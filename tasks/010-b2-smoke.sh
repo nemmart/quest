@@ -10,7 +10,7 @@ g++ --version | head -1; nproc
 echo "== fetch B2 book from p14-phase-b2 =="
 git fetch --quiet origin p14-phase-b2
 BOOK=/tmp/quest.addrbook.b2-010
-git show origin/p14-phase-b2:Work/c_src/quest.addrbook > "$BOOK"
+git show FETCH_HEAD:Work/c_src/quest.addrbook > "$BOOK"
 head -2 "$BOOK"
 echo "== emulator build =="
 cd Work/c_src && make -j"$(nproc)" 2>&1 | tail -1 && ls -l emulator
