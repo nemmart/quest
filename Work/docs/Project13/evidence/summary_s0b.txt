@@ -1,0 +1,65 @@
+### s0b_m
+== s0b_m/m: divergences=0 redirect_lines=1210 detach=1 abort=0
+-- coverage: gcalls(clone=QUEST2) vs redirect WSAVS per routine (LIVE routines must be equal; STACKED show gcalls only):
+  DIST                         LIVE    gcalls=600    redirect=600   
+  READ_IN                      LIVE    gcalls=4      redirect=4     
+  OWNS                         LIVE    gcalls=1      redirect=1     
+  live routines NOT reached this run: DISTANCE_TO_PLAYER, FIND_OBJECT, RANDOM
+  cross-check: OK
+Lockstep: ordinal 0 DETACHED at 7017FCE8 (I.STOP) — clone halted, master continues unverified
+
+### s0b_fo
+== s0b_fo/failopen: divergences=0 redirect_lines=1808 detach=0 abort=0
+-- coverage: gcalls(clone=QUEST2) vs redirect WSAVS per routine (LIVE routines must be equal; STACKED show gcalls only):
+  DIST                         LIVE    gcalls=900    redirect=900   
+  READ_IN                      LIVE    gcalls=3      redirect=3     
+  OWNS                         LIVE    gcalls=1      redirect=1     
+  live routines NOT reached this run: DISTANCE_TO_PLAYER, FIND_OBJECT, RANDOM
+  cross-check: OK
+
+### s0b_play
+== s0b_play/play: divergences=0 redirect_lines=20501 detach=0 abort=0
+-- coverage: gcalls(clone=QUEST2) vs redirect WSAVS per routine (LIVE routines must be equal; STACKED show gcalls only):
+  DISTANCE_TO_PLAYER           LIVE    gcalls=3841   redirect=3841  
+  FIND_OBJECT                  LIVE    gcalls=3775   redirect=3775  
+  DIST                         LIVE    gcalls=1500   redirect=1500  
+  RANDOM                       LIVE    gcalls=1122   redirect=1122  
+  OWNS                         LIVE    gcalls=9      redirect=9     
+  READ_IN                      LIVE    gcalls=4      redirect=4     
+  live routines NOT reached this run: none
+  cross-check: OK
+
+### s0b_inj
+== s0b_inj/play: divergences=0 redirect_lines=1217 detach=1 abort=0
+-- coverage: gcalls(clone=QUEST2) vs redirect WSAVS per routine (LIVE routines must be equal; STACKED show gcalls only):
+  DIST                         LIVE    gcalls=600    redirect=600   
+  OWNS                         LIVE    gcalls=4      redirect=4     
+  READ_IN                      LIVE    gcalls=4      redirect=4     
+  FIND_OBJECT                  LIVE    gcalls=1      redirect=1     
+  live routines NOT reached this run: DISTANCE_TO_PLAYER, RANDOM
+  cross-check: OK
+Lockstep: ordinal 0 DETACHED at 7017F036 (?FATAL) — clone halted, master continues unverified
+
+### s0b_abort
+== s0b_abort/m: divergences=0 redirect_lines=7 detach=0 abort=2
+-- coverage: gcalls(clone=QUEST2) vs redirect WSAVS per routine (LIVE routines must be equal; STACKED show gcalls only):
+  READ_IN                      LIVE    gcalls=3      redirect=3     
+  DIST                         LIVE    gcalls=1      redirect=1     
+  live routines NOT reached this run: DISTANCE_TO_PLAYER, FIND_OBJECT, OWNS, RANDOM
+  cross-check: OK
+RTStubs: TEST terminal point at 7016871D kind=ABORT (QUEST_TERMINAL)
+================ WORLD ABORT ================
+TERMINAL-ABORT at 7016871D, verified on both engines (top stack wides: 1B8A7016 AC037000 — for DERR.TRP: number, faulting pc)
+
+### b2r_m
+== b2r_m/m: divergences=1 redirect_lines=13 detach=0 abort=0
+-- coverage: gcalls(clone=QUEST2) vs redirect WSAVS per routine (LIVE routines must be equal; STACKED show gcalls only):
+  READ_IN                      LIVE    gcalls=3      redirect=3     
+  INIT_SCREEN                  LIVE    gcalls=1      redirect=1     
+  HIT_ANY_CHAR                 LIVE    gcalls=1      redirect=1     
+  GET_INPUT                    LIVE    gcalls=1      redirect=1     
+  LOGON                        LIVE    gcalls=1      redirect=1     
+  live routines NOT reached this run: ALLY_PLAYER, AUTO_MOVE, BACKPACK, CASTLE_INVENTORY, CATAPULT, CLONE_SUNDAR, DEFEND, DISPLAY_FLASK, DIST, DISTANCE_TO_PLAYER, FIND_OBJECT, GET_OBJECT_INDEX, LOOK, MOVE, MOVE_FAMILIAR, MOVE_IN_CAVE, OWNS, PICK_X_Y, PLACE_PLAYER, RANDOM, REFRESH_SCREEN, REGEN_SPELLS, REPORT, REPOSITION, RETURN_MESSAGE, SEIGE, SIGNAL_TURN, SPYGLASS, STORMS_AT_SEA, TAKE, TAKE_OVER_CASTLE, TERRAIN, TERRITORY, THIEF, TOWER_ATTACK, TRANSPORT_SUNDAR, TRANSPORT_TERRAK, UNLOCK_FILE, UPDATE_SCREENS, WRITE_OBJECT
+  cross-check: OK
+LOCKSTEP DIVERGENCE - details in stdout log
+

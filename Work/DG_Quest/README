@@ -1,0 +1,28 @@
+Welcome to Quest!
+
+Compile:
+   javac debug/*.java hw/*.java os/*.java Launch.java
+   jar -cvf *.class */*.class
+
+Run:
+   java -cp quest.jar Launch QUEST QUEST_SERVER @QUEST >log
+   telnet to port 8781 with a DG D200 compatible terminal
+
+The Launch java application creates a virtual DG machine, sets up the
+file system to be the contents of the QUEST directory (the first argument)
+and then launches two QUEST_SERVER.PR and QUEST.PR.  The QUEST_SERVER is
+a DG background process that allowed multiple players to play quest
+simultaneously.  The @ before QUEST, tells Launch to wait for a connection
+to port 8781, and redirect all output from the QUEST process to the telnet
+session.
+
+The game is relatively straight forward - type h for help, but be prepared
+to die a lot.
+
+To quit Quest, press "escape" (or die).  Then control-c the Java application.
+When you control-c the java application, it will write the data files back
+to the quest directory.
+
+To play again, relaunch the java application and reconnect.
+
+Enjoy!

@@ -1,0 +1,152 @@
+CXX      = g++
+CXXFLAGS = -std=c++17 -O2 -Wall -Wextra -Wno-unused-parameter -Wno-sign-compare -I.
+LDFLAGS  = -lpthread
+
+TARGET   = emulator
+
+# Source files
+SRCS = Launch.cpp \
+       hw/PageSet.cpp \
+       hw/Memory.cpp \
+       hw/Instruction.cpp \
+       hw/NovaCompute.cpp \
+       hw/EagleInstruction.cpp \
+       hw/EagleGeneral.cpp \
+       hw/EagleCompute.cpp \
+       hw/EagleFloat.cpp \
+       hw/EagleStack.cpp \
+       hw/EagleSpecial.cpp \
+       hw/EagleIntegration.cpp \
+       hw/Decoder.cpp \
+       hw/Machine.cpp \
+       hw/MachineThread.cpp \
+       hw/QueueEntry.cpp \
+       hw/NativeRegistry.cpp \
+       debug/CallStack.cpp \
+       debug/SymbolTable.cpp \
+       debug/MemoryDumper.cpp \
+       debug/Disassembler.cpp \
+       emu_types/VaryingString.cpp \
+       emu_types/ByteArray.cpp \
+       emu_types/WordArray.cpp \
+       emu_types/OperatingSystem.cpp \
+       emu_types/Location.cpp \
+       emu_types/Word.cpp \
+       emu_types/Wide.cpp \
+       emu_types/Bit.cpp \
+       rt/char_to_unsigned.cpp \
+       rt/udiv32.cpp \
+       rt/umul32.cpp \
+       rt/sqr31.cpp \
+       rt/delay.cpp \
+       rt/current_pid.cpp \
+       rt/connect.cpp \
+       rt/lookup_port.cpp \
+       rt/write_screen.cpp \
+       rt/random_number.cpp \
+       rt/read.cpp \
+       rt/unsigned_to_char.cpp \
+       rt/open_file.cpp \
+       rt/close_file.cpp \
+       rt/write.cpp \
+       rt/read_screen.cpp \
+       rt/open_shared_io_file.cpp \
+       rt/get_shared_page.cpp \
+       rt/create_task.cpp \
+       rt/await_console_interrupt.cpp \
+       rt/ipc_send_receive.cpp \
+       rt/get_current_time.cpp \
+       rt/create_ipc_file.cpp \
+       rt/recreate_file.cpp \
+       emu_rt/char_to_unsigned.cpp \
+       emu_rt/udiv32.cpp \
+       emu_rt/umul32.cpp \
+       emu_rt/sqr31.cpp \
+       emu_rt/delay.cpp \
+       emu_rt/current_pid.cpp \
+       emu_rt/connect.cpp \
+       emu_rt/lookup_port.cpp \
+       emu_rt/write_screen.cpp \
+       emu_rt/random_number.cpp \
+       emu_rt/read.cpp \
+       emu_rt/unsigned_to_char.cpp \
+       emu_rt/open_file.cpp \
+       emu_rt/close_file.cpp \
+       emu_rt/write.cpp \
+       emu_rt/read_screen.cpp \
+       emu_rt/open_shared_io_file.cpp \
+       emu_rt/get_shared_page.cpp \
+       emu_rt/create_task.cpp \
+       emu_rt/await_console_interrupt.cpp \
+       emu_rt/translate.cpp \
+       emu_rt/bit_move.cpp \
+       emu_rt/char_to_bit.cpp \
+       emu_rt/syscall.cpp \
+       emu_rt/fill_words.cpp \
+       emu_rt/get_current_time.cpp \
+       emu_rt/create_ipc_file.cpp \
+       emu_rt/recreate_file.cpp \
+       quest/return_message.cpp \
+       quest/init_shared_data.cpp \
+       quest/dist.cpp \
+       quest/owns.cpp \
+       quest/display_inventory.cpp \
+       quest/display_magic.cpp \
+       quest/regen_spells.cpp \
+       quest/Player.cpp \
+       quest/update_screens.cpp \
+       quest/thief.cpp \
+       quest/random.cpp \
+       quest/find_object.cpp \
+       quest/get_object_index.cpp \
+       emu_quest/return_message.cpp \
+       emu_quest/init_shared_data.cpp \
+       emu_quest/Player.cpp \
+       emu_quest/SharedData.cpp \
+       emu_quest/dist.cpp \
+       emu_quest/owns.cpp \
+       emu_quest/display_inventory.cpp \
+       emu_quest/display_magic.cpp \
+       emu_quest/update_screens.cpp \
+       emu_quest/thief.cpp \
+       emu_quest/random.cpp \
+       emu_quest/find_object.cpp \
+       emu_quest/get_object_index.cpp \
+       os/AOSVSSymbols.cpp \
+       os/ArrayPage.cpp \
+       os/MappedPage.cpp \
+       os/Utility.cpp \
+       os/OSError.cpp \
+       os/FS.cpp \
+       os/FSFile.cpp \
+       os/FSDirectory.cpp \
+       os/FSChannel.cpp \
+       os/FSConsole.cpp \
+       os/FSTerminal.cpp \
+       os/FSPagedFile.cpp \
+       os/FSStreamedFile.cpp \
+       os/OS.cpp \
+       os/OSMessage.cpp \
+       os/OSProcess.cpp \
+       os/OSTask.cpp \
+       os/OSContext.cpp \
+       os/OSContextSystem.cpp \
+       os/OSContextShared.cpp \
+       os/OSContextIPC.cpp \
+       os/OSContextFS.cpp \
+       os/OSContextTask.cpp
+
+OBJS = $(SRCS:.cpp=.o)
+
+all: $(TARGET)
+
+$(TARGET): $(OBJS)
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
+
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+
+clean:
+	rm -f $(OBJS) $(TARGET)
+
+.PHONY: all clean

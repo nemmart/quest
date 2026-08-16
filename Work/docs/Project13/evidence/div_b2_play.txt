@@ -1,0 +1,7 @@
+================ LOCKSTEP DIVERGENCE ================
+  master: label=QUEST1 ordinal=0 result_pc=7017E27A trap_pc=7017E27A insns=30 ac0=00000000 ac1=00000000 ac2=E0002224 ac3=70175F6B c=0 wsp=7000114A wfp=700010E8 psr=8000 shadow_wsp=7000114A T(ac0..3)=00000000 00000000 E0002224 70175F6B
+  clone : label=QUEST2 ordinal=0 result_pc=7017E27A trap_pc=7017E27A insns=30 ac0=00000000 ac1=00000000 ac2=F000D6EC ac3=70175F6B c=0 wsp=700010F0 wfp=78006B4C psr=8000 shadow_wsp=7000114A T(ac0..3)=00000000 00000000 F000D746 70175FC5
+master backtrace:
+frame  3 -- ?WRITE_SCREEN+0x0   [7017E27A]
+frame  2 -- LOGON+0xC8   [70175F67]
+frame  1 -- QUEST+0x27E   [7015C283]

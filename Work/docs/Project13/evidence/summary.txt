@@ -1,0 +1,51 @@
+### b1_m
+== b1_m/m: divergences=0 hijack_lines=1210 detach=1 abort=0
+-- coverage: gcalls(clone=QUEST2) vs hijack WSAVS per routine (LIVE routines must be equal; STACKED show gcalls only):
+  DIST                         LIVE    gcalls=600    hijack=600   
+  READ_IN                      LIVE    gcalls=4      hijack=4     
+  OWNS                         LIVE    gcalls=1      hijack=1     
+  live routines NOT reached this run: DISTANCE_TO_PLAYER, FIND_OBJECT, RANDOM
+  cross-check: OK
+Lockstep: ordinal 0 DETACHED at 7017FCE8 (I.STOP) — clone halted, master continues unverified
+
+### b1_fo
+== b1_fo/failopen: divergences=0 hijack_lines=1808 detach=0 abort=0
+-- coverage: gcalls(clone=QUEST2) vs hijack WSAVS per routine (LIVE routines must be equal; STACKED show gcalls only):
+  DIST                         LIVE    gcalls=900    hijack=900   
+  READ_IN                      LIVE    gcalls=3      hijack=3     
+  OWNS                         LIVE    gcalls=1      hijack=1     
+  live routines NOT reached this run: DISTANCE_TO_PLAYER, FIND_OBJECT, RANDOM
+  cross-check: OK
+
+### b1_play
+== b1_play/play: divergences=0 hijack_lines=20103 detach=0 abort=0
+-- coverage: gcalls(clone=QUEST2) vs hijack WSAVS per routine (LIVE routines must be equal; STACKED show gcalls only):
+  DISTANCE_TO_PLAYER           LIVE    gcalls=3718   hijack=3718  
+  FIND_OBJECT                  LIVE    gcalls=3705   hijack=3705  
+  DIST                         LIVE    gcalls=1500   hijack=1500  
+  RANDOM                       LIVE    gcalls=1116   hijack=1116  
+  OWNS                         LIVE    gcalls=9      hijack=9     
+  READ_IN                      LIVE    gcalls=4      hijack=4     
+  live routines NOT reached this run: none
+  cross-check: OK
+
+### b1_inj
+== b1_inj/play: divergences=0 hijack_lines=1217 detach=1 abort=0
+-- coverage: gcalls(clone=QUEST2) vs hijack WSAVS per routine (LIVE routines must be equal; STACKED show gcalls only):
+  DIST                         LIVE    gcalls=600    hijack=600   
+  OWNS                         LIVE    gcalls=4      hijack=4     
+  READ_IN                      LIVE    gcalls=4      hijack=4     
+  FIND_OBJECT                  LIVE    gcalls=1      hijack=1     
+  live routines NOT reached this run: DISTANCE_TO_PLAYER, RANDOM
+  cross-check: OK
+Lockstep: ordinal 0 DETACHED at 7017F036 (?FATAL) — clone halted, master continues unverified
+
+### b1_abort
+== b1_abort/m: divergences=0 hijack_lines=7 detach=0 abort=2
+-- coverage: gcalls(clone=QUEST2) vs hijack WSAVS per routine (LIVE routines must be equal; STACKED show gcalls only):
+  READ_IN                      LIVE    gcalls=3      hijack=3     
+  DIST                         LIVE    gcalls=1      hijack=1     
+  live routines NOT reached this run: DISTANCE_TO_PLAYER, FIND_OBJECT, OWNS, RANDOM
+  cross-check: OK
+================ WORLD ABORT ================
+

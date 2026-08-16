@@ -1,0 +1,250 @@
+# Project 14 Phase A regression evidence — generated 2026-08-16
+# binary: warning-free refactored tree; p14_b1_abort and p14_final_m ran on the final binary (post inj-knob fail-loud + closed-end log line; both touches unreachable in green runs).
+
+### p14_b2_m
+  DIST                         LIVE    gcalls=604    redirect=604   
+  GET_INPUT                    LIVE    gcalls=8      redirect=8     
+  DISPLAY_INVENTORY            stacked gcalls=5      redirect=0     
+  READ_IN                      LIVE    gcalls=4      redirect=4     
+  TERRITORY                    LIVE    gcalls=2      redirect=2     
+  DISPLAY_SCREEN               stacked gcalls=2      redirect=0     
+  INIT_SCREEN                  LIVE    gcalls=1      redirect=1     
+  QUEST                        stacked gcalls=1      redirect=0     
+  REPORT                       LIVE    gcalls=1      redirect=1     
+  LOCK_FILE                    stacked gcalls=1      redirect=0     
+  HIT_ANY_CHAR                 LIVE    gcalls=1      redirect=1     
+  C_A_LISTENER                 stacked gcalls=1      redirect=0     
+Lockstep: ordinal 0 DETACHED at 7017FCE8 (I.STOP) — clone halted, master continues unverified
+probe_fires=0
+
+### p14_b2_m2
+  DIST                         LIVE    gcalls=601    redirect=601   
+  GET_INPUT                    LIVE    gcalls=8      redirect=8     
+  DISPLAY_INVENTORY            stacked gcalls=4      redirect=0     
+  READ_IN                      LIVE    gcalls=4      redirect=4     
+  HIT_ANY_CHAR                 LIVE    gcalls=2      redirect=2     
+  TERRITORY                    LIVE    gcalls=2      redirect=2     
+  DISPLAY_SCREEN               stacked gcalls=2      redirect=0     
+  INIT_SCREEN                  LIVE    gcalls=1      redirect=1     
+  QUEST                        stacked gcalls=1      redirect=0     
+  REPORT                       LIVE    gcalls=1      redirect=1     
+  LOCK_FILE                    stacked gcalls=1      redirect=0     
+  C_A_LISTENER                 stacked gcalls=1      redirect=0     
+Lockstep: ordinal 0 DETACHED at 7017FCE8 (I.STOP) — clone halted, master continues unverified
+probe_fires=0
+
+### p14_b2_m3
+  DIST                         LIVE    gcalls=600    redirect=600   
+  GET_INPUT                    LIVE    gcalls=8      redirect=8     
+  DISPLAY_INVENTORY            stacked gcalls=5      redirect=0     
+  READ_IN                      LIVE    gcalls=4      redirect=4     
+  TERRITORY                    LIVE    gcalls=2      redirect=2     
+  DISPLAY_SCREEN               stacked gcalls=2      redirect=0     
+  INIT_SCREEN                  LIVE    gcalls=1      redirect=1     
+  QUEST                        stacked gcalls=1      redirect=0     
+  REPORT                       LIVE    gcalls=1      redirect=1     
+  LOCK_FILE                    stacked gcalls=1      redirect=0     
+  HIT_ANY_CHAR                 LIVE    gcalls=1      redirect=1     
+  C_A_LISTENER                 stacked gcalls=1      redirect=0     
+Lockstep: ordinal 0 DETACHED at 7017FCE8 (I.STOP) — clone halted, master continues unverified
+probe_fires=0
+
+### p14_b2_m4
+  DIST                         LIVE    gcalls=596    redirect=596   
+  GET_INPUT                    LIVE    gcalls=8      redirect=8     
+  DISPLAY_INVENTORY            stacked gcalls=6      redirect=0     
+  READ_IN                      LIVE    gcalls=4      redirect=4     
+  OWNS                         LIVE    gcalls=2      redirect=2     
+  RANDOM                       LIVE    gcalls=2      redirect=2     
+  TERRITORY                    LIVE    gcalls=2      redirect=2     
+  DISPLAY_SCREEN               stacked gcalls=2      redirect=0     
+  INIT_SCREEN                  LIVE    gcalls=1      redirect=1     
+  QUEST                        stacked gcalls=1      redirect=0     
+  REPORT                       LIVE    gcalls=1      redirect=1     
+  LOCK_FILE                    stacked gcalls=1      redirect=0     
+Lockstep: ordinal 0 DETACHED at 7017FCE8 (I.STOP) — clone halted, master continues unverified
+probe_fires=0
+
+### p14_b2_fo
+  DIST                         LIVE    gcalls=900    redirect=900   
+  GET_INPUT                    LIVE    gcalls=9      redirect=9     
+  DISPLAY_INVENTORY            stacked gcalls=5      redirect=0     
+  READ_IN                      LIVE    gcalls=3      redirect=3     
+  TERRITORY                    LIVE    gcalls=3      redirect=3     
+  DISPLAY_SCREEN               stacked gcalls=3      redirect=0     
+  HIT_ANY_CHAR                 LIVE    gcalls=2      redirect=2     
+  REFRESH_SCREEN               LIVE    gcalls=2      redirect=2     
+  INIT_SCREEN                  LIVE    gcalls=1      redirect=1     
+  QUEST                        stacked gcalls=1      redirect=0     
+  LIST_PLAYERS                 stacked gcalls=1      redirect=0     
+  REPORT                       LIVE    gcalls=1      redirect=1     
+probe_fires=0
+
+### p14_b2_play
+  UPDATE_SCREENS               LIVE    gcalls=7966   redirect=7966  
+  TERRITORY                    LIVE    gcalls=7431   redirect=7431  
+  DISTANCE_TO_PLAYER           LIVE    gcalls=4222   redirect=4222  
+  FIND_OBJECT                  LIVE    gcalls=4172   redirect=4172  
+  DIST                         LIVE    gcalls=1500   redirect=1500  
+  RANDOM                       LIVE    gcalls=1131   redirect=1131  
+  OWNS                         LIVE    gcalls=9      redirect=9     
+  GET_INPUT                    LIVE    gcalls=7      redirect=7     
+  TERRAIN                      LIVE    gcalls=7      redirect=7     
+  DISPLAY_INVENTORY            stacked gcalls=6      redirect=0     
+  DISPLAY_SCREEN               stacked gcalls=5      redirect=0     
+  READ_IN                      LIVE    gcalls=4      redirect=4     
+probe_fires=0
+
+### p14_b2_inj
+  DIST                         LIVE    gcalls=600    redirect=600   
+  GET_INPUT                    LIVE    gcalls=7      redirect=7     
+  DISPLAY_INVENTORY            stacked gcalls=4      redirect=0     
+  OWNS                         LIVE    gcalls=4      redirect=4     
+  READ_IN                      LIVE    gcalls=4      redirect=4     
+  TERRAIN                      LIVE    gcalls=3      redirect=3     
+  TERRITORY                    LIVE    gcalls=2      redirect=2     
+  DISPLAY_SCREEN               stacked gcalls=2      redirect=0     
+  INIT_SCREEN                  LIVE    gcalls=1      redirect=1     
+  QUEST                        stacked gcalls=1      redirect=0     
+  REPORT                       LIVE    gcalls=1      redirect=1     
+  LOCK_FILE                    stacked gcalls=1      redirect=0     
+Lockstep: ordinal 0 DETACHED at 7017F036 (?FATAL) — clone halted, master continues unverified
+probe_fires=0
+
+### p14_b2_abort
+  READ_IN                      LIVE    gcalls=3      redirect=3     
+  GET_INPUT                    LIVE    gcalls=2      redirect=2     
+  INIT_SCREEN                  LIVE    gcalls=1      redirect=1     
+  QUEST                        stacked gcalls=1      redirect=0     
+  GET_QUEST                    stacked gcalls=1      redirect=0     
+  HIT_ANY_CHAR                 LIVE    gcalls=1      redirect=1     
+  C_A_LISTENER                 stacked gcalls=1      redirect=0     
+  REFRESH_SCREEN               LIVE    gcalls=1      redirect=1     
+  DIST                         LIVE    gcalls=1      redirect=1     
+  INIT_OBJ_TBL                 stacked gcalls=1      redirect=0     
+  LOGON                        LIVE    gcalls=1      redirect=1     
+  QUEST.1@7015C5E1             stacked gcalls=1      redirect=0     
+TERMINAL-ABORT at 7016871D, verified on both engines (top stack wides: 1B8A7016 AC037000 — for DERR.TRP: number, faulting pc)
+probe_fires=0
+
+### p14_b1_m
+  DIST                         LIVE    gcalls=600    redirect=600   
+  GET_INPUT                    stacked gcalls=8      redirect=0     
+  DISPLAY_INVENTORY            stacked gcalls=5      redirect=0     
+  READ_IN                      LIVE    gcalls=4      redirect=4     
+  TERRITORY                    stacked gcalls=2      redirect=0     
+  DISPLAY_SCREEN               stacked gcalls=2      redirect=0     
+  INIT_SCREEN                  stacked gcalls=1      redirect=0     
+  QUEST                        stacked gcalls=1      redirect=0     
+  REPORT                       stacked gcalls=1      redirect=0     
+  LOCK_FILE                    stacked gcalls=1      redirect=0     
+  HIT_ANY_CHAR                 stacked gcalls=1      redirect=0     
+  C_A_LISTENER                 stacked gcalls=1      redirect=0     
+Lockstep: ordinal 0 DETACHED at 7017FCE8 (I.STOP) — clone halted, master continues unverified
+probe_fires=0
+
+### p14_b1_fo
+  DIST                         LIVE    gcalls=900    redirect=900   
+  GET_INPUT                    stacked gcalls=9      redirect=0     
+  DISPLAY_INVENTORY            stacked gcalls=5      redirect=0     
+  READ_IN                      LIVE    gcalls=3      redirect=3     
+  TERRITORY                    stacked gcalls=3      redirect=0     
+  DISPLAY_SCREEN               stacked gcalls=3      redirect=0     
+  HIT_ANY_CHAR                 stacked gcalls=2      redirect=0     
+  REFRESH_SCREEN               stacked gcalls=2      redirect=0     
+  INIT_SCREEN                  stacked gcalls=1      redirect=0     
+  QUEST                        stacked gcalls=1      redirect=0     
+  LIST_PLAYERS                 stacked gcalls=1      redirect=0     
+  REPORT                       stacked gcalls=1      redirect=0     
+probe_fires=0
+
+### p14_b1_play
+  UPDATE_SCREENS               stacked gcalls=5624   redirect=0     
+  TERRITORY                    stacked gcalls=5236   redirect=0     
+  DISTANCE_TO_PLAYER           LIVE    gcalls=2976   redirect=2976  
+  FIND_OBJECT                  LIVE    gcalls=2938   redirect=2938  
+  DIST                         LIVE    gcalls=1200   redirect=1200  
+  RANDOM                       LIVE    gcalls=1088   redirect=1088  
+  GET_INPUT                    stacked gcalls=11     redirect=0     
+  DISPLAY_INVENTORY            stacked gcalls=9      redirect=0     
+  OWNS                         LIVE    gcalls=8      redirect=8     
+  TERRAIN                      stacked gcalls=6      redirect=0     
+  READ_IN                      LIVE    gcalls=4      redirect=4     
+  DISPLAY_SCREEN               stacked gcalls=4      redirect=0     
+Lockstep: ordinal 0 DETACHED at 7017FCE8 (I.STOP) — clone halted, master continues unverified
+probe_fires=0
+
+### p14_b1_inj
+  DIST                         LIVE    gcalls=600    redirect=600   
+  GET_INPUT                    stacked gcalls=7      redirect=0     
+  DISPLAY_INVENTORY            stacked gcalls=4      redirect=0     
+  OWNS                         LIVE    gcalls=4      redirect=4     
+  READ_IN                      LIVE    gcalls=4      redirect=4     
+  TERRAIN                      stacked gcalls=3      redirect=0     
+  TERRITORY                    stacked gcalls=2      redirect=0     
+  DISPLAY_SCREEN               stacked gcalls=2      redirect=0     
+  INIT_SCREEN                  stacked gcalls=1      redirect=0     
+  QUEST                        stacked gcalls=1      redirect=0     
+  REPORT                       stacked gcalls=1      redirect=0     
+  LOCK_FILE                    stacked gcalls=1      redirect=0     
+Lockstep: ordinal 0 DETACHED at 7017F036 (?FATAL) — clone halted, master continues unverified
+probe_fires=0
+
+### p14_b1_abort
+  READ_IN                      LIVE    gcalls=3      redirect=3     
+  GET_INPUT                    stacked gcalls=2      redirect=0     
+  QUEST.1@7015C5E1             stacked gcalls=1      redirect=0     
+  FAKE_LAND_MASS               stacked gcalls=1      redirect=0     
+  INIT_SCREEN                  stacked gcalls=1      redirect=0     
+  QUEST                        stacked gcalls=1      redirect=0     
+  GET_QUEST                    stacked gcalls=1      redirect=0     
+  HIT_ANY_CHAR                 stacked gcalls=1      redirect=0     
+  C_A_LISTENER                 stacked gcalls=1      redirect=0     
+  REFRESH_SCREEN               stacked gcalls=1      redirect=0     
+  FAKE_OCEAN                   stacked gcalls=1      redirect=0     
+  DIST                         LIVE    gcalls=1      redirect=1     
+TERMINAL-ABORT at 7016871D, verified on both engines (top stack wides: 1B8A7016 AC037000 — for DERR.TRP: number, faulting pc)
+probe_fires=0
+
+### p14_final_m
+  DIST                         LIVE    gcalls=600    redirect=600   
+  GET_INPUT                    LIVE    gcalls=8      redirect=8     
+  DISPLAY_INVENTORY            stacked gcalls=5      redirect=0     
+  READ_IN                      LIVE    gcalls=4      redirect=4     
+  TERRITORY                    LIVE    gcalls=2      redirect=2     
+  DISPLAY_SCREEN               stacked gcalls=2      redirect=0     
+probe_fires=0
+
+### m-band and stable anchors (b2 m x4 + final)
+p14_b2_m     lines=1268 DIST=604 DIST@70166E1C(gcalls,QUEST2)=594 GET_INPUT=8 tower_site=8
+p14_b2_m2    lines=1266 DIST=601 DIST@70166E1C(gcalls,QUEST2)=594 GET_INPUT=8 tower_site=0
+p14_b2_m3    lines=1260 DIST=600 DIST@70166E1C(gcalls,QUEST2)=594 GET_INPUT=8 tower_site=0
+p14_b2_m4    lines=1258 DIST=596 DIST@70166E1C(gcalls,QUEST2)=590 GET_INPUT=8 tower_site=0
+p14_final_m  lines=1260 DIST=600 DIST@70166E1C(gcalls,QUEST2)=594 GET_INPUT=8 tower_site=0
+
+### variance mechanism (world evolution + ?GTOD)
+source tree == tarball (md5, all files)
+WORLD_DATA_FILE bytes changed vs pristine: p14_b2_m=169 p14_b2_m3=179; between runs: 165
+?GTOD (mediated: master executes, clone gets checked copies — os/LockstepMediator.cpp:68):
+GTOD ret err=0000 ac0=0000001E ac1=0000002C
+GTOD ret err=0000 ac0=00000013 ac1=00000035
+
+### verdict table (div from stdout, lines = wc -l redirect.log, endpoint from stderr/stdout)
+p14_b2_m      div=0 lines=1268   endpoint=detach 7017FCE8 (I.STOP)
+p14_b2_m2     div=0 lines=1266   endpoint=detach 7017FCE8 (I.STOP)
+p14_b2_m3     div=0 lines=1260   endpoint=detach 7017FCE8 (I.STOP)
+p14_b2_m4     div=0 lines=1258   endpoint=detach 7017FCE8 (I.STOP)
+p14_b2_fo     div=0 lines=1863   endpoint=run end (socket close)
+p14_b2_play   div=0 lines=52958  endpoint=run end (socket close)
+p14_b2_inj    div=0 lines=1269   endpoint=detach 7017F036 (?FATAL)
+p14_b2_abort  div=0 lines=19     endpoint=WORLD ABORT x1 (TERMINAL-ABORT at 7016871D, verified both engines)
+p14_b1_m      div=0 lines=1210   endpoint=detach 7017FCE8 (I.STOP)
+p14_b1_fo     div=0 lines=1808   endpoint=run end (socket close)
+p14_b1_play   div=0 lines=16428  endpoint=detach 7017FCE8 (I.STOP)
+p14_b1_inj    div=0 lines=1217   endpoint=detach 7017F036 (?FATAL)
+p14_b1_abort  div=0 lines=7      endpoint=WORLD ABORT x1 (TERMINAL-ABORT at 7016871D, verified both engines)
+p14_final_m   div=0 lines=1260   endpoint=detach 7017FCE8 (I.STOP)
+
+### login-phase stable anchors (all five m runs): READ_IN=4 LOGON=1 INIT_SCREEN=1 REFRESH_SCREEN=1 GET_INPUT=8
+### (HIT_ANY_CHAR 1, one run 2 — driver keypress timing); world-sensitive counts are BANDED:
+###   DIST total 596-604 across m runs; even the main scan site 70166E1C is banded (590/594, see m4).

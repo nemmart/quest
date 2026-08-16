@@ -1,0 +1,15 @@
+./emulator -handler=native -zero=clone -lockstep -silent ../../QUEST QUEST_SERVER @QUEST @QUEST >log
+
+# Then: telnet localhost 8781 — login CL / Claude / quest / Y / any / F.
+# ESC exits in-game; ctrl-C also exits cleanly (saves, then curator report last).
+#
+# This is the daily driver: NATIVE L2 (the M3 product) + the GARBAGE PROBE
+# (-zero=clone: master garbage-authentic, clone zeroed; register-value diffs
+# collected/suppressed per probe_suppressions.txt in this directory; pc,
+# counts, and syscall mediation stay armed; specimens -> probe_specimens.log).
+#
+# Variants:
+#   full-strength shipping check (no probe):  drop -zero=clone
+#   bit-faithful 1988 attic:                  -zero=none
+#   double-checked handler mode:              -handler=check
+#   quieter console:                          ... >log 2>err

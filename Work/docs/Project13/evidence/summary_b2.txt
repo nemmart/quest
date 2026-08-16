@@ -1,0 +1,178 @@
+### b2r_m5
+== b2r_m5/m: divergences=0 redirect_lines=1260 detach=1 abort=0
+-- coverage: gcalls(clone=QUEST2) vs redirect WSAVS per routine (LIVE routines must be equal; STACKED show gcalls only):
+  DIST                         LIVE    gcalls=600    redirect=600   
+  GET_INPUT                    LIVE    gcalls=8      redirect=8     
+  READ_IN                      LIVE    gcalls=4      redirect=4     
+  TERRITORY                    LIVE    gcalls=2      redirect=2     
+  INIT_SCREEN                  LIVE    gcalls=1      redirect=1     
+  REPORT                       LIVE    gcalls=1      redirect=1     
+  HIT_ANY_CHAR                 LIVE    gcalls=1      redirect=1     
+  REFRESH_SCREEN               LIVE    gcalls=1      redirect=1     
+  STORMS_AT_SEA                LIVE    gcalls=1      redirect=1     
+  REGEN_SPELLS                 LIVE    gcalls=1      redirect=1     
+  LOGON                        LIVE    gcalls=1      redirect=1     
+  THIEF                        LIVE    gcalls=1      redirect=1     
+  CATAPULT                     LIVE    gcalls=1      redirect=1     
+  OWNS                         LIVE    gcalls=1      redirect=1     
+  DEFEND                       LIVE    gcalls=1      redirect=1     
+  MOVE_FAMILIAR                LIVE    gcalls=1      redirect=1     
+  SIGNAL_TURN                  LIVE    gcalls=1      redirect=1     
+  TOWER_ATTACK                 LIVE    gcalls=1      redirect=1     
+  AUTO_MOVE                    LIVE    gcalls=1      redirect=1     
+  TERRAIN                      LIVE    gcalls=1      redirect=1     
+  live routines NOT reached this run: ALLY_PLAYER, BACKPACK, CASTLE_INVENTORY, CLONE_SUNDAR, DISPLAY_FLASK, DISTANCE_TO_PLAYER, FIND_OBJECT, GET_OBJECT_INDEX, LOOK, MOVE, MOVE_IN_CAVE, PICK_X_Y, PLACE_PLAYER, RANDOM, REPOSITION, RETURN_MESSAGE, SEIGE, SPYGLASS, TAKE, TAKE_OVER_CASTLE, TRANSPORT_SUNDAR, TRANSPORT_TERRAK, UNLOCK_FILE, UPDATE_SCREENS, WRITE_OBJECT
+  cross-check: OK
+Lockstep: ordinal 0 DETACHED at 7017FCE8 (I.STOP) — clone halted, master continues unverified
+
+### b2r_fo
+== b2r_fo/failopen: divergences=0 redirect_lines=1863 detach=0 abort=0
+-- coverage: gcalls(clone=QUEST2) vs redirect WSAVS per routine (LIVE routines must be equal; STACKED show gcalls only):
+  DIST                         LIVE    gcalls=900    redirect=900   
+  GET_INPUT                    LIVE    gcalls=9      redirect=9     
+  READ_IN                      LIVE    gcalls=3      redirect=3     
+  TERRITORY                    LIVE    gcalls=3      redirect=3     
+  HIT_ANY_CHAR                 LIVE    gcalls=2      redirect=2     
+  REFRESH_SCREEN               LIVE    gcalls=2      redirect=2     
+  INIT_SCREEN                  LIVE    gcalls=1      redirect=1     
+  REPORT                       LIVE    gcalls=1      redirect=1     
+  STORMS_AT_SEA                LIVE    gcalls=1      redirect=1     
+  REGEN_SPELLS                 LIVE    gcalls=1      redirect=1     
+  LOGON                        LIVE    gcalls=1      redirect=1     
+  THIEF                        LIVE    gcalls=1      redirect=1     
+  CATAPULT                     LIVE    gcalls=1      redirect=1     
+  OWNS                         LIVE    gcalls=1      redirect=1     
+  DEFEND                       LIVE    gcalls=1      redirect=1     
+  MOVE_FAMILIAR                LIVE    gcalls=1      redirect=1     
+  SIGNAL_TURN                  LIVE    gcalls=1      redirect=1     
+  TOWER_ATTACK                 LIVE    gcalls=1      redirect=1     
+  TERRAIN                      LIVE    gcalls=1      redirect=1     
+  live routines NOT reached this run: ALLY_PLAYER, AUTO_MOVE, BACKPACK, CASTLE_INVENTORY, CLONE_SUNDAR, DISPLAY_FLASK, DISTANCE_TO_PLAYER, FIND_OBJECT, GET_OBJECT_INDEX, LOOK, MOVE, MOVE_IN_CAVE, PICK_X_Y, PLACE_PLAYER, RANDOM, REPOSITION, RETURN_MESSAGE, SEIGE, SPYGLASS, TAKE, TAKE_OVER_CASTLE, TRANSPORT_SUNDAR, TRANSPORT_TERRAK, UNLOCK_FILE, UPDATE_SCREENS, WRITE_OBJECT
+  cross-check: OK
+
+### b2r_play
+== b2r_play/play: divergences=0 redirect_lines=31018 detach=0 abort=0
+-- coverage: gcalls(clone=QUEST2) vs redirect WSAVS per routine (LIVE routines must be equal; STACKED show gcalls only):
+  UPDATE_SCREENS               LIVE    gcalls=4868   redirect=4868  
+  TERRITORY                    LIVE    gcalls=4529   redirect=4529  
+  DISTANCE_TO_PLAYER           LIVE    gcalls=2561   redirect=2561  
+  FIND_OBJECT                  LIVE    gcalls=2534   redirect=2534  
+  DIST                         LIVE    gcalls=900    redirect=900   
+  RANDOM                       LIVE    gcalls=79     redirect=79    
+  GET_INPUT                    LIVE    gcalls=7      redirect=7     
+  OWNS                         LIVE    gcalls=5      redirect=5     
+  READ_IN                      LIVE    gcalls=4      redirect=4     
+  TERRAIN                      LIVE    gcalls=4      redirect=4     
+  STORMS_AT_SEA                LIVE    gcalls=2      redirect=2     
+  MOVE_FAMILIAR                LIVE    gcalls=2      redirect=2     
+  SIGNAL_TURN                  LIVE    gcalls=2      redirect=2     
+  INIT_SCREEN                  LIVE    gcalls=1      redirect=1     
+  REPORT                       LIVE    gcalls=1      redirect=1     
+  HIT_ANY_CHAR                 LIVE    gcalls=1      redirect=1     
+  REFRESH_SCREEN               LIVE    gcalls=1      redirect=1     
+  REGEN_SPELLS                 LIVE    gcalls=1      redirect=1     
+  LOGON                        LIVE    gcalls=1      redirect=1     
+  THIEF                        LIVE    gcalls=1      redirect=1     
+  CATAPULT                     LIVE    gcalls=1      redirect=1     
+  MOVE                         LIVE    gcalls=1      redirect=1     
+  DEFEND                       LIVE    gcalls=1      redirect=1     
+  TAKE                         LIVE    gcalls=1      redirect=1     
+  TOWER_ATTACK                 LIVE    gcalls=1      redirect=1     
+  AUTO_MOVE                    LIVE    gcalls=1      redirect=1     
+  live routines NOT reached this run: ALLY_PLAYER, BACKPACK, CASTLE_INVENTORY, CLONE_SUNDAR, DISPLAY_FLASK, GET_OBJECT_INDEX, LOOK, MOVE_IN_CAVE, PICK_X_Y, PLACE_PLAYER, REPOSITION, RETURN_MESSAGE, SEIGE, SPYGLASS, TAKE_OVER_CASTLE, TRANSPORT_SUNDAR, TRANSPORT_TERRAK, UNLOCK_FILE, WRITE_OBJECT
+  cross-check: OK
+
+### b2r_inj
+== b2r_inj/play: divergences=0 redirect_lines=1269 detach=1 abort=0
+-- coverage: gcalls(clone=QUEST2) vs redirect WSAVS per routine (LIVE routines must be equal; STACKED show gcalls only):
+  DIST                         LIVE    gcalls=600    redirect=600   
+  GET_INPUT                    LIVE    gcalls=7      redirect=7     
+  OWNS                         LIVE    gcalls=4      redirect=4     
+  READ_IN                      LIVE    gcalls=4      redirect=4     
+  TERRAIN                      LIVE    gcalls=3      redirect=3     
+  TERRITORY                    LIVE    gcalls=2      redirect=2     
+  INIT_SCREEN                  LIVE    gcalls=1      redirect=1     
+  REPORT                       LIVE    gcalls=1      redirect=1     
+  FIND_OBJECT                  LIVE    gcalls=1      redirect=1     
+  HIT_ANY_CHAR                 LIVE    gcalls=1      redirect=1     
+  REFRESH_SCREEN               LIVE    gcalls=1      redirect=1     
+  STORMS_AT_SEA                LIVE    gcalls=1      redirect=1     
+  REGEN_SPELLS                 LIVE    gcalls=1      redirect=1     
+  LOGON                        LIVE    gcalls=1      redirect=1     
+  THIEF                        LIVE    gcalls=1      redirect=1     
+  CATAPULT                     LIVE    gcalls=1      redirect=1     
+  DEFEND                       LIVE    gcalls=1      redirect=1     
+  MOVE_FAMILIAR                LIVE    gcalls=1      redirect=1     
+  SIGNAL_TURN                  LIVE    gcalls=1      redirect=1     
+  TOWER_ATTACK                 LIVE    gcalls=1      redirect=1     
+  AUTO_MOVE                    LIVE    gcalls=1      redirect=1     
+  live routines NOT reached this run: ALLY_PLAYER, BACKPACK, CASTLE_INVENTORY, CLONE_SUNDAR, DISPLAY_FLASK, DISTANCE_TO_PLAYER, GET_OBJECT_INDEX, LOOK, MOVE, MOVE_IN_CAVE, PICK_X_Y, PLACE_PLAYER, RANDOM, REPOSITION, RETURN_MESSAGE, SEIGE, SPYGLASS, TAKE, TAKE_OVER_CASTLE, TRANSPORT_SUNDAR, TRANSPORT_TERRAK, UNLOCK_FILE, UPDATE_SCREENS, WRITE_OBJECT
+  cross-check: OK
+Lockstep: ordinal 0 DETACHED at 7017F036 (?FATAL) — clone halted, master continues unverified
+
+### b2r_abort
+== b2r_abort/m: divergences=0 redirect_lines=19 detach=0 abort=2
+-- coverage: gcalls(clone=QUEST2) vs redirect WSAVS per routine (LIVE routines must be equal; STACKED show gcalls only):
+  READ_IN                      LIVE    gcalls=3      redirect=3     
+  GET_INPUT                    LIVE    gcalls=2      redirect=2     
+  INIT_SCREEN                  LIVE    gcalls=1      redirect=1     
+  HIT_ANY_CHAR                 LIVE    gcalls=1      redirect=1     
+  REFRESH_SCREEN               LIVE    gcalls=1      redirect=1     
+  DIST                         LIVE    gcalls=1      redirect=1     
+  LOGON                        LIVE    gcalls=1      redirect=1     
+  live routines NOT reached this run: ALLY_PLAYER, AUTO_MOVE, BACKPACK, CASTLE_INVENTORY, CATAPULT, CLONE_SUNDAR, DEFEND, DISPLAY_FLASK, DISTANCE_TO_PLAYER, FIND_OBJECT, GET_OBJECT_INDEX, LOOK, MOVE, MOVE_FAMILIAR, MOVE_IN_CAVE, OWNS, PICK_X_Y, PLACE_PLAYER, RANDOM, REGEN_SPELLS, REPORT, REPOSITION, RETURN_MESSAGE, SEIGE, SIGNAL_TURN, SPYGLASS, STORMS_AT_SEA, TAKE, TAKE_OVER_CASTLE, TERRAIN, TERRITORY, THIEF, TOWER_ATTACK, TRANSPORT_SUNDAR, TRANSPORT_TERRAK, UNLOCK_FILE, UPDATE_SCREENS, WRITE_OBJECT
+  cross-check: OK
+================ WORLD ABORT ================
+
+### b1r_m
+== b1r_m/m: divergences=0 redirect_lines=1210 detach=1 abort=0
+-- coverage: gcalls(clone=QUEST2) vs redirect WSAVS per routine (LIVE routines must be equal; STACKED show gcalls only):
+  DIST                         LIVE    gcalls=600    redirect=600   
+  READ_IN                      LIVE    gcalls=4      redirect=4     
+  OWNS                         LIVE    gcalls=1      redirect=1     
+  live routines NOT reached this run: DISTANCE_TO_PLAYER, FIND_OBJECT, RANDOM
+  cross-check: OK
+Lockstep: ordinal 0 DETACHED at 7017FCE8 (I.STOP) — clone halted, master continues unverified
+
+### b1r_fo
+== b1r_fo/failopen: divergences=0 redirect_lines=1808 detach=0 abort=0
+-- coverage: gcalls(clone=QUEST2) vs redirect WSAVS per routine (LIVE routines must be equal; STACKED show gcalls only):
+  DIST                         LIVE    gcalls=900    redirect=900   
+  READ_IN                      LIVE    gcalls=3      redirect=3     
+  OWNS                         LIVE    gcalls=1      redirect=1     
+  live routines NOT reached this run: DISTANCE_TO_PLAYER, FIND_OBJECT, RANDOM
+  cross-check: OK
+
+### b1r_play
+== b1r_play/play: divergences=0 redirect_lines=12303 detach=0 abort=0
+-- coverage: gcalls(clone=QUEST2) vs redirect WSAVS per routine (LIVE routines must be equal; STACKED show gcalls only):
+  DISTANCE_TO_PLAYER           LIVE    gcalls=2586   redirect=2586  
+  FIND_OBJECT                  LIVE    gcalls=2577   redirect=2577  
+  DIST                         LIVE    gcalls=900    redirect=900   
+  RANDOM                       LIVE    gcalls=80     redirect=80    
+  OWNS                         LIVE    gcalls=5      redirect=5     
+  READ_IN                      LIVE    gcalls=4      redirect=4     
+  live routines NOT reached this run: none
+  cross-check: OK
+
+### b1r_inj
+== b1r_inj/play: divergences=0 redirect_lines=1233 detach=1 abort=0
+-- coverage: gcalls(clone=QUEST2) vs redirect WSAVS per routine (LIVE routines must be equal; STACKED show gcalls only):
+  DIST                         LIVE    gcalls=605    redirect=605   
+  OWNS                         LIVE    gcalls=4      redirect=4     
+  READ_IN                      LIVE    gcalls=4      redirect=4     
+  RANDOM                       LIVE    gcalls=3      redirect=3     
+  FIND_OBJECT                  LIVE    gcalls=1      redirect=1     
+  live routines NOT reached this run: DISTANCE_TO_PLAYER
+  cross-check: OK
+Lockstep: ordinal 0 DETACHED at 7017F036 (?FATAL) — clone halted, master continues unverified
+
+### b1r_abort
+== b1r_abort/m: divergences=0 redirect_lines=7 detach=0 abort=2
+-- coverage: gcalls(clone=QUEST2) vs redirect WSAVS per routine (LIVE routines must be equal; STACKED show gcalls only):
+  READ_IN                      LIVE    gcalls=3      redirect=3     
+  DIST                         LIVE    gcalls=1      redirect=1     
+  live routines NOT reached this run: DISTANCE_TO_PLAYER, FIND_OBJECT, OWNS, RANDOM
+  cross-check: OK
+================ WORLD ABORT ================
+

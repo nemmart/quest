@@ -1,0 +1,18 @@
+Hi Claude!
+
+We're working on a game that was written for the Data General MV/8000 (Eagle Eclipse)
+running AOS/VS circa 1988, written in PL/1.
+
+The game source has been lost.  But binaries still remain.  About 10 years back, I wrote
+an emulator of the hardware and enough bits of the OS to run the game in emulation.
+You can find a README in work/DG_Quest/README.  All of the emulation source is available
+under work/DG_Quest/{debug, hw, os}/*.java and work/DG_Quest/Launch.java.  This emulator
+works great, and I can play the game.
+
+The long term goal of this project is to recreate the source of the game in modern c++17
+but keep the running code faithful to the original.
+
+So our project is to plot a path from this emulation (that runs) back through code.  My 
+development environment is Windows + Cygwin and g++ 11.4.
+
+Looking forward to working with you on the project.

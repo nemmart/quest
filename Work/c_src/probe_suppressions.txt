@@ -1,0 +1,10 @@
+# Quest probe suppression catalogue (per-site input file, user ruling Aug 14).
+# Loaded from the LAUNCH CWD in probe mode (-zero=clone). Format per line:
+#   <call octal> <site-pc hex> <regs: a0 a1 a2> <SILENT|NOTE>  # note
+# SILENT = proven don't-care: no per-hit output, counted in the shutdown
+#          summary (hits + distinct values).
+# NOTE   = one-liner per hit; specimens still under observation.
+# When this file exists it is AUTHORITATIVE (built-in table ignored).
+# New-specimen forensic records give you the fields; add a line, replay.
+0303 7017E2F4 a0 SILENT  # 2026-08-14 #1 ?WRITE_SCREEN dead locals — 445 hits/72 values/exp.1, zero consequence
+0142 70175F2E a0 NOTE    # 2026-08-14 #2 game ?ISR dead ptr ac0 — one login hit/session, observing

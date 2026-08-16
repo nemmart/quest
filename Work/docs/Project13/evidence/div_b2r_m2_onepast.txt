@@ -1,0 +1,19 @@
+   rel pos = 0000
+
+================ LOCKSTEP DIVERGENCE ================
+mediated-call input mismatch (width 2, byte range E0003808..E0003809):
+  master value = 00000200
+  clone  value = 00000000
+master backtrace:
+frame  4 -- 7017FDED     guessing: .UKIL+0x8
+frame  3 -- REFRESH_SCREEN+0x48   [70176ADB]
+frame  2 -- GET_QUEST+0x75B   [7016BCA4]
+frame  1 -- QUEST+0x3B0   [7015C3B5]
+frame  0 -- 7017EA51     guessing: I.INIT+0x23
+clone backtrace:
+frame  4 -- 7017FDED     guessing: .UKIL+0x8
+frame  3 -- REFRESH_SCREEN+0x48   [70176ADB]
+frame  2 -- GET_QUEST+0x75B   [7016BCA4]
+frame  1 -- QUEST+0x3B0   [7015C3B5]
+frame  0 -- 7017EA51     guessing: I.INIT+0x23
+=====================================================

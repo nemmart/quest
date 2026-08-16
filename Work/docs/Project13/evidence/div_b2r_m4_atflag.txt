@@ -1,0 +1,19 @@
+
+================ LOCKSTEP DIVERGENCE ================
+mediated-call input mismatch (width 2, byte range E0003808..E0003809):
+  clone word addr USED at read = F0001C04
+  master value = 00000200
+  clone  value = 00000000
+  read addr: master word=70001C04 clone word(now)=70001BCC areas_depth(now)=1
+  master words @70001BFC: 0000 0000 0000 0000 0000 0000 0800 0000 0200 0000 7000 1C02 0000 0003 7017 E2F6
+  clone  words @70001BC4: 0000 0000 0000 0000 0000 0000 0800 0000 0200 0000 7000 1BCA 0000 0003 7017 E2F6
+master backtrace:
+frame  4 -- 7017FDED     guessing: .UKIL+0x8
+frame  3 -- REFRESH_SCREEN+0x48   [70176ADB]
+frame  2 -- GET_QUEST+0x75B   [7016BCA4]
+frame  1 -- QUEST+0x3B0   [7015C3B5]
+frame  0 -- 7017EA51     guessing: I.INIT+0x23
+clone backtrace:
+frame  4 -- 7017FDED     guessing: .UKIL+0x8
+frame  3 -- REFRESH_SCREEN+0x48   [70176ADB]
+frame  2 -- GET_QUEST+0x75B   [7016BCA4]
