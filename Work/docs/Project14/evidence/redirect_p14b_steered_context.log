@@ -1,0 +1,8 @@
+redirect seq=5119309 caller=QUEST2 WRTN  GET_INPUT            area_wfp=74003ECC ret_pc=7016AA66 real_wsp=7000114E (was 74003EBE) shadow_wsp=700012CC master_wfp=700012DA depth=1
+redirect seq=5119326 caller=QUEST2 WSAVS GET_INPUT            pc=7016AA35 area_wfp=74003ECC argc=1 frame=41 real_wsp=70001152 shadow_wsp=7000132C master_wfp=700012DA ret=7015DC00 depth=2
+redirect seq=5119334 caller=QUEST2 WRTN  GET_INPUT            area_wfp=74003ECC ret_pc=7016AA66 real_wsp=7000114E (was 74003EBE) shadow_wsp=700012CC master_wfp=700012DA depth=1
+redirect seq=5119344 caller=QUEST2 WSAVS ATTACK.3@7015E84A    pc=7015E84A area_wfp=7400080A argc=0 frame=115 real_wsp=70001150 shadow_wsp=700013BE master_wfp=700012D8 ret=7015DC22 depth=2 link=7400051A
+redirect seq=5119350 caller=QUEST2 WSAVS RANDOM               pc=7017664D area_wfp=7400728C argc=1 frame=2 real_wsp=70001158 shadow_wsp=700013D4 master_wfp=700013D0 ret=7015E91A depth=3
+redirect seq=5119353 caller=QUEST2 WRTN  RANDOM               area_wfp=7400728C ret_pc=70176671 real_wsp=70001154 (was 7400727E) shadow_wsp=700013C2 master_wfp=700013D0 depth=2
+redirect seq=5119363 caller=QUEST2 WRTN  ATTACK.3@7015E84A    area_wfp=7400080A ret_pc=7017E77D real_wsp=7000114E (was 740007FE) shadow_wsp=700012CC master_wfp=700012D8 depth=1
+redirect seq=5119291 caller=QUEST2 WSAVS ATTACK               pc=7015D7A7 area_wfp=7400051A argc=0 frame=186 real_wsp=7000114E shadow_wsp=700012CC master_wfp=70001158 ret=701791D8 depth=1

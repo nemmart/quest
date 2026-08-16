@@ -62,6 +62,25 @@ public:
   void close() override {}
 };
 
+// QUEST_PORT (Project 14 Phase B ruling): behavior-neutral env knob for
+// parallel battery runs; default 8781. Fail-loud on an unparseable value
+// (the QUEST_INJECT lesson: a malformed knob must never degrade silently).
+static int terminal_port() {
+  static int port = -1;
+  if(port > 0) return port;
+  port = 8781;
+  if(const char* p = getenv("QUEST_PORT")) {
+    char* end = nullptr;
+    long v = strtol(p, &end, 10);
+    if(end == p || *end != '\0' || v < 1 || v > 65535) {
+      fprintf(stderr, "QUEST_PORT: unparseable value '%s' (want a decimal port 1-65535)\n", p);
+      exit(2);
+    }
+    port = static_cast<int>(v);
+  }
+  return port;
+}
+
 static FSTerminal* wait_for_client() {
   if(acceptor_fd < 0) {
     acceptor_fd = ::socket(AF_INET, SOCK_STREAM, 0);
@@ -69,12 +88,13 @@ static FSTerminal* wait_for_client() {
       throw std::runtime_error("Unable to create server socket");
     int opt = 1;
     ::setsockopt(acceptor_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
+    int port = terminal_port();
     struct sockaddr_in addr{};
     addr.sin_family = AF_INET;
     addr.sin_addr.s_addr = INADDR_ANY;
-    addr.sin_port = htons(8781);
+    addr.sin_port = htons(static_cast<uint16_t>(port));
     if(::bind(acceptor_fd, reinterpret_cast<struct sockaddr*>(&addr), sizeof(addr)) < 0)
-      throw std::runtime_error("Unable to bind server socket on port 8781");
+      throw std::runtime_error("Unable to bind server socket on port " + std::to_string(port));
     if(::listen(acceptor_fd, 5) < 0)
       throw std::runtime_error("Unable to listen on server socket");
   }
@@ -93,6 +113,8 @@ static std::string to_upper(const std::string& s) {
 int main(int argc, char* argv[]) {
   // Unbuffered diagnostic - if this doesn't print, crash is before main()
   // (startup diagnostic removed)
+
+  terminal_port();  // eager QUEST_PORT validation: an unparseable value refuses to launch
 
   try {
   // Optional: -trace FILE -types TYPE,TYPE,...   (e.g. -types scalls,shared)
@@ -212,7 +234,7 @@ int main(int argc, char* argv[]) {
     fprintf(stderr, "-or-   %s [-trace FILE -types TYPE,...] <dir> <PR file 1> ... <PR file n>\n", argv[0]);
     fprintf(stderr, "\n");
     fprintf(stderr, "If a PR file name starts with an @, then the launcher waits for a\n");
-    fprintf(stderr, "terminal to connect to port 8781.\n");
+    fprintf(stderr, "terminal to connect to port %d.\n", terminal_port());
     return 1;
   }
 

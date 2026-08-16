@@ -353,6 +353,15 @@ const LiveRecord& Mapper::push_record(Machine& m, BookEntry* e, uint32_t entry_p
              static_cast<uint32_t>(rec.master_wfp),
              static_cast<uint32_t>(m.memory->read_wide(static_cast<uint32_t>(rec.area_wfp))) & 0x7FFFFFFF,
              records_.size());
+    // B1 evidence instrument (Project 14 Phase B ruling): nested entries
+    // (name form PARENT.n@pc) append the static link — the saved-ac1 wide
+    // of this frame's area image (wfp-6). Additive at line end; named
+    // routines' lines are unchanged.
+    if(e->name.find('@') != std::string::npos) {
+      size_t len = strlen(buf);
+      snprintf(buf + len, sizeof(buf) - len, " link=%08X",
+               static_cast<uint32_t>(m.memory->read_wide(static_cast<uint32_t>(rec.area_wfp) - 6)));
+    }
     os::Trace::line("redirect", m.process ? m.process->instance_label : std::string("?"), buf);
   }
   return records_.back();
