@@ -1,0 +1,10 @@
+m: div=0 redirect=1260 endpoint=/tmp/run-008-m/err:DETACHED expect=I.STOP detach
+fo: div=0 redirect=1863 endpoint= expect=handler
+injstd: div=0 redirect=1260 endpoint=/tmp/run-008-injstd/err:DETACHED expect=FATAL 7017F036
+abort: div=0 redirect=19 endpoint=/tmp/run-008-abort/err:WORLD ABORT expect=WORLD ABORT
+== B1 short legs done ==
+m: div=0 redirect=1260 endpoint=/tmp/run-008-m/err:DETACHED expect=I.STOP detach
+fo: div=0 redirect=1863 endpoint= expect=handler
+injstd: div=0 redirect=1260 endpoint=/tmp/run-008-injstd/err:DETACHED expect=FATAL 7017F036
+abort: div=0 redirect=19 endpoint=/tmp/run-008-abort/err:WORLD ABORT expect=WORLD ABORT
+B1-FINISH OK
