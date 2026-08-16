@@ -74,7 +74,7 @@ while true; do
   fi
 
   git add -A "results/$name"
-  git commit --quiet -m "results: $name" || true
+  git -c user.name="quest-runner" -c user.email="runner@localhost" commit --quiet -m "results: $name" || true
   # push with retry; a lost race just re-pulls
   for i in 1 2 3; do
     git push --quiet 2>/dev/null && break
