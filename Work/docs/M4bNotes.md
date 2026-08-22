@@ -352,7 +352,26 @@ local pairing, no wrap).
   Stack depth at the call = **6 wides**: 3 arg-pointers on top of the 3
   temporaries they reference. Census correctly maps ONLY the final WPSH
   (arg1-3 at 70169B81), call classified CLEAN, temp-building excluded.
-  Verified 0 WPSH miscategorized.
+  Verified 0 WPSH miscategorized. (The temporaries are never popped
+  because RETURN_MESSAGE is [[noreturn]] — see below — so there is no
+  "after the call" cleanup; the whole stack is abandoned at process
+  termination.)
+
+**RETURN_MESSAGE is a NORMAL compiled PL/I game routine that happens to
+be [[noreturn]].** It has a standard WSAVS 0x0003 frame and by-reference
+args like any game routine (it IS in the book and census), but its body
+ends in SYSCALL 0310 (process-terminate) with an inline message table
+("A mighty blow has been struck..." — game death/combat messages) and
+has NO WRTN anywhere. The C++ port is an unconditional
+terminate_process(message). So "noreturn" is a behavior property, NOT
+evidence it is runtime — a game routine whose job is to kill the process
+with a message. Consequences: correctly censused (args redirect
+normally); roll-call correctly lists it LIVE-UNEXERCISED-unless-fatal
+(reaching it means the process dies); arg temporaries need no cleanup
+(process death reclaims the stack). This is the general lesson that
+in-body stack temporaries are reclaimed by FRAME TEARDOWN at WRTN (or by
+process death for noreturn routines), never by per-call pops — so
+redirecting arg pushes cannot leak stack.
 
 **Flag for M4b (pass-by-reference) — sharpened:** some game→game args
 are ADDRESSES of caller stack temporaries. At such a site the stack
