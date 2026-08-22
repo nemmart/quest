@@ -5,11 +5,17 @@ findings fixed), lockstep + redirect trace. **0 divergences, 0 mapper
 aborts across 1,316,947 redirect events.** 44 of 101 live routines
 exercised in real play, including the key nested-procedure cases.
 
-## Headline
+## Headline (corrected)
 
-M4a MECHANISM COMPLETE and CONFIRMED IN LIVE PLAY. All 101 callable
-game routines migrate to 0x74000000 areas; the full scripted battery
-(fo/m/inj/abort/play) is green and a real human play session ran clean.
+All 101 callable routines are MIGRATED (in the book, redirect on). The
+MECHANISM is validated on the **44 routines actually EXERCISED** under
+lockstep (this session + the scripted battery), 0 divergences across
+1.3M redirect events — a wide, representative 44 (nested, large-dyn,
+combat, WSAVR, hot leaves). The other **57 are MIGRATED-BUT-UNEXERCISED**:
+configured to redirect but never yet executed migrated in any run, so
+UNPROVEN. M4a is NOT fully closed until those 57 run clean — cf.
+DISPLAY_SCREEN, which looked fine until it first executed and tripped
+Finding A. This is a real coverage gap, not a footnote.
 
 ## LIVE-VALIDATED (fired in play, 0 div) — 44 routines
 
@@ -52,10 +58,15 @@ Boot QUEST, C_A_LISTENER (task entry), the 26 ON-unit bodies. Reached by
 dispatch not call; become branch targets under M5 static handler
 dispatch. Not M4 scope.
 
-## Status
+## Status (corrected)
 
-M4a is DONE for its mechanism goal. The 57 unexercised routines are a
-coverage backlog (reachable by more play or targeted scripts), not
-open risk. Recommend: proceed to M4b; sweep remaining coverage
-opportunistically (or one more play session into caves/bargain/death)
-when convenient.
+M4a mechanism is VALIDATED ON 44/101, PRESUMED on the remaining 57.
+Not fully closed. To close: the 57 migrated-but-unexercised routines
+must execute under lockstep — targeted play (caves, death, bargain,
+menus, castle ops, boats, fire, alchemist) and/or scripted approaches
+into those paths. Each is low-probability-of-surprise (mechanism is the
+same) but UNPROVEN until run — the Finding A precedent says run them.
+Options: (1) more play sessions covering the missing content; (2)
+scripted drivers that reach specific paths; (3) accept residual risk
+and proceed to M4b, closing coverage in parallel. Recommend (1)/(2)
+before declaring M4a done.

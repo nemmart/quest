@@ -1,6 +1,6 @@
 # Where things stand
 
-## ★ M4a MECHANISM COMPLETE (Aug 22 2026)
+## M4a — mechanism validated on 44/101 exercised; 57 migrated-but-unexercised (Aug 22 2026)
 
 All 101 callable game routines migrate to 0x74000000 areas; both mapper
 findings closed (Finding A: `s>=W` stack leg; Finding B: I2 as wsl−heap_break
