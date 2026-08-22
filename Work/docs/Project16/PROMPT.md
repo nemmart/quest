@@ -41,13 +41,32 @@ runs stock so the checker always has a faithful reference):
 
 ## Scope — ONE site, then STOP
 
-Pick ONE simple, frequently-exercised game→game call site: a fixed
-arg count, all args pushed by XPEF/LPEF (NOT the WPSH multi-slot case
-yet), the callee already M4a-live and exercised in play, and NOT
-RETURN_MESSAGE (noreturn) and NOT a nested/XCALL site. Nominate it at
-the plan gate with rationale (GET_INPUT's caller, a DISTANCE_TO_PLAYER
-or DIST call site, etc. — something that fires constantly in the m/play
-battery so lockstep exercises it hard).
+**The site is chosen: the DIST,4 call at 0x70166E1C.** Selected from
+m-leg coverage data (task 017): DIST is called ~1200×/20s in the FAST
+m leg — so a single m run hammers the converted site hundreds of times,
+giving lockstep massive coverage in seconds (no play run needed to
+exercise it). The arg window:
+```
+70166e0e XPEF [ac3+0x418]    ; arg4
+70166e10 XPEF [ac3+0x412]    ; arg3
+70166e12 XWLDA 2,[ac3+0x416] ; register setup (NOT a push — preserve as-is)
+70166e14 LPEF [ac2+0xF86F]   ; arg2
+70166e17 XWLDA 2,[ac3+0x414] ; register setup (NOT a push — preserve as-is)
+70166e19 LPEF [ac2+0xF86E]   ; arg1
+70166e1c LCALL [0x70168717],4 ; DIST
+```
+argmap: arg1@70166E19, arg2@70166E14, arg3@70166E10, arg4@70166E0E.
+4 args, all XPEF/LPEF (no WPSH). Two XWLDA register-setups are
+interleaved between pushes — the redirect must WRITE only the 4 arg
+pushes to DIST's area slots and leave the XWLDAs untouched (they
+compute values later pushes use). DIST is M4a-live (area 0x74003950,
+4-wide frame, no dyn/push).
+
+**Watch (Stage 0):** DIST uses the `slotpatch` return convention (the
+callee patches a result slot). Confirm this interacts cleanly with the
+marker-stays-on-stack ruling and the write-mode WRTN fixup before
+building — it is a normal returning routine, so simpler than noreturn/
+nested, but the return-value path deserves a look.
 
 Both caller styles must COEXIST: this one site writes args; every other
 site still pushes (M4a copy mode). The book/decoration marks only the
