@@ -34,7 +34,7 @@ Machine::Machine(OSProcess* process, OSTask* task, SymbolTable* symbols, Memory*
     lockstep_role(0), lockstep_ordinal(-1), rtcov(RTStubs::coverage_for(process)),
     native_break(false), native_span(false), rt_pending_return(0),
     pending_native(nullptr), terminal_reached(false),
-    zero_claims(zero_mode == ZERO_BOTH)
+    zero_claims(zero_mode == ZERO_BOTH), args_written(false)
 {
   call_stack = new CallStack(symbols, this);
   for(int i=0; i<8; i++)

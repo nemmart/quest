@@ -68,6 +68,12 @@ public:
                                  // or QUEST_TERMINAL test pc): last verified pair, then detach
   bool        zero_claims;       // ruling 8: zero stack words exposed by wsp claims
                                  // (EagleStack claim sites + RTBridge::emulate_frame*)
+  bool        args_written;      // M4b (Project 16): set by a decorated LCALL whose
+                                 // args were WRITTEN to the callee's area; consumed-
+                                 // and-cleared by the very next WSAVS/WSAVR (set at a
+                                 // non-book save = abort_world). Clone-only machinery
+                                 // like the mapper — never compared or serialized
+                                 // (M4bNotes Q5: no, by architecture).
 
   // ---- M4a mapping layer (docs/Mapper.md; Project 14) ----
   // The Machine OWNS the Mapper instance (configured by launch code at
