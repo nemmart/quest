@@ -165,3 +165,31 @@ M4's remaining waves should not invest in machinery that assumes the
 full condition system survives into M5 unchanged — e.g. exotic unwind
 support for dyn routines' recovery paths that this direction would
 fatalize. Cheap compliance now; decision stays open.
+
+---
+
+## SYSCALL 0310 is compiler-known-noreturn (Aug 22 2026)
+
+RETURN_MESSAGE (a normal PL/I game routine) ends in SYSCALL 0310 with
+NO epilogue — no WRTN anywhere in its body, and its inline message-data
+table is packed immediately after the SYSCALL. Contrast: the other
+syscalls in the program (0245, 0246, 0142, 073, 044, 0232) are all
+followed by normal code (WBR/continued execution) and their routines
+have WRTNs. Only 0310 is treated as terminal.
+
+Inference: the DG PL/I toolchain KNEW SYSCALL 0310 (process-terminate)
+does not return — via a noreturn-equivalent attribute on the declared
+entry/intrinsic it compiled against (the runtime declaration files, lost
+with the source). Reachability analysis then pruned RETURN_MESSAGE's
+epilogue as dead code. This is evidence about the TOOLCHAIN's knowledge,
+not just runtime behavior — the compiler did per-entry noreturn
+reasoning.
+
+For M5: SYSCALL 0310 is a terminal/noreturn edge (a graph SINK), and
+RETURN_MESSAGE is therefore a sink node — a call to it is an invoke with
+no normal successor (only the process-death "edge"). This composes with
+the invoke-style / fatalize direction already sketched: RETURN_MESSAGE
+is the canonical game-level terminate, distinct from the ?-runtime
+raise sources. Any static reachability/liveness must treat a call to
+RETURN_MESSAGE (and a direct SYSCALL 0310) as not-returning, exactly as
+the original compiler did.
