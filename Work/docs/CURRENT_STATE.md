@@ -1,5 +1,21 @@
 # Where things stand
 
+## ★ P16 (M4b first slice) — STOPPED AT A FINDING, awaiting ruling (Aug 22 2026)
+
+One site converted (DIST,4 @ 70166E1C, caller map + write-mode WSAVS +
+mode-aware record/fixup, both Stage-0 reconciliations ratified). The
+MECHANISM IS PROVEN: 84 clean write-mode calls in the m leg, shadow/W−2/
++2·argc arithmetic exact, flag rules clean, copy mode coexists, master
+stock. But the battery (task 018) hit the boundary-2 stop condition:
+client batches are a 500-instruction QUANTUM, so compare pairs land
+mid-window — master's wsp is 2k ahead of shadow after k partial pushes →
+div=1 in every site-reaching leg (M4bNotes issue 1(a) is real). Stopped
+per boundary 2; NO mapper/design edits. Two candidate rulings written up
+neutrally in docs/Project16/REPORT.md §5: C1 open-window shadow
+accounting (Gen 5) vs C2 quantum alignment (batch never breaks inside a
+window). Task 019 captures the raw dump. Resume: rule C1/C2 → implement
+→ re-run task-018 battery (expect div=0) → land.
+
 ## ★ M4a CLOSED (Aug 22 2026)
 
 M4a is DONE. All 101 callable game routines migrate to 0x74000000 areas;
