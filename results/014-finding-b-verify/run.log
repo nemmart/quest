@@ -1,0 +1,17 @@
+=== KEY LEG: fo in failopen mode (arms I2) ===
+fo       div=0   probes=0   i2aborts=2   endpoint=WORLD-ABORT
+=== no-regression ===
+m        div=0   probes=0   i2aborts=2   endpoint=WORLD-ABORT
+inj      div=0   probes=0   i2aborts=2   endpoint=WORLD-ABORT
+abort    div=0   probes=0   i2aborts=2   endpoint=WORLD-ABORT
+play     div=0   probes=0   i2aborts=2   endpoint=WORLD-ABORT
+== verdicts ==
+fo       div=0   probes=0   i2aborts=2   endpoint=WORLD-ABORT
+m        div=0   probes=0   i2aborts=2   endpoint=WORLD-ABORT
+inj      div=0   probes=0   i2aborts=2   endpoint=WORLD-ABORT
+abort    div=0   probes=0   i2aborts=2   endpoint=WORLD-ABORT
+play     div=0   probes=0   i2aborts=2   endpoint=WORLD-ABORT
+== fo I2 detail (should be NONE after fix) ==
+MAPPER I2: stack clearance violated (wsl 7001770A <= stack-leg high water 740072C4, shadow_wsp 740072C4, depth 1)
+Exception: MAPPER I2: stack clearance violated (wsl 7001770A <= stack-leg high water 740072C4, shadow_wsp 740072C4, depth 1)
+FINDING-B-VERIFY OK
