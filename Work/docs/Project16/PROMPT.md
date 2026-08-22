@@ -27,9 +27,36 @@ stops. Prior sessions proved M4a; do NOT rebuild it.
 
 For a converted call site, three coordinated pieces (clone-only; master
 runs stock so the checker always has a faithful reference):
-1. **push_map[pc] → area slot**: at a decorated call's arg-push
-   instruction, WRITE the value into the callee's fixed area arg slot
-   instead of pushing to the stack.
+1. **The mechanism is ONE `pc → area address` map, checked by THREE
+   instruction classes.** (This is prescribed, not open — build exactly
+   this.)
+   - **Push instructions** (XPEF/LPEF/XPEFB/LPEFB/WPSH): if the push's
+     pc is in the map, STORE the value to the mapped area address
+     instead of pushing to [wsp] / bumping wsp. The map gives the base
+     of the store region for that site; each push writes its arg's slot
+     (see slot-offset note below).
+   - **LCALL**: if the call's pc is in the map, WRITE the marker
+     (arg-count word) to the mapped area marker address AND set the
+     "args written not pushed" flag — while STILL pushing the marker to
+     the stack as the tombstone (ruling #2).
+   - **WSAVS**: this side ALREADY EXISTS. The M4a redirect keys WSAVS by
+     the callee entry pc via `machine.mapper.entry_for_pc(pc) →
+     BookEntry{area,...}` (EagleStack.cpp ~line 238). M4b EXTENDS that
+     existing path (consume the flag → write-mode frame handling); it
+     does NOT add a new WSAVS lookup.
+   So: the address BOOK already handles the callee-entry (WSAVS/WRTN)
+   side; the NEW `pc → address` map handles the caller side (the push
+   pcs + the LCALL pc). Stage 0: decide whether to extend the book with
+   these caller-side entries or keep a second parallel map — either is
+   fine, but state which and why. Both resolve to the same callee's area
+   region.
+
+   **Slot-offset (confirm at Stage 0):** each arg-push pc must resolve to
+   the EXACT destination word (base + that arg's slot offset). State
+   whether the map stores per-pc exact addresses, or base + a positional
+   offset the push computes. For DIST,4 @ 70166E1C the four push pcs
+   (70166E0E/10/14/19) map to DIST's four area arg slots in arg order
+   (argmap: arg1@E19, arg2@E14, arg3@E10, arg4@E0E).
 2. **The call marker STAYS pushed on the stack** (ruling): the LCALL's
    arg-count/linkage word is still pushed to the stack exactly as
    today, and KEPT there until the return — a live-call tombstone so
