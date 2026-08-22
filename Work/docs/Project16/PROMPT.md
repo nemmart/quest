@@ -31,9 +31,15 @@ runs stock so the checker always has a faithful reference):
    instruction, WRITE the value into the callee's fixed area arg slot
    instead of pushing to the stack.
 2. **The call marker STAYS pushed on the stack** (ruling): the LCALL's
-   arg-count/linkage word is still pushed (kept until return — a
-   live-call tombstone so the mapper's address-ordering stays valid)
-   AND written to the callee area. This means NO mapper change.
+   arg-count/linkage word is still pushed to the stack exactly as
+   today, and KEPT there until the return — a live-call tombstone so
+   the mapper's address-ordering stays valid (every live call still
+   leaves ≥1 word on the stack, so no zero-arg aliasing; this is WHY
+   M4b needs NO mapper change). The marker is ALSO written into the
+   callee area. Which copy is authoritative: the callee reads its
+   arg-count from the AREA copy (like its args); the stack copy is a
+   dead tombstone, never read for content. Only the ARGUMENT pushes
+   are redirected off the stack — the marker push is UNCHANGED.
 3. **A per-machine "args written not pushed" flag**: the decorated call
    sets it; **every WSAVS/WSAVR consume-and-clears it** with the three
    unconditional rules (M4bNotes): set+book-redirect→write mode, clear;
