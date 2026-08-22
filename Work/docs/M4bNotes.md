@@ -295,3 +295,41 @@ in one shot), not the one-pc→one-slot model that XPEF/LPEF sites use.
 quest.argmap already encodes this as repeated `<routine> argN at <same
 pc>` lines — the push_map builder reads slot count per pc from there.
 All 25 are clean contiguous runs (0,1 or 0,2), so no cycle walk needed.
+
+---
+
+## WPSH/WPOP population fully characterized (Aug 22 2026)
+
+The 59 WPSH / 23 WPOP split into TWO disjoint, fully-understood uses:
+
+**(1) 25 WPSH = argument marshalling** (game→game calls; in quest.argmap;
+drained by the callee's WRTN, never by a WPOP). Multi-slot per pc:
+TERRAIN `WPSH 0,2` (3), TERRITORY `WPSH 0,1` (2), RETURN_MESSAGE 2–3.
+These are M4b's concern (push_map, pc→multiple slots).
+
+**(2) 23 WPSH = local frame-pointer-borrow save/restore brackets**
+(these are the ones that DO pair with the 23 WPOPs). Every one is the
+identical 3-instruction idiom, verified across all 23:
+```
+WPSH 3,3          ; save AC3
+LDAFP 3           ; load frame pointer into AC3
+X{W,N}STA/XSTB … [ac3+off]   ; store one register into a frame slot
+WPOP 3,3          ; restore AC3
+```
+23/23 contain LDAFP, 0/23 contain a call, span is EXACTLY 3
+instructions, only variation is the store opcode (XWSTA ×19, XNSTA ×2,
+XSTB ×2), operands 3,3 (once 2,2). The compiler emits this when it must
+write a frame slot but AC3 is live. NOT block-move/WCMV related (those
+don't clobber AC3 this way); NOT around calls.
+
+**Remaining 11 WPSH** (59−25−23) are the single-register arg pushes
+already counted in (1)'s pc set / other single-slot arg sites.
+
+**Consequence:** WPSH/WPOP are NOT an open problem. Population (1) is
+M4b (censused). Population (2) is a trivial, self-contained, stack-
+symmetric local idiom — both engines execute it identically on the real
+stack, the mapper's compression leg already handles the transient
+AC3-save word, and it spans 3 instructions with no call/alloc — so it
+needs NO special M4b/M4c handling. If M4c ever relocates in-body stack
+residue, these brackets are the easiest possible case (fixed shape,
+local pairing, no wrap).
