@@ -333,3 +333,29 @@ AC3-save word, and it spans 3 instructions with no call/alloc — so it
 needs NO special M4b/M4c handling. If M4c ever relocates in-body stack
 residue, these brackets are the easiest possible case (fixed shape,
 local pairing, no wrap).
+
+---
+
+## All 59 WPSH accounted for (Aug 22 2026) — complete partition
+
+- **25** — game→game arg marshalling (in quest.argmap; push_map handles
+  pc→multiple slots).
+- **23** — frame-pointer-borrow brackets (WPSH 3,3/LDAFP/store/WPOP 3,3;
+  local, trivial, no handling needed).
+- **8** — game→RUNTIME arg pushes (?OPEN_SHARED_IO_FILE ×3, B.MOVE ×2,
+  C.TRANS ×3). Out of scope: game→RT stays stock (RT → M5 intrinsics).
+- **3** — stack-temporary construction for a PASS-BY-REFERENCE call
+  (RETURN_MESSAGE at 70169B82). NOT arg pushes: the idiom is
+  `WPSH r,r / LDASP r` repeated to materialize temporaries on the stack
+  and load their ADDRESSES into ACs, then a final `WPSH 0,2` pushes
+  those three addresses as the actual args. Census correctly maps only
+  the final WPSH (arg1-3 at 70169B81) and excludes the temp-building
+  WPSHes. Verified: 0 WPSH miscategorized.
+
+**Flag for M4b (pass-by-reference):** some game→game args are ADDRESSES
+of caller stack temporaries (built via WPSH+LDASP). Redirecting the arg
+PUSH to the callee area is correct and sufficient — but the pushed value
+is a pointer into the real stack, and what it points AT is not
+relocated. The callee dereferences the pointer; the mapper handles the
+stack address. No special handling needed, but the M4b implementer
+should know an arg can be a live stack-temp pointer, not just a value.
