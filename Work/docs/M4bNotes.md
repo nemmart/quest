@@ -277,10 +277,15 @@ the only multi-slot-per-pc case). They feed three game routines:
 IMPORTANT (corrected): TERRAIN (0x7017C877), TERRITORY (0x7017CD71),
 UPDATE_SCREENS (0x7017D635), RETURN_MESSAGE (0x70176FDD) all sit in the
 0x7017xxxx range but ARE game routines — in the book, migrated, in the
-census. The game/RT split is the BOOK, not a raw address cutoff. Game
-code runs up to ~0x7017D6xx; true RT/compiler helpers start ~0x7017Exxx
-(?WRITE_SCREEN 0x7017E27A, B.MOVE 0x7017E5CB, C.TRANS 0x7017E64A,
-?OPEN_SHARED_IO_FILE). Only WPSH feeding those 0x7017Exxx RT targets is
+census. The game/RT split is the BOOK, not a raw address cutoff.
+EXACT boundary: last game routine = WRITE_OBJECT (0x7017D859); first
+runtime routine = ?CHAR_TO_UNSIGNED (0x7017D99B); from there up all
+`?`/`MT?` system routines (?UNSIGNED_TO_CHAR, ?UMUL32, ?UDIV32,
+?OPEN_FILE, ?READ, ?CREATE_TASK, ... and further up ?WRITE_SCREEN
+0x7017E27A, B.MOVE 0x7017E5CB, C.TRANS 0x7017E64A). So game < 0x7017D99B,
+runtime >= 0x7017D99B, marked cleanly by the `?` naming. (?CHAR_TO_UNSIGNED
+being first RT is apt — its failure, bad numeric input, is the only
+organically-observed signal source; see M5Notes.) Only WPSH feeding those 0x7017Exxx RT targets is
 out of scope (game→RT stays stock); WPSH feeding TERRAIN/TERRITORY/
 UPDATE_SCREENS/RETURN_MESSAGE is IN scope and correctly censused.
 
