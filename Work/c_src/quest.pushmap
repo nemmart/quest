@@ -1,0 +1,12 @@
+# M4b caller map — Project 16, ONE site: the DIST,4 call at 70166E1C.
+# Selected from m-leg coverage (task 017): DIST ~1200x/20s in the FAST m leg.
+# push <pc> <area word addr>: XPEF/LPEF stores to the callee arg slot, no push.
+# call <pc> <area word addr>: LCALL writes the marker there, STILL pushes it
+#   (call-marker ruling), sets the written-not-pushed flag.
+# DIST book entry: area 74003950, wfp 74003962, argc 4 -> args at [74003950,
+# 74003958), marker at 74003958 (= wfp-10).
+push 70166E0E 74003950   # arg4  XPEF [ac3+0x418]
+push 70166E10 74003952   # arg3  XPEF [ac3+0x412]
+push 70166E14 74003954   # arg2  LPEF [ac2+0xF86F]
+push 70166E19 74003956   # arg1  LPEF [ac2+0xF86E]
+call 70166E1C 74003958   # LCALL [70168717],4 -> DIST marker slot

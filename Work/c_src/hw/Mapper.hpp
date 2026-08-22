@@ -78,8 +78,13 @@ struct LiveRecord {
   int32_t    W;             // clone real wsp at the redirected WSAVS (the LCALL frame word)
   int32_t    argc;          // actual argc from the frame word
   int32_t    frame_wides;
-  int32_t    master_wfp;    // fwd(W) + 10: where the master's frame pointer sits
+  int32_t    master_wfp;    // fwd(W) + 10 (copy mode) or fwd(W) + 2*argc + 10 (write
+                            // mode — the marker sits 2*argc lower on the clone)
   int32_t    shift_after;   // cumulative shift for real-stack addresses above W (words)
+  bool       args_written;  // M4b write-mode record (the mode bit M4bNotes
+                            // anticipated): the caller WROTE its args into the area;
+                            // only the marker is on the clone stack, so this record's
+                            // elision is 2*argc + 10 + 2*frame, not 10 + 2*frame.
 };
 
 class Mapper {
@@ -119,6 +124,17 @@ public:
 
   bool redirect_configured() const { return book_ != nullptr; }
   BookEntry* entry_for_pc(uint32_t pc) const { return book_ ? book_->lookup_pc(pc) : nullptr; }
+  // M4b (Project 16): the caller-map query, gated on the book exactly like
+  // entry_for_pc — the master's mapper has no book, so the master pushes
+  // stock at every site by configuration, not by role query. One map,
+  // three instruction classes: at a push pc the value is the arg slot; at
+  // an LCALL pc it is the marker slot (wfp_base − 10). 0 = not mapped
+  // (area addresses are never 0).
+  uint32_t caller_write(uint32_t pc) const {
+    if(!book_ || book_->caller_map.empty()) return 0;
+    auto it = book_->caller_map.find(pc);
+    return it == book_->caller_map.end() ? 0 : it->second;
+  }
   bool is_area_address(uint32_t v) const { return book_ && book_->in_range(v); }
   bool has_records() const { return !records_.empty(); }
   size_t depth() const { return records_.size(); }
@@ -139,7 +155,8 @@ public:
   // unwind cut (I.GOTO / area_unwind_to) pops a suffix. Process death
   // (?FATAL/?RETURN/ABORT) discards the world; no mapping survives it.
   const LiveRecord& push_record(Machine& m, BookEntry* e, uint32_t entry_pc,
-                                int32_t W, int32_t argc, int32_t frame_wides);
+                                int32_t W, int32_t argc, int32_t frame_wides,
+                                bool args_written);
   void wrtn_fixup(Machine& m, int32_t pre_wfp);
   void unwind_to(Machine& m, int32_t target_wfp);
 

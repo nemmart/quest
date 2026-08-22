@@ -368,7 +368,8 @@ void Mapper::i2_assert(Machine& m) const {
 }
 
 const LiveRecord& Mapper::push_record(Machine& m, BookEntry* e, uint32_t entry_pc,
-                                      int32_t W, int32_t argc, int32_t frame_wides) {
+                                      int32_t W, int32_t argc, int32_t frame_wides,
+                                      bool args_written) {
   if(records_.empty())
     latched_diff_ = (m.wsl & 0x7FFFFFFF) -
                     (static_cast<int32_t>(m.memory->read_wide(rt::HEAP_BREAK)) & 0x7FFFFFFF);
@@ -412,14 +413,21 @@ const LiveRecord& Mapper::push_record(Machine& m, BookEntry* e, uint32_t entry_p
   rec.W = W;
   rec.argc = argc;
   rec.frame_wides = frame_wides;
-  rec.master_wfp = static_cast<int32_t>(map_checked(static_cast<uint32_t>(W), Dir::ToMaster)) + 10;
-  rec.shift_after = (records_.empty() ? 0 : records_.back().shift_after) + 10 + 2 * frame_wides;
+  rec.args_written = args_written;
+  // M4b (Project 16, mode-aware accounting — ratified Aug 22 2026): a
+  // write-mode record's clone stack elides the ARGS as well as the WSAVS
+  // image; only the marker was pushed, sitting 2*argc lower than the
+  // master's. So the marker's master image is fwd(W) + 2*argc, and this
+  // record's elision is 2*argc + 10 + 2*frame. Copy mode: unchanged.
+  int32_t elided_args = args_written ? 2 * argc : 0;
+  rec.master_wfp = static_cast<int32_t>(map_checked(static_cast<uint32_t>(W), Dir::ToMaster)) + elided_args + 10;
+  rec.shift_after = (records_.empty() ? 0 : records_.back().shift_after) + elided_args + 10 + 2 * frame_wides;
   records_.push_back(rec);
   e->live = true;
   if(os::Trace::enabled("redirect")) {
     char buf[220];
-    snprintf(buf, sizeof(buf), "WSAVS %-20s pc=%08X area_wfp=%08X argc=%d frame=%d real_wsp=%08X shadow_wsp=%08X master_wfp=%08X ret=%08X depth=%zu",
-             e->name.c_str(), entry_pc, static_cast<uint32_t>(rec.area_wfp), argc, frame_wides,
+    snprintf(buf, sizeof(buf), "WSAVS %-20s mode=%c pc=%08X area_wfp=%08X argc=%d frame=%d real_wsp=%08X shadow_wsp=%08X master_wfp=%08X ret=%08X depth=%zu",
+             e->name.c_str(), args_written ? 'W' : 'C', entry_pc, static_cast<uint32_t>(rec.area_wfp), argc, frame_wides,
              static_cast<uint32_t>(m.wsp), static_cast<uint32_t>(shadow_wsp(m.wsp)),
              static_cast<uint32_t>(rec.master_wfp),
              static_cast<uint32_t>(m.memory->read_wide(static_cast<uint32_t>(rec.area_wfp))) & 0x7FFFFFFF,
@@ -450,11 +458,18 @@ void Mapper::wrtn_fixup(Machine& m, int32_t pre_wfp) {
              static_cast<uint32_t>(pre_wfp), static_cast<uint32_t>(top.area_wfp), top.entry->name.c_str());
     mapper_abort(&m, buf);
   }
-  int32_t new_wsp = top.W - 2 - 2 * top.argc;   // discard the caller's frame word + args
+  // Copy mode: discard the caller's frame word + args (all on the real
+  // stack). M4b write mode (ratified Aug 22 2026): only the marker was
+  // pushed — wsp = W − 2 restores the caller's pre-window wsp; the args
+  // were never on the clone stack. (The M4bNotes "wsp = W" wording
+  // predates the call-marker ruling; W as the code defines it INCLUDES
+  // the pushed marker.)
+  int32_t new_wsp = top.args_written ? top.W - 2 : top.W - 2 - 2 * top.argc;
   if(os::Trace::enabled("redirect")) {
     char buf[200];
-    snprintf(buf, sizeof(buf), "WRTN  %-20s area_wfp=%08X ret_pc=%08X real_wsp=%08X (was %08X) shadow_wsp=%08X master_wfp=%08X depth=%zu",
-             top.entry->name.c_str(), static_cast<uint32_t>(top.area_wfp), static_cast<uint32_t>(m.pc),
+    snprintf(buf, sizeof(buf), "WRTN  %-20s mode=%c area_wfp=%08X ret_pc=%08X real_wsp=%08X (was %08X) shadow_wsp=%08X master_wfp=%08X depth=%zu",
+             top.entry->name.c_str(), top.args_written ? 'W' : 'C',
+             static_cast<uint32_t>(top.area_wfp), static_cast<uint32_t>(m.pc),
              static_cast<uint32_t>(new_wsp), static_cast<uint32_t>(m.wsp),
              static_cast<uint32_t>(new_wsp + (records_.size() > 1 ? records_[records_.size()-2].shift_after : 0)),
              static_cast<uint32_t>(top.master_wfp), records_.size() - 1);

@@ -41,6 +41,31 @@ static void trace_gcall(Machine& machine, int32_t site, int32_t target, int32_t 
 using namespace debug;
 using namespace os;
 
+// M4b (Project 16): trace one caller-side area write (a redirected arg
+// push or the decorated LCALL's marker write) under the redirect tag.
+static void trace_caller_write(Machine& machine, const char* what, uint32_t pc,
+                               uint32_t slot, int32_t value) {
+  if(!os::Trace::enabled("redirect"))
+    return;
+  char buf[120];
+  snprintf(buf, sizeof(buf), "%s pc=%08X slot=%08X value=%08X", what, pc, slot,
+           static_cast<uint32_t>(value));
+  os::Trace::line("redirect", machine.process ? machine.process->instance_label : std::string("?"), buf);
+}
+
+// M4b: the written-not-pushed flag reached a boundary no decorated call
+// can legally reach (non-book save, WRTN, WPOPB). Unreachable if the
+// caller map is right — which is exactly why it aborts if reached
+// (M4bNotes consume-and-clear discussion, fail-loud house style).
+[[noreturn]] static void dangling_flag_abort(Machine& machine, const char* where, uint32_t pc) {
+  machine.args_written=false;
+  char buf[160];
+  snprintf(buf, sizeof(buf), "M4B: written-args flag set at %s %08X — decorated call landed off-map", where, pc);
+  if(Lockstep::enabled)
+    Lockstep::abort_world(buf, &machine, /*save=*/false);
+  throw std::runtime_error(buf);
+}
+
 void EagleStack::setup(uint32_t opcode, const std::string& name, const std::string& fmt, int32_t op) {
   Instruction::setup(opcode, name, fmt, op);
   opcode=opcode>>11;
@@ -187,9 +212,34 @@ uint32_t EagleStack::execute(Machine& machine, uint32_t address, uint32_t opcode
     resolved=machine.eagle_l_resolve_indirect(copy_segment(address, address+1), AA);
     arguments=machine.memory->read_word(copy_segment(address, address+3));
     if((arguments & 0x8000)==0)
-      machine.wide_push((machine.get_psr()<<16)|arguments);
+      value=(machine.get_psr()<<16)|arguments;
     else
-      machine.wide_push(arguments & 0x7FFF);
+      value=arguments & 0x7FFF;
+    machine.wide_push(value);
+    // M4b (Project 16): a decorated call site. The marker was STILL
+    // pushed above (call-marker ruling: a live-call tombstone keeps the
+    // mapper's address ordering valid — no §3b change) AND is written to
+    // the callee's marker slot; the args were already written to the arg
+    // slots by the redirected pushes. Set the per-machine flag for the
+    // very next WSAVS to consume. Before transfer, verify the resolved
+    // target IS the mapped slot's book routine — a mismatch (self-
+    // modified target, map corruption) would read args from the wrong
+    // area, so fail loud here.
+    if(uint32_t marker_slot=machine.mapper.caller_write(static_cast<uint32_t>(address))) {
+      BookEntry* callee=AddressBook::instance ? AddressBook::instance->by_area_address(marker_slot) : nullptr;
+      if(!callee || static_cast<uint32_t>(resolved)!=callee->entry_pc) {
+        char buf[160];
+        snprintf(buf, sizeof(buf), "M4B: decorated LCALL at %08X resolved to %08X, not the mapped callee %s at %08X",
+                 address, static_cast<uint32_t>(resolved),
+                 callee ? callee->name.c_str() : "?", callee ? callee->entry_pc : 0);
+        if(Lockstep::enabled)
+          Lockstep::abort_world(buf, &machine, /*save=*/false);
+        throw std::runtime_error(buf);
+      }
+      machine.memory->write_wide(marker_slot, value);
+      machine.args_written=true;
+      trace_caller_write(machine, "LCALL", address, marker_slot, value);
+    }
     machine.ac[3]=copy_segment(address, address+4);
     machine.ovr=0;
     if(static_cast<uint32_t>(resolved)==0x30000000) {
@@ -224,7 +274,15 @@ uint32_t EagleStack::execute(Machine& machine, uint32_t address, uint32_t opcode
     }
     return resolved;
 
-   case WSAVR: case WSAVS:
+   case WSAVR: case WSAVS: {
+    // M4b (Project 16): consume-and-clear the written-not-pushed flag at
+    // EVERY WSAVS/WSAVR, first thing — before the book lookup and before
+    // any overflow test (M4bNotes clear-before-overflow ordering; the
+    // overflow handler fires AT this instruction, so one clear point).
+    // Three unconditional rules: set + book entry → write mode; set +
+    // non-book save → abort_world; clear + book entry → M4a copy mode.
+    bool args_written_flag=machine.args_written;
+    machine.args_written=false;
     frame_size=machine.memory->read_word(copy_segment(address, address+1));
     // M4a redirect (docs/M4aDesign.md §4; clone only, keyed by pc through the
     // address book): the caller's args + frame word are COPIED into the
@@ -236,6 +294,8 @@ uint32_t EagleStack::execute(Machine& machine, uint32_t address, uint32_t opcode
       // Gate = CONFIGURATION (Mapper.md §3): the master's mapper has no
       // book, so entry_for_pc is null there — no role query here.
       BookEntry* book_entry=machine.mapper.entry_for_pc(address);
+      if(args_written_flag && !book_entry)
+        dangling_flag_abort(machine, "non-book WSAVS", address);
       if(book_entry) {
         if(book_entry->live) {   // routines are not re-entrant — the dynamic tripwire
           char buf[160];
@@ -243,6 +303,46 @@ uint32_t EagleStack::execute(Machine& machine, uint32_t address, uint32_t opcode
                    book_entry->name.c_str(), address);
           if(Lockstep::enabled) Lockstep::abort_world(buf, &machine, /*save=*/false);
           throw std::runtime_error(buf);
+        }
+        if(args_written_flag) {
+          // M4b WRITE MODE: the caller wrote the args into the arg slots
+          // (redirected pushes) and the decorated LCALL wrote the marker
+          // to wfp-10 — only the tombstone wide is on the real stack.
+          // Ruling: the AREA copy of the marker is authoritative — the
+          // callee reads its arg-count from the area like its args; the
+          // stack copy is a dead tombstone, never read for content. Read
+          // argc FIRST: it feeds the overflow test, because the master's
+          // wsp here includes the 2*argc arg words the clone elided
+          // (master symmetry needs shadow + 2*argc + 10 + 2*frame).
+          int32_t area_wfp=static_cast<int32_t>(book_entry->wfp_base);
+          int32_t frame_word=machine.memory->read_wide(static_cast<uint32_t>(area_wfp-10));
+          int32_t argc=frame_word & 0x7FFF;
+          if(argc>book_entry->max_argc) {
+            char buf[160];
+            snprintf(buf, sizeof(buf), "AREA: %s called with argc %d > book max %d", book_entry->name.c_str(), argc, book_entry->max_argc);
+            if(Lockstep::enabled) Lockstep::abort_world(buf, &machine, /*save=*/false);
+            throw std::runtime_error(buf);
+          }
+          if(machine.wsl>0 && machine.shadow_wsp()+2*argc+10+frame_size*2>machine.wsl)
+            return handle_overflow(machine, address, copy_segment(address, address+2));
+          int32_t W=machine.wsp;                                 // real: the LCALL tombstone
+          // No copy: args + marker are already in the area. Only the
+          // five restore wides are written (same as copy mode).
+          machine.memory->write_wide(static_cast<uint32_t>(area_wfp-8), machine.ac[0]);
+          machine.memory->write_wide(static_cast<uint32_t>(area_wfp-6), machine.ac[1]);
+          machine.memory->write_wide(static_cast<uint32_t>(area_wfp-4), machine.ac[2]);
+          machine.memory->write_wide(static_cast<uint32_t>(area_wfp-2), machine.wfp);
+          machine.memory->write_wide(static_cast<uint32_t>(area_wfp+0), machine.ac[3] | (machine.c<<31));
+          machine.ac[3]=area_wfp;
+          machine.wfp=area_wfp;
+          if(machine.zero_claims)   // ruling 8, as in copy mode
+            for(int32_t w=area_wfp+2; w<area_wfp+2+2*frame_size; w++)
+              machine.memory->write_word(static_cast<uint32_t>(w), 0);
+          machine.ovk=(oper==WSAVR)?0:1;
+          machine.call_stack->augment(machine.wfp, frame_size);
+          machine.mapper.push_record(machine, book_entry, address, W, argc, frame_size,
+                                     /*args_written=*/true);
+          return copy_segment(address, address+2);
         }
         // Master-side overflow symmetry: the master's WSAVS would fault on
         // its stack; the clone's real stack does not grow here, so test the
@@ -281,7 +381,8 @@ uint32_t EagleStack::execute(Machine& machine, uint32_t address, uint32_t opcode
         // Mutation site 1 of 3 (Mapper.md §3): push the live record — the
         // mapper computes master_wfp/shift, asserts I2/I5 + the main-task
         // assert + extent-fits-block, sets the live flag, and traces.
-        machine.mapper.push_record(machine, book_entry, address, W, argc, frame_size);
+        machine.mapper.push_record(machine, book_entry, address, W, argc, frame_size,
+                                   /*args_written=*/false);
         return copy_segment(address, address+2);
       }
     }
@@ -305,8 +406,13 @@ uint32_t EagleStack::execute(Machine& machine, uint32_t address, uint32_t opcode
     machine.ovk=(oper==WSAVR)?0:1;
     machine.call_stack->augment(machine.wfp, frame_size);
     return copy_segment(address, address+2);
+   }
 
    case WSSVR: case WSSVS:
+    // M4b: same save path, same consume rule — no decorated call targets
+    // a WSSVS (book variants are WSAVS/WSAVR only), so set = dangle.
+    if(machine.args_written)
+      dangling_flag_abort(machine, "WSSVS", address);
     frame_size=machine.memory->read_word(address+1);
     if(machine.wsl>0 && machine.wsp+12+frame_size*2>machine.wsl)
       return handle_overflow(machine, address, copy_segment(address, address+2));
@@ -333,6 +439,11 @@ uint32_t EagleStack::execute(Machine& machine, uint32_t address, uint32_t opcode
     return copy_segment(address, address+2);
 
    case WRTN: {
+    // M4b tripwire (included per the riding proposal): a call can't
+    // legally reach WRTN with the flag set — the very next instruction
+    // after a decorated LCALL is the callee's WSAVS, which consumes it.
+    if(machine.args_written)
+      dangling_flag_abort(machine, "WRTN", address);
     // M4a: stock sequence; if wfp was an AREA address the pops come from
     // the area image (same offsets), and only the final wsp needs the
     // fixup — Machine::area_wrtn_fixup, gated on the range test.
@@ -355,6 +466,8 @@ uint32_t EagleStack::execute(Machine& machine, uint32_t address, uint32_t opcode
    }
 
    case WPOPB:
+    if(machine.args_written)   // M4b tripwire — see WRTN
+      dangling_flag_abort(machine, "WPOPB", address);
     value=machine.wide_pop();
     machine.ac[3]=machine.wide_pop();
     machine.ac[2]=machine.wide_pop();
@@ -473,11 +586,24 @@ uint32_t EagleStack::execute(Machine& machine, uint32_t address, uint32_t opcode
 
    case XPEF:
     resolved=machine.eagle_x_resolve_indirect(copy_segment(address, address+1), AA);
+    // M4b (Project 16): a caller-map hit WRITES the arg into the callee's
+    // area arg slot instead of pushing — wsp does not move. Clone-only
+    // via the mapper's book gate; the master always pushes stock.
+    if(uint32_t slot=machine.mapper.caller_write(static_cast<uint32_t>(address))) {
+      machine.memory->write_wide(slot, resolved);
+      trace_caller_write(machine, "ARGWR", address, slot, resolved);
+      return copy_segment(address, address+2);
+    }
     machine.wide_push(resolved);
     return copy_segment(address, address+2);
 
    case LPEF:
     resolved=machine.eagle_l_resolve_indirect(copy_segment(address, address+1), AA);
+    if(uint32_t slot=machine.mapper.caller_write(static_cast<uint32_t>(address))) {   // M4b — see XPEF
+      machine.memory->write_wide(slot, resolved);
+      trace_caller_write(machine, "ARGWR", address, slot, resolved);
+      return copy_segment(address, address+3);
+    }
     machine.wide_push(resolved);
     return copy_segment(address, address+3);
 

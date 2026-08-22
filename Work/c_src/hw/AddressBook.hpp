@@ -46,6 +46,20 @@ public:
   bool in_range(uint32_t v) const { return v >= BASE && v < BASE + total_words; }
   BookEntry* by_area_address(uint32_t v);   // nullptr if not in any entry's block
 
+  // ---- M4b (Project 16): the caller-side map ----
+  // QUEST_PUSH_MAP=<file>; ONE map pc → area word address covering every
+  // caller-side instruction of a converted site (ruling: prescribed
+  // mechanism). Push pcs (XPEF/LPEF) map to the callee's arg slots — the
+  // push STORES there instead of pushing. The LCALL pc maps to the
+  // callee's marker slot (wfp_base − 10) — the call writes the marker
+  // there, STILL pushes it to the stack (call-marker ruling), and sets
+  // the per-machine written-not-pushed flag. Callee-entry pcs stay in
+  // the book (the WSAVS path). The data is process-wide like the book;
+  // EFFECT is clone-only because every query goes through the Mapper's
+  // book-gated accessor (Mapper.md §3: gate = configuration).
+  std::unordered_map<uint32_t, uint32_t> caller_map;   // caller pc → area word addr
+  static bool load_push_map_from_env();     // call after load_from_env; requires a book
+
   // Clone launch: map exactly total_pages pages at BASE, RW, no exec.
   void map_pages(Memory& memory);
 };

@@ -228,6 +228,11 @@ int main(int argc, char* argv[]) {
   // their WSAVS frame in a fixed area (clone only). Absent = stock.
   if(!hw::AddressBook::load_from_env())
     return 1;
+  // M4b push map (QUEST_PUSH_MAP=<file>): which call sites write their
+  // args into the callee's area instead of pushing (clone only, gated
+  // through the Mapper like the book). Absent = every site pushes (M4a).
+  if(!hw::AddressBook::load_push_map_from_env())
+    return 1;
 
   if(argc < 2) {
     fprintf(stderr, "Usage: %s [-trace FILE -types TYPE,...] <PR file>\n", argv[0]);

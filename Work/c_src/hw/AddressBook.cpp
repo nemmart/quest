@@ -84,6 +84,77 @@ bool AddressBook::load_from_env() {
   return true;
 }
 
+// Push-map line grammar (docs/Project16): "push <pc> <area_word_addr>"
+// or "call <pc> <area_word_addr>", hex without 0x; # comments. Both go
+// into ONE caller map (pc → area address); the keywords exist so the
+// loader can validate each pc's role: a push slot must lie inside a book
+// entry's arg region [alloc_base, alloc_base + 2*max_argc); a call slot
+// must BE a book entry's marker slot (wfp_base − 10).
+bool AddressBook::load_push_map_from_env() {
+  const char* path = getenv("QUEST_PUSH_MAP");
+  if(!path || !*path)
+    return true;
+  if(!instance) {
+    fprintf(stderr, "AddressBook: QUEST_PUSH_MAP set without QUEST_ADDRESS_BOOK\n");
+    return false;
+  }
+  std::ifstream in(path);
+  if(!in) {
+    fprintf(stderr, "AddressBook: cannot open %s\n", path);
+    return false;
+  }
+  std::string line;
+  int lineno = 0;
+  size_t pushes = 0, calls = 0;
+  while(std::getline(in, line)) {
+    lineno++;
+    size_t hash = line.find('#');
+    if(hash != std::string::npos)
+      line = line.substr(0, hash);
+    std::istringstream ss(line);
+    std::string kind, a, b;
+    if(!(ss >> kind))
+      continue;
+    if(!(ss >> a >> b)) {
+      fprintf(stderr, "AddressBook: %s:%d: bad push-map line\n", path, lineno);
+      return false;
+    }
+    uint32_t pc = static_cast<uint32_t>(strtoul(a.c_str(), nullptr, 16));
+    uint32_t slot = static_cast<uint32_t>(strtoul(b.c_str(), nullptr, 16));
+    BookEntry* e = instance->by_area_address(slot);
+    if(kind == "push") {
+      if(!e || slot < e->alloc_base || slot >= e->alloc_base + 2 * static_cast<uint32_t>(e->max_argc)) {
+        fprintf(stderr, "AddressBook: %s:%d: push slot %08X is not inside a book entry's arg region\n",
+                path, lineno, slot);
+        return false;
+      }
+      pushes++;
+    }
+    else if(kind == "call") {
+      if(!e || slot != e->wfp_base - 10) {
+        fprintf(stderr, "AddressBook: %s:%d: call slot %08X is not a book entry's marker slot (wfp-10)\n",
+                path, lineno, slot);
+        return false;
+      }
+      calls++;
+      fprintf(stderr, "AddressBook: decorated call %08X → %s marker %08X\n",
+              pc, e->name.c_str(), slot);
+    }
+    else {
+      fprintf(stderr, "AddressBook: %s:%d: unknown push-map kind '%s'\n", path, lineno, kind.c_str());
+      return false;
+    }
+    if(instance->caller_map.count(pc)) {
+      fprintf(stderr, "AddressBook: %s:%d: duplicate caller pc %08X\n", path, lineno, pc);
+      return false;
+    }
+    instance->caller_map[pc] = slot;
+  }
+  fprintf(stderr, "AddressBook: %s — caller map: %zu push redirect(s), %zu decorated call(s)\n",
+          path, pushes, calls);
+  return true;
+}
+
 BookEntry* AddressBook::lookup_pc(uint32_t pc) {
   auto it = by_pc.find(pc);
   return it == by_pc.end() ? nullptr : it->second;
