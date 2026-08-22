@@ -357,28 +357,14 @@ void Mapper::i2_assert(Machine& m) const {
              static_cast<uint32_t>(wsl_now), static_cast<uint32_t>(brk_now));
     mapper_abort(owner_, buf);
   }
-  // (b) Stack clearance. The band a legitimate alloc reclassifies,
-  // [new_wsl, old_wsl), must lie strictly above ALL stack-leg activity,
-  // so the leg's identity/compression split stays well-defined on both
-  // sides: shadow_wsp(wsp) is the master-side live wsp (>= the clone's
-  // real wsp, shifts are positive), and each record's master-side frame
-  // extent end (the ToClone leg's own `hi`, master_wfp + 2 + 2*frame)
-  // bounds its mapped band.
-  int32_t clear = shadow_wsp(m.wsp);
-  for(const LiveRecord& r : records_) {
-    int32_t hi = r.master_wfp + 2 + 2 * r.frame_wides;
-    if(hi > clear)
-      clear = hi;
-  }
-  if(wsl_now <= clear) {
-    char buf[200];
-    snprintf(buf, sizeof(buf),
-             "MAPPER I2: stack clearance violated (wsl %08X <= stack-leg high water %08X, "
-             "shadow_wsp %08X, depth %zu)",
-             static_cast<uint32_t>(wsl_now), static_cast<uint32_t>(clear),
-             static_cast<uint32_t>(shadow_wsp(m.wsp)), records_.size());
-    mapper_abort(owner_, buf);
-  }
+  // (b) Stack-clearance check REMOVED (task 015): as originally
+  // specified it compared across address spaces (shadow_wsp fed a wsp
+  // that was not always a clean real-stack value produced a 0x74 area
+  // address, so wsl <= clear always fired). Isolation proved clause (a)
+  // alone fixes fo with no regression, and clause (c) — the live wsl
+  // domain bound in map_word/probe — is what actually prevents the
+  // reclassified-buffer misclassification. So (b) is unnecessary.
+
 }
 
 const LiveRecord& Mapper::push_record(Machine& m, BookEntry* e, uint32_t entry_pc,
