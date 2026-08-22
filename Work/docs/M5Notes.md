@@ -193,3 +193,24 @@ is the canonical game-level terminate, distinct from the ?-runtime
 raise sources. Any static reachability/liveness must treat a call to
 RETURN_MESSAGE (and a direct SYSCALL 0310) as not-returning, exactly as
 the original compiler did.
+
+**Two-sided codegen effect (the noreturn is visible on BOTH sides):**
+- Callee: RETURN_MESSAGE has no epilogue (message-data table packed
+  where the WRTN would be).
+- Caller: the LCALL to RETURN_MESSAGE has NO post-call code — no
+  return-value read, no fall-through, no WRTN on that path. The caller
+  block simply ENDS at the LCALL. (Contrast a normal call, e.g.
+  FIND_OBJECT at 70161351, immediately followed by XWLDA result / WSNE
+  / WBR — the normal post-call continuation.)
+- The arg marshalling is also atypical: RETURN_MESSAGE takes args BY
+  REFERENCE, so instead of the flat XPEF/XPEF/XPEF-then-LCALL of a
+  by-value call, the caller builds 3 stack temporaries (WPSH/LDASP ×3)
+  and pushes their ADDRESSES.
+
+So for M5: a noreturn call is not merely "callee is a sink" — the CALL
+INSTRUCTION has no normal-successor edge in the caller's CFG. The
+caller's basic block terminates at the LCALL with only the abnormal
+(process-death) exit. This is exactly the invoke-with-no-normal-successor
+shape already sketched; noreturn calls are its simplest instance (one
+edge: to termination). Detect them structurally too: an LCALL with no
+following epilogue/continuation on that path is a noreturn call site.
