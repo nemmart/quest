@@ -17,6 +17,20 @@ UNPROVEN. M4a is NOT fully closed until those 57 run clean — cf.
 DISPLAY_SCREEN, which looked fine until it first executed and tripped
 Finding A. This is a real coverage gap, not a footnote.
 
+## Handler / signal machinery — LIVE-VALIDATED this session
+
+The user triggered an ON exception during play. The trace shows
+execution at pc=7017EC7C (the O?SIGNAL / error-unwind region, the same
+pc as Finding B) with lockstep pairs CLEAN (ord=0, 4/4 insns) — while
+migrated area frames were live. So a REAL signal dispatch + the
+Ruling-A chain-walk-in-master-coordinates + unwind interacting with
+0x74 area frames all executed in live play at 0 divergence, not only in
+the scripted inj battery. Handler ESTABLISHMENT under migration also ran
+(READ_IN ×6, ATTACK ×14, START_TURN ×1 — all have ON-units, fired
+migrated). (Note: the play launch enabled only gcalls/lockstep/redirect
+traces, not rtcalls, so O?SIGNAL itself is not individually logged — the
+lockstep pair at its pc is the evidence.)
+
 ## LIVE-VALIDATED (fired in play, 0 div) — 44 routines
 
 Nested procedures (static-link-through-area, live): ATTACK + ATTACK.2 +
