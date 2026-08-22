@@ -255,3 +255,33 @@ bind the next:** boundary rulings before code; the design doc is not
 edited by working sessions; corrections to design facts are recorded,
 not silently fixed; one routine (here: one SITE?) then stop —
 granularity for M4b's first project is itself an open question.
+
+---
+
+## WPSH arg-push sites (Aug 22 2026 analysis)
+
+WPSH is NOT primarily a push/pop-pair op — its dominant role is
+argument marshalling (one instruction pushes a contiguous register
+run). In QUEST: 59 WPSH total, only 23 WPOP → most WPSH are drained by
+a call's WRTN (args) or a frame pop, not a matching WPOP.
+
+**No wrapping cases**: every WPSH/WPOP has XX<=AA (verified over
+quest.dis), so width = AA-XX+1, a contiguous ascending run. The
+emulator's mod-4 wrap path is dead code for this program.
+
+**25 WPSH instructions push game→game call args** (in quest.argmap;
+the only multi-slot-per-pc case). They feed three game routines:
+- TERRAIN     — `WPSH 0,2` → 3 slots (~13 sites)
+- TERRITORY   — `WPSH 0,1` → 2 slots (~8 sites)
+- RETURN_MESSAGE — `WPSH 0,1`/`0,2` → 2–3 slots (~5 sites)
+(TERRAIN/TERRITORY/RETURN_MESSAGE sit at 0x7017Cxxx but ARE game
+routines per the book/census — the game/RT split is the book, not a
+raw address cutoff. B.MOVE/C.TRANS/?WRITE_SCREEN etc. are true RT and
+correctly OUT of the census — game→RT arg pushes stay stock.)
+
+**M4b implementation consequence:** the push_map must handle a WPSH pc
+mapping to MULTIPLE area slots (write AC0..AC[k] to slots base..base+k
+in one shot), not the one-pc→one-slot model that XPEF/LPEF sites use.
+quest.argmap already encodes this as repeated `<routine> argN at <same
+pc>` lines — the push_map builder reads slot count per pc from there.
+All 25 are clean contiguous runs (0,1 or 0,2), so no cycle walk needed.
