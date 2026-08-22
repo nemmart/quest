@@ -274,10 +274,15 @@ the only multi-slot-per-pc case). They feed three game routines:
 - TERRAIN     — `WPSH 0,2` → 3 slots (~13 sites)
 - TERRITORY   — `WPSH 0,1` → 2 slots (~8 sites)
 - RETURN_MESSAGE — `WPSH 0,1`/`0,2` → 2–3 slots (~5 sites)
-(TERRAIN/TERRITORY/RETURN_MESSAGE sit at 0x7017Cxxx but ARE game
-routines per the book/census — the game/RT split is the book, not a
-raw address cutoff. B.MOVE/C.TRANS/?WRITE_SCREEN etc. are true RT and
-correctly OUT of the census — game→RT arg pushes stay stock.)
+IMPORTANT (corrected): TERRAIN (0x7017C877), TERRITORY (0x7017CD71),
+UPDATE_SCREENS (0x7017D635), RETURN_MESSAGE (0x70176FDD) all sit in the
+0x7017xxxx range but ARE game routines — in the book, migrated, in the
+census. The game/RT split is the BOOK, not a raw address cutoff. Game
+code runs up to ~0x7017D6xx; true RT/compiler helpers start ~0x7017Exxx
+(?WRITE_SCREEN 0x7017E27A, B.MOVE 0x7017E5CB, C.TRANS 0x7017E64A,
+?OPEN_SHARED_IO_FILE). Only WPSH feeding those 0x7017Exxx RT targets is
+out of scope (game→RT stays stock); WPSH feeding TERRAIN/TERRITORY/
+UPDATE_SCREENS/RETURN_MESSAGE is IN scope and correctly censused.
 
 **M4b implementation consequence:** the push_map must handle a WPSH pc
 mapping to MULTIPLE area slots (write AC0..AC[k] to slots base..base+k
