@@ -45,7 +45,16 @@ cd "$REPO_DIR"
 log() { echo "[runner $(date '+%H:%M:%S')] $*"; }
 
 while true; do
-  git pull --quiet --ff-only 2>/dev/null || { log "pull failed; retrying"; sleep "$POLL_SECONDS"; continue; }
+  # Self-healing sync: the box is a disposable mirror of origin/main.
+  # Any local results are pushed at the end of each task; between tasks we
+  # hard-reset to origin so a divergence (e.g. a task rewritten upstream
+  # while we produced a stale result) never wedges the loop.
+  git fetch --quiet origin 2>/dev/null || { log "fetch failed; retrying"; sleep "$POLL_SECONDS"; continue; }
+  if ! git merge-base --is-ancestor origin/main HEAD 2>/dev/null; then
+    log "resyncing to origin/main"
+    git reset --hard --quiet origin/main
+    git clean -fdq results/ 2>/dev/null || true
+  fi
 
   # oldest task (numeric order) with no result dir
   task=""
