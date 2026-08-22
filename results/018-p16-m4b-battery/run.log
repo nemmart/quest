@@ -1,0 +1,57 @@
+tasks/018-p16-m4b-battery.sh: line 15: 23664 Aborted                 (core dumped) env QUEST_ADDRESS_BOOK=$BOOK QUEST_PUSH_MAP=$PMAP "$@" stdbuf -o0 -e0 $EMU -lockstep -silent -trace $R/trace -types lockstep,redirect,gcalls QUEST QUEST_SERVER @QUEST @QUEST > $R/out 2> $R/err
+fo       div=1   i2=0   probes=0   m4b_aborts=0   writeWSAVS=97    argwr=392    end=clean+FATAL
+tasks/018-p16-m4b-battery.sh: line 15: 23702 Aborted                 (core dumped) env QUEST_ADDRESS_BOOK=$BOOK QUEST_PUSH_MAP=$PMAP "$@" stdbuf -o0 -e0 $EMU -lockstep -silent -trace $R/trace -types lockstep,redirect,gcalls QUEST QUEST_SERVER @QUEST @QUEST > $R/out 2> $R/err
+m        div=1   i2=0   probes=0   m4b_aborts=0   writeWSAVS=84    argwr=337    end=clean+FATAL
+tasks/018-p16-m4b-battery.sh: line 15: 23790 Aborted                 (core dumped) env QUEST_ADDRESS_BOOK=$BOOK QUEST_PUSH_MAP=$PMAP "$@" stdbuf -o0 -e0 $EMU -lockstep -silent -trace $R/trace -types lockstep,redirect,gcalls QUEST QUEST_SERVER @QUEST @QUEST > $R/out 2> $R/err
+inj      div=1   i2=0   probes=0   m4b_aborts=0   writeWSAVS=5     argwr=23     end=clean+FATAL
+abort    div=0   i2=0   probes=0   m4b_aborts=0   writeWSAVS=0     argwr=0      end=WORLD-ABORT+FATAL
+tasks/018-p16-m4b-battery.sh: line 15: 23892 Aborted                 (core dumped) env QUEST_ADDRESS_BOOK=$BOOK QUEST_PUSH_MAP=$PMAP "$@" stdbuf -o0 -e0 $EMU -lockstep -silent -trace $R/trace -types lockstep,redirect,gcalls QUEST QUEST_SERVER @QUEST @QUEST > $R/out 2> $R/err
+play     div=1   i2=0   probes=0   m4b_aborts=0   writeWSAVS=5     argwr=23     end=clean+FATAL
+== P16 verdicts (101-live + one converted site) ==
+fo       div=1   i2=0   probes=0   m4b_aborts=0   writeWSAVS=97    argwr=392    end=clean+FATAL
+m        div=1   i2=0   probes=0   m4b_aborts=0   writeWSAVS=84    argwr=337    end=clean+FATAL
+inj      div=1   i2=0   probes=0   m4b_aborts=0   writeWSAVS=5     argwr=23     end=clean+FATAL
+abort    div=0   i2=0   probes=0   m4b_aborts=0   writeWSAVS=0     argwr=0      end=WORLD-ABORT+FATAL
+play     div=1   i2=0   probes=0   m4b_aborts=0   writeWSAVS=5     argwr=23     end=clean+FATAL
+== m-leg M4b counts ==
+decorated-site LCALLs (clone): 84
+ARGWR writes (clone):          337
+write-mode WSAVS (DIST):       84
+write-mode WRTN  (DIST):       84
+copy-mode WSAVS (all others):  18
+gcalls at site 70166E1C:       168
+== first decorated windows ==
+redirect seq=002433 caller=QUEST2 ARGWR pc=70166E0E slot=74003950 value=74003754
+redirect seq=002434 caller=QUEST2 ARGWR pc=70166E10 slot=74003952 value=7400374E
+redirect seq=002435 caller=QUEST2 ARGWR pc=70166E14 slot=74003954 value=7013A472
+redirect seq=002436 caller=QUEST2 ARGWR pc=70166E19 slot=74003956 value=7013A471
+redirect seq=002437 caller=QUEST2 LCALL pc=70166E1C slot=74003958 value=80000004
+redirect seq=002441 caller=QUEST2 ARGWR pc=70166E0E slot=74003950 value=74003754
+redirect seq=002442 caller=QUEST2 ARGWR pc=70166E10 slot=74003952 value=7400374E
+redirect seq=002443 caller=QUEST2 ARGWR pc=70166E14 slot=74003954 value=7013A475
+redirect seq=002444 caller=QUEST2 ARGWR pc=70166E19 slot=74003956 value=7013A474
+redirect seq=002445 caller=QUEST2 LCALL pc=70166E1C slot=74003958 value=80000004
+redirect seq=002449 caller=QUEST2 ARGWR pc=70166E0E slot=74003950 value=74003754
+redirect seq=002450 caller=QUEST2 ARGWR pc=70166E10 slot=74003952 value=7400374E
+redirect seq=002451 caller=QUEST2 ARGWR pc=70166E14 slot=74003954 value=7013A478
+redirect seq=002452 caller=QUEST2 ARGWR pc=70166E19 slot=74003956 value=7013A477
+redirect seq=002453 caller=QUEST2 LCALL pc=70166E1C slot=74003958 value=80000004
+redirect seq=002460 caller=QUEST2 ARGWR pc=70166E0E slot=74003950 value=74003754
+redirect seq=002461 caller=QUEST2 ARGWR pc=70166E10 slot=74003952 value=7400374E
+redirect seq=002462 caller=QUEST2 ARGWR pc=70166E14 slot=74003954 value=7013A472
+redirect seq=002463 caller=QUEST2 ARGWR pc=70166E19 slot=74003956 value=7013A471
+redirect seq=002464 caller=QUEST2 LCALL pc=70166E1C slot=74003958 value=80000004
+redirect seq=002468 caller=QUEST2 ARGWR pc=70166E0E slot=74003950 value=74003754
+redirect seq=002469 caller=QUEST2 ARGWR pc=70166E10 slot=74003952 value=7400374E
+redirect seq=002470 caller=QUEST2 ARGWR pc=70166E14 slot=74003954 value=7013A475
+redirect seq=002471 caller=QUEST2 ARGWR pc=70166E19 slot=74003956 value=7013A474
+== DIST write-mode calls 1-2 (shadow_wsp evidence) ==
+redirect seq=002439 caller=QUEST2 WSAVS DIST                 mode=W pc=70168717 area_wfp=74003962 argc=4 frame=0 real_wsp=700010E4 shadow_wsp=70001FE4 master_wfp=70001FE4 ret=70166E20 depth=3
+redirect seq=002440 caller=QUEST2 WRTN  DIST                 mode=W area_wfp=74003962 ret_pc=70168732 real_wsp=700010E2 (was 7400394E) shadow_wsp=70001FD0 master_wfp=70001FE4 depth=2
+redirect seq=002447 caller=QUEST2 WSAVS DIST                 mode=W pc=70168717 area_wfp=74003962 argc=4 frame=0 real_wsp=700010E4 shadow_wsp=70001FE4 master_wfp=70001FE4 ret=70166E20 depth=3
+redirect seq=002448 caller=QUEST2 WRTN  DIST                 mode=W area_wfp=74003962 ret_pc=70168732 real_wsp=700010E2 (was 7400394E) shadow_wsp=70001FD0 master_wfp=70001FE4 depth=2
+redirect seq=002455 caller=QUEST2 WSAVS DIST                 mode=W pc=70168717 area_wfp=74003962 argc=4 frame=0 real_wsp=700010E4 shadow_wsp=70001FE4 master_wfp=70001FE4 ret=70166E20 depth=3
+redirect seq=002456 caller=QUEST2 WRTN  DIST                 mode=W area_wfp=74003962 ret_pc=70168732 real_wsp=700010E2 (was 7400394E) shadow_wsp=70001FD0 master_wfp=70001FE4 depth=2
+redirect seq=002466 caller=QUEST2 WSAVS DIST                 mode=W pc=70168717 area_wfp=74003962 argc=4 frame=0 real_wsp=700010E4 shadow_wsp=70001FE4 master_wfp=70001FE4 ret=70166E20 depth=3
+redirect seq=002467 caller=QUEST2 WRTN  DIST                 mode=W area_wfp=74003962 ret_pc=70168732 real_wsp=700010E2 (was 7400394E) shadow_wsp=70001FD0 master_wfp=70001FE4 depth=2
+P16 BATTERY OK
