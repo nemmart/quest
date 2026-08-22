@@ -1,0 +1,41 @@
+=== routines redirected in m leg (count) ===
+    600 DIST
+      8 GET_INPUT
+      5 DISPLAY_INVENTORY
+      4 READ_IN
+      2 TERRITORY
+      2 DISPLAY_SCREEN
+      1 TOWER_ATTACK
+      1 THIEF
+      1 TERRAIN
+      1 STORMS_AT_SEA
+      1 START_TURN
+      1 SIGNAL_TURN
+      1 REPORT
+      1 REGEN_SPELLS
+      1 REFRESH_SCREEN
+      1 QUEST.1@7015C5E1
+      1 OWNS
+      1 MOVE_FAMILIAR
+      1 LOGON
+      1 LOCK_FILE
+      1 INIT_SCREEN
+      1 INIT_OBJ_TBL
+      1 HIT_ANY_CHAR
+      1 GET_QUEST
+      1 FAKE_OCEAN
+      1 FAKE_LAND_MASS
+      1 DEFEND
+      1 CATAPULT
+      1 AUTO_MOVE
+=== game->game CALLS in m leg to candidate callees ===
+  DIST called: 1200
+  DISTANCE_TO_PLAYER called: 0
+0
+  RANDOM called: 0
+0
+  OWNS called: 2
+  GET_INPUT called: 16
+  REFRESH_SCREEN called: 2
+  DISPLAY_SCREEN called: 4
+COVERAGE OK
