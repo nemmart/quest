@@ -1,0 +1,12 @@
+redirect seq=001424 caller=QUEST2 WRTN  FAKE_LAND_MASS       area_wfp=74003B0C ret_pc=70169939 real_wsp=700010E0 (was 74003AFE) shadow_wsp=700010F4 master_wfp=70001102 depth=1
+redirect seq=001426 caller=QUEST2 WSAVS FAKE_OCEAN           pc=701699B5 area_wfp=74003B4C argc=1 frame=6 real_wsp=700010E4 shadow_wsp=7000110E master_wfp=70001102 ret=7016E1DC depth=2
+redirect seq=001427 caller=QUEST2 WRTN  FAKE_OCEAN           area_wfp=74003B4C ret_pc=70169B0E real_wsp=700010E0 (was 74003B3E) shadow_wsp=700010F4 master_wfp=70001102 depth=1
+redirect seq=001428 caller=QUEST2 WRTN  INIT_SCREEN          area_wfp=740056FC ret_pc=7016E1DC real_wsp=700010DC (was 740056EE) shadow_wsp=700010DC master_wfp=700010EA depth=0
+redirect seq=001441 caller=QUEST2 WSAVS GET_QUEST            pc=7016B549 area_wfp=74003F3A argc=0 frame=1354 real_wsp=700010DE shadow_wsp=70001B7C master_wfp=700010E8 ret=7015C3B9 depth=1
+redirect seq=001466 caller=QUEST2 WSAVS HIT_ANY_CHAR         pc=7016DE91 area_wfp=7400569A argc=0 frame=9 real_wsp=700010E0 shadow_wsp=70001B9A master_wfp=70001B88 ret=7016BCA4 depth=2
+redirect seq=001481 caller=QUEST2 WSAVS GET_INPUT            pc=7016AA35 area_wfp=74003ECC argc=1 frame=41 real_wsp=700010E4 shadow_wsp=70001BFA master_wfp=70001BA8 ret=7016DEAD depth=3
+redirect seq=001489 caller=QUEST2 WRTN  GET_INPUT            area_wfp=74003ECC ret_pc=7016AA66 real_wsp=700010E0 (was 74003EBE) shadow_wsp=70001B9A master_wfp=70001BA8 depth=2
+redirect seq=001498 caller=QUEST2 WRTN  HIT_ANY_CHAR         area_wfp=7400569A ret_pc=7016DEBB real_wsp=700010DE (was 7400568E) shadow_wsp=70001B7C master_wfp=70001B88 depth=1
+redirect seq=001500 caller=QUEST2 WSAVS REFRESH_SCREEN       pc=70176A93 area_wfp=7400733C argc=0 frame=23 real_wsp=700010E0 shadow_wsp=70001BB6 master_wfp=70001B88 ret=7016BCA8 depth=2
+redirect seq=001587 caller=QUEST2 WRTN  REFRESH_SCREEN       area_wfp=7400733C ret_pc=70176B4D real_wsp=700010DE (was 74007330) shadow_wsp=70001B7C master_wfp=70001B88 depth=1
+redirect seq=001590 caller=QUEST2 WSAVS DIST                 pc=70168717 area_wfp=74003962 argc=4 frame=0 real_wsp=7000153C shadow_wsp=70001FE4 master_wfp=70001FE4 ret=70166B8A depth=2

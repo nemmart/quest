@@ -31,7 +31,8 @@ words, not frame_size words.
 Usage: build_address_book.py <Disassembled dir> [--out-book F] [--out-report F]
        [--live NAME,NAME,...]   restrict the LIVE (uncommented) set to
                                 these names (default: all wave-one =
-                                pure AND not nocall)
+                                all callable = not nocall; B2 dropped the
+                                prior "pure AND not nocall" restriction)
 """
 import argparse
 import os
@@ -81,7 +82,7 @@ def main():
     ap.add_argument('--out-book', default='quest.addrbook')
     ap.add_argument('--out-report', default='addrbook_report.md')
     ap.add_argument('--live', default=None,
-                    help='comma-separated names to leave LIVE (default: all pure)')
+                    help='comma-separated names to leave LIVE (default: all callable = not nocall)')
     args = ap.parse_args()
 
     syms = load_symbols(os.path.join(args.disdir, 'quest.symbols'))
@@ -216,7 +217,7 @@ def main():
         # "[wsp] = LCALL frame word" read is meaningless there: NOT a wave-one
         # candidate.
         e['nocall'] = not e['sites']
-        e['wave_one'] = e['pure'] and not e['nocall']
+        e['wave_one'] = not e['nocall']   # B2: all-callable (nocall-only exclusion; was: pure and not nocall)
         e['live'] = e['wave_one'] and (live_filter is None or e['name'] in live_filter)
         words = 2 * e['max_argc'] + 2 + 10 + 2 * e['frame']
         e['size'] = (words + 15) & ~15

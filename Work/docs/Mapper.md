@@ -36,7 +36,15 @@ Defined at any instant by the live-record list plus one derived leg:
   bijection on interval INTERIORS; each closed right end is a
   deliberate forward-only two-to-one overlay** (see the §1.3 direction
   rationale). The inverse resolves an overlay master address to the
-  STACK-LEG preimage, because dereference targets data.
+  STACK-LEG preimage, because dereference targets data. **Finding A
+  extension (ruled Aug 22 2026, Project14/FINDING_A_MAPPER_FIX.md +
+  REPORT_FINDING_A_FIX.md): one more two-to-one point per live record
+  at the band's OPPOSITE edge — master_wfp + 2*frame (the master's wsp
+  at that routine's base level) is the image of BOTH the stack anchor W
+  (a position value; LDASP/MSP cursors hold it) and the area's
+  last-local word (a data location). Same principle, mirrored: the
+  inverse resolves to the DATA — the AREA this time, since the live
+  locals are there — and I4/I6 assert the fixpoint at that point.**
 - **Stack leg — the COMPRESSION map.** The clone's stack is SMALLER
   than the master's: every live redirected frame elides its
   `10 + 2*frame` words from the clone stack while the master keeps
@@ -45,8 +53,11 @@ Defined at any instant by the live-record list plus one derived leg:
   at addresses differing by the cumulative compression below it. The
   leg is piecewise: each live record is a discontinuity; between
   discontinuities the map is a constant shift = sum of elisions
-  below. Master-to-clone subtracts, clone-to-master adds — the SAME
-  walk, two directions. Bounded above by wsl (I2); values above wsl
+  below. The discontinuity is AT the anchor (Finding A, Aug 22 2026):
+  s == W takes the record's OWN shift — it is the clone's wsp at that
+  routine's base level and images to the master's wsp, the same `>=`
+  threshold shadow_wsp always documented. Master-to-clone subtracts,
+  clone-to-master adds — the SAME walk, two directions. Bounded above by wsl (I2); values above wsl
   are not stack addresses and take the identity. DERIVED from the
   record list — no independent state. (Wave-one validity of the
   closed-form shift rests on WSAVS images being the ONLY elision; see
@@ -214,7 +225,12 @@ containing allocation) is a named FUTURE extension, not wave one.
   fan-ins appear (a parent's closed end vs its child's alloc base
   sharing a master address — the same two-to-one shape as Q2, same
   resolutions). Three changes, not a redesign — but CHANGES; a session
-  adopting the protocol must make them deliberately.
+  adopting the protocol must make them deliberately. NOTE (Finding A,
+  Aug 22 2026): the STACK-LEG portion is already done — the `>=` walk
+  is record-order for ties (innermost-first hits the innermost tied
+  record, whose cumulative shift_after is the sum over the tie). I5's
+  strict nesting assert and the seam fan-ins remain the deliberate
+  changes owed.
 - **Closed-form shadow accounting** is valid while WSAVS images are
   the ONLY elision (M4aDesign §8 marker); WMSP/dynamic-local migration
   retires it for the per-instruction simulation.

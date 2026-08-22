@@ -1,0 +1,12 @@
+### b2_fo (DISPLAY_SCREEN commented) — RED: MAPPER I2 wsl-moved on fail-open path
+MAPPER I2: wsl moved while records live (latched 7001715A, now 7001714C)
+pc=7017EC7C ac0=700010F0 ac1=00000000 ac2=7016F1C4 ac3=74005AAA wsp=700010F0 wfp=74005AAA
+Data write-back SUPPRESSED (state presumed corrupt).
+--
+
+### b2_fo2 (DISPLAY_SCREEN + LIST_PLAYERS commented) — STILL RED, different record live (GET_INPUT):
+MAPPER I2: wsl moved while records live (latched 7001715A, now 7001714C)
+pc=7017EC7C ac0=70001440 ac1=00000000 ac2=7016F1C4 ac3=700010EE wsp=70001440 wfp=700010EE
+Data write-back SUPPRESSED (state presumed corrupt).
+--
+-- non-isolable: same wsl move 7001715A->7001714C at pc 7017EC7C regardless of which record is live --

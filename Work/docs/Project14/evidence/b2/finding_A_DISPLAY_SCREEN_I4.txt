@@ -1,0 +1,14 @@
+### b2_m (FULL 101-book) — RED: MAPPER I4 round-trip (DISPLAY_SCREEN, dyn,push)
+dispatchSystemCall: F000084C
+-- abort dump --
+MAPPER I4: round trip failed for 700010E6 (fwd): mapped=70001150 back=74003332
+pc=7016705A ac0=700010E6 ac1=00000209 ac2=E8006C38 ac3=7400333C wsp=700010E6 wfp=7400333C
+Data write-back SUPPRESSED (state presumed corrupt).
+=============================================
+--
+  what():  MAPPER I4: round trip failed for 700010E6 (fwd): mapped=70001150 back=74003332
+-- the two DISPLAY_SCREEN pushes (master_wfp collapses onto descended real_wsp) --
+redirect seq=001019 caller=QUEST2 WSAVS DISPLAY_SCREEN       pc=70166AF9 area_wfp=7400333C argc=1 frame=547 real_wsp=700010E2 shadow_wsp=70001FD0 master_wfp=70001B8A ret=7016BCC2 depth=2
+redirect seq=002876 caller=QUEST2 WSAVS DISPLAY_SCREEN       pc=70166AF9 area_wfp=7400333C argc=1 frame=547 real_wsp=700010E6 shadow_wsp=700015A0 master_wfp=7000115A ret=701788D2 depth=2
+-- reproduction (b2_m_rep) --
+MAPPER I4: round trip failed for 700010E2 (fwd): mapped=70001B80 back=74003332

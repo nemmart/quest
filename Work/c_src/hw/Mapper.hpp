@@ -13,11 +13,15 @@
 //     from wfp. CLOSED on the right BY PRINCIPLE: a one-past-the-end
 //     pointer (WCMV cursor residue, C-style end pointers) is a reference
 //     to that object's extent and belongs to the frame it walked off.
-//   - the stack COMPRESSION leg: real-stack addresses above a redirected
-//     frame's frame word shift by the words the master pushed and the
-//     clone did not (10 + 2*frame per live record at or below), DERIVED
-//     from the record list, bounded above by wsl (I2: values above wsl
-//     are not stack addresses and take the identity). One walk, two
+//   - the stack COMPRESSION leg: real-stack addresses AT or above a
+//     redirected frame's frame word shift by the words the master pushed
+//     and the clone did not (10 + 2*frame per live record at or below),
+//     DERIVED from the record list, bounded above by wsl (I2: values
+//     above wsl are not stack addresses and take the identity). AT — the
+//     Finding A ruling: s == W is the record's own anchor (the clone's
+//     wsp at that routine's base level) and takes the record's OWN
+//     shift, imaging to the master's wsp (master_wfp + 2*frame); same
+//     >= threshold shadow_wsp always documented. One walk, two
 //     directions — there is no separate inverse implementation.
 //   - identity everywhere else (a non-live area address stays as-is: it
 //     will diverge loudly, which is right — nothing legitimate holds one).
@@ -30,6 +34,13 @@
 // because a dereference targets data and the data at that master cell
 // lives at the clone's stack word. I4 asserts the strict round trip on
 // interiors and the master-value fixpoint on the overlay; I6 likewise.
+// FINDING A EXTENSION (ruled Aug 22 2026): one more two-to-one point per
+// live record, at the OPPOSITE edge — master_wfp + 2*frame (the master's
+// wsp while the routine runs at base level) is the image of BOTH the
+// stack anchor W (a position value) and the area's last-local word (a
+// data location). Same resolution by the same principle: the inverse
+// goes to the DATA (the area); the stack-leg mapping of u == W asserts
+// the fixpoint, not the strict trip.
 //
 // THE SURFACE (Mapper.md §1.3 + the Q1-a ruling): exactly THREE
 // purpose-named calls, so a direction can never be picked by accident:
@@ -88,7 +99,8 @@ public:
     uint32_t clone_word;         // decodings, for divergence dumps
     uint32_t master_word;
     uint32_t mapped;             // encode(form, fwd(clone_word)) — what the clone value maps to
-    const LiveRecord* record;    // the area record the mapping hit, or nullptr
+    const LiveRecord* record;    // the record the mapping hit (area leg, or
+                                 // stack-leg attribution incl. u == W), or nullptr
   };
 
   // Launch-time configuration (Mapper.md §3): the Mapper is CONFIGURED,

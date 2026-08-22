@@ -1,0 +1,12 @@
+redirect seq=005810 caller=QUEST2 WSAVS GET_INPUT            pc=7016AA35 area_wfp=74003ECC argc=1 frame=41 real_wsp=700010E6 shadow_wsp=700011AC master_wfp=7000115A ret=70178C3F depth=2
+redirect seq=005818 caller=QUEST2 WRTN  GET_INPUT            area_wfp=74003ECC ret_pc=7016AA66 real_wsp=700010E2 (was 74003EBE) shadow_wsp=7000114C master_wfp=7000115A depth=1
+redirect seq=005842 caller=QUEST2 WSAVS AUTO_MOVE            pc=7015FA73 area_wfp=740009FE argc=2 frame=16 real_wsp=700010E8 shadow_wsp=7000117C master_wfp=7000115C ret=70178D56 depth=2
+redirect seq=005853 caller=QUEST2 WSAVS GET_INPUT            pc=7016AA35 area_wfp=74003ECC argc=1 frame=41 real_wsp=700010F0 shadow_wsp=700011E0 master_wfp=7000118E ret=7015FAA6 depth=3
+redirect seq=005861 caller=QUEST2 WRTN  GET_INPUT            area_wfp=74003ECC ret_pc=7016AA66 real_wsp=700010EC (was 74003EBE) shadow_wsp=70001180 master_wfp=7000118E depth=2
+redirect seq=005878 caller=QUEST2 WSAVS READ_IN              pc=701766ED area_wfp=740072BA argc=0 frame=6 real_wsp=700010EE shadow_wsp=70001198 master_wfp=7000118C ret=7015FB7E depth=3
+redirect seq=005890 caller=QUEST2 WRTN  READ_IN              area_wfp=740072BA ret_pc=7017E77D real_wsp=700010EC (was 740072AE) shadow_wsp=70001180 master_wfp=7000118C depth=2
+redirect seq=005907 caller=QUEST2 WRTN  AUTO_MOVE            area_wfp=740009FE ret_pc=7017E77D real_wsp=700010E2 (was 740009EE) shadow_wsp=7000114C master_wfp=7000115C depth=1
+redirect seq=005910 caller=QUEST2 WSAVS DISPLAY_INVENTORY    pc=701674B5 area_wfp=740037AC argc=1 frame=158 real_wsp=700010E6 shadow_wsp=70001296 master_wfp=7000115A ret=70178BFD depth=2
+redirect seq=005911 caller=QUEST2 WRTN  DISPLAY_INVENTORY    area_wfp=740037AC ret_pc=70168516 real_wsp=700010E2 (was 7400379E) shadow_wsp=7000114C master_wfp=7000115A depth=1
+redirect seq=005921 caller=QUEST2 WSAVS GET_INPUT            pc=7016AA35 area_wfp=74003ECC argc=1 frame=41 real_wsp=700010E6 shadow_wsp=700011AC master_wfp=7000115A ret=70178C3F depth=2
+redirect seq=005929 caller=QUEST2 WRTN  GET_INPUT            area_wfp=74003ECC ret_pc=7016AA66 real_wsp=700010E2 (was 74003EBE) shadow_wsp=7000114C master_wfp=7000115A depth=1

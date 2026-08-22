@@ -375,3 +375,94 @@ BANDED (matrix restated; Run.md §8). Main-task assert is TASK IDENTITY
 (header ships wsb==wsl, bounds form unavailable). Regression: 14 runs,
 0 div, probes 0, all signatures paired; closed-end point currently has
 no live specimen (first-exercise log line in place).
+
+## 12. Project 14 Phase B2 findings + rulings (Aug 22 2026)
+
+B2 widened the live book from 45 to 101 (all callable game routines;
+nocall→M5). m/inj/abort validate on the widened book (0 div, anchors
+exact, endpoints correct). Two mapper-invariant breaks surfaced and
+were correctly STOPPED at boundary 2 (Mapper untouched):
+
+**Finding A — DISPLAY_SCREEN (dyn frame): I4 break — RULED as a MAPPER
+STACK-LEG BUG, fix the mapper (do NOT exclude the routine).**
+The routine does WSAVS N (executes as WSAVS 0 on the clone: linkage on
+the real stack, N-word frame in the area), then MSP grows a dynamic tail
+BELOW its linkage marker on the real stack. That tail belongs to
+DISPLAY_SCREEN's activation and must translate to the corresponding spot
+below DISPLAY_SCREEN's MASTER frame. The bug: the stack leg
+(Mapper.cpp ToMaster, `for records innermost-first: if s > W return
+s + shift_after`) attributes the tail address to the WRONG frame and
+applies a blanket compression shift, lifting s=700010E6 up by 53 wides
+to 70001150 — INSIDE DISPLAY_SCREEN's own master extent [7000114E,
+700015A2). ToClone then resolves that master address to the AREA (its
+`lo<=s<hi` branch), so the directions disagree — I4 breaks. 0
+divergences throughout; the game ran identically, only the mapper's
+self-check trips.
+
+THE FIX (the correct stack-leg map): attribute a stack address to its
+**least-upper-bound live frame** — the frame whose marker W is the
+SMALLEST one still >= s (stack grows down, so a frame's MSP tail sits
+BELOW its own marker; the owning frame is the nearest marker ABOVE the
+address, not below it). Translate s as its offset within that frame's
+activation, landing at the corresponding offset below that frame's
+master marker (the tail is contiguous below the frame on the master —
+same activation, nothing interleaved). ToClone uses the same
+attribution so the round trip closes. This is a SEARCH for the least
+upper bound, not `shift_after` arithmetic — the closed-form shift was
+only ever an approximation that held until a routine put a dynamic tail
+below a relocated frame.
+
+Scope: this is a Mapper design refinement (boundary 2, needs care — get
+the master-side offset arithmetic exact, fix BOTH directions, verify
+against the DISPLAY_SCREEN m leg and the other large dyn routines).
+DISPLAY_SCREEN stays LIVE; the mapper is corrected. This likely also
+subsumes the "record-order not address-order" note (Mapper §3b) for the
+stack leg. NOT an M4c deferral, NOT a routine exclusion — the earlier
+draft ruling (exclude to M4c) is SUPERSEDED.
+
+**IMPLEMENTED + GEOMETRY CORRECTED (Aug 22, REPORT_FINDING_A_FIX.md).**
+The fix landed and is verified (m/inj/abort/play GREEN on the full 101
+book, DISPLAY_SCREEN LIVE). BUT the mechanism narrative above was built
+on a DOWNWARD-growing stack, which is WRONG: this machine's stack grows
+UP (Machine::wide_push does wsp+=2; WMSP adds). There is no "dynamic
+tail below the frame." The real bug: both crashes had s == W exactly —
+a register holding the frame's OWN anchor (a position value, captured
+via LDASP, the dyn idiom), and the strict `>` skipped the record's own
+entry, applying the OUTER record's shift into the frame's master band.
+The fix is one threshold: ToMaster stack leg `s > it->W` → `s >= it->W`,
+making it agree with shadow_wsp (which always used `>=` for this exact
+reason). The "least-upper-bound search" collapses to the `>=` threshold
+on an up-growing stack — no search, no new fields. The mapped value now
+MATCHES the master (0 div), not merely avoids the abort. A new Q2-style
+merge point appears at the band's other edge (W and the area's last-local
+both preimage master_wfp+2*frame); resolved by the same rule (inverse →
+data → area), ToClone unchanged. So DISPLAY_SCREEN stays live at 101;
+the RULING (attribute to owning activation, close the round trip, both
+directions) stands — only its geometry is corrected here.
+
+**Finding B — fail-open handler moves wsl −14 wides while a record is
+live: I2 break, INVESTIGATION SPUN OUT (I2 stays strict).**
+Proven RECORD-AGNOSTIC (commenting the live routine relocates the abort
+to the next live record, identical wsl move 7001715A→7001714C at the
+same pc 7017EC7C in the L2 signal-delivery region). So this is a
+PRE-EXISTING wsl motion in the native fail-open path that batch-2 never
+exercised with a game record live across it; the widening only exposed
+it. Scope: fail-open only — inj (?FATAL) and abort (terminal) endpoints
+are clean on the widened book.
+RULING: **characterize before deciding; do NOT relax I2 yet.** Read
+O?SIGNAL / R?SIGNAL / DEFAULT_ERROR_HANDLER and find what lowers wsl by
+14 wides on the fail-open path. If legitimate handler stack adjustment →
+I2 must tolerate a signal-frame wsl delta while records live (a
+Mapper/L2 contract change, then fo re-runs clean). If an accounting slip
+in the native handler → fix there (boundary 3), I2 unchanged. Relaxing
+an invariant before understanding why it fired is how silent corruption
+enters — I2 stays strict until the −14 is explained. See
+docs/Project14/FINDING_B_INVESTIGATION.md.
+
+**B2 landing:** m/inj/abort green on the 101 book with DISPLAY_SCREEN
+commented for diagnosis; the real landing is 101 live once the stack-leg
+mapper fix (Finding A) is in. fo blocked on Finding B's characterization. Play handoff (Stage 3)
+proceeds once fo is clean. CheckerHistory Gen-4 append is CORRECTED:
+"dyn/push symmetric" holds for divergence but NOT for mapper bijectivity
+under large dynamic descent (Finding A) — append after both findings
+resolve.

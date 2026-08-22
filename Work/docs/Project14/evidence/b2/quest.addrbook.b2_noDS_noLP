@@ -45,7 +45,7 @@
 7016603D    DIED                          74003190   7400319E   2    0x07   WSAVS   dyn,push
 70166487    DISPLAY_MAGIC                 740031C0   740031CA   0    0x35   WSAVS   dyn
 701666A3    DISPLAY_CAVE                  74003250   7400325C   1    0x5B   WSAVS   dyn,push
-70166AF9    DISPLAY_SCREEN                74003330   7400333C   1    0x223   WSAVS   dyn,push
+#70166AF9    DISPLAY_SCREEN                74003330   7400333C   1    0x223   WSAVS   dyn,push
 701674B5    DISPLAY_INVENTORY             740037A0   740037AC   1    0x9E   WSAVS   dyn
 701685AB    DISPLAY_FLASK                 74003900   7400390C   1    0x19   WSAVS   -
 70168717    DIST                          74003950   74003962   4    0x00   WSAVS   slotpatch
@@ -76,7 +76,7 @@
 #7016E5B5    KILL_PLAYER.3@7016E5B5        74005A10   74005A1A   0    0x00   WSAVS   nested,nocall
 7016E5CB    KILL_PLAYER.4@7016E5CB        74005A30   74005A3C   1    0x05   WSAVS   nested
 7016E6BD    KNIGHT_ATTACK                 74005A60   74005A6C   1    0x0C   WSAVS   push
-7016EB87    LIST_PLAYERS                  74005AA0   74005AAA   0    0x1A3   WSAVS   -
+#7016EB87    LIST_PLAYERS                  74005AA0   74005AAA   0    0x1A3   WSAVS   -
 #7016EC57    LIST_PLAYERS.1@7016EC57       74005E10   74005E1A   0    0x09   WSAVS   dyn,nested,nocall
 #7016F1D0    LIST_PLAYERS.2@7016F1D0       74005E40   74005E4A   0    0x00   WSAVS   push,nested,nocall
 7016F556    LIST_PLAYERS.3@7016F556       74005E60   74005E6C   1    0x03   WSAVS   slotpatch,nested

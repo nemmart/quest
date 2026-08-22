@@ -118,11 +118,31 @@ uint32_t Mapper::map_word(uint32_t u, Dir dir, const LiveRecord** rec) const {
     }
     // The stack compression leg (signed, like every consumer of these
     // addresses), bounded above by the latched wsl (I2).
+    //
+    // >= — the Finding A ruling (docs/Project14/FINDING_A_MAPPER_FIX.md,
+    // corrected geometry in REPORT_FINDING_A_FIX.md): s == W is the
+    // record's OWN anchor — the clone's wsp while that routine runs at
+    // its base level (LDASP puts it in registers; dyn routines' MSP
+    // cursors hold it). Its image is the MASTER's wsp there,
+    // master_wfp + 2*frame = s + this record's own shift_after. The old
+    // strict > attributed it one frame out, applying the outer shift
+    // and landing INSIDE this frame's master band (the B2 I4 abort).
+    // This is the same threshold shadow_wsp always used ("the record
+    // whose frame word the clone's wsp still points at counts as
+    // above") — the two legs now agree. It also subsumes Mapper.md
+    // §3b's record-order-for-ties: with W ties (zero-arg protocol,
+    // future), the innermost-first walk hits the innermost tied record,
+    // whose cumulative shift_after is the sum over the tie.
+    // The image s == W -> master_wfp + 2*frame is a two-to-one MERGE
+    // POINT (its other preimage is the area's last-local word) —
+    // resolved Q2-style in map_checked/I6, fixpoint not strict trip.
     if(s > latched_wsl_)
       return u;
     for(auto it = records_.rbegin(); it != records_.rend(); ++it)
-      if(s > it->W)
+      if(s >= it->W) {
+        if(rec) *rec = &*it;
         return static_cast<uint32_t>(s + it->shift_after);
+      }
     return u;
   }
   // Dir::ToClone — the same structure walked the other way.
@@ -155,8 +175,22 @@ uint32_t Mapper::map_checked(uint32_t u, Dir dir, const LiveRecord** rec) const 
     // resolves to the stack-leg preimage, so the assert is the
     // master-value fixpoint instead.
     Dir back_dir = (dir == Dir::ToMaster) ? Dir::ToClone : Dir::ToMaster;
-    bool overlay = (dir == Dir::ToMaster) && r &&
-                   static_cast<int32_t>(v) >= r->master_wfp + 2 + 2 * r->frame_wides;
+    // Two-to-one bands, each ruled forward-only with the fixpoint form of
+    // I4 (Q2 ruling + its Finding A extension). Scoped PRECISELY so every
+    // ordinary mapping keeps the strict round trip:
+    //   area overlay  — an AREA-leg image at/past the extent end (the end
+    //                   pointer band; inverse resolves to the stack leg);
+    //   stack merge   — the STACK-leg image of the record's own anchor
+    //                   u == W (the wsp position value; its master image
+    //                   master_wfp + 2*frame is also the area's last-local
+    //                   word, and the inverse resolves to the AREA, where
+    //                   a dereference finds the live data).
+    bool from_area = r && book_ && book_->in_range(u);
+    bool area_overlay = (dir == Dir::ToMaster) && from_area &&
+                        static_cast<int32_t>(v) >= r->master_wfp + 2 + 2 * r->frame_wides;
+    bool stack_merge = (dir == Dir::ToMaster) && r && !from_area &&
+                       static_cast<int32_t>(u) == r->W;
+    bool overlay = area_overlay || stack_merge;
     uint32_t back = map_word(v, back_dir);
     if(overlay) {
       // Post-R-C, no observed producer lands ON the closed right end
@@ -247,7 +281,12 @@ Mapper::Verdict Mapper::equivalent(uint32_t master_v, uint32_t clone_v) const {
   // made a tested invariant). On the overlay band the agreement is on the
   // master value (Q2 ruling), matching I4's fixpoint form.
   uint32_t back = map_word(mapped_w, Dir::ToClone);
-  bool overlay = r && static_cast<int32_t>(mapped_w) >= r->master_wfp + 2 + 2 * r->frame_wides;
+  // Overlay scoping mirrors map_checked exactly (area closed-end band /
+  // Finding A stack merge point); everything else keeps strict agreement.
+  bool from_area = r && book_ && book_->in_range(cw);
+  bool overlay = (from_area &&
+                  static_cast<int32_t>(mapped_w) >= r->master_wfp + 2 + 2 * r->frame_wides) ||
+                 (r && !from_area && static_cast<int32_t>(cw) == r->W);
   if(overlay ? (map_word(back, Dir::ToMaster) != mapped_w) : (back != cw)) {
     char buf[160];
     snprintf(buf, sizeof(buf), "MAPPER I6: inverse disagrees with the clone's value: master_w=%08X inv=%08X clone_w=%08X",
