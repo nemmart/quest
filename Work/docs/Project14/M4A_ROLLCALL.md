@@ -72,10 +72,19 @@ Boot QUEST, C_A_LISTENER (task entry), the 26 ON-unit bodies. Reached by
 dispatch not call; become branch targets under M5 static handler
 dispatch. Not M4 scope.
 
-## Status (corrected)
+## Status — M4a CLOSED (Aug 22 2026, user ruling)
 
-M4a mechanism is VALIDATED ON 44/101, PRESUMED on the remaining 57.
-Not fully closed. To close: the 57 migrated-but-unexercised routines
+M4a is CLOSED. Mechanism validated on 44/101 routines exercised under
+lockstep + the full signal/handler machinery (establishment, real
+dispatch through O?SIGNAL/unwind, Ruling-A walks) — all 0 divergences
+across 1.3M redirect events in live play, plus the scripted battery
+(fo/m/inj/abort/play) green. The 44 span every hard case: nested
+procedures live, large-dyn (DISPLAY_SCREEN), combat, WSAVR, hot leaves,
+signal dispatch with area frames live. The remaining 57 are
+MIGRATED-and-live-in-the-book but not yet individually exercised; they
+carry low residual risk (identical mechanism) and are a COVERAGE
+BACKLOG to sweep opportunistically or during M4b, NOT a blocker.
+Original intent below retained for history. To close: the 57 migrated-but-unexercised routines
 must execute under lockstep — targeted play (caves, death, bargain,
 menus, castle ops, boats, fire, alchemist) and/or scripted approaches
 into those paths. Each is low-probability-of-surprise (mechanism is the

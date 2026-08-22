@@ -245,3 +245,14 @@ mediated handlers dereference packet pointers with bit 31 still set;
 should read 0x74xxxxxx. Validation: batch-1 battery re-proven identical;
 batch-2 book (45 live) full battery at 0 divergences, 26 routines
 exercised in free play (31k verified redirects).
+
+## Generation 4/5 — M4a closed (Aug 22 2026)
+
+M4a mechanism complete and closed. Frame redirect (WSAVS/WRTN → 0x74
+areas) + Mapper (bijection A, codec E, equivalent/frame_precedes/
+clone_location, invariants I1–I6) validated across 101 migrated
+routines, 44 exercised in live play at 0 divergences over 1.3M redirect
+events, plus scripted battery green. Findings A (s>=W stack leg) and B
+(I2 as wsl−heap_break fence latch + live-wsl bound; clearance clause
+removed) both fixed. Live signal dispatch with area frames confirmed
+clean. 57 routines migrated-but-unexercised = coverage backlog.

@@ -1,6 +1,15 @@
 # Where things stand
 
-## M4a — mechanism validated on 44/101 exercised; 57 migrated-but-unexercised (Aug 22 2026)
+## ★ M4a CLOSED (Aug 22 2026)
+
+M4a is DONE. All 101 callable game routines migrate to 0x74000000 areas;
+both mapper findings fixed (A: s>=W; B: wsl-heap_break fence latch).
+Validated on 44 routines exercised in live play + the full scripted
+battery, 0 divergences across 1.3M redirect events, including live
+signal dispatch with area frames live. 57 routines are migrated but
+not-yet-individually-exercised — coverage backlog, low risk, swept
+opportunistically. NEXT: M4b (caller-side arg redirect; census done,
+100% convertible; call-marker-stays-on-stack ruling; no mapper change).
 
 All 101 callable game routines migrate to 0x74000000 areas; both mapper
 findings closed (Finding A: `s>=W` stack leg; Finding B: I2 as wsl−heap_break
