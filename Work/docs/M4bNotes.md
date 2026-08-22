@@ -345,17 +345,24 @@ local pairing, no wrap).
 - **8** — game→RUNTIME arg pushes (?OPEN_SHARED_IO_FILE ×3, B.MOVE ×2,
   C.TRANS ×3). Out of scope: game→RT stays stock (RT → M5 intrinsics).
 - **3** — stack-temporary construction for a PASS-BY-REFERENCE call
-  (RETURN_MESSAGE at 70169B82). NOT arg pushes: the idiom is
-  `WPSH r,r / LDASP r` repeated to materialize temporaries on the stack
-  and load their ADDRESSES into ACs, then a final `WPSH 0,2` pushes
-  those three addresses as the actual args. Census correctly maps only
-  the final WPSH (arg1-3 at 70169B81) and excludes the temp-building
-  WPSHes. Verified: 0 WPSH miscategorized.
+  (RETURN_MESSAGE,3 at 70169B82). NOT arg pushes. Full window traced:
+  `WPSH 0,0; LDASP 0` (build temp, addr→AC0), `WPSH 1,1; LDASP 1`,
+  `WPSH 2,2; LDASP 2` — three temporaries pushed, each addr loaded —
+  then `WPSH 0,2` pushes AC0/AC1/AC2 (the three addresses) as the args.
+  Stack depth at the call = **6 wides**: 3 arg-pointers on top of the 3
+  temporaries they reference. Census correctly maps ONLY the final WPSH
+  (arg1-3 at 70169B81), call classified CLEAN, temp-building excluded.
+  Verified 0 WPSH miscategorized.
 
-**Flag for M4b (pass-by-reference):** some game→game args are ADDRESSES
-of caller stack temporaries (built via WPSH+LDASP). Redirecting the arg
-PUSH to the callee area is correct and sufficient — but the pushed value
-is a pointer into the real stack, and what it points AT is not
-relocated. The callee dereferences the pointer; the mapper handles the
-stack address. No special handling needed, but the M4b implementer
-should know an arg can be a live stack-temp pointer, not just a value.
+**Flag for M4b (pass-by-reference) — sharpened:** some game→game args
+are ADDRESSES of caller stack temporaries. At such a site the stack
+holds MORE than argc wides (RETURN_MESSAGE,3 example: 6 wides = 3
+pointer-args + 3 referenced temporaries). M4b redirects ONLY the
+argc pointer-pushes into the callee area; the temporaries MUST remain
+on the stack (they are what the pointers reference). So after redirect:
+pointer-args live in the area, referents live on the real stack, callee
+dereferences area-resident pointers to reach stack-resident temps — the
+mapper handles the stack addresses. Correct and sufficient, but the
+implementer must NOT try to also relocate the referent temporaries, and
+must not be surprised that a CLEAN arg window leaves >argc wides on the
+stack. The census already scopes the window to just the pointer-push.
