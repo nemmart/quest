@@ -1,0 +1,88 @@
+# Every WPSH/WPOP in QUEST, classified (Aug 22 2026). 3 mutually-exclusive cases:
+#   'paired with X'          save/restore bracket (frame-ptr borrow: WPSH r,r/LDASP/store/WPOP r,r)
+#   'arg push for LCALL R'   argument marshalling (R game routine; [runtime] = game->RT, out of M4b scope)
+#   'creates a temp ...'     ref-arg temp construction (RETURN_MESSAGE only)
+# 82 total: 46 paired (23 pairs) + 25 arg->game + 8 arg->RT + 3 temp-create.
+
+7015BE6B WPSH 0,1  // arg push for LCALL RETURN_MESSAGE
+7015BE89 WPSH 0,0  // arg push for LCALL ?OPEN_SHARED_IO_FILE [runtime]
+7015BEA6 WPSH 0,0  // arg push for LCALL ?OPEN_SHARED_IO_FILE [runtime]
+7015BEC3 WPSH 0,0  // arg push for LCALL ?OPEN_SHARED_IO_FILE [runtime]
+7015C50A WPSH 0,2  // arg push for LCALL TERRAIN
+7015C562 WPSH 0,2  // arg push for LCALL B.MOVE [runtime]
+7015C564 WPSH 0,2  // arg push for LCALL B.MOVE [runtime]
+7015F7BA WPSH 3,3  // paired with 7015F7BE
+7015F7BE WPOP 3,3  // paired with 7015F7BA
+7015F7C5 WPSH 3,3  // paired with 7015F7C9
+7015F7C9 WPOP 3,3  // paired with 7015F7C5
+7015F7D0 WPSH 3,3  // paired with 7015F7D4
+7015F7D4 WPOP 3,3  // paired with 7015F7D0
+7015F7EE WPSH 3,3  // paired with 7015F7F2
+7015F7F2 WPOP 3,3  // paired with 7015F7EE
+7015F7F9 WPSH 3,3  // paired with 7015F7FD
+7015F7FD WPOP 3,3  // paired with 7015F7F9
+7015F80E WPSH 3,3  // paired with 7015F812
+7015F812 WPOP 3,3  // paired with 7015F80E
+7015F819 WPSH 3,3  // paired with 7015F81D
+7015F81D WPOP 3,3  // paired with 7015F819
+7015F82E WPSH 3,3  // paired with 7015F832
+7015F832 WPOP 3,3  // paired with 7015F82E
+7015F839 WPSH 3,3  // paired with 7015F83D
+7015F83D WPOP 3,3  // paired with 7015F839
+70160EA8 WPSH 0,1  // arg push for LCALL TERRITORY
+70161731 WPSH 0,2  // arg push for LCALL TERRAIN
+7016186F WPSH 0,2  // arg push for LCALL TERRAIN
+70161AFD WPSH 0,2  // arg push for LCALL TERRAIN
+70161B50 WPSH 0,2  // arg push for LCALL TERRAIN
+70161B73 WPSH 0,2  // arg push for LCALL TERRAIN
+70161BCD WPSH 0,2  // arg push for LCALL TERRAIN
+70161BF0 WPSH 0,2  // arg push for LCALL TERRAIN
+7016294E WPSH 0,1  // arg push for LCALL C.TRANS [runtime]
+70162954 WPSH 0,1  // arg push for LCALL C.TRANS [runtime]
+70162958 WPSH 0,1  // arg push for LCALL C.TRANS [runtime]
+70163023 WPSH 0,2  // arg push for LCALL TERRAIN
+70165129 WPSH 0,1  // arg push for LCALL TERRITORY
+70165345 WPSH 3,3  // paired with 70165349
+70165349 WPOP 3,3  // paired with 70165345
+7016534D WPSH 3,3  // paired with 70165351
+70165351 WPOP 3,3  // paired with 7016534D
+70166369 WPSH 3,3  // paired with 7016636D
+7016636D WPOP 3,3  // paired with 70166369
+701667B2 WPSH 3,3  // paired with 701667B6
+701667B6 WPOP 3,3  // paired with 701667B2
+7016680D WPSH 3,3  // paired with 70166811
+70166811 WPOP 3,3  // paired with 7016680D
+7016686E WPSH 3,3  // paired with 70166872
+70166872 WPOP 3,3  // paired with 7016686E
+701668C9 WPSH 3,3  // paired with 701668CD
+701668CD WPOP 3,3  // paired with 701668C9
+70166ED3 WPSH 3,3  // paired with 70166ED7
+70166ED7 WPOP 3,3  // paired with 70166ED3
+70166FA6 WPSH 3,3  // paired with 70166FAA
+70166FAA WPOP 3,3  // paired with 70166FA6
+701670E6 WPSH 0,1  // arg push for LCALL TERRITORY
+70169B77 WPSH 0,0  // creates a temp on the stack (ref-arg for RETURN_MESSAGE)
+70169B7C WPSH 1,1  // creates a temp on the stack (ref-arg for RETURN_MESSAGE)
+70169B7F WPSH 2,2  // creates a temp on the stack (ref-arg for RETURN_MESSAGE)
+70169B81 WPSH 0,2  // arg push for LCALL RETURN_MESSAGE
+7016A3EA WPSH 3,3  // paired with 7016A3EE
+7016A3EE WPOP 3,3  // paired with 7016A3EA
+7016B828 WPSH 0,1  // arg push for LCALL TERRITORY
+7016BCE6 WPSH 3,3  // paired with 7016BCEA
+7016BCEA WPOP 3,3  // paired with 7016BCE6
+7016DF8F WPSH 3,3  // paired with 7016DF93
+7016DF93 WPOP 3,3  // paired with 7016DF8F
+7016E7D5 WPSH 2,2  // paired with 7016E7D9
+7016E7D9 WPOP 2,2  // paired with 7016E7D5
+7016F268 WPSH 0,1  // arg push for LCALL TERRITORY
+70171182 WPSH 0,2  // arg push for LCALL TERRAIN
+70171327 WPSH 0,2  // arg push for LCALL TERRAIN
+70172651 WPSH 0,2  // arg push for LCALL TERRAIN
+7017342A WPSH 0,1  // arg push for LCALL TERRITORY
+701740D6 WPSH 0,2  // arg push for LCALL TERRAIN
+70175EBE WPSH 0,1  // arg push for LCALL RETURN_MESSAGE
+70175EF6 WPSH 0,1  // arg push for LCALL RETURN_MESSAGE
+70178A3F WPSH 3,3  // paired with 70178A43
+70178A43 WPOP 3,3  // paired with 70178A3F
+7017BE98 WPSH 0,1  // arg push for LCALL TERRITORY
+7017D7D0 WPSH 0,1  // arg push for LCALL RETURN_MESSAGE
