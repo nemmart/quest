@@ -1,4 +1,18 @@
-# Where things stand — tarball hand-off (reverting to normal-session flow)
+# Where things stand
+
+## ★ M4a MECHANISM COMPLETE (Aug 22 2026)
+
+All 101 callable game routines migrate to 0x74000000 areas; both mapper
+findings closed (Finding A: `s>=W` stack leg; Finding B: I2 as wsl−heap_break
+fence latch + live-wsl domain bound, clearance clause removed). Full battery
+GREEN on the 101-live book — fo/m/inj/abort/play: 0 divergences, 0 I2 aborts,
+0 probes (task 016). Remaining before M4a is *called* done: live-play breadth
+coverage (menu/combat/death dyn routines the scripted drivers miss), the
+roll-call, CheckerHistory Gen-4 append, Mapper.md I2 wording. Then M4b.
+
+---
+# (prior notes below)
+ — tarball hand-off (reverting to normal-session flow)
 
 The git/runner pipeline is set aside; back to Work.tgz per session. The
 repo (github.com/nemmart/quest) still holds full history if wanted, but
