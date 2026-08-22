@@ -96,12 +96,27 @@ chosen site.
 
 ## Stages
 
-**Stage 0 — plan gate.** Nominate the site (with disassembly of its arg
-window). Specify: the push_map representation (even if a 1-entry table),
-the call decoration mechanism, where the flag lives on Machine, the
-exact WSAVS/WSAVR consume-and-clear insertion point (clear BEFORE the
-overflow test — M4bNotes), the write-mode WRTN fixup (wsp = W). Show the
-before/after for this site's frame image. WAIT for go-ahead.
+**Stage 0 — plan gate.** Nominate the site (already chosen: DIST,4 @
+0x70166E1C — confirm its window). Specify explicitly, as SEPARATE items:
+  (a) **The push→store mechanism**: how the emulator, at a decorated
+      push pc (e.g. XPEF @70166E0E), redirects that ONE instruction to
+      STORE its value into the callee's area slot instead of pushing to
+      [wsp] and bumping wsp. State where the hook lives (the XPEF/LPEF
+      execution path, keyed by push-pc?) and how it stays a no-op for
+      the 100 other routines. This is distinct from the flag (which is
+      the callee-side signal); name both.
+  (b) **The push_map representation**: what each entry holds — it must
+      carry the destination (callee area base + this arg's slot offset)
+      so the store knows WHERE at push time (the push precedes the
+      call). Even a 1-entry table, but show its contents for this site.
+  (c) The call decoration mechanism (what marks 70166E1C as converted).
+  (d) Where the "args written not pushed" flag lives on Machine, and the
+      exact WSAVS/WSAVR consume-and-clear insertion point (clear BEFORE
+      the overflow test — M4bNotes).
+  (e) The write-mode WRTN fixup and mode-aware push_record arithmetic
+      (see your own reconciliation — ratified separately).
+Show the before/after for this site's frame image + the first two DIST
+calls' shadow_wsp. WAIT for go-ahead.
 
 **Stage 1 — build the one-site redirect.** Implement clone-only. Master
 untouched. Keep it minimal and readable.
