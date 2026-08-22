@@ -109,10 +109,12 @@ public:
   // master-vs-clone is a property of the configuration, not of code paths
   // querying roles. main-task stack bounds back the redirect-time
   // main-task assert (§3 Tasks: the listener's mapper is configured too,
-  // and stays empty by construction). The stack-leg bound wsl is LATCHED
-  // at the first push — the boot-time wsl-steal (I.ALLOC carving the
-  // listener stack) precedes any redirect; I2 asserts constancy while
-  // records live (ruling, Project 14 plan gate).
+  // and stays empty by construction). The stack-leg bound is the LIVE
+  // wsl; I2 latches wsl − heap_break at the first push (the boot-time
+  // wsl-steal precedes any redirect) and asserts, while records live,
+  // that the difference is unchanged and that wsl clears all stack-leg
+  // activity (Finding B ruling — legitimate I?ALLOC/I?FREE motion moves
+  // wsl and the break together; anything else is still an abort).
   void configure(Machine* owner, AddressBook* book, bool is_main_task);
 
   bool redirect_configured() const { return book_ != nullptr; }
@@ -154,12 +156,25 @@ private:
   // of the raw value lands in a mapped range — "unlisted form seen" is a
   // finding (boundary 2), never a silent identity. Returns true if fired.
   bool probe(uint32_t v) const;
-  void i2_assert(Machine& m) const;   // wsl constant while records live
+  // I2, Finding B ruling (M4aDesign §12): wsl is dual-purpose (stack
+  // limit AND stack/heap fence) and legitimately moves at I?ALLOC/I?FREE
+  // commit points — always together with the heap break, by the same
+  // size. So the assert is (a) wsl − heap_break unchanged since the
+  // latch (a slip = wsl motion with no matching break motion), plus
+  // (b) stack clearance: wsl strictly above all live stack-leg activity,
+  // so the reclassified band [new_wsl, old_wsl) never overlaps the leg.
+  void i2_assert(Machine& m) const;
+  // The stack-leg domain bound: the LIVE wsl (owner's current fence).
+  // Pre-Finding-B this was the latched wsl; under the diff-invariant the
+  // live value is the machine's own record of the stack/heap boundary,
+  // and addresses above it (e.g. the fo message buffer) are heap, not
+  // stack — they must take the identity.
+  int32_t stack_bound() const;
 
-  Machine*     owner_ = nullptr;      // abort context only
+  Machine*     owner_ = nullptr;      // abort context + live wsl (stack_bound)
   AddressBook* book_ = nullptr;
   bool main_task_ = false;                    // set at configure; asserted at every push
-  int32_t latched_wsl_ = 0;                   // I2: latched at first push
+  int32_t latched_diff_ = 0;                  // I2: wsl − heap_break, latched at first push
   std::vector<LiveRecord> records_;
 };
 

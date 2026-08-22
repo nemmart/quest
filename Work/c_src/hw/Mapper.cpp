@@ -5,6 +5,7 @@
 #include "Memory.hpp"
 #include "../os/OSProcess.hpp"
 #include "../os/Trace.hpp"
+#include "../runtime/i_alloc.hpp"   // rt::HEAP_BREAK (I2 diff latch; hw→runtime precedent: RTStubs)
 #include <atomic>
 #include <cstdio>
 #include <stdexcept>
@@ -117,7 +118,12 @@ uint32_t Mapper::map_word(uint32_t u, Dir dir, const LiveRecord** rec) const {
       return u;   // non-live area address: loud identity
     }
     // The stack compression leg (signed, like every consumer of these
-    // addresses), bounded above by the latched wsl (I2).
+    // addresses), bounded above by the LIVE wsl (I2, Finding B ruling:
+    // wsl is the stack/heap fence and legitimately moves at heap commit
+    // points; i2_assert guarantees its motion is only ever that, and
+    // its clearance check keeps the leg strictly below it. Addresses
+    // above wsl — e.g. the fail-open message buffer — are heap and take
+    // the identity).
     //
     // >= — the Finding A ruling (docs/Project14/FINDING_A_MAPPER_FIX.md,
     // corrected geometry in REPORT_FINDING_A_FIX.md): s == W is the
@@ -136,7 +142,7 @@ uint32_t Mapper::map_word(uint32_t u, Dir dir, const LiveRecord** rec) const {
     // The image s == W -> master_wfp + 2*frame is a two-to-one MERGE
     // POINT (its other preimage is the area's last-local word) —
     // resolved Q2-style in map_checked/I6, fixpoint not strict trip.
-    if(s > latched_wsl_)
+    if(s > stack_bound())
       return u;
     for(auto it = records_.rbegin(); it != records_.rend(); ++it)
       if(s >= it->W) {
@@ -146,7 +152,7 @@ uint32_t Mapper::map_word(uint32_t u, Dir dir, const LiveRecord** rec) const {
     return u;
   }
   // Dir::ToClone — the same structure walked the other way.
-  if(s > latched_wsl_)   // I2 bound, master side (master wsl == clone wsl)
+  if(s > stack_bound())   // I2 bound (live), master side (master wsl == clone wsl)
     return u;
   for(auto it = records_.rbegin(); it != records_.rend(); ++it) {
     int32_t lo = it->master_wfp - 10 - 2 * it->argc;                // args start
@@ -235,7 +241,7 @@ bool Mapper::probe(uint32_t v) const {
     }
     if(!hit && !records_.empty()) {
       int32_t s = static_cast<int32_t>(w);
-      hit = s > records_.front().W && s <= latched_wsl_;
+      hit = s > records_.front().W && s <= stack_bound();
     }
     if(hit) {
       probe_fires.fetch_add(1);
@@ -325,14 +331,52 @@ int32_t Mapper::shadow_wsp(int32_t clone_wsp) const {
 
 // ---- the three mutations ----
 
+int32_t Mapper::stack_bound() const {
+  return owner_->wsl & 0x7FFFFFFF;
+}
+
 void Mapper::i2_assert(Machine& m) const {
   if(records_.empty())
     return;
-  int32_t wsl_now = m.wsl & 0x7FFFFFFF;
-  if(wsl_now != latched_wsl_) {
-    char buf[160];
-    snprintf(buf, sizeof(buf), "MAPPER I2: wsl moved while records live (latched %08X, now %08X)",
-             static_cast<uint32_t>(latched_wsl_), static_cast<uint32_t>(wsl_now));
+  // (a) The fence invariant. Legitimate heap motion (I?ALLOC's STASL
+  // 0x7017E903 / I?FREE's 0x7017E9D2-D5, native i_alloc.cpp) moves wsl
+  // and the heap break by the same size, same direction, at the same
+  // commit — the difference is constant across it. A wsl write with no
+  // matching break motion (e.g. a botched handler re-latch — everything
+  // the old wsl-constancy form was written for) still changes the
+  // difference and still aborts here.
+  int32_t wsl_now  = m.wsl & 0x7FFFFFFF;
+  int32_t brk_now  = static_cast<int32_t>(m.memory->read_wide(rt::HEAP_BREAK)) & 0x7FFFFFFF;
+  int32_t diff_now = wsl_now - brk_now;
+  if(diff_now != latched_diff_) {
+    char buf[200];
+    snprintf(buf, sizeof(buf),
+             "MAPPER I2: wsl moved without the heap break while records live "
+             "(latched diff %08X, now %08X; wsl %08X, break %08X)",
+             static_cast<uint32_t>(latched_diff_), static_cast<uint32_t>(diff_now),
+             static_cast<uint32_t>(wsl_now), static_cast<uint32_t>(brk_now));
+    mapper_abort(owner_, buf);
+  }
+  // (b) Stack clearance. The band a legitimate alloc reclassifies,
+  // [new_wsl, old_wsl), must lie strictly above ALL stack-leg activity,
+  // so the leg's identity/compression split stays well-defined on both
+  // sides: shadow_wsp(wsp) is the master-side live wsp (>= the clone's
+  // real wsp, shifts are positive), and each record's master-side frame
+  // extent end (the ToClone leg's own `hi`, master_wfp + 2 + 2*frame)
+  // bounds its mapped band.
+  int32_t clear = shadow_wsp(m.wsp);
+  for(const LiveRecord& r : records_) {
+    int32_t hi = r.master_wfp + 2 + 2 * r.frame_wides;
+    if(hi > clear)
+      clear = hi;
+  }
+  if(wsl_now <= clear) {
+    char buf[200];
+    snprintf(buf, sizeof(buf),
+             "MAPPER I2: stack clearance violated (wsl %08X <= stack-leg high water %08X, "
+             "shadow_wsp %08X, depth %zu)",
+             static_cast<uint32_t>(wsl_now), static_cast<uint32_t>(clear),
+             static_cast<uint32_t>(shadow_wsp(m.wsp)), records_.size());
     mapper_abort(owner_, buf);
   }
 }
@@ -340,7 +384,9 @@ void Mapper::i2_assert(Machine& m) const {
 const LiveRecord& Mapper::push_record(Machine& m, BookEntry* e, uint32_t entry_pc,
                                       int32_t W, int32_t argc, int32_t frame_wides) {
   if(records_.empty())
-    latched_wsl_ = m.wsl & 0x7FFFFFFF;   // I2 latch (post-steal value; ruling)
+    latched_diff_ = (m.wsl & 0x7FFFFFFF) -
+                    (static_cast<int32_t>(m.memory->read_wide(rt::HEAP_BREAK)) & 0x7FFFFFFF);
+                    // I2 latch, diff form (Finding B ruling; post-steal, first push)
   else
     i2_assert(m);
   // Main-task assert (Mapper.md §3 Tasks): the listener never LCALLs game

@@ -440,24 +440,41 @@ data → area), ToClone unchanged. So DISPLAY_SCREEN stays live at 101;
 the RULING (attribute to owning activation, close the round trip, both
 directions) stands — only its geometry is corrected here.
 
-**Finding B — fail-open handler moves wsl −14 wides while a record is
-live: I2 break, INVESTIGATION SPUN OUT (I2 stays strict).**
-Proven RECORD-AGNOSTIC (commenting the live routine relocates the abort
-to the next live record, identical wsl move 7001715A→7001714C at the
-same pc 7017EC7C in the L2 signal-delivery region). So this is a
-PRE-EXISTING wsl motion in the native fail-open path that batch-2 never
-exercised with a game record live across it; the widening only exposed
-it. Scope: fail-open only — inj (?FATAL) and abort (terminal) endpoints
-are clean on the widened book.
-RULING: **characterize before deciding; do NOT relax I2 yet.** Read
-O?SIGNAL / R?SIGNAL / DEFAULT_ERROR_HANDLER and find what lowers wsl by
-14 wides on the fail-open path. If legitimate handler stack adjustment →
-I2 must tolerate a signal-frame wsl delta while records live (a
-Mapper/L2 contract change, then fo re-runs clean). If an accounting slip
-in the native handler → fix there (boundary 3), I2 unchanged. Relaxing
-an invariant before understanding why it fired is how silent corruption
-enters — I2 stays strict until the −14 is explained. See
-docs/Project14/FINDING_B_INVESTIGATION.md.
+**Finding B — fail-open wsl −14 motion: CHARACTERIZED + RULED
+(Aug 22, REPORT_FINDING_B.md).** Outcome 1 — LEGITIMATE real-machine
+behaviour, not a slip. wsl on this runtime is DUAL-PURPOSE: stack limit
+AND stack/heap fence. The fail-open path moves it in its HEAP-FENCE
+role: ?LIB_ERROR calls I?ALLOC (real STASL 0x7017E903; native
+i_alloc.cpp:191) to carve a 14-word class-3 block off the top of the
+stack segment for the error-message buffer (":USER_DATA_FILE", 15 bytes
+→ request 9 → class-3 size 14; wsl 7001715A − 0xE = 7001714C, exact).
+The size is a function of MESSAGE LENGTH, not any handler frame — the
+brief's "signal frame / re-latch" framing was wrong. The buffer is
+retained (task slot B+0x3) for ?ERMSG, freed only at the next
+?LIB_ERROR, so wsl stays moved indefinitely — no transient-window
+argument saves I2. Both engines run the write (0 divergences); the
+abort pc 7017EC7C is the DETECTION site (the game ON-handler's
+LJSR I.GOTO → unwind_to → i2_assert), one dispatch after the write.
+
+RULING: I2's INTENT (the stack leg's domain bound must not silently
+shift under live records) is right; its IMPLEMENTATION ("wsl constant
+while records live") over-approximates, forbidding legitimate heap
+allocation during signal handling. Adopt the report's §5 refinement:
+**(1) latch `wsl − heap_break` (0x700001F0), not wsl** — I?ALLOC/I?FREE
+move both by the same size in the same direction, so the difference is
+the true invariant of legitimate heap motion; it still catches a wsl
+write with no matching heap-break motion (the real corruption I2
+guards). **(2) plus a stack-clearance bound at each i2_assert:**
+`wsl > max(live wsp, every record's master-side extent hi)` — the
+reclassified band [new_wsl, old_wsl) must sit strictly above all
+stack-leg activity so the compression/identity split stays well-defined.
+ADJUSTMENT (planning session): bound (2) must be checked against the
+POST-Finding-A stack-leg extents — DISPLAY_SCREEN's shadow_wsp (70001FD0)
+is the case that most crowds it — so Finding A's `>=` fix and this
+heap-fence latch must be VALIDATED TOGETHER on the fo leg, not
+independently. Not adopted: tolerating arbitrary wsl deltas; window
+re-latch (buffer persists past any window); commenting routines
+(record-agnostic, proven useless).
 
 **B2 landing:** m/inj/abort green on the 101 book with DISPLAY_SCREEN
 commented for diagnosis; the real landing is 101 live once the stack-leg

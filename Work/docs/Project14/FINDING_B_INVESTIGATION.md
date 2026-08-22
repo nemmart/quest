@@ -63,3 +63,10 @@ Finding A (DISPLAY_SCREEN, I4) is RULED separately (M4aDesign §12,
 excluded to M4c). This brief is Finding B only. They share a theme —
 the widened live set puts records where M4a's closed form didn't have to
 hold — but are mechanically distinct and independent.
+
+## Status
+
+INVESTIGATED (Aug 22 2026) — see REPORT_FINDING_B.md in this directory.
+Verdict: outcome 1 (legitimate; I?ALLOC of the 15-byte ":USER_DATA_FILE"
+message buffer, STASL 0x7017E903, class-3 size 14). Awaiting planning-
+session ruling on the recommended I2 refinement (report §5).
