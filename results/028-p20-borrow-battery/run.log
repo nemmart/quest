@@ -1,0 +1,26 @@
+--- book + pushmap.M4 load check ---
+AddressBook: borrow block — 23 slot(s) at [74000000, 7400005C), frames from 7400005C
+AddressBook: /home/questrunner/queue/Work/c_src/quest.pushmap.M4 — caller map: 1313 push redirect(s), 566 decorated call(s), 46 borrow pc(s)
+expect: 23 slots [74000000,7400005C), 1313 pushes, 566 calls, 46 borrow pcs
+m      div=0   i2=0   probes=0   m4b_ab=0   map_ab=0   argwr=2553   argrd=101   wWSAVS=630    wWRTN=630    roundtrips=101 unclosed=0 bad=0 pairs_fired=3/23 slots=40,4C,50
+fo     div=0   i2=0   probes=0   m4b_ab=0   map_ab=0   argwr=2553   argrd=101   wWSAVS=630    wWRTN=630    roundtrips=101 unclosed=0 bad=0 pairs_fired=3/23 slots=40,4C,50
+inj    div=0   i2=0   probes=0   m4b_ab=0   map_ab=0   argwr=2581   argrd=101   wWSAVS=635    wWRTN=633    roundtrips=101 unclosed=0 bad=0 pairs_fired=3/23 slots=40,4C,50
+abort  div=0   i2=0   probes=0   m4b_ab=0   map_ab=0   argwr=13     argrd=1     wWSAVS=8      wWRTN=6      roundtrips=1 unclosed=0 bad=0 pairs_fired=1/23 slots=50
+play   div=0   i2=0   probes=0   m4b_ab=0   map_ab=0   argwr=87976  argrd=146   wWSAVS=23148  wWRTN=23147  roundtrips=146 unclosed=0 bad=0 pairs_fired=3/23 slots=40,4C,50
+--- P20 verdicts ---
+m      div=0   i2=0   probes=0   m4b_ab=0   map_ab=0   argwr=2553   argrd=101   wWSAVS=630    wWRTN=630    roundtrips=101 unclosed=0 bad=0 pairs_fired=3/23 slots=40,4C,50
+fo     div=0   i2=0   probes=0   m4b_ab=0   map_ab=0   argwr=2553   argrd=101   wWSAVS=630    wWRTN=630    roundtrips=101 unclosed=0 bad=0 pairs_fired=3/23 slots=40,4C,50
+inj    div=0   i2=0   probes=0   m4b_ab=0   map_ab=0   argwr=2581   argrd=101   wWSAVS=635    wWRTN=633    roundtrips=101 unclosed=0 bad=0 pairs_fired=3/23 slots=40,4C,50
+abort  div=0   i2=0   probes=0   m4b_ab=0   map_ab=0   argwr=13     argrd=1     wWSAVS=8      wWRTN=6      roundtrips=1 unclosed=0 bad=0 pairs_fired=1/23 slots=50
+play   div=0   i2=0   probes=0   m4b_ab=0   map_ab=0   argwr=87976  argrd=146   wWSAVS=23148  wWRTN=23147  roundtrips=146 unclosed=0 bad=0 pairs_fired=3/23 slots=40,4C,50
+--- distinct borrow pairs fired across all legs (of 23) ---
+3
+--- baseline comparison: task 026 verdicts for reference ---
+m      div=0   i2=0   probes=0   m4b_ab=0   map_ab=0   argwr=2452   wWSAVS=630    wWRTN=630    Lsites=26   Xsites=0    rm_calls=0  
+fo     div=0   i2=0   probes=0   m4b_ab=0   map_ab=0   argwr=2452   wWSAVS=630    wWRTN=630    Lsites=26   Xsites=0    rm_calls=0  
+inj    div=0   i2=0   probes=0   m4b_ab=0   map_ab=0   argwr=2480   wWSAVS=635    wWRTN=633    Lsites=33   Xsites=0    rm_calls=0  
+abort  div=0   i2=0   probes=0   m4b_ab=0   map_ab=0   argwr=12     wWSAVS=8      wWRTN=6      Lsites=8    Xsites=0    rm_calls=0  
+play   div=0   i2=0   probes=0   m4b_ab=0   map_ab=0   argwr=85696  wWSAVS=22639  wWRTN=22638  Lsites=51   Xsites=0    rm_calls=0  
+rm     div=0   i2=0   probes=0   m4b_ab=0   map_ab=0   argwr=0      wWSAVS=0      wWRTN=0      Lsites=0    Xsites=0    rm_calls=0  
+rm2    div=0   i2=0   probes=0   m4b_ab=0   map_ab=0   argwr=2452   wWSAVS=630    wWRTN=630    Lsites=26   Xsites=0    rm_calls=0  
+TASK 028 DONE
