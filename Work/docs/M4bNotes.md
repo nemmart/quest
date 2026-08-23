@@ -446,26 +446,54 @@ mapper already keeps):
 5. **Generalizes to M4c** — the WPSH/WPOP frame-borrow pairings use the
    same field (decorated push up, decorated WPOP down).
 
-Empty-records handling (the QUEST-boundary case). QUEST boot is
-nocall/stock — its WSAVS pushes NO record — AND QUEST calls routines
-directly. So "a decorated caller always has a record" is NOT universally
-true; QUEST is the counterexample (the outermost real caller with no
-record). In QUEST as it exists this never bites: QUEST's only arg-
-pushing direct calls are to RUNTIME (?OPEN_FILE, ?WRITE_SCREEN — out of
-M4b scope) or zero-arg (INIT_SHARED_DATA, READ_IN) — verified, no
-game→game arg-push site sits directly in QUEST. But the mechanism must
-not rely on that luck. Three layers:
-  1. **Load-time guard**: the push_map loader REFUSES to decorate a site
-     whose containing routine is not book-live (excludes QUEST and any
-     nocall routine). This makes the runtime abort below unreachable.
-  2. **Checkpoint READ**: `records_.empty() → delta 0` (benign — empty
-     is a normal quiescent state, no open window).
-  3. **Decorated WRITE (push / LCALL)**: `records_.empty() → ABORT`
-     (fail-loud house style). A decorated op with no top record means
-     the decoration is somewhere the load-time guard should have
-     rejected; abort at the offending instruction rather than UB on
-     `records_.back()`. The read is benign, the write is an invariant
-     violation — deliberate asymmetry.
+Empty-records handling → **decorate QUEST as the base record** (primary).
+
+QUEST boot is nocall/stock today, so `records_` starts empty and a
+decorated push into an empty stack would be UB. Rather than guard the
+empty case in three places, ELIMINATE it: **decorate QUEST's WSAVS so a
+record is always present.** QUEST's WSAVS (WSAVS 0x0022 @ 7015c005) and
+WRTN (@ 7015c5e0) are structurally ORDINARY — the `nocall` flag is about
+the CALLER side (the loader jumps to QUEST; nothing LCALLs it), not the
+frame-save side. Analysis shows **no special WSAVS/WRTN processing is
+needed**:
+
+- **WSAVS**: QUEST is the FIRST record, so it hits the existing
+  `records_.empty()` first-record branch (latches the I2 diff, starts
+  shift_after from 0) — that branch already exists for "I am the base
+  record." QUEST is a COPY-MODE, argc-0 record (no preceding decorated
+  LCALL, no args): the simplest possible record. `fwd(W)` on an empty
+  chain is identity, so master_wfp = W + 10 — the degenerate base of the
+  normal formula, no special case.
+- **WRTN**: `wrtn_fixup` (Mapper.cpp:449) touches ONLY `records_.back()`
+  (the returning frame's own record); its sole caller-record reference
+  (records_[size()-2]) is trace-only and already `size() > 1`-guarded.
+  new_wsp = W − 2 − 2·argc = W − 2 (argc 0) restores the boot wsp; pop →
+  empty. Correct for the base frame with no new code.
+
+Result: `records_` is never empty once boot's first instruction runs;
+the empty case vanishes (no read-guard, no write-abort, no load-time
+exclusion needed as the primary path). "records_ never empty because
+QUEST is the base record" is a far cleaner invariant.
+
+This FOLDS QUEST out of the M5 nocall set into M4b (a scope addition vs.
+M4a, which excluded it). Two things to VALIDATE (not special-case):
+  (1) QUEST is entered by the loader with boot-time ac3/wsp state, not
+      caller-set-up state — confirm the WSAVS redirect's ac3→area-wfp
+      assumption holds from boot (same slotpatch-style check the DIST
+      report did).
+  (2) QUEST's frame migrates to area 0x74000000 — the boot frame is now
+      in the area. Lockstep either boots clean or is INSTANTLY red (it's
+      the first frame — trivial to validate: any error diverges at
+      instruction 1).
+
+Fallback (only if boot-frame migration hits a wrinkle): the three-layer
+guard — load-time (refuse to decorate a site whose containing routine is
+not book-live), checkpoint READ (empty → 0), decorated WRITE (empty →
+abort, fail-loud). In QUEST today no game→game arg-push site sits
+directly in QUEST (its arg-push direct calls are all RT: ?OPEN_FILE,
+?WRITE_SCREEN; or zero-arg: INIT_SHARED_DATA, READ_IN — verified), so
+the guard would also be correct — but the base-record approach is
+cleaner and preferred.
 
 Deferred (NOT M4b): MSP interleaved inside a redirected window is a
 stack-LAYOUT question, but NO arg window in QUEST contains an MSP/wsp-
