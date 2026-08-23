@@ -1,5 +1,36 @@
 # Where things stand
 
+## ★ P20 LANDED — M4 DE-STACKIFICATION COMPLETE (Aug 23 2026)
+
+The FINAL M4b tranche: all 23 WPSH/WPOP frame-borrow brackets redirected
+off-stack into a 23-slot reserved block at [74000000, 7400005C); code
+frames shifted to 0x7400005C (derived 4·N, nothing hardcoded). Frames
+(M4a) + args (M4b A–D) + borrows (P20) are ALL off the stack — the game
+program is flat and live-analyzable, still executing the original
+instructions, checker green. Battery task 028 GREEN: div=0 on all five
+legs, 0 i2/probes/aborts, and the AC round-trip verified BY VALUE (every
+fired WPSH's stored value == its WPOP's load, offset off/off+2 exact,
+every bracket closed; 101/101/1/146 round-trips per leg). Baseline vs
+task 026 exact (argwr deltas == borrow stores; wWSAVS/wWRTN unchanged).
+Mechanism was REUSE per the prompt: WPSH side is the stock P18 wides=1
+hook; the ONE new hook is the decorated WPOP load (EagleStack) +
+Mapper::note_arg_pop (−2 mirror). Tooling: ArgWindows borrow pass
+(23/23 PROVEN single-block on the same targets set as arg windows, 0
+flagged, cross-checked vs the coordinator scan); book builder reserves
+the block; loader gets the `borrow_slots` line, a relative-16-grid check
+(JUDGMENT CALL flagged in the report: 4·23 isn't a multiple of 16, grid
+made relative to frames_base; borrow_slots=0 recovers the old check),
+and the third `borrow` validation arm; all six pushmaps rebased +0x5C
+with full 1352-line transcription revalidation; quest.pushmap.M4 =
+ABCD + borrows (1313/566/46). Coverage: 3/23 pairs driver-reachable
+(16, 19, 20), rest decorated+proven, usual backlog. WMSP/STASP groups
+stay by design (M4cNotes: dissolve at translation). Report:
+docs/Project20/REPORT.md.
+
+**NEXT: M5 — live range analysis on the flat program (M5Notes.md);
+ON-handler control flow (O.ON / I.GOTO dynamic dispatch) is the known
+loose end to bring under the same discipline.**
+
 ## ★ P19 LANDED — M4b COMPLETE: tranches C & D (Aug 23 2026)
 
 All 566 arg-bearing game→game call sites decorated (535 P18 + 26 XCALL
