@@ -64,20 +64,21 @@ GROUP, not per WMSP. WRTN (wsp = wfp) is the final backstop for anything
 not explicitly restored. Most STASP sites follow a ?WRITE_SCREEN call
 (dynamic screen-write buffers).
 
-## What the WMSP groups ARE (nemmart's read): variadic data marshalling
-These are the DG PL/I equivalent of building a `printf`-style formatted
-write. A WMSP group marshals VARIABLE-WIDTH data (strings/values whose
-lengths aren't known at compile time — the `%s`/`%d`/`%f` pieces) into a
-stack block, then calls `?WRITE_SCREEN` (0x7017E27A, a RUNTIME routine)
-passing POINTERS into that block. The `?WRITE_SCREEN` calling convention
-is fixed (argc 2 or 5 only — 436 and 287 calls resp.; args are plain
-XPEF pointers/handle), so the WMSP group size (1..5) is the number of
-data pieces marshalled, NOT the call's argc (STORE: 5 WMSPs feed an
-argc-2 call — one pointer to the assembled block + the screen handle).
+## What the WMSP groups ARE (nemmart's read): sprintf-into-a-buffer
+These are the DG PL/I equivalent of `sprintf` then write: the WMSP group
+BUILDS ONE formatted output buffer on the stack (the format-and-fill code
+renders all the args — strings/numbers of runtime-varying width — INTO
+that single buffer), then `?WRITE_SCREEN` (0x7017E27A, a RUNTIME routine)
+DUMPS THE WHOLE BUFFER to the screen in one call. So the argc-2 call is
+(pointer-to-buffer, screen-handle) and it emits the entire formatted
+buffer; the WMSP count is however many allocations the fill code needed
+to build that one buffer, NOT a per-arg or per-call-arg count (STORE: 5
+WMSPs build the buffer, one argc-2 dump). (The argc-5 ?WRITE_SCREEN form
+is a different, fixed-field call shape, not the buffer-build path.)
 
 **M4c consequence — this bracket is TRANSPARENT to lockstep, likely
-needs NO offset handling.** The callee is RUNTIME (out of M4b game→game
-scope, never redirected), the marshalling is deterministic stock
+needs NO offset handling.** The writer is RUNTIME (out of M4b game→game
+scope, never redirected), the buffer-build is deterministic stock
 computation that moves BOTH engines' wsp identically, and the group is
 self-contained (STASP closes it before WRTN). So WMSP/STASP contributes
 nothing to master/clone divergence on its own. The ONLY thing M4c must
