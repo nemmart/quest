@@ -414,8 +414,20 @@ Mechanism:
 - **Decorated push** (XPEF/LPEF/XPEFB/LPEFB/WPSH at a mapped pc):
   `records_.back().stack_offset += 2 * words_written` (2 per word; 2k
   for a WPSH writing k words).
-- **Decorated pop and decorated LCALL:** `records_.back().stack_offset
-  -= 2 * words` (the LCALL subtracts its own 2*argc).
+- **Consume −2·argc at the WRITE-MODE WSAVS, not the LCALL** (P17
+  Stage-0 amendment, ratified + battery-proven). Rationale: a quantum
+  boundary can land between the decorated LCALL and the callee's WSAVS,
+  where the master's args are still on its stack (not consumed until
+  frame teardown) so the divergence is still 2·argc — zeroing at the
+  LCALL would falsely diverge there. Instead push_record's write-mode
+  branch does `caller_record.stack_offset −= 2·argc` just before pushing
+  the callee record, where shift_after's elided_args takes over the
+  accounting (clean hand-off, no gap). Safe by construction: the
+  subtraction is in the write-mode branch, reachable only when
+  args_written was set, which only a decorated LCALL sets. Proven: the
+  post-LCALL boundary pair (pc=70166E1C, off=8) PASSED — would have
+  diverged under LCALL-time subtraction.
+  (Decorated WPOP for M4c frame-borrows still decrements at the WPOP.)
 - **Checkpoint comparison:** `delta = records_.empty() ? 0 :
   records_.back().stack_offset;` then `clone.shadow_wsp + delta ==
   master.wsp`. Empty → delta 0 → exactly the current closed-form check;
@@ -534,6 +546,13 @@ field + one checkpoint line), NOT a mapper-identity change — no Gen-5
 record restructuring. Note in CheckerHistory when it lands; the closed
 form is recovered exactly when the offset is 0.
 
-Next: add `stack_offset` to LiveRecord + the three hooks + the checkpoint
-line, on the DIST site. Re-run task-018 (expect div=0 on all
-site-reaching legs), report.
+**LANDED (P17, task 020): div=0 on all five legs, the P16 mid-window
+condition passing with direct evidence (33 mid-window pairs, off sweeping
+0/2/4/6/8, zero diverged; the exact P16 70166E19/off=6 case green).
+QUEST decorated as base record — ordinary copy-mode, boot clean, empty
+case eliminated. stack_offset rides in the record; unwind_to/wrtn_fixup
+carry it with no new code. Open (fail-loud, no code): a mid-window signal
+whose handler is in the SAME frame as the window would strand the offset
+(suffix-pop clears only cut frames); one-line zero-on-unwind if it ever
+fires. NEXT: widen M4b to N sites (mechanism + checkpoint both proven);
+then WPSH multi-slot args; then M4c.

@@ -1,5 +1,19 @@
 # Where things stand
 
+## M4b progress (Aug 22 2026)
+- P16: M4b mechanism PROVEN on one site (DIST,4 @ 70166E1C) — args to
+  area, marker tombstoned+written, flag consumed at WSAVS. Stopped at a
+  mid-window checkpoint condition (Boundary 2).
+- P17: mid-window condition SOLVED — `stack_offset` field in LiveRecord
+  (checkpoint compares shadow+offset; −2·argc consumed at write-mode
+  WSAVS per the ratified timing amendment). QUEST added to the book as
+  the base copy-mode record (records_ never empty). Task 020 GREEN:
+  div=0 all five legs, 33 mid-window pairs passing, boot clean.
+- Book now 102 live (QUEST folded in from the M5 nocall set).
+- NEXT: widen M4b to N sites from quest.argmap; then WPSH multi-slot
+  arg pushes; then M4c (in-body stack residue).
+
+
 ## ★ P17 LANDED — M4b first slice COMPLETE: stack_offset + QUEST base record (Aug 22 2026)
 
 The P16 mid-window finding is FIXED per the M4bNotes ruling, with one
