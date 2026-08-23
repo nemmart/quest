@@ -615,11 +615,23 @@ uint32_t EagleStack::execute(Machine& machine, uint32_t address, uint32_t opcode
 
    case XPEFB:
     resolved=machine.eagle_x_byte_indexed(copy_segment(address, address+1), AA);
+    if(uint32_t slot=machine.mapper.caller_write(static_cast<uint32_t>(address))) {   // M4b — see XPEF (P18: B-variants were missed in P16)
+      machine.memory->write_wide(slot, resolved);
+      machine.mapper.note_arg_write(machine, 1);   // P17: master pushed, we wrote
+      trace_caller_write(machine, "ARGWR", address, slot, resolved);
+      return copy_segment(address, address+2);
+    }
     machine.wide_push(resolved);
     return copy_segment(address, address+2);
 
    case LPEFB:
     resolved=machine.eagle_l_byte_indexed(copy_segment(address, address+1), AA);
+    if(uint32_t slot=machine.mapper.caller_write(static_cast<uint32_t>(address))) {   // M4b — see XPEF (P18: B-variants were missed in P16)
+      machine.memory->write_wide(slot, resolved);
+      machine.mapper.note_arg_write(machine, 1);   // P17: master pushed, we wrote
+      trace_caller_write(machine, "ARGWR", address, slot, resolved);
+      return copy_segment(address, address+3);
+    }
     machine.wide_push(resolved);
     return copy_segment(address, address+3);
 
