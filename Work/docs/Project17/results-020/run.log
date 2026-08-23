@@ -1,0 +1,50 @@
+fo       div=0   i2=0   probes=0   m4b_aborts=0   mapper_aborts=0   writeWSAVS=891   argwr=3564   quest_base=1  midwin_pass=10  end=clean+FATAL
+m        div=0   i2=0   probes=0   m4b_aborts=0   mapper_aborts=0   writeWSAVS=594   argwr=2376   quest_base=1  midwin_pass=7   end=I.STOP+FATAL
+inj      div=0   i2=0   probes=0   m4b_aborts=0   mapper_aborts=0   writeWSAVS=594   argwr=2376   quest_base=1  midwin_pass=6   end=clean+FATAL
+abort    div=0   i2=0   probes=0   m4b_aborts=0   mapper_aborts=0   writeWSAVS=0     argwr=0      quest_base=1  midwin_pass=0   end=WORLD-ABORT+FATAL
+play     div=0   i2=0   probes=0   m4b_aborts=0   mapper_aborts=0   writeWSAVS=891   argwr=3564   quest_base=1  midwin_pass=10  end=clean+FATAL
+== P17 verdicts (102-live book incl QUEST + DIST site) ==
+fo       div=0   i2=0   probes=0   m4b_aborts=0   mapper_aborts=0   writeWSAVS=891   argwr=3564   quest_base=1  midwin_pass=10  end=clean+FATAL
+m        div=0   i2=0   probes=0   m4b_aborts=0   mapper_aborts=0   writeWSAVS=594   argwr=2376   quest_base=1  midwin_pass=7   end=I.STOP+FATAL
+inj      div=0   i2=0   probes=0   m4b_aborts=0   mapper_aborts=0   writeWSAVS=594   argwr=2376   quest_base=1  midwin_pass=6   end=clean+FATAL
+abort    div=0   i2=0   probes=0   m4b_aborts=0   mapper_aborts=0   writeWSAVS=0     argwr=0      quest_base=1  midwin_pass=0   end=WORLD-ABORT+FATAL
+play     div=0   i2=0   probes=0   m4b_aborts=0   mapper_aborts=0   writeWSAVS=891   argwr=3564   quest_base=1  midwin_pass=10  end=clean+FATAL
+== m-leg counts ==
+decorated-site LCALLs (clone): 594
+ARGWR writes (clone):          2376
+write-mode WSAVS (DIST):       594
+write-mode WRTN  (DIST):       594
+copy-mode WSAVS (all others):  51
+QUEST WSAVS (base record):     1
+mid-window pairs (passing):    7
+mid-window pairs (DIVERGED):   0
+== QUEST base record (first redirect of the m leg) ==
+redirect seq=000021 caller=QUEST2 WSAVS QUEST                mode=C pc=7015C005 area_wfp=7400000A argc=0 frame=34 real_wsp=7000108E shadow_wsp=700010DC master_wfp=70001098 ret=7017EA54 depth=1
+== decorated windows (off must climb 2..8, hold at LCALL, 0 at WSAVS) ==
+redirect seq=002816 caller=QUEST2 ARGWR pc=70166E0E slot=74003950 value=74003754 off=2
+redirect seq=002817 caller=QUEST2 ARGWR pc=70166E10 slot=74003952 value=7400374E off=4
+redirect seq=002818 caller=QUEST2 ARGWR pc=70166E14 slot=74003954 value=7013A472 off=6
+redirect seq=002819 caller=QUEST2 ARGWR pc=70166E19 slot=74003956 value=7013A471 off=8
+redirect seq=002820 caller=QUEST2 LCALL pc=70166E1C slot=74003958 value=80000004 off=8
+redirect seq=002822 caller=QUEST2 WSAVS DIST                 mode=W pc=70168717 area_wfp=74003962 argc=4 frame=0 real_wsp=70001096 shadow_wsp=70001FE4 master_wfp=70001FE4 ret=70166E20 depth=4
+redirect seq=002824 caller=QUEST2 ARGWR pc=70166E0E slot=74003950 value=74003754 off=2
+redirect seq=002825 caller=QUEST2 ARGWR pc=70166E10 slot=74003952 value=7400374E off=4
+redirect seq=002826 caller=QUEST2 ARGWR pc=70166E14 slot=74003954 value=7013A475 off=6
+redirect seq=002827 caller=QUEST2 ARGWR pc=70166E19 slot=74003956 value=7013A474 off=8
+redirect seq=002828 caller=QUEST2 LCALL pc=70166E1C slot=74003958 value=80000004 off=8
+redirect seq=002830 caller=QUEST2 WSAVS DIST                 mode=W pc=70168717 area_wfp=74003962 argc=4 frame=0 real_wsp=70001096 shadow_wsp=70001FE4 master_wfp=70001FE4 ret=70166E20 depth=4
+redirect seq=002832 caller=QUEST2 ARGWR pc=70166E0E slot=74003950 value=74003754 off=2
+redirect seq=002833 caller=QUEST2 ARGWR pc=70166E10 slot=74003952 value=7400374E off=4
+redirect seq=002834 caller=QUEST2 ARGWR pc=70166E14 slot=74003954 value=7013A478 off=6
+redirect seq=002835 caller=QUEST2 ARGWR pc=70166E19 slot=74003956 value=7013A477 off=8
+redirect seq=002836 caller=QUEST2 LCALL pc=70166E1C slot=74003958 value=80000004 off=8
+redirect seq=002838 caller=QUEST2 WSAVS DIST                 mode=W pc=70168717 area_wfp=74003962 argc=4 frame=0 real_wsp=70001096 shadow_wsp=70001FE4 master_wfp=70001FE4 ret=70166E20 depth=4
+== mid-window pairs, m leg (off>0, none DIVERGED) ==
+lockstep seq=003339 caller=QUEST1 pair ord=0 pc=70166E19 insns=500 clone_pc=70166E19 clone_insns=500 off=6
+lockstep seq=004484 caller=QUEST1 pair ord=0 pc=70166E19 insns=500 clone_pc=70166E19 clone_insns=500 off=6
+lockstep seq=005969 caller=QUEST1 pair ord=0 pc=70166E0E insns=500 clone_pc=70166E0E clone_insns=500 off=0
+lockstep seq=006039 caller=QUEST1 pair ord=0 pc=70166E1C insns=500 clone_pc=70166E1C clone_insns=500 off=8
+lockstep seq=006503 caller=QUEST1 pair ord=0 pc=70166E14 insns=500 clone_pc=70166E14 clone_insns=500 off=4
+lockstep seq=007967 caller=QUEST1 pair ord=0 pc=70166E19 insns=500 clone_pc=70166E19 clone_insns=500 off=6
+lockstep seq=008449 caller=QUEST1 pair ord=0 pc=70166E10 insns=500 clone_pc=70166E10 clone_insns=500 off=2
+P17 BATTERY OK

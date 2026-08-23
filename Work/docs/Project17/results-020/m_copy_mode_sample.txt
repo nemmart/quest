@@ -1,0 +1,6 @@
+redirect seq=000021 caller=QUEST2 WSAVS QUEST                mode=C pc=7015C005 area_wfp=7400000A argc=0 frame=34 real_wsp=7000108E shadow_wsp=700010DC master_wfp=70001098 ret=7017EA54 depth=1
+redirect seq=000053 caller=QUEST2 WSAVS READ_IN              mode=C pc=701766ED area_wfp=740072BA argc=0 frame=6 real_wsp=70001090 shadow_wsp=700010F4 master_wfp=700010E8 ret=7015C063 depth=2
+redirect seq=000064 caller=QUEST2 WRTN  READ_IN              mode=C area_wfp=740072BA ret_pc=7017E77D real_wsp=7000108E (was 740072AE) shadow_wsp=700010DC master_wfp=700010E8 depth=1
+redirect seq=000068 caller=QUEST2 WSAVS LOGON                mode=C pc=70175E9F area_wfp=7400714A argc=0 frame=40 real_wsp=70001090 shadow_wsp=70001138 master_wfp=700010E8 ret=7015C287 depth=2
+redirect seq=000092 caller=QUEST2 WSAVS READ_IN              mode=C pc=701766ED area_wfp=740072BA argc=0 frame=6 real_wsp=7000109E shadow_wsp=7000115C master_wfp=70001150 ret=70175F6F depth=3
+redirect seq=000103 caller=QUEST2 WRTN  READ_IN              mode=C area_wfp=740072BA ret_pc=7017E77D real_wsp=7000109C (was 740072AE) shadow_wsp=70001144 master_wfp=70001150 depth=2
