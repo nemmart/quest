@@ -77,31 +77,36 @@ mapped slots.
 
 ## Steps
 
-### Step 1 — BB-PROVE + count + number the pairs (use quest.blocks)
+### Step 1 — BB-PROVE + count + number the pairs (in ArgWindows.java)
 Adjacency does NOT prove a single basic block. There are **130 unresolved
-indirect jumps** in the program; one could target a bracket interior,
-desyncing the store from the load. So each bracket must be PROVEN a single
-basic block (no jump target in the interior, no branch out before the
-WPOP).
+indirect jumps**; one could target a bracket interior, desyncing the store
+from the load. Each bracket must be PROVEN single-block (no branch target
+in the interior, no flow instruction inside).
 
-**The CFG already exists: `Disassembled/quest.blocks`** (13,495 blocks,
-each `ADDR:` header + instructions + an `n <succ> <succ>` successor line).
-No need to find/re-run the argmap tool — the BB proof is a LOOKUP:
-- Detect brackets by the WPOP→back-scan (WPOP is only ever a bracket
-  close; all 23 verified).
-- For each bracket, PROVE single-block: the WPSH and WPOP fall in the SAME
-  block (the block whose start is the greatest start <= the pc) AND no
-  block-start lands strictly in the interior (wpsh, wpop]. (A block start
-  in the interior = something can jump in; different containing blocks =
-  a branch out.)
-- Coordinator already ran this check: **23/23 prove single-block.** The
-  implementing session should reproduce it as the authoritative pass.
+**The tool that builds quest.argmap is `Tools/ArgWindows.java`** (in the
+`Tools/` tree — NOT the `Work/` tarball; the implementing session needs
+Tools/ checked out). It ALREADY does exactly this proof for arg windows:
+it takes a **targets file** (all branch/jump destinations, incl. the
+indirect ones — cross-checked against its own `Follow.targets`) and, for
+each window, asserts `targets.subSet(windowStart+1, call.pc)` is empty
+(no target lands inside), plus disqualifies any FLOW/STACK instruction in
+the span. `Tools/DisassembleBlocks.java` produces quest.blocks (the CFG)
+separately; the argmap proof uses the targets set, not quest.blocks.
+
+Add a borrow pass to ArgWindows using the SAME `targets` set:
+- Detect brackets by WPOP→back-scan (WPOP is only ever a bracket close;
+  all 23 verified). Each is `WPSH r,r / LDAFP / store / WPOP r,r`.
+- PROVE single-block: `targets.subSet(wpsh+1, wpop+1)` must be EMPTY (no
+  branch target in the interior or on the WPOP), and no FLOW instruction
+  inside (there's only LDAFP + a store — neither is flow). This is the
+  arg-window proof minus the debt/attribution accounting.
 - Count provable pairs (N=23), number 0..N-1, emit into quest.argmap: the
   `_PAIRS count N` header + two `_PAIRS slotN at <pc>` lines per pair
-  (WPSH pc, WPOP pc, same slotN).
-- Any bracket that CANNOT be proven single-block: FLAG it, do NOT decorate
-  it, report it. (None expected — all 23 clean.) This closes the
-  WPSH_WPOP.md open item rigorously (proof against the CFG, not "span 3").
+  (WPSH pc, WPOP pc, same slotN). ArgWindows already emits `NAME argN at
+  PC` lines — this is a sibling emission.
+- Any bracket that fails the proof: FLAG, do NOT decorate, report. (None
+  expected — coordinator's independent quest.blocks check found 23/23
+  single-block; the ArgWindows targets-set proof should agree.)
 - Cross-check emitted pairs vs borrowmap.crosscheck.txt (23, AC3x22 +
   AC2x1).
 
