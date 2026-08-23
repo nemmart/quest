@@ -1,0 +1,64 @@
+--- push_map.AB load check (3-field grammar) ---
+AddressBook: /home/questrunner/queue/Work/c_src/quest.pushmap.AB — caller map: 1251 push redirect(s), 535 decorated call(s)
+decorated calls loaded: 536 (expect 535)
+m      div=0   i2=0   probes=0   m4b_ab=0   map_ab=0   argwr=2452   wWSAVS=630    wWRTN=630    call_sites=26  
+fo     div=0   i2=0   probes=0   m4b_ab=0   map_ab=0   argwr=2452   wWSAVS=630    wWRTN=630    call_sites=26  
+inj    div=0   i2=0   probes=0   m4b_ab=0   map_ab=0   argwr=2515   wWSAVS=647    wWRTN=645    call_sites=33  
+abort  div=0   i2=0   probes=0   m4b_ab=0   map_ab=0   argwr=12     wWSAVS=8      wWRTN=6      call_sites=8   
+play   div=0   i2=0   probes=0   m4b_ab=0   map_ab=0   argwr=86158  wWSAVS=22781  wWRTN=22780  call_sites=51  
+--- A+B verdicts ---
+m      div=0   i2=0   probes=0   m4b_ab=0   map_ab=0   argwr=2452   wWSAVS=630    wWRTN=630    call_sites=26  
+fo     div=0   i2=0   probes=0   m4b_ab=0   map_ab=0   argwr=2452   wWSAVS=630    wWRTN=630    call_sites=26  
+inj    div=0   i2=0   probes=0   m4b_ab=0   map_ab=0   argwr=2515   wWSAVS=647    wWRTN=645    call_sites=33  
+abort  div=0   i2=0   probes=0   m4b_ab=0   map_ab=0   argwr=12     wWSAVS=8      wWRTN=6      call_sites=8   
+play   div=0   i2=0   probes=0   m4b_ab=0   map_ab=0   argwr=86158  wWSAVS=22781  wWRTN=22780  call_sites=51  
+--- multi-slot WPSH ARGWR lines (all legs, unique) ---
+redirect seq=005252 caller=QUEST2 ARGWR pc=701670E6 slot=74009942 value=701802AE off=2
+redirect seq=005253 caller=QUEST2 ARGWR pc=701670E6 slot=74009944 value=000002AE off=2
+redirect seq=005270 caller=QUEST2 ARGWR pc=701670E6 slot=74009942 value=701802AE off=2
+redirect seq=005271 caller=QUEST2 ARGWR pc=701670E6 slot=74009944 value=000002AE off=2
+redirect seq=005283 caller=QUEST2 ARGWR pc=701670E6 slot=74009942 value=701802AE off=2
+redirect seq=005284 caller=QUEST2 ARGWR pc=701670E6 slot=74009944 value=000002AE off=2
+redirect seq=005417 caller=QUEST2 ARGWR pc=7015C50A slot=740098C2 value=701802AE off=2
+redirect seq=005418 caller=QUEST2 ARGWR pc=7015C50A slot=740098C4 value=000002AE off=2
+redirect seq=005419 caller=QUEST2 ARGWR pc=7015C50A slot=740098C6 value=701802AE off=2
+redirect seq=005421 caller=QUEST2 ARGWR pc=7015C50A slot=740098C2 value=701802AE off=2
+redirect seq=005422 caller=QUEST2 ARGWR pc=7015C50A slot=740098C4 value=000002AE off=2
+redirect seq=005423 caller=QUEST2 ARGWR pc=7015C50A slot=740098C6 value=701802AE off=2
+redirect seq=005435 caller=QUEST2 ARGWR pc=7015C50A slot=740098C2 value=701802AE off=2
+redirect seq=005436 caller=QUEST2 ARGWR pc=7015C50A slot=740098C4 value=000002AE off=2
+redirect seq=005437 caller=QUEST2 ARGWR pc=7015C50A slot=740098C6 value=701802AE off=2
+redirect seq=005535 caller=QUEST2 ARGWR pc=701670E6 slot=74009942 value=701802AE off=2
+redirect seq=005536 caller=QUEST2 ARGWR pc=701670E6 slot=74009944 value=000002AE off=2
+redirect seq=005692 caller=QUEST2 ARGWR pc=7015C50A slot=740098C2 value=701802AE off=2
+redirect seq=005693 caller=QUEST2 ARGWR pc=7015C50A slot=740098C4 value=000002AE off=2
+redirect seq=005694 caller=QUEST2 ARGWR pc=7015C50A slot=740098C6 value=701802AE off=2
+redirect seq=008375 caller=QUEST2 ARGWR pc=701670E6 slot=74009942 value=701802AE off=2
+redirect seq=008376 caller=QUEST2 ARGWR pc=701670E6 slot=74009944 value=000002AE off=2
+redirect seq=008383 caller=QUEST2 ARGWR pc=701670E6 slot=74009942 value=701802AE off=2
+redirect seq=008384 caller=QUEST2 ARGWR pc=701670E6 slot=74009944 value=000002AE off=2
+redirect seq=008400 caller=QUEST2 ARGWR pc=701670E6 slot=74009942 value=701802AE off=2
+redirect seq=008401 caller=QUEST2 ARGWR pc=701670E6 slot=74009944 value=000002AE off=2
+redirect seq=008656 caller=QUEST2 ARGWR pc=701670E6 slot=74009942 value=701802AE off=2
+redirect seq=008657 caller=QUEST2 ARGWR pc=701670E6 slot=74009944 value=000002AE off=2
+redirect seq=008758 caller=QUEST2 ARGWR pc=70171182 slot=740098C2 value=00003B8C off=2
+redirect seq=008759 caller=QUEST2 ARGWR pc=70171182 slot=740098C4 value=000002AE off=2
+--- first TERRAIN write-mode window (context) ---
+[/home/questrunner/queue/results/025-p18-AB-battery/fo.terrain_window]
+5312:redirect seq=005311 caller=QUEST2 LCALL pc=7016BD33 slot=740037A2 value=80000001 off=2
+5314:redirect seq=005313 caller=QUEST2 WSAVS DISPLAY_INVENTORY    mode=W pc=701674B5 area_wfp=740037AC argc=1 frame=158 real_wsp=70001092 shadow_wsp=70001CC6 master_wfp=70001B8A ret=7016BD37 depth=3
+5435:redirect seq=005434 caller=QUEST2 ARGWR pc=7015C508 slot=740098C0 value=7015BF19 off=2
+5436:redirect seq=005435 caller=QUEST2 ARGWR pc=7015C50A slot=740098C2 value=701802AE off=2
+5437:redirect seq=005436 caller=QUEST2 ARGWR pc=7015C50A slot=740098C4 value=000002AE off=2
+5438:redirect seq=005437 caller=QUEST2 ARGWR pc=7015C50A slot=740098C6 value=701802AE off=2
+5439:redirect seq=005438 caller=QUEST2 ARGWR pc=7015C50B slot=740098C8 value=7400000D off=10
+5440:redirect seq=005439 caller=QUEST2 ARGWR pc=7015C50D slot=740098CA value=7000021C off=12
+5441:redirect seq=005440 caller=QUEST2 ARGWR pc=7015C510 slot=740098CC value=70180062 off=14
+5442:redirect seq=005441 caller=QUEST2 ARGWR pc=7015C513 slot=740098CE value=70180061 off=16
+5443:redirect seq=005442 caller=QUEST2 ARGWR pc=7015C515 slot=740098D0 value=70000216 off=18
+5444:redirect seq=005443 caller=QUEST2 LCALL pc=7015C518 slot=740098D2 value=80000009 off=18
+5446:redirect seq=005445 caller=QUEST2 WSAVS TERRAIN              mode=W pc=7017C877 area_wfp=740098DC argc=9 frame=15 real_wsp=70001090 shadow_wsp=70001118 master_wfp=700010FA ret=7015C51C depth=2
+--- coverage ---
+53
+(decorated call sites fired, of 535)
+TASK 025 DONE

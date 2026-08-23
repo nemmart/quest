@@ -1,0 +1,3176 @@
+dispatchSystemCall: F000084C
+System Call 3, called from 7017EC0F
+ ac0=7017ECE4
+ ac1=00000000
+ ac2=700008F6
+
+MEM (return values)
+  ac0 = 249
+  ac1 = 4
+  ac2 = 700008F6
+
+RETURNING AC1=00000004
+dispatchSystemCall: F000084C
+System Call 14, called from 7017EC61
+ ac0=000000F9
+ ac1=000004F0
+ ac2=700001F0
+
+MEMI (return values)
+  ac1 = 7003F3FF
+
+RETURNING AC1=7003F3FF
+dispatchSystemCall: 70000A42
+System Call 542, called from 7017ED2B
+ ac0=7000082E
+ ac1=7003EF0A
+ ac2=70178419
+
+IXIT -- ignored
+
+RETURNING AC1=7003EF0A
+dispatchSystemCall: 70000A5E
+System Call 127, called from 7017E74A
+ ac0=FFFFFFFF
+ ac1=00000000
+ ac2=7000019A
+RETURNING AC1=00000001
+dispatchSystemCall: 70000A5E
+System Call 27, called from 7017E77C
+ ac0=E0000346
+ ac1=00000000
+ ac2=E0000354
+
+ILKUP:
+   service = ?1.SWAT.IPC
+
+RETURNING AC1=00000000
+****** ERROR RETURN ******  CODE=2006
+
+dispatchSystemCall: 70000AB4
+System Call 336, called from 7017E5A9
+ ac0=E0001550
+ ac1=00000000
+ ac2=00000000
+
+RECREATE:
+   name = SHARED_DATA_FILE
+
+RETURNING AC1=00000000
+dispatchSystemCall: 70000AB6
+System Call 73, called from 7017A29E
+ ac0=00000000
+ ac1=00000000
+ ac2=00000000
+RETURNING AC1=00000503
+dispatchSystemCall: 70000AB6
+System Call 44, called from 7017A2C0
+ ac0=000000FD
+ ac1=00000599
+ ac2=00000000
+RETURNING AC1=00000599
+dispatchSystemCall: 70000AE4
+System Call 63, called from 7017E4AF
+ ac0=E00015B0
+ ac1=FFFFFFFF
+ ac2=0000EEEE
+
+SOPEN:
+  ac0 = :SHARED_DATA_FILE
+  ac1 = -1
+  ac2 = 61166
+Assigned channel 2
+
+RETURNING AC1=00000002
+dispatchSystemCall: 70000AE4
+System Call 63, called from 7017E4AF
+ ac0=E00015B0
+ ac1=FFFFFFFF
+ ac2=0000EEEE
+
+SOPEN:
+  ac0 = :WORLD_DATA_FILE
+  ac1 = -1
+  ac2 = 61166
+Assigned channel 3
+
+RETURNING AC1=00000003
+dispatchSystemCall: 70000AE4
+System Call 63, called from 7017E4AF
+ ac0=E00015B0
+ ac1=FFFFFFFF
+ ac2=0000EEEE
+
+SOPEN:
+  ac0 = :CASTLE_DATA_FILE
+  ac1 = -1
+  ac2 = 61166
+Assigned channel 4
+
+RETURNING AC1=00000004
+dispatchSystemCall: 70000ADC
+System Call 60, called from 7017E363
+ ac0=00000000
+ ac1=00000002
+ ac2=70000AC8
+
+SPAGE:
+   read only = 0
+   memory destination = 70180000
+   page count (ignored) = 22
+   start page = 0
+
+RETURNING AC1=00000002
+dispatchSystemCall: 70000ADC
+System Call 60, called from 7017E363
+ ac0=00000000
+ ac1=00000003
+ ac2=70000AC8
+
+SPAGE:
+   read only = 0
+   memory destination = 7003F400
+   page count (ignored) = 12
+   start page = 0
+
+RETURNING AC1=00000003
+dispatchSystemCall: 70000ADC
+System Call 60, called from 7017E363
+ ac0=00000000
+ ac1=00000004
+ ac2=70000AC8
+
+SPAGE:
+   read only = 0
+   memory destination = 70152400
+   page count (ignored) = 22
+   start page = 0
+
+RETURNING AC1=00000004
+dispatchSystemCall: 70000A90
+System Call 171, called from 70178475
+ ac0=00000000
+ ac1=00000000
+ ac2=00000000
+
+SERVE:
+   servmsg packet = 00000000
+
+Server call ignored
+
+RETURNING AC1=00000000
+dispatchSystemCall: 70000AA0
+System Call 116, called from 7017E5C6
+ ac0=00000000
+ ac1=FFFFFFFF
+ ac2=00000000
+
+PNAME:
+   ac0 = 00000000
+   ac1 = 00000000
+
+RETURNING AC1=00000064
+dispatchSystemCall: 70000ABA
+System Call 0, called from 7017E2DA
+ ac0=E0001568
+ ac1=00000000
+ ac2=70000AA0
+
+CREATE:
+   name = QUEST
+   type = 001E
+   time packet address = FFFFFFFF
+   acl = FFFFFFFF
+   local port = 0001
+
+RETURNING AC1=00000000
+dispatchSystemCall: 70000ACA
+System Call 300, called from 7017E449
+ ac0=00000000
+ ac1=00000000
+ ac2=70000AA0
+
+OPEN (fs op):
+   (fs op) options = 40BB
+   (fs op) file type = FFFF
+   (fs op) block size = 0000
+   (fs op) record length = FFFF
+   (fs op) buffer pointer = FFFFFFFF
+   (fs op) name pointer = E0001580
+   (fs op) file = :USER_DATA_FILE
+Assigning channel: 5
+RETURNING AC1=00000000
+dispatchSystemCall: 70000AB8
+System Call 301, called from 7017E26A
+ ac0=00000000
+ ac1=00000000
+ ac2=70000A9C
+
+CLOSE (fs cl):
+   (fs cl) channel = 0005
+
+RETURNING AC1=00000000
+dispatchSystemCall: 70000B32
+System Call 27, called from 7017E3B1
+ ac0=E000154C
+ ac1=00000000
+ ac2=00000000
+
+ILKUP:
+   service = QUEST
+
+   service port = 00640001
+RETURNING AC1=00640001
+dispatchSystemCall: 70000AA8
+System Call 36, called from 7017E302
+ ac0=00000000
+ ac1=00000000
+ ac2=00000000
+RETURNING AC1=00000036
+dispatchSystemCall: 70000CCE
+System Call 26, called from 7017A657
+ ac0=00000000
+ ac1=00000000
+ ac2=70000A9E
+
+IREC:
+   system flags = 0000
+   user flags = 0000
+   origin port = 00000000
+   destination port = 0000
+   length = 0000
+   data pointer = 00000000
+
+dispatchSystemCall: F0000EA5
+dispatchSystemCall: F0000EA5
+System Call 3, called from 7017EA8E
+ ac0=7017EB63
+ ac1=00000000
+System Call 3, called from 7017EA8E
+ ac0=7017EB63
+ ac1=00000000
+ ac2=70000F4F
+ ac2=70000F4F
+
+MEM (return values)
+  ac0 = 89
+  ac1 = 6
+  ac2 = 70000F4F
+
+RETURNING AC1=00000006
+
+MEM (return values)
+  ac0 = 89
+  ac1 = 6
+  ac2 = 70000F4F
+
+RETURNING AC1=00000006
+dispatchSystemCall: F0000EA5
+System Call 14, called from 7017EAE0
+ ac0=00000059
+ ac1=000004F0
+ ac2=700001F0
+dispatchSystemCall: F0000EA5
+System Call 14, called from 7017EAE0
+ ac0=00000059
+ ac1=000004F0
+ ac2=700001F0
+
+MEMI (return values)
+  ac1 = 70017BFF
+
+RETURNING AC1=70017BFF
+
+MEMI (return values)
+  ac1 = 70017BFF
+
+RETURNING AC1=70017BFF
+dispatchSystemCall: 7000109C
+System Call 542, called from 7017EBAA
+ ac0=70000E87
+ ac1=7001770A
+ ac2=7015C005
+dispatchSystemCall: 7000109C
+System Call 542, called from 7017EBAA
+ ac0=70000E87
+ ac1=7001770A
+ ac2=7015C005
+
+IXIT -- ignored
+
+RETURNING AC1=7001770A
+
+IXIT -- ignored
+
+RETURNING AC1=7001770A
+dispatchSystemCall: 700010B8
+System Call 127, called from 7017E409
+ ac0=FFFFFFFF
+ ac1=00000000
+ ac2=7000019A
+dispatchSystemCall: 700010B8
+System Call 127, called from 7017E409
+ ac0=FFFFFFFF
+ ac1=00000000
+ ac2=7000019A
+RETURNING AC1=00000001
+RETURNING AC1=00000001
+dispatchSystemCall: 700010B8
+System Call 27, called from 7017E43B
+ ac0=E0000346
+ ac1=00000000
+ ac2=E0000354
+dispatchSystemCall: 700010B8
+System Call 27, called from 7017E43B
+ ac0=E0000346
+ ac1=00000000
+ ac2=E0000354
+
+ILKUP:
+   service = ?1.SWAT.IPC
+
+RETURNING AC1=00000000
+****** ERROR RETURN ******  CODE=2006
+
+RETURNING AC1=00000000
+****** ERROR RETURN ******  CODE=2006
+
+dispatchSystemCall: 700010B8
+System Call 73, called from 7015BE34
+ ac0=00000000
+ ac1=00000000
+ ac2=00000000
+dispatchSystemCall: 70001106
+System Call 73, called from 7015BE34
+ ac0=00000000
+ ac1=00000000
+ ac2=00000000
+RETURNING AC1=000005A1
+RETURNING AC1=000005A1
+dispatchSystemCall: 700010B8
+System Call 44, called from 7015BE56
+ ac0=0000005F
+ ac1=00000637
+ ac2=00000000
+dispatchSystemCall: 70001106
+System Call 44, called from 7015BE56
+ ac0=0000005F
+ ac1=00000637
+ ac2=00000000
+RETURNING AC1=00000637
+RETURNING AC1=00000637
+dispatchSystemCall: 70001134
+System Call 63, called from 7017DE01
+ ac0=E0002250
+ ac1=FFFFFFFF
+ ac2=0000EEEE
+dispatchSystemCall: 700010E6
+System Call 63, called from 7017DE01
+ ac0=E00021B4
+ ac1=FFFFFFFF
+ ac2=0000EEEE
+
+SOPEN:
+  ac0 = :SHARED_DATA_FILE
+  ac1 = -1
+  ac2 = 61166
+
+SOPEN:
+  ac0 = :SHARED_DATA_FILE
+  ac1 = -1
+  ac2 = 61166
+Assigned channel 2
+
+RETURNING AC1=00000002
+Assigned channel 2
+
+RETURNING AC1=00000002
+dispatchSystemCall: 70001134
+System Call 63, called from 7017DE01
+ ac0=E0002250
+ ac1=FFFFFFFF
+ ac2=0000EEEE
+dispatchSystemCall: 700010E6
+System Call 63, called from 7017DE01
+ ac0=E00021B4
+ ac1=FFFFFFFF
+ ac2=0000EEEE
+
+SOPEN:
+  ac0 = :WORLD_DATA_FILE
+  ac1 = -1
+  ac2 = 61166
+Assigned channel 3
+
+RETURNING AC1=00000003
+
+SOPEN:
+  ac0 = :WORLD_DATA_FILE
+  ac1 = -1
+  ac2 = 61166
+Assigned channel 3
+
+RETURNING AC1=00000003
+dispatchSystemCall: 700010E6
+System Call 63, called from 7017DE01
+ ac0=E00021B4
+ ac1=FFFFFFFF
+ ac2=0000EEEE
+dispatchSystemCall: 70001134
+System Call 63, called from 7017DE01
+ ac0=E0002250
+ ac1=FFFFFFFF
+ ac2=0000EEEE
+
+SOPEN:
+  ac0 = :CASTLE_DATA_FILE
+  ac1 = -1
+  ac2 = 61166
+Assigned channel 4
+
+RETURNING AC1=00000004
+
+SOPEN:
+  ac0 = :CASTLE_DATA_FILE
+  ac1 = -1
+  ac2 = 61166
+Assigned channel 4
+
+RETURNING AC1=00000004
+dispatchSystemCall: 700010DE
+System Call 60, called from 7017DCB5
+ ac0=00000000
+ ac1=00000002
+ ac2=700010CA
+dispatchSystemCall: 7000112C
+System Call 60, called from 7017DCB5
+ ac0=00000000
+ ac1=00000002
+ ac2=70001118
+
+SPAGE:
+   read only = 0
+   memory destination = 70180000
+   page count (ignored) = 22
+   start page = 0
+
+
+SPAGE:
+   read only = 0
+   memory destination = 70180000
+   page count (ignored) = 22
+   start page = 0
+
+RETURNING AC1=00000002
+RETURNING AC1=00000002
+dispatchSystemCall: 7000112C
+System Call 60, called from 7017DCB5
+ ac0=00000000
+ ac1=00000003
+ ac2=70001118
+dispatchSystemCall: 700010DE
+System Call 60, called from 7017DCB5
+ ac0=00000000
+ ac1=00000003
+ ac2=700010CA
+
+SPAGE:
+   read only = 0
+   memory destination = 70017C00
+   page count (ignored) = 12
+
+SPAGE:
+   read only = 0
+   memory destination = 70017C00
+   page count (ignored) = 12
+   start page = 0
+
+   start page = 0
+
+RETURNING AC1=00000003
+RETURNING AC1=00000003
+dispatchSystemCall: 700010DE
+dispatchSystemCall: 7000112C
+System Call 60, called from 7017DCB5
+System Call 60, called from 7017DCB5
+ ac0=00000000
+ ac1=00000004
+ ac2=700010CA
+ ac0=00000000
+ ac1=00000004
+ ac2=70001118
+
+SPAGE:
+   read only = 0
+   memory destination = 7012AC00
+   page count (ignored) = 22
+   start page = 0
+
+
+SPAGE:
+   read only = 0
+   memory destination = 7012AC00
+   page count (ignored) = 22
+   start page = 0
+
+RETURNING AC1=00000004
+RETURNING AC1=00000004
+dispatchSystemCall: 700010C8
+dispatchSystemCall: 70001116
+System Call 300, called from 7017DD9B
+ ac0=00000000
+ ac1=00000000
+ ac2=700010EE
+System Call 300, called from 7017DD9B
+ ac0=00000000
+ ac1=00000000
+ ac2=700010A0
+
+OPEN (fs op):
+   (fs op) options = 403A
+   (fs op) file type = FFFF
+   (fs op) block size = 0000
+   (fs op) record length = FFFF
+   (fs op) buffer pointer = FFFFFFFF
+   (fs op) name pointer = E000221C
+   (fs op) file = @OUTPUT
+Assigning channel: 5
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 700010C6
+dispatchSystemCall: 70001114
+System Call 300, called from 7017DD9B
+ ac0=00000000
+ ac1=00000000
+ ac2=700010EE
+System Call 300, called from 7017DD9B
+ ac0=00000000
+ ac1=00000000
+ ac2=700010A0
+
+OPEN (fs op):
+   (fs op) options = 403A
+   (fs op) file type = FFFF
+   (fs op) block size = 0000
+   (fs op) record length = FFFF
+   (fs op) buffer pointer = FFFFFFFF
+   (fs op) name pointer = E000221C
+   (fs op) file = @INPUT
+Assigning channel: 6
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 700010DE
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010A4
+dispatchSystemCall: 7000112C
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010F2
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E000215A
+   (fs wt) byte count = 0013
+1
+WRITE EXTENSION
+   location = F0001122
+   options = 0000
+   rel pos = 0000
+   init pos = 0000
+Welcome to quest!
+
+
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 700010DE
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010A4
+dispatchSystemCall: 7000112C
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010F2
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E0002172
+   (fs wt) byte count = 0019
+1
+WRITE EXTENSION
+   location = F0001122
+   options = 0000
+   rel pos = 0000
+   init pos = 0000
+What are your initials : 
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 7000113C
+System Call 302, called from 7017DFEC
+ ac0=00000000
+ ac1=00000000
+ ac2=700010BE
+dispatchSystemCall: 700011A0
+System Call 302, called from 7017DFEC
+ ac0=00000000
+ ac1=00000000
+ ac2=70001122
+
+READ (fs rd):
+   (fs rd) channel = 0006
+   (fs rd) options = C002
+   (fs rd) record number = 0
+   (fs rd) buffer pointer = E00022B6
+   (fs rd) byte count = 0086
+READ EXTENSION
+   location = F0001152
+   options = 0000
+   rel pos = 0000
+   init pos = 0000
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 70001142
+System Call 27, called from 7017DD03
+ ac0=E000216C
+ ac1=00000000
+ ac2=00000000
+dispatchSystemCall: 700011EA
+System Call 27, called from 7017DD03
+ ac0=E00022BC
+ ac1=00000000
+ ac2=00000000
+
+ILKUP:
+   service = QUEST
+
+   service port = 00640001
+RETURNING AC1=00640001
+RETURNING AC1=00640001
+dispatchSystemCall: 700010B0
+System Call 167, called from 7017DBA3
+ ac0=00000064
+ ac1=00000000
+ ac2=00000000
+dispatchSystemCall: 70001158
+System Call 167, called from 7017DBA3
+ ac0=00000064
+ ac1=00000000
+ ac2=00000000
+
+CON:
+   pid = 0064
+
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 700010A0
+System Call 142, called from 70175F2E
+ ac0=00000000
+ ac1=00000000
+ ac2=7400715A
+dispatchSystemCall: 70001148
+System Call 142, called from 70175F2E
+ ac0=00000000
+ ac1=00000000
+ ac2=700010F8
+
+ISR:
+   system flags = 0000
+   user flags = 0009
+   destination = 00640001
+   origin port = 0001
+   send length = 0000
+   send pointer = 00000000
+   receive length = 0000
+   receive pointer = 00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 70000CCE
+System Call 25, called from 7017B247
+ ac0=00000000
+ ac1=00000000
+ ac2=70000A9E
+
+ISEND:
+   system flags = 0000
+   user flags = 0000
+   destination = 00650001
+   origin port = 0001
+   length = 0000
+   data pointer = 00000001
+
+RETURNING AC1=00000000
+dispatchSystemCall: 70000CCE
+System Call 26, called from 7017A657
+ ac0=00000000
+ ac1=00000000
+ ac2=70000A9E
+RETURNING AC1=00000000
+
+IREC:
+   system flags = 0000
+   user flags = 0000
+   origin port = 00000000
+   destination port = 0000
+   length = 0000
+   data pointer = 00000000
+
+RETURNING AC1=00000000
+dispatchSystemCall: 70001158
+System Call 116, called from 7017E134
+ ac0=00000000
+ ac1=FFFFFFFF
+ ac2=00000000
+dispatchSystemCall: 700010B0
+System Call 116, called from 7017E134
+ ac0=00000000
+ ac1=FFFFFFFF
+ ac2=00000000
+
+PNAME:
+   ac0 = 00000000
+   ac1 = 00000000
+
+RETURNING AC1=00000065
+RETURNING AC1=00000065
+dispatchSystemCall: 70001194
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=7000115A
+dispatchSystemCall: 700010EC
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010B2
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E0002216
+   (fs wt) byte count = 000E
+1
+WRITE EXTENSION
+   location = F000118A
+   options = 0000
+   rel pos = 0000
+   init pos = 0000
+Player name ? 
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 70001208
+System Call 302, called from 7017DFEC
+ ac0=00000000
+dispatchSystemCall: 7000114A
+System Call 302, called from 7017DFEC
+ ac0=00000000
+ ac1=00000000
+ ac2=700010CC
+ ac1=00000000
+ ac2=7000118A
+
+READ (fs rd):
+   (fs rd) channel = 0006
+   (fs rd) options = C002
+   (fs rd) record number = 0
+   (fs rd) buffer pointer = E0002386
+   (fs rd) byte count = 0086
+READ EXTENSION
+   location = F00011BA
+   options = 0000
+   rel pos = 0000
+   init pos = 0000
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 700010EC
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010B2
+dispatchSystemCall: 70001194
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=7000115A
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E0002216
+   (fs wt) byte count = 000B
+1
+WRITE EXTENSION
+   location = F000118A
+   options = 0000
+   rel pos = 0000
+   init pos = 0000
+Password ? 
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 7000114A
+System Call 302, called from 7017DFEC
+ ac0=00000000
+ ac1=00000000
+ ac2=700010CC
+dispatchSystemCall: 70001208
+System Call 302, called from 7017DFEC
+ ac0=00000000
+ ac1=00000000
+ ac2=7000118A
+
+READ (fs rd):
+   (fs rd) channel = 0006
+   (fs rd) options = C002
+   (fs rd) record number = 0
+   (fs rd) buffer pointer = E0002386
+   (fs rd) byte count = 0086
+READ EXTENSION
+   location = F00011BA
+   options = 0000
+   rel pos = 0000
+   init pos = 0000
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 700010EC
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+dispatchSystemCall: 70001194
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=7000115A
+ ac2=700010B2
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E0002216
+   (fs wt) byte count = 0002
+1
+WRITE EXTENSION
+   location = F000118A
+   options = 0000
+   rel pos = 0000
+   init pos = 0000
+
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 70001148
+System Call 142, called from 70176099
+ ac0=00000000
+ ac1=00000000
+ ac2=700010F8
+dispatchSystemCall: 700010A0
+System Call 142, called from 70176099
+ ac0=00000000
+ ac1=00000000
+ ac2=7400715A
+
+ISR:
+   system flags = 0000
+   user flags = 0001
+   destination = 00640001
+   origin port = 0001
+   send length = 0000
+   send pointer = 00000001
+   receive length = 0000
+   receive pointer = 00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 70000D06
+System Call 300, called from 7017E449
+ ac0=00000000
+ ac1=00000000
+ ac2=70000CDC
+
+OPEN (fs op):
+   (fs op) options = 403A
+   (fs op) file type = FFFF
+   (fs op) block size = 0000
+   (fs op) record length = FFFF
+   (fs op) buffer pointer = FFFFFFFF
+   (fs op) name pointer = E00019F8
+   (fs op) file = :USER_DATA_FILE
+Assigning channel: 5
+RETURNING AC1=00000000
+dispatchSystemCall: 70000D04
+System Call 302, called from 7017E540
+ ac0=00000000
+ ac1=00000000
+ ac2=70000CE6
+
+READ (fs rd):
+   (fs rd) channel = 0005
+   (fs rd) options = E003
+   (fs rd) record number = 0
+   (fs rd) buffer pointer = E0001588
+   (fs rd) byte count = 03D4
+READ EXTENSION
+   location = 00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 70000CFE
+System Call 302, called from 7017E540
+ ac0=00000000
+ ac1=00000000
+ ac2=70000CE0
+
+READ (fs rd):
+   (fs rd) channel = 0005
+   (fs rd) options = 0000
+   (fs rd) record number = 0
+   (fs rd) buffer pointer = E0001588
+   (fs rd) byte count = 03D4
+RETURNING AC1=00000000
+dispatchSystemCall: 70000CFE
+System Call 302, called from 7017E540
+ ac0=00000000
+ ac1=00000000
+ ac2=70000CE0
+
+READ (fs rd):
+   (fs rd) channel = 0005
+   (fs rd) options = 0000
+   (fs rd) record number = 0
+   (fs rd) buffer pointer = E0001588
+   (fs rd) byte count = 03D4
+RETURNING AC1=00000000
+dispatchSystemCall: 70000CF6
+System Call 301, called from 7017E26A
+ ac0=00000000
+ ac1=00000000
+ ac2=70000CDA
+
+CLOSE (fs cl):
+   (fs cl) channel = 0005
+
+RETURNING AC1=00000000
+dispatchSystemCall: 70000CCE
+System Call 25, called from 7017B247
+ ac0=00000000
+ ac1=00000000
+ ac2=70000A9E
+
+ISEND:
+   system flags = 0000
+   user flags = 0006
+   destination = 00650001
+   origin port = 0001
+   length = 0000
+   data pointer = 00000001
+
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 70000CCE
+System Call 26, called from 7017A657
+ ac0=00000000
+ ac1=00000000
+ ac2=70000A9E
+
+IREC:
+   system flags = 0000
+   user flags = 0000
+   origin port = 00000000
+   destination port = 0000
+   length = 0000
+   data pointer = 00000000
+
+RETURNING AC1=00000000
+dispatchSystemCall: 70001194
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=7000115A
+dispatchSystemCall: 700010EC
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010B2
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E0002226
+   (fs wt) byte count = 004B
+1
+WRITE EXTENSION
+   location = F000118A
+   options = 0000
+   rel pos = 0000
+   init pos = 0000
+That USERNAME/PASSWORD does not exist
+Do you wish to create this character?
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 700011DC
+System Call 302, called from 7017DEBE
+ ac0=00000000
+ ac1=00000000
+ ac2=700011BE
+dispatchSystemCall: 700010D6
+System Call 302, called from 7017DEBE
+ ac0=00000000
+ ac1=00000000
+ ac2=700010B8
+
+READ (fs rd):
+   (fs rd) channel = 0006
+   (fs rd) options = 5001
+   (fs rd) record number = 0
+   (fs rd) buffer pointer = E00022AC
+   (fs rd) byte count = 0001
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 70001194
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=7000115A
+dispatchSystemCall: 700010EC
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010B2
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E0002216
+   (fs wt) byte count = 0002
+1
+WRITE EXTENSION
+   location = F000118A
+   options = 0000
+   rel pos = 0000
+   init pos = 0000
+Y
+
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 70001148
+System Call 142, called from 701760FF
+ ac0=00000000
+ ac1=00000000
+ ac2=700010F8
+dispatchSystemCall: 700010A0
+System Call 142, called from 701760FF
+ ac0=00000000
+ ac1=00000000
+ ac2=7400715A
+
+ISR:
+   system flags = 0000
+   user flags = 0002
+   destination = 00640001
+   origin port = 0001
+   send length = 0000
+   send pointer = 00000001
+   receive length = 0000
+   receive pointer = 00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 70000D06
+System Call 300, called from 7017E449
+ ac0=00000000
+ ac1=00000000
+ ac2=70000CDC
+
+OPEN (fs op):
+   (fs op) options = 403A
+   (fs op) file type = FFFF
+   (fs op) block size = 0000
+   (fs op) record length = FFFF
+   (fs op) buffer pointer = FFFFFFFF
+   (fs op) name pointer = E00019F8
+   (fs op) file = :USER_DATA_FILE
+Assigning channel: 5
+RETURNING AC1=00000000
+dispatchSystemCall: 70000D04
+System Call 302, called from 7017E540
+ ac0=00000000
+ ac1=00000000
+ ac2=70000CE6
+
+READ (fs rd):
+   (fs rd) channel = 0005
+   (fs rd) options = E003
+   (fs rd) record number = 0
+   (fs rd) buffer pointer = E0001588
+   (fs rd) byte count = 03D4
+READ EXTENSION
+   location = 00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 70000CFE
+System Call 302, called from 7017E540
+ ac0=00000000
+ ac1=00000000
+ ac2=70000CE0
+
+READ (fs rd):
+   (fs rd) channel = 0005
+   (fs rd) options = 0000
+   (fs rd) record number = 0
+   (fs rd) buffer pointer = E0001588
+   (fs rd) byte count = 03D4
+RETURNING AC1=00000000
+dispatchSystemCall: 70000CFE
+System Call 302, called from 7017E540
+ ac0=00000000
+ ac1=00000000
+ ac2=70000CE0
+
+READ (fs rd):
+   (fs rd) channel = 0005
+   (fs rd) options = 0000
+   (fs rd) record number = 0
+   (fs rd) buffer pointer = E0001588
+   (fs rd) byte count = 03D4
+RETURNING AC1=00000000
+dispatchSystemCall: 70000F1E
+System Call 302, called from 7017E540
+ ac0=00000000
+ ac1=00000000
+ ac2=70000F00
+
+READ (fs rd):
+   (fs rd) channel = 0005
+   (fs rd) options = E003
+   (fs rd) record number = 0
+   (fs rd) buffer pointer = E00019D0
+   (fs rd) byte count = 03D4
+READ EXTENSION
+   location = 00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 70000F18
+System Call 302, called from 7017E540
+ ac0=00000000
+ ac1=00000000
+ ac2=70000EFA
+
+READ (fs rd):
+   (fs rd) channel = 0005
+   (fs rd) options = 0000
+   (fs rd) record number = 0
+   (fs rd) buffer pointer = E00019D0
+   (fs rd) byte count = 03D4
+RETURNING AC1=00000000
+dispatchSystemCall: 70000F16
+System Call 303, called from 7017E643
+ ac0=00000000
+ ac1=00000000
+ ac2=70000EF8
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = 0000
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E0001588
+   (fs wt) byte count = 03D4
+0
+
+frame  4 -- 7017FFA0     guessing: .UKIL+0x8
+frame  3 -- UPDATE_USER_DATA_FILE+0x77   [7017CA12]
+frame  2 -- IPC_TASK+0xB9A   [7017B1DD]
+frame  1 -- QUEST_SERVER+0x7D2   [70178BEB]
+frame  0 -- 7017EBD2     guessing: I.INIT+0x23
+89192263 instructions run
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 7000110C
+System Call 500, called from 7017E1EE
+ ac0=00000001
+ ac1=7017E784
+dispatchSystemCall: 700010BE
+System Call 500, called from 7017E1EE
+ ac0=00000001
+ ac1=7017E784
+ ac2=70017636
+ ac2=70017636
+
+TASK:
+   packet type = 11080000
+   priority = 0000
+   task ID = 0000
+   starting address = 7017E784
+   AC2 = 70165713
+   stack base = 70017650
+   stack size high = 0000
+
+TASK:
+   packet type = 10BA0000
+   priority = 0000
+   stack size low = 05AC
+   stack fault handler = FFFF
+   flags = 0000
+   task count = 0001
+
+   task ID = 0000
+   starting address = 7017E784
+   AC2 = 70165713
+   stack base = 70017650
+   stack size high = 0000
+   stack size low = 05AC
+   stack fault handler = FFFF
+   flags = 0000
+   task count = 0001
+
+RETURNING AC1=7017E784
+RETURNING AC1=7017E784
+dispatchSystemCall: 70001BCC
+dispatchSystemCall: 700010E0
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010A6
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=70001B92
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E00025CA
+   (fs wt) byte count = 0001
+1
+WRITE EXTENSION
+   location = F0001BC2
+   options = 0000
+   rel pos = 0000
+   init pos = 0000
+
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 700176B8
+System Call 542, called from 7017EBAA
+ ac0=70017652
+ ac1=7001770C
+ ac2=70165713
+dispatchSystemCall: 700176B8
+System Call 542, called from 7017EBAA
+ ac0=70017652
+ ac1=7001770C
+ ac2=70165713
+
+IXIT -- ignored
+
+RETURNING AC1=7001770C
+
+IXIT -- ignored
+
+RETURNING AC1=7001770C
+dispatchSystemCall: 700176AC
+System Call 505, called from 7017E7BD
+ ac0=7017E7C4
+ ac1=7001770C
+ ac2=70165713
+dispatchSystemCall: 700176AC
+System Call 505, called from 7017E7BD
+ ac0=7017E7C4
+ ac1=7001770C
+ ac2=70165713
+RETURNING AC1=7001770C
+RETURNING AC1=7001770C
+dispatchSystemCall: 700010E0
+System Call 303, called from 7017E2F4
+ ac0=00000000
+dispatchSystemCall: 70001BCC
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=70001B92
+ ac1=00000000
+ ac2=700010A6
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E00025CE
+   (fs wt) byte count = 0066
+1
+WRITE EXTENSION
+   location = F0001BC2
+   options = 0000
+   rel pos = 0000
+   init pos = 0000
+To prove your heroism, your first quest is to
+slay a dragon. The dragon may be of any dragon variety
+
+
+dispatchSystemCall: 700176C8
+System Call 16, called from 7017DB52
+ ac0=00000000
+dispatchSystemCall: 700176C8
+System Call 16, called from 7017DB52
+ ac0=00000000
+ ac1=00000000
+ ac2=00000000
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+ ac1=00000000
+ ac2=00000000
+
+INTWT
+
+
+INTWT
+
+dispatchSystemCall: 700010E2
+System Call 303, called from 7017E2F4
+ ac0=00000000
+dispatchSystemCall: 70001BEA
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=70001BB0
+ ac1=00000000
+ ac2=700010A8
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E000371A
+   (fs wt) byte count = 001E
+1
+WRITE EXTENSION
+   location = F0001BE0
+   options = 0000
+   rel pos = 0000
+   init pos = 0000
+Hit any character to continue
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 70001C32
+System Call 302, called from 7017DEBE
+ ac0=00000000
+dispatchSystemCall: 700010CC
+System Call 302, called from 7017DEBE
+ ac0=00000000
+ ac1=00000000
+ ac2=70001C14
+ ac1=00000000
+ ac2=700010AE
+
+READ (fs rd):
+   (fs rd) channel = 0006
+   (fs rd) options = 5001
+   (fs rd) record number = 0
+   (fs rd) buffer pointer = E0003758
+   (fs rd) byte count = 0001
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 700010E2
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010A8
+dispatchSystemCall: 70001BEA
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=70001BB0
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E000371A
+   (fs wt) byte count = 0002
+1
+WRITE EXTENSION
+   location = F0001BE0
+   options = 0000
+   rel pos = 0000
+   init pos = 0000
+
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 70001C06
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=70001BCC
+dispatchSystemCall: 700010E2
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010A8
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E000371A
+   (fs wt) byte count = 0001
+1
+WRITE EXTENSION
+   location = F0001BFC
+   options = 0000
+   rel pos = 0000
+   init pos = 0000
+
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 70001C0C
+System Call 303, called from 7017E2F4
+ ac0=00000000
+dispatchSystemCall: 700010E8
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010AE
+ ac1=00000000
+ ac2=70001BD2
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E000371E
+   (fs wt) byte count = 0016
+1
+WRITE EXTENSION
+   location = F0001C02
+   options = 0800
+   rel pos = 0000
+   init pos = 0200
+______________________
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 70001C0C
+System Call 303, called from 7017E2F4
+ ac0=00000000
+dispatchSystemCall: 700010E8
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010AE
+ ac1=00000000
+ ac2=70001BD2
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E000371E
+   (fs wt) byte count = 0016
+1
+WRITE EXTENSION
+   location = F0001C02
+   options = 0800
+   rel pos = 0000
+   init pos = 020A
+----------------------
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 70001C0C
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+dispatchSystemCall: 700010E8
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010AE
+ ac2=70001BD2
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E0003756
+   (fs wt) byte count = 0018
+1
+WRITE EXTENSION
+   location = F0001C02
+   options = 0800
+   rel pos = 0000
+   init pos = 0101
+|                      |
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 70001C0C
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=70001BD2
+dispatchSystemCall: 700010E8
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010AE
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E0003756
+   (fs wt) byte count = 0018
+1
+WRITE EXTENSION
+   location = F0001C02
+   options = 0800
+   rel pos = 0000
+   init pos = 0102
+|                      |
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 70001C0C
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=70001BD2
+dispatchSystemCall: 700010E8
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010AE
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E0003756
+   (fs wt) byte count = 0018
+1
+WRITE EXTENSION
+   location = F0001C02
+   options = 0800
+   rel pos = 0000
+   init pos = 0103
+|                      |
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 70001C0C
+System Call 303, called from 7017E2F4
+ ac0=00000000
+dispatchSystemCall: 700010E8
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=70001BD2
+ ac1=00000000
+ ac2=700010AE
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E0003756
+   (fs wt) byte count = 0018
+1
+WRITE EXTENSION
+   location = F0001C02
+   options = 0800
+   rel pos = 0000
+   init pos = 0104
+|                      |
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 70001C0C
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+dispatchSystemCall: 700010E8
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac2=70001BD2
+ ac1=00000000
+ ac2=700010AE
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E0003756
+   (fs wt) byte count = 0018
+1
+WRITE EXTENSION
+   location = F0001C02
+   options = 0800
+   rel pos = 0000
+   init pos = 0105
+|                      |
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 700010E8
+System Call 303, called from 7017E2F4
+ ac0=00000000
+dispatchSystemCall: 70001C0C
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=70001BD2
+ ac1=00000000
+ ac2=700010AE
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E0003756
+   (fs wt) byte count = 0018
+1
+WRITE EXTENSION
+   location = F0001C02
+   options = 0800
+   rel pos = 0000
+   init pos = 0106
+|                      |
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 70001C0C
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+dispatchSystemCall: 700010E8
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010AE
+ ac2=70001BD2
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E0003756
+   (fs wt) byte count = 0018
+1
+WRITE EXTENSION
+   location = F0001C02
+   options = 0800
+   rel pos = 0000
+   init pos = 0107
+|                      |
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 70001C0C
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+dispatchSystemCall: 700010E8
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010AE
+ ac2=70001BD2
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E0003756
+   (fs wt) byte count = 0018
+1
+WRITE EXTENSION
+   location = F0001C02
+   options = 0800
+   rel pos = 0000
+   init pos = 0108
+|                      |
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 70001C0C
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=70001BD2
+dispatchSystemCall: 700010E8
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010AE
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E0003756
+   (fs wt) byte count = 0018
+1
+WRITE EXTENSION
+   location = F0001C02
+   options = 0800
+   rel pos = 0000
+   init pos = 0109
+|                      |
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 700010E8
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010AE
+dispatchSystemCall: 70002026
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=70001FEC
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E0003BEA
+   (fs wt) byte count = 01A7
+1
+WRITE EXTENSION
+   location = F000201C
+   options = 0800
+   rel pos = 0000
+   init pos = 0201
+
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 700010E8
+System Call 303, called from 7017E2F4
+ ac0=00000000
+dispatchSystemCall: 70002026
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac1=00000000
+ ac2=700010AE
+ ac2=70001FEC
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E000373A
+   (fs wt) byte count = 0027
+1
+WRITE EXTENSION
+   location = F000201C
+   options = 0800
+   rel pos = 0000
+   init pos = 000B
+    Wilderness                         
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 70002026
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=70001FEC
+dispatchSystemCall: 700010E8
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010AE
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E000373A
+   (fs wt) byte count = 0027
+1
+WRITE EXTENSION
+   location = F000201C
+   options = 0800
+   rel pos = 0000
+   init pos = 000C
+    City of Arkanda                    
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 70002026
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=70001FEC
+dispatchSystemCall: 700010E8
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010AE
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E0003F56
+   (fs wt) byte count = 0027
+1
+WRITE EXTENSION
+   location = F000201C
+   options = 0800
+   rel pos = 0000
+   init pos = 000D
+                                       
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 70001D1C
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=70001CE2
+dispatchSystemCall: 700010E8
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010AE
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E0003756
+   (fs wt) byte count = 000B
+1
+WRITE EXTENSION
+   location = F0001D12
+   options = 0800
+   rel pos = 0000
+   init pos = 1E00
+INVENTORY
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 70001D32
+System Call 303, called from 7017E2F4
+ ac0=00000000
+dispatchSystemCall: 700010FE
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=70001CF8
+ ac1=00000000
+ ac2=700010C4
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E00039A6
+   (fs wt) byte count = 0013
+1
+WRITE EXTENSION
+   location = F0001D28
+   options = 0800
+   rel pos = 0000
+   init pos = 1E01
+Food rations       
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 70001D32
+System Call 303, called from 7017E2F4
+ ac0=00000000
+dispatchSystemCall: 700010FE
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010C4
+ ac1=00000000
+ ac2=70001CF8
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E00039A6
+   (fs wt) byte count = 0013
+1
+WRITE EXTENSION
+   location = F0001D28
+   options = 0800
+   rel pos = 0000
+   init pos = 1E02
+Food rations       
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 70001D32
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+dispatchSystemCall: 700010FE
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010C4
+ ac2=70001CF8
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E00039A6
+   (fs wt) byte count = 0013
+1
+WRITE EXTENSION
+   location = F0001D28
+   options = 0800
+   rel pos = 0000
+   init pos = 1E03
+Water skin         
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 700010E8
+System Call 303, called from 7017E2F4
+ ac0=00000000
+dispatchSystemCall: 70001D1C
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=70001CE2
+ ac1=00000000
+ ac2=700010AE
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E000376E
+   (fs wt) byte count = 0013
+1
+WRITE EXTENSION
+   location = F0001D12
+   options = 0800
+   rel pos = 0000
+   init pos = 1E04
+                   
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 70001D1C
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=70001CE2
+dispatchSystemCall: 700010E8
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010AE
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E000376E
+   (fs wt) byte count = 0013
+1
+WRITE EXTENSION
+   location = F0001D12
+   options = 0800
+   rel pos = 0000
+   init pos = 1E05
+                   
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 700010E8
+System Call 303, called from 7017E2F4
+ ac0=00000000
+dispatchSystemCall: 70001D1C
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=70001CE2
+ ac1=00000000
+ ac2=700010AE
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E000376E
+   (fs wt) byte count = 0013
+1
+WRITE EXTENSION
+   location = F0001D12
+   options = 0800
+   rel pos = 0000
+   init pos = 1E06
+                   
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 70001D1C
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=70001CE2
+dispatchSystemCall: 700010E8
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010AE
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E000376E
+   (fs wt) byte count = 0013
+1
+WRITE EXTENSION
+   location = F0001D12
+   options = 0800
+   rel pos = 0000
+   init pos = 1E07
+                   
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 70001D1C
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=70001CE2
+dispatchSystemCall: 700010E8
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010AE
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E000376E
+   (fs wt) byte count = 0013
+1
+WRITE EXTENSION
+   location = F0001D12
+   options = 0800
+   rel pos = 0000
+   init pos = 1E08
+                   
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 700010E8
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010AE
+dispatchSystemCall: 70001D1C
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=70001CE2
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E000376E
+   (fs wt) byte count = 0013
+1
+WRITE EXTENSION
+   location = F0001D12
+   options = 0800
+   rel pos = 0000
+   init pos = 1E09
+                   
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 70001D1C
+System Call 303, called from 7017E2F4
+ ac0=00000000
+dispatchSystemCall: 700010E8
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010AE
+ ac1=00000000
+ ac2=70001CE2
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E000376E
+   (fs wt) byte count = 0013
+1
+WRITE EXTENSION
+   location = F0001D12
+   options = 0800
+   rel pos = 0000
+   init pos = 1E0A
+                   
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 70001D1C
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=70001CE2
+dispatchSystemCall: 700010E8
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010AE
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E0003826
+   (fs wt) byte count = 000C
+1
+WRITE EXTENSION
+   location = F0001D12
+   options = 0800
+   rel pos = 0000
+   init pos = 3200
+Strength 20
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 700010E8
+System Call 303, called from 7017E2F4
+ ac0=00000000
+dispatchSystemCall: 70001D1C
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=70001CE2
+ ac1=00000000
+ ac2=700010AE
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E000376E
+   (fs wt) byte count = 0013
+1
+WRITE EXTENSION
+   location = F0001D12
+   options = 0800
+   rel pos = 0000
+   init pos = 3201
+Thy purse is empty
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 700010E8
+System Call 303, called from 7017E2F4
+ ac0=00000000
+dispatchSystemCall: 70001D1C
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=70001CE2
+ ac1=00000000
+ ac2=700010AE
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E0003826
+   (fs wt) byte count = 0013
+1
+WRITE EXTENSION
+   location = F0001D12
+   options = 0800
+   rel pos = 0000
+   init pos = 3202
+Experience level 5
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 700010E8
+System Call 303, called from 7017E2F4
+ ac0=00000000
+dispatchSystemCall: 70001D1C
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=70001CE2
+ ac1=00000000
+ ac2=700010AE
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E0003826
+   (fs wt) byte count = 0016
+1
+WRITE EXTENSION
+   location = F0001D12
+   options = 0800
+   rel pos = 0000
+   init pos = 3203
+Intelligence level 10
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 70001D1C
+System Call 303, called from 7017E2F4
+ ac0=00000000
+dispatchSystemCall: 700010E8
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010AE
+ ac1=00000000
+ ac2=70001CE2
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E00037DE
+   (fs wt) byte count = 0009
+1
+WRITE EXTENSION
+   location = F0001D12
+   options = 0800
+   rel pos = 0000
+   init pos = 3204
+Vision 4
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 70001D16
+System Call 303, called from 7017E2F4
+ ac0=00000000
+dispatchSystemCall: 700010E2
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010A8
+ ac1=00000000
+ ac2=70001CDC
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E0003826
+   (fs wt) byte count = 000F
+1
+WRITE EXTENSION
+   location = F0001D0C
+   options = 0000
+   rel pos = 0000
+   init pos = 0000
+, Perception 1
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 700010E8
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010AE
+dispatchSystemCall: 70001D1C
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=70001CE2
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E0003826
+   (fs wt) byte count = 000E
+1
+WRITE EXTENSION
+   location = F0001D12
+   options = 0800
+   rel pos = 0000
+   init pos = 3205
+Quest level 1
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 700010E8
+System Call 303, called from 7017E2F4
+ ac0=00000000
+dispatchSystemCall: 70001D1C
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=70001CE2
+ ac1=00000000
+ ac2=700010AE
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E0003826
+   (fs wt) byte count = 0015
+1
+WRITE EXTENSION
+   location = F0001D12
+   options = 0800
+   rel pos = 0000
+   init pos = 3206
+Number of castles 80
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 70001D1C
+System Call 303, called from 7017E2F4
+ ac0=00000000
+dispatchSystemCall: 700010E8
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=70001CE2
+ ac1=00000000
+ ac2=700010AE
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E000376E
+   (fs wt) byte count = 001E
+1
+WRITE EXTENSION
+   location = F0001D12
+   options = 0800
+   rel pos = 0000
+   init pos = 3207
+You havn't slain a dragon yet
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 700010E8
+System Call 303, called from 7017E2F4
+ ac0=00000000
+dispatchSystemCall: 70001D1C
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=70001CE2
+ ac1=00000000
+ ac2=700010AE
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E0003722
+   (fs wt) byte count = 0008
+1
+WRITE EXTENSION
+   location = F0001D12
+   options = 0800
+   rel pos = 0000
+   init pos = 3208
+Rings: 
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 70001D1C
+System Call 303, called from 7017E2F4
+ ac0=00000000
+dispatchSystemCall: 700010E8
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010AE
+ ac1=00000000
+ ac2=70001CE2
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E0003752
+   (fs wt) byte count = 0001
+1
+WRITE EXTENSION
+   location = F0001D12
+   options = 0800
+   rel pos = 0000
+   init pos = 3209
+
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 70001D16
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=70001CDC
+dispatchSystemCall: 700010E2
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010A8
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E0003752
+   (fs wt) byte count = 0001
+1
+WRITE EXTENSION
+   location = F0001D0C
+   options = 0000
+   rel pos = 0000
+   init pos = 0000
+
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 700010E8
+System Call 303, called from 7017E2F4
+ ac0=00000000
+dispatchSystemCall: 70001D1C
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=70001CE2
+ ac1=00000000
+ ac2=700010AE
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E0003752
+   (fs wt) byte count = 0001
+1
+WRITE EXTENSION
+   location = F0001D12
+   options = 0800
+   rel pos = 0000
+   init pos = 320A
+
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 70001D1C
+System Call 303, called from 7017E2F4
+ ac0=00000000
+dispatchSystemCall: 700010E8
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=70001CE2
+ ac1=00000000
+ ac2=700010AE
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E0003752
+   (fs wt) byte count = 0001
+1
+WRITE EXTENSION
+   location = F0001D12
+   options = 0800
+   rel pos = 0000
+   init pos = 320B
+
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 700010E8
+System Call 303, called from 7017E2F4
+ ac0=00000000
+dispatchSystemCall: 70001D1C
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=70001CE2
+ ac1=00000000
+ ac2=700010AE
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E0003752
+   (fs wt) byte count = 0001
+1
+WRITE EXTENSION
+   location = F0001D12
+   options = 0800
+   rel pos = 0000
+   init pos = 320C
+
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 70001D1C
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=70001CE2
+dispatchSystemCall: 700010E8
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010AE
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E00037DE
+   (fs wt) byte count = 0026
+1
+WRITE EXTENSION
+   location = F0001D12
+   options = 0800
+   rel pos = 0000
+   init pos = 320D
+Wind from West - Rainy               
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 700011A2
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=70001168
+dispatchSystemCall: 700010EA
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010B0
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E0002216
+   (fs wt) byte count = 0072
+1
+WRITE EXTENSION
+   location = F0001198
+   options = 0800
+   rel pos = 0000
+   init pos = 0011
+What would you like your character to be
+'W' = wizard, 'C' = cleric, 'D' = druid, 'F' = fighter 'B' = barbarian
+
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 700010CE
+System Call 302, called from 7017DEBE
+ ac0=00000000
+ ac1=00000000
+ ac2=700010B0
+dispatchSystemCall: 700011E4
+System Call 302, called from 7017DEBE
+ ac0=00000000
+ ac1=00000000
+ ac2=700011C6
+
+READ (fs rd):
+   (fs rd) channel = 0006
+   (fs rd) options = 5001
+   (fs rd) record number = 0
+   (fs rd) buffer pointer = E00022BC
+   (fs rd) byte count = 0001
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 700010E4
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+dispatchSystemCall: 7000119C
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=70001162
+ ac2=700010AA
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E0002216
+   (fs wt) byte count = 001C
+1
+WRITE EXTENSION
+   location = F0001192
+   options = 0000
+   rel pos = 0000
+   init pos = 0000
+
+You must declare yourself!
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 700010EA
+System Call 303, called from 7017E2F4
+ ac0=00000000
+dispatchSystemCall: 700011A2
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac1=00000000
+ ac2=700010B0
+ ac2=70001168
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E0002216
+   (fs wt) byte count = 0072
+1
+WRITE EXTENSION
+   location = F0001198
+   options = 0800
+   rel pos = 0000
+   init pos = 0011
+What would you like your character to be
+'W' = wizard, 'C' = cleric, 'D' = druid, 'F' = fighter 'B' = barbarian
+
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 700011E4
+System Call 302, called from 7017DEBE
+ ac0=00000000
+ ac1=00000000
+ ac2=700011C6
+dispatchSystemCall: 700010CE
+System Call 302, called from 7017DEBE
+ ac0=00000000
+ ac1=00000000
+ ac2=700010B0
+
+READ (fs rd):
+   (fs rd) channel = 0006
+   (fs rd) options = 5001
+   (fs rd) record number = 0
+   (fs rd) buffer pointer = E00022BC
+   (fs rd) byte count = 0001
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 700010EC
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010B2
+dispatchSystemCall: 700011C8
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=7000118E
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E00022BE
+   (fs wt) byte count = 0019
+1
+WRITE EXTENSION
+   location = F00011BE
+   options = 0800
+   rel pos = 0000
+   init pos = 000E
+-> Waiting for your turn
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 700011C8
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=7000118E
+dispatchSystemCall: 700010EC
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010B2
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E00022BE
+   (fs wt) byte count = 0003
+1
+WRITE EXTENSION
+   location = F00011BE
+   options = 0800
+   rel pos = 0000
+   init pos = 000E
+->
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 700010EA
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+dispatchSystemCall: 700011A2
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=70001168
+ ac2=700010B0
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E0002216
+   (fs wt) byte count = 000F
+1
+WRITE EXTENSION
+   location = F0001198
+   options = 0800
+   rel pos = 0000
+   init pos = 000F
+
+
+
+
+
+
+
+
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 7000126C
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=70001232
+dispatchSystemCall: 700010EC
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010B2
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E00023C6
+   (fs wt) byte count = 0043
+1
+WRITE EXTENSION
+   location = F0001262
+   options = 0800
+   rel pos = 0000
+   init pos = 0014
+You have been hit by an arrow from a tower for 4 strength points.
+
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 70001284
+System Call 303, called from 7017E2F4
+ ac0=00000000
+dispatchSystemCall: 700010E8
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac1=00000000
+ ac2=7000124A
+ ac2=700010AE
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E000244E
+   (fs wt) byte count = 001E
+1
+WRITE EXTENSION
+   location = F000127A
+   options = 0000
+   rel pos = 0000
+   init pos = 0000
+Hit any character to continue
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 700010D2
+System Call 302, called from 7017DEBE
+ ac0=00000000
+ ac1=00000000
+ ac2=700010B4
+dispatchSystemCall: 700012CC
+System Call 302, called from 7017DEBE
+ ac0=00000000
+ ac1=00000000
+ ac2=700012AE
+
+READ (fs rd):
+   (fs rd) channel = 0006
+   (fs rd) options = 5001
+   (fs rd) record number = 0
+   (fs rd) buffer pointer = E000248C
+   (fs rd) byte count = 0001
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 70001284
+System Call 303, called from 7017E2F4
+ ac0=00000000
+dispatchSystemCall: 700010E8
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010AE
+ ac1=00000000
+ ac2=7000124A
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E000244E
+   (fs wt) byte count = 0002
+1
+WRITE EXTENSION
+   location = F000127A
+   options = 0000
+   rel pos = 0000
+   init pos = 0000
+
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 7000126C
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=70001232
+dispatchSystemCall: 700010EC
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010B2
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E00023C6
+   (fs wt) byte count = 0043
+1
+WRITE EXTENSION
+   location = F0001262
+   options = 0800
+   rel pos = 0000
+   init pos = 0014
+You have been hit by an arrow from a tower for 4 strength points.
+
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 70001284
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=7000124A
+dispatchSystemCall: 700010E8
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010AE
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E000244E
+   (fs wt) byte count = 001E
+1
+WRITE EXTENSION
+   location = F000127A
+   options = 0000
+   rel pos = 0000
+   init pos = 0000
+Hit any character to continue
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 700010D2
+System Call 302, called from 7017DEBE
+ ac0=00000000
+ ac1=00000000
+ ac2=700010B4
+dispatchSystemCall: 700012CC
+System Call 302, called from 7017DEBE
+ ac0=00000000
+ ac1=00000000
+ ac2=700012AE
+
+READ (fs rd):
+   (fs rd) channel = 0006
+   (fs rd) options = 5001
+   (fs rd) record number = 0
+   (fs rd) buffer pointer = E000248C
+   (fs rd) byte count = 0001
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 700010E8
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010AE
+dispatchSystemCall: 70001284
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=7000124A
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E000244E
+   (fs wt) byte count = 0002
+1
+WRITE EXTENSION
+   location = F000127A
+   options = 0000
+   rel pos = 0000
+   init pos = 0000
+
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 700010EC
+System Call 303, called from 7017E2F4
+ ac0=00000000
+dispatchSystemCall: 7000126C
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=70001232
+ ac1=00000000
+ ac2=700010B2
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E00022D2
+   (fs wt) byte count = 0001
+1
+WRITE EXTENSION
+   location = F0001262
+   options = 0800
+   rel pos = 0000
+   init pos = 0014
+
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 700012EC
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700012B2
+dispatchSystemCall: 700010EC
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010B2
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E00023C6
+   (fs wt) byte count = 0016
+1
+WRITE EXTENSION
+   location = F00012E2
+   options = 0800
+   rel pos = 0000
+   init pos = 3200
+Strength 12 [fighter]
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 700011A2
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=70001168
+dispatchSystemCall: 700010EA
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010B0
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E0002216
+   (fs wt) byte count = 0003
+1
+WRITE EXTENSION
+   location = F0001198
+   options = 0800
+   rel pos = 0000
+   init pos = 000E
+-> 
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 700011E4
+System Call 302, called from 7017DEBE
+ ac0=00000000
+ ac1=00000000
+ ac2=700011C6
+dispatchSystemCall: 700010CE
+System Call 302, called from 7017DEBE
+ ac0=00000000
+ ac1=00000000
+ ac2=700010B0
+
+READ (fs rd):
+   (fs rd) channel = 0006
+   (fs rd) options = 5001
+   (fs rd) record number = 0
+   (fs rd) buffer pointer = E00022BC
+   (fs rd) byte count = 0001
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 700010EA
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010B0
+dispatchSystemCall: 700011A2
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=70001168
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E0002216
+   (fs wt) byte count = 000F
+1
+WRITE EXTENSION
+   location = F0001198
+   options = 0800
+   rel pos = 0000
+   init pos = 000F
+
+
+
+
+
+
+
+
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 700011A2
+System Call 303, called from 7017E2F4
+ ac0=00000000
+dispatchSystemCall: 700010EA
+System Call 303, called from 7017E2F4
+ ac1=00000000
+ ac2=70001168
+ ac0=00000000
+ ac1=00000000
+ ac2=700010B0
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E0002212
+   (fs wt) byte count = 0001
+1
+WRITE EXTENSION
+   location = F0001198
+   options = 0800
+   rel pos = 0000
+   init pos = 030E
+
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 70001368
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+dispatchSystemCall: 700010E6
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010AC
+ ac2=7000132E
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E000230E
+   (fs wt) byte count = 000C
+1
+WRITE EXTENSION
+   location = F000135E
+   options = 0000
+   rel pos = 0000
+   init pos = 0000
+Move to the 
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 700010E6
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010AC
+dispatchSystemCall: 70001368
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=7000132E
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E000230E
+   (fs wt) byte count = 0005
+1
+WRITE EXTENSION
+   location = F000135E
+   options = 0000
+   rel pos = 0000
+   init pos = 0000
+NORTH
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+Thread halt
+1211479 instructions run
+dispatchSystemCall: 70001554
+System Call 333, called from 7017F05B
+ ac0=00000000
+ ac1=FFFFFFFF
+ ac2=70001398
+RETURNING AC1=FFFFFFFF
+dispatchSystemCall: 700015B4
+System Call 251, called from 7017F3F9
+ ac0=FFFFFFFF
+ ac1=00000000
+ ac2=7000158C
+
+?RNGPR:
+   ring = 7
+   buffer = E0002978
+   room = 256
+   name = :QUEST.PR
+
+RETURNING AC1=00000000
+dispatchSystemCall: 700015B4
+System Call 63, called from 7017F44E
+ ac0=E0002978
+ ac1=FFFFFFFF
+ ac2=00000000
+
+SOPEN:
+  ac0 = :QUEST.ST
+  ac1 = -1
+  ac2 = 0
+Assigned channel 7
+
+RETURNING AC1=00000007
+dispatchSystemCall: 700015B4
+frame  8 -- 7017FDED     guessing: .UKIL+0x8
+frame  7 -- ?FATAL+0x1E2   [7017F218]
+frame  6 -- DEF?ON+0x46   [7017EF4B]
+frame  5 -- 7017EE3D     guessing: O.SERROR+0xA
+frame  4 -- FIND_OBJECT+0x7   [7016A896]
+frame  3 -- MOVE_PLAYER+0x1322   [7017233F]
+frame  2 -- START_TURN+0x134D   [7017956C]
+frame  1 -- QUEST+0x5D7   [7015C5DC]
+frame  0 -- 7017EA51     guessing: I.INIT+0x23
+1217162 instructions run
+frame  2 -- 7017FDED     guessing: .UKIL+0x8
+frame  1 -- C_A_LISTENER+0x2   [70165715]
+frame  0 -- 7017E7C1     guessing: T.INIT+0x3B
+68 instructions run
