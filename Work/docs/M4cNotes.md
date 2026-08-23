@@ -21,16 +21,27 @@ By how they move wsp:
 WMSP allocates a dynamic in-body buffer; the space is given back by an
 EXPLICIT STASP mid-body (NOT only by WRTN teardown, as first assumed).
 
-**WMSP (57) far outnumbers STASP (19) — ~3:1 — because cleanup is
-BATCHED: multiple WMSP allocations are reclaimed by ONE STASP that
-restores wsp below the whole group.** Verified in DISPLAY_SCREEN (9
-WMSP, 3 STASP), which has three groups each of the shape:
+**WMSP (57) outnumbers STASP (19) because cleanup is BATCHED: a run of
+WMSP allocations is closed by ONE STASP that restores wsp below the whole
+group. Group size VARIES (1 to 5 WMSP per STASP) — it is NOT a fixed
+3:1.** #STASP per routine = #groups (DISPLAY_SCREEN 3 groups, DIED /
+GET_QUEST 2, the rest 1). Verified:
+- STORE: FIVE WMSPs in one group, one STASP (7017a141..7017a1d1), and
+  the STASP is well before the WRTN.
+- DISPLAY_SCREEN: three groups of three, each closed by its own STASP.
+- The 1:1 routines (DISPLAY_CAVE, HELP, OBSERVE) are single-alloc groups.
+
+**WRTN does NOT reclaim MSP space** (earlier "WRTN backstop" note was
+wrong — nemmart caught it). Every WMSP group is explicitly closed by its
+STASP BEFORE the routine returns; by the time WRTN runs, wsp is already
+back down. So MSP allocation is always balanced by an explicit STASP
+restore within the body, never left for frame teardown.
 
     LDASP r; WMSP a;   ; capture wsp, allocate buffer 1
     LDASP r; WMSP b;   ; capture wsp, allocate buffer 2
-    LDASP r; WMSP c;   ; capture wsp, allocate buffer 3
+    ... (1..5 allocations in the group) ...
     ... use buffers (?WRITE_SCREEN etc.) ...
-    STASP 0            ; ONE restore: wsp = saved pre-group wsp → all 3 freed
+    STASP 0            ; ONE restore: wsp = saved pre-group wsp → whole group freed
 
 The per-WMSP LDASP captures the running wsp (buffers are built relative
 to their own base); the single STASP at the group end restores wsp to a
