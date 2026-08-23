@@ -20,7 +20,24 @@ By how they move wsp:
 ## The WMSP/STASP save-restore bracket (confirmed, key M4c finding)
 WMSP allocates a dynamic in-body buffer; the space is given back by an
 EXPLICIT STASP mid-body (NOT only by WRTN teardown, as first assumed).
-The idiom, verified at 7016614b..701661aa (a ?WRITE_SCREEN buffer):
+
+**WMSP (57) far outnumbers STASP (19) — ~3:1 — because cleanup is
+BATCHED: multiple WMSP allocations are reclaimed by ONE STASP that
+restores wsp below the whole group.** Verified in DISPLAY_SCREEN (9
+WMSP, 3 STASP), which has three groups each of the shape:
+
+    LDASP r; WMSP a;   ; capture wsp, allocate buffer 1
+    LDASP r; WMSP b;   ; capture wsp, allocate buffer 2
+    LDASP r; WMSP c;   ; capture wsp, allocate buffer 3
+    ... use buffers (?WRITE_SCREEN etc.) ...
+    STASP 0            ; ONE restore: wsp = saved pre-group wsp → all 3 freed
+
+The per-WMSP LDASP captures the running wsp (buffers are built relative
+to their own base); the single STASP at the group end restores wsp to a
+saved pre-group value, reclaiming the whole batch at once. The saved
+value round-trips through the frame (XWSTA/XWLDA [wfp+off]) with a small
+WSBI adjust, as in the single-buffer bracket at 7016614b..701661aa
+(a ?WRITE_SCREEN buffer):
 
     LDASP 2            ; capture current wsp into AC2
     WMSP 0             ; allocate buffer (wsp += 2·AC0)
@@ -31,9 +48,10 @@ The idiom, verified at 7016614b..701661aa (a ?WRITE_SCREEN buffer):
     STASP 1            ; wsp = restored value → buffer reclaimed
 
 So: **STASP is the "give WMSP space back" instruction**, restoring a wsp
-value the routine saved in its own frame before allocating. Most of the
-19 STASP sites follow a ?WRITE_SCREEN call (dynamic screen-write buffer);
-all follow the load-from-frame / adjust / STASP shape.
+value the routine saved in its own frame — one STASP per allocation
+GROUP, not per WMSP. WRTN (wsp = wfp) is the final backstop for anything
+not explicitly restored. Most STASP sites follow a ?WRITE_SCREEN call
+(dynamic screen-write buffers).
 
 ## M4c implication (for when M4c is planned — NOT now)
 This is a THIRD stack-lifecycle pattern beside arg-pushes (M4b) and
