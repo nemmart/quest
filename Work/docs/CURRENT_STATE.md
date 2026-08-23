@@ -1,5 +1,26 @@
 # Where things stand
 
+## ★ P18 LANDED — M4b widened to ALL flat-LCALL sites, tranches A+B (Aug 23 2026)
+
+535 decorated caller sites live (515 flat single-word + 20 WPSH
+multi-slot to TERRAIN/TERRITORY), batteries GREEN (tasks 024, 025):
+div=0 all five legs, 0 i2/probes/m4b/mapper aborts, write-mode
+WSAVS==WRTN, 86k redirected arg writes in play, WPSH windows verified by
+VALUES + offset arithmetic (TERRAIN off 2→10 across the WPSH, closing at
+2·argc=18). Two emulator completions of the existing design, no
+mapper/ruling changes: (1) caller_write hook replicated to XPEFB/LPEFB —
+P16 hooked only XPEF/LPEF, which was the root cause of the task-021
+driven divergence (captured in task 023: GET_INPUT@701760C4, shadow
++2·argc, argwr=0); (2) the WPSH multi-slot hook (AC[XX]→base slot
+ascending, note_arg_write(m,wides), fail-loud wides/group cross-check) +
+loader 3-field grammar with per-wide slot validation. Report:
+docs/Project18/REPORT.md (§7–11); CheckerHistory Gen-4/5 addendum.
+
+**NEXT (next project): tranche C — 26 XCALL/nested sites (static-link
+interaction); tranche D — 5 RETURN_MESSAGE sites (pass-by-ref pointer
+args, [[noreturn]]). Then M4c (in-body stack residue: MSP dyn allocs,
+WPSH/WPOP brackets).**
+
 ## M4b progress (Aug 22 2026)
 - P16: M4b mechanism PROVEN on one site (DIST,4 @ 70166E1C) — args to
   area, marker tombstoned+written, flag consumed at WSAVS. Stopped at a

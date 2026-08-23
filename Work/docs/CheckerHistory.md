@@ -271,3 +271,24 @@ point and the args are still elided there; battery pair evidence at
 pc=70166E1C off=8 confirms). unwind_to's suffix-pop discards cut frames'
 offsets for free. Validated: task-020 battery, div=0 all legs, 33
 mid-window pairs passing at off ∈ {0,2,4,6,8}.
+
+## Generation 4/5 addendum — M4b widened to all flat-LCALL sites (P18, Aug 23 2026)
+
+No checker or mapper-identity change — the P17 comparison term carries
+unmodified to 535 decorated sites (tranche A: 515 flat single-word;
+tranche B: 20 WPSH multi-slot to TERRAIN/TERRITORY). Two emulator-side
+completions of the EXISTING design: (1) the caller_write hook replicated
+to XPEFB/LPEFB (P16 hooked only XPEF/LPEF; DIST's window never used the
+B-variants — a decorated site with a B-variant push then ran write-mode
+WSAVS with an un-elided arg → shadow +2·argc, captured in task 023 at
+GET_INPUT/701760C4); (2) the WPSH multi-slot hook per the P18 spec:
+AC[XX] → the map's base (lowest) slot, ascending, note_arg_write(m,
+wides), fail-loud if map wides != AC group size. Loader grammar extended
+to 3-field `push <pc> <base_slot> <wides>`, every wide's slot validated
+in the callee arg region. Validated: task-024 (A alone) and task-025
+(A+B) batteries, div=0 all five legs, 0 i2/probes/aborts, write-mode
+WSAVS == WRTN counts (±in-flight at kill), WPSH windows exercised at 6
+sites with offset += 2·wides mid-window (TERRAIN off 2→10 across the
+WPSH, closing at 2·argc=18) and distinct per-slot values confirming the
+ascending order. Remaining undecorated: 26 XCALL/nested + 5
+RETURN_MESSAGE (tranches C/D, next project).
