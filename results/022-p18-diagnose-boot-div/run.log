@@ -1,0 +1,23 @@
+[full] div=0
+0 decorated=516
+=== FULL-MAP DIVERGENCE DETAIL ===
+[boot_only] div=0
+0 decorated=12
+[no_boot] div=0
+0 decorated=505
+# INIT_OBJ_TBL,2 @ 7015C2B7
+push 7015C2B4 740056C2   # LPEFB arg1
+push 7015C2B2 740056C0   # XPEF arg2
+call 7015C2B7 740056C4   # INIT_OBJ_TBL marker
+[init_obj] div=0
+0 decorated=2
+=== SUMMARY ===
+full: div=0
+0
+boot_only: div=0
+0
+no_boot: div=0
+0
+init_obj: div=0
+0
+TASK 022 DONE
