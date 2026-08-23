@@ -77,30 +77,33 @@ mapped slots.
 
 ## Steps
 
-### Step 0 — locate the argmap-building tool
-The tool that builds `quest.argmap` with **basic-block analysis** (from
-tasks 004/005) is NOT clearly in `Work/c_src/tools/` (those are Python
-helpers; none does BB analysis). Find its source first (it may be on the
-runner checkout, or committed under a name not yet grepped). The BB
-analysis is load-bearing for step 1 — do not proceed without it.
-
-### Step 1 — enhance the argmap tool: BB-PROVE + count + number the pairs
+### Step 1 — BB-PROVE + count + number the pairs (use quest.blocks)
 Adjacency does NOT prove a single basic block. There are **130 unresolved
 indirect jumps** in the program; one could target a bracket interior,
 desyncing the store from the load. So each bracket must be PROVEN a single
-basic block (no jump target lands in the interior, no branch leaves before
-the WPOP) — the SAME CFG analysis the tool already does for arg windows.
+basic block (no jump target in the interior, no branch out before the
+WPOP).
+
+**The CFG already exists: `Disassembled/quest.blocks`** (13,495 blocks,
+each `ADDR:` header + instructions + an `n <succ> <succ>` successor line).
+No need to find/re-run the argmap tool — the BB proof is a LOOKUP:
 - Detect brackets by the WPOP→back-scan (WPOP is only ever a bracket
-  close), then PROVE single-block via the tool's BB machinery.
-- Count the provable pairs (N), number them 0..N-1, emit into quest.argmap:
-  the `_PAIRS count N` header line + two `_PAIRS slotN at <pc>` lines per
-  pair (WPSH pc, WPOP pc, same slotN).
+  close; all 23 verified).
+- For each bracket, PROVE single-block: the WPSH and WPOP fall in the SAME
+  block (the block whose start is the greatest start <= the pc) AND no
+  block-start lands strictly in the interior (wpsh, wpop]. (A block start
+  in the interior = something can jump in; different containing blocks =
+  a branch out.)
+- Coordinator already ran this check: **23/23 prove single-block.** The
+  implementing session should reproduce it as the authoritative pass.
+- Count provable pairs (N=23), number 0..N-1, emit into quest.argmap: the
+  `_PAIRS count N` header + two `_PAIRS slotN at <pc>` lines per pair
+  (WPSH pc, WPOP pc, same slotN).
 - Any bracket that CANNOT be proven single-block: FLAG it, do NOT decorate
-  it (leave it on the stack, report it). This also closes the WPSH_WPOP.md
-  open item rigorously (proof, not "span is 3").
-- Cross-check the emitted pairs against borrowmap.crosscheck.txt (expect
-  23, AC3×22 + AC2×1). Agreement = confidence; a shortfall (a bracket the
-  BB analysis can't clear) is a real FINDING to report, not force.
+  it, report it. (None expected — all 23 clean.) This closes the
+  WPSH_WPOP.md open item rigorously (proof against the CFG, not "span 3").
+- Cross-check emitted pairs vs borrowmap.crosscheck.txt (23, AC3x22 +
+  AC2x1).
 
 ### Step 2 — book: reserve the block, shift frames (build_address_book.py)
 Read `_PAIRS count N` → reserve N slots (N*4 bytes) at base 0x74000000,
