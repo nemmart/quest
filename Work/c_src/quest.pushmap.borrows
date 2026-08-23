@@ -1,0 +1,50 @@
+# M4b P20 borrow map — 23 WPSH/WPOP frame-borrow brackets.
+# borrow <pc> <slot>: opcode decides — WPSH stores AC[r] to the slot
+# (not the stack), WPOP loads it back (does not pop). Slots are the
+# reserved block [74000000, 7400005C); frames start above it.
+borrow 7015F7BA 74000000   # slot0 WPSH
+borrow 7015F7BE 74000000   # slot0 WPOP
+borrow 7015F7C5 74000004   # slot1 WPSH
+borrow 7015F7C9 74000004   # slot1 WPOP
+borrow 7015F7D0 74000008   # slot2 WPSH
+borrow 7015F7D4 74000008   # slot2 WPOP
+borrow 7015F7EE 7400000C   # slot3 WPSH
+borrow 7015F7F2 7400000C   # slot3 WPOP
+borrow 7015F7F9 74000010   # slot4 WPSH
+borrow 7015F7FD 74000010   # slot4 WPOP
+borrow 7015F80E 74000014   # slot5 WPSH
+borrow 7015F812 74000014   # slot5 WPOP
+borrow 7015F819 74000018   # slot6 WPSH
+borrow 7015F81D 74000018   # slot6 WPOP
+borrow 7015F82E 7400001C   # slot7 WPSH
+borrow 7015F832 7400001C   # slot7 WPOP
+borrow 7015F839 74000020   # slot8 WPSH
+borrow 7015F83D 74000020   # slot8 WPOP
+borrow 70165345 74000024   # slot9 WPSH
+borrow 70165349 74000024   # slot9 WPOP
+borrow 7016534D 74000028   # slot10 WPSH
+borrow 70165351 74000028   # slot10 WPOP
+borrow 70166369 7400002C   # slot11 WPSH
+borrow 7016636D 7400002C   # slot11 WPOP
+borrow 701667B2 74000030   # slot12 WPSH
+borrow 701667B6 74000030   # slot12 WPOP
+borrow 7016680D 74000034   # slot13 WPSH
+borrow 70166811 74000034   # slot13 WPOP
+borrow 7016686E 74000038   # slot14 WPSH
+borrow 70166872 74000038   # slot14 WPOP
+borrow 701668C9 7400003C   # slot15 WPSH
+borrow 701668CD 7400003C   # slot15 WPOP
+borrow 70166ED3 74000040   # slot16 WPSH
+borrow 70166ED7 74000040   # slot16 WPOP
+borrow 70166FA6 74000044   # slot17 WPSH
+borrow 70166FAA 74000044   # slot17 WPOP
+borrow 7016A3EA 74000048   # slot18 WPSH
+borrow 7016A3EE 74000048   # slot18 WPOP
+borrow 7016BCE6 7400004C   # slot19 WPSH
+borrow 7016BCEA 7400004C   # slot19 WPOP
+borrow 7016DF8F 74000050   # slot20 WPSH
+borrow 7016DF93 74000050   # slot20 WPOP
+borrow 7016E7D5 74000054   # slot21 WPSH
+borrow 7016E7D9 74000054   # slot21 WPOP
+borrow 70178A3F 74000058   # slot22 WPSH
+borrow 70178A43 74000058   # slot22 WPOP

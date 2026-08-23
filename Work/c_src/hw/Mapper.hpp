@@ -178,6 +178,12 @@ public:
   // yet). Empty book-live stack here = decorated site outside any live
   // frame: impossible once QUEST is the base record, so fail loud.
   void note_arg_write(Machine& m, int32_t wides);
+  // P20 mirror: a redirected WPOP loaded `wides` wides from a borrow slot
+  // instead of popping — the master's wsp fell back by 2*wides, the
+  // clone's didn't move, so the offset comes back down. Net zero across
+  // a WPSH/WPOP bracket (+2 at the store, −2 here); same fail-loud
+  // empty-records rule as note_arg_write.
+  void note_arg_pop(Machine& m, int32_t wides);
 
   // ---- the three mutation kinds (Mapper.md §3), all clone-role, all
   // traced (`redirect`): redirected WSAVS/WSAVR pushes; redirected WRTN

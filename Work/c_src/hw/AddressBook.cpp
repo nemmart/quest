@@ -38,6 +38,19 @@ bool AddressBook::load_from_env() {
     std::istringstream ss(line);
     std::string entry, name, alloc, wfp, argc, frame, variant, flags;
     if(!(ss >> entry >> name >> alloc >> wfp >> argc >> frame >> variant)) {
+      // P20: the borrow-block line `borrow_slots N` — must precede every
+      // entry (the reserved-block allocation is read before frame
+      // placement; frames start at BASE + 4*N).
+      if(entry == "borrow_slots" && !name.empty() && wfp.empty()) {
+        if(have_prev) {
+          fprintf(stderr, "AddressBook: %s:%d: borrow_slots after an entry line\n", path, lineno);
+          delete book;
+          return false;
+        }
+        book->borrow_slots = static_cast<uint32_t>(strtoul(name.c_str(), nullptr, 10));
+        top = book->frames_base();
+        continue;
+      }
       fprintf(stderr, "AddressBook: %s:%d: bad line\n", path, lineno);
       delete book;
       return false;
@@ -57,9 +70,13 @@ bool AddressBook::load_from_env() {
     // Consistency checks against the layout ruling: wfp_base = alloc_base
     // + 2*max_argc + 10 (R-C); blocks STRICTLY disjoint including the
     // closed right ends (Mapper.md I1: alloc_end(k) < alloc_base(k+1),
-    // honored by the stride size+16); base ring 7.
+    // honored by the stride size+16); base ring 7. The 16-grid is
+    // relative to frames_base (P20: frames start at BASE + 4*N, and
+    // 4*N need not be a multiple of 16 — N=23 puts them at 0x7400005C;
+    // borrow_slots=0 recovers the absolute check exactly).
     if(e.wfp_base != e.alloc_base + 2 * e.max_argc + 10 ||
-       (have_prev ? e.alloc_base <= top : e.alloc_base < top) || (e.alloc_base & 15) != 0 ||
+       (have_prev ? e.alloc_base <= top : e.alloc_base < top) ||
+       ((e.alloc_base - book->frames_base()) & 15) != 0 ||
        (e.alloc_base >> 28) != (BASE >> 28) ||
        (variant != "WSAVS" && variant != "WSAVR")) {
       fprintf(stderr, "AddressBook: %s:%d: layout inconsistency for %s\n", path, lineno, name.c_str());
@@ -77,6 +94,9 @@ bool AddressBook::load_from_env() {
   instance = book;
   fprintf(stderr, "AddressBook: %s — %zu live routine(s), %u words, %u page(s) at %08X\n",
           path, book->entries.size(), book->total_words, book->total_pages, BASE);
+  if(book->borrow_slots)
+    fprintf(stderr, "AddressBook: borrow block — %u slot(s) at [%08X, %08X), frames from %08X\n",
+            book->borrow_slots, BASE, book->frames_base(), book->frames_base());
   for(const BookEntry& e : book->entries)
     fprintf(stderr, "  %08X %-24s area %08X wfp %08X argc %d frame %d %s\n",
             e.entry_pc, e.name.c_str(), e.alloc_base, e.wfp_base,
@@ -89,7 +109,9 @@ bool AddressBook::load_from_env() {
 // into ONE caller map (pc → area address); the keywords exist so the
 // loader can validate each pc's role: a push slot must lie inside a book
 // entry's arg region [alloc_base, alloc_base + 2*max_argc); a call slot
-// must BE a book entry's marker slot (wfp_base − 10).
+// must BE a book entry's marker slot (wfp_base − 10). P20 adds
+// "borrow <pc> <area_word_addr>" — a WPSH/WPOP bracket pc whose slot is
+// a reserved borrow slot in [BASE, frames_base()).
 bool AddressBook::load_push_map_from_env() {
   const char* path = getenv("QUEST_PUSH_MAP");
   if(!path || !*path)
@@ -105,7 +127,7 @@ bool AddressBook::load_push_map_from_env() {
   }
   std::string line;
   int lineno = 0;
-  size_t pushes = 0, calls = 0;
+  size_t pushes = 0, calls = 0, borrows = 0;
   while(std::getline(in, line)) {
     lineno++;
     size_t hash = line.find('#');
@@ -153,6 +175,23 @@ bool AddressBook::load_push_map_from_env() {
       fprintf(stderr, "AddressBook: decorated call %08X → %s marker %08X\n",
               pc, e->name.c_str(), slot);
     }
+    else if(kind == "borrow") {
+      // P20: WPSH/WPOP frame-borrow bracket — the slot is one of the N
+      // reserved wides at [BASE, BASE + 4*N), NOT inside any entry's
+      // block (the third validation arm, mirroring the arg-region and
+      // marker-slot checks). Both bracket pcs carry the SAME absolute
+      // slot; the OPCODE at the pc decides store (WPSH) vs load (WPOP).
+      if(instance->borrow_slots == 0) {
+        fprintf(stderr, "AddressBook: %s:%d: borrow line but the book reserves no borrow slots\n", path, lineno);
+        return false;
+      }
+      if(slot < BASE || slot >= instance->frames_base() || (slot - BASE) % 4 != 0) {
+        fprintf(stderr, "AddressBook: %s:%d: borrow slot %08X is not a reserved slot in [%08X, %08X)\n",
+                path, lineno, slot, BASE, instance->frames_base());
+        return false;
+      }
+      borrows++;
+    }
     else {
       fprintf(stderr, "AddressBook: %s:%d: unknown push-map kind '%s'\n", path, lineno, kind.c_str());
       return false;
@@ -163,8 +202,8 @@ bool AddressBook::load_push_map_from_env() {
     }
     instance->caller_map[pc] = slot;
   }
-  fprintf(stderr, "AddressBook: %s — caller map: %zu push redirect(s), %zu decorated call(s)\n",
-          path, pushes, calls);
+  fprintf(stderr, "AddressBook: %s — caller map: %zu push redirect(s), %zu decorated call(s), %zu borrow pc(s)\n",
+          path, pushes, calls, borrows);
   return true;
 }
 

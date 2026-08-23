@@ -377,6 +377,16 @@ void Mapper::note_arg_write(Machine& m, int32_t wides) {
   records_.back().stack_offset += 2 * wides;
 }
 
+void Mapper::note_arg_pop(Machine& m, int32_t wides) {
+  if(records_.empty()) {
+    char buf[160];
+    snprintf(buf, sizeof(buf), "MAPPER: redirected pop at %08X with no live record (decorated site outside any book-live frame)",
+             static_cast<uint32_t>(m.pc));
+    mapper_abort(&m, buf);
+  }
+  records_.back().stack_offset -= 2 * wides;
+}
+
 const LiveRecord& Mapper::push_record(Machine& m, BookEntry* e, uint32_t entry_pc,
                                       int32_t W, int32_t argc, int32_t frame_wides,
                                       bool args_written) {

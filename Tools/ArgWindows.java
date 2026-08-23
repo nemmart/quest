@@ -268,6 +268,75 @@ public class ArgWindows {
      s.cls=s.innerCalls.isEmpty() ? "CLEAN" : "CLEAN-WITH-INNER-CALLS";
    }
 
+   // ---- Project 20: WPSH/WPOP frame-borrow brackets -------------------------
+   //
+   // Bracket shape (verified against quest.wpsh_wpop): WPSH r,r / LDAFP /
+   // one frame-relative store / WPOP r,r. WPOP appears nowhere else in the
+   // program, so detection is WPOP -> back-scan. Each bracket must be
+   // PROVEN single-block with the SAME targets set the arg-window proof
+   // uses: no branch target strictly inside the interior or on the WPOP
+   // (the WPSH pc itself is exempt — control arriving there executes the
+   // whole bracket), and nothing in the interior but stack-neutral,
+   // flow-free compute (here: LDAFP + the store). Any failure FLAGS the
+   // bracket (not emitted, reported) — the P16/P17/P18 stop-and-report
+   // precedent.
+
+   static class Borrow {
+     Instr wpsh, wpop;
+     int   reg;                            // borrowed AC (XX==AA on both ends)
+     String fail;                          // null = proven
+   }
+
+   static int wpopXX(Instr in) { return (in.opcode>>13) & 0x03; }
+   static int wpopAA(Instr in) { return (in.opcode>>11) & 0x03; }
+
+   static List<Borrow> findBorrows(Memory memory, SortedSet<Integer> targets) {
+     List<Borrow> borrows=new ArrayList<Borrow>();
+     for(Instr in : instrs.values()) {
+       if(!in.name.equals("WPOP"))
+         continue;
+       Borrow b=new Borrow();
+       b.wpop=in;
+       borrows.add(b);
+       if(wpopXX(in)!=wpopAA(in)) { b.fail="wpop-multi-register"; continue; }
+       b.reg=wpopAA(in);
+       // back-chain exactly 3 contiguous instructions: store, LDAFP, WPSH
+       Instr[] chain=new Instr[3];
+       int cur=in.pc;
+       boolean broken=false;
+       for(int k=0;k<3;k++) {
+         Map.Entry<Integer,Instr> e=instrs.lowerEntry(cur);
+         if(e==null || e.getValue().pc+e.getValue().length!=cur) { b.fail="discontinuous-code before "+String.format("%08X", cur); broken=true; break; }
+         chain[k]=e.getValue();
+         cur=chain[k].pc;
+       }
+       if(broken)
+         continue;
+       Instr store=chain[0], ldafp=chain[1], wpsh=chain[2];
+       if(!wpsh.name.equals("WPSH")) { b.fail="open-is-not-WPSH "+wpsh.name+String.format("@%08X", wpsh.pc); continue; }
+       if(wpopXX(wpsh)!=b.reg || wpopAA(wpsh)!=b.reg) { b.fail="wpsh-register-mismatch"; continue; }
+       if(!ldafp.name.equals("LDAFP")) { b.fail="no-LDAFP "+ldafp.name+String.format("@%08X", ldafp.pc); continue; }
+       b.wpsh=wpsh;
+       // interior discipline — the arg-window proof minus debt/attribution:
+       // no flow, no stack ops, no skips, no calls, no undecoded words
+       for(Instr i2 : new Instr[]{ldafp, store}) {
+         if(i2.decodeFailed) { b.fail="undecoded-in-bracket "+String.format("%08X", i2.pc); break; }
+         if(isCall(i2)) { b.fail="call-in-bracket "+String.format("%08X", i2.pc); break; }
+         if(STACK_TOUCHING.contains(i2.name)) { b.fail="stack-op-in-bracket "+i2.name+String.format("@%08X", i2.pc); break; }
+         if(FLOW.contains(i2.name)) { b.fail="flow-in-bracket "+i2.name+String.format("@%08X", i2.pc); break; }
+         if(Follow.SKIP_INSTRUCTIONS.contains(i2.name)) { b.fail="skip-in-bracket "+i2.name+String.format("@%08X", i2.pc); break; }
+         if("novaCompute".equals(i2.format) && (i2.opcode & 0x07)!=0) { b.fail="nova-skip-in-bracket "+i2.name+String.format("@%08X", i2.pc); break; }
+       }
+       if(b.fail!=null)
+         continue;
+       // single-block proof: no branch target strictly inside the bracket
+       // interior OR on the WPOP itself (subSet upper bound wpop.pc+1)
+       SortedSet<Integer> inside=targets.subSet(wpsh.pc+1, b.wpop.pc+1);
+       if(!inside.isEmpty()) { b.fail="target-lands-in-bracket "+String.format("%08X", inside.first()); continue; }
+     }
+     return borrows;
+   }
+
    // ---- sources map from Follow's tags --------------------------------------
 
    static Map<Integer,Set<Integer>> buildSources() {
@@ -412,8 +481,26 @@ public class ArgWindows {
      }
      dr.close();
 
+     // ---- Project 20: borrow brackets -----------------------------------------
+     List<Borrow> borrows=findBorrows(memory, targets);
+     List<Borrow> proven=new ArrayList<Borrow>();
+     List<Borrow> flagged=new ArrayList<Borrow>();
+     for(Borrow b : borrows)
+       (b.fail==null ? proven : flagged).add(b);
+     proven.sort((x,y)->Integer.compare(x.wpsh.pc, y.wpsh.pc));
+
      // ---- write quest.argmap ------------------------------------------------
+     // _PAIRS first (0-indexed, flat base+4N — a DIFFERENT word and a
+     // DIFFERENT equation than the 1-indexed argN at wfp-10-2N, so a
+     // reader never conflates the two). The opcode at the pc decides
+     // store (WPSH) vs load (WPOP), exactly as XPEF-vs-LCALL does today.
      PrintWriter am=new PrintWriter(args[6]);
+     am.printf("_PAIRS count %d%n", proven.size());
+     for(int n=0;n<proven.size();n++) {
+       Borrow b=proven.get(n);
+       am.printf("_PAIRS slot%d at %08X%n", n, b.wpsh.pc);
+       am.printf("_PAIRS slot%d at %08X%n", n, b.wpop.pc);
+     }
      int argLines=0;
      for(Site s : sites) {
        if(!(s.cls.equals("CLEAN") || s.cls.equals("CLEAN-WITH-INNER-CALLS")))
@@ -467,6 +554,14 @@ public class ArgWindows {
      cs.printf("# sanity: XCALL sites %d (expected 63)%n", xcallCount);
      cs.printf("# sanity: computed target set %s quest.targets file (%d vs %d entries)%n",
                targetsAgree ? "MATCHES" : "DIFFERS FROM", targets.size(), fileTargets.size());
+     cs.printf("# borrow brackets (P20): %d WPOPs, %d proven single-block, %d FLAGGED%n",
+               borrows.size(), proven.size(), flagged.size());
+     for(int n=0;n<proven.size();n++) {
+       Borrow b=proven.get(n);
+       cs.printf("# borrow: slot%d WPSH %08X WPOP %08X AC%d%n", n, b.wpsh.pc, b.wpop.pc, b.reg);
+     }
+     for(Borrow b : flagged)
+       cs.printf("# borrow: FLAGGED WPOP@%08X %s (stays on-stack)%n", b.wpop.pc, b.fail);
      for(String n : linkNotes)
        cs.println("# xcall-link: " + n);
      cs.close();
@@ -479,8 +574,9 @@ public class ArgWindows {
      if(expectedArgLines!=argLines)
        throw new RuntimeException("argmap/callsites disagree: " + argLines + " arg lines vs " + expectedArgLines + " expected");
 
-     System.out.printf("sites=%d argLines=%d edges=%d xcalls=%d targetsAgree=%b%n",
-                       sites.size(), argLines, totalCallEdges, xcallCount, targetsAgree);
+     System.out.printf("sites=%d argLines=%d edges=%d xcalls=%d targetsAgree=%b borrows=%d proven=%d flagged=%d%n",
+                       sites.size(), argLines, totalCallEdges, xcallCount, targetsAgree,
+                       borrows.size(), proven.size(), flagged.size());
      for(Map.Entry<String,Integer> e : classTotals.entrySet())
        System.out.printf("  %-24s %d%n", e.getKey(), e.getValue());
    }

@@ -41,6 +41,13 @@ public:
   std::unordered_map<uint32_t, BookEntry*> by_pc;
   uint32_t total_words = 0;
   uint32_t total_pages = 0;
+  // P20: N reserved borrow slots at [BASE, BASE + 4*N) — slot n at
+  // BASE + 4*n (0-indexed, flat; deliberately a DIFFERENT equation than
+  // the 1-indexed argN at wfp-10-2N). Code frames start at BASE + 4*N.
+  // Read from the book's `borrow_slots N` line BEFORE any entry; 0 (no
+  // line) reproduces the pre-P20 layout exactly.
+  uint32_t borrow_slots = 0;
+  uint32_t frames_base() const { return BASE + 4 * borrow_slots; }
 
   BookEntry* lookup_pc(uint32_t pc);
   bool in_range(uint32_t v) const { return v >= BASE && v < BASE + total_words; }

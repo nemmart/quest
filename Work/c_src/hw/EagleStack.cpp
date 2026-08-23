@@ -605,6 +605,23 @@ uint32_t EagleStack::execute(Machine& machine, uint32_t address, uint32_t opcode
     return copy_segment(address, address+1);
 
    case WPOP:
+    // M4b P20 — THE ONE NEW HOOK: a caller-map hit at a WPOP pc is the
+    // CLOSE of a WPSH/WPOP frame-borrow bracket (WPOP is used nowhere
+    // else in the program; all 23 are single-register r,r, BB-proven by
+    // ArgWindows). LOAD AC[r] from the reserved slot instead of popping
+    // — r from the instruction's OWN operand, not the map — and bring
+    // the offset back down (mirror of note_arg_write; net zero across
+    // the bracket). wsp does not move; nothing is popped. The paired
+    // WPSH stored through the stock P18 hook (wides=1 single-register
+    // path), so the loaded value is exactly the stored one.
+    if(uint32_t slot=machine.mapper.caller_write(static_cast<uint32_t>(address))) {
+      if(XX!=AA)
+        throw std::runtime_error("M4b WPOP: decorated pop is not single-register");
+      machine.ac[AA]=machine.memory->read_wide(slot);
+      trace_caller_write(machine, "ARGRD", address, slot, machine.ac[AA]);
+      machine.mapper.note_arg_pop(machine, 1);
+      return copy_segment(address, address+1);
+    }
     value=XX;
     while(true) {
       machine.ac[value]=machine.wide_pop();
