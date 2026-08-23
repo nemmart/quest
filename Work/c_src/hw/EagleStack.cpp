@@ -171,9 +171,35 @@ uint32_t EagleStack::execute(Machine& machine, uint32_t address, uint32_t opcode
     resolved=machine.eagle_x_resolve_indirect(copy_segment(address, address+1), AA);
     arguments=machine.memory->read_word(copy_segment(address, address+2));
     if((arguments & 0x8000)==0)
-      machine.wide_push((machine.get_psr()<<16)|arguments);
+      value=(machine.get_psr()<<16)|arguments;
     else
-      machine.wide_push(arguments & 0x7FFF);
+      value=arguments & 0x7FFF;
+    machine.wide_push(value);
+    // M4b (Project 19, tranche C): a decorated XCALL site — the identical
+    // hook to the LCALL case below (P18 XPEFB/LPEFB precedent: replicate,
+    // don't specialize). The marker word convention is the same
+    // ((psr<<16)|argc, or argc&0x7FFF — computed above exactly as LCALL
+    // computes it), and the write-mode WSAVS is call-opcode-agnostic: it
+    // reads argc from the AREA marker. The nested-procedure static-link /
+    // FRAME semantics were migrated by M4a and are untouched by arg
+    // redirection. Marker still pushed (call-marker ruling); verify the
+    // resolved target IS the mapped slot's book routine, fail loud.
+    if(uint32_t marker_slot=machine.mapper.caller_write(static_cast<uint32_t>(address))) {
+      BookEntry* callee=AddressBook::instance ? AddressBook::instance->by_area_address(marker_slot) : nullptr;
+      if(!callee || static_cast<uint32_t>(resolved)!=callee->entry_pc) {
+        char buf[160];
+        snprintf(buf, sizeof(buf), "M4B: decorated XCALL at %08X resolved to %08X, not the mapped callee %s at %08X",
+                 address, static_cast<uint32_t>(resolved),
+                 callee ? callee->name.c_str() : "?", callee ? callee->entry_pc : 0);
+        if(Lockstep::enabled)
+          Lockstep::abort_world(buf, &machine, /*save=*/false);
+        throw std::runtime_error(buf);
+      }
+      machine.memory->write_wide(marker_slot, value);
+      machine.args_written=true;
+      // stack_offset deliberately not touched (P17 ruling, as at LCALL).
+      trace_caller_write(machine, "XCALL", address, marker_slot, value);
+    }
     machine.ac[3]=copy_segment(address, address+3);
     machine.ovr=0;
     if(static_cast<uint32_t>(resolved)==0x30000000) {

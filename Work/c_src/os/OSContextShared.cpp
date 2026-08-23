@@ -48,11 +48,31 @@ int32_t OSContextShared::SSHPT_call() {
   return SUCCESS;
 }
 
+// TEMPORARY (P19 tranche-D reachability, Aug 2026): the same
+// QUEST_FAIL_OPEN knob as OSContextFS.cpp, extended to ?SOPEN so the
+// battery can drive INIT_SHARED_DATA's inline-checked SYSCALL failure ->
+// RETURN_MESSAGE @7015BE74 (ERROR_PROCESSING.md pattern). SOPEN is a
+// LOCAL call (LockstepMediator): both clients execute their own, so the
+// injected failure is symmetric and deterministic. Server excluded.
+static bool fail_sopen(const std::string& label, const std::string& file) {
+  const char* want = getenv("QUEST_FAIL_OPEN");
+  if(want == nullptr || label.compare(0, 5, "QUEST") != 0 ||
+     label == "QUEST_SERVER")
+    return false;
+  return file.find(want) != std::string::npos;
+}
+
 int32_t OSContextShared::SOPEN_call() {
   std::string file = full_path(read_string(ac0));
   int32_t slot = -1;
 
   printf("\nSOPEN:\n  ac0 = %s\n  ac1 = %d\n  ac2 = %d\n", file.c_str(), ac1, ac2);
+
+  if(fail_sopen(process->instance_label, file)) {
+    fprintf(stderr, "FAIL_OPEN: %s denied ?SOPEN %s\n",
+            process->instance_label.c_str(), file.c_str());
+    return OSError::FS_FILE_NOT_FOUND;
+  }
 
   if(ac1 != -1)
     throw std::runtime_error("Unsupported SOPEN option");
