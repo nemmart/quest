@@ -43,14 +43,17 @@ pointer args + [[noreturn]]). Do NOT decorate any XCALL site or any
 RETURN_MESSAGE site. Also skip the 188 zero-arg CLEAN-EMPTY sites
 (nothing to redirect).
 
-## How to widen (this is mostly push_map generation)
+## The push_map is ALREADY GENERATED (coordinator, this session)
 
-The push_map (`pc → area address`) is the whole mechanism now. Widening
-= generating map entries for all A&B sites, from quest.argmap + the book
-(per-pc exact destination = callee area base + that arg's slot offset,
-the P17 convention). Build a generator (extend whatever produced the
-one-site quest.pushmap) that emits entries for every A&B call site and
-its arg pushes + marker slot. Load-time validation (already in the
+The coordinator generated + validated the tranche A & B maps:
+`Work/c_src/quest.pushmap.A` (515 sites), `.B` (20 WPSH sites), `.AB`
+(combined). Generator: `Work/c_src/tools/gen_pushmap.py`. Every site's
+arg window resolved to exactly its argc (0 skipped), every push slot
+validated inside the callee's arg region, every marker == wfp−10, and
+the WPSH register→arg ordering verified (above). You should still
+sanity-check them, but the generation + slot arithmetic is done. Your
+job is the emulator side: the WPSH multi-slot hook + loading these maps
++ the battery. Load-time validation (already in the
 loader): each push slot inside the callee's arg region; each marker slot
 == some book entry's wfp−10; refuse a site whose containing routine is
 not book-live (the QUEST-boundary guard).
