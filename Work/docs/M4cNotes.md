@@ -103,6 +103,14 @@ with the WMSPs — they PRECEDE the group. Cross-check: only 1 of 89
 ?UNSIGNED_TO_CHAR calls has a WMSP within 25 lines; they cluster in the
 convert phase.)
 
+**Not every WMSP has a preceding converter** — only ~9 of 46 WMSP groups
+do. Most buffers are STRING-only (`%s`): the length is the string's own
+stored length, no conversion needed. `?UNSIGNED_TO_CHAR` appears only for
+NUMERIC pieces (`%d`), where it renders the number AND returns its length
+(the minority case). Either way the WMSP sizing is length-driven (load
+length → accumulate → allocate); the only difference is the length's
+source — a string's stored length vs. the converter's returned length.
+
 **The hinge (nemmart): `?UNSIGNED_TO_CHAR` RETURNS THE LENGTH** — that's
 the hard data dependency forcing convert-before-build. Verified in STORE
 at 7017a112: right after the converter call, `XNLDA [ac3+0x74]` reads its
