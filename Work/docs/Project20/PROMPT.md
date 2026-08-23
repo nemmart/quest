@@ -178,3 +178,40 @@ CURRENT_STATE, and note M4 done in M4Roadmap.md.
 - `_PAIRS` slots being flat base+4N (not a fake routine's wfp-10-2N arg
   region) keeps them a structurally-distinct region below all frames —
   never confusable with an arg/marker address.
+
+---
+
+## Trust anchor — the targets set (read before trusting any single-block proof)
+
+Every "no branch target lands in the window/bracket" proof — arg windows
+AND borrow brackets — is sound ONLY modulo `Tools/StartStop.java` +
+`Tools/Follow.java` having discovered EVERY control-transfer edge. The
+`targets` set is the single source of truth for "how can control reach a
+PC," and it is exactly as complete as those two tools' opcode enumeration.
+
+Two failure modes, very different:
+1. A transfer the tools RECOGNIZE but can't resolve statically (indirect
+   forms: `offset & 0x8000`, ac2/ac3-relative, negative-offset — they
+   return -1). ~130 of these. SAFE for the proof: an unresolvable/FLOW
+   instruction INSIDE a span disqualifies it (the arg walk bails on
+   `flow-in-window` / `unresolved-inner-call`; the borrow proof must do
+   the same). Known dynamic dispatch (O.ON, I.GOTO taking target in AC2)
+   is identified in StartStop — this is the M5 ON-handler loose end.
+2. A transfer the tools DON'T RECOGNIZE AS a transfer at all — an opcode/
+   mode that can redirect PC but isn't in Follow's enumeration. This is
+   the ONLY real hazard: it emits no target, no -1, nothing — a span looks
+   clean because the dangerous edge is INVISIBLE, not flagged. No consumer
+   can be conservative about an edge the edge-finder never produced.
+
+**Mitigation (nemmart):** the target computation is CENTRALIZED in
+StartStop/Follow. If a missed transfer mechanism is ever found, it is
+added THERE, and every consumer (ArgWindows' window proof, the borrow
+proof, anything future) inherits the fix. Single place to be correct.
+
+**Bound:** the borrow brackets take on NO new trust surface. M4b args
+(566 sites, 85k+ redirected writes in the play leg) already stake
+correctness on this same targets set and ran green through the full
+battery. A missing-jump-class gap that mattered would almost certainly
+have surfaced as an arg-window divergence already. The borrows inherit a
+hard-stress-tested assumption, not a fresh one. If a future divergence
+ever traces to an unexpected jump-in, the fix goes in StartStop/Follow.
