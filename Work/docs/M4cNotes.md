@@ -64,6 +64,28 @@ GROUP, not per WMSP. WRTN (wsp = wfp) is the final backstop for anything
 not explicitly restored. Most STASP sites follow a ?WRITE_SCREEN call
 (dynamic screen-write buffers).
 
+## What the WMSP groups ARE (nemmart's read): variadic data marshalling
+These are the DG PL/I equivalent of building a `printf`-style formatted
+write. A WMSP group marshals VARIABLE-WIDTH data (strings/values whose
+lengths aren't known at compile time — the `%s`/`%d`/`%f` pieces) into a
+stack block, then calls `?WRITE_SCREEN` (0x7017E27A, a RUNTIME routine)
+passing POINTERS into that block. The `?WRITE_SCREEN` calling convention
+is fixed (argc 2 or 5 only — 436 and 287 calls resp.; args are plain
+XPEF pointers/handle), so the WMSP group size (1..5) is the number of
+data pieces marshalled, NOT the call's argc (STORE: 5 WMSPs feed an
+argc-2 call — one pointer to the assembled block + the screen handle).
+
+**M4c consequence — this bracket is TRANSPARENT to lockstep, likely
+needs NO offset handling.** The callee is RUNTIME (out of M4b game→game
+scope, never redirected), the marshalling is deterministic stock
+computation that moves BOTH engines' wsp identically, and the group is
+self-contained (STASP closes it before WRTN). So WMSP/STASP contributes
+nothing to master/clone divergence on its own. The ONLY thing M4c must
+check: a WMSP group opening while an M4b game→game arg window is already
+live on the stack (the interaction case) — the offset from the open
+window must survive across the group's LDASP-capture/STASP-restore.
+Absent that overlap, WMSP/STASP can be left alone.
+
 ## M4c implication (for when M4c is planned — NOT now)
 This is a THIRD stack-lifecycle pattern beside arg-pushes (M4b) and
 frame-borrows (WPSH/WPOP). Under M4b redirection the clone's wsp may
