@@ -2,10 +2,11 @@
 g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
 16
 == emulator build ==
-g++ -std=c++17 -O2 -Wall -Wextra -Wno-unused-parameter -Wno-sign-compare -I. -MMD -MP -c -o os/OSContextTask.o os/OSContextTask.cpp
-g++ -std=c++17 -O2 -Wall -Wextra -Wno-unused-parameter -Wno-sign-compare -I. -MMD -MP -o emulator Launch.o hw/PageSet.o hw/Memory.o hw/Instruction.o hw/NovaCompute.o hw/EagleInstruction.o hw/EagleGeneral.o hw/EagleCompute.o hw/EagleFloat.o hw/EagleStack.o hw/EagleSpecial.o hw/Decoder.o hw/Machine.o hw/Mapper.o hw/AddressBook.o hw/MachineThread.o hw/QueueEntry.o hw/Lockstep.o hw/NativeRegistry.o hw/RTStubs.o hw/RTBridge.o runtime/fill_words.o runtime/udiv32.o runtime/unsigned_to_char.o runtime/o_on.o runtime/i_lock.o runtime/i_alloc.o runtime/t_area.o runtime/frames.o runtime/o_signal.o runtime/lib_error.o runtime/o_area.o runtime/p_defon.o runtime/r_signal.o runtime/def_on.o runtime/mv_error_handler.o runtime/native_error_handler.o runtime/check_error_handler.o debug/CallStack.o debug/Capture.o debug/SymbolTable.o debug/MemoryDumper.o debug/Disassembler.o os/AOSVSSymbols.o os/Trace.o os/ArrayPage.o os/MappedPage.o os/Utility.o os/OSError.o os/FS.o os/FSFile.o os/FSDirectory.o os/FSChannel.o os/FSConsole.o os/FSTerminal.o os/FSPagedFile.o os/FSStreamedFile.o os/OS.o os/OSMessage.o os/OSProcess.o os/OSTask.o os/LockstepMediator.o os/ProbeSuppressions.o os/MirrorPage.o os/OSContext.o os/OSContextSystem.o os/OSContextShared.o os/OSContextIPC.o os/OSContextFS.o os/OSContextTask.o -lpthread
--rwxrwxr-x 1 questrunner questrunner 1018112 Aug 16 06:51 emulator
+make: Nothing to be done for 'all'.
+-rwxrwxr-x 1 questrunner questrunner 1027328 Aug 23 03:05 emulator
 == tools build ==
-tasks/001-smoke.sh: line 13: javac: command not found
-ls: cannot access 'Follow.class': No such file or directory
-ls: cannot access 'ArgWindows.class': No such file or directory
+ArgWindows.class
+Follow.class
+== book sanity ==
+102
+SMOKE OK
