@@ -389,57 +389,81 @@ stack. The census already scopes the window to just the pointer-push.
 
 ---
 
-## RULING (Aug 22 2026): P16 first-slice — mid-window pairs → adopt C1 (open-window shadow accounting)
+## RULING (Aug 22 2026): P16 first-slice — mid-window pairs → stack_delta
 
 **P16 outcome:** the one-site mechanism (DIST,4 @ 70166E1C) is PROVEN —
 84 clean write-mode calls, args to correct area slots, marker
 written-and-pushed (tombstone), flag consumed at every WSAVS, copy mode
-coexisting, and ALL ratified arithmetic exact (WSAVS shadow ==
-master_wfp+2·frame; WRTN lands W−2; +2·argc offset correct across calls
-2..84). The Stage-2 battery then hit the anticipated Boundary-2 stop and
-the session stopped clean (no Mapper/doc change).
+coexisting, all ratified arithmetic exact. Stage-2 then hit the
+anticipated mid-window condition and the session stopped clean (no
+Mapper/doc change) — a textbook Boundary-2 stop.
 
-**The finding (verified):** compare pairs land mid-window because the
-checker's 500-instruction quantum boundary can fall anywhere, including
-inside the 6-instruction arg window. There the count-matched master has
-pushed k args (wsp +2k) while the clone wrote them (wsp flat) with no
-record open yet, so shadow_wsp is off by exactly 2k → wsp_differs.
-Confirmed: master wsp 70001FD6 vs clone shadow 70001FD0 = 6 = 2k, k=3.
-This is M4bNotes issue 1(a) verbatim.
+**The finding (verified):** the checker's 500-instruction quantum
+boundary can stop anywhere, including inside the 6-instruction arg
+window. There the count-matched master has pushed k args (wsp +2k) while
+the clone WROTE them to the area (wsp flat), no record open yet, so
+shadow_wsp is off by exactly 2k → wsp_differs. Verified: master wsp
+70001FD6 vs clone shadow 70001FD0 = 6 = 2k, k=3. Source-agnostic (a
+signal delivered mid-window would do the same).
 
-**RULING: adopt C1 (open-window shadow accounting), NOT C2.** Reasons:
-1. **C2 is a partial fix to a structural problem.** It forbids
-   quantum-induced mid-window pairs, but signal/fault delivery can ALSO
-   land mid-window and is NOT a batch-boundary choice — C2 leaves that
-   fail-loud. Signals demonstrably fire in this game (live-play signal
-   dispatch, M4A_ROLLCALL). A closed form that "almost holds" is exactly
-   the Finding-A/B failure shape; we don't ship another one.
-2. **C1 is the correct, general model** and the one the design already
-   names (Mapper §3b concrete; issue 1). From the first redirected push,
-   an open-window record carries k = args-written-so-far; shadow_wsp
-   adds 2k while the window is open; the window closes at the decorated
-   LCALL (tombstone push realigns; WSAVS converts window→live record).
-   Correct for EVERY source of a mid-window pair, not just the quantum.
-3. **Its hard sub-case is tractable.** Windows are straight-line
-   (census CLEAN — no interior call/branch/syscall), so the ONLY
-   mid-window exit is async delivery (signal/fault) at a single defined
-   interception point; define window-abandonment there (drop the open
-   window, real stack still holds the k pushes the master made — they
-   reconcile as ordinary stack), with the existing tripwires as
-   fail-loud backstops. No mid-window CALL can occur here.
+**RULING — adopt `stack_delta`, a running divergence balance. Both C1
+(open-window record kind) and C2 (quantum alignment) are REJECTED.**
 
-**This authorizes the Mapper change** (open-window record kind: A gains
-window intervals, legal W ties, record-list order for identity where
-address order no longer separates) — it is the ratified Gen-5 step, not
-a Boundary-2 violation. Scope stays one site (DIST) until C1 is proven
-on it (task-018 battery green, div=0), THEN widen.
+The mechanism:
+- `stack_delta` is a per-machine, CLONE-SIDE scalar (the master never
+  redirects, so its stack_delta is always 0). Starts at 0.
+- **Every decorated push** (XPEF/LPEF/XPEFB/LPEFB/WPSH at a mapped pc):
+  `stack_delta += 2 * words_written` (2 per word: 2 for a single-word
+  push, 2k for a WPSH writing k words).
+- **Every decorated pop and decorated LCALL:** `stack_delta -=
+  2 * words`. The decorated LCALL decrements by 2*argc (closing its arg
+  window); a decorated WPOP (the M4c frame-borrow pairings) decrements
+  by its width.
+- **Comparison becomes** `clone.shadow_wsp + clone.stack_delta ==
+  master.wsp` at EVERY compare pair. Outside any window stack_delta==0
+  and this reduces to the existing closed-form check.
 
-**Checker generation:** C1 is the Gen-5 accounting-model change
-(stateful shadow between records). Append CheckerHistory Gen-5 when it
-lands. The closed-form (Gen-4) remains correct for copy-mode-only runs
-(M4a); Gen-5 generalizes it, reducing to Gen-4 when no window is open.
+Why this over C1/C2:
+1. **No blind windows.** Every instruction boundary stays a valid
+   compare point — unlike C2 (which forbids stopping inside a window)
+   and C1 (which puts frame identity into a special open-window mode).
+   Full lockstep coverage preserved; the checkpoint that would catch a
+   bug is never suppressed.
+2. **Source-agnostic.** A mid-window pair reconciles the same way
+   whether it landed there by quantum or by signal delivery — dissolving
+   the "one issue or two" question. C2 only handles the quantum source
+   and leaves mid-window signals fail-loud; signals fire in this game.
+3. **Composes as a running balance.** Each decorated increment has a
+   matching decorated decrement (push↔LCALL for args, WPSH↔WPOP for
+   borrows), so the balance returns to 0 when an elision is undone. The
+   LCALL subtracts its OWN 2*argc (NOT zero) so nested/interleaved
+   windows (F1(F2(x),...) if it ever arises) stay correct.
+4. **Only decorated ops move it.** Shared stack motion — MSP, the
+   tombstone push (both engines), non-decorated pushes — moves both
+   wsps equally and touches stack_delta NOT AT ALL, because stack_delta
+   measures DIVERGENCE, not absolute wsp.
+5. **Generalizes to M4c.** The same scalar handles the WPSH/WPOP
+   frame-borrow pairings (decorated push up, decorated WPOP down).
 
-Next: implement C1 on the DIST site, re-run task-018 (expect div=0 all
-site-reaching legs), report + CheckerHistory Gen-5 append. Keep C2's
-quantum-alignment idea DOCUMENTED as a rejected alternative (and as a
-possible perf optimization later, never a correctness mechanism).
+Deferred (NOT M4b): MSP interleaved with a redirected window raises a
+stack-LAYOUT question (an elided arg changes the geometry a later
+wsp-mover sees), but in QUEST NO arg window contains an MSP/wsp-mover
+(verified: the only in-window wsp motion program-wide is the
+RETURN_MESSAGE ref-arg temp-build, a separate handled case). MSP is
+expected to fold into the same decorated-delta system when M4c handles
+it; not designed against now.
+
+Not adopted: C1's open-window record kind (heavier; a record/identity
+change where a scalar suffices) and C2's quantum alignment (partial —
+leaves mid-window signals fail-loud; bends batch segmentation). Keep C2
+documented only as a possible later PERF optimization, never a
+correctness mechanism.
+
+**Checker generation:** stack_delta is a comparison-term change, not a
+mapper-identity change — it does NOT need the Gen-5 record restructuring
+C1 implied. Note it in CheckerHistory when it lands; the closed form is
+recovered exactly when stack_delta==0.
+
+Next: implement stack_delta on the DIST site, re-run task-018 (expect
+div=0 on all site-reaching legs), report. Scope stays one site until
+green, then widen.
