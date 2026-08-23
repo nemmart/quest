@@ -85,6 +85,16 @@ struct LiveRecord {
                             // anticipated): the caller WROTE its args into the area;
                             // only the marker is on the clone stack, so this record's
                             // elision is 2*argc + 10 + 2*frame, not 10 + 2*frame.
+  int32_t    stack_offset;  // M4b (Project 17, M4bNotes ruling): mid-window
+                            // divergence between the master's wsp and the clone's
+                            // shadow, carried on the frame whose code contains the
+                            // open arg window (the CALLER — pushes fire before the
+                            // callee's record exists). +2 per redirected arg-push
+                            // wide; −2*argc consumed at the write-mode WSAVS (P17
+                            // Stage-0 ruling: NOT at the LCALL — the post-LCALL/
+                            // pre-WSAVS boundary is a valid compare point and the
+                            // args are still elided there). Only decorated ops move
+                            // it; checkpoint reads back().stack_offset (empty → 0).
 };
 
 class Mapper {
@@ -148,6 +158,19 @@ public:
   // wsp at every pair; the record whose frame word the clone's wsp still
   // points at counts as "above", hence the ≥ threshold) ----
   int32_t shadow_wsp(int32_t clone_wsp) const;
+
+  // ---- M4b mid-window checkpoint term (Project 17). The checker compares
+  // shadow_wsp + checkpoint_offset against the master's wsp; 0 whenever no
+  // window is open, recovering the closed form exactly. ----
+  int32_t checkpoint_offset() const {
+    return records_.empty() ? 0 : records_.back().stack_offset;
+  }
+  // A redirected arg push wrote `wides` wides to the area instead of the
+  // stack: the master's wsp is now 2*wides further ahead of the shadow.
+  // Lands on the CALLER's record (the top — the callee's doesn't exist
+  // yet). Empty book-live stack here = decorated site outside any live
+  // frame: impossible once QUEST is the base record, so fail loud.
+  void note_arg_write(Machine& m, int32_t wides);
 
   // ---- the three mutation kinds (Mapper.md §3), all clone-role, all
   // traced (`redirect`): redirected WSAVS/WSAVR pushes; redirected WRTN

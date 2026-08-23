@@ -367,6 +367,16 @@ void Mapper::i2_assert(Machine& m) const {
 
 }
 
+void Mapper::note_arg_write(Machine& m, int32_t wides) {
+  if(records_.empty()) {
+    char buf[160];
+    snprintf(buf, sizeof(buf), "MAPPER: redirected arg push at %08X with no live record (decorated site outside any book-live frame)",
+             static_cast<uint32_t>(m.pc));
+    mapper_abort(&m, buf);
+  }
+  records_.back().stack_offset += 2 * wides;
+}
+
 const LiveRecord& Mapper::push_record(Machine& m, BookEntry* e, uint32_t entry_pc,
                                       int32_t W, int32_t argc, int32_t frame_wides,
                                       bool args_written) {
@@ -407,6 +417,23 @@ const LiveRecord& Mapper::push_record(Machine& m, BookEntry* e, uint32_t entry_p
              e->name.c_str(), frame_wides, e->size_words);
     mapper_abort(&m, buf);
   }
+  // M4b stack_offset consume (Project 17 Stage-0 ruling): a write-mode
+  // record means the args-written flag was set, i.e. the caller's LCALL
+  // was DECORATED — only then is the window's +2k offset outstanding on
+  // the caller's record, and this WSAVS is where the record arithmetic
+  // (elided_args in shift_after) takes over the accounting. Subtract it
+  // here, not at the LCALL: the post-LCALL/pre-WSAVS boundary is a valid
+  // compare point and the args are still elided there. Copy mode
+  // (undecorated caller) never touches the offset.
+  if(args_written) {
+    if(records_.empty()) {
+      char buf[160];
+      snprintf(buf, sizeof(buf), "MAPPER: write-mode WSAVS for %s with no caller record (decorated call outside any book-live frame)",
+               e->name.c_str());
+      mapper_abort(&m, buf);
+    }
+    records_.back().stack_offset -= 2 * argc;
+  }
   LiveRecord rec;
   rec.entry = e;
   rec.area_wfp = static_cast<int32_t>(e->wfp_base);
@@ -414,6 +441,7 @@ const LiveRecord& Mapper::push_record(Machine& m, BookEntry* e, uint32_t entry_p
   rec.argc = argc;
   rec.frame_wides = frame_wides;
   rec.args_written = args_written;
+  rec.stack_offset = 0;
   // M4b (Project 16, mode-aware accounting — ratified Aug 22 2026): a
   // write-mode record's clone stack elides the ARGS as well as the WSAVS
   // image; only the marker was pushed, sitting 2*argc lower than the

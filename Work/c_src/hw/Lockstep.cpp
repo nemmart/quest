@@ -129,11 +129,11 @@ static void describe(const char* who, QueueEntry* e, QueueEntry* master_ref) {
                               static_cast<uint32_t>(m->ac[i])).mapped;
   printf("  %s: label=%s ordinal=%d result_pc=%08X trap_pc=%08X insns=%llu"
          " ac0=%08X ac1=%08X ac2=%08X ac3=%08X c=%d"
-         " wsp=%08X wfp=%08X psr=%04X shadow_wsp=%08X T(ac0..3)=%08X %08X %08X %08X%s%s\n",
+         " wsp=%08X wfp=%08X psr=%04X shadow_wsp=%08X off=%d T(ac0..3)=%08X %08X %08X %08X%s%s\n",
           who, label_of(e), m->lockstep_ordinal,
           e->address, m->pc, static_cast<unsigned long long>(delta),
           m->ac[0], m->ac[1], m->ac[2], m->ac[3], m->c,
-          m->wsp, m->wfp, m->get_psr(), m->shadow_wsp(),
+          m->wsp, m->wfp, m->get_psr(), m->shadow_wsp(), m->mapper.checkpoint_offset(),
           mapped[0], mapped[1], mapped[2], mapped[3],
           e->exception ? " exception=" : "",
           e->exception ? e->exception->what() : "");
@@ -167,7 +167,13 @@ void Lockstep::compare_pair(QueueEntry* master, QueueEntry* clone) {
       regs_differ = clone->machine->equivalent(static_cast<uint32_t>(master->machine->ac[i]),
                                                static_cast<uint32_t>(clone->machine->ac[i]))
                     .kind == hw::Mapper::Kind::MISMATCH;
-    wsp_differs = master->machine->wsp != clone->machine->shadow_wsp();
+    // P17 (M4bNotes stack_offset ruling): when a compare pair lands with a
+    // redirected arg window open — or on the post-LCALL/pre-WSAVS boundary —
+    // the master's wsp legitimately leads the shadow by the elided arg wides.
+    // The top record's stack_offset carries exactly that lead (0 whenever no
+    // window is open, recovering the closed form).
+    wsp_differs = master->machine->wsp !=
+                  clone->machine->shadow_wsp() + clone->machine->mapper.checkpoint_offset();
   }
 
   // Batches ending in a syscall trap both report the 0x30000000 sentinel
@@ -224,10 +230,11 @@ void Lockstep::compare_pair(QueueEntry* master, QueueEntry* clone) {
   if(os::Trace::enabled("lockstep")) {
     char buf[160];
     snprintf(buf, sizeof(buf),
-             "pair ord=%d pc=%08X insns=%llu clone_pc=%08X clone_insns=%llu%s%s",
+             "pair ord=%d pc=%08X insns=%llu clone_pc=%08X clone_insns=%llu off=%d%s%s",
              master->machine->lockstep_ordinal,
              master->address, static_cast<unsigned long long>(master_delta),
              clone->address, static_cast<unsigned long long>(clone_delta),
+             clone->machine->mapper.checkpoint_offset(),
              count_exempt ? " native_span" : "",
              diverged ? " DIVERGED" : "");
     os::Trace::line("lockstep", label_of(master), buf);

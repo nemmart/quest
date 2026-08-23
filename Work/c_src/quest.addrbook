@@ -4,7 +4,7 @@
 #         image ac0 wfp-8, ac1 wfp-6, ac2 wfp-4, prev-wfp wfp-2, ac3|c wfp+0 | WSAVS space 2*frame words
 # a line starting with # is NOT migrated (stays stacked). Hand-editable; keep the columns.
 # entry     name                          alloc_base wfp_base   argc frame  variant flags
-#7015C005    QUEST                         74000000   7400000A   0    0x22   WSAVS   push,nocall
+7015C005    QUEST                         74000000   7400000A   0    0x22   WSAVS   push,nocall
 7015C5E1    QUEST.1@7015C5E1              74000060   7400006A   0    0x06   WSAVS   nested
 7015C823    ALCHEMIST_HOME                74000090   740000A0   3    0x80   WSAVS   -
 7015CC78    ALCHEMIST_HOME.1@7015CC78     740001C0   740001CA   0    0x31   WSAVS   nested

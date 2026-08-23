@@ -47,9 +47,9 @@ static void trace_caller_write(Machine& machine, const char* what, uint32_t pc,
                                uint32_t slot, int32_t value) {
   if(!os::Trace::enabled("redirect"))
     return;
-  char buf[120];
-  snprintf(buf, sizeof(buf), "%s pc=%08X slot=%08X value=%08X", what, pc, slot,
-           static_cast<uint32_t>(value));
+  char buf[140];
+  snprintf(buf, sizeof(buf), "%s pc=%08X slot=%08X value=%08X off=%d", what, pc, slot,
+           static_cast<uint32_t>(value), machine.mapper.checkpoint_offset());
   os::Trace::line("redirect", machine.process ? machine.process->instance_label : std::string("?"), buf);
 }
 
@@ -238,6 +238,10 @@ uint32_t EagleStack::execute(Machine& machine, uint32_t address, uint32_t opcode
       }
       machine.memory->write_wide(marker_slot, value);
       machine.args_written=true;
+      // P17: stack_offset deliberately NOT touched here. The marker push is
+      // symmetric (both engines push it) and the args stay elided through
+      // the post-LCALL/pre-WSAVS boundary — the write-mode WSAVS consumes
+      // the offset when its record arithmetic takes over (Mapper.cpp).
       trace_caller_write(machine, "LCALL", address, marker_slot, value);
     }
     machine.ac[3]=copy_segment(address, address+4);
@@ -591,6 +595,7 @@ uint32_t EagleStack::execute(Machine& machine, uint32_t address, uint32_t opcode
     // via the mapper's book gate; the master always pushes stock.
     if(uint32_t slot=machine.mapper.caller_write(static_cast<uint32_t>(address))) {
       machine.memory->write_wide(slot, resolved);
+      machine.mapper.note_arg_write(machine, 1);   // P17: master pushed, we wrote
       trace_caller_write(machine, "ARGWR", address, slot, resolved);
       return copy_segment(address, address+2);
     }
@@ -601,6 +606,7 @@ uint32_t EagleStack::execute(Machine& machine, uint32_t address, uint32_t opcode
     resolved=machine.eagle_l_resolve_indirect(copy_segment(address, address+1), AA);
     if(uint32_t slot=machine.mapper.caller_write(static_cast<uint32_t>(address))) {   // M4b — see XPEF
       machine.memory->write_wide(slot, resolved);
+      machine.mapper.note_arg_write(machine, 1);   // P17: master pushed, we wrote
       trace_caller_write(machine, "ARGWR", address, slot, resolved);
       return copy_segment(address, address+3);
     }
