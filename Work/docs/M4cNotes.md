@@ -103,6 +103,17 @@ with the WMSPs — they PRECEDE the group. Cross-check: only 1 of 89
 ?UNSIGNED_TO_CHAR calls has a WMSP within 25 lines; they cluster in the
 convert phase.)
 
+**The hinge (nemmart): `?UNSIGNED_TO_CHAR` RETURNS THE LENGTH** — that's
+the hard data dependency forcing convert-before-build. Verified in STORE
+at 7017a112: right after the converter call, `XNLDA [ac3+0x74]` reads its
+length output, `XWADD [ac3+0x52]` accumulates it into a running total,
+`WINC` adds 1 (terminator/separator), and it's stored to `[ac3+0x11E]`.
+The WMSP build then does `XWLDA 2,[ac3+0x11E]; WMSP 2` — reading the very
+slot the converter's length was accumulated into. So converter length
+output → frame slot (running total) → WMSP allocation size. The length
+IS the converter's return value threaded into buffer sizing; there is no
+way to size the buffer until the conversions have run.
+
 
 
 **M4c consequence — this bracket is TRANSPARENT to lockstep, likely
