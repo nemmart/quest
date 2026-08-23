@@ -76,6 +76,22 @@ to build that one buffer, NOT a per-arg or per-call-arg count (STORE: 5
 WMSPs build the buffer, one argc-2 dump). (The argc-5 ?WRITE_SCREEN form
 is a different, fixed-field call shape, not the buffer-build path.)
 
+**Confirmed by the length-computation idiom before each WMSP** (nemmart's
+prediction: an sprintf-style build must compute each piece's length
+before allocating for it). In STORE's group every WMSP is preceded by:
+
+    XWLDA r,[ac3+off]  ; load a piece's LENGTH from a frame slot
+    WADI  3,2          ; accumulate into the running buffer size
+    WMOVR 2; WMOVR 2   ; byte->word rounding/convert
+    WMSP  2            ; allocate that many words
+
+with successive length slots ([ac3+0x30], +0x52, +0x96, +0x11E). The
+numeric-field case is explicit: `NLDAI 10 (base ten); ... WNADI 3,5`
+(length + 5 digits' slack) before its WMSP — decimal integer formatting
+(`%d`). So each WMSP allocates space sized to a formatted piece; the
+group builds the whole buffer; `?WRITE_SCREEN` dumps it. Hypothesis
+verified, not just plausible.
+
 **M4c consequence — this bracket is TRANSPARENT to lockstep, likely
 needs NO offset handling.** The writer is RUNTIME (out of M4b game→game
 scope, never redirected), the buffer-build is deterministic stock
