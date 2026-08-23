@@ -292,3 +292,22 @@ sites with offset += 2·wides mid-window (TERRAIN off 2→10 across the
 WPSH, closing at 2·argc=18) and distinct per-slot values confirming the
 ascending order. Remaining undecorated: 26 XCALL/nested + 5
 RETURN_MESSAGE (tranches C/D, next project).
+
+## Generation 4/5 addendum — M4b COMPLETE: tranches C & D (P19, Aug 23 2026)
+
+No checker or mapper-identity change. The remaining 31 sites decorated:
+26 XCALL/nested (the marker hook replicated into `case XCALL` — the
+pushed word and the wfp−10 marker convention are code-identical to
+LCALL, and the write-mode WSAVS is call-opcode-agnostic; live-verified
+at 9 LIST_PLAYERS.3 sites incl. the M4a static link intact under
+redirection) and 5 RETURN_MESSAGE (all LCALLs — zero new code; the
+2/3-wide WPSH windows ride the P18-B hook). The noreturn shape is
+absorbed by the existing 0310 retire: verified live (QUEST_FAIL_SSHPT →
+INIT_SHARED_DATA's inline check → RETURN_MESSAGE,6 write-mode →
+body clean under ordinary lockstep → RETIRED at ?RETURN), signature
+wWSAVS − wWRTN = +1, the never-popped record moot after retire.
+Validated: tasks 026 (7-leg regression, div=0, P18-baseline-equal) and
+027 (targeted coverage, div=0). Coverage honestly partial (C 9/26,
+D 1/5 — rest driver-unreachable, carried by the uniform slot law +
+load-time validation + the fail-loud target-vs-book check).
+**566/566 arg-bearing sites decorated; M4b closes. Next: M4c.**

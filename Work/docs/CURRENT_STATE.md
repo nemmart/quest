@@ -1,5 +1,27 @@
 # Where things stand
 
+## ★ P19 LANDED — M4b COMPLETE: tranches C & D (Aug 23 2026)
+
+All 566 arg-bearing game→game call sites decorated (535 P18 + 26 XCALL
++ 5 RETURN_MESSAGE; 188 zero-arg need nothing). Batteries GREEN: task
+026 (7-leg regression on quest.pushmap.ABCD, div=0, P18-baseline-equal)
++ task 027 (targeted coverage, div=0). Two completions of the existing
+design, no mapper/ruling changes: (1) the marker hook replicated into
+`case XCALL` (code-identical word; write-mode WSAVS opcode-agnostic;
+live at 9 LIST_PLAYERS.3 sites, static link intact); (2) tranche D =
+map entries only — all 5 sites are LCALLs on the P18-B WPSH hook.
+Noreturn verified live: QUEST_FAIL_SSHPT (new TEMPORARY os knob; the
+?SOPEN failure routes via ?LIB_ERROR→?FATAL instead — also exercised,
+clean) → RETURN_MESSAGE,6 @7015BE74 write-mode, body clean, RETIRED at
+?RETURN, wWSAVS−wWRTN=+1. Coverage: C 9/26, D 1/5 live; rest
+driver-unreachable (BARGAIN/BOAT/CAST/KILL_PLAYER/OP_EDIT; LOGON/
+UPDATE_USER_DATA_FILE/LOCK_FILE incl. the pass-by-ref site — structural
+argument + verified pointer-arg analog in docs/Project19/REPORT.md §4).
+Report: docs/Project19/REPORT.md; CheckerHistory Gen-4/5 addendum.
+
+**NEXT: M4c — in-body stack residue: MSP dyn allocs (WMSP/STASP
+sprintf-style groups, see M4cNotes.md), WPSH/WPOP brackets.**
+
 ## ★ P18 LANDED — M4b widened to ALL flat-LCALL sites, tranches A+B (Aug 23 2026)
 
 535 decorated caller sites live (515 flat single-word + 20 WPSH
