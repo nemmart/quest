@@ -1,0 +1,24 @@
+===== Project 18 tranche A: quest.pushmap.A (515 single-word sites) =====
+--- push_map load check ---
+decorated calls loaded: 0
+0
+tasks/021-p18-AB-battery.sh: line 16: 58216 Aborted                 (core dumped) env QUEST_ADDRESS_BOOK=$BOOK QUEST_PUSH_MAP=$PA "$@" stdbuf -o0 -e0 $EMU -lockstep -silent -trace $R/trace -types lockstep,redirect,gcalls QUEST QUEST_SERVER @QUEST @QUEST > $R/out 2> $R/err
+m      div=1   i2=0   probes=0   argwr=0      writeWSAVS=1     sites_fired=0    end=clean
+tasks/021-p18-AB-battery.sh: line 16: 58253 Aborted                 (core dumped) env QUEST_ADDRESS_BOOK=$BOOK QUEST_PUSH_MAP=$PA "$@" stdbuf -o0 -e0 $EMU -lockstep -silent -trace $R/trace -types lockstep,redirect,gcalls QUEST QUEST_SERVER @QUEST @QUEST > $R/out 2> $R/err
+fo     div=1   i2=0   probes=0   argwr=0      writeWSAVS=1     sites_fired=0    end=clean
+tasks/021-p18-AB-battery.sh: line 16: 58290 Aborted                 (core dumped) env QUEST_ADDRESS_BOOK=$BOOK QUEST_PUSH_MAP=$PA "$@" stdbuf -o0 -e0 $EMU -lockstep -silent -trace $R/trace -types lockstep,redirect,gcalls QUEST QUEST_SERVER @QUEST @QUEST > $R/out 2> $R/err
+inj    div=1   i2=0   probes=0   argwr=0      writeWSAVS=1     sites_fired=0    end=clean
+tasks/021-p18-AB-battery.sh: line 16: 58327 Aborted                 (core dumped) env QUEST_ADDRESS_BOOK=$BOOK QUEST_PUSH_MAP=$PA "$@" stdbuf -o0 -e0 $EMU -lockstep -silent -trace $R/trace -types lockstep,redirect,gcalls QUEST QUEST_SERVER @QUEST @QUEST > $R/out 2> $R/err
+abort  div=1   i2=0   probes=0   argwr=0      writeWSAVS=1     sites_fired=0    end=clean
+tasks/021-p18-AB-battery.sh: line 16: 58368 Aborted                 (core dumped) env QUEST_ADDRESS_BOOK=$BOOK QUEST_PUSH_MAP=$PA "$@" stdbuf -o0 -e0 $EMU -lockstep -silent -trace $R/trace -types lockstep,redirect,gcalls QUEST QUEST_SERVER @QUEST @QUEST > $R/out 2> $R/err
+play   div=1   i2=0   probes=0   argwr=0      writeWSAVS=1     sites_fired=0    end=clean
+--- tranche A verdicts ---
+m      div=1   i2=0   probes=0   argwr=0      writeWSAVS=1     sites_fired=0    end=clean
+fo     div=1   i2=0   probes=0   argwr=0      writeWSAVS=1     sites_fired=0    end=clean
+inj    div=1   i2=0   probes=0   argwr=0      writeWSAVS=1     sites_fired=0    end=clean
+abort  div=1   i2=0   probes=0   argwr=0      writeWSAVS=1     sites_fired=0    end=clean
+play   div=1   i2=0   probes=0   argwr=0      writeWSAVS=1     sites_fired=0    end=clean
+--- total distinct A sites fired across legs ---
+0
+(of 515 decorated; unfired = coverage backlog, not a blocker)
+TASK 021 DONE
