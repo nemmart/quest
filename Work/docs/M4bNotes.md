@@ -448,14 +448,26 @@ mapper already keeps):
 
 Empty-records handling → **decorate QUEST as the base record** (primary).
 
-QUEST boot is nocall/stock today, so `records_` starts empty and a
-decorated push into an empty stack would be UB. Rather than guard the
-empty case in three places, ELIMINATE it: **decorate QUEST's WSAVS so a
-record is always present.** QUEST's WSAVS (WSAVS 0x0022 @ 7015c005) and
-WRTN (@ 7015c5e0) are structurally ORDINARY — the `nocall` flag is about
-the CALLER side (the loader jumps to QUEST; nothing LCALLs it), not the
-frame-save side. Analysis shows **no special WSAVS/WRTN processing is
-needed**:
+QUEST boot is nocall/stock today, so `records_` starts empty. Rather
+than guard the empty case, ELIMINATE it: **add QUEST to the book so it
+migrates in ordinary M4a COPY MODE.** This needs NO special handling and
+no new base-record logic — it works because the flag rules already route
+it correctly:
+
+QUEST is entered by the LOADER, not by a decorated LCALL. So the
+"args written" flag is CLEAR when QUEST's WSAVS fires. The
+consume-and-clear rule for (flag clear + book redirect) is already
+"M4a copy mode" — so QUEST just takes the normal copy-mode migrated-frame
+path: frame → area, stock stack behavior, exactly like the other 100
+routines. It is NOT a write-mode/decorated-call frame; it is an ordinary
+copy-mode routine that happens to be the OUTERMOST frame, so its record
+is the base of the stack and `records_` is never empty. "Decorate QUEST"
+= "add QUEST to the address book"; nothing more.
+
+Supporting detail (why it's ordinary, not why it's special): QUEST's
+WSAVS (0x0022 @ 7015c005) and WRTN (@ 7015c5e0) are structurally normal
+(the `nocall` flag is about the caller side — the loader jumps in,
+nothing LCALLs it — not the frame-save side), so:
 
 - **WSAVS**: QUEST is the FIRST record, so it hits the existing
   `records_.empty()` first-record branch (latches the I2 diff, starts
@@ -470,10 +482,9 @@ needed**:
   new_wsp = W − 2 − 2·argc = W − 2 (argc 0) restores the boot wsp; pop →
   empty. Correct for the base frame with no new code.
 
-Result: `records_` is never empty once boot's first instruction runs;
-the empty case vanishes (no read-guard, no write-abort, no load-time
-exclusion needed as the primary path). "records_ never empty because
-QUEST is the base record" is a far cleaner invariant.
+Result: `records_` is never empty once boot runs; the empty case
+vanishes with no special code — QUEST is just a copy-mode routine in the
+book, and the flag-clear→copy-mode rule does the rest.
 
 This FOLDS QUEST out of the M5 nocall set into M4b (a scope addition vs.
 M4a, which excluded it). Two things to VALIDATE (not special-case):

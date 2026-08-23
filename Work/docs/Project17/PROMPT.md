@@ -64,12 +64,15 @@ both wsps equally and must NOT touch it).
 
 ## Task 2 — decorate QUEST as the base record
 
-So `records_` is never empty (kills the empty case at the root). Per the
-M4bNotes ruling: QUEST's WSAVS (7015c005) and WRTN (7015c5e0) are
-ordinary; it becomes a COPY-MODE, argc-0 base record via the EXISTING
-first-record and wrtn_fixup paths — **no special WSAVS/WRTN code**.
-Un-comment/add QUEST to the address book (it is currently
-`#7015C005 ... push,nocall`). Validate:
+So `records_` is never empty (kills the empty case at the root). This is
+NOT special base-record handling — it's ordinary M4a copy-mode
+migration. QUEST is entered by the LOADER, not a decorated LCALL, so the
+"args written" flag is CLEAR at its WSAVS, and the existing
+(flag-clear + book) rule = M4a copy mode. So "decorate QUEST" = simply
+**add QUEST to the address book** (currently `#7015C005 ... push,nocall`);
+it then migrates its frame to area 0x74000000 in copy mode exactly like
+the other 100 routines, and because it is the outermost frame its record
+is the base (records_ never empty). No new WSAVS/WRTN code. Validate:
 - Boot is lockstep-clean with QUEST's frame in area 0x74000000 (it is
   the first frame — any error diverges at ~instruction 1, so this is
   quick to confirm or refute).
