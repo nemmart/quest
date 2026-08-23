@@ -1,0 +1,1413 @@
+AddressBook: /home/questrunner/queue/Work/c_src/quest.addrbook — 102 live routine(s), 40320 words, 40 page(s) at 74000000
+  7015C005 QUEST                    area 74000000 wfp 7400000A argc 0 frame 34 WSAVS
+  7015C5E1 QUEST.1@7015C5E1         area 74000060 wfp 7400006A argc 0 frame 6 WSAVS
+  7015C823 ALCHEMIST_HOME           area 74000090 wfp 740000A0 argc 3 frame 128 WSAVS
+  7015CC78 ALCHEMIST_HOME.1@7015CC78 area 740001C0 wfp 740001CA argc 0 frame 49 WSAVS
+  7015D053 ALLY_PLAYER              area 74000240 wfp 7400024A argc 0 frame 304 WSAVS
+  7015D7A7 ATTACK                   area 74000510 wfp 7400051A argc 0 frame 186 WSAVS
+  7015E113 ATTACK.1@7015E113        area 740006A0 wfp 740006AA argc 0 frame 33 WSAVS
+  7015E1F1 ATTACK.2@7015E1F1        area 74000700 wfp 7400070A argc 0 frame 107 WSAVS
+  7015E84A ATTACK.3@7015E84A        area 74000800 wfp 7400080A argc 0 frame 115 WSAVS
+  7015F8F6 ATTACK.5@7015F8F6        area 74000930 wfp 7400093A argc 0 frame 81 WSAVS
+  7015FA73 AUTO_MOVE                area 740009F0 wfp 740009FE argc 2 frame 16 WSAVS
+  7015FD51 BACKPACK                 area 74000A50 wfp 74000A5C argc 1 frame 94 WSAVS
+  7016044F BARGAIN                  area 74000B30 wfp 74000B40 argc 3 frame 107 WSAVS
+  70160854 BARGAIN.1@70160854       area 74000C30 wfp 74000C3C argc 1 frame 80 WSAVS
+  70160920 BARGAIN.2@70160920       area 74000CF0 wfp 74000CFA argc 0 frame 75 WSAVS
+  70160B95 BEING_ATTACK             area 74000DB0 wfp 74000DBA argc 0 frame 22 WSAVS
+  70161693 BOAT                     area 74000E00 wfp 74000E10 argc 3 frame 36 WSAVS
+  70161AA3 BOAT.1@70161AA3          area 74000E70 wfp 74000E7C argc 1 frame 12 WSAVS
+  70161CBF CATAPULT                 area 74000EB0 wfp 74000EBC argc 1 frame 26 WSAVS
+  70162327 CAST                     area 74000F10 wfp 74000F1A argc 0 frame 89 WSAVS
+  7016243F CAST.1@7016243F          area 74000FE0 wfp 74000FEA argc 0 frame 55 WSAVS
+  70163682 CAST.4@70163682          area 740010B0 wfp 740010BE argc 2 frame 4 WSAVS
+  7016389D CASTLE_INVENTORY         area 740010E0 wfp 740010EC argc 1 frame 77 WSAVS
+  70163FD3 CAVE_ATTACK              area 740011C0 wfp 740011CA argc 0 frame 132 WSAVS
+  701643E0 CAVE_ATTACK.1@701643E0   area 740012F0 wfp 740012FA argc 0 frame 110 WSAVS
+  70164600 CAVE_ATTACK.2@70164600   area 740013F0 wfp 740013FA argc 0 frame 102 WSAVS
+  70164D5B CLONE_SUNDAR             area 740014E0 wfp 740014F0 argc 3 frame 10 WSAVS
+  7016509F CREATE_MAP               area 74001520 wfp 7400152E argc 2 frame 1706 WSAVS
+  701650AC DISPLAY_MAP              area 740022A0 wfp 740022AE argc 2 frame 1706 WSAVS
+  70165863 DEFEND                   area 74003040 wfp 7400304A argc 0 frame 148 WSAVS
+  7016603D DIED                     area 74003190 wfp 7400319E argc 2 frame 7 WSAVS
+  70166487 DISPLAY_MAGIC            area 740031C0 wfp 740031CA argc 0 frame 53 WSAVS
+  701666A3 DISPLAY_CAVE             area 74003250 wfp 7400325C argc 1 frame 91 WSAVS
+  70166AF9 DISPLAY_SCREEN           area 74003330 wfp 7400333C argc 1 frame 547 WSAVS
+  701674B5 DISPLAY_INVENTORY        area 740037A0 wfp 740037AC argc 1 frame 158 WSAVS
+  701685AB DISPLAY_FLASK            area 74003900 wfp 7400390C argc 1 frame 25 WSAVS
+  70168717 DIST                     area 74003950 wfp 74003962 argc 4 frame 0 WSAVS
+  701687AD DISTANCE_TO_PLAYER       area 74003980 wfp 74003990 argc 3 frame 2 WSAVS
+  70168A27 DROP                     area 740039B0 wfp 740039BC argc 1 frame 101 WSAVS
+  70169683 DROP.1@70169683          area 74003AA0 wfp 74003AAA argc 0 frame 17 WSAVS
+  701697A1 FAKE_LAND_MASS           area 74003B00 wfp 74003B0C argc 1 frame 12 WSAVS
+  701699B5 FAKE_OCEAN               area 74003B40 wfp 74003B4C argc 1 frame 6 WSAVS
+  70169B0F LOCK_FILE                area 74003B70 wfp 74003B7E argc 2 frame 1 WSAVR
+  70169B86 UNLOCK_FILE              area 74003BA0 wfp 74003BAC argc 1 frame 0 WSAVR
+  70169D69 FIRE                     area 74003BC0 wfp 74003BCE argc 2 frame 169 WSAVS
+  7016A3BD FIRE.1@7016A3BD          area 74003D40 wfp 74003D4A argc 0 frame 4 WSAVS
+  7016A461 FIRE.2@7016A461          area 74003D70 wfp 74003D7A argc 0 frame 10 WSAVS
+  7016A4F8 FIRE.3@7016A4F8          area 74003DA0 wfp 74003DAA argc 0 frame 105 WSAVS
+  7016A88F FIND_OBJECT              area 74003E90 wfp 74003EA0 argc 3 frame 6 WSAVS
+  7016AA35 GET_INPUT                area 74003EC0 wfp 74003ECC argc 1 frame 41 WSAVS
+  7016B549 GET_QUEST                area 74003F30 wfp 74003F3A argc 0 frame 1354 WSAVS
+  7016BDB3 GET_OBJECT_INDEX         area 740049E0 wfp 740049EC argc 1 frame 3 WSAVS
+  7016D55F HELP                     area 74004A10 wfp 74004A1A argc 0 frame 1569 WSAVS
+  7016DE91 HIT_ANY_CHAR             area 74005690 wfp 7400569A argc 0 frame 9 WSAVS
+  7016DF39 INIT_OBJ_TBL             area 740056C0 wfp 740056CE argc 2 frame 5 WSAVS
+  7016E103 INIT_SCREEN              area 740056F0 wfp 740056FC argc 1 frame 5 WSAVS
+  7016E2C7 KILL_PLAYER              area 74005720 wfp 7400572A argc 0 frame 315 WSAVS
+  7016E5CB KILL_PLAYER.4@7016E5CB   area 74005A30 wfp 74005A3C argc 1 frame 5 WSAVS
+  7016E6BD KNIGHT_ATTACK            area 74005A60 wfp 74005A6C argc 1 frame 12 WSAVS
+  7016EB87 LIST_PLAYERS             area 74005AA0 wfp 74005AAA argc 0 frame 419 WSAVS
+  7016F556 LIST_PLAYERS.3@7016F556  area 74005E60 wfp 74005E6C argc 1 frame 3 WSAVS
+  7016F65B LOOK                     area 74005E90 wfp 74005E9A argc 0 frame 44 WSAVS
+  7016F7D1 MOVE                     area 74005F10 wfp 74005F1E argc 2 frame 7 WSAVS
+  7016FC67 MOVE_FAMILIAR            area 74005F40 wfp 74005F4C argc 1 frame 97 WSAVS
+  701702DB MOVE_IN_CAVE             area 74006020 wfp 74006030 argc 3 frame 110 WSAVS
+  7017101D MOVE_PLAYER              area 74006120 wfp 74006130 argc 3 frame 221 WSAVS
+  701729E2 MOVE_PLAYER.1@701729E2   area 74006300 wfp 7400630A argc 0 frame 6 WSAVS
+  70172CE1 OBSERVE                  area 74006330 wfp 7400633C argc 1 frame 341 WSAVS
+  7017381B OP_EDIT                  area 74006620 wfp 7400662A argc 0 frame 242 WSAVS
+  70175672 OP_EDIT.4@70175672       area 74006880 wfp 74006890 argc 3 frame 16 WSAVS
+  701757A8 OP_EDIT.6@701757A8       area 740068F0 wfp 74006900 argc 3 frame 22 WSAVS
+  70175897 OP_EDIT.8@70175897       area 74006960 wfp 74006972 argc 4 frame 14 WSAVS
+  70175BA9 OP_HELP                  area 740069C0 wfp 740069CA argc 0 frame 919 WSAVS
+  70175CBF OWNS                     area 74007110 wfp 7400711E argc 2 frame 3 WSAVS
+  70175E9F LOGON                    area 74007140 wfp 7400714A argc 0 frame 40 WSAVS
+  701761E7 PICK_X_Y                 area 74007210 wfp 7400721E argc 2 frame 5 WSAVS
+  701762F3 PLACE_PLAYER             area 74007240 wfp 74007250 argc 3 frame 8 WSAVS
+  7017664D RANDOM                   area 74007280 wfp 7400728C argc 1 frame 2 WSAVS
+  701766ED READ_IN                  area 740072B0 wfp 740072BA argc 0 frame 6 WSAVS
+  70176797 REGEN_SPELLS             area 74007300 wfp 7400730A argc 0 frame 6 WSAVS
+  70176A93 REFRESH_SCREEN           area 74007330 wfp 7400733C argc 1 frame 23 WSAVS
+  70176C0B REPORT                   area 74007380 wfp 7400738A argc 0 frame 258 WSAVS
+  70176FC1 REPOSITION               area 740075A0 wfp 740075AC argc 1 frame 1 WSAVS
+  70176FDD RETURN_MESSAGE           area 740075C0 wfp 740075D6 argc 6 frame 3 WSAVS
+  701771CF SEIGE                    area 740075F0 wfp 74007602 argc 4 frame 204 WSAVS
+  70177BED SIGNAL_TURN              area 740077B0 wfp 740077BA argc 0 frame 13 WSAVS
+  7017821F START_TURN               area 740077F0 wfp 740077FA argc 0 frame 48 WSAVS
+  701797F3 SPYGLASS                 area 74007890 wfp 7400789C argc 1 frame 15 WSAVS
+  70179BE3 STORE                    area 740078D0 wfp 740078E0 argc 3 frame 221 WSAVS
+  7017A695 STORMS_AT_SEA            area 74007AD0 wfp 74007ADC argc 1 frame 23 WSAVS
+  7017A963 TAKE                     area 74007B20 wfp 74007B2C argc 1 frame 92 WSAVS
+  7017B42F THIEF                    area 74007C00 wfp 74007C0C argc 1 frame 68 WSAVS
+  7017B799 TERRITORY_MAP            area 74007CB0 wfp 74007CBC argc 1 frame 3465 WSAVS
+  7017C27D TAKE_OVER_CASTLE         area 740097E0 wfp 740097EE argc 2 frame 92 WSAVS
+  7017C877 TERRAIN                  area 740098C0 wfp 740098DC argc 9 frame 15 WSAVS
+  7017CD71 TERRITORY                area 74009940 wfp 74009956 argc 6 frame 22 WSAVS
+  7017D0ED TOWER_ATTACK             area 740099A0 wfp 740099AC argc 1 frame 94 WSAVS
+  7017D48F TRANSPORT_TERRAK         area 74009A80 wfp 74009A8E argc 2 frame 12 WSAVS
+  7017D492 TRANSPORT_SUNDAR         area 74009AC0 wfp 74009ACE argc 2 frame 12 WSAVS
+  7017D635 UPDATE_SCREENS           area 74009B00 wfp 74009B10 argc 3 frame 5 WSAVS
+  7017D735 UPDATE_USER_DATA_FILE    area 74009B30 wfp 74009B40 argc 3 frame 260 WSAVS
+  7017D859 WRITE_OBJECT             area 74009D60 wfp 74009D76 argc 6 frame 4 WSAVS
+AddressBook: decorated call 7015C2B7 → INIT_OBJ_TBL marker 740056C4
+AddressBook: decorated call 7015C332 → DIED marker 74003194
+AddressBook: decorated call 7015C38C → INIT_SCREEN marker 740056F2
+AddressBook: decorated call 7015C897 → OWNS marker 74007114
+AddressBook: decorated call 7015C934 → GET_INPUT marker 74003EC2
+AddressBook: decorated call 7015C944 → RANDOM marker 74007282
+AddressBook: decorated call 7015C950 → REPOSITION marker 740075A2
+AddressBook: decorated call 7015CA80 → RANDOM marker 74007282
+AddressBook: decorated call 7015CB69 → GET_INPUT marker 74003EC2
+AddressBook: decorated call 7015CBBB → RANDOM marker 74007282
+AddressBook: decorated call 7015CBDD → REPOSITION marker 740075A2
+AddressBook: decorated call 7015D0B3 → GET_INPUT marker 74003EC2
+AddressBook: decorated call 7015D286 → UPDATE_USER_DATA_FILE marker 74009B36
+AddressBook: decorated call 7015DAC0 → GET_INPUT marker 74003EC2
+AddressBook: decorated call 7015DB36 → BARGAIN marker 74000B36
+AddressBook: decorated call 7015DBFC → GET_INPUT marker 74003EC2
+AddressBook: decorated call 7015DD28 → OWNS marker 74007114
+AddressBook: decorated call 7015DD36 → OWNS marker 74007114
+AddressBook: decorated call 7015DD45 → RANDOM marker 74007282
+AddressBook: decorated call 7015DDBF → OWNS marker 74007114
+AddressBook: decorated call 7015DDE7 → OWNS marker 74007114
+AddressBook: decorated call 7015DE34 → OWNS marker 74007114
+AddressBook: decorated call 7015DE77 → OWNS marker 74007114
+AddressBook: decorated call 7015DF8C → RANDOM marker 74007282
+AddressBook: decorated call 7015E09B → RANDOM marker 74007282
+AddressBook: decorated call 7015E0BD → RANDOM marker 74007282
+AddressBook: decorated call 7015E25B → UPDATE_SCREENS marker 74009B06
+AddressBook: decorated call 7015E30A → CLONE_SUNDAR marker 740014E6
+AddressBook: decorated call 7015E4C8 → RANDOM marker 74007282
+AddressBook: decorated call 7015E4EF → OWNS marker 74007114
+AddressBook: decorated call 7015E4F9 → RANDOM marker 74007282
+AddressBook: decorated call 7015E548 → OWNS marker 74007114
+AddressBook: decorated call 7015E5E8 → DISPLAY_FLASK marker 74003902
+AddressBook: decorated call 7015E916 → RANDOM marker 74007282
+AddressBook: decorated call 7015EB70 → OWNS marker 74007114
+AddressBook: decorated call 7015EF1C → OWNS marker 74007114
+AddressBook: decorated call 7015F0B9 → OWNS marker 74007114
+AddressBook: decorated call 7015F170 → OWNS marker 74007114
+AddressBook: decorated call 7015F326 → REPOSITION marker 740075A2
+AddressBook: decorated call 7015F77B → GET_OBJECT_INDEX marker 740049E2
+AddressBook: decorated call 7015F85C → UPDATE_SCREENS marker 74009B06
+AddressBook: decorated call 7015FAA2 → GET_INPUT marker 74003EC2
+AddressBook: decorated call 7015FD58 → OWNS marker 74007114
+AddressBook: decorated call 7015FE1D → GET_INPUT marker 74003EC2
+AddressBook: decorated call 7015FF25 → DISPLAY_INVENTORY marker 740037A2
+AddressBook: decorated call 7015FFD7 → GET_INPUT marker 74003EC2
+AddressBook: decorated call 70160079 → GET_INPUT marker 74003EC2
+AddressBook: decorated call 701600E7 → DISPLAY_INVENTORY marker 740037A2
+AddressBook: decorated call 701605C7 → GET_INPUT marker 74003EC2
+AddressBook: decorated call 7016064A → RANDOM marker 74007282
+AddressBook: decorated call 70160721 → GET_INPUT marker 74003EC2
+AddressBook: decorated call 701608E6 → GET_INPUT marker 74003EC2
+AddressBook: decorated call 70160956 → OWNS marker 74007114
+AddressBook: decorated call 70160A23 → GET_INPUT marker 74003EC2
+AddressBook: decorated call 70160C0D → DISTANCE_TO_PLAYER marker 74003986
+AddressBook: decorated call 70160CC3 → RANDOM marker 74007282
+AddressBook: decorated call 70160DFE → RANDOM marker 74007282
+AddressBook: decorated call 70160EFA → RANDOM marker 74007282
+AddressBook: decorated call 70160F96 → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 701611F7 → UPDATE_SCREENS marker 74009B06
+AddressBook: decorated call 7016121C → UPDATE_SCREENS marker 74009B06
+AddressBook: decorated call 70161243 → RANDOM marker 74007282
+AddressBook: decorated call 70161351 → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 701614BE → UPDATE_SCREENS marker 74009B06
+AddressBook: decorated call 70161507 → KNIGHT_ATTACK marker 74005A62
+AddressBook: decorated call 701615C9 → KNIGHT_ATTACK marker 74005A62
+AddressBook: decorated call 7016174C → MOVE_PLAYER marker 74006126
+AddressBook: decorated call 7016177B → GET_OBJECT_INDEX marker 740049E2
+AddressBook: decorated call 701618A5 → GET_INPUT marker 74003EC2
+AddressBook: decorated call 701618E9 → MOVE_PLAYER marker 74006126
+AddressBook: decorated call 70161A05 → UPDATE_SCREENS marker 74009B06
+AddressBook: decorated call 70161A13 → UPDATE_SCREENS marker 74009B06
+AddressBook: decorated call 70161A94 → INIT_SCREEN marker 740056F2
+AddressBook: decorated call 70161A9A → DISPLAY_SCREEN marker 74003332
+AddressBook: decorated call 70161AAD → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 70161D29 → RANDOM marker 74007282
+AddressBook: decorated call 70161D75 → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 70161E13 → DIST marker 74003958
+AddressBook: decorated call 70161E70 → TAKE_OVER_CASTLE marker 740097E4
+AddressBook: decorated call 70161E90 → RANDOM marker 74007282
+AddressBook: decorated call 70161EBD → UPDATE_SCREENS marker 74009B06
+AddressBook: decorated call 701623FB → GET_INPUT marker 74003EC2
+AddressBook: decorated call 70162580 → OWNS marker 74007114
+AddressBook: decorated call 701626CC → OWNS marker 74007114
+AddressBook: decorated call 70162853 → GET_OBJECT_INDEX marker 740049E2
+AddressBook: decorated call 701628CA → OWNS marker 74007114
+AddressBook: decorated call 70162AC4 → REFRESH_SCREEN marker 74007332
+AddressBook: decorated call 70162AD1 → DISPLAY_SCREEN marker 74003332
+AddressBook: decorated call 70162AFB → DISPLAY_SCREEN marker 74003332
+AddressBook: decorated call 70162B88 → OWNS marker 74007114
+AddressBook: decorated call 70162C05 → OWNS marker 74007114
+AddressBook: decorated call 70162C11 → OWNS marker 74007114
+AddressBook: decorated call 70162C1D → OWNS marker 74007114
+AddressBook: decorated call 70162C29 → OWNS marker 74007114
+AddressBook: decorated call 70162C35 → OWNS marker 74007114
+AddressBook: decorated call 70162C41 → OWNS marker 74007114
+AddressBook: decorated call 70162C4D → OWNS marker 74007114
+AddressBook: decorated call 70162C59 → OWNS marker 74007114
+AddressBook: decorated call 70162C65 → OWNS marker 74007114
+AddressBook: decorated call 70162C71 → OWNS marker 74007114
+AddressBook: decorated call 70162E81 → UPDATE_SCREENS marker 74009B06
+AddressBook: decorated call 70162EA7 → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 70162F5F → UPDATE_SCREENS marker 74009B06
+AddressBook: decorated call 70162F97 → INIT_SCREEN marker 740056F2
+AddressBook: decorated call 70162F9E → DISPLAY_SCREEN marker 74003332
+AddressBook: decorated call 70162FCF → TRANSPORT_TERRAK marker 74009A84
+AddressBook: decorated call 7016316D → OWNS marker 74007114
+AddressBook: decorated call 70163208 → REPOSITION marker 740075A2
+AddressBook: decorated call 701633ED → GET_INPUT marker 74003EC2
+AddressBook: decorated call 70163543 → DISPLAY_MAP marker 740022A4
+AddressBook: decorated call 70163563 → DISPLAY_SCREEN marker 74003332
+AddressBook: decorated call 7016357F → DISPLAY_INVENTORY marker 740037A2
+AddressBook: decorated call 701635EF → OWNS marker 74007114
+AddressBook: decorated call 701636F2 → INIT_SCREEN marker 740056F2
+AddressBook: decorated call 701636F9 → DISPLAY_SCREEN marker 74003332
+AddressBook: decorated call 70163793 → REFRESH_SCREEN marker 74007332
+AddressBook: decorated call 7016379A → INIT_SCREEN marker 740056F2
+AddressBook: decorated call 701637A1 → DISPLAY_SCREEN marker 74003332
+AddressBook: decorated call 7016397E → GET_INPUT marker 74003EC2
+AddressBook: decorated call 70163A91 → GET_INPUT marker 74003EC2
+AddressBook: decorated call 701640B8 → GET_INPUT marker 74003EC2
+AddressBook: decorated call 7016417D → GET_INPUT marker 74003EC2
+AddressBook: decorated call 70164262 → OWNS marker 74007114
+AddressBook: decorated call 7016428B → OWNS marker 74007114
+AddressBook: decorated call 701642C8 → OWNS marker 74007114
+AddressBook: decorated call 70164338 → RANDOM marker 74007282
+AddressBook: decorated call 701645D4 → OWNS marker 74007114
+AddressBook: decorated call 701645FB → DISPLAY_FLASK marker 74003902
+AddressBook: decorated call 7016492E → OWNS marker 74007114
+AddressBook: decorated call 70164A02 → OWNS marker 74007114
+AddressBook: decorated call 70164A48 → OWNS marker 74007114
+AddressBook: decorated call 70164B9C → REPOSITION marker 740075A2
+AddressBook: decorated call 70164EE1 → UPDATE_SCREENS marker 74009B06
+AddressBook: decorated call 70164F2F → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 70164FCE → UPDATE_SCREENS marker 74009B06
+AddressBook: decorated call 70164FFF → UPDATE_SCREENS marker 74009B06
+AddressBook: decorated call 701659C9 → RANDOM marker 74007282
+AddressBook: decorated call 701659EB → OWNS marker 74007114
+AddressBook: decorated call 70165ACD → RANDOM marker 74007282
+AddressBook: decorated call 70165AD9 → OWNS marker 74007114
+AddressBook: decorated call 70165B79 → RANDOM marker 74007282
+AddressBook: decorated call 70165C0E → RANDOM marker 74007282
+AddressBook: decorated call 70165C2B → REPOSITION marker 740075A2
+AddressBook: decorated call 70165C36 → RANDOM marker 74007282
+AddressBook: decorated call 70165C9D → RANDOM marker 74007282
+AddressBook: decorated call 70165D4A → DIED marker 74003194
+AddressBook: decorated call 70165E87 → OWNS marker 74007114
+AddressBook: decorated call 70165EB2 → RANDOM marker 74007282
+AddressBook: decorated call 70165F71 → DIED marker 74003194
+AddressBook: decorated call 7016610C → UPDATE_SCREENS marker 74009B06
+AddressBook: decorated call 70166323 → REPOSITION marker 740075A2
+AddressBook: decorated call 70166341 → DISPLAY_SCREEN marker 74003332
+AddressBook: decorated call 701663B6 → DISPLAY_INVENTORY marker 740037A2
+AddressBook: decorated call 70166B13 → DISPLAY_CAVE marker 74003252
+AddressBook: decorated call 70166B86 → DIST marker 74003958
+AddressBook: decorated call 70166E1C → DIST marker 74003958
+AddressBook: decorated call 701675A9 → DISTANCE_TO_PLAYER marker 74003986
+AddressBook: decorated call 70168AEE → GET_INPUT marker 74003EC2
+AddressBook: decorated call 70168E26 → GET_OBJECT_INDEX marker 740049E2
+AddressBook: decorated call 70168EFF → DIST marker 74003958
+AddressBook: decorated call 7016913E → DISPLAY_INVENTORY marker 740037A2
+AddressBook: decorated call 70169197 → GET_INPUT marker 74003EC2
+AddressBook: decorated call 70169206 → GET_INPUT marker 74003EC2
+AddressBook: decorated call 7016926E → GET_INPUT marker 74003EC2
+AddressBook: decorated call 701694C1 → GET_INPUT marker 74003EC2
+AddressBook: decorated call 70169538 → GET_INPUT marker 74003EC2
+AddressBook: decorated call 701695AD → GET_INPUT marker 74003EC2
+AddressBook: decorated call 70169622 → GET_INPUT marker 74003EC2
+AddressBook: decorated call 701696B4 → GET_INPUT marker 74003EC2
+AddressBook: decorated call 70169F5F → DIST marker 74003958
+AddressBook: decorated call 70169F7B → RANDOM marker 74007282
+AddressBook: decorated call 70169FA0 → GET_INPUT marker 74003EC2
+AddressBook: decorated call 7016A3FB → UPDATE_SCREENS marker 74009B06
+AddressBook: decorated call 7016A7D8 → UPDATE_SCREENS marker 74009B06
+AddressBook: decorated call 7016A810 → CLONE_SUNDAR marker 740014E6
+AddressBook: decorated call 7016BCBE → DISPLAY_SCREEN marker 74003332
+AddressBook: decorated call 7016BD33 → DISPLAY_INVENTORY marker 740037A2
+AddressBook: decorated call 7016DEA9 → GET_INPUT marker 74003EC2
+AddressBook: decorated call 7016E1D2 → FAKE_LAND_MASS marker 74003B02
+AddressBook: decorated call 7016E1D8 → FAKE_OCEAN marker 74003B42
+AddressBook: decorated call 7016E41E → GET_INPUT marker 74003EC2
+AddressBook: decorated call 7016E4BD → UPDATE_SCREENS marker 74009B06
+AddressBook: decorated call 7016E509 → UPDATE_USER_DATA_FILE marker 74009B36
+AddressBook: decorated call 7016E550 → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 7016E5A3 → GET_INPUT marker 74003EC2
+AddressBook: decorated call 7016E629 → UPDATE_USER_DATA_FILE marker 74009B36
+AddressBook: decorated call 7016E736 → DISTANCE_TO_PLAYER marker 74003986
+AddressBook: decorated call 7016E7F4 → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 7016E9E9 → UPDATE_SCREENS marker 74009B06
+AddressBook: decorated call 7016EA0E → UPDATE_SCREENS marker 74009B06
+AddressBook: decorated call 7016EBAD → GET_INPUT marker 74003EC2
+AddressBook: decorated call 7016F40D → GET_INPUT marker 74003EC2
+AddressBook: decorated call 7016F73D → GET_INPUT marker 74003EC2
+AddressBook: decorated call 7016F748 → TERRITORY_MAP marker 74007CB2
+AddressBook: decorated call 7016FBB7 → FAKE_LAND_MASS marker 74003B02
+AddressBook: decorated call 7016FBBD → FAKE_OCEAN marker 74003B42
+AddressBook: decorated call 7016FDC7 → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 7016FE8F → RANDOM marker 74007282
+AddressBook: decorated call 7016FFF6 → UPDATE_SCREENS marker 74009B06
+AddressBook: decorated call 701700D9 → UPDATE_SCREENS marker 74009B06
+AddressBook: decorated call 701700FE → UPDATE_SCREENS marker 74009B06
+AddressBook: decorated call 70170330 → RANDOM marker 74007282
+AddressBook: decorated call 70170457 → RANDOM marker 74007282
+AddressBook: decorated call 7017065F → DISPLAY_SCREEN marker 74003332
+AddressBook: decorated call 701706BF → OWNS marker 74007114
+AddressBook: decorated call 7017070D → REPOSITION marker 740075A2
+AddressBook: decorated call 70170729 → TRANSPORT_SUNDAR marker 74009AC4
+AddressBook: decorated call 7017088D → RANDOM marker 74007282
+AddressBook: decorated call 70170B3B → GET_INPUT marker 74003EC2
+AddressBook: decorated call 70171110 → OWNS marker 74007114
+AddressBook: decorated call 70171124 → OWNS marker 74007114
+AddressBook: decorated call 7017112F → OWNS marker 74007114
+AddressBook: decorated call 7017135C → OWNS marker 74007114
+AddressBook: decorated call 7017138A → GET_INPUT marker 74003EC2
+AddressBook: decorated call 7017139F → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 70171408 → TRANSPORT_TERRAK marker 74009A84
+AddressBook: decorated call 70171674 → OWNS marker 74007114
+AddressBook: decorated call 701716E1 → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 70171778 → RANDOM marker 74007282
+AddressBook: decorated call 70171783 → OWNS marker 74007114
+AddressBook: decorated call 70171799 → DIED marker 74003194
+AddressBook: decorated call 701717A8 → ALCHEMIST_HOME marker 74000096
+AddressBook: decorated call 701717B9 → STORE marker 740078D6
+AddressBook: decorated call 701717F6 → OWNS marker 74007114
+AddressBook: decorated call 70171804 → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 701718C7 → RANDOM marker 74007282
+AddressBook: decorated call 70171974 → DIED marker 74003194
+AddressBook: decorated call 70171A53 → OWNS marker 74007114
+AddressBook: decorated call 70171A8A → DISTANCE_TO_PLAYER marker 74003986
+AddressBook: decorated call 70171AEB → OWNS marker 74007114
+AddressBook: decorated call 70171AF6 → OWNS marker 74007114
+AddressBook: decorated call 70171B27 → OWNS marker 74007114
+AddressBook: decorated call 70171B42 → OWNS marker 74007114
+AddressBook: decorated call 70171BB2 → GET_INPUT marker 74003EC2
+AddressBook: decorated call 70171C6E → DIST marker 74003958
+AddressBook: decorated call 70171CE2 → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 70171D52 → UPDATE_SCREENS marker 74009B06
+AddressBook: decorated call 70171D81 → UPDATE_SCREENS marker 74009B06
+AddressBook: decorated call 70171DD8 → SEIGE marker 740075F8
+AddressBook: decorated call 70171E6D → RANDOM marker 74007282
+AddressBook: decorated call 70171E78 → OWNS marker 74007114
+AddressBook: decorated call 70171E8E → DIED marker 74003194
+AddressBook: decorated call 70171EDD → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 70171F64 → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 70171FD0 → OWNS marker 74007114
+AddressBook: decorated call 7017217F → UPDATE_SCREENS marker 74009B06
+AddressBook: decorated call 701721D4 → UPDATE_SCREENS marker 74009B06
+AddressBook: decorated call 701721E0 → MOVE marker 74005F14
+AddressBook: decorated call 701721E6 → DISPLAY_SCREEN marker 74003332
+AddressBook: decorated call 70172286 → GET_INPUT marker 74003EC2
+AddressBook: decorated call 7017233F → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 701723A8 → OWNS marker 74007114
+AddressBook: decorated call 70172562 → UPDATE_SCREENS marker 74009B06
+AddressBook: decorated call 701725B7 → UPDATE_SCREENS marker 74009B06
+AddressBook: decorated call 701725EB → INIT_SCREEN marker 740056F2
+AddressBook: decorated call 701725F5 → MOVE marker 74005F14
+AddressBook: decorated call 701726C0 → GET_INPUT marker 74003EC2
+AddressBook: decorated call 70172925 → OWNS marker 74007114
+AddressBook: decorated call 70172983 → REFRESH_SCREEN marker 74007332
+AddressBook: decorated call 70172989 → DISPLAY_SCREEN marker 74003332
+AddressBook: decorated call 70172D66 → GET_INPUT marker 74003EC2
+AddressBook: decorated call 70172F7C → GET_INPUT marker 74003EC2
+AddressBook: decorated call 70172FDF → GET_INPUT marker 74003EC2
+AddressBook: decorated call 70173042 → GET_INPUT marker 74003EC2
+AddressBook: decorated call 7017309B → GET_INPUT marker 74003EC2
+AddressBook: decorated call 701730F4 → GET_INPUT marker 74003EC2
+AddressBook: decorated call 7017314B → GET_INPUT marker 74003EC2
+AddressBook: decorated call 7017319F → GET_INPUT marker 74003EC2
+AddressBook: decorated call 701731C4 → DISPLAY_FLASK marker 74003902
+AddressBook: decorated call 701733F0 → PLACE_PLAYER marker 74007246
+AddressBook: decorated call 701733F6 → INIT_SCREEN marker 740056F2
+AddressBook: decorated call 70173830 → INIT_SCREEN marker 740056F2
+AddressBook: decorated call 7017383B → DISPLAY_SCREEN marker 74003332
+AddressBook: decorated call 70173861 → GET_INPUT marker 74003EC2
+AddressBook: decorated call 70173880 → DISPLAY_SCREEN marker 74003332
+AddressBook: decorated call 70173896 → DISPLAY_SCREEN marker 74003332
+AddressBook: decorated call 70173913 → TERRITORY_MAP marker 74007CB2
+AddressBook: decorated call 7017391E → DISPLAY_SCREEN marker 74003332
+AddressBook: decorated call 701739EE → INIT_SCREEN marker 740056F2
+AddressBook: decorated call 70173A12 → CREATE_MAP marker 74001524
+AddressBook: decorated call 70173A45 → GET_INPUT marker 74003EC2
+AddressBook: decorated call 70173AC5 → GET_INPUT marker 74003EC2
+AddressBook: decorated call 70173DA9 → GET_INPUT marker 74003EC2
+AddressBook: decorated call 70173E65 → INIT_SCREEN marker 740056F2
+AddressBook: decorated call 70173F4C → INIT_SCREEN marker 740056F2
+AddressBook: decorated call 70174022 → INIT_SCREEN marker 740056F2
+AddressBook: decorated call 7017429F → GET_INPUT marker 74003EC2
+AddressBook: decorated call 701743D0 → GET_OBJECT_INDEX marker 740049E2
+AddressBook: decorated call 701744F0 → INIT_SCREEN marker 740056F2
+AddressBook: decorated call 701744F7 → DISPLAY_SCREEN marker 74003332
+AddressBook: decorated call 7017452A → GET_INPUT marker 74003EC2
+AddressBook: decorated call 701745A1 → GET_INPUT marker 74003EC2
+AddressBook: decorated call 70174937 → GET_INPUT marker 74003EC2
+AddressBook: decorated call 70174A81 → GET_INPUT marker 74003EC2
+AddressBook: decorated call 70174AF5 → MOVE marker 74005F14
+AddressBook: decorated call 70174B63 → INIT_SCREEN marker 740056F2
+AddressBook: decorated call 70174C48 → GET_INPUT marker 74003EC2
+AddressBook: decorated call 70174C90 → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 70174CA8 → WRITE_OBJECT marker 74009D6C
+AddressBook: decorated call 70174CB7 → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 70174CCF → WRITE_OBJECT marker 74009D6C
+AddressBook: decorated call 70174CF1 → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 70174D09 → WRITE_OBJECT marker 74009D6C
+AddressBook: decorated call 70174D18 → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 70174D30 → WRITE_OBJECT marker 74009D6C
+AddressBook: decorated call 70174D55 → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 70174D6E → WRITE_OBJECT marker 74009D6C
+AddressBook: decorated call 70174D7E → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 70174D97 → WRITE_OBJECT marker 74009D6C
+AddressBook: decorated call 70174DBC → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 70174DD5 → WRITE_OBJECT marker 74009D6C
+AddressBook: decorated call 70174DE5 → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 70174DFE → WRITE_OBJECT marker 74009D6C
+AddressBook: decorated call 70174E15 → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 70174E34 → WRITE_OBJECT marker 74009D6C
+AddressBook: decorated call 70174E4A → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 70174E69 → WRITE_OBJECT marker 74009D6C
+AddressBook: decorated call 70174F04 → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 70174F17 → WRITE_OBJECT marker 74009D6C
+AddressBook: decorated call 70174F2B → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 70174F48 → WRITE_OBJECT marker 74009D6C
+AddressBook: decorated call 70174F57 → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 70174F6F → WRITE_OBJECT marker 74009D6C
+AddressBook: decorated call 70174F83 → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 70174FA0 → WRITE_OBJECT marker 74009D6C
+AddressBook: decorated call 70174FAF → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 70174FC7 → WRITE_OBJECT marker 74009D6C
+AddressBook: decorated call 70174FD6 → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 70174FEE → WRITE_OBJECT marker 74009D6C
+AddressBook: decorated call 70175002 → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 7017501F → WRITE_OBJECT marker 74009D6C
+AddressBook: decorated call 7017502E → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 70175046 → WRITE_OBJECT marker 74009D6C
+AddressBook: decorated call 7017505A → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 70175077 → WRITE_OBJECT marker 74009D6C
+AddressBook: decorated call 701750C8 → GET_INPUT marker 74003EC2
+AddressBook: decorated call 70175120 → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 70175133 → WRITE_OBJECT marker 74009D6C
+AddressBook: decorated call 70175142 → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 7017515A → WRITE_OBJECT marker 74009D6C
+AddressBook: decorated call 70175169 → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 70175181 → WRITE_OBJECT marker 74009D6C
+AddressBook: decorated call 70175190 → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 701751A8 → WRITE_OBJECT marker 74009D6C
+AddressBook: decorated call 701751B7 → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 701751CF → WRITE_OBJECT marker 74009D6C
+AddressBook: decorated call 701751DE → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 701751F6 → WRITE_OBJECT marker 74009D6C
+AddressBook: decorated call 7017520A → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 70175227 → WRITE_OBJECT marker 74009D6C
+AddressBook: decorated call 7017523B → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 70175258 → WRITE_OBJECT marker 74009D6C
+AddressBook: decorated call 7017526C → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 70175289 → WRITE_OBJECT marker 74009D6C
+AddressBook: decorated call 7017529D → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 701752BA → WRITE_OBJECT marker 74009D6C
+AddressBook: decorated call 701752F8 → DIST marker 74003958
+AddressBook: decorated call 70175339 → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 70175356 → WRITE_OBJECT marker 74009D6C
+AddressBook: decorated call 70175378 → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 70175390 → WRITE_OBJECT marker 74009D6C
+AddressBook: decorated call 701753B2 → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 701753CA → WRITE_OBJECT marker 74009D6C
+AddressBook: decorated call 701753E7 → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 701753FA → WRITE_OBJECT marker 74009D6C
+AddressBook: decorated call 70175443 → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 70175460 → WRITE_OBJECT marker 74009D6C
+AddressBook: decorated call 7017546F → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 70175487 → WRITE_OBJECT marker 74009D6C
+AddressBook: decorated call 70175496 → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 701754AE → WRITE_OBJECT marker 74009D6C
+AddressBook: decorated call 701754B8 → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 701754CB → WRITE_OBJECT marker 74009D6C
+AddressBook: decorated call 701754FC → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 7017551C → WRITE_OBJECT marker 74009D6C
+AddressBook: decorated call 7017552B → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 70175543 → WRITE_OBJECT marker 74009D6C
+AddressBook: decorated call 70175557 → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 70175574 → WRITE_OBJECT marker 74009D6C
+AddressBook: decorated call 70175583 → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 7017559B → WRITE_OBJECT marker 74009D6C
+AddressBook: decorated call 701755DD → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 70175602 → WRITE_OBJECT marker 74009D6C
+AddressBook: decorated call 701760C4 → GET_INPUT marker 74003EC2
+AddressBook: decorated call 70176370 → UPDATE_SCREENS marker 74009B06
+AddressBook: decorated call 701764AB → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 70176577 → UPDATE_SCREENS marker 74009B06
+AddressBook: decorated call 70176F42 → DIED marker 74003194
+AddressBook: decorated call 70176FC7 → PICK_X_Y marker 74007214
+AddressBook: decorated call 70176FD1 → PLACE_PLAYER marker 74007246
+AddressBook: decorated call 70176FD7 → INIT_SCREEN marker 740056F2
+AddressBook: decorated call 701771E2 → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 70177618 → OWNS marker 74007114
+AddressBook: decorated call 70177625 → OWNS marker 74007114
+AddressBook: decorated call 70177632 → OWNS marker 74007114
+AddressBook: decorated call 70177657 → OWNS marker 74007114
+AddressBook: decorated call 70177664 → OWNS marker 74007114
+AddressBook: decorated call 7017766F → OWNS marker 74007114
+AddressBook: decorated call 7017768F → OWNS marker 74007114
+AddressBook: decorated call 7017769A → OWNS marker 74007114
+AddressBook: decorated call 701776A5 → OWNS marker 74007114
+AddressBook: decorated call 701776C5 → OWNS marker 74007114
+AddressBook: decorated call 701777A9 → OWNS marker 74007114
+AddressBook: decorated call 70177881 → OWNS marker 74007114
+AddressBook: decorated call 7017788C → OWNS marker 74007114
+AddressBook: decorated call 70177897 → OWNS marker 74007114
+AddressBook: decorated call 701778A2 → OWNS marker 74007114
+AddressBook: decorated call 701778AD → OWNS marker 74007114
+AddressBook: decorated call 701778B7 → TAKE_OVER_CASTLE marker 740097E4
+AddressBook: decorated call 70177910 → GET_INPUT marker 74003EC2
+AddressBook: decorated call 701779B6 → DIST marker 74003958
+AddressBook: decorated call 701779DD → OWNS marker 74007114
+AddressBook: decorated call 701779E8 → RANDOM marker 74007282
+AddressBook: decorated call 70177A29 → DIED marker 74003194
+AddressBook: decorated call 70177AD2 → TAKE_OVER_CASTLE marker 740097E4
+AddressBook: decorated call 70177AE3 → RANDOM marker 74007282
+AddressBook: decorated call 70177CF0 → RANDOM marker 74007282
+AddressBook: decorated call 70177D40 → RANDOM marker 74007282
+AddressBook: decorated call 70177D80 → RANDOM marker 74007282
+AddressBook: decorated call 70177DD2 → RANDOM marker 74007282
+AddressBook: decorated call 70177DF9 → RANDOM marker 74007282
+AddressBook: decorated call 70177E7D → UNLOCK_FILE marker 74003BA2
+AddressBook: decorated call 70177EED → DIST marker 74003958
+AddressBook: decorated call 70177EFD → LOCK_FILE marker 74003B74
+AddressBook: decorated call 70177F0B → LOCK_FILE marker 74003B74
+AddressBook: decorated call 7017826C → GET_INPUT marker 74003EC2
+AddressBook: decorated call 70178537 → OWNS marker 74007114
+AddressBook: decorated call 7017858B → OWNS marker 74007114
+AddressBook: decorated call 7017868D → DIED marker 74003194
+AddressBook: decorated call 70178801 → DIED marker 74003194
+AddressBook: decorated call 70178808 → STORMS_AT_SEA marker 74007AD2
+AddressBook: decorated call 7017880F → MOVE_FAMILIAR marker 74005F42
+AddressBook: decorated call 701788CE → DISPLAY_SCREEN marker 74003332
+AddressBook: decorated call 701788EB → TOWER_ATTACK marker 740099A2
+AddressBook: decorated call 701788F6 → THIEF marker 74007C02
+AddressBook: decorated call 701788FD → CATAPULT marker 74000EB2
+AddressBook: decorated call 70178956 → DISPLAY_INVENTORY marker 740037A2
+AddressBook: decorated call 701789E0 → DISPLAY_INVENTORY marker 740037A2
+AddressBook: decorated call 70178A17 → DISPLAY_SCREEN marker 74003332
+AddressBook: decorated call 70178BA0 → GET_INPUT marker 74003EC2
+AddressBook: decorated call 70178BAF → BACKPACK marker 74000A52
+AddressBook: decorated call 70178BBE → DROP marker 740039B2
+AddressBook: decorated call 70178BF9 → DISPLAY_INVENTORY marker 740037A2
+AddressBook: decorated call 70178C3B → GET_INPUT marker 74003EC2
+AddressBook: decorated call 70178D04 → GET_INPUT marker 74003EC2
+AddressBook: decorated call 70178D52 → AUTO_MOVE marker 740009F4
+AddressBook: decorated call 70179014 → DROP marker 740039B2
+AddressBook: decorated call 7017905F → OBSERVE marker 74006332
+AddressBook: decorated call 701790A8 → BACKPACK marker 74000A52
+AddressBook: decorated call 701790AF → DISPLAY_INVENTORY marker 740037A2
+AddressBook: decorated call 701790F8 → CASTLE_INVENTORY marker 740010E2
+AddressBook: decorated call 70179185 → SPYGLASS marker 74007892
+AddressBook: decorated call 7017918C → DISPLAY_SCREEN marker 74003332
+AddressBook: decorated call 7017929D → OWNS marker 74007114
+AddressBook: decorated call 701792A9 → OWNS marker 74007114
+AddressBook: decorated call 701792BB → OWNS marker 74007114
+AddressBook: decorated call 701792C8 → OWNS marker 74007114
+AddressBook: decorated call 701792D9 → OWNS marker 74007114
+AddressBook: decorated call 701792E6 → OWNS marker 74007114
+AddressBook: decorated call 70179319 → GET_INPUT marker 74003EC2
+AddressBook: decorated call 701793D4 → FIRE marker 74003BC4
+AddressBook: decorated call 70179416 → FIRE marker 74003BC4
+AddressBook: decorated call 7017952B → BOAT marker 74000E06
+AddressBook: decorated call 70179557 → MOVE_IN_CAVE marker 74006026
+AddressBook: decorated call 7017956C → MOVE_PLAYER marker 74006126
+AddressBook: decorated call 70179595 → DISPLAY_SCREEN marker 74003332
+AddressBook: decorated call 701795D7 → TAKE marker 74007B22
+AddressBook: decorated call 701796FE → RANDOM marker 74007282
+AddressBook: decorated call 701797FD → OWNS marker 74007114
+AddressBook: decorated call 7017987F → GET_INPUT marker 74003EC2
+AddressBook: decorated call 70179980 → INIT_SCREEN marker 740056F2
+AddressBook: decorated call 70179986 → DISPLAY_SCREEN marker 74003332
+AddressBook: decorated call 701799C5 → INIT_SCREEN marker 740056F2
+AddressBook: decorated call 70179D0F → GET_INPUT marker 74003EC2
+AddressBook: decorated call 70179EB5 → GET_INPUT marker 74003EC2
+AddressBook: decorated call 70179F6C → DISPLAY_INVENTORY marker 740037A2
+AddressBook: decorated call 70179FB0 → GET_INPUT marker 74003EC2
+AddressBook: decorated call 7017A54B → GET_INPUT marker 74003EC2
+AddressBook: decorated call 7017A578 → DISPLAY_SCREEN marker 74003332
+AddressBook: decorated call 7017A5ED → DISPLAY_INVENTORY marker 740037A2
+AddressBook: decorated call 7017A6E2 → RANDOM marker 74007282
+AddressBook: decorated call 7017A7A2 → PLACE_PLAYER marker 74007246
+AddressBook: decorated call 7017A7A8 → INIT_SCREEN marker 740056F2
+AddressBook: decorated call 7017AA3E → GET_INPUT marker 74003EC2
+AddressBook: decorated call 7017AC13 → GET_INPUT marker 74003EC2
+AddressBook: decorated call 7017ADDD → OWNS marker 74007114
+AddressBook: decorated call 7017ADE8 → OWNS marker 74007114
+AddressBook: decorated call 7017ADF6 → OWNS marker 74007114
+AddressBook: decorated call 7017AE0C → OWNS marker 74007114
+AddressBook: decorated call 7017AE17 → OWNS marker 74007114
+AddressBook: decorated call 7017AE25 → OWNS marker 74007114
+AddressBook: decorated call 7017AE3B → OWNS marker 74007114
+AddressBook: decorated call 7017AE46 → OWNS marker 74007114
+AddressBook: decorated call 7017AE54 → OWNS marker 74007114
+AddressBook: decorated call 7017B02F → GET_INPUT marker 74003EC2
+AddressBook: decorated call 7017B10A → GET_INPUT marker 74003EC2
+AddressBook: decorated call 7017C00D → GET_INPUT marker 74003EC2
+AddressBook: decorated call 7017C07A → DISPLAY_MAP marker 740022A4
+AddressBook: decorated call 7017C3AB → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 7017C4A6 → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 7017C575 → UPDATE_SCREENS marker 74009B06
+AddressBook: decorated call 7017C580 → INIT_SCREEN marker 740056F2
+AddressBook: decorated call 7017C59E → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 7017C5CF → UPDATE_SCREENS marker 74009B06
+AddressBook: decorated call 7017C71F → UPDATE_SCREENS marker 74009B06
+AddressBook: decorated call 7017D1BD → DIST marker 74003958
+AddressBook: decorated call 7017D1DC → RANDOM marker 74007282
+AddressBook: decorated call 7017D27B → DIED marker 74003194
+AddressBook: decorated call 7017D2B6 → DIST marker 74003958
+AddressBook: decorated call 7017D33E → RANDOM marker 74007282
+AddressBook: decorated call 7017D3E4 → DIED marker 74003194
+AddressBook: decorated call 7017D4E9 → FIND_OBJECT marker 74003E96
+AddressBook: decorated call 7017D586 → UPDATE_SCREENS marker 74009B06
+AddressBook: decorated call 7017D5B6 → UPDATE_SCREENS marker 74009B06
+AddressBook: decorated call 7017D984 → UPDATE_SCREENS marker 74009B06
+AddressBook: /home/questrunner/queue/Work/c_src/quest.pushmap.A — caller map: 1125 push redirect(s), 515 decorated call(s)
+Decoder::initialize()...MachineThread()...
+Init complete.
+:
+:CASTLE_DATA_FILE
+:DATA_FILE
+:FIXUP_OBJECTS.PR
+:FIXUP_OBJECTS.ST
+:NEW_CASTLES.PR
+:NEW_CASTLES.ST
+:NEW_USERS.PR
+:NEW_USERS.ST
+:NEW_USER_DATA_FILE
+:OLD_USER_DATA_FILE
+:PER
+:QUEST.PR
+:QUEST.ST
+:QUEST_SERVER.PR
+:QUEST_SERVER.ST
+:SAVE_USER.PR
+:SAVE_USER.ST
+:SHARED_DATA_FILE
+:SYSTEM
+:USER_DATA_FILE
+:WORLD_DATA_FILE
+Lockstep role for QUEST_SERVER: SERVER
+Waiting for terminal client for @QUEST
+*** SD_PTR [QUEST_SERVER] set to 0x70180000
+Lockstep role for QUEST1: MASTER
+RTStubs: TEST terminal point at 7016871D kind=ABORT (QUEST_TERMINAL)
+RTStubs: RT range 7017D99B..7017FFFF, 137 entries
+Silent clone terminal for @QUEST
+Lockstep role for QUEST2: CLONE
+NativeRegistry: 0x7015BD20 (direct)
+NativeRegistry: 0x7017D99B (direct)
+NativeRegistry: 0x7017DA75 (direct)
+NativeRegistry: 0x7017DB1B (direct)
+NativeRegistry: 0x7017DB3E (direct)
+NativeRegistry: 0x7017DB4B (direct)
+NativeRegistry: 0x7017DB63 (direct)
+NativeRegistry: 0x7017DB9B (direct)
+NativeRegistry: 0x7017DBB3 (direct)
+NativeRegistry: 0x7017DC3F (direct)
+NativeRegistry: 0x7017DC4F (direct)
+NativeRegistry: 0x7017DC63 (direct)
+NativeRegistry: 0x7017DC7D (direct)
+NativeRegistry: 0x7017DCCB (direct)
+NativeRegistry: 0x7017DD27 (direct)
+NativeRegistry: 0x7017DDBB (direct)
+NativeRegistry: 0x7017DE25 (direct)
+NativeRegistry: 0x7017DE33 (direct)
+NativeRegistry: 0x7017DE5F (direct)
+NativeRegistry: 0x7017DEEB (direct)
+NativeRegistry: 0x7017E095 (direct)
+NativeRegistry: 0x7017E0BB (direct)
+NativeRegistry: 0x7017E12B (direct)
+NativeRegistry: 0x7017E14D (direct)
+NativeRegistry: 0x7017E154 (direct)
+NativeRegistry: 0x7017E15E (direct)
+NativeRegistry: 0x7017E168 (direct)
+NativeRegistry: 0x7017E171 (direct)
+NativeRegistry: 0x7017E17F (direct)
+NativeRegistry: 0x7017E189 (direct)
+NativeRegistry: 0x7017E190 (direct)
+NativeRegistry: 0x7017E197 (direct)
+NativeRegistry: 0x7017E1A5 (direct)
+NativeRegistry: 0x7017E1B5 (direct)
+NativeRegistry: 0x7017E1C0 (direct)
+NativeRegistry: 0x7017E1CB (direct)
+NativeRegistry: 0x7017E1DC (direct)
+NativeRegistry: 0x7017E1FC (direct)
+NativeRegistry: 0x7017E27A (direct)
+NativeRegistry: 0x7017E31C (direct)
+NativeRegistry: 0x7017E33A (direct)
+NativeRegistry: 0x7017E3D2 (direct)
+NativeRegistry: 0x7017E3F0 (direct)
+NativeRegistry: 0x7017E4B8 (direct)
+NativeRegistry: 0x7017E5CB (direct)
+NativeRegistry: 0x7017E5F4 (direct)
+NativeRegistry: 0x7017E64A (direct)
+NativeRegistry: 0x7017E688 (direct)
+NativeRegistry: 0x7017E708 (direct)
+NativeRegistry: 0x7017E722 (direct)
+NativeRegistry: 0x7017E733 (direct)
+NativeRegistry: 0x7017E750 (direct)
+NativeRegistry: 0x7017E766 (direct)
+NativeRegistry: 0x7017E77D (direct)
+NativeRegistry: 0x7017E784 (direct)
+NativeRegistry: 0x7017E786 (direct)
+NativeRegistry: 0x7017E7C4 (direct)
+NativeRegistry: 0x7017E7D0 (direct)
+NativeRegistry: 0x7017E7ED (direct)
+NativeRegistry: 0x7017E805 (direct)
+NativeRegistry: 0x7017E811 (direct)
+NativeRegistry: 0x7017E81C (direct)
+NativeRegistry: 0x7017E820 (direct)
+NativeRegistry: 0x7017E834 (direct)
+NativeRegistry: 0x7017E838 (direct)
+NativeRegistry: 0x7017E853 (direct)
+NativeRegistry: 0x7017E866 (direct)
+NativeRegistry: 0x7017E945 (direct)
+NativeRegistry: 0x7017E949 (direct)
+NativeRegistry: 0x7017E94C (direct)
+NativeRegistry: 0x7017EA1E (direct)
+NativeRegistry: 0x7017EA2E (direct)
+NativeRegistry: 0x7017EA5E (direct)
+NativeRegistry: 0x7017EA78 (direct)
+NativeRegistry: 0x7017EA7A (direct)
+NativeRegistry: 0x7017EB67 (direct)
+NativeRegistry: 0x7017EBA8 (direct)
+NativeRegistry: 0x7017EBC0 (direct)
+NativeRegistry: 0x7017EC39 (direct)
+NativeRegistry: 0x7017EC7B (direct)
+NativeRegistry: 0x7017EC7C (direct)
+NativeRegistry: 0x7017ECCC (direct)
+NativeRegistry: 0x7017ED1C (direct)
+NativeRegistry: 0x7017ED93 (direct)
+NativeRegistry: 0x7017ED9B (direct)
+NativeRegistry: 0x7017EDCB (direct)
+NativeRegistry: 0x7017EDDD (direct)
+NativeRegistry: 0x7017EDE7 (direct)
+NativeRegistry: 0x7017EDED (direct)
+NativeRegistry: 0x7017EE02 (direct)
+NativeRegistry: 0x7017EE07 (direct)
+NativeRegistry: 0x7017EE0F (direct)
+NativeRegistry: 0x7017EE17 (direct)
+NativeRegistry: 0x7017EE1F (direct)
+NativeRegistry: 0x7017EE27 (direct)
+NativeRegistry: 0x7017EE2D (direct)
+NativeRegistry: 0x7017EE33 (direct)
+NativeRegistry: 0x7017EE56 (direct)
+NativeRegistry: 0x7017EF05 (direct)
+NativeRegistry: 0x7017EF51 (direct)
+NativeRegistry: 0x7017EF54 (direct)
+NativeRegistry: 0x7017F030 (direct)
+NativeRegistry: 0x7017F036 (direct)
+NativeRegistry: 0x7017F6B4 (direct)
+NativeRegistry: 0x7017F730 (direct)
+NativeRegistry: 0x7017F774 (direct)
+NativeRegistry: 0x7017F87B (direct)
+NativeRegistry: 0x7017FA31 (direct)
+NativeRegistry: 0x7017FABC (direct)
+NativeRegistry: 0x7017FB81 (direct)
+NativeRegistry: 0x7017FBAE (direct)
+NativeRegistry: 0x7017FBE3 (direct)
+NativeRegistry: 0x7017FC39 (direct)
+NativeRegistry: 0x7017FC41 (direct)
+NativeRegistry: 0x7017FC4D (direct)
+NativeRegistry: 0x7017FC50 (direct)
+NativeRegistry: 0x7017FCAB (direct)
+NativeRegistry: 0x7017FCCD (direct)
+NativeRegistry: 0x7017FCD8 (direct)
+NativeRegistry: 0x7017FCE8 (direct)
+NativeRegistry: 0x7017FCF3 (direct)
+NativeRegistry: 0x7017FD16 (direct)
+NativeRegistry: 0x7017FD3D (direct)
+NativeRegistry: 0x7017FD61 (direct)
+NativeRegistry: 0x7017FD7A (direct)
+NativeRegistry: 0x7017FDA0 (direct)
+NativeRegistry: 0x7017FDB9 (direct)
+NativeRegistry: 0x7017FDBF (direct)
+NativeRegistry: 0x7017FDC0 (direct)
+NativeRegistry: 0x7017FDC2 (direct)
+NativeRegistry: 0x7017FDCE (direct)
+NativeRegistry: 0x7017FDD0 (direct)
+NativeRegistry: 0x7017FDD3 (direct)
+NativeRegistry: 0x7017FDD9 (direct)
+NativeRegistry: 0x7017FDE5 (direct)
+NativeRegistry: 0x7017FE05 (direct)
+NativeRegistry: 0x7017FE26 (direct)
+NativeRegistry: ?FILL_WORDS -> 0x7017E31C
+NativeRegistry: ?UDIV32 -> 0x7017DB3E
+NativeRegistry: ?UNSIGNED_TO_CHAR -> 0x7017DA75
+NativeRegistry: O.ON -> 0x7017ED9B
+NativeRegistry: O.REVERT -> 0x7017EDCB
+NativeRegistry: I.LOCK -> 0x7017E7D0
+NativeRegistry: I.UNLOCK -> 0x7017E7ED
+NativeRegistry: I.ALLOC -> 0x7017E866
+NativeRegistry: I.FREEB -> 0x7017E945
+NativeRegistry: I.FREEW -> 0x7017E949
+NativeRegistry: I.FREE -> 0x7017E94C
+NativeRegistry: T?AREA -> 0x7017ED93
+NativeRegistry: I.PROLOG -> 0x7017E733
+NativeRegistry: I.EPILOG -> 0x7017E77D
+NativeRegistry: I.GOTO -> 0x7017EC7C
+NativeRegistry: O?SIGNAL -> 0x7017EDED
+NativeRegistry: O.SET -> 0x7017EE56
+NativeRegistry: O.SERROR -> 0x7017EE33
+NativeRegistry: O.SCONVE -> 0x7017EE2D
+NativeRegistry: O.SSUBSC -> 0x7017EE27
+NativeRegistry: O.SFIXED -> 0x7017EE1F
+NativeRegistry: O.SZEROD -> 0x7017EE17
+NativeRegistry: O.SOVERF -> 0x7017EE0F
+NativeRegistry: O.SUNDER -> 0x7017EE07
+NativeRegistry: ?LIB_ERROR -> 0x7017E33A
+NativeRegistry: ?LIB_ERROR_CODE -> 0x7017DE25
+NativeRegistry: ?DEFAULT_ERROR_HANDLER -> 0x7017E3D2
+NativeRegistry: O?AREA -> 0x7017FC39
+NativeRegistry: P?DEFON -> 0x7017FD7A
+NativeRegistry: R?SIGNAL -> 0x7017EF54
+NativeRegistry: DEF?ON -> 0x7017EF05
+RTStubs: 137 stubs registered, 31 translations
+AddressBook: mapped 40 page(s) at 74000000 (RW, no exec) for QUEST
+*** SD_PTR [QUEST] set to 0x70180000
+*** SD_PTR [QUEST] set to 0x70180000
+RTBridge::zero_frame_claim: entry 7017DC8B opcode A6C9 is not WSAVx/WSSVx — claim NOT zeroed (new entry shape? — further occurrences silenced)
+RTBridge::zero_frame_claim: entry 7017E28C opcode A6C9 is not WSAVx/WSSVx — claim NOT zeroed (new entry shape? — further occurrences silenced)
+RTBridge::zero_frame_claim: entry 7017E2BC opcode A6C9 is not WSAVx/WSSVx — claim NOT zeroed (new entry shape? — further occurrences silenced)
+RTBridge::zero_frame_claim: entry 7017DF1B opcode A6C9 is not WSAVx/WSSVx — claim NOT zeroed (new entry shape? — further occurrences silenced)
+RTBridge::zero_frame_claim: entry 7017DF5E opcode A6C9 is not WSAVx/WSSVx — claim NOT zeroed (new entry shape? — further occurrences silenced)
+RTBridge::zero_frame_claim: entry 7017DF8C opcode A6C9 is not WSAVx/WSSVx — claim NOT zeroed (new entry shape? — further occurrences silenced)
+Connecting 101 with 100
+ISR SENDING MESSAGE
+RECEIVED MESSAGE
+
+IREC RETURN:
+   system flags = 0000
+   user flags = 0009
+   origin port = 00650001
+   destination port = 0001
+   length = 0000
+   data pointer = 00000000
+
+SENDING MESSAGE
+ISR RECEIVED MESSAGE
+ISR SENDING MESSAGE
+RECEIVED MESSAGE
+
+IREC RETURN:
+   system flags = 0000
+   user flags = 0001
+   origin port = 00650001
+   destination port = 0001
+   length = 0000
+   data pointer = 00000001
+
+SENDING MESSAGE
+ISR RECEIVED MESSAGE
+RTBridge::zero_frame_claim: entry 7017DE6D opcode A6C9 is not WSAVx/WSSVx — claim NOT zeroed (new entry shape? — further occurrences silenced)
+ISR SENDING MESSAGE
+RECEIVED MESSAGE
+
+IREC RETURN:
+   system flags = 0000
+   user flags = 0002
+   origin port = 00650001
+   destination port = 0001
+   length = 0000
+   data pointer = 00000001
+
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 310 (addr 0x70180162)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 311 (addr 0x70180163)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 312 (addr 0x70180164)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 313 (addr 0x70180165)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 314 (addr 0x70180166)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 315 (addr 0x70180167)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 316 (addr 0x70180168)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 317 (addr 0x70180169)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 318 (addr 0x7018016A)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 319 (addr 0x7018016B)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 320 (addr 0x7018016C)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 321 (addr 0x7018016D)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 322 (addr 0x7018016E)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 323 (addr 0x7018016F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 324 (addr 0x70180170)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 325 (addr 0x70180171)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 326 (addr 0x70180172)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 327 (addr 0x70180173)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 328 (addr 0x70180174)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 329 (addr 0x70180175)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 330 (addr 0x70180176)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 331 (addr 0x70180177)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 332 (addr 0x70180178)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 333 (addr 0x70180179)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 334 (addr 0x7018017A)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 335 (addr 0x7018017B)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 336 (addr 0x7018017C)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 337 (addr 0x7018017D)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 338 (addr 0x7018017E)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 339 (addr 0x7018017F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 340 (addr 0x70180180)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 341 (addr 0x70180181)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 342 (addr 0x70180182)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 343 (addr 0x70180183)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 344 (addr 0x70180184)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 345 (addr 0x70180185)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 346 (addr 0x70180186)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 347 (addr 0x70180187)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 348 (addr 0x70180188)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 349 (addr 0x70180189)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 350 (addr 0x7018018A)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 351 (addr 0x7018018B)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 352 (addr 0x7018018C)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 353 (addr 0x7018018D)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 354 (addr 0x7018018E)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 355 (addr 0x7018018F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 356 (addr 0x70180190)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 357 (addr 0x70180191)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 358 (addr 0x70180192)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 359 (addr 0x70180193)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 360 (addr 0x70180194)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 361 (addr 0x70180195)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 362 (addr 0x70180196)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 363 (addr 0x70180197)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 364 (addr 0x70180198)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 365 (addr 0x70180199)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 366 (addr 0x7018019A)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 367 (addr 0x7018019B)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 368 (addr 0x7018019C)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 369 (addr 0x7018019D)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 370 (addr 0x7018019E)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 371 (addr 0x7018019F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 372 (addr 0x701801A0)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 483 (addr 0x7018020F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 483 (addr 0x7018020F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 483 (addr 0x7018020F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 483 (addr 0x7018020F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 483 (addr 0x7018020F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 483 (addr 0x7018020F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 483 (addr 0x7018020F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 483 (addr 0x7018020F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 483 (addr 0x7018020F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 483 (addr 0x7018020F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 483 (addr 0x7018020F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 483 (addr 0x7018020F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 483 (addr 0x7018020F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 483 (addr 0x7018020F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 483 (addr 0x7018020F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 483 (addr 0x7018020F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 483 (addr 0x7018020F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 483 (addr 0x7018020F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 483 (addr 0x7018020F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 483 (addr 0x7018020F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 483 (addr 0x7018020F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 483 (addr 0x7018020F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 483 (addr 0x7018020F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 483 (addr 0x7018020F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 483 (addr 0x7018020F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 483 (addr 0x7018020F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 483 (addr 0x7018020F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 483 (addr 0x7018020F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 483 (addr 0x7018020F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 483 (addr 0x7018020F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 483 (addr 0x7018020F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 483 (addr 0x7018020F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 483 (addr 0x7018020F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 483 (addr 0x7018020F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 483 (addr 0x7018020F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 483 (addr 0x7018020F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 483 (addr 0x7018020F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 483 (addr 0x7018020F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 483 (addr 0x7018020F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 483 (addr 0x7018020F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 545 (addr 0x7018024D)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 545 (addr 0x7018024D)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 545 (addr 0x7018024D)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 545 (addr 0x7018024D)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 545 (addr 0x7018024D)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 545 (addr 0x7018024D)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 545 (addr 0x7018024D)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 545 (addr 0x7018024D)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 545 (addr 0x7018024D)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 545 (addr 0x7018024D)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 545 (addr 0x7018024D)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 545 (addr 0x7018024D)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 545 (addr 0x7018024D)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 545 (addr 0x7018024D)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 545 (addr 0x7018024D)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 545 (addr 0x7018024D)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 545 (addr 0x7018024D)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 545 (addr 0x7018024D)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 545 (addr 0x7018024D)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 545 (addr 0x7018024D)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 545 (addr 0x7018024D)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 545 (addr 0x7018024D)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 545 (addr 0x7018024D)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 545 (addr 0x7018024D)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 545 (addr 0x7018024D)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 545 (addr 0x7018024D)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 545 (addr 0x7018024D)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 545 (addr 0x7018024D)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 545 (addr 0x7018024D)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 545 (addr 0x7018024D)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 545 (addr 0x7018024D)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 545 (addr 0x7018024D)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 546 (addr 0x7018024E)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 550 (addr 0x70180252)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 551 (addr 0x70180253)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 551 (addr 0x70180253)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 551 (addr 0x70180253)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 551 (addr 0x70180253)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 551 (addr 0x70180253)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 551 (addr 0x70180253)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 551 (addr 0x70180253)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 551 (addr 0x70180253)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 551 (addr 0x70180253)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 551 (addr 0x70180253)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 551 (addr 0x70180253)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 551 (addr 0x70180253)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 551 (addr 0x70180253)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 551 (addr 0x70180253)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 551 (addr 0x70180253)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 551 (addr 0x70180253)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 551 (addr 0x70180253)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 551 (addr 0x70180253)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 551 (addr 0x70180253)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 551 (addr 0x70180253)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 551 (addr 0x70180253)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 551 (addr 0x70180253)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 551 (addr 0x70180253)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 551 (addr 0x70180253)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 551 (addr 0x70180253)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 551 (addr 0x70180253)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 551 (addr 0x70180253)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 551 (addr 0x70180253)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 551 (addr 0x70180253)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 551 (addr 0x70180253)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 551 (addr 0x70180253)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 551 (addr 0x70180253)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 551 (addr 0x70180253)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 551 (addr 0x70180253)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 551 (addr 0x70180253)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 551 (addr 0x70180253)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 551 (addr 0x70180253)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 551 (addr 0x70180253)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 551 (addr 0x70180253)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 551 (addr 0x70180253)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 551 (addr 0x70180253)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 551 (addr 0x70180253)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 551 (addr 0x70180253)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 551 (addr 0x70180253)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 551 (addr 0x70180253)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 551 (addr 0x70180253)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 551 (addr 0x70180253)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 551 (addr 0x70180253)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 660 (addr 0x701802C0)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 661 (addr 0x701802C1)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 662 (addr 0x701802C2)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 663 (addr 0x701802C3)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 681 (addr 0x701802D5)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 685 (addr 0x701802D9)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 682 (addr 0x701802D6)
+Exception: Segment fault - block 0, page 1 not loaded
+Unregistering process 100
+message to 101
+OPEN Channel 1, path :QUEST_SERVER.PR modified: 0
+OPEN Channel 2, path :SHARED_DATA_FILE modified: 1
+OPEN Channel 3, path :WORLD_DATA_FILE modified: 1
+OPEN Channel 4, path :CASTLE_DATA_FILE modified: 1
+OPEN Channel 5, path :USER_DATA_FILE modified: 1
+ISR RECEIVED MESSAGE
+RTBridge::zero_frame_claim: entry 7017DBCE opcode A6E9 is not WSAVx/WSSVx — claim NOT zeroed (new entry shape? — further occurrences silenced)
+RTBridge::zero_frame_claim: entry 7017DBFC opcode A6E9 is not WSAVx/WSSVx — claim NOT zeroed (new entry shape? — further occurrences silenced)
+RTBridge::zero_frame_claim: entry 7017DC3A opcode A6E9 is not WSAVx/WSSVx — claim NOT zeroed (new entry shape? — further occurrences silenced)
+
+================ WORLD ABORT ================
+TERMINAL-ABORT at 7016871D, verified on both engines (top stack wides: 1B8A7016 AC037000 — for DERR.TRP: number, faulting pc)
+pc=7016871D ac0=00003ED2 ac1=00003C8A ac2=7012AC03 ac3=70001FE4 wsp=70001FE4 wfp=70001FE4
+Data write-back SUPPRESSED (state presumed corrupt).
+=============================================
+Exception: INTWT interrupted
+Unregistering process 102
+OPEN Channel 1, path :QUEST.PR modified: 0
+OPEN Channel 2, path :SHARED_DATA_FILE modified: 1
+OPEN Channel 3, path :WORLD_DATA_FILE modified: 1
+OPEN Channel 4, path :CASTLE_DATA_FILE modified: 1
+Exception: INTWT interrupted
+Unregistering process 101
+OPEN Channel 1, path :QUEST.PR modified: 0
+OPEN Channel 2, path :SHARED_DATA_FILE modified: 1
+OPEN Channel 3, path :WORLD_DATA_FILE modified: 1
+OPEN Channel 4, path :CASTLE_DATA_FILE modified: 1
+All processes terminated.
+pagemap census (ever-mapped page ranges, word addresses):
+  70000000..7019F7FF  (1662 pages)
+  74000000..74009FFF  (40 pages)  <-- AT/ABOVE 0x74000000
+FS::save_all SUPPRESSED (world abort, state presumed corrupt).
+RTStubs: rtcov-QUEST1.txt — 1102 of 9828 RT words covered
+RTStubs: rtcov-QUEST2.txt — 837 of 9828 RT words covered
