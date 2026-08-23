@@ -145,6 +145,13 @@ public:
     auto it = book_->caller_map.find(pc);
     return it == book_->caller_map.end() ? 0 : it->second;
   }
+  // P18 tranche B: word count for a WPSH push pc (1 for the single-word
+  // opcodes; the loader only records entries for wides > 1).
+  uint32_t caller_write_wides(uint32_t pc) const {
+    if(!book_ || book_->caller_wides.empty()) return 1;
+    auto it = book_->caller_wides.find(pc);
+    return it == book_->caller_wides.end() ? 1 : it->second;
+  }
   bool is_area_address(uint32_t v) const { return book_ && book_->in_range(v); }
   bool has_records() const { return !records_.empty(); }
   size_t depth() const { return records_.size(); }

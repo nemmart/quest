@@ -112,7 +112,7 @@ bool AddressBook::load_push_map_from_env() {
     if(hash != std::string::npos)
       line = line.substr(0, hash);
     std::istringstream ss(line);
-    std::string kind, a, b;
+    std::string kind, a, b, c;
     if(!(ss >> kind))
       continue;
     if(!(ss >> a >> b)) {
@@ -121,13 +121,26 @@ bool AddressBook::load_push_map_from_env() {
     }
     uint32_t pc = static_cast<uint32_t>(strtoul(a.c_str(), nullptr, 16));
     uint32_t slot = static_cast<uint32_t>(strtoul(b.c_str(), nullptr, 16));
+    uint32_t wides = 1;                       // P18 tranche B: optional 3rd field
+    if(ss >> c)
+      wides = static_cast<uint32_t>(strtoul(c.c_str(), nullptr, 10));
     BookEntry* e = instance->by_area_address(slot);
     if(kind == "push") {
-      if(!e || slot < e->alloc_base || slot >= e->alloc_base + 2 * static_cast<uint32_t>(e->max_argc)) {
-        fprintf(stderr, "AddressBook: %s:%d: push slot %08X is not inside a book entry's arg region\n",
-                path, lineno, slot);
+      if(wides < 1 || wides > 3) {            // WPSH XX,AA spans at most 4 ACs; maps use 2–3
+        fprintf(stderr, "AddressBook: %s:%d: push wides %u out of range [1,3]\n", path, lineno, wides);
         return false;
       }
+      // every written slot (base .. base+2*(wides-1)) must lie in the arg region
+      for(uint32_t k = 0; k < wides; k++) {
+        uint32_t s = slot + 2 * k;
+        if(!e || s < e->alloc_base || s >= e->alloc_base + 2 * static_cast<uint32_t>(e->max_argc)) {
+          fprintf(stderr, "AddressBook: %s:%d: push slot %08X (wide %u of %u) is not inside a book entry's arg region\n",
+                  path, lineno, s, k + 1, wides);
+          return false;
+        }
+      }
+      if(wides > 1)
+        instance->caller_wides[pc] = wides;
       pushes++;
     }
     else if(kind == "call") {

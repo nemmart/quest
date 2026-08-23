@@ -58,6 +58,10 @@ public:
   // EFFECT is clone-only because every query goes through the Mapper's
   // book-gated accessor (Mapper.md §3: gate = configuration).
   std::unordered_map<uint32_t, uint32_t> caller_map;   // caller pc → area word addr
+  // P18 tranche B: a WPSH pc writes 2–3 consecutive words ascending from
+  // the base slot (3-field push line: push <pc> <base_slot> <wides>).
+  // Absent entry = 1 (the single-word XPEF/LPEF/XPEFB/LPEFB case).
+  std::unordered_map<uint32_t, uint32_t> caller_wides;
   static bool load_push_map_from_env();     // call after load_from_env; requires a book
 
   // Clone launch: map exactly total_pages pages at BASE, RW, no exec.

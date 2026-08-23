@@ -550,6 +550,26 @@ uint32_t EagleStack::execute(Machine& machine, uint32_t address, uint32_t opcode
     return copy_segment(address, address+1);
 
    case WPSH:
+    // M4b P18 tranche B: a caller-map hit WRITES the whole AC group into
+    // consecutive area arg slots instead of pushing. Ordering (REPORT §4,
+    // verified): AC[XX] is pushed FIRST and the stack grows UP, so AC[XX]
+    // lands at the LOWEST address = the HIGHEST arg number = the map's
+    // base slot. Write AC[XX] at base and ASCEND. wides comes from the
+    // 3-field map line and must equal the instruction's group size.
+    if(uint32_t slot=machine.mapper.caller_write(static_cast<uint32_t>(address))) {
+      uint32_t wides=machine.mapper.caller_write_wides(static_cast<uint32_t>(address));
+      uint32_t group=((AA-XX)&3)+1;
+      if(group!=wides)
+        throw std::runtime_error("M4b WPSH: map wides != instruction AC group size");
+      value=XX;
+      for(uint32_t k=0; k<wides; k++) {
+        machine.memory->write_wide(slot+2*k, machine.ac[value]);
+        trace_caller_write(machine, "ARGWR", address, slot+2*k, machine.ac[value]);
+        value=(value+1)%4;
+      }
+      machine.mapper.note_arg_write(machine, wides);   // P17: master pushed, we wrote
+      return copy_segment(address, address+1);
+    }
     value=XX;
     while(true) {
       machine.wide_push(machine.ac[value]);
