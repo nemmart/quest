@@ -64,17 +64,24 @@ GROUP, not per WMSP. WRTN (wsp = wfp) is the final backstop for anything
 not explicitly restored. Most STASP sites follow a ?WRITE_SCREEN call
 (dynamic screen-write buffers).
 
-## What the WMSP groups ARE (nemmart's read): sprintf-into-a-buffer
-These are the DG PL/I equivalent of `sprintf` then write: the WMSP group
-BUILDS ONE formatted output buffer on the stack (the format-and-fill code
-renders all the args — strings/numbers of runtime-varying width — INTO
-that single buffer), then `?WRITE_SCREEN` (0x7017E27A, a RUNTIME routine)
-DUMPS THE WHOLE BUFFER to the screen in one call. So the argc-2 call is
-(pointer-to-buffer, screen-handle) and it emits the entire formatted
-buffer; the WMSP count is however many allocations the fill code needed
-to build that one buffer, NOT a per-arg or per-call-arg count (STORE: 5
-WMSPs build the buffer, one argc-2 dump). (The argc-5 ?WRITE_SCREEN form
-is a different, fixed-field call shape, not the buffer-build path.)
+## What the WMSP groups ARE (nemmart's read, refined): dynamic string workspace
+A WMSP group allocates a runtime-sized STRING BUFFER, does its work, and
+a STASP frees it. The most common consumer is a formatted screen write
+(build a line, `?WRITE_SCREEN` dumps it), but NOT the only one:
+- **11 of 19 groups** feed a `?WRITE_SCREEN` before their STASP (the
+  sprintf-then-write case).
+- **8 of 19** have NO screen write — they build/copy strings IN-LINE
+  (WCMV word-character moves into the buffer), storing the result back to
+  frame slots for later use. Pure dynamic-string scratch.
+The unifying pattern is *dynamic-length string work*: WMSP a
+runtime-sized buffer, fill it (WCMV copies and/or a runtime call like
+?WRITE_SCREEN), STASP it back. Screen output is the biggest consumer,
+not the definition.
+
+**Every WMSP group is closed by a STASP (19/19 verified).** MSP space is
+always explicitly reclaimed within the body; WRTN is never involved.
+
+
 
 **Confirmed by the length-computation idiom before each WMSP** (nemmart's
 prediction: an sprintf-style build must compute each piece's length
