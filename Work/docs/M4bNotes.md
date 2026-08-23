@@ -446,13 +446,26 @@ mapper already keeps):
 5. **Generalizes to M4c** — the WPSH/WPOP frame-borrow pairings use the
    same field (decorated push up, decorated WPOP down).
 
-Reachability: a decorated site is only reached from inside a book-live
-caller whose record is already on the stack (DIST's site is in
-DISPLAY_SCREEN, book-live; chain DISPLAY_SCREEN→GET_QUEST→QUEST). QUEST
-boot is nocall/stock, so records_ is empty only during the pre-first-live
-prefix, which contains NO decorated sites. The push_map loader should
-refuse to decorate a site whose containing routine is not book-live
-(cheap load-time guard) — then a decorated op always has a top record.
+Empty-records handling (the QUEST-boundary case). QUEST boot is
+nocall/stock — its WSAVS pushes NO record — AND QUEST calls routines
+directly. So "a decorated caller always has a record" is NOT universally
+true; QUEST is the counterexample (the outermost real caller with no
+record). In QUEST as it exists this never bites: QUEST's only arg-
+pushing direct calls are to RUNTIME (?OPEN_FILE, ?WRITE_SCREEN — out of
+M4b scope) or zero-arg (INIT_SHARED_DATA, READ_IN) — verified, no
+game→game arg-push site sits directly in QUEST. But the mechanism must
+not rely on that luck. Three layers:
+  1. **Load-time guard**: the push_map loader REFUSES to decorate a site
+     whose containing routine is not book-live (excludes QUEST and any
+     nocall routine). This makes the runtime abort below unreachable.
+  2. **Checkpoint READ**: `records_.empty() → delta 0` (benign — empty
+     is a normal quiescent state, no open window).
+  3. **Decorated WRITE (push / LCALL)**: `records_.empty() → ABORT`
+     (fail-loud house style). A decorated op with no top record means
+     the decoration is somewhere the load-time guard should have
+     rejected; abort at the offending instruction rather than UB on
+     `records_.back()`. The read is benign, the write is an invariant
+     violation — deliberate asymmetry.
 
 Deferred (NOT M4b): MSP interleaved inside a redirected window is a
 stack-LAYOUT question, but NO arg window in QUEST contains an MSP/wsp-
