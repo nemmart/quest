@@ -86,11 +86,24 @@ before allocating for it). In STORE's group every WMSP is preceded by:
     WMSP  2            ; allocate that many words
 
 with successive length slots ([ac3+0x30], +0x52, +0x96, +0x11E). The
-numeric-field case is explicit: `NLDAI 10 (base ten); ... WNADI 3,5`
-(length + 5 digits' slack) before its WMSP — decimal integer formatting
-(`%d`). So each WMSP allocates space sized to a formatted piece; the
-group builds the whole buffer; `?WRITE_SCREEN` dumps it. Hypothesis
-verified, not just plausible.
+numeric-field case shows base-ten handling (`NLDAI 10; ... WNADI 3,5`).
+
+**Three-phase structure (all confirmed in STORE):** the number→string
+CONVERSION is a distinct EARLIER phase, not interspersed with the WMSPs
+(you must convert a number to its char form before you can know its
+length, and the build phase needs all lengths to size the buffer):
+  1. CONVERT: `?UNSIGNED_TO_CHAR` (0x7017DA75, RUNTIME) calls for each
+     numeric arg (STORE: at 7017a043/0d6/112, immediately BEFORE the
+     group) — produce string reps + lengths into frame slots.
+  2. BUILD: the WMSP group reads those lengths and allocates/fills the
+     buffer (the XWLDA-length/WADI/WMOVR/WMSP idiom above).
+  3. DUMP: `?WRITE_SCREEN` emits the whole buffer.
+(This corrects an earlier guess that conversions would be INTERSPERSED
+with the WMSPs — they PRECEDE the group. Cross-check: only 1 of 89
+?UNSIGNED_TO_CHAR calls has a WMSP within 25 lines; they cluster in the
+convert phase.)
+
+
 
 **M4c consequence — this bracket is TRANSPARENT to lockstep, likely
 needs NO offset handling.** The writer is RUNTIME (out of M4b game→game
