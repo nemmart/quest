@@ -38,6 +38,19 @@ int32_t OSContextShared::GSHPT_call() {
 }
 
 int32_t OSContextShared::SSHPT_call() {
+  // TEMPORARY (P19 tranche-D reachability, Aug 2026): QUEST_FAIL_SSHPT=1
+  // fails ?SSHPT (SYSCALL 044) for the QUEST clients. This is the call
+  // whose failure INIT_SHARED_DATA checks INLINE at 7015BE59 and routes
+  // to RETURN_MESSAGE,6 @7015BE74 (the SOPEN failure, by contrast, goes
+  // through ?LIB_ERROR -> ?FATAL — task 026 rm leg). LOCAL call: both
+  // clients fail symmetrically; server excluded.
+  if(getenv("QUEST_FAIL_SSHPT") &&
+     process->instance_label.compare(0, 5, "QUEST") == 0 &&
+     process->instance_label != "QUEST_SERVER") {
+    fprintf(stderr, "FAIL_SSHPT: %s denied ?SSHPT\n",
+            process->instance_label.c_str());
+    return OSError::OS_NOT_IMPLEMENTED;
+  }
   if(ac0 != process->shared_start)
     return OSError::OS_NOT_IMPLEMENTED;
   std::vector<OSSharedPageSource*> replacement(ac1, nullptr);

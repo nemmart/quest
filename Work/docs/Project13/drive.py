@@ -34,6 +34,10 @@ if mode == "m":
     drain(70)
 elif mode == "failopen":
     send("L", 5); send("P", 15)
+elif mode == "kp":
+    # P19 tranche-C coverage: KILL_PLAYER prompts "What player name to
+    # kill off ?" then "Password ?" — kill our own freshly created player.
+    send("K", 5); send("Claude\r", 8); send("quest\r", 15)
 elif mode == "play":
     # --- movement: AUTO_MOVE drives FIND_OBJECT / DIST / DISTANCE_TO_PLAYER /
     #     RANDOM through the map render and territory scan every turn ---
