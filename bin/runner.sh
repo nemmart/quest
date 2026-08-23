@@ -56,11 +56,20 @@ while true; do
     git clean -fdq results/ 2>/dev/null || true
   fi
 
-  # oldest task (numeric order) with no result dir
+  # oldest task (numeric order) that is not yet DONE. A task with only a
+  # FAILED result (e.g. a bug in the task script, since fixed and pushed)
+  # is retried — up to MAX_ATTEMPTS times — instead of being blocked
+  # forever by the stale result dir. A DONE marker means never re-run.
+  MAX_ATTEMPTS="${MAX_ATTEMPTS:-3}"
   task=""
   for t in $(ls tasks/*.sh 2>/dev/null | sort); do
     name=$(basename "$t" .sh)
-    [ -d "results/$name" ] || { task="$t"; break; }
+    [ -f "results/$name/DONE" ] && continue          # succeeded: skip
+    if [ -d "results/$name" ]; then                  # a prior FAILED attempt
+      attempts=$(cat "results/$name/ATTEMPTS" 2>/dev/null || echo 0)
+      [ "$attempts" -ge "$MAX_ATTEMPTS" ] && continue # give up after N tries
+    fi
+    task="$t"; break
   done
 
   if [ -z "$task" ]; then
@@ -69,8 +78,13 @@ while true; do
   fi
 
   name=$(basename "$task" .sh)
-  log "running $name"
+  # attempt bookkeeping (survives across runs via the committed result dir)
+  attempts=$(cat "results/$name/ATTEMPTS" 2>/dev/null || echo 0)
+  attempts=$((attempts + 1))
+  log "running $name (attempt $attempts/$MAX_ATTEMPTS)"
+  rm -rf "results/$name"            # clear any stale FAILED/run.log from a prior try
   mkdir -p "results/$name"
+  echo "$attempts" > "results/$name/ATTEMPTS"
 
   # Run from repo root, everything captured. Timeout guards runaways.
   if timeout "$TASK_TIMEOUT" bash "$task" >"results/$name/run.log" 2>&1; then
@@ -79,7 +93,7 @@ while true; do
   else
     rc=$?
     echo "exit=$rc" > "results/$name/FAILED"
-    log "$name FAILED (exit $rc)"
+    log "$name FAILED (exit $rc, attempt $attempts/$MAX_ATTEMPTS)"
   fi
 
   git add -A "results/$name"

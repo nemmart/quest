@@ -47,3 +47,16 @@ results/       runner output: results/NNN-name/{run.log, DONE|FAILED, artifacts.
   release it.
 - main can be branch-protected later if session pushes should gate
   through review; current posture is trust-with-audit.
+
+
+## Runner retry behaviour (Aug 23 2026)
+
+A task is considered handled only when `results/<name>/DONE` exists. A
+task that left only a `FAILED` result (e.g. a bug in the task script,
+since fixed and pushed) is RETRIED — up to `MAX_ATTEMPTS` (default 3,
+override via env) — instead of being blocked forever by the stale result
+dir. Each attempt count is tracked in `results/<name>/ATTEMPTS`
+(committed, so it survives the self-heal reset). To force a full re-run
+of a task that hit the attempt cap, delete its `results/<name>` dir and
+push. NOTE: deploying this requires copying the updated bin/runner.sh to
+the runner box and restarting the systemd unit.
