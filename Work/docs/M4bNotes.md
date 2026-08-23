@@ -422,6 +422,17 @@ Mechanism:
   no sentinel record, no change to the ~11 existing `records_.empty()`
   stock-passthrough sites.
 
+Record-push gate — book membership, NOT decoration (clarified). Every
+WSAVS whose routine is in the book pushes a LiveRecord (copy mode OR
+write mode — both call push_record; the args-written flag only selects
+which). A non-book WSAVS pushes nothing. So `records_.back()` is the
+currently-executing book-live frame's record. A decorated arg-push's
+`stack_offset += ` therefore lands on the CALLER's record precisely when
+the caller is book-live — which it always is for a real call site (the
+load-time guard enforces it). This also means stack_offset is a new
+field on records that ALREADY get pushed for all 101 (M4a discipline) —
+not new record-push behavior, just a new field.
+
 Why IN the record (this is the key insight, from the record stack the
 mapper already keeps):
 1. **Frame-scoped for free.** The arg window runs entirely while the
