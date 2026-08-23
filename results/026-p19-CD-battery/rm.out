@@ -1,0 +1,433 @@
+dispatchSystemCall: F000084C
+System Call 3, called from 7017EC0F
+ ac0=7017ECE4
+ ac1=00000000
+ ac2=700008F6
+
+MEM (return values)
+  ac0 = 249
+  ac1 = 4
+  ac2 = 700008F6
+
+RETURNING AC1=00000004
+dispatchSystemCall: F000084C
+System Call 14, called from 7017EC61
+ ac0=000000F9
+ ac1=000004F0
+ ac2=700001F0
+
+MEMI (return values)
+  ac1 = 7003F3FF
+
+RETURNING AC1=7003F3FF
+dispatchSystemCall: 70000A42
+System Call 542, called from 7017ED2B
+ ac0=7000082E
+ ac1=7003EF0A
+ ac2=70178419
+
+IXIT -- ignored
+
+RETURNING AC1=7003EF0A
+dispatchSystemCall: 70000A5E
+System Call 127, called from 7017E74A
+ ac0=FFFFFFFF
+ ac1=00000000
+ ac2=7000019A
+RETURNING AC1=00000001
+dispatchSystemCall: 70000A5E
+System Call 27, called from 7017E77C
+ ac0=E0000346
+ ac1=00000000
+ ac2=E0000354
+
+ILKUP:
+   service = ?1.SWAT.IPC
+
+RETURNING AC1=00000000
+****** ERROR RETURN ******  CODE=2006
+
+dispatchSystemCall: 70000AB4
+System Call 336, called from 7017E5A9
+ ac0=E0001550
+ ac1=00000000
+ ac2=00000000
+
+RECREATE:
+   name = SHARED_DATA_FILE
+
+RETURNING AC1=00000000
+dispatchSystemCall: 70000AB6
+System Call 73, called from 7017A29E
+ ac0=00000000
+ ac1=00000000
+ ac2=00000000
+RETURNING AC1=00000503
+dispatchSystemCall: 70000AB6
+System Call 44, called from 7017A2C0
+ ac0=000000FD
+ ac1=00000599
+ ac2=00000000
+RETURNING AC1=00000599
+dispatchSystemCall: 70000AE4
+System Call 63, called from 7017E4AF
+ ac0=E00015B0
+ ac1=FFFFFFFF
+ ac2=0000EEEE
+
+SOPEN:
+  ac0 = :SHARED_DATA_FILE
+  ac1 = -1
+  ac2 = 61166
+Assigned channel 2
+
+RETURNING AC1=00000002
+dispatchSystemCall: 70000AE4
+System Call 63, called from 7017E4AF
+ ac0=E00015B0
+ ac1=FFFFFFFF
+ ac2=0000EEEE
+
+SOPEN:
+  ac0 = :WORLD_DATA_FILE
+  ac1 = -1
+  ac2 = 61166
+Assigned channel 3
+
+RETURNING AC1=00000003
+dispatchSystemCall: 70000AE4
+System Call 63, called from 7017E4AF
+ ac0=E00015B0
+ ac1=FFFFFFFF
+ ac2=0000EEEE
+
+SOPEN:
+  ac0 = :CASTLE_DATA_FILE
+  ac1 = -1
+  ac2 = 61166
+Assigned channel 4
+
+RETURNING AC1=00000004
+dispatchSystemCall: 70000ADC
+System Call 60, called from 7017E363
+ ac0=00000000
+ ac1=00000002
+ ac2=70000AC8
+
+SPAGE:
+   read only = 0
+   memory destination = 70180000
+   page count (ignored) = 22
+   start page = 0
+
+RETURNING AC1=00000002
+dispatchSystemCall: 70000ADC
+System Call 60, called from 7017E363
+ ac0=00000000
+ ac1=00000003
+ ac2=70000AC8
+
+SPAGE:
+   read only = 0
+   memory destination = 7003F400
+   page count (ignored) = 12
+   start page = 0
+
+RETURNING AC1=00000003
+dispatchSystemCall: 70000ADC
+System Call 60, called from 7017E363
+ ac0=00000000
+ ac1=00000004
+ ac2=70000AC8
+
+SPAGE:
+   read only = 0
+   memory destination = 70152400
+   page count (ignored) = 22
+   start page = 0
+
+RETURNING AC1=00000004
+dispatchSystemCall: 70000A90
+System Call 171, called from 70178475
+ ac0=00000000
+ ac1=00000000
+ ac2=00000000
+
+SERVE:
+   servmsg packet = 00000000
+
+Server call ignored
+
+RETURNING AC1=00000000
+dispatchSystemCall: 70000AA0
+System Call 116, called from 7017E5C6
+ ac0=00000000
+ ac1=FFFFFFFF
+ ac2=00000000
+
+PNAME:
+   ac0 = 00000000
+   ac1 = 00000000
+
+RETURNING AC1=00000064
+dispatchSystemCall: 70000ABA
+System Call 0, called from 7017E2DA
+ ac0=E0001568
+ ac1=00000000
+ ac2=70000AA0
+
+CREATE:
+   name = QUEST
+   type = 001E
+   time packet address = FFFFFFFF
+   acl = FFFFFFFF
+   local port = 0001
+
+RETURNING AC1=00000000
+dispatchSystemCall: 70000ACA
+System Call 300, called from 7017E449
+ ac0=00000000
+ ac1=00000000
+ ac2=70000AA0
+
+OPEN (fs op):
+   (fs op) options = 40BB
+   (fs op) file type = FFFF
+   (fs op) block size = 0000
+   (fs op) record length = FFFF
+   (fs op) buffer pointer = FFFFFFFF
+   (fs op) name pointer = E0001580
+   (fs op) file = :USER_DATA_FILE
+Assigning channel: 5
+RETURNING AC1=00000000
+dispatchSystemCall: 70000AB8
+System Call 301, called from 7017E26A
+ ac0=00000000
+ ac1=00000000
+ ac2=70000A9C
+
+CLOSE (fs cl):
+   (fs cl) channel = 0005
+
+RETURNING AC1=00000000
+dispatchSystemCall: 70000B32
+System Call 27, called from 7017E3B1
+ ac0=E000154C
+ ac1=00000000
+ ac2=00000000
+
+ILKUP:
+   service = QUEST
+
+   service port = 00640001
+RETURNING AC1=00640001
+dispatchSystemCall: 70000AA8
+System Call 36, called from 7017E302
+ ac0=00000000
+ ac1=00000000
+ ac2=00000000
+RETURNING AC1=00000003
+dispatchSystemCall: 70000CCE
+System Call 26, called from 7017A657
+ ac0=00000000
+ ac1=00000000
+ ac2=70000A9E
+
+IREC:
+   system flags = 0000
+   user flags = 0000
+   origin port = 00000000
+   destination port = 0000
+   length = 0000
+   data pointer = 00000000
+
+dispatchSystemCall: F0000EA5
+System Call 3, called from 7017EA8E
+ ac0=7017EB63
+ ac1=00000000
+ ac2=70000F4F
+dispatchSystemCall: F0000EA5
+System Call 3, called from 7017EA8E
+ ac0=7017EB63
+ ac1=00000000
+ ac2=70000F4F
+
+MEM (return values)
+  ac0 = 89
+  ac1 = 6
+  ac2 = 70000F4F
+
+RETURNING AC1=00000006
+
+MEM (return values)
+  ac0 = 89
+  ac1 = 6
+  ac2 = 70000F4F
+
+RETURNING AC1=00000006
+dispatchSystemCall: F0000EA5
+System Call 14, called from 7017EAE0
+ ac0=00000059
+ ac1=000004F0
+ ac2=700001F0
+dispatchSystemCall: F0000EA5
+System Call 14, called from 7017EAE0
+ ac0=00000059
+ ac1=000004F0
+ ac2=700001F0
+
+MEMI (return values)
+  ac1 = 70017BFF
+
+RETURNING AC1=70017BFF
+
+MEMI (return values)
+  ac1 = 70017BFF
+
+RETURNING AC1=70017BFF
+dispatchSystemCall: 7000109C
+System Call 542, called from 7017EBAA
+ ac0=70000E87
+ ac1=7001770A
+ ac2=7015C005
+dispatchSystemCall: 7000109C
+System Call 542, called from 7017EBAA
+ ac0=70000E87
+ ac1=7001770A
+ ac2=7015C005
+
+IXIT -- ignored
+
+RETURNING AC1=7001770A
+
+IXIT -- ignored
+
+RETURNING AC1=7001770A
+dispatchSystemCall: 700010B8
+System Call 127, called from 7017E409
+ ac0=FFFFFFFF
+ ac1=00000000
+ ac2=7000019A
+dispatchSystemCall: 700010B8
+System Call 127, called from 7017E409
+ ac0=FFFFFFFF
+ ac1=00000000
+ ac2=7000019A
+RETURNING AC1=00000001
+RETURNING AC1=00000001
+dispatchSystemCall: 700010B8
+System Call 27, called from 7017E43B
+ ac0=E0000346
+ ac1=00000000
+ ac2=E0000354
+dispatchSystemCall: 700010B8
+System Call 27, called from 7017E43B
+ ac0=E0000346
+ ac1=00000000
+ ac2=E0000354
+
+ILKUP:
+   service = ?1.SWAT.IPC
+
+RETURNING AC1=00000000
+****** ERROR RETURN ******  CODE=2006
+
+RETURNING AC1=00000000
+****** ERROR RETURN ******  CODE=2006
+
+dispatchSystemCall: 70001106
+System Call 73, called from 7015BE34
+ ac0=00000000
+ ac1=00000000
+ ac2=00000000
+dispatchSystemCall: 700010B8
+System Call 73, called from 7015BE34
+ ac0=00000000
+ ac1=00000000
+ ac2=00000000
+RETURNING AC1=000005A1
+RETURNING AC1=000005A1
+dispatchSystemCall: 70001106
+System Call 44, called from 7015BE56
+ ac0=0000005F
+ ac1=00000637
+ ac2=00000000
+dispatchSystemCall: 700010B8
+System Call 44, called from 7015BE56
+ ac0=0000005F
+ ac1=00000637
+ ac2=00000000
+RETURNING AC1=00000637
+RETURNING AC1=00000637
+dispatchSystemCall: 70001134
+System Call 63, called from 7017DE01
+ ac0=E0002250
+ ac1=FFFFFFFF
+ ac2=0000EEEE
+dispatchSystemCall: 700010E6
+System Call 63, called from 7017DE01
+ ac0=E00021B4
+ ac1=FFFFFFFF
+ ac2=0000EEEE
+
+SOPEN:
+  ac0 = :SHARED_DATA_FILE
+  ac1 = -1
+  ac2 = 61166
+
+SOPEN:
+  ac0 = :SHARED_DATA_FILE
+  ac1 = -1
+  ac2 = 61166
+RETURNING AC1=FFFFFFFF
+****** ERROR RETURN ******  CODE=100A
+
+RETURNING AC1=FFFFFFFF
+****** ERROR RETURN ******  CODE=100A
+
+Thread halt
+330 instructions run
+dispatchSystemCall: 7000136C
+System Call 333, called from 7017F05B
+ ac0=00000000
+ ac1=FFFFFFFF
+ ac2=700011B0
+RETURNING AC1=FFFFFFFF
+dispatchSystemCall: 700013CC
+System Call 251, called from 7017F3F9
+ ac0=FFFFFFFF
+ ac1=00000000
+ ac2=700013A4
+
+?RNGPR:
+   ring = 7
+   buffer = E00025A8
+   room = 256
+   name = :QUEST.PR
+
+RETURNING AC1=00000000
+dispatchSystemCall: 700013CC
+System Call 63, called from 7017F44E
+ ac0=E00025A8
+ ac1=FFFFFFFF
+ ac2=00000000
+
+SOPEN:
+  ac0 = :QUEST.ST
+  ac1 = -1
+  ac2 = 0
+Assigned channel 2
+
+RETURNING AC1=00000002
+dispatchSystemCall: 700013CC
+frame  9 -- 7017FDED     guessing: .UKIL+0x8
+frame  8 -- ?FATAL+0x1E2   [7017F218]
+frame  7 -- DEF?ON+0x46   [7017EF4B]
+frame  6 -- 7017EE3D     guessing: O.SERROR+0xA
+frame  5 -- ?DEFAULT_ERROR_HANDLER+0x19   [7017E3EB]
+frame  4 -- ?LIB_ERROR+0x93   [7017E3CD]
+frame  3 -- ?OPEN_SHARED_IO_FILE+0x5B   [7017DE16]
+frame  2 -- INIT_SHARED_DATA+0x6E   [7015BE91]
+frame  1 -- QUEST+0x6   [7015C00B]
+frame  0 -- 7017EA51     guessing: I.INIT+0x23
+1834 instructions run

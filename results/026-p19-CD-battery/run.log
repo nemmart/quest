@@ -1,0 +1,29 @@
+--- push_map.ABCD load check ---
+AddressBook: /home/questrunner/queue/Work/c_src/quest.pushmap.ABCD — caller map: 1313 push redirect(s), 566 decorated call(s)
+decorated calls loaded: 566 (expect 566)
+m      div=0   i2=0   probes=0   m4b_ab=0   map_ab=0   argwr=2452   wWSAVS=630    wWRTN=630    Lsites=26   Xsites=0    rm_calls=0  
+fo     div=0   i2=0   probes=0   m4b_ab=0   map_ab=0   argwr=2452   wWSAVS=630    wWRTN=630    Lsites=26   Xsites=0    rm_calls=0  
+inj    div=0   i2=0   probes=0   m4b_ab=0   map_ab=0   argwr=2480   wWSAVS=635    wWRTN=633    Lsites=33   Xsites=0    rm_calls=0  
+abort  div=0   i2=0   probes=0   m4b_ab=0   map_ab=0   argwr=12     wWSAVS=8      wWRTN=6      Lsites=8    Xsites=0    rm_calls=0  
+play   div=0   i2=0   probes=0   m4b_ab=0   map_ab=0   argwr=85696  wWSAVS=22639  wWRTN=22638  Lsites=51   Xsites=0    rm_calls=0  
+rm     div=0   i2=0   probes=0   m4b_ab=0   map_ab=0   argwr=0      wWSAVS=0      wWRTN=0      Lsites=0    Xsites=0    rm_calls=0  
+rm2    div=0   i2=0   probes=0   m4b_ab=0   map_ab=0   argwr=2452   wWSAVS=630    wWRTN=630    Lsites=26   Xsites=0    rm_calls=0  
+--- C&D verdicts ---
+m      div=0   i2=0   probes=0   m4b_ab=0   map_ab=0   argwr=2452   wWSAVS=630    wWRTN=630    Lsites=26   Xsites=0    rm_calls=0  
+fo     div=0   i2=0   probes=0   m4b_ab=0   map_ab=0   argwr=2452   wWSAVS=630    wWRTN=630    Lsites=26   Xsites=0    rm_calls=0  
+inj    div=0   i2=0   probes=0   m4b_ab=0   map_ab=0   argwr=2480   wWSAVS=635    wWRTN=633    Lsites=33   Xsites=0    rm_calls=0  
+abort  div=0   i2=0   probes=0   m4b_ab=0   map_ab=0   argwr=12     wWSAVS=8      wWRTN=6      Lsites=8    Xsites=0    rm_calls=0  
+play   div=0   i2=0   probes=0   m4b_ab=0   map_ab=0   argwr=85696  wWSAVS=22639  wWRTN=22638  Lsites=51   Xsites=0    rm_calls=0  
+rm     div=0   i2=0   probes=0   m4b_ab=0   map_ab=0   argwr=0      wWSAVS=0      wWRTN=0      Lsites=0    Xsites=0    rm_calls=0  
+rm2    div=0   i2=0   probes=0   m4b_ab=0   map_ab=0   argwr=2452   wWSAVS=630    wWRTN=630    Lsites=26   Xsites=0    rm_calls=0  
+--- XCALL marker lines (all legs, unique, first 30) ---
+--- nested-callee write-mode WSAVS (unique) ---
+--- RETURN_MESSAGE write-mode windows ---
+(RETURN_MESSAGE not exercised — coverage gap, report)
+--- pass-by-ref WPSH @70169B81 ARGWR lines ---
+(70169B82 not exercised — coverage gap, report)
+--- C-site coverage (decorated XCALL pcs fired, of 26) ---
+0
+--- all decorated call sites fired, of 566 ---
+51
+TASK 026 DONE
