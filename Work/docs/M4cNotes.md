@@ -103,13 +103,21 @@ with the WMSPs — they PRECEDE the group. Cross-check: only 1 of 89
 ?UNSIGNED_TO_CHAR calls has a WMSP within 25 lines; they cluster in the
 convert phase.)
 
-**Not every WMSP has a preceding converter** — only ~9 of 46 WMSP groups
-do. Most buffers are STRING-only (`%s`): the length is the string's own
-stored length, no conversion needed. `?UNSIGNED_TO_CHAR` appears only for
-NUMERIC pieces (`%d`), where it renders the number AND returns its length
-(the minority case). Either way the WMSP sizing is length-driven (load
-length → accumulate → allocate); the only difference is the length's
-source — a string's stored length vs. the converter's returned length.
+**TWO output paths (nemmart) — WMSP buffer-build is the MINORITY case.**
+Of 89 ?UNSIGNED_TO_CHAR calls that precede a ?WRITE_SCREEN, 77 have NO
+WMSP between them and only 1 does. So:
+  - **Direct path (majority):** convert the number (?UNSIGNED_TO_CHAR
+    writes the string to a fixed/frame location) → ?WRITE_SCREEN emits it
+    directly. No WMSP. This is how most numeric output happens.
+  - **Buffer-build path (minority, the WMSP groups):** used only when a
+    line must be ASSEMBLED from multiple variable-width pieces into one
+    buffer first — WMSP allocates the assembled buffer, then ?WRITE_SCREEN
+    dumps it. This is the multi-piece sprintf case.
+Counts fit: 723 ?WRITE_SCREEN, 89 conversions, only 57 WMSP — most writes
+are simple (a string, or a directly-converted number); WMSP assembly is
+the special multi-piece case, NOT the general output mechanism. So a
+?UNSIGNED_TO_CHAR before a WMSP group is the exception; most WMSP groups
+are string-only assembly and most conversions never touch a WMSP.
 
 **The hinge (nemmart): `?UNSIGNED_TO_CHAR` RETURNS THE LENGTH** — that's
 the hard data dependency forcing convert-before-build. Verified in STORE
