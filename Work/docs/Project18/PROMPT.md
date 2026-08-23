@@ -45,6 +45,15 @@ RETURN_MESSAGE site. Also skip the 188 zero-arg CLEAN-EMPTY sites
 
 ## The push_map is ALREADY GENERATED (coordinator, this session)
 
+NOTE (the push_map is a direct transcription of the argmap): a push_map
+entry is a pure function of (callee, arg-number) → area slot, keyed by
+the push PC — `slot = callee_wfp − 10 − 2N`. It does NOT depend on which
+LCALL the push belongs to (a given PC pushes a fixed arg of a fixed
+callee, whose frame is at a fixed area address). So the argmap already IS
+the push_map; no call-site association or window-walking is needed. Two
+independent generators (direct transcription and call-window walking)
+produce IDENTICAL maps — cross-validation that the slots are right.
+
 The coordinator generated + validated the tranche A & B maps:
 `Work/c_src/quest.pushmap.A` (515 sites), `.B` (20 WPSH sites), `.AB`
 (combined). Generator: `Work/c_src/tools/gen_pushmap.py`. Every site's
