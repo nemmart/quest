@@ -1,6 +1,36 @@
 # Where things stand
 
-## ★ P16 (M4b first slice) — STOPPED AT A FINDING, awaiting ruling (Aug 22 2026)
+## ★ P17 LANDED — M4b first slice COMPLETE: stack_offset + QUEST base record (Aug 22 2026)
+
+The P16 mid-window finding is FIXED per the M4bNotes ruling, with one
+Stage-0 amendment (user-ratified): the −2·argc consumption fires at the
+WRITE-MODE WSAVS, not the decorated LCALL — the post-LCALL/pre-WSAVS
+boundary is a valid compare point and the args are still elided there
+(battery pair at 70166E1C off=8 passing proves the amendment right).
+Mechanics: `LiveRecord.stack_offset` (+2 per redirected push wide on the
+caller's record; consumed at write-mode WSAVS; empty → mapper_abort);
+checkpoint compare = `shadow_wsp + checkpoint_offset` (empty → 0 =
+closed form). QUEST decorated as the BASE RECORD — just uncommented in
+the book, ordinary copy-mode migration from the loader entry, boots as
+record #1, `records_` never empty. Book now 102 live.
+
+Task-020 battery GREEN: **div=0 on all five legs** (fo/m/inj/abort/play;
+inj at normal driver speed, rest 10x), 0 i2, 0 probes, 0 m4b/mapper
+aborts; 594–891 complete write-mode DIST calls per site-reaching leg
+(P16 died at call 85); 33 mid-window pairs passing at off ∈ {0,2,4,6,8}
+incl. the exact P16 70166E19/off=6 case; copy mode coexisting;
+quest_base=1 everywhere. Comparison-term change noted in CheckerHistory
+(no Gen-5 restructuring). QUEST folded out of the M5 nocall set (now 28)
+— see Project14/M4A_ROLLCALL.md. Report: docs/Project17/REPORT.md.
+
+**NEXT (later projects, binding P17 scope stops here):** widen M4b to N
+sites from quest.argmap; the WPSH multi-slot arg case; then M4c residue
+(MSP dyn allocs, WPSH/WPOP brackets). Known fail-loud residual (noted,
+ruled acceptable): a mid-window async signal with a same-frame O.ON
+handler would strand a nonzero offset → loud divergence; one-line
+zero-on-unwind if ever observed.
+
+## P16 (M4b first slice) — superseded by P17 above (Aug 22 2026)
 
 One site converted (DIST,4 @ 70166E1C, caller map + write-mode WSAVS +
 mode-aware record/fixup, both Stage-0 reconciliations ratified). The

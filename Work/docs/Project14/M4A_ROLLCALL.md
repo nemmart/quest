@@ -66,11 +66,18 @@ notes only:
   TERRITORY_MAP, TRANSPORT_SUNDAR/TERRAK, CLONE_SUNDAR,
   UPDATE_USER_DATA_FILE, WRITE_OBJECT, RETURN_MESSAGE (fatal-only path).
 
-## EXCLUDED → M5 — 29 nocall
+## EXCLUDED → M5 — 28 nocall (was 29; QUEST folded into M4b)
 
-Boot QUEST, C_A_LISTENER (task entry), the 26 ON-unit bodies. Reached by
-dispatch not call; become branch targets under M5 static handler
-dispatch. Not M4 scope.
+C_A_LISTENER (task entry), TERRAIN_HELP, and the 26 ON-unit bodies
+(counted from the book's `nocall` lines). Reached by dispatch not call;
+become branch targets under M5 static handler dispatch. Not M4 scope.
+
+**QUEST itself moved OUT of this set (P17, Aug 22 2026):** decorated as
+the BASE RECORD per the M4bNotes ruling — added to the book, migrates in
+ordinary M4a copy mode from the loader entry (flag-clear + book rule),
+boots as record #1 with its frame in area 74000000. Validated: task-020
+battery, div=0 all legs, quest_base=1 everywhere. Book is now 102 live.
+See docs/Project17/REPORT.md.
 
 ## Status — M4a CLOSED (Aug 22 2026, user ruling)
 

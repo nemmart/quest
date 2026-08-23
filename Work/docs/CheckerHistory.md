@@ -256,3 +256,18 @@ events, plus scripted battery green. Findings A (s>=W stack leg) and B
 (I2 as wsl−heap_break fence latch + live-wsl bound; clearance clause
 removed) both fixed. Live signal dispatch with area frames confirmed
 clean. 57 routines migrated-but-unexercised = coverage backlog.
+
+## Generation 4/5 addendum — mid-window checkpoint term (P17, Aug 22 2026)
+
+A COMPARISON-TERM change, not a mapper-identity change (no Gen-5 record
+restructuring; A/E/T and the record identity are untouched). The wsp
+checkpoint is now `master.wsp == clone.shadow_wsp() + checkpoint_offset()`
+where the offset is `LiveRecord.stack_offset` of the top record (empty →
+0, recovering the closed form exactly). Only decorated M4b ops move it:
+redirected arg pushes +2/wide on the caller's record; the write-mode
+WSAVS consumes −2·argc (P17 Stage-0 ruling: at the WSAVS, NOT the
+decorated LCALL — the post-LCALL/pre-WSAVS boundary is a valid compare
+point and the args are still elided there; battery pair evidence at
+pc=70166E1C off=8 confirms). unwind_to's suffix-pop discards cut frames'
+offsets for free. Validated: task-020 battery, div=0 all legs, 33
+mid-window pairs passing at off ∈ {0,2,4,6,8}.
