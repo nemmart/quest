@@ -1,0 +1,58 @@
+lp    div=0   i2=0   probes=0   m4b_ab=0   map_ab=0   argwr=3685   wWSAVS=959    wWRTN=958    Xsites=9    rmW=0  
+kp    div=0   i2=0   probes=0   m4b_ab=0   map_ab=0   argwr=2450   wWSAVS=627    wWRTN=626    Xsites=0    rmW=0  
+rmD   div=0   i2=0   probes=0   m4b_ab=0   map_ab=0   argwr=6      wWSAVS=1      wWRTN=0      Xsites=0    rmW=1  
+--- verdicts ---
+lp    div=0   i2=0   probes=0   m4b_ab=0   map_ab=0   argwr=3685   wWSAVS=959    wWRTN=958    Xsites=9    rmW=0  
+kp    div=0   i2=0   probes=0   m4b_ab=0   map_ab=0   argwr=2450   wWSAVS=627    wWRTN=626    Xsites=0    rmW=0  
+rmD   div=0   i2=0   probes=0   m4b_ab=0   map_ab=0   argwr=6      wWSAVS=1      wWRTN=0      Xsites=0    rmW=1  
+--- lp: XCALL markers (unique) ---
+redirect seq=009154 caller=QUEST2 XCALL pc=7016ED6E slot=74005E62 value=80000001 off=2
+redirect seq=009164 caller=QUEST2 XCALL pc=7016EE80 slot=74005E62 value=80000001 off=2
+redirect seq=009175 caller=QUEST2 XCALL pc=7016EEE7 slot=74005E62 value=80000001 off=2
+redirect seq=009186 caller=QUEST2 XCALL pc=7016EF4E slot=74005E62 value=80000001 off=2
+redirect seq=009197 caller=QUEST2 XCALL pc=7016EFB5 slot=74005E62 value=80000001 off=2
+redirect seq=009208 caller=QUEST2 XCALL pc=7016F01C slot=74005E62 value=80000001 off=2
+redirect seq=009219 caller=QUEST2 XCALL pc=7016F081 slot=74005E62 value=80000001 off=2
+redirect seq=009230 caller=QUEST2 XCALL pc=7016F0E6 slot=74005E62 value=80000001 off=2
+redirect seq=009241 caller=QUEST2 XCALL pc=7016F14D slot=74005E62 value=80000001 off=2
+redirect seq=009255 caller=QUEST2 XCALL pc=7016ED6E slot=74005E62 value=80000001 off=2
+redirect seq=009265 caller=QUEST2 XCALL pc=7016EE80 slot=74005E62 value=80000001 off=2
+redirect seq=009276 caller=QUEST2 XCALL pc=7016EEE7 slot=74005E62 value=80000001 off=2
+--- lp: first nested-XCALL window ---
+9123:redirect seq=009122 caller=QUEST2 WSAVS LIST_PLAYERS         mode=C pc=7016EB87 area_wfp=74005AAA argc=0 frame=419 real_wsp=70001096 shadow_wsp=7000149E master_wfp=70001158 ret=70178D2F depth=3
+9131:redirect seq=009130 caller=QUEST2 ARGWR pc=7016EBAB slot=74003EC0 value=E800B580 off=2
+9134:redirect seq=009133 caller=QUEST2 WSAVS GET_INPUT            mode=W pc=7016AA35 area_wfp=74003ECC argc=1 frame=41 real_wsp=7000109C shadow_wsp=70001502 master_wfp=700014B0 ret=7016EBB1 depth=4
+9154:redirect seq=009153 caller=QUEST2 ARGWR pc=7016ED6B slot=74005E60 value=74005ABD off=2
+9155:redirect seq=009154 caller=QUEST2 XCALL pc=7016ED6E slot=74005E62 value=80000001 off=2
+9157:redirect seq=009156 caller=QUEST2 WSAVS LIST_PLAYERS.3@7016F556 mode=W pc=7016F556 area_wfp=74005E6C argc=1 frame=3 real_wsp=700010A4 shadow_wsp=700014BE master_wfp=700014B8 ret=7016ED71 depth=4 link=74005AAA
+9164:redirect seq=009163 caller=QUEST2 ARGWR pc=7016EE7D slot=74005E60 value=74005ABD off=2
+9165:redirect seq=009164 caller=QUEST2 XCALL pc=7016EE80 slot=74005E62 value=80000001 off=2
+9167:redirect seq=009166 caller=QUEST2 WSAVS LIST_PLAYERS.3@7016F556 mode=W pc=7016F556 area_wfp=74005E6C argc=1 frame=3 real_wsp=700010A4 shadow_wsp=700014BE master_wfp=700014B8 ret=7016EE83 depth=4 link=74005AAA
+9175:redirect seq=009174 caller=QUEST2 ARGWR pc=7016EEE4 slot=74005E60 value=74005ABD off=2
+--- lp: nested write-mode WSAVS (unique) ---
+WSAVS LIST_PLAYERS.3@7016F556 mode=W pc=7016F556 area_wfp=74005E6C argc=1 frame=3 real_wsp=700010A4 shadow_wsp=700014BE master_wfp=700014B8 ret=7016ED71 depth=4 link=74005AAA
+WSAVS LIST_PLAYERS.3@7016F556 mode=W pc=7016F556 area_wfp=74005E6C argc=1 frame=3 real_wsp=700010A4 shadow_wsp=700014BE master_wfp=700014B8 ret=7016EE83 depth=4 link=74005AAA
+WSAVS LIST_PLAYERS.3@7016F556 mode=W pc=7016F556 area_wfp=74005E6C argc=1 frame=3 real_wsp=700010A4 shadow_wsp=700014BE master_wfp=700014B8 ret=7016EEEA depth=4 link=74005AAA
+WSAVS LIST_PLAYERS.3@7016F556 mode=W pc=7016F556 area_wfp=74005E6C argc=1 frame=3 real_wsp=700010A4 shadow_wsp=700014BE master_wfp=700014B8 ret=7016EF51 depth=4 link=74005AAA
+WSAVS LIST_PLAYERS.3@7016F556 mode=W pc=7016F556 area_wfp=74005E6C argc=1 frame=3 real_wsp=700010A4 shadow_wsp=700014BE master_wfp=700014B8 ret=7016EFB8 depth=4 link=74005AAA
+WSAVS LIST_PLAYERS.3@7016F556 mode=W pc=7016F556 area_wfp=74005E6C argc=1 frame=3 real_wsp=700010A4 shadow_wsp=700014BE master_wfp=700014B8 ret=7016F01F depth=4 link=74005AAA
+WSAVS LIST_PLAYERS.3@7016F556 mode=W pc=7016F556 area_wfp=74005E6C argc=1 frame=3 real_wsp=700010A4 shadow_wsp=700014BE master_wfp=700014B8 ret=7016F084 depth=4 link=74005AAA
+WSAVS LIST_PLAYERS.3@7016F556 mode=W pc=7016F556 area_wfp=74005E6C argc=1 frame=3 real_wsp=700010A4 shadow_wsp=700014BE master_wfp=700014B8 ret=7016F0E9 depth=4 link=74005AAA
+WSAVS LIST_PLAYERS.3@7016F556 mode=W pc=7016F556 area_wfp=74005E6C argc=1 frame=3 real_wsp=700010A4 shadow_wsp=700014BE master_wfp=700014B8 ret=7016F150 depth=4 link=74005AAA
+--- kp: XCALL markers ---
+--- rmD: RETURN_MESSAGE window ---
+22:redirect seq=000021 caller=QUEST2 WSAVS QUEST                mode=C pc=7015C005 area_wfp=7400000A argc=0 frame=34 real_wsp=7000108E shadow_wsp=700010DC master_wfp=70001098 ret=7017EA54 depth=1
+26:redirect seq=000025 caller=QUEST2 ARGWR pc=7015BE69 slot=740075C0 value=7015BD7B off=2
+27:redirect seq=000026 caller=QUEST2 ARGWR pc=7015BE6B slot=740075C2 value=00000000 off=2
+28:redirect seq=000027 caller=QUEST2 ARGWR pc=7015BE6B slot=740075C4 value=00000000 off=2
+29:redirect seq=000028 caller=QUEST2 ARGWR pc=7015BE6D slot=740075C6 value=700010A6 off=8
+30:redirect seq=000029 caller=QUEST2 ARGWR pc=7015BE6F slot=740075C8 value=701518F9 off=10
+31:redirect seq=000030 caller=QUEST2 ARGWR pc=7015BE72 slot=740075CA value=700010A0 off=12
+32:redirect seq=000031 caller=QUEST2 LCALL pc=7015BE74 slot=740075CC value=80000006 off=12
+34:redirect seq=000033 caller=QUEST2 WSAVS RETURN_MESSAGE       mode=W pc=70176FDD area_wfp=740075D6 argc=6 frame=3 real_wsp=700010B6 shadow_wsp=70001120 master_wfp=7000111A ret=7015BE78 depth=2
+--- rmD: FAIL_SSHPT + retire evidence ---
+FAIL_SSHPT: QUEST1 denied ?SSHPT
+FAIL_SSHPT: QUEST2 denied ?SSHPT
+--- C coverage across 027 legs (of 26) ---
+9
+TASK 027 DONE
