@@ -1,0 +1,27 @@
+tasks/023-p18-capture-driven-div.sh: line 20: 59585 Aborted                 (core dumped) env QUEST_ADDRESS_BOOK=$BOOK QUEST_PUSH_MAP=$PA stdbuf -o0 -e0 $EMU -lockstep -silent -trace $R/trace -types lockstep,redirect,gcalls QUEST QUEST_SERVER @QUEST @QUEST > $R/out 2> $R/err
+m leg: div=1
+--- divergence dump (from out) ---
+1015:================ LOCKSTEP DIVERGENCE ================
+1016-  master: label=QUEST1 ordinal=0 result_pc=7017E708 trap_pc=7017E708 insns=20 ac0=E02D5372 ac1=00000003 ac2=7000119E ac3=7016AA45 c=0 wsp=700011A6 wfp=70001152 psr=8000 shadow_wsp=700011A6 off=0 T(ac0..3)=E02D5372 00000003 7000119E 7016AA45
+1017-  clone : label=QUEST2 ordinal=0 result_pc=7017E708 trap_pc=7017E708 insns=20 ac0=E02D5372 ac1=00000003 ac2=74003F18 ac3=7016AA45 c=0 wsp=700010A2 wfp=74003ECC psr=8000 shadow_wsp=700011A8 off=0 T(ac0..3)=E02D5372 00000003 700011A0 7016AA45
+1018-master backtrace:
+1019-frame  4 -- X.CB+0x0   [7017E708]
+1020-frame  3 -- GET_INPUT+0xC   [7016AA41]
+1021-frame  2 -- LOGON+0x225   [701760C4]
+1022-frame  1 -- QUEST+0x27E   [7015C283]
+1023-frame  0 -- 7017EA51     guessing: I.INIT+0x23
+1024-clone backtrace:
+1025-frame  4 -- X.CB+0x0   [7017E708]
+1026-frame  3 -- GET_INPUT+0xC   [7016AA41]
+1027-frame  2 -- LOGON+0x225   [701760C4]
+1028-frame  1 -- QUEST+0x27E   [7015C283]
+1029-frame  0 -- 7017EA51     guessing: I.INIT+0x23
+1030-=====================================================
+--- last write-mode WSAVS lines ---
+22:redirect seq=000021 caller=QUEST2 WSAVS QUEST                mode=C pc=7015C005 area_wfp=7400000A argc=0 frame=34 real_wsp=7000108E shadow_wsp=700010DC master_wfp=70001098 ret=7017EA54 depth=1
+54:redirect seq=000053 caller=QUEST2 WSAVS READ_IN              mode=C pc=701766ED area_wfp=740072BA argc=0 frame=6 real_wsp=70001090 shadow_wsp=700010F4 master_wfp=700010E8 ret=7015C063 depth=2
+69:redirect seq=000068 caller=QUEST2 WSAVS LOGON                mode=C pc=70175E9F area_wfp=7400714A argc=0 frame=40 real_wsp=70001090 shadow_wsp=70001138 master_wfp=700010E8 ret=7015C287 depth=2
+93:redirect seq=000092 caller=QUEST2 WSAVS READ_IN              mode=C pc=701766ED area_wfp=740072BA argc=0 frame=6 real_wsp=7000109E shadow_wsp=7000115C master_wfp=70001150 ret=70175F6F depth=3
+112:redirect seq=000111 caller=QUEST2 WSAVS READ_IN              mode=C pc=701766ED area_wfp=740072BA argc=0 frame=6 real_wsp=7000109E shadow_wsp=7000115C master_wfp=70001150 ret=70175FD7 depth=3
+137:redirect seq=000136 caller=QUEST2 WSAVS GET_INPUT            mode=W pc=7016AA35 area_wfp=74003ECC argc=1 frame=41 real_wsp=700010A0 shadow_wsp=700011A6 master_wfp=70001154 ret=701760C8 depth=3
+TASK 023 DONE
