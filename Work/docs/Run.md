@@ -40,7 +40,18 @@ Flags must come **before** the positional arguments.
 **`-lockstep`** — dual-emulation verification mode (see
 `docs/EmulationVerification.md`). Requires exactly one program to be
 listed twice: the first instance becomes the **master**, the second the
-**clone**; all other programs (the server) run normally. Both instances
+**clone**; all other programs (the server) run normally. Since P22
+(Gen-6.0, docs/Project22/), lockstep additionally REQUIRES two envs and
+honors a third — it refuses to launch without the first two:
+`QUEST_BLOCKS=<path>` (ground-truth CFG, normally
+Disassembled/quest.blocks), `QUEST_SYNC_LIST=<path>` (the sync list,
+normally Work/c_src/quest.synclist — the identity list until a
+translation ships its own), and `QUEST_SYNC_K=<n>` (rendezvous every n
+listed block entries; default 50; K=1 = per-entry debug pairing, the
+first bisection tool for any future divergence). QUEST clients under
+lockstep no longer batch by instruction count: a 100M-instruction
+runaway guard THROWS if no listed entry or gate is reached (loud by
+design — see CheckerHistory.md Generation 6.0). Both instances
 execute in verified lockstep; type only into the master's terminal (the
 first telnet connection) — the second window is a read-only spectator
 view of the same session. Any divergence halts both engines with a
@@ -60,7 +71,7 @@ only the spectator display is dropped. Ignored (with a warning) without
 |---|---|---|
 | `scalls` | every system-call entry/exit: caller label, tid, call name, ACs, error | light |
 | `shared` | every write to shared-mapped file pages: caller, page, offset, value; task-thread handler writes tagged `(handler)`; clone-copy pages labeled `...~clone` | moderate |
-| `lockstep` | one line per verified master/clone batch pair | **heavy** — ~1 line per 500 client instructions; debugging only |
+| `lockstep` | one line per verified master/clone batch pair (incl. blk= block ordinals since Gen-6.0) | **heavy** — ~1 line per K game blocks (~230 insns at K=50); debugging only |
 | `rtcalls` | every PL/1 runtime entry reached via native stub dispatch (clone only — the master and non-lockstep runs have no stubs). One line per call: instance, entry symbol, return address. Includes RT-internal calls. | light |
 | `redirect` | M4a: one line per redirected WSAVS/WRTN/unwind-drop of an address-book routine (clone only): routine, area wfp, argc, frame, real/shadow wsp, master wfp, depth. | light |
 | `gcalls` | one line per LCALL/XCALL into the GAME range [QUEST, ?CHAR_TO_UNSIGNED): target pc + symbol, argc, call site; both roles. The routine-coverage instrument (Project 13): for every live book routine, `gcalls` count == `redirect` WSAVS count. | moderate |

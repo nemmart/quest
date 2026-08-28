@@ -311,3 +311,46 @@ Validated: tasks 026 (7-leg regression, div=0, P18-baseline-equal) and
 D 1/5 — rest driver-unreachable, carried by the uniform slot law +
 load-time validation + the fail-loud target-vs-book check).
 **566/566 arg-bearing sites decorated; M4b closes. Next: M4c.**
+
+## Generation 6.0 — the block-sync checker (P22, Aug 28 2026)
+
+THE SYNC MODEL CHANGED — the first re-denomination since Gen 1.
+Rendezvous are no longer counted in instructions (the 500-insn batch is
+GONE for lockstep QUEST clients) but in BASIC BLOCKS: both engines run
+until the K-th arrival at a listed block-entry address since the last
+rendezvous (K via QUEST_SYNC_K, default 50 per ruling; K=1 = per-entry
+debug mode), then compare. Sync identity is now
+(block entry address, per-client block ordinal); the ordinal is counted
+at arrival-transitions at listed game-range pcs, before every break
+decision, so spans, deferred dispatch, and native transfers count
+identically in both roles. The sync list is an explicit input
+(QUEST_SYNC_LIST; Gen-6.0 ships the identity list = all 13,495
+quest.blocks starts) validated at load: novelty refused, gates
+(post-call/post-jump/post-syscall + terminal starts, 1,865) refused if
+delisted, malformed input refused. A 100M-insn runaway guard THROWS on
+exhaustion — loud, never a parallel heartbeat.
+
+Compare surface at a pair: pc identity, block ordinal (STRICT — no
+native-span exemption; translation may skip instructions, never listed
+entries), wide ACs, carry, PSR-visible state as before, PLUS the FP
+state always (FP ACs as raw doubles, the quads shadow, fplr, fpr —
+ruling Q3), PLUS (TEMPORARY) the instruction-count delta retained while
+both sides still emulate — **P23 is OBLIGATED to remove the insn-count
+term**. Gates unchanged from Gen 2/3: syscalls, crossings, terminals
+keep precedence over the heartbeat.
+
+What is given up, knowingly: intra-block register states are no longer
+compared (a translated block will not reproduce them); divergence
+inside a block surfaces at the block exit. What is gained: the
+rendezvous denomination is translation-invariant, and K=50 is FINER
+than the old batch anyway (~230 insns/heartbeat observed).
+
+Validated (task 030, strict gate: pairs floor + pinned endpoints +
+blk_mismatch=0 + gaps_over_k=0): eight legs, ~7.2M pairs, div=0, zero
+ordinal mismatches, max inter-pair gap never exceeded K — including a
+6,862,784-pair full patient play session at K=50 and a 325K-pair K=1
+leg (max gap exactly 1). Task 029's GREEN is VOID (two concurrent
+runner loops truncated each other's sessions; weak gate); kept as the
+record of why battery gates pin pairs floors and endpoints. Carry
+live-in census for P23's surface ruling: 163/13,495 blocks
+(P22 REPORT §8) — carry STAYS in the surface.

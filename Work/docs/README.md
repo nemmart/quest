@@ -43,6 +43,7 @@ one-time change/review notes.
 | Project12/ | REFERENCE | M4a first migration: READ_IN off the stack, 0 div; REPORT.md = as-built hijack + Gen-4 checker tables, audits, evidence (APPROVED Aug 15) |
 | Project13/ | REFERENCE | M4a widening: batches 1+2 LANDED (45 live, base 0x74000000, end-inclusive T + stride, @-flag inverse); REPORT.md §6 |
 | Project8/ | CURRENT | Phase 2 prompt: the stack-free L2 implementation (rulings to settle, landing stages, hazards H2–H7, A/B matrix) |
+| Project22/ | REFERENCE | Gen-6.0 block-sync checker LANDED (Aug 28): BlockSyncDesign.md (design of record), PROMPT.md (rulings), REPORT.md (as-built + task-030 gate + Q2 carry census 163/13495 + the 029 invalid-green record); IRDesign.md = P23 context |
 | Project4/ | REFERENCE | The DEF?ON cluster (O?AREA, P?DEFON, R?SIGNAL, DEF?ON-staged): derivations, reports, lift checklist |
 
 ## Working docs

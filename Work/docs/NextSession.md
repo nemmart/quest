@@ -1,3 +1,13 @@
+> **[Aug 28 2026 — P22 banner]** This re-entry narrative is from Aug 13
+> and predates P14–P22. Current state now lives in CURRENT_STATE.md
+> (newest entry on top). Next project: **P23 — Gen-6.1, 1:1 lowering**
+> (context: docs/Project22/IRDesign.md; binding obligations from P22:
+> remove the TEMPORARY insn-count compare term, honor the carry-live-in
+> list of 163 blocks in docs/Project22/REPORT.md §8, and close the CFG
+> gaps before translating affected blocks — ENQT/DEQUE skip edges and
+> SQR31?3's interior LJSR at 7015BD6B). The narrative below remains
+> valid history for Milestones 1–3.
+
 Hi Claude!
 
 Quest reconstruction project — a game written for the Data General

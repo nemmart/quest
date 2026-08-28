@@ -1,5 +1,35 @@
 # Where things stand
 
+## ★ P22 LANDED — GEN-6.0: THE BLOCK-SYNC CHECKER (Aug 28 2026)
+
+The sync model is re-denominated: rendezvous every K listed basic-block
+entries (QUEST_SYNC_K, default 50; K=1 debug) instead of 500-insn
+batches — the first sync-model change since Gen 1, and the enabling
+move for translation (P23+): the heartbeat no longer counts
+instructions a translated clone won't execute. Sync identity =
+(block entry pc, per-client block ordinal), counted at
+arrival-transitions before every break decision; the sync list is an
+explicit validated input (identity list shipped: all 13,495
+quest.blocks starts; novelty and gate-delisting refused at load);
+100M-insn runaway guard THROWS. Surface: + block ordinal (STRICT, no
+span exemption), + FP state always (Q3), insn-count delta retained
+TEMPORARILY — **P23 must remove it**. Gates/crossings/terminals/M4
+untouched. Battery task 030 GREEN under a STRICT gate (pairs floors +
+pinned endpoints): 8 legs, ~7.2M pairs, div=0, 0 ordinal mismatches,
+max gap never > K — incl. a 6.86M-pair full play session and a 325K-pair
+K=1 leg (max gap exactly 1). Task 029's GREEN is VOID (two concurrent
+runner loops on the box truncated each other; the strict-gate shape is
+now the battery template — hardened script parked in tasks/hold/031).
+Carry live-in census for P23: 163/13,495 blocks (REPORT §8) — carry
+stays in the surface. Q4 side-finding: quest.blocks predated the P1
+WLDAI fix (78 lines, structure unaffected); user regenerates upstream.
+Loader CRLF hardening pending ruling (a CRLF blocks file silently
+yields 9 gates — REPORT §6 environs). Report: docs/Project22/REPORT.md.
+
+**NEXT: P23 — Gen-6.1, 1:1 lowering (docs/Project22/IRDesign.md context;
+obligations: remove the insn-count term; carry-live-in list; CFG gaps:
+ENQT/DEQUE skip edges + 7015BD6B interior LJSR).**
+
 ## ★ P20 LANDED — M4 DE-STACKIFICATION COMPLETE (Aug 23 2026)
 
 The FINAL M4b tranche: all 23 WPSH/WPOP frame-borrow brackets redirected
