@@ -189,8 +189,14 @@ itself under every regression shape.
 | inj3 (70176AA7…:RESUME, m) | 50 | 6,434 | 0 | 5,953 | 50 | I.STOP (clean/I.STOP) |
 | k1fo (FAIL_OPEN, K=1) | 1 | 325,170 | 0 | 324,565 | **1** | clean (clean/I.STOP) |
 
-~7.2M pairs total, zero block-ordinal mismatches, no inter-pair gap
-ever exceeded K on any leg, i2=0 and probes=0 everywhere (M4 mapper
+Replicated: task 031 (the hardened template) was picked up by a runner
+in the window before it was parked and ran to an independent second
+GREEN — same 8 legs, div=0, 0 ordinal mismatches, 6,925,242-pair play
+leg — under setsid/lock-fd-closed launches and port-scoped kills
+(results/031). Two independent full-battery greens total.
+
+~7.2M pairs total per run, zero block-ordinal mismatches, no inter-pair
+gap ever exceeded K on any leg, i2=0 and probes=0 everywhere (M4 mapper
 quiet underneath), guard_throws=0. The 6.8M-pair play leg at K=50 is
 the single strongest piece of evidence the new sync model has: a full
 patient session with the heartbeat, gates, signals, and detach all
