@@ -4,6 +4,7 @@
 #include "../os/Trace.hpp"
 #include "Lockstep.hpp"
 #include "RTStubs.hpp"
+#include "BlockSync.hpp"
 #include "MachineThread.hpp"
 #include "Decoder.hpp"
 #include "Instruction.hpp"
@@ -30,7 +31,8 @@ Machine::Machine(OSProcess* process, OSTask* task, SymbolTable* symbols, Memory*
     call_stack(nullptr),
     pc(0), fplr(0.0), c(0),
     ovk(0), ovr(0), ires(0), ixct(0), ffp(0), sr(0), fpr(0),
-    wsb(0), wsl(0), wsp(0), wfp(0), instruction_count(0), halt_ptr(nullptr),
+    wsb(0), wsl(0), wsp(0), wfp(0), instruction_count(0), block_ordinal(0),
+    halt_ptr(nullptr),
     lockstep_role(0), lockstep_ordinal(-1), rtcov(RTStubs::coverage_for(process)),
     native_break(false), native_span(false), rt_pending_return(0),
     pending_native(nullptr), terminal_reached(false),
@@ -276,6 +278,15 @@ uint32_t Machine::run_steps(uint32_t address, int32_t count) {
     instruction_count++;
     }
     pc = new_pc;
+    // Gen-6 block-entry counting (docs/Project22/BlockSyncDesign.md): every
+    // arrival-transition at a LISTED game block entry ticks the ordinal —
+    // BEFORE any break decision below, so master and clone count
+    // identically whichever rendezvous (terminal, crossing, span exit,
+    // heartbeat) ends the batch here. A batch's initial pc is not counted:
+    // at a break it was counted when arrived at; a syscall-return resume
+    // enters through OS code both engines traverse identically.
+    if(rt_sync && BlockSync::listed(static_cast<uint32_t>(pc)))
+      block_ordinal++;
     // Terminal detach (Lockstep::detach): pc arriving at a terminal point
     // ends the batch with the terminal flag set. Both engines emulate the
     // same code, so master and clone converge here and form one final

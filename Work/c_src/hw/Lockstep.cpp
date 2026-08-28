@@ -127,11 +127,12 @@ static void describe(const char* who, QueueEntry* e, QueueEntry* master_ref) {
   for(int i = 0; i < 4; i++)   // verdict decodings for the dump (Mapper.md §1.3)
     mapped[i] = m->equivalent(static_cast<uint32_t>(mm->ac[i]),
                               static_cast<uint32_t>(m->ac[i])).mapped;
-  printf("  %s: label=%s ordinal=%d result_pc=%08X trap_pc=%08X insns=%llu"
+  printf("  %s: label=%s ordinal=%d result_pc=%08X trap_pc=%08X insns=%llu blk=%llu"
          " ac0=%08X ac1=%08X ac2=%08X ac3=%08X c=%d"
          " wsp=%08X wfp=%08X psr=%04X shadow_wsp=%08X off=%d T(ac0..3)=%08X %08X %08X %08X%s%s\n",
           who, label_of(e), m->lockstep_ordinal,
           e->address, m->pc, static_cast<unsigned long long>(delta),
+          static_cast<unsigned long long>(e->block_after),
           m->ac[0], m->ac[1], m->ac[2], m->ac[3], m->c,
           m->wsp, m->wfp, m->get_psr(), m->shadow_wsp(), m->mapper.checkpoint_offset(),
           mapped[0], mapped[1], mapped[2], mapped[3],
@@ -174,6 +175,25 @@ void Lockstep::compare_pair(QueueEntry* master, QueueEntry* clone) {
     // window is open, recovering the closed form).
     wsp_differs = master->machine->wsp !=
                   clone->machine->shadow_wsp() + clone->machine->mapper.checkpoint_offset();
+  }
+
+  // Gen-6 (docs/Project22/BlockSyncDesign.md): the per-client block ordinal —
+  // the count of listed game-block entries — is the translation-invariant
+  // half of the sync identity and is compared STRICTLY at every pair, with
+  // no native-span exemption: translated code skips instructions, never
+  // listed block entries. FP ACs (double bits + the quads raw-bit shadow —
+  // the float-shadow history says floats bite) and float status join the
+  // surface per ruling Q3, always, not just for FP-touching blocks.
+  bool blocks_differ = master->block_after != clone->block_after;
+  bool fp_differs = false;
+  if(!probe_relax_regs) {
+    fp_differs = memcmp(master->machine->fpac, clone->machine->fpac,
+                        sizeof(master->machine->fpac)) != 0 ||
+                 memcmp(master->machine->quads, clone->machine->quads,
+                        sizeof(master->machine->quads)) != 0 ||
+                 memcmp(&master->machine->fplr, &clone->machine->fplr,
+                        sizeof(master->machine->fplr)) != 0 ||
+                 master->machine->fpr != clone->machine->fpr;
   }
 
   // Batches ending in a syscall trap both report the 0x30000000 sentinel
@@ -222,18 +242,22 @@ void Lockstep::compare_pair(QueueEntry* master, QueueEntry* clone) {
     (master_delta != clone_delta && !count_exempt) ||
     regs_differ ||
     wsp_differs ||
+    blocks_differ ||
+    fp_differs ||
     trap_sites_differ ||
     master_threw != clone_threw ||
     (master_threw && clone_threw &&
      strcmp(master->exception->what(), clone->exception->what()) != 0);
 
   if(os::Trace::enabled("lockstep")) {
-    char buf[160];
+    char buf[208];
     snprintf(buf, sizeof(buf),
-             "pair ord=%d pc=%08X insns=%llu clone_pc=%08X clone_insns=%llu off=%d%s%s",
+             "pair ord=%d pc=%08X insns=%llu clone_pc=%08X clone_insns=%llu blk=%llu clone_blk=%llu off=%d%s%s",
              master->machine->lockstep_ordinal,
              master->address, static_cast<unsigned long long>(master_delta),
              clone->address, static_cast<unsigned long long>(clone_delta),
+             static_cast<unsigned long long>(master->block_after),
+             static_cast<unsigned long long>(clone->block_after),
              clone->machine->mapper.checkpoint_offset(),
              count_exempt ? " native_span" : "",
              diverged ? " DIVERGED" : "");

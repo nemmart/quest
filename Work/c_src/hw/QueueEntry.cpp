@@ -17,6 +17,7 @@ void QueueEntry::run() {
     exception = new std::runtime_error(e);
   }
   insn_after = machine->instruction_count;
+  block_after = machine->block_ordinal;
   native_span = machine->native_span;
   machine->native_span = false;
   terminal = machine->terminal_reached;
