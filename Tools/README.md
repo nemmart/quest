@@ -10,7 +10,7 @@ jar -cvf tools.jar *.class */*.class
 ```
 java -cp tools.jar debug.SymbolTable ../QUEST/QUEST.ST >quest.symbols
 java -cp tools.jar StartStop ../QUEST QUEST "SQR31?3" "?CHAR_TO_UNSIGNED" "SQR31?3" >quest.addrs
-java -cp tools.jar Follow ../QUEST QUEST quest quest.addrs
+java -cp tools.jar Follow ../QUEST QUEST quest.addrs quest
 java -cp tools.jar DisassembleBlocks ../QUEST QUEST quest.targets quest.tags >quest.blocks
 java -cp tools.jar Disassemble ../QUEST QUEST quest.addrs >quest.dis
 java -cp tools.jar Disassemble ../QUEST QUEST quest.addrs nocode >quest.mem

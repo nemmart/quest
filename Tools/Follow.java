@@ -324,7 +324,8 @@ public class Follow {
     SortedSet<Integer> codeLocations;
 
     if(args.length!=4) {
-     System.err.println("Usage: java Forward <dir> <PR file> <name> <SS file>");
+     System.err.println("Usage: java Follow <dir> <PR file> <addrs file> <out base>");
+     System.err.println("       writes <out base>.targets and <out base>.tags");
      System.exit(1);
     }
 
@@ -346,20 +347,20 @@ public class Follow {
     int fileSharedOffset=filePages.readWord(0x11A);
     int SEGMENT_BASE=OSProcess.SEGMENT_BASE*1024;
 
-    codeLocations=loadCodeLocations(args[3]);
+    codeLocations=loadCodeLocations(args[2]);
 
     process(symbols, codeLocations, process.memory);
 
     PrintWriter pw;
 
-    pw=new PrintWriter(args[2] + ".targets");
+    pw=new PrintWriter(args[3] + ".targets");
     for(int pc : targets) {
       if(codeLocations.contains(pc))
         pw.printf("%08X\n", pc);
     }
     pw.close();
 
-    pw=new PrintWriter(args[2] + ".tags");
+    pw=new PrintWriter(args[3] + ".tags");
     for(int pc : tags.keySet()) {
       pw.printf("%08X %s\n", pc, tags.get(pc));
     }
