@@ -59,6 +59,20 @@ shared pages + compare-on-read + page audit, terminal machinery
 - **(b)**: K via env (QUEST_SYNC_K).
 - **Q4 stale-blocks finding (§3)**: user regenerates quest.blocks on
   his end; Disassembled/ untouched by this project.
+- **(c) CRLF (post-battery)**: the user's toolchain is Windows Java —
+  artifacts may arrive with CRLF line endings; every reader must
+  tolerate them. Applied: BlockSync chomps trailing whitespace per
+  line and refuses any terminator-line token that is neither a
+  1-letter tag nor 8 hex digits (file:line). The incident: a CRLF
+  quest.blocks silently loaded with 9 gates instead of 1,865 — starts
+  parsed, but every terminator's LAST successor token grew a \r and
+  was dropped. Verified post-fix: LF and CRLF both load 1,865 gates;
+  corruption refuses loudly; CRLF live smoke 6,506 pairs div=0.
+  (>>-based loaders — AddressBook, pushmap, ProbeSuppressions — are
+  naturally CRLF-safe: \r is whitespace to istringstream.)
+  quest.wpsh_wpop side-note: it is a P16 session artifact, not a tool
+  output — no missing tool version; upstream regeneration should
+  carry the file along (or a future session commits a generator).
 
 ## 3. Q4 precondition — evidence, and a finding
 

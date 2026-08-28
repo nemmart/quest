@@ -23,8 +23,9 @@ now the battery template — hardened script parked in tasks/hold/031).
 Carry live-in census for P23: 163/13,495 blocks (REPORT §8) — carry
 stays in the surface. Q4 side-finding: quest.blocks predated the P1
 WLDAI fix (78 lines, structure unaffected); user regenerates upstream.
-Loader CRLF hardening pending ruling (a CRLF blocks file silently
-yields 9 gates — REPORT §6 environs). Report: docs/Project22/REPORT.md.
+Loader CRLF hardening LANDED (ruling: Windows Java emits CRLF, readers
+tolerate it): chomp + grammar-exact token refusal — a CRLF blocks file
+had silently collapsed 1,865 gates to 9. Report: docs/Project22/REPORT.md.
 
 **NEXT: P23 — Gen-6.1, 1:1 lowering (docs/Project22/IRDesign.md context;
 obligations: remove the insn-count term; carry-live-in list; CFG gaps:
