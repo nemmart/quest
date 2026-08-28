@@ -23,6 +23,7 @@ SRCS = Launch.cpp \
        hw/Machine.cpp \
        hw/Mapper.cpp \
        hw/AddressBook.cpp \
+       hw/BlockSync.cpp \
        hw/MachineThread.cpp \
        hw/QueueEntry.cpp \
        hw/Lockstep.cpp \

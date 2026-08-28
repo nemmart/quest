@@ -12,6 +12,7 @@
 #include "hw/Decoder.hpp"
 #include "hw/Machine.hpp"
 #include "hw/AddressBook.hpp"
+#include "hw/BlockSync.hpp"
 #include "hw/MachineThread.hpp"
 #include "hw/Lockstep.hpp"
 #include "os/ProbeSuppressions.hpp"
@@ -223,6 +224,14 @@ int main(int argc, char* argv[]) {
       "=============================================================\n");
   }
   if(!trace_file.empty() && !os::Trace::initialize(trace_file, trace_types))
+    return 1;
+  // Gen-6 block-sync list (docs/Project22/BlockSyncDesign.md): the sync
+  // identity is the (block entry address, per-client block ordinal) pair.
+  // QUEST_BLOCKS (ground-truth CFG) + QUEST_SYNC_LIST (the translation
+  // artifact) are REQUIRED under -lockstep; the loader validates the list
+  // (every entry a quest.blocks start, gate addresses mandatory) and
+  // refuses to run on any violation.
+  if(hw::Lockstep::enabled && !hw::BlockSync::load_from_env())
     return 1;
   // M4a address book (QUEST_ADDRESS_BOOK=<file>): which game routines run
   // their WSAVS frame in a fixed area (clone only). Absent = stock.

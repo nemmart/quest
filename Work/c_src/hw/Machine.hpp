@@ -52,6 +52,12 @@ public:
   int32_t     fpr;
   int32_t     wsb, wsl, wsp, wfp;
   uint64_t    instruction_count;
+  uint64_t    block_ordinal;     // Gen-6 (docs/Project22/BlockSyncDesign.md): cumulative
+                                 // count of arrivals at LISTED game block entries
+                                 // (BlockSync::listed), the per-client half of the
+                                 // (entry address, ordinal) sync identity. Compared
+                                 // at every pair; master and clone compute it as the
+                                 // same deterministic function of the execution.
   std::atomic<bool>* halt_ptr;   // set by OSTask to &task->halt
   int32_t     lockstep_role;     // hw::Lockstep role (set at task registration)
   int32_t     lockstep_ordinal;  // per-process task creation ordinal
