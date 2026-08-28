@@ -238,6 +238,11 @@ uint32_t Machine::run_steps(uint32_t address, int32_t count) {
   bool rt_sync = rtcov != nullptr && Lockstep::enabled &&
     (lockstep_role == Lockstep::MASTER || lockstep_role == Lockstep::CLONE);
   int32_t pending_guard = 0;
+  // Gen-6.0 heartbeat (docs/Project22/BlockSyncDesign.md): listed block
+  // entries since this batch began. Every batch end is a rendezvous, so
+  // "K entries since the last rendezvous" is exactly "K entries this
+  // batch"; the counter is batch-local by construction.
+  uint32_t blocks_since_sync = 0;
 
   pc = address;
   while(count > 0) {
@@ -285,8 +290,10 @@ uint32_t Machine::run_steps(uint32_t address, int32_t count) {
     // heartbeat) ends the batch here. A batch's initial pc is not counted:
     // at a break it was counted when arrived at; a syscall-return resume
     // enters through OS code both engines traverse identically.
-    if(rt_sync && BlockSync::listed(static_cast<uint32_t>(pc)))
+    if(rt_sync && BlockSync::listed(static_cast<uint32_t>(pc))) {
       block_ordinal++;
+      blocks_since_sync++;
+    }
     // Terminal detach (Lockstep::detach): pc arriving at a terminal point
     // ends the batch with the terminal flag set. Both engines emulate the
     // same code, so master and clone converge here and form one final
@@ -430,6 +437,25 @@ uint32_t Machine::run_steps(uint32_t address, int32_t count) {
       }
       return pc;
     }
+    // Gen-6.0 heartbeat: the K-th listed block entry since the last
+    // rendezvous ends the batch AT the entry (pre-execution), replacing
+    // the 500-instruction batch as the sync fabric's clock. Placed after
+    // every gate check above so gates keep precedence — a gate arrival
+    // that is also the K-th entry pairs as the gate it is.
+    if(rt_sync && blocks_since_sync >= BlockSync::sync_k)
+      return pc;
+  }
+  // Loop exit: a halted task returns normally; a lockstep client
+  // exhausting its instruction budget did NOT reach any rendezvous in
+  // RUNAWAY_GUARD instructions — that is the runaway, and it fails loud
+  // (METHOD §8) instead of quietly pairing on an instruction count the
+  // Gen-6 surface no longer speaks.
+  if(rt_sync && count <= 0) {
+    char buf[112];
+    snprintf(buf, sizeof(buf),
+             "block-sync: no rendezvous within %d instructions (runaway guard), pc=%08X",
+             BlockSync::RUNAWAY_GUARD, pc);
+    throw std::runtime_error(buf);
   }
   return pc;
 }
@@ -439,14 +465,17 @@ uint32_t Machine::run(uint32_t address) {
 
   pc = address;
   while(!(halt_ptr && *halt_ptr)) {
-    // Lockstep clients use smaller batches than the server so a divergence
-    // is reasonably localized without paying scheduler round-trips every
-    // few dozen instructions. (Was 100 during step-2/3 debugging; drop it
-    // back down when hunting a specific divergence.)
+    // Gen-6.0 (docs/Project22/BlockSyncDesign.md): lockstep QUEST clients
+    // sync on the K-block heartbeat inside run_steps; their instruction
+    // budget is only the runaway guard, whose exhaustion THROWS. The
+    // server keeps plain instruction batches (it is not paired). A
+    // non-QUEST program duplicated under -lockstep (no RT range, no
+    // blocks file — a generic capability never used for Quest work)
+    // retains the historical 500-instruction pairing.
     int32_t batch = 1000;
     if(Lockstep::enabled &&
        (lockstep_role == Lockstep::MASTER || lockstep_role == Lockstep::CLONE))
-      batch = 500;
+      batch = rtcov ? BlockSync::RUNAWAY_GUARD : 500;
     new_pc = machine_thread->run_steps(this, pc, batch);
     if(new_pc == 0x30000000)
       return new_pc;   // System call - caller handles dispatch

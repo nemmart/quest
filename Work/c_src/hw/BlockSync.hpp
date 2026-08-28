@@ -45,6 +45,15 @@ public:
   static uint32_t game_stop;
   static uint32_t sync_k;        // K: rendezvous every K listed entries (QUEST_SYNC_K, default 50)
 
+  // Gen-6.0 Stage 1: the instruction budget handed to a lockstep client
+  // batch is no longer a sync event — the K-block heartbeat is. The
+  // budget survives only as a RUNAWAY GUARD: exhausting it without any
+  // rendezvous THROWS (loud failure over a silent parallel heartbeat;
+  // METHOD §8). Sized far above any legitimate inter-rendezvous stretch
+  // (the longest observed emulated RT spans are bounded by the 10M
+  // run-to-return guard).
+  static constexpr int32_t RUNAWAY_GUARD = 100000000;
+
   // Load + validate. Called from Launch when -lockstep is given; returns
   // false (after printing why) on any failure. Idempotent.
   static bool load_from_env();
