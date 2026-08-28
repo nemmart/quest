@@ -58,7 +58,13 @@ bool BlockSync::load_from_env() {
   std::set<uint32_t> starts;
   std::set<uint32_t> gates;
   std::string line, last_insn;
+  int blineno = 0;
   while(std::getline(bf, line)) {
+    blineno++;
+    // User ruling (Aug 28): artifacts may arrive CRLF (Windows Java);
+    // every reader tolerates trailing \r/whitespace.
+    while(!line.empty() && isspace(static_cast<unsigned char>(line.back())))
+      line.pop_back();
     uint32_t s = start_line(line);
     if(s) {
       starts.insert(s);
@@ -67,32 +73,42 @@ bool BlockSync::load_from_env() {
     }
     if(terminator_line(line)) {
       // Tokenize: tags are single lowercase letters, successors are hex.
+      // The grammar admits NOTHING else — an unrecognized token means the
+      // artifact is malformed or the parse is drifting; refuse loudly
+      // (the CRLF incident: a trailing \r once turned the last successor
+      // of every terminator into a 9-char token, silently collapsing the
+      // gate set from 1,865 to 9).
       bool call_block = line[0] == 'c' || line[0] == 'j';
       bool syscall_block = last_insn.compare(0, 7, "SYSCALL") == 0;
-      if(call_block || syscall_block) {
-        std::string tok;
-        std::ifstream dummy;   // (silence unused warnings on some g++)
-        (void)dummy;
-        size_t pos = 0;
-        bool after_n = line[0] == 'n';
-        while(pos < line.size()) {
-          size_t sp = line.find(' ', pos);
-          tok = line.substr(pos, sp == std::string::npos ? std::string::npos : sp - pos);
-          pos = sp == std::string::npos ? line.size() : sp + 1;
-          if(tok.size() == 1 && tok[0] >= 'a' && tok[0] <= 'z') {
-            after_n = tok[0] == 'n';
-            continue;
-          }
-          if(tok.size() == 8) {
-            uint32_t a = static_cast<uint32_t>(strtoul(tok.c_str(), nullptr, 16));
-            // c/j blocks: gate only the 'n' (resumption) successors — the
-            // call target itself is RT- or game-entry machinery, not a
-            // resumption point. SYSCALL blocks: every successor (both
-            // skip arms resume from the trap).
-            if(a && (syscall_block || (call_block && after_n)))
-              gates.insert(a);
-          }
+      std::string tok;
+      size_t pos = 0;
+      bool after_n = line[0] == 'n';
+      while(pos < line.size()) {
+        size_t sp = line.find(' ', pos);
+        tok = line.substr(pos, sp == std::string::npos ? std::string::npos : sp - pos);
+        pos = sp == std::string::npos ? line.size() : sp + 1;
+        if(tok.empty())
+          continue;
+        if(tok.size() == 1 && tok[0] >= 'a' && tok[0] <= 'z') {
+          after_n = tok[0] == 'n';
+          continue;
         }
+        bool hex8 = tok.size() == 8;
+        for(size_t i = 0; hex8 && i < 8; i++)
+          if(!isxdigit(static_cast<unsigned char>(tok[i])))
+            hex8 = false;
+        if(!hex8) {
+          fprintf(stderr, "BlockSync: %s:%d: unrecognized token '%s' on "
+                          "terminator line\n", blocks_path, blineno, tok.c_str());
+          return false;
+        }
+        uint32_t a = static_cast<uint32_t>(strtoul(tok.c_str(), nullptr, 16));
+        // c/j blocks: gate only the 'n' (resumption) successors — the
+        // call target itself is RT- or game-entry machinery, not a
+        // resumption point. SYSCALL blocks: every successor (both
+        // skip arms resume from the trap).
+        if(a && (syscall_block || (call_block && after_n)))
+          gates.insert(a);
       }
       last_insn.clear();
       continue;
