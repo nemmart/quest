@@ -356,8 +356,9 @@ public class ArgWindows {
    // ---- main -----------------------------------------------------------------
 
    public static void main(String[] args) throws Exception {
-     if(args.length!=9) {
-       System.err.println("Usage: java ArgWindows <dir> <PR file> <addrs file> <targets file> <addrbook file> <dis file> <argmap out> <callsites out> <wpsh_wpop out>");
+     if(args.length!=7) {
+       System.err.println("Usage: java ArgWindows <dir> <PR file> <addrs file> <targets file> <addrbook file> <dis file> <out base>");
+       System.err.println("       writes <out base>.argmap, <out base>.callsites, <out base>.wpsh_wpop");
        System.exit(1);
      }
      String dir=args[0], pr=args[1].toUpperCase();
@@ -494,7 +495,7 @@ public class ArgWindows {
      // DIFFERENT equation than the 1-indexed argN at wfp-10-2N, so a
      // reader never conflates the two). The opcode at the pc decides
      // store (WPSH) vs load (WPOP), exactly as XPEF-vs-LCALL does today.
-     PrintWriter am=new PrintWriter(args[6]);
+     PrintWriter am=new PrintWriter(args[6] + ".argmap");
      am.printf("_PAIRS count %d%n", proven.size());
      for(int n=0;n<proven.size();n++) {
        Borrow b=proven.get(n);
@@ -513,7 +514,7 @@ public class ArgWindows {
      am.close();
 
      // ---- write quest.callsites ----------------------------------------------
-     PrintWriter cs=new PrintWriter(args[7]);
+     PrintWriter cs=new PrintWriter(args[6] + ".callsites");
      TreeMap<String,Integer> classTotals=new TreeMap<String,Integer>();
      TreeMap<String,Integer> reasonTotals=new TreeMap<String,Integer>();
      for(Site s : sites) {
@@ -681,11 +682,11 @@ public class ArgWindows {
      if(!wwFails.isEmpty()) {
        for(String f : wwFails)
          System.err.println("wpsh_wpop: " + f);
-       System.err.printf("wpsh_wpop: NOT CLEAN (%d problem%s) — %s not written%n",
-                         wwFails.size(), wwFails.size()==1?"":"s", args[8]);
+       System.err.printf("wpsh_wpop: NOT CLEAN (%d problem%s) — %s.wpsh_wpop not written%n",
+                         wwFails.size(), wwFails.size()==1?"":"s", args[6]);
        System.exit(2);
      }
-     PrintWriter ww=new PrintWriter(args[8]);
+     PrintWriter ww=new PrintWriter(args[6] + ".wpsh_wpop");
      ww.println("# Every WPSH/WPOP in QUEST, classified (ArgWindows). 3 mutually-exclusive cases:");
      ww.println("#   'paired with X'          save/restore bracket (frame-ptr borrow: WPSH r,r/LDAFP/store/WPOP r,r)");
      ww.println("#   'arg push for LCALL R'   argument marshalling (R game routine; [runtime] = game->RT, out of M4b scope)");
