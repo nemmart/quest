@@ -19,7 +19,7 @@ java -cp tools.jar Disassemble ../QUEST QUEST quest.addrs nomem >quest.code
 java -cp tools.jar StartStop ../QUEST QUEST "?CHAR_TO_UNSIGNED" "?NTOP" "?NBOT" >quest-rt.addrs
 java -cp tools.jar Disassemble ../QUEST QUEST quest-rt.addrs >quest-rt.dis
 
-java -cp tools.jar ArgWindows ../QUEST QUEST quest.addrs quest.targets ../Work/c_src/quest.addrbook quest.dis quest.argmap quest.callsites
+java -cp tools.jar ArgWindows ../QUEST QUEST quest.addrs quest.targets ../Work/c_src/quest.addrbook quest.dis quest.argmap quest.callsites quest.wpsh_wpop
 ```
 
 ## StartStop Utility � Reachability Analysis

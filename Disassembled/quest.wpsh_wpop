@@ -1,5 +1,5 @@
-# Every WPSH/WPOP in QUEST, classified (Aug 22 2026). 3 mutually-exclusive cases:
-#   'paired with X'          save/restore bracket (frame-ptr borrow: WPSH r,r/LDASP/store/WPOP r,r)
+# Every WPSH/WPOP in QUEST, classified (ArgWindows). 3 mutually-exclusive cases:
+#   'paired with X'          save/restore bracket (frame-ptr borrow: WPSH r,r/LDAFP/store/WPOP r,r)
 #   'arg push for LCALL R'   argument marshalling (R game routine; [runtime] = game->RT, out of M4b scope)
 #   'creates a temp ...'     ref-arg temp construction (RETURN_MESSAGE only)
 # 82 total: 46 paired (23 pairs) + 25 arg->game + 8 arg->RT + 3 temp-create.
@@ -37,9 +37,9 @@
 70161B73 WPSH 0,2  // arg push for LCALL TERRAIN
 70161BCD WPSH 0,2  // arg push for LCALL TERRAIN
 70161BF0 WPSH 0,2  // arg push for LCALL TERRAIN
-7016294E WPSH 0,1  // arg push for LCALL C.TRANS [runtime]
-70162954 WPSH 0,1  // arg push for LCALL C.TRANS [runtime]
-70162958 WPSH 0,1  // arg push for LCALL C.TRANS [runtime]
+7016294E WPSH 0,1  // arg push for LCALL C.TRANS / C.TRANSL [runtime]
+70162954 WPSH 0,1  // arg push for LCALL C.TRANS / C.TRANSL [runtime]
+70162958 WPSH 0,1  // arg push for LCALL C.TRANS / C.TRANSL [runtime]
 70163023 WPSH 0,2  // arg push for LCALL TERRAIN
 70165129 WPSH 0,1  // arg push for LCALL TERRITORY
 70165345 WPSH 3,3  // paired with 70165349

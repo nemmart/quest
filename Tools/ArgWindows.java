@@ -356,8 +356,8 @@ public class ArgWindows {
    // ---- main -----------------------------------------------------------------
 
    public static void main(String[] args) throws Exception {
-     if(args.length!=8) {
-       System.err.println("Usage: java ArgWindows <dir> <PR file> <addrs file> <targets file> <addrbook file> <dis file> <argmap out> <callsites out>");
+     if(args.length!=9) {
+       System.err.println("Usage: java ArgWindows <dir> <PR file> <addrs file> <targets file> <addrbook file> <dis file> <argmap out> <callsites out> <wpsh_wpop out>");
        System.exit(1);
      }
      String dir=args[0], pr=args[1].toUpperCase();
@@ -573,6 +573,131 @@ public class ArgWindows {
          expectedArgLines+=s.argc;
      if(expectedArgLines!=argLines)
        throw new RuntimeException("argmap/callsites disagree: " + argLines + " arg lines vs " + expectedArgLines + " expected");
+
+     // ---- quest.wpsh_wpop: classify EVERY WPSH/WPOP (user ruling Aug 28 2026) --
+     //
+     // Regenerable artifact + gate: three mutually-exclusive, exhaustive
+     // cases. Case 1 (paired) comes from the borrow pass above and inherits
+     // its single-block PROOF — a FLAGGED bracket, a WPOP outside a proven
+     // pair, an unattributable WPSH, a temp feeding anything but
+     // RETURN_MESSAGE, or a count mismatch vs quest.dis means the artifact
+     // is NOT written and the tool exits 2. CLEAN is only reported when
+     // everything is good.
+     List<String> wwFails=new ArrayList<String>();
+     Map<Integer,Integer> pairOf=new TreeMap<Integer,Integer>();
+     for(Borrow b : proven) {
+       pairOf.put(b.wpsh.pc, b.wpop.pc);
+       pairOf.put(b.wpop.pc, b.wpsh.pc);
+     }
+     for(Borrow b : flagged)
+       wwFails.add(String.format("bracket not proven single-block: WPOP@%08X %s", b.wpop.pc, b.fail));
+     Map<Integer,Site> slotOwner=new TreeMap<Integer,Site>();
+     for(Site s : sites)
+       if(s.cls!=null && s.cls.startsWith("CLEAN") && s.argc>0)
+         for(int pc : s.slotPc)
+           slotOwner.put(pc, s);
+     TreeMap<Integer,String> annot=new TreeMap<Integer,String>();   // pc -> annotation
+     TreeMap<Integer,Instr>  wws=new TreeMap<Integer,Instr>();
+     for(Instr in : instrs.values())
+       if(in.name.equals("WPSH") || in.name.equals("WPOP"))
+         wws.put(in.pc, in);
+     int nPaired=0, nArgGame=0, nArgRt=0, nTemp=0;
+     for(Instr in : wws.values()) {
+       if(pairOf.containsKey(in.pc)) {
+         annot.put(in.pc, String.format("paired with %08X", pairOf.get(in.pc)));
+         nPaired++;
+         continue;
+       }
+       if(in.name.equals("WPOP")) {
+         wwFails.add(String.format("WPOP@%08X outside any proven bracket", in.pc));
+         continue;
+       }
+       // temp-create: WPSH r,r immediately followed by LDASP r (materialize
+       // a stack temp and take its address). RETURN_MESSAGE-only by ruling.
+       Map.Entry<Integer,Instr> ne=instrs.higherEntry(in.pc);
+       boolean temp=false;
+       if(wpopXX(in)==wpopAA(in) && ne!=null && ne.getKey()==in.pc+in.length
+          && ne.getValue().name.equals("LDASP") && ((ne.getValue().opcode>>11)&0x03)==wpopAA(in))
+         temp=true;
+       // consuming call: forward scan over contiguous code, no flow allowed
+       Instr consumer=null;
+       String scanFail=null;
+       int cur=in.pc, hops=0;
+       while(hops++<24) {
+         Map.Entry<Integer,Instr> e=instrs.higherEntry(cur);
+         if(e==null || e.getKey()!=cur+instrs.get(cur).length) { scanFail="discontinuous"; break; }
+         Instr i2=e.getValue();
+         cur=i2.pc;
+         if(isCall(i2)) { consumer=i2; break; }
+         if(FLOW.contains(i2.name) || i2.name.equals("WRTN")) { scanFail="flow "+i2.name+String.format("@%08X", i2.pc); break; }
+       }
+       if(temp) {
+         int t=consumer==null ? -1 : callTarget(consumer, memory);
+         String tn=t<0 ? null : book.get(t);
+         if(!"RETURN_MESSAGE".equals(tn)) {
+           wwFails.add(String.format("temp-create WPSH@%08X feeds %s, not RETURN_MESSAGE",
+                       in.pc, tn!=null ? tn : (scanFail!=null ? "("+scanFail+")" : "(no call found)")));
+           continue;
+         }
+         annot.put(in.pc, "creates a temp on the stack (ref-arg for RETURN_MESSAGE)");
+         nTemp++;
+         continue;
+       }
+       Site owner=slotOwner.get(in.pc);
+       if(owner!=null) {
+         annot.put(in.pc, String.format("arg push for LCALL %s", owner.targetName));
+         nArgGame++;
+         continue;
+       }
+       if(consumer==null) {
+         wwFails.add(String.format("WPSH@%08X unclassifiable: %s", in.pc, scanFail!=null ? scanFail : "no call in range"));
+         continue;
+       }
+       int t=callTarget(consumer, memory);
+       if(t>=0 && book.containsKey(t)) {
+         wwFails.add(String.format("WPSH@%08X feeds game call %s@%08X but is in no CLEAN window",
+                     in.pc, book.get(t), consumer.pc));
+         continue;
+       }
+       String rn=t<0 ? null : symbols.addressToName.get(t);
+       if(rn==null) {
+         wwFails.add(String.format("WPSH@%08X feeds unresolvable call @%08X", in.pc, consumer.pc));
+         continue;
+       }
+       annot.put(in.pc, String.format("arg push for LCALL %s [runtime]", rn));
+       nArgRt++;
+     }
+     // sanity vs quest.dis: mnemonic occurrence count must equal ours
+     int disWw=0;
+     BufferedReader wr=new BufferedReader(new FileReader(args[5]));
+     for(String line; (line=wr.readLine())!=null; )
+       if(line.matches(".*\\bWPSH \\d,\\d.*") || line.matches(".*\\bWPOP \\d,\\d.*"))
+         disWw++;
+     wr.close();
+     if(disWw!=wws.size())
+       wwFails.add(String.format("count mismatch: %d WPSH/WPOP in tool stream vs %d in quest.dis", wws.size(), disWw));
+     if(annot.size()!=wws.size() && wwFails.isEmpty())
+       wwFails.add(String.format("classification not exhaustive: %d of %d annotated", annot.size(), wws.size()));
+     if(!wwFails.isEmpty()) {
+       for(String f : wwFails)
+         System.err.println("wpsh_wpop: " + f);
+       System.err.printf("wpsh_wpop: NOT CLEAN (%d problem%s) — %s not written%n",
+                         wwFails.size(), wwFails.size()==1?"":"s", args[8]);
+       System.exit(2);
+     }
+     PrintWriter ww=new PrintWriter(args[8]);
+     ww.println("# Every WPSH/WPOP in QUEST, classified (ArgWindows). 3 mutually-exclusive cases:");
+     ww.println("#   'paired with X'          save/restore bracket (frame-ptr borrow: WPSH r,r/LDAFP/store/WPOP r,r)");
+     ww.println("#   'arg push for LCALL R'   argument marshalling (R game routine; [runtime] = game->RT, out of M4b scope)");
+     ww.println("#   'creates a temp ...'     ref-arg temp construction (RETURN_MESSAGE only)");
+     ww.printf("# %d total: %d paired (%d pairs) + %d arg->game + %d arg->RT + %d temp-create.%n",
+               wws.size(), nPaired, nPaired/2, nArgGame, nArgRt, nTemp);
+     ww.println();
+     for(Instr in : wws.values())
+       ww.printf("%08X %s %d,%d  // %s%n", in.pc, in.name, wpopXX(in), wpopAA(in), annot.get(in.pc));
+     ww.close();
+     System.out.printf("wpsh_wpop: CLEAN — %d classified (%d pairs proven single-block + %d arg->game + %d arg->RT + %d temp)%n",
+                       wws.size(), nPaired/2, nArgGame, nArgRt, nTemp);
 
      System.out.printf("sites=%d argLines=%d edges=%d xcalls=%d targetsAgree=%b borrows=%d proven=%d flagged=%d%n",
                        sites.size(), argLines, totalCallEdges, xcallCount, targetsAgree,

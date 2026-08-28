@@ -2,7 +2,12 @@
 
 *Aug 22 2026. Full classification of every WPSH/WPOP instruction, for
 M4b (arg redirect) and M4c (in-body stack residue). Per-instruction
-listing: Disassembled/quest.wpsh_wpop.*
+listing: Disassembled/quest.wpsh_wpop — since Aug 28 2026 REGENERATED
+and GATED by ArgWindows (9th arg): the tool classifies every WPSH/WPOP
+into the three cases, requires the paired brackets to be PROVEN
+single-block (the P20 borrow proof), and refuses to write the artifact
+(exit 2) unless everything is clean. The Aug-22 hand listing said
+"C.TRANS"; the tool emits the symbol table's full "C.TRANS / C.TRANSL".*
 
 ## Instruction semantics
 
