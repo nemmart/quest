@@ -1,5 +1,10 @@
 # Next session
 
+## Battery template (Aug 29 2026)
+- tasks/034-parallel-battery.sh is the battery template of record
+  (parallel, JOBS=6, 13 legs incl. the emu isolation pair); hold/031's
+  serial shape is superseded. Copy 034, not 031/032.
+
 ## P24 handoff (Aug 29 2026)
 - P24 (wide-carry) is LANDED on branch p24-wide-carry; battery = task
   032, verdict RECORDED in Project24/REPORT.md §7: 9/11 GREEN; 2 RED =

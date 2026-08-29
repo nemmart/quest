@@ -1,5 +1,24 @@
 # Where things stand
 
+## ★ PARALLEL BATTERY TEMPLATE LANDED — task 034 (Aug 29 2026)
+
+User ruling: no more 30+ minute serial batteries. tasks/034-parallel-
+battery.sh is the TEMPLATE OF RECORD, superseding hold/031's serial
+shape (leg INTERNALS unchanged): slot pool (JOBS=6 default — legs are
+wall-clock dominated; hard core-pinning would starve the multi-threaded
+emulator), long-pole play legs launch first, per-leg verdict/status
+files collated in canonical order after wait (the serial FAILS counter
+cannot cross subshells), driver timeout 480 for contention margin.
+Per-leg isolation (own port 8791+, own scratch, own trace) was already
+in place; the flock guard still prevents battery-level overlap — the
+actual task-029 failure mode. Standing leg set = the 032 eleven (inj/
+abort green under the F6 fix, drop=1 each) + the 033 all-emulated
+isolation pair = 13 legs. Proof run (results/034-parallel-battery):
+**13/13 GREEN, wall_clock=523s (~8.7 min)**, div=0 everywhere, strict
+gate held, drop checks exact, coverage line matches the 032 pattern
+(BEING_ATTACK cluster live at 2 hits, LOCK_FILE at 8) — no contention
+flakiness. ~5-6x wall-clock reduction.
+
 ## ★ F6 CLOSED — terminal legs restored (Aug 29 2026, integrator session)
 
 User ruling: option c, BOTH halves. (1) IRExec loader drops the IR
