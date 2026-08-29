@@ -1,5 +1,51 @@
 # Where things stand
 
+## ★ P23 LANDED — GEN-6.1: THE IR (Aug 28–29 2026; reviewed + integrated Aug 29)
+
+The clone executes the game as an intermediate representation. Built:
+`c_src/tools/lower.py` (dis+blocks+pushmap+argmap → provenance-stamped
+quest.ir; TOTAL — any inexpressible block is OMITTED, absent=emulated),
+`c_src/hw/IRExec` (refuse-on-anything loader + block interpreter; clone
+only, master always emulates), `c_src/tools/split_skips.py`. Grammar is
+**rev 2** — consolidated normative spec now lives in **docs/IR.md**
+(IRPhase1/IR2 are history). Shipped artifact `c_src/quest.ir2.book`:
+17,983/18,009 blocks (99.86%) — 443 call / 165 ret / 1,039 arg-slot
+stores / ~3.9k gotos (3,242 lowered WBRs) / ~31.1k embedded
+instructions; the 26 omitted = the 7015BD6B exclusion + 25 @/bit-15
+census. CFG rebuilt: ALL skips split (user ruling; 13,494 → 18,009
+blocks; quest.blocks.split + identity quest.synclist.split are now the
+operative lockstep pair). The strict continuation tripwire (decoder
+word_length, no annotations) surfaced the **LNADI/LNSBI listing defect
+in BOTH toolchains** — fixed, all listings regenerated, §14 diff-audit
+exactly on-prediction (2 real instructions recovered). P22 obligations
+ALL discharged: TEMPORARY insn-count term removed from the verdict
+(trace-only now); **ovr joins the pair surface** (c retained →
+carry-live-in stays covered); ENQT/DEQUE skip edges split; 7015BD6B is
+its own block, exclusion-listed in lower.py AND refused by the loader.
+`#`-ops call the SAME EagleInstruction helpers as emulation (user
+ruling) — which is what let the **wide-carry emulator bug** (carry
+computed as >>31, not ALU carry-out; masked from lockstep forever per
+METHOD §2, caught by the manual) be PARKED as its own task:
+docs/Project23/WideCarry.md + wide_carry_fix.patch, **NOT applied**
+(native carry residue in Project1/2 translations must be re-derived
+with it; WADC carry needs real evidence). Mode discipline: quest.ir
+declares `mode stock|book`; loader refuses book IR without
+QUEST_ADDRESS_BOOK+QUEST_PUSH_MAP and recomputes provenance sha256s.
+Gates (REPORT §9, all K=1 strict, 0 div): pilot, whole-game pre-split,
+split, rev-2 book/stock/site= legs (~2.2k IR blocks live each) — plus
+an independent reviewer spot-check Aug 29 (fresh build, K=1 book leg,
+boot→login→creation→turns: 2,184 IR blocks, div=0). Report:
+docs/Project23/REPORT.md (reviewer notes appended §10).
+
+**NEXT: wide-carry re-verification first (parked task, WideCarry.md —
+REDO the carry-live-in ∩ wide-producer census, record it, then land
+the patch + re-derive translation residue). Then the §8 queue: B-form
+byte-EA extraction (unlocks 96 call sites), WPSH multi-wide (25),
+`save`, @/bit-15 fix+regen+diff-audit (25 blocks). P24 = t-places
+(borrows pilot per user ruling — no borrow/restore ops; `end if`
+conditional exits at the P24 boundary; pre-P24 census owed: crossings
+inside borrow-bracket interiors).**
+
 ## ★ P22 LANDED — GEN-6.0: THE BLOCK-SYNC CHECKER (Aug 28 2026)
 
 The sync model is re-denominated: rendezvous every K listed basic-block

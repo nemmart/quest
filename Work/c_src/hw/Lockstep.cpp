@@ -163,7 +163,8 @@ void Lockstep::compare_pair(QueueEntry* master, QueueEntry* clone) {
   bool regs_differ = false;
   bool wsp_differs = false;
   if(!probe_relax_regs) {
-    regs_differ = master->machine->c != clone->machine->c;
+    regs_differ = master->machine->c != clone->machine->c ||
+                  master->machine->ovr != clone->machine->ovr;   // P23: the #-correctness check
     for(int i = 0; i < 4 && !regs_differ; i++)
       regs_differ = clone->machine->equivalent(static_cast<uint32_t>(master->machine->ac[i]),
                                                static_cast<uint32_t>(clone->machine->ac[i]))
@@ -239,7 +240,10 @@ void Lockstep::compare_pair(QueueEntry* master, QueueEntry* clone) {
     span_mismatch ||
     terminal_mismatch ||
     master->address != clone->address ||
-    (master_delta != clone_delta && !count_exempt) ||
+    // P22's TEMPORARY insn-count delta term REMOVED per the P23
+    // obligation (CURRENT_STATE.md): an IR clone does not execute the
+    // master's instruction stream. Deltas remain in traces/reports.
+    (void(count_exempt), false) ||
     regs_differ ||
     wsp_differs ||
     blocks_differ ||

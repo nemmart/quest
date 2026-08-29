@@ -79,7 +79,12 @@ java -cp Tools Disassemble QUEST QUEST holes.addrs
 
 Never from the apparent intent of an instruction. `WSUB x,x` zeroes a
 register **and clears carry** — a one-bit residue error that only a
-capture diff caught. Know which instruction owns each convention side
+capture diff caught. *(P24 correction, Aug 29 2026: that sentence
+documented the OLD emulator's `>>31` wide-carry bug. Under the
+manual-correct ALU carry landed by Project 24, `WSUB x,x` SETS carry —
+x−x has no borrow. The §5 lesson — source over intent — stands; the
+example's polarity flipped with the source. See
+docs/Project24/CarryCensus.md.)* Know which instruction owns each convention side
 effect: `WSSVS` pushes the shadow call-stack frame for `LJSR` routines,
 not the call.
 

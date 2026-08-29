@@ -1,5 +1,15 @@
 # L2Contract.md — The L2 (Condition-System) Boundary Contract
 
+> **P24 WIDE-CARRY CORRECTION (Aug 29 2026) — NORMATIVE.** Project 24
+> fixed the emulator's wide-carry bug (docs/Project23/WideCarry.md,
+> docs/Project24/CarryCensus.md) and re-derived native staging. The
+> exit-table carry values below that derive from wide ops are corrected
+> IN PLACE at each row with a "(P24: ...)" tag; untagged c rows are
+> entry-carry transports or narrow-derived and stand as written. The
+> global mapping: WSUB x,x -> c=1; WADC x,x -> c=0 (user ruling);
+> WSBI borrow inversion (count-0 -> c=0, count-1 -> c=1).
+
+
 Project 6, Phase 1 deliverable 2. Status: DRAFT FOR REVIEW.
 
 This document is the BOUNDARY view: what any L2 implementation owes L1,
@@ -221,7 +231,7 @@ Outputs — single exit, transfer to entry_ac3+4 (= LJSR pc+7):
 | ac1 | −1 (count 0) / 0 (count 1) / count−1−iterations generally |
 | ac2 | wfp+0xC + 2·iterations |
 | ac3 | wfp (caller frame) |
-| c | **1 for count 0 (WSBI borrow), 0 for count 1**; general: borrow of the final decrement |
+| c | **0 for count 0, 1 for count 1** (P24: genuine no-borrow of the final WSBI decrement — the pre-fix row read "1 for count 0, 0 for count 1") |
 | ovr | unchanged (sticky; all operands positive) |
 | wsp | entry+4 |
 | psr/ovk | unchanged (no frame op) |
@@ -370,8 +380,9 @@ the keys match per §2.1's discipline; re-ON after REVERT reuses the
 deactivated node (validated live).
 
 Note: the pushed helper psr carries ovk=1 (O.ON's WSSVS precedes the
-XJSR); catch-all searches record c=0 in the helper ret wide (the
-preamble WSUB 1,1 side effect — the O_ON.md single-bit lesson).
+XJSR); catch-all searches record c=1 (P24: was c=0 pre-fix) in the
+helper ret wide (the preamble WSUB 1,1 side effect — the O_ON.md
+single-bit lesson; WSUB now SETS carry).
 
 ### 3.5 O.REVERT (0x7017EDCB) — deregister  [O_ON.md; o_on.cpp]
 
@@ -463,7 +474,7 @@ crossing):
 | ac1 | **the establisher token** (the registering record's identity; today its frame pointer) |
 | ac2 | handler address |
 | ac3 | 0x7017EE40 (DISPATCH_RET — the tail's address; the L1 body WRTNs back into L2 through it) |
-| c | c_h = (type>0) ? c_x : 0 (helper preamble clears carry for catch-all) |
+| c | c_h = (type>0) ? c_x : 1 (P24: helper preamble WSUB 1,1 SETS carry for catch-all; pre-fix this row read ": 0") |
 | ovk/ovr | 1 / 0 |
 | wsp / wfp | E+12 / F; frame wide (psr_body<<16)\|0 at [E+12], psr_body = (entry_psr \| 0x8000) & ~0x4000 |
 
@@ -517,7 +528,7 @@ LCALL, argc 0, WSAVS 0. Fixed inputs (no args, no flag store):
 | O.SOVERF | −3 | 0x11607 |
 | O.SUNDER | −4 | 0x11616 |
 
-key2 = 0; c_x = 0 (the joining WSUB clears carry). Behavior/exits =
+key2 = 0; c_x = 1 (P24: the joining WSUB SETS carry; pre-fix c_x = 0). Behavior/exits =
 §3.9 from the shared body onward (dispatch state, tail, escalation),
 with the memory image differing only in the absent flag store and
 argc 0 (resume WRTN pops no args: wsp = E−2). Live caller: X.CB →
@@ -552,8 +563,9 @@ code=[B+1])** with argc 3 (⇒ resume flag stored as 0: a
 ?LIB_ERROR-mediated signal is never resumable via the flag).
 Boundary state at the interior hand-off (normative because it is
 recorded in images and is the staging O?SIGNAL consumes): ac0 = code,
-ac1 = −1, ac2 = 0, ac3 = 0x7017E3EF, c = 0 (the WADC/WSUB pair ends
-c=0 deterministically), wsp = F+30, wfp = F' = F+16, psr = psr_body.
+ac1 = −1, ac2 = 0, ac3 = 0x7017E3EF, c = 1 (P24: the WADC/WSUB pair
+ends c=1 deterministically — WSUB 2,2 is last and sets carry; pre-fix
+this read c=0), wsp = F+30, wfp = F' = F+16, psr = psr_body.
 Exits: O?SIGNAL's (dispatch / exhaustion / its tail). If O?SIGNAL's
 resume WRTN returns (to 0x7017E3EF): **WRTN** — return to the XCALL
 site (0x7017E3D0) with entry values restored; control is then back in
@@ -751,7 +763,9 @@ which is contract (the dispatch hands it to L1 in ac3).
 - **Exit-register fidelity (ruling, SESSION_REPORT §4)**: the Outputs
   tables in §3 are NORMATIVE for every register and flag at every
   exit, INCLUDING apparent scratch/residue (I.PROLOG's ac1/ac2 walk
-  values, the c=1 borrow, the dispatch c_h, the WRTN-restored
+  values, the WSBI decrement carry (P24: count-0 -> c=0, count-1 ->
+  c=1; the pre-fix "c=1 borrow" phrasing described the old values),
+  the dispatch c_h, the WRTN-restored
   images). An implementation that computes results differently must
   still stage the same exit-register image. No "contract-private
   register" concept exists.

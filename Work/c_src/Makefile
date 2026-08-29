@@ -78,7 +78,8 @@ SRCS = Launch.cpp \
        os/OSContextShared.cpp \
        os/OSContextIPC.cpp \
        os/OSContextFS.cpp \
-       os/OSContextTask.cpp
+       os/OSContextTask.cpp \
+       hw/IRExec.cpp
 
 OBJS = $(SRCS:.cpp=.o)
 DEPS = $(SRCS:.cpp=.d)

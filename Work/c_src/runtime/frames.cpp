@@ -8,12 +8,16 @@
 // each routine ends with RTBridge::native_transfer (transfer pairing,
 // docs/SharedProtocol.md frozen interface 2).
 //
-// Carry/overflow are replicated with EagleInstruction::add/sub's exact
-// formulas (local copies below — the originals are instance methods),
-// per METHOD.md §5: verify flag side effects from the emulator source,
-// never from intent. WSUB 0,0 clears carry; WSBI's borrow SETS carry
-// when the count is 0 (I.PROLOG exits with c=1 for count 0, c=0 for
-// count 1 — both shapes live in Quest's 18 call sites).
+// Carry/overflow come from EagleInstruction::add/sub themselves (thin
+// forwards below), per METHOD.md §5: verify flag side effects from the
+// emulator source, never from intent.
+// P24 CORRECTION (Aug 2026, wide-carry fix): this header used to say
+// "WSUB 0,0 clears carry; WSBI's borrow SETS carry when the count is 0
+// (I.PROLOG exits c=1 for count 0, c=0 for count 1)" — those were the
+// OLD (>>31) emulator's values. Under the manual-correct ALU carry:
+// WSUB 0,0 SETS carry (x-x, no borrow); WSBI 1,1 on count 0 borrows
+// (0-1) so c=0, on count 1 no borrow so c=1 — I.PROLOG exits c=0 for
+// count 0, c=1 for count 1. The forwards make these values automatic.
 //
 // Project 8 Stage A: handler-STATE reads/writes (frame slots, chain
 // head, snapshot) moved behind rt::error_handler_api; this file keeps
@@ -25,6 +29,7 @@
 #include "error_handler.hpp"
 #include "../hw/Machine.hpp"
 #include "../hw/Memory.hpp"
+#include "../hw/EagleInstruction.hpp"
 #include "../hw/RTBridge.hpp"
 #include "../hw/RTStubs.hpp"
 #include "../hw/Lockstep.hpp"
@@ -35,23 +40,17 @@
 
 namespace {
 
-// EagleInstruction::add / ::sub replicas (EagleInstruction.cpp:23-39):
-// same int64 arithmetic, same sticky ovr, same carry formula.
+// P24 CORRECTION (Aug 2026): these were verbatim REPLICAS of
+// EagleInstruction::add/sub, which froze the >>31 wide-carry bug into
+// native code (docs/Project24/CarryCensus.md finding F2). add/sub are
+// static and public (IRExec calls them directly, P23 ruling), so the
+// replicas are now thin forwards — single source of truth; the helper
+// fix covers this file with no local formula to drift.
 int32_t emu_add(hw::Machine& machine, int64_t src, int64_t dst) {
-  int64_t result = dst + src;
-  int64_t overflow = ((src ^ result) & ~(src ^ dst));
-  int64_t carry = ((dst & 0xFFFFFFFF) + (src & 0xFFFFFFFF)) >> 31;
-  machine.ovr |= static_cast<int32_t>((static_cast<uint64_t>(overflow) >> 31) & 0x01);
-  machine.c = static_cast<int32_t>(carry & 0x01);
-  return static_cast<int32_t>(result & 0xFFFFFFFF);
+  return hw::EagleInstruction::add(machine, src, dst);
 }
 int32_t emu_sub(hw::Machine& machine, int64_t src, int64_t dst) {
-  int64_t result = dst - src;
-  int64_t overflow = ((src ^ dst) & (result ^ dst));
-  int64_t carry = ((dst & 0xFFFFFFFF) - (src & 0xFFFFFFFF)) >> 31;
-  machine.ovr |= static_cast<int32_t>((static_cast<uint64_t>(overflow) >> 31) & 0x01);
-  machine.c = static_cast<int32_t>(carry & 0x01);
-  return static_cast<int32_t>(result & 0xFFFFFFFF);
+  return hw::EagleInstruction::sub(machine, src, dst);
 }
 
 // Segment-corrected word address, as every X-format body access does
@@ -143,7 +142,7 @@ uint32_t i_prolog(hw::Machine& machine) {
   // bit-faithfully; a conforming implementation re-hosts them —
   // Registers E9/E10). wsp arithmetic here is the normative +4
   // reservation (H3); push CONTENTS are the api's.
-  machine.ac[0] = emu_sub(machine, machine.ac[0], machine.ac[0]);  // WSUB 0,0: ac0=0, c=0
+  machine.ac[0] = emu_sub(machine, machine.ac[0], machine.ac[0]);  // WSUB 0,0: ac0=0, c=1 (P24: was c=0 pre-fix)
   machine.wsp += 4;                                     // WPSH 0,1 (head slot + entry ac1)
   machine.ac[2] = wfp0;                                 // LDAFP 2
   machine.ac[0] = machine.wsp;                          // LDASP 0 (the [wfp+2] snapshot value)
@@ -172,7 +171,9 @@ uint32_t i_prolog(hw::Machine& machine) {
   // Display-loop register/flag effects (memory copies are the api's):
   // WSBI 1,1 decrements with borrow; the body advances ac2 by 2 per
   // iteration. Exit c/ovr come from the final decrement, exactly as
-  // the emulated loop leaves them (c=1 for count 0, c=0 for count 1).
+  // the emulated loop leaves them (P24 fixed values: c=0 for count 0
+  // — the 0-1 decrement borrows — and c=1 for count 1; pre-fix these
+  // were reversed).
   machine.ac[2] = wfp0 + 0xC;                           // XLEF 2,[wfp+0xC]
   while(true) {
     machine.ac[1] = emu_sub(machine, 1, machine.ac[1]); // WSBI 1,1

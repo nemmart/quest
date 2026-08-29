@@ -1,5 +1,20 @@
 # Project 1 — O.SEARCH → O.SET cluster: Translation Derivation
 
+> **P24 WIDE-CARRY CORRECTION (Aug 29 2026).** Every carry VALUE in
+> this document that derives from the wide helpers reflects the OLD
+> emulator's `>>31` bug (docs/Project23/WideCarry.md, fixed by Project
+> 24). The corrected semantics: `WSUB x,x` -> c=**1** (no borrow);
+> `WADC x,x` -> c=**0** (user ruling — no ALU carry-out of x + ~x);
+> `WSBI n,x` carries per genuine no-borrow (count-0 decrement borrows:
+> c=0; count-1 does not: c=1 — the reverse of the old values); `WINC x`
+> -> c=1 iff x==0xFFFFFFFF (old: never on that operand shape). Narrow
+> (Nova/`>>16`) carries are unchanged. Annotations below are NOT
+> rewritten inline (METHOD §11); read every wide-derived c through this
+> mapping. The re-derived native staging lives in runtime/ (P24
+> report); this doc remains the record of the derivation METHOD.
+
+
+
 Status: DERIVATION IN PROGRESS. Method: METHOD.md; merge rules:
 SharedProtocol.md; writer-side chain documentation this must agree
 with: O_ON.md. Quality bar: I_ALLOC.md.

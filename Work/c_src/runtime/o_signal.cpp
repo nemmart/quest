@@ -242,7 +242,9 @@ uint32_t signal_dispatch(hw::Machine& machine, hw::RTBridge& bridge,
   mem.write_wide(Eu + 14, key2_raw);
   // --- helper residue: only the LAST invocation survives at [E+16..E+29];
   //     none at all when the frame chain was empty ---
-  int32_t c_h = (type > 0) ? c_x : 0;               // preamble WSUB 1,1 clears carry for catch-all
+  int32_t c_h = (type > 0) ? c_x : 1;               // catch-all: helper preamble WSUB 1,1 at
+                                                    // ee7B SETS carry (x-x, no borrow) under the
+                                                    // P24 fix (pre-fix it cleared it)
   uint32_t ret_wide = HELPER_XJSR_RET | (static_cast<uint32_t>(c_h) << 31);
   mem.write_wide(Eu + 16, psr_body << 16);          // (found implies any_search)
   mem.write_wide(Eu + 18, type);
@@ -320,7 +322,7 @@ uint32_t signal_dispatch(hw::Machine& machine, hw::RTBridge& bridge,
 }
 
 // Shorthand shape: WSAVS; fixed ac0/ac2; ac1 zeroed (WSUB 1,1, which
-// also clears carry) at EE37 before the shared body. c_x = 0 for every
+// also SETS carry under the P24 fix) at EE37 before the shared body. c_x = 1 for every
 // shorthand and for O.SERROR.
 uint32_t shorthand(hw::Machine& machine, const char* name, int32_t type, int32_t code) {
   if (nested_in_fallback(machine, name))
@@ -329,7 +331,7 @@ uint32_t shorthand(hw::Machine& machine, const char* name, int32_t type, int32_t
   if (rt::walker_gate_open(machine))
     return fallback(machine, name, "(native-fallback: gate wide 0x7017EEA0 > 0 — I?LINEID mode enabled)");
   hw::RTStubs::log_call(machine, name, "(native)");
-  return signal_dispatch(machine, bridge, name, type, /*key2_raw=*/0, code, /*c_x=*/0);
+  return signal_dispatch(machine, bridge, name, type, /*key2_raw=*/0, code, /*c_x=*/1);
 }
 
 } // namespace
@@ -344,14 +346,15 @@ uint32_t o_qsignal(hw::Machine& machine) {
 
   // Body (EDEF..EE01): flag = argc>3 ? *arg4 (narrow, sign-extended) : 0,
   // stored to [wsb-0x2A]; ac0/ac1/ac2 = *arg1/*arg2/*arg3 (wide). The
-  // argc<=3 path's WSUB 0,0 clears carry; the argc>3 path keeps it.
+  // argc<=3 path's WSUB 0,0 SETS carry (P24 fix; pre-fix it cleared
+  // it); the argc>3 path keeps the entry carry.
   int32_t flag, c_x;
   if (bridge.arg_count() > 3) {                     // EDF2 WSGTI 0,3
     flag = bridge.arg_word(4);                      // EDF5 XNLDA @[ac3-0x12]
     c_x = bridge.entry_carry();
   } else {
-    flag = 0;                                       // EDF8 WSUB 0,0 (c=0)
-    c_x = 0;
+    flag = 0;                                       // EDF8 WSUB 0,0 (c=1 under the P24 fix)
+    c_x = 1;
   }
   rt::error_handler().set_resume_flag(machine, flag);   // EDF9 [wsb-0x2A] (H4: only this
                                                         //   entry path ever writes it)

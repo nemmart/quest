@@ -13,3 +13,35 @@
 #   bit-faithful 1988 attic:                  -zero=none
 #   double-checked handler mode:              -handler=check
 #   quieter console:                          ... >log 2>err
+
+# ---------------------------------------------------------------- IR (P23)
+# Clone executes quest.ir blocks as IR; master emulates; absent blocks
+# emulate (always safe). Requires -lockstep. Emit first, then launch with
+# the envs — the loader hard-binds the IR to the exact CFG via sha256 and
+# REFUSES on any mismatch, bad grammar, or book/stock mode mixups.
+#
+# Emit (stock mode — valid with or without the M4 book):
+#   python3 tools/lower.py --dis <Disassembled>/quest.dis \
+#     --blocks quest.blocks.split --pushmap quest.pushmap.M4 \
+#     --argmap <Disassembled>/quest.argmap --all --out quest.ir2.stock
+# Emit (book mode — decorated calls/argpushes lowered; book runs ONLY):
+#   ... same, plus --book, --out quest.ir2.book
+#
+# Launch (book mode; this is the P23 gate configuration):
+QUEST_BLOCKS=quest.blocks.split QUEST_SYNC_LIST=quest.synclist.split \
+QUEST_SYNC_K=1 QUEST_IR=quest.ir2.book \
+QUEST_ADDRESS_BOOK=quest.addrbook QUEST_PUSH_MAP=quest.pushmap.M4 \
+./emulator -lockstep -silent ../../QUEST QUEST_SERVER @QUEST @QUEST >log
+#
+# Stock-mode IR: use QUEST_IR=quest.ir2.stock and (optionally) drop the
+# ADDRESS_BOOK/PUSH_MAP envs. Book-mode IR without those envs is refused.
+# NOTE the split CFG pair: quest.ir provenance is stamped against
+# quest.blocks.split — QUEST_BLOCKS/QUEST_SYNC_LIST must be the .split
+# files, not the originals, or the loader refuses at startup.
+#
+# Evidence on stderr: "IRExec: loaded N IR blocks" at start; one
+# "first execution of block X" line per block (coverage).
+# QUEST_IR_DEBUG_BLOCK=<hex8> prints per-statement ac state for a block.
+# Combining with -handler=native / -zero=clone is expected to compose
+# (IR dispatch sits inside the emulated fetch path) but the validated
+# gate config is exactly the line above. Spec: docs/IR.md.

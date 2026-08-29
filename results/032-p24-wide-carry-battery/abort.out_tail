@@ -1,0 +1,40 @@
+ ac0=00000000
+ ac1=00000000
+ ac2=70001BD2
+dispatchSystemCall: 700010E8
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010AE
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E0003756
+   (fs wt) byte count = 0018
+1
+WRITE EXTENSION
+   location = F0001C02
+   options = 0800
+   rel pos = 0000
+   init pos = 0109
+|                      |
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+
+================ LOCKSTEP DIVERGENCE ================
+  master: label=QUEST1 ordinal=0 result_pc=7016871D trap_pc=7016871D insns=103 blk=290091 ac0=00003ED2 ac1=00003DCD ac2=7012AC03 ac3=70001FE4 c=0 wsp=70001FE4 wfp=70001FE4 psr=8000 shadow_wsp=70001FE4 off=0 T(ac0..3)=00003ED2 00003DCD 7012AC03 70001FE4
+  clone : label=QUEST2 ordinal=0 result_pc=70166B3D trap_pc=70166B3D insns=145 blk=290118 ac0=00000003 ac1=701802AE ac2=7012AC06 ac3=74003398 c=0 wsp=70001092 wfp=74003398 psr=8000 shadow_wsp=70001FD0 off=0 T(ac0..3)=00000003 701802AE 7012AC06 70001B8A
+master backtrace:
+frame  4 -- DIST+0x6   [7016871D]
+frame  3 -- DISPLAY_SCREEN+0x8D   [70166B86]
+frame  2 -- GET_QUEST+0x775   [7016BCBE]
+frame  1 -- QUEST+0x3B0   [7015C3B5]
+frame  0 -- 7017EA51     guessing: I.INIT+0x23
+clone backtrace:
+frame  3 -- DISPLAY_SCREEN+0x44   [70166B3D]
+frame  2 -- GET_QUEST+0x775   [7016BCBE]
+frame  1 -- QUEST+0x3B0   [7015C3B5]
+frame  0 -- 7017EA51     guessing: I.INIT+0x23
+=====================================================

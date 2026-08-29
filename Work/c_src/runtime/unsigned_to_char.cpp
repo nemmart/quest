@@ -106,9 +106,10 @@ uint32_t unsigned_to_char(hw::Machine& machine) {
     // the saved-ac0 slot patched to the quotient. Final iteration's
     // values persist. Inner-entry ac2 is 1 (NLDAI at 0x7017DAC1) on
     // the first iteration, thereafter the previous iteration's scratch
-    // byte pointer (WADD at 0x7017DAE9). Inner-entry carry is 0 except
-    // on a first iteration reached via the argc>2 parse path, which
-    // skips the WSUB 0,0 at 0x7017DAA3 and leaves the entry carry.
+    // byte pointer (WADD at 0x7017DAE9). Inner-entry carry: see the
+    // P24 re-derivation at the staging line below (the pre-fix note
+    // here said "0 except argc>2 first iteration"; the k==1/argc<=2
+    // leg is c=1 under the wide-carry fix).
     psr=(machine.get_psr()|0x8000)&0xFFFF;                     // ovk set by the outer WSAVS on the master
     bridge.write_frame_wide(fb, 52, static_cast<int32_t>(fb+0xC));
     bridge.write_frame_wide(fb, 54, static_cast<int32_t>(fb+0x20));
@@ -118,7 +119,13 @@ uint32_t unsigned_to_char(hw::Machine& machine) {
     bridge.write_frame_wide(fb, 62, base);
     bridge.write_frame_wide(fb, 64, k==1 ? 1 : static_cast<int32_t>(fb*2+0x1B+34-k));
     bridge.write_frame_wide(fb, 66, static_cast<int32_t>(fb));
-    carry=(k==1 && argc>2) ? bridge.entry_carry() : 0;
+    // P24 re-derivation: iteration 1's inner-entry carry is the entry
+    // carry when argc>2 (the parse path skips daA3), else the daA3
+    // WSUB 0,0 latch = c=1 under the fix (was 0). For k>1 the LAST
+    // surviving iteration entered via the loop back-edge, whose final
+    // c-writer is the XNDO at daCB (narrow, fix-invariant): index+1
+    // never wraps 16 bits, c=0 — unchanged.
+    carry=(k==1) ? ((argc>2) ? bridge.entry_carry() : 1) : 0;
     bridge.write_frame_wide(fb, 68, static_cast<int32_t>(0x7017DADCu|(static_cast<uint32_t>(carry)<<31)));
   }
 
