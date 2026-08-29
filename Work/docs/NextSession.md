@@ -9,9 +9,10 @@
   parse gaps, see Project25/ByteEA.md §1). Grammar: wp/bp pointer
   builders (masking in the executor), M8 raw-index loads/stores, `*`;
   `<<` removed (was spec'd, never implemented). Local gates 3/3
-  green, 0 div. NEXT: (1) task 035 verdict (queued on main; runs the
-  p25 branch) → append to Project25/REPORT.md §5 and integrate; a
-  red battery is STOP-and-report. (2) USER'S disassembler fix for
+  green, 0 div. Battery 035: 12/13 green, ALL IR legs clean; the inj-emu red
+  (all-emulated leg, injection pc unreached) RULED FLAKE by the user
+  — verdict recorded in REPORT §5. NEXT: (1) integrate the branch.
+  (2) USER'S disassembler fix for
   the 184 byte-operand @ lines (ByteEA.md §2) → regen + diff-audit
   (expect exactly those lines) → retire lower.py's @-reconstruction
   for byte forms. (3) P26 = t-places (the two @addr borrow bracket

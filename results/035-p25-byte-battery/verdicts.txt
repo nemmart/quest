@@ -1,16 +1,16 @@
-fo        cfg=book  K=50  div=0   guard=0  liberr_native=1  pairs=8257 blk_equal=8257 blk_mismatch=0 k_heartbeats=7618 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
-m         cfg=book  K=50  div=0   guard=0  liberr_native=1  pairs=7640 blk_equal=7640 blk_mismatch=0 k_heartbeats=7161 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=I.STOP leg=OK
-inj       cfg=book  K=50  div=0   guard=0  liberr_native=0  pairs=7624 blk_equal=7624 blk_mismatch=0 k_heartbeats=7160 gaps_over_k=0 max_gap=50 floor=1000 OK end=FATAL want=FATAL leg=OK
-abort     cfg=book  K=50  div=0   guard=0  liberr_native=0  pairs=6334 blk_equal=6334 blk_mismatch=0 k_heartbeats=6128 gaps_over_k=0 max_gap=50 floor=10 OK end=WORLD-ABORT want=WORLD-ABORT leg=OK
-play      cfg=book  K=50  div=0   guard=0  liberr_native=0  pairs=5562763 blk_equal=5562763 blk_mismatch=0 k_heartbeats=5561701 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
-inj3      cfg=book  K=50  div=0   guard=0  liberr_native=1  pairs=7611 blk_equal=7611 blk_mismatch=0 k_heartbeats=7130 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=clean,I.STOP leg=OK
-k1fo      cfg=book  K=1   div=0   guard=0  liberr_native=1  pairs=364729 blk_equal=364729 blk_mismatch=0 k_heartbeats=364125 gaps_over_k=0 max_gap=1 floor=1000 OK end=clean want=clean,I.STOP leg=OK
-fo-st     cfg=stock K=50  div=0   guard=0  liberr_native=1  pairs=8382 blk_equal=8382 blk_mismatch=0 k_heartbeats=7743 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
-play-st   cfg=stock K=50  div=0   guard=0  liberr_native=0  pairs=9781931 blk_equal=9781931 blk_mismatch=0 k_heartbeats=9780675 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
-fo-emu    cfg=emu   K=50  div=0   guard=0  liberr_native=1  pairs=8184 blk_equal=8184 blk_mismatch=0 k_heartbeats=7545 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
-m-emu     cfg=emu   K=50  div=0   guard=0  liberr_native=1  pairs=7269 blk_equal=7269 blk_mismatch=0 k_heartbeats=6790 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=I.STOP leg=OK
-inj-emu   cfg=emu   K=50  div=0   guard=0  liberr_native=0  pairs=7569 blk_equal=7569 blk_mismatch=0 k_heartbeats=7010 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=FATAL leg=FAIL
-abort-emu cfg=emu   K=50  div=0   guard=0  liberr_native=0  pairs=6303 blk_equal=6303 blk_mismatch=0 k_heartbeats=6097 gaps_over_k=0 max_gap=50 floor=10 OK end=WORLD-ABORT want=WORLD-ABORT leg=OK
+fo        cfg=book  K=50  div=0   guard=0  liberr_native=1  pairs=7874 blk_equal=7874 blk_mismatch=0 k_heartbeats=7235 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+m         cfg=book  K=50  div=0   guard=0  liberr_native=1  pairs=7272 blk_equal=7272 blk_mismatch=0 k_heartbeats=6793 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=I.STOP leg=OK
+inj       cfg=book  K=50  div=0   guard=0  liberr_native=0  pairs=7256 blk_equal=7256 blk_mismatch=0 k_heartbeats=6792 gaps_over_k=0 max_gap=50 floor=1000 OK end=FATAL want=FATAL leg=OK
+abort     cfg=book  K=50  div=0   guard=0  liberr_native=0  pairs=5996 blk_equal=5996 blk_mismatch=0 k_heartbeats=5790 gaps_over_k=0 max_gap=50 floor=10 OK end=WORLD-ABORT want=WORLD-ABORT leg=OK
+play      cfg=book  K=50  div=0   guard=0  liberr_native=0  pairs=5553501 blk_equal=5553501 blk_mismatch=0 k_heartbeats=5552415 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+inj3      cfg=book  K=50  div=0   guard=0  liberr_native=1  pairs=7200 blk_equal=7200 blk_mismatch=0 k_heartbeats=6719 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=clean,I.STOP leg=OK
+k1fo      cfg=book  K=1   div=0   guard=0  liberr_native=1  pairs=363981 blk_equal=363981 blk_mismatch=0 k_heartbeats=363377 gaps_over_k=0 max_gap=1 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+fo-st     cfg=stock K=50  div=0   guard=0  liberr_native=1  pairs=7883 blk_equal=7883 blk_mismatch=0 k_heartbeats=7244 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+play-st   cfg=stock K=50  div=0   guard=0  liberr_native=0  pairs=9820020 blk_equal=9820020 blk_mismatch=0 k_heartbeats=9818692 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+fo-emu    cfg=emu   K=50  div=0   guard=0  liberr_native=1  pairs=8312 blk_equal=8312 blk_mismatch=0 k_heartbeats=7673 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+m-emu     cfg=emu   K=50  div=0   guard=0  liberr_native=1  pairs=7159 blk_equal=7159 blk_mismatch=0 k_heartbeats=6680 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=I.STOP leg=OK
+inj-emu   cfg=emu   K=50  div=0   guard=0  liberr_native=0  pairs=7590 blk_equal=7590 blk_mismatch=0 k_heartbeats=7126 gaps_over_k=0 max_gap=50 floor=1000 OK end=FATAL want=FATAL leg=OK
+abort-emu cfg=emu   K=50  div=0   guard=0  liberr_native=0  pairs=6374 blk_equal=6374 blk_mismatch=0 k_heartbeats=6168 gaps_over_k=0 max_gap=50 floor=10 OK end=WORLD-ABORT want=WORLD-ABORT leg=OK
 == Task 035 P25 byte battery (JOBS=6) ==
 inj: armed-pc block drops=1 (want 1)
 abort: armed-pc block drops=1 (want 1)
@@ -26,4 +26,4 @@ WPSH multi-wide sites:
 borrow sites (UPDATE_SCREENS; census-carried if 0 — ByteEA.md §5):
 7015F795:0 7016A3C7:0 
 B-form (GET_INPUT) blocks live: 7/78 — 7015C2B2 7015FAA0 7016DEA7 7016EBAB 701760C2 7017826A 70178C36
-wall_clock_seconds=488
+wall_clock_seconds=524
