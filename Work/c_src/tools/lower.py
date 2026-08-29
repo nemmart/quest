@@ -1,8 +1,18 @@
 #!/usr/bin/env python3
-# P23 lower.py — quest.dis + quest.blocks (+ pushmap, argmap) -> quest.ir
-# Spec: docs/Project23/IRPhase1.md. Register-faithful 1:1, class-capped,
-# no temps, no folding. Everything not in the cap is an embedded
-# statement. TOTAL: an all-embed block is valid output.
+# lower.py — quest.dis + quest.blocks (+ pushmap, argmap) -> quest.ir
+#
+# THE SPEC IS docs/IR.md (consolidated, normative; spec-wins).  This
+# emitter implements it — grammar, wp/bp/M8 semantics, WPSH group
+# stores, @addr borrow brackets, the byte-EA per-mode table — and any
+# emitter/spec disagreement is a bug in one of them, to be reported,
+# not papered over.  Byte-EA derivation record + the disassembler
+# byte-operand defect this parser compensates for:
+# docs/Project25/ByteEA.md and docs/DISASSEMBLER_BYTE_OPERANDS.md.
+# (Historical phase-1 rationale: docs/Project23/IRPhase1.md.)
+#
+# Register-faithful 1:1, class-capped, no temps, no folding.
+# Everything not in the cap is an embedded statement.  TOTAL: an
+# all-embed block is valid output.
 #
 # Phase 1 cap (spec §4): NLDAI WLDAI / X,L x N,W LDA/STA (modes 0-3,
 # direct or @-indirect via R) / XLEF LLEF / WMOV / WADD WSUB WADDI WSBI.
@@ -172,6 +182,13 @@ def parse_memop(pc, text, wide):
         die("@-prefix vs indirect bit disagree at %08X: %s" % (pc, text))
     return e
 
+def bplit(v):
+    """Byte-pointer literal in the dis fold notation: 0xW:b, value w*2+b
+    (user ruling, Aug 29: dump addresses are word-addressed; make the IR
+    text greppable against them — b is the byte select, always 0/1)."""
+    return "0x%08X:%d" % ((v >> 1) & 0x7FFFFFFF, v & 1)
+
+
 def byte_ea(pc, operand, wide):
     """Byte-EA operand -> VALUE expression, per Machine::eagle_{x,l}_
     byte_indexed (P25; semantics read from the emulator source, NOT the
@@ -214,7 +231,7 @@ def byte_ea(pc, operand, wide):
             value = disp & 0xFFFFFFFF                     # L ii=0: raw
         else:
             value = ((disp & 0x1FFFFFFF) | (seg3 << 29)) & 0xFFFFFFFF
-        return "0x%08X" % value
+        return bplit(value)
     if base == "pc":
         if wide:
             value = (opw * 2 + disp) & 0xFFFFFFFF
@@ -225,10 +242,10 @@ def byte_ea(pc, operand, wide):
             if folded != value:
                 die("byte fold 0x%08X:%d != computed 0x%08X at %08X: %s"
                     % (fold_w, fold_b, value, pc, operand))
-        return "0x%08X" % value
+        return bplit(value)
     # register base
     if wide:
-        return "%s*2 + 0x%08X" % (base, disp & 0xFFFFFFFF)
+        return "%s*2 + %s" % (base, bplit(disp & 0xFFFFFFFF))
     d = sext(disp, 16)
     return "bp(%s, %d)" % (base, d)
 

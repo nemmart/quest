@@ -17,14 +17,21 @@ implemented). Full tier landed: XLEFB/LLEFB values + 6 byte ld/st
 ops; embeds 31,116→27,600. Semantics read from
 eagle_{x,l}_byte_indexed — IR.md §8's parked formula was wrong for
 L-forms (corrected); the "indirect LPEFB hard case" was a
-disassembler artifact (raw 0xE0001998; 184 such lines flagged, FIX
-OWNED BY THE USER — lower.py reconstructs @→bit31 meanwhile). Local
+disassembler artifact (raw 0xE0001998; 184 such lines flagged; fix DEFERRED by
+user ruling — byteIndexed disassembler masking judged too risky to
+touch — so lower.py's @→bit31 reconstruction is STANDING;
+docs/DISASSEMBLER_BYTE_OPERANDS.md). Local
 gates: k1fo/k1play (book, K=1 strict) + stock fo, 0 div; LPEFB site
 live at startup; borrow blocks 0/2 by scripted drivers
 (census-carried, ByteEA.md §5). Battery: task 035 RAN — 12/13
-green, all IR legs 0 div (incl. 5.5M-pair play); inj-emu red ruled
-flake by the user (all-emulated leg, injection pc unreached, zero
-P25 code; REPORT §5). Docs: IR.md amended (§5/§6/§8/§9),
+green, all IR legs 0 div (incl. 5.5M-pair play); inj-emu red ruled flake,
+retries ridden, attempt 3 13/13 GREEN DONE (REPORT §5). Post-landing:
+0xW:b byte-pointer literals (dump-greppable; : is byte-select only,
+bitp reserved for M1), IR.md cross-refs, disassembler defect doc
+(fix deferred, shim standing), and the assert(e[, "msg"]) statement
+(clone prints + detaches on failure; compare_pair detached
+early-out closes the straddling-batch latent race). All specified
+in IR.md; K=1 re-gates green throughout. Docs: IR.md amended (§5/§6/§8/§9),
 Project25/{ByteEA,REPORT,REPORT_worklog}.md.
 
 ## ★ PARALLEL BATTERY TEMPLATE LANDED — task 034 (Aug 29 2026)

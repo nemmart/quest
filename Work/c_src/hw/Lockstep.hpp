@@ -104,6 +104,16 @@ public:
   static bool is_detached(int32_t ordinal);
   static void detach(QueueEntry* master, QueueEntry* clone);
 
+  // P25 `assert` op: clone-initiated detach from INSIDE a clone batch.
+  // The worker runs batches under shared_write_mutex (thread_main), so
+  // the full unhook is safe at the assert site — the same world-pause
+  // detach() gets at the compare site. Prints the report, halts the
+  // clone process (every ordinal, same reasoning as detach()),
+  // unmirrors, retires copies. Caller throws afterward to end the
+  // batch; compare_pair's detached early-out keeps the truncated
+  // clone half from reading as a divergence.
+  static void assert_detach(Machine* clone_machine, const char* report);
+
   // abort_world — the deliberate stop-the-world path (Layering ruling 6
   // impl note + ruling 7). Used when pairing is impossible or the world
   // is proven corrupt: prints the reason (+ machine state if given),

@@ -1,3 +1,13 @@
+// IRExec — the clone-side IR interpreter.
+//
+// THE SPEC IS docs/IR.md (consolidated, normative; spec-wins).  The
+// grammar parsed here, the wp/bp/M8 semantics (P25 byte addressing),
+// the segment-wrap index rule, the refuse-on-anything loader posture,
+// and the terminator discipline are all defined there; this file is
+// the implementation.  Where an operation corresponds to machine
+// behavior, call the SAME emulator code paths the instruction would
+// (Machine/Memory/EagleInstruction helpers) — never a local formula.
+// Byte-EA derivation record: docs/Project25/ByteEA.md.
 #include "IRExec.hpp"
 #include "Machine.hpp"
 #include "Memory.hpp"
@@ -160,7 +170,16 @@ struct Parser {
     if (s[0] == '0' && (s[1] == 'x' || s[1] == 'X')) {
       char* end; uint64_t v = strtoull(s, &end, 16);
       if (end == s || v > 0xFFFFFFFFull) bad("bad hex constant");
-      s = end; return node(Expr::CONST, nullptr, nullptr, uint32_t(neg ? -int64_t(v) : int64_t(v)));
+      s = end;
+      if (*s == ':') {                  // P25: byte-pointer literal 0xW:b
+        s++;                            // (dis fold notation; b = byte select)
+        if (neg) bad("negative byte-pointer literal");
+        if (*s != '0' && *s != '1') bad("byte select must be 0 or 1");
+        uint32_t b = uint32_t(*s++ - '0');
+        if (v > 0x7FFFFFFFull) bad("byte-pointer word address exceeds 31 bits");
+        return node(Expr::CONST, nullptr, nullptr, uint32_t(v) * 2u + b);
+      }
+      return node(Expr::CONST, nullptr, nullptr, uint32_t(neg ? -int64_t(v) : int64_t(v)));
     }
     if (*s >= '0' && *s <= '9') {
       char* end; uint64_t v = strtoull(s, &end, 10);
@@ -375,6 +394,31 @@ void IRExec::load(const std::string& path) {
         refuse("goto target " + t + " is not a listed block start");
     } else if (tok == "save") {
       refuse("'save' is reserved but not implemented this tranche");
+    } else if (body.rfind("assert(", 0) == 0) {
+      // P25: assert(expr) | assert(expr, "message").  Statement, never a
+      // terminator.  The message may not contain '"' (grammar rule) and
+      // cannot contain ';' by construction (comment stripping runs first).
+      st.kind = Stmt::ASSERT;
+      st.text = body;
+      const char* p = body.c_str() + 7;          // past "assert("
+      Parser pe(p, cur->start);
+      P cond = pe.expr();
+      std::string msg;
+      pe.ws();
+      if (*pe.s == ',') {
+        pe.s++; pe.ws();
+        if (*pe.s != '"') refuse("assert message must be a \"string\": " + body);
+        pe.s++;
+        const char* mstart = pe.s;
+        while (*pe.s && *pe.s != '"') pe.s++;
+        if (*pe.s != '"') refuse("assert message missing closing quote: " + body);
+        msg.assign(mstart, pe.s - mstart);
+        pe.s++;
+      }
+      pe.ws();
+      if (*pe.s != ')') refuse("assert missing closing paren: " + body);
+      pe.s++; pe.end();
+      st.rhs = cond;
     } else {
       st.kind = Stmt::STMT;
       size_t eq = body.find('=');
@@ -573,6 +617,24 @@ uint32_t IRExec::run_block(Machine& machine, uint32_t pc) {
                    "expected %08X", st.pc, new_pc, expected);
           throw std::runtime_error(buf);
         }
+      }
+      case Stmt::ASSERT: {
+        // P25: condition true -> free; condition 0 -> the clone's own IR
+        // is wrong by its own declaration.  Print the statement and
+        // DETACH (user ruling): master (ground truth) continues
+        // unverified; the throw ends this clone batch, which the
+        // compare_pair detached early-out then skips.
+        if (cx.eval(st.rhs) != 0)
+          break;
+        char rep[512];
+        snprintf(rep, sizeof rep,
+                 "IR ASSERT FAILED [block %08X stmt %zu]: %s",
+                 blk->start, i, st.text.c_str());
+        if (machine.lockstep_role == Lockstep::CLONE) {
+          Lockstep::assert_detach(&machine, rep);
+          throw std::runtime_error("IR assert failed (clone detached)");
+        }
+        throw std::runtime_error(rep);   // non-lockstep: loud, METHOD S8
       }
       case Stmt::STMT: {
         if (dbg)

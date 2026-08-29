@@ -1,6 +1,11 @@
 # Next session
 
-## P25 LANDED — pending battery verdict (Aug 29 2026)
+## P25 LANDED — battery GREEN, reviewed + integrated (Aug 29 2026)
+- Battery 035: attempt 1 12/13 (inj-emu endpoint-reach flake, user
+  ruling, evidence in REPORT §5); attempt 3 **13/13 GREEN DONE**.
+  Reviewed + merged to main Aug 29; reviewer notes REPORT §9.
+  Next: **P26 = t-places** (borrows convert — the two @addr bracket
+  pairs are the pilot's first customers; conditional exits).
 - P25 (byte addressing + call ledger) is IMPLEMENTED on branch
   p25-byte-addressing: **566/566 decorated sites lowered** (the user
   reversed the borrow exclusion in-session — bracket as @addr
@@ -9,13 +14,19 @@
   parse gaps, see Project25/ByteEA.md §1). Grammar: wp/bp pointer
   builders (masking in the executor), M8 raw-index loads/stores, `*`;
   `<<` removed (was spec'd, never implemented). Local gates 3/3
-  green, 0 div. Battery 035: 12/13 green, ALL IR legs clean; the inj-emu red
-  (all-emulated leg, injection pc unreached) RULED FLAKE by the user
-  — verdict recorded in REPORT §5. NEXT: (1) integrate the branch.
-  (2) USER'S disassembler fix for
-  the 184 byte-operand @ lines (ByteEA.md §2) → regen + diff-audit
-  (expect exactly those lines) → retire lower.py's @-reconstruction
-  for byte forms. (3) P26 = t-places (the two @addr borrow bracket
+  green, 0 div. Battery 035: attempt 1 12/13 (inj-emu red ruled flake), attempt 3
+  **13/13 GREEN, DONE** — flake confirmed. NOTE: the ir2 artifacts on
+  the branch were regenerated AFTER the green battery for the 0xW:b
+  literal (pure notation, identical census, K=1 local re-gate green);
+  the reviewer may want the next battery run on the literal-form
+  artifacts or may accept the K=1 gate. Also on the branch
+  post-battery: the assert(e[, "msg"]) statement (spec'd in IR.md §3;
+  fire-tested: print + detach + 0 div + master continues). NEXT: (1) integrate the branch.
+  (2) Disassembler byte-operand
+  defect: fix DEFERRED by user ruling (the byteIndexed masking is
+  buggy in multiple ways; too risky to touch) — the lower.py
+  reconstruction shim is STANDING; docs/DISASSEMBLER_BYTE_OPERANDS.md
+  is the record and the future-fix protocol. (3) P26 = t-places (the two @addr borrow bracket
   pairs in lowered blocks are the pilot's first customers) +
   conditional exits.
 

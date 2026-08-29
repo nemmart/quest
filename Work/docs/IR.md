@@ -77,6 +77,23 @@ addresses; blocks are single-entry, so statements need no identities.
                                    refuses). WSAVS reads its frame
                                    word from memory, so it needs an
                                    address story first.
+    assert(e)                      STATEMENT (P25). Evaluates e; 0 is
+    assert(e, "message")           failure. Never a terminator. On the
+                                   CLONE, failure prints the statement
+                                   ("IR ASSERT FAILED [block, stmt]:
+                                   <source text>") and DETACHES — the
+                                   clone halts, the master (ground
+                                   truth) continues unverified, and
+                                   compare_pair's detached early-out
+                                   keeps the truncated batch from
+                                   reading as a divergence (user
+                                   ruling, Aug 29). Outside lockstep
+                                   it throws (loud, METHOD §8). The
+                                   message may not contain '"'
+                                   (grammar) and cannot contain ';'
+                                   by construction (comments strip
+                                   first); malformed forms REFUSE at
+                                   load.
 
 One machine instruction MAY lower to several statements (e.g. WPSH,
 future): no bookkeeping is required or possible — statements are
@@ -100,7 +117,8 @@ sequence, not identities.
     expr    := unary/primary chained with binary ops (left-assoc,
                single level — emitters parenthesize anything else)
     binops  := + - * & | ^ #+ #-         (#* #/ reserved, refused)
-    primary := acN | constant (0x… or signed decimal) | M8[e] | M16[e] |
+    primary := acN | constant (0x… or signed decimal) |
+               byte-pointer literal 0xW:b (b in {0,1}) | M8[e] | M16[e] |
                M32[e] | R[e] | wp(e, e) | bp(e, e) | sx16(e) | zx16(e) |
                zx8(e) | trunc16(e) | ( e )
     M1 and t-places are reserved (IQ3 / P26) and refused.
@@ -134,6 +152,17 @@ Semantics (32-bit unsigned host arithmetic, wrap):
   table read out of the emulator source).
 - `*` is host 32-bit multiply, wrap, no flags (distinct from the
   reserved #-op `#*`, which owns flag semantics if ever needed).
+- Byte-pointer literal `0xW:b` (P25, user ruling): value = W*2 + b.
+  Pure notation for a 32-bit byte pointer in the disassembler's fold
+  form — W is the WORD address (what memory dumps use), b the byte
+  select. `:b` means BYTE SELECT exclusively and permanently: b is 0
+  or 1, anything else refuses. Emitters use it for every constant
+  byte EA and for L-form byte-table bases (`acN*2 + 0xW:b`), so the
+  IR text is greppable against word-addressed dumps and matches the
+  dis rendering. Word-pointer constants stay plain hex (already
+  word-addressed). wp/bp remain the REGISTER-RELATIVE forms only —
+  no wp(0,d)/bp(0,d) is ever emitted. Bit-pointer literals (M1,
+  future) must NOT overload `:` — see §8.
 - SEGMENT WRAP (executor rule): every M/R INDEX is evaluated as
   (e & 0x0FFFFFFF) | seg, seg from the block header. The emitter
   refuses any absolute or pc-folded EA outside the block's segment,
@@ -235,7 +264,10 @@ counted the bracket).
 
 ## 8. Reserved / roadmap
 
-`save`; `#*` `#/`; M1 (bit addressing, IQ3). Byte addressing (M8,
+`save`; `#*` `#/`; M1 (bit addressing, IQ3 — when it lands, bit
+pointers get the function-style literal `bitp(w, n)` (n = 0..31),
+matching the wp/bp precedent; the colon form `0xW:b` is byte-select
+FOREVER and is not to be overloaded — user ruling, Aug 29 2026). Byte addressing (M8,
 wp/bp, B-form pushes) LANDED in P25 — and the formula this section
 used to park, ((base<<1)+disp)&0x1FFFFFFF | (seg<<29), was found to
 describe only the X-form ii=0/2/3 cases: the L-form byte EA applies
@@ -261,7 +293,12 @@ pass-through), wp(b,d)/bp(b,d) pointer builders (masking in the
 executor, not the text — retires pef_value's spelled-out word mask
 and the old unwrapped XLEF/LLEF value emission, a latent
 inconsistency recorded in ByteEA.md), `*` host-multiply binop, `<<`
-removed (was specified, never implemented), WPSH group stores, and
-@addr borrow brackets inside lowered decorated blocks. Grammar is a
+removed (was specified, never implemented), WPSH group stores,
+@addr borrow brackets inside lowered decorated blocks, and the
+byte-pointer literal 0xW:b (word-addressed fold notation; `:` is
+byte-select only, bitp(w,n) reserved for M1). Second P25 amendment:
+`assert(e[, "msg"])` statement — clone prints + detaches on failure;
+compare_pair gained the detached early-out (which also closes the
+documented straddling-batch latent race after process-wide detach). Grammar is a
 superset except `<<`; pre-P25 loaders refuse the new forms (regenerate
 artifacts and binaries together, as always).
