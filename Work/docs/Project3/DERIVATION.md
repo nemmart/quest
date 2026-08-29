@@ -1,5 +1,20 @@
 # Project 3 — T?AREA, I.EPILOG, I.PROLOG, I.GOTO: Translation Derivation
 
+> **P24 WIDE-CARRY CORRECTION (Aug 29 2026).** Every carry VALUE in
+> this document that derives from the wide helpers reflects the OLD
+> emulator's `>>31` bug (docs/Project23/WideCarry.md, fixed by Project
+> 24). The corrected semantics: `WSUB x,x` -> c=**1** (no borrow);
+> `WADC x,x` -> c=**0** (user ruling — no ALU carry-out of x + ~x);
+> `WSBI n,x` carries per genuine no-borrow (count-0 decrement borrows:
+> c=0; count-1 does not: c=1 — the reverse of the old values); `WINC x`
+> -> c=1 iff x==0xFFFFFFFF (old: never on that operand shape). Narrow
+> (Nova/`>>16`) carries are unchanged. Annotations below are NOT
+> rewritten inline (METHOD §11); read every wide-derived c through this
+> mapping. The re-derived native staging lives in runtime/ (P24
+> report); this doc remains the record of the derivation METHOD.
+
+
+
 Status: TRANSLATED AND VALIDATED (this session). All four routines
 capture-validated to ZERO differing words on their live shapes and
 exercised under `-lockstep` gameplay (login sessions + the

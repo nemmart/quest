@@ -134,6 +134,8 @@ std::string Disassembler::disassemble(Memory& memory, uint32_t address, const st
     return name + " " + std::to_string((opcode>>11)&0x03) + "," + wide_byte_indexed(memory, address+1, opcode, 13);
   else if (fmt == "tinyImmediateWordIndirect")
     return name + " " + std::to_string(static_cast<int32_t>((opcode>>13))-4+1) + "," + word_indirect(memory, address+1, opcode, 11);
+  else if (fmt == "tinyImmediateWideIndirect")   // L-forms: wide displacement, 3 words
+    return name + " " + std::to_string(static_cast<int32_t>((opcode>>13))-4+1) + "," + wide_indirect(memory, address+1, opcode, 11);
   else if (fmt == "wordIndirect")
     return name + " " + word_indirect(memory, address+1, opcode, 11);
   else if (fmt == "wideIndirect")
@@ -169,6 +171,9 @@ int Disassembler::word_length(const std::string& fmt) {
   if (fmt == "registerWordByteIndexed") return 2;
   if (fmt == "registerWideByteIndexed") return 3;
   if (fmt == "tinyImmediateWordIndirect") return 2;
+  if (fmt == "tinyImmediateWideIndirect") return 3;  // was merged with the
+                                          // word class at 2 — the LNADI/LNSBI
+                                          // phantom-listing defect (P23 report)
   if (fmt == "wordIndirect") return 2;
   if (fmt == "wideIndirect") return 3;
   if (fmt == "wordIndirectArgument") return 3;

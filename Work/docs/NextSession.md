@@ -1,12 +1,15 @@
-> **[Aug 28 2026 — P22 banner]** This re-entry narrative is from Aug 13
-> and predates P14–P22. Current state now lives in CURRENT_STATE.md
-> (newest entry on top). Next project: **P23 — Gen-6.1, 1:1 lowering**
-> (context: docs/Project22/IRDesign.md; binding obligations from P22:
-> remove the TEMPORARY insn-count compare term, honor the carry-live-in
-> list of 163 blocks in docs/Project22/REPORT.md §8, and close the CFG
-> gaps before translating affected blocks — ENQT/DEQUE skip edges and
-> SQR31?3's interior LJSR at 7015BD6B). The narrative below remains
-> valid history for Milestones 1–3.
+> **[Aug 29 2026 — P23 banner]** This re-entry narrative is from Aug 13
+> and predates P14–P23. Current state now lives in CURRENT_STATE.md
+> (newest entry on top). **P23 LANDED** (Gen-6.1: the IR — reviewed and
+> integrated Aug 29; docs/Project23/REPORT.md, spec docs/IR.md; all P22
+> obligations discharged). Next work, per REPORT §8: the wide-carry
+> re-verification (parked task, docs/Project23/WideCarry.md — redo the
+> carry-live-in census BEFORE landing the parked patch), then B-form
+> byte-EA extraction (96 call sites), WPSH multi-wide (25), `save`,
+> and the @/bit-15 listing fix+regen. **P24 = t-places** (borrows are
+> the pilot per user ruling; `end if` conditional exits are the
+> boundary). The narrative below remains valid history for
+> Milestones 1–3.
 
 Hi Claude!
 

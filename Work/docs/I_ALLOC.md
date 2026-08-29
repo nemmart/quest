@@ -546,11 +546,20 @@ block+size−4 = old break; wsl += size; [1FC] := restored break + 2;
 [restored break] := −1 (e9CE, mirrors alloc's sentinel). Registers out:
 all three ACs = entry (nothing patched), c = entry.
 
-### Carry chains (source-formula, capture-proven)
+### Carry chains (source-formula; pre-fix captures — see P24 note)
 
-- `WADC x,x` → c=1 always. Alloc path: set at e90B, survives the header
+**P24 CORRECTION (Aug 29 2026, wide-carry fix + WADC user ruling):**
+`WADC x,x` → c=**0** (no ALU carry-out of x + ~x; the pre-fix c=1 was
+the >>31 bug). The alloc-path chain below is unchanged in SHAPE but the
+value flips: the unlock-LCALL residue word is now 0x7017EA08 (bit31
+clear), and the 0xF017EA08 in captures/i_alloc-master.txt is a PRE-FIX
+artifact. The WNEG row's c=0 keeps its value with a simpler reason:
+genuine borrow. i_alloc.cpp re-staged accordingly (P24 report).
+
+- `WADC x,x` → c=1 always [P24: now c=0 — see correction above]. Alloc
+  path: set at e90B, survives the header
   writer's WRTN (bit31 of its saved ret wide), reaches the unlock LCALL
-  → 0xF017EA08 in residue.
+  → 0xF017EA08 in residue [P24: now 0x7017EA08].
 - `WNEG` of a negative → c=0 (see table note). Free path: c=0 from e9B1
   through the coalescer helper's image and WRTN to the unlock LCALL →
   0x7017EA08 (bit31 clear).

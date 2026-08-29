@@ -129,9 +129,12 @@ corrections and all four open questions resolved:
    Varying pieces, empirically confirmed: patched slot = last
    quotient; saved-ac1 = base; saved-ac2 = 1 on iteration 1 (NLDAI at
    7017DAC1), thereafter the PREVIOUS iteration's scratch byte
-   pointer fb*2+0x1B+(34-k); return wide = 0x7017DADC | carry<<31
-   where carry = entry carry if (k==1 && argc>2) else 0 (the argc>2
-   parse path skips the WSUB 0,0 at 7017DAA3).
+   pointer fb*2+0x1B+(34-k); return wide = 0x7017DADC | carry<<31.
+   P24 CORRECTION (Aug 29 2026): carry = entry carry if (k==1 &&
+   argc>2); **1** if (k==1 && argc<=2) — the daA3 WSUB 0,0 latch now
+   SETS carry; 0 if k>1 — the surviving iteration's last c-writer is
+   the daCB XNDO (narrow, fix-invariant, index never wraps 16 bits).
+   The pre-fix rule read "else 0" for all non-(k==1&&argc>2) cases.
 3. Open questions: (1) digit table = 00 00 "0123456789ABCDEF", XLEFB
    base at byte 1, so remainder+1 → TABLE[remainder]. (2) CVWN: keeps
    sext16 of the LOW half, ovr |= high half not a pure sign

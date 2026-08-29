@@ -18,9 +18,10 @@
 //     -- type != 2 --
 //   7017fd88 XWLDA 0,@[ac3-0x10];      ac0 = type (again)
 //   7017fd8a WSEQI 0,6;  WBR ->fd91 if type != 6
-//   7017fd8d WADC 0,0;                 ac0 = -1, c = 1 (EagleCompute
-//                                      add(~src,dst): carry-out 1,
-//                                      ovr contribution 0 — §3.4)
+//   7017fd8d WADC 0,0;                 ac0 = -1, c = 0 (P24 ruling:
+//                                      add(~src,dst) = 0xFFFFFFFF has
+//                                      no ALU carry-out; ovr 0. The
+//                                      pre-fix c=1 was the >>31 bug.)
 //   7017fd8e XWSTA 0,[ac3+0xC];  WBR ->fd95      local [F+12] = -1
 //   7017fd91 NLDAI 6,0;                ac0 = 6 (no flag effects)
 //   7017fd93 XWSTA 0,[ac3+0xC];        local [F+12] = 6
@@ -139,7 +140,10 @@ uint32_t pq_defon(hw::Machine& machine) {
     machine.ac[0] = new_type;
     // ac1, ac2 untouched: still the entry values, as emulation leaves them.
     machine.ac[3] = static_cast<int32_t>(A_OSIG_RET);
-    machine.c = (type == 6) ? 1 : bridge.entry_carry();   // WADC 0,0 sets c=1; NLDAI path keeps entry c
+    machine.c = (type == 6) ? 0 : bridge.entry_carry();   // fd8D WADC 0,0: no ALU carry-out of
+                                                          // x + ~x, c=0 (P24 user ruling; pre-fix
+                                                          // the >>31 bug gave 1). NLDAI path keeps
+                                                          // the entry carry (no c-writer, verified).
 
     debug::Capture::native_footprint(machine);
 

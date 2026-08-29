@@ -14,13 +14,14 @@
 
 namespace {
 
-// Carry formulas copied VERBATIM from hw/EagleInstruction.cpp add()/
-// sub(). Do not "simplify": the I.FREEW capture proved the sub() carry
-// differs from borrow intuition (WNEG of a negative size gives c=0,
-// int64 arithmetic-shift then &1). See I_ALLOC.md "Carry chains".
+// P24 CORRECTION (Aug 2026, wide-carry fix): this used to be a
+// verbatim replica of the OLD (>>31) add() carry formula. Now the ALU
+// carry-out (bit 32), matching the fixed hw/EagleInstruction.cpp. Every
+// call site discards c (c_unused) — the size-class arithmetic never
+// consumes it — so this is formula hygiene, not a behavior change here.
 int32_t add_c(int64_t src, int64_t dst, int32_t& c) {
   int64_t result = dst + src;
-  int64_t carry = ((dst & 0xFFFFFFFF) + (src & 0xFFFFFFFF)) >> 31;
+  int64_t carry = ((dst & 0xFFFFFFFF) + (src & 0xFFFFFFFF)) >> 32;
   c = static_cast<int32_t>(carry & 0x01);
   return static_cast<int32_t>(result & 0xFFFFFFFF);
 }
@@ -183,9 +184,13 @@ uint32_t i_alloc(hw::Machine& machine) {
   mem.write_wide(static_cast<uint32_t>(F) + 12, size);
   mem.write_wide(static_cast<uint32_t>(F) + 14, block);
   mem.write_wide(static_cast<uint32_t>(F) + 16, F);
-  // c=1 at the unlock LCALL: WADC 1,1 at 0x7017E90B (capture: F017EA08).
+  // c at the unlock LCALL: WADC 1,1 at 0x7017E90B. P24 CORRECTION
+  // (user ruling, Aug 29 2026): WADC x,x = add(~x,x) has NO ALU
+  // carry-out (0xFFFFFFFF, no bit 32), so c=0 — the pre-fix c=1 (and
+  // the 0xF017EA08 in the old capture) was the >>31 bug. The fixed
+  // master saves 0x7017EA08 here.
   mem.write_wide(static_cast<uint32_t>(F) + 18,
-                 static_cast<int32_t>(A_UNLOCK_RET | 0x80000000u));
+                 static_cast<int32_t>(A_UNLOCK_RET));
 
   // ---- heap effects ----
   machine.wsl = machine.wsl - size;                       // STASL 0x7017E903
@@ -258,8 +263,11 @@ uint32_t free_common(hw::Machine& machine, hw::RTBridge& bridge,
   mem.write_wide(static_cast<uint32_t>(F) + 10, size);
   mem.write_wide(static_cast<uint32_t>(F) + 12, block + size);
   mem.write_wide(static_cast<uint32_t>(F) + 14, F);
-  // c=0 at the unlock LCALL: sub() carry of WNEG(-size) is 0 —
-  // capture-proven, NOT borrow intuition (I_ALLOC.md "Carry chains").
+  // c=0 at the unlock LCALL: WNEG of -size (nonzero) borrows, so the
+  // fixed ALU carry is 0. P24 NOTE: same VALUE as pre-fix (the old
+  // >>31 formula also gave 0 here), but the justification is now plain
+  // borrow semantics; the old "NOT borrow intuition" caveat described
+  // the buggy formula and is retired.
   mem.write_wide(static_cast<uint32_t>(F) + 16, static_cast<int32_t>(A_UNLOCK_RET));
   mem.write_wide(static_cast<uint32_t>(F) + 18, static_cast<int32_t>(A_RET_WATER));
   mem.write_wide(static_cast<uint32_t>(F) + 20, block);   // water helper WPSH scratch

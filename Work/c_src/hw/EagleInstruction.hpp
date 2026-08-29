@@ -10,8 +10,10 @@ class Machine;
 
 class EagleInstruction : public Instruction {
 public:
-  int32_t add(Machine& machine, int64_t src, int64_t dst);
-  int32_t sub(Machine& machine, int64_t src, int64_t dst);
+  // static: P23 IRExec calls these directly — the IR #-ops are DEFINED
+  // as these helpers (docs/Project23/WideCarry.md), single source of truth.
+  static int32_t add(Machine& machine, int64_t src, int64_t dst);
+  static int32_t sub(Machine& machine, int64_t src, int64_t dst);
   int32_t mul(Machine& machine, int64_t src, int64_t dst);
   int32_t arithmetic_shift(Machine& machine, int32_t src, int32_t amount);
   int32_t logical_shift(Machine& machine, int32_t src, int32_t amount);

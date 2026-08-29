@@ -213,3 +213,18 @@ with the producer audit; (3) the census, rewritten over verified IR;
 (4) the raise census and the M5 analyses. Each step keeps the game
 playable and the checker green — no analysis is ever built on
 unverified semantics.
+
+
+## Addendum (Aug 28, post-P22 ruling): the sync list frees the runtime for conversion
+
+Because only game blocks are counted, ?-call interiors are unobserved
+spans between crossings — the checker is already indifferent to how
+the runtime computes, watching only the doorframe (L0/L1 entry and
+leaf pairs), the syscall gate, and surface-visible effects (caller
+memory, shared pages, exit ACs). Any ?-routine may therefore be
+replaced by a native implementation honoring its summary — reads,
+writes, error class — at any time after Gen-6.0, independent of game
+translation progress. This generalizes M3b's contract-fidelity
+concession from L2 to the entire runtime: the summary catalog is the
+conversion contract, and RT conversion becomes per-routine
+incremental work parallel to, not downstream of, M5.

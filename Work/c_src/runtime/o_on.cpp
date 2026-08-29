@@ -110,7 +110,7 @@ uint32_t o_on(hw::Machine& machine) {
   search.scratch=out.scratch;
   write_helper_residue(machine, frame+8, bridge.entry_psr()|0x8000,
                        type, caller, frame,
-                       0x7017EDA1u, (type>0) ? bridge.entry_carry() : 0, search);
+                       0x7017EDA1u, (type>0) ? bridge.entry_carry() : 1, search);   // catch-all: ee7B WSUB 1,1 -> c=1 (P24 fix; was 0)
 
   final_wsp = out.allocated ? wsp0+8 : wsp0;   // the normative wsp effect (H3)
   debug::Capture::native_footprint(machine);
@@ -147,7 +147,7 @@ uint32_t o_revert(hw::Machine& machine) {
     // at the XJSR: ovk=0).
     write_helper_residue(machine, frame, bridge.entry_psr()&~0x8000,
                          type, caller, frame,
-                         0x7017EDD6u, (type>0) ? bridge.entry_carry() : 0, search);
+                         0x7017EDD6u, (type>0) ? bridge.entry_carry() : 1, search); // catch-all: ee7B WSUB 1,1 -> c=1 (P24 fix; was 0)
   }
 
   debug::Capture::native_footprint(machine);

@@ -149,8 +149,9 @@ void handler_body_to_boundary(hw::Machine& machine, int32_t Wh,
   mem.write_wide(Fh - 4, e_ac2);
   mem.write_wide(Fh - 2, machine.wfp);
   mem.write_wide(Fh, static_cast<int32_t>(ret_addr) | (e_c << 31));
-  // Locals: WADC 1,1 -> -1 (always; c momentarily 1), WSUB 2,2 -> 0
-  // (c := 0 — the boundary carry), code.
+  // Locals: WADC 1,1 -> -1 (always; c momentarily 0 — P24 ruling: no
+  // ALU carry-out of x + ~x), WSUB 2,2 -> 0 (c := 1, x-x has no
+  // borrow — the boundary carry; pre-fix this was c=0), code.
   mem.write_wide(Fh + 2, -1);
   mem.write_wide(Fh + 4, 0);
   mem.write_wide(Fh + 6, code);
@@ -169,7 +170,7 @@ void handler_body_to_boundary(hw::Machine& machine, int32_t Wh,
   machine.ac[1] = -1;
   machine.ac[2] = 0;
   machine.ac[3] = static_cast<int32_t>(A_RET_OSIG);
-  machine.c = 0;
+  machine.c = 1;                    // WSUB 2,2 boundary carry (P24: was 0 pre-fix)
   machine.ovk = 1;
   machine.ovr = 0;
   machine.wfp = static_cast<int32_t>(Fh);
@@ -328,7 +329,7 @@ uint32_t lib_error(hw::Machine& machine) {
     machine.ac[1] = bridge.entry_ac(1);
     machine.ac[2] = static_cast<int32_t>(B);
     machine.ac[3] = static_cast<int32_t>(A_RET_FREEW);
-    machine.c = 0;
+    machine.c = 1;                  // e35D WSUB 0,0 latch: x-x, no borrow (P24: was 0 pre-fix)
     machine.ovk = 1;
     machine.ovr = 0;
     machine.wfp = static_cast<int32_t>(F);
@@ -339,7 +340,11 @@ uint32_t lib_error(hw::Machine& machine) {
     mem.write_wide(B + 0x3, 0);
   }
 
-  int32_t c_x = 0;                                   // carry at the XCALL
+  int32_t c_x = 1;                                   // carry at the XCALL: the e35D
+                                                     // WSUB 0,0 latch carry (c=1 under the
+                                                     // P24 fix; was 0) survives every framed
+                                                     // call to the XCALL on the no-message
+                                                     // path; WCMV overwrites it below.
   int32_t wcmv_leftover = 0, wcmv_dst_end = 0;       // e3C2 T?AREA residue inputs
   if(argc > 1) {
     mem.write_word(F + 2, static_cast<uint32_t>(len) & 0xFFFF);  // narrow local
@@ -347,7 +352,11 @@ uint32_t lib_error(hw::Machine& machine) {
     machine.ac[1] = 3;
     machine.ac[2] = static_cast<int32_t>(B);
     machine.ac[3] = static_cast<int32_t>(A_RET_ALLOC);
-    machine.c = 0;
+    machine.c = 0;                  // last writer is the SECOND WINC at e396: its operand
+                                    // ((len+1)>>1 logical) can never be 0xFFFFFFFF, so the
+                                    // ALU carry-out is 0. P24 NOTE: same value as pre-fix,
+                                    // new justification (the first WINC at e394 now gives
+                                    // c=1 for len==-1, but e396 always overwrites).
     machine.ovk = 1;
     machine.ovr = 0;
     machine.wfp = static_cast<int32_t>(F);

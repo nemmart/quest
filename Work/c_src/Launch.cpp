@@ -13,6 +13,7 @@
 #include "hw/Machine.hpp"
 #include "hw/AddressBook.hpp"
 #include "hw/BlockSync.hpp"
+#include "hw/IRExec.hpp"
 #include "hw/MachineThread.hpp"
 #include "hw/Lockstep.hpp"
 #include "os/ProbeSuppressions.hpp"
@@ -233,6 +234,10 @@ int main(int argc, char* argv[]) {
   // refuses to run on any violation.
   if(hw::Lockstep::enabled && !hw::BlockSync::load_from_env())
     return 1;
+  // P23 quest.ir (QUEST_IR=<file>): IR blocks the clone executes in
+  // place of emulation. Loader refuses on provenance mismatch or any
+  // validation failure; absent env = fully emulated clone.
+  hw::IRExec::instance = hw::IRExec::load_from_env();
   // M4a address book (QUEST_ADDRESS_BOOK=<file>): which game routines run
   // their WSAVS frame in a fixed area (clone only). Absent = stock.
   if(!hw::AddressBook::load_from_env())

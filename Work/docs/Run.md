@@ -43,10 +43,12 @@ listed twice: the first instance becomes the **master**, the second the
 **clone**; all other programs (the server) run normally. Since P22
 (Gen-6.0, docs/Project22/), lockstep additionally REQUIRES two envs and
 honors a third — it refuses to launch without the first two:
-`QUEST_BLOCKS=<path>` (ground-truth CFG, normally
-Disassembled/quest.blocks), `QUEST_SYNC_LIST=<path>` (the sync list,
-normally Work/c_src/quest.synclist — the identity list until a
-translation ships its own), and `QUEST_SYNC_K=<n>` (rendezvous every n
+`QUEST_BLOCKS=<path>` (ground-truth CFG — since P23 the operative file
+is Work/c_src/quest.blocks.split, the all-skips-split CFG; the
+pre-split Disassembled/quest.blocks is its regeneration input),
+`QUEST_SYNC_LIST=<path>` (the sync list — since P23 normally
+Work/c_src/quest.synclist.split, the identity list over the split
+CFG), and `QUEST_SYNC_K=<n>` (rendezvous every n
 listed block entries; default 50; K=1 = per-entry debug pairing, the
 first bisection tool for any future divergence). QUEST clients under
 lockstep no longer batch by instruction count: a 100M-instruction
@@ -56,6 +58,15 @@ execute in verified lockstep; type only into the master's terminal (the
 first telnet connection) — the second window is a read-only spectator
 view of the same session. Any divergence halts both engines with a
 report on stdout (one-line notice on stderr).
+
+Since P23 (Gen-6.1, docs/IR.md), lockstep also honors
+`QUEST_IR=<path>` (a quest.ir file — e.g. Work/c_src/quest.ir2.book or
+.stock): blocks present in the file execute on the CLONE as IR, absent
+blocks are emulated, the master always emulates. The loader recomputes
+the file's provenance sha256s (refusing on mismatch with QUEST_BLOCKS)
+and refuses a `mode book` file unless the book envs
+(`QUEST_ADDRESS_BOOK` + `QUEST_PUSH_MAP`) are also set; `mode stock`
+files run under either configuration.
 
 **`-silent`** — with `-lockstep`: single-terminal play. The clone gets a
 discarding null terminal instead of the second telnet connection, so

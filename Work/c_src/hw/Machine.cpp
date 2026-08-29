@@ -1,4 +1,5 @@
 #include "Machine.hpp"
+#include "IRExec.hpp"
 #include "AddressBook.hpp"
 #include "../os/OSProcess.hpp"
 #include "../os/Trace.hpp"
@@ -260,6 +261,17 @@ uint32_t Machine::run_steps(uint32_t address, int32_t count) {
       new_pc = fn(*this);
     } else {
     count--;
+    // P23 (Gen-6.1) IR dispatch: a block PRESENT in quest.ir runs as IR
+    // on the CLONE; the master always emulates (docs/Project23/
+    // IRPhase1.md §1). Placed at the top of the fetch path so ordinal
+    // counting, break decisions, and every rendezvous below see the
+    // block exit exactly as they would an instruction result.
+    if(IRExec::instance && lockstep_role == Lockstep::CLONE &&
+       IRExec::instance->has(static_cast<uint32_t>(pc))) {
+      new_pc = IRExec::instance->run_block(*this, static_cast<uint32_t>(pc));
+      if(new_pc == 0x30000000)
+        return new_pc;
+    } else {
     if(rtcov && static_cast<uint32_t>(pc) >= RTStubs::start &&
        static_cast<uint32_t>(pc) < RTStubs::stop)
       rtcov[static_cast<uint32_t>(pc) - RTStubs::start] = 1;
@@ -281,6 +293,7 @@ uint32_t Machine::run_steps(uint32_t address, int32_t count) {
       throw std::runtime_error(buf);
     }
     instruction_count++;
+    }
     }
     pc = new_pc;
     // Gen-6 block-entry counting (docs/Project22/BlockSyncDesign.md): every
