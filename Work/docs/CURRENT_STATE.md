@@ -1,5 +1,22 @@
 # Where things stand
 
+## ★ F6 CLOSED — terminal legs restored (Aug 29 2026, integrator session)
+
+User ruling: option c, BOTH halves. (1) IRExec loader drops the IR
+block whose span contains a mid-block QUEST_INJECT/QUEST_TERMINAL pc
+(absent=emulated=symmetric; entry-armed pcs stay lowered — inj3
+precedent; conservative floor-block drop, rt-range armed pcs ignored).
+(2) Standing all-emulated inj/abort legs join the battery template as
+the terminal-machinery isolation check — they answer "does raise/
+dispatch/unwind/die still work" independent of the IR layer. Task 033
+(runner): **4/4 GREEN**, strict gate — inj book FATAL (1 drop), abort
+book WORLD-ABORT (1 drop), inj-emu FATAL (0 drops), abort-emu
+WORLD-ABORT (0 drops), div=0 everywhere. The two task-032 reds are
+superseded green; the P24 battery record is complete. Repo: fix +
+task 033 on main. Remaining P24 open item: the consumer-site live
+coverage ruling (KNIGHT_ATTACK/DIVX — census-sufficient vs manual
+combat/store session).
+
 ## ★ P24 LANDED — THE WIDE-CARRY CORRECTION (Aug 29 2026)
 
 `EagleInstruction::add()/sub()` now compute CARRY as the ALU carry-out

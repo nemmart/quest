@@ -5,8 +5,9 @@
   032, verdict RECORDED in Project24/REPORT.md §7: 9/11 GREEN; 2 RED =
   finding F6 (inject/terminal arming vs IR at non-block-entry pcs — a
   pre-existing P23 gap, no carry involvement, evidence in the report).
-  **RULINGS OWED (user):** (a) F6 disposition — emu-config the inj/
-  abort legs, or IR-loader exclusion of armed-pc blocks, or both;
+  **F6 RESOLVED (Aug 29, user ruling: both):** loader drops armed-pc
+  blocks + standing all-emulated inj/abort legs; task 033 4/4 GREEN —
+  the terminal legs are back in the battery. STILL OWED (user):
   (b) whether the KNIGHT_ATTACK ADC.C cluster + DIVX consumer sites
   need live-pair demonstration (a manual combat/store play session) or
   the census classification suffices.

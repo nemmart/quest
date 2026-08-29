@@ -208,13 +208,18 @@ battery verdict and the owed rulings.
 
 ## 10. Rulings owed to the user (open at session end)
 
-1. **F6 disposition** (§7): inject/terminal arming vs IR at
-   non-block-entry pcs. Options: (a) run inj/abort battery legs
-   all-emulated (no code; equivalent to the pre-IR 031 check);
-   (b) IR-loader excludes blocks containing QUEST_INJECT/QUEST_TERMINAL
-   pcs (absent=emulated — the clone then emulates through the armed
-   site; small IRExec/loader change, P23 machinery); (c) both. The two
-   red legs re-run green under any of these if F6's analysis is right.
+1. **F6 disposition** (§7): RESOLVED (user ruling Aug 29: option c,
+   both). Landed at integration: IRExec loader drops the IR block whose
+   span contains a mid-block QUEST_INJECT/QUEST_TERMINAL pc
+   (absent=emulated, symmetric; entry-armed pcs stay lowered per the
+   inj3 precedent), plus standing all-emulated inj/abort legs as the
+   terminal-machinery isolation check. Task 033 (runner, Aug 29):
+   **4/4 GREEN** — inj book div=0 end=FATAL (7,301 pairs, 1 drop),
+   abort book div=0 end=WORLD-ABORT (5,836 pairs, 1 drop), inj-emu
+   div=0 FATAL (7,792), abort-emu div=0 WORLD-ABORT (6,348), strict
+   gate throughout. With 033, the P24 battery record is complete:
+   every 032 leg green or superseded-green. F6's analysis confirmed
+   by the fix behaving exactly as predicted.
 2. **Consumer-site live coverage**: the battery demonstrated the
    BEING_ATTACK ADC.C cluster and LOCK_FILE live; KNIGHT_ATTACK's
    cluster and the 19 DIVX sites did not fire in scripted legs. Rule
