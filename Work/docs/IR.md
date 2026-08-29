@@ -77,6 +77,23 @@ addresses; blocks are single-entry, so statements need no identities.
                                    refuses). WSAVS reads its frame
                                    word from memory, so it needs an
                                    address story first.
+    assert(e)                      STATEMENT (P25). Evaluates e; 0 is
+    assert(e, "message")           failure. Never a terminator. On the
+                                   CLONE, failure prints the statement
+                                   ("IR ASSERT FAILED [block, stmt]:
+                                   <source text>") and DETACHES — the
+                                   clone halts, the master (ground
+                                   truth) continues unverified, and
+                                   compare_pair's detached early-out
+                                   keeps the truncated batch from
+                                   reading as a divergence (user
+                                   ruling, Aug 29). Outside lockstep
+                                   it throws (loud, METHOD §8). The
+                                   message may not contain '"'
+                                   (grammar) and cannot contain ';'
+                                   by construction (comments strip
+                                   first); malformed forms REFUSE at
+                                   load.
 
 One machine instruction MAY lower to several statements (e.g. WPSH,
 future): no bookkeeping is required or possible — statements are
@@ -279,6 +296,9 @@ inconsistency recorded in ByteEA.md), `*` host-multiply binop, `<<`
 removed (was specified, never implemented), WPSH group stores,
 @addr borrow brackets inside lowered decorated blocks, and the
 byte-pointer literal 0xW:b (word-addressed fold notation; `:` is
-byte-select only, bitp(w,n) reserved for M1). Grammar is a
+byte-select only, bitp(w,n) reserved for M1). Second P25 amendment:
+`assert(e[, "msg"])` statement — clone prints + detaches on failure;
+compare_pair gained the detached early-out (which also closes the
+documented straddling-batch latent race after process-wide detach). Grammar is a
 superset except `<<`; pre-P25 loaders refuse the new forms (regenerate
 artifacts and binaries together, as always).

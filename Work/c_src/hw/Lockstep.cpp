@@ -144,6 +144,13 @@ void Lockstep::compare_pair(QueueEntry* master, QueueEntry* clone) {
   if(!master || !clone)
     return;
 
+  // Detached before the compare (P25 assert_detach mid-batch, or a
+  // straddling batch of a secondary ordinal after a process-wide
+  // detach — the latent race detach() documents): the clone half is
+  // truncated/halted by design; nothing left to verify.
+  if(is_detached(master->machine->lockstep_ordinal))
+    return;
+
   uint64_t master_delta = master->insn_after - master->insn_before;
   uint64_t clone_delta  = clone->insn_after  - clone->insn_before;
   bool master_threw = master->exception != nullptr;
@@ -418,6 +425,34 @@ void Lockstep::detach(QueueEntry* master, QueueEntry* clone) {
           "Lockstep: ordinal %d DETACHED at %08X (%s) — clone halted, "
           "master continues unverified\n",
           ordinal, master->address, where.c_str());
+}
+
+void Lockstep::assert_detach(Machine* m, const char* report) {
+  int32_t ordinal = m->lockstep_ordinal;
+  if(ordinal >= 0 && ordinal < 64 && detached[ordinal].load())
+    return;                                  // idempotent
+  fflush(stdout);
+  fprintf(stderr, "%s\n", report);
+  os::OSProcess* clone_process = m->process;
+  if(clone_process) {
+    std::lock_guard<std::recursive_mutex> lock(clone_process->task_mutex);
+    for(os::OSTask* t : clone_process->tasks)
+      if(t) {
+        if(t->machine) {
+          int32_t o = t->machine->lockstep_ordinal;
+          if(o >= 0 && o < 64)
+            detached[o].store(true, std::memory_order_release);
+        }
+        t->halt_task();
+      }
+  }
+  if(ordinal >= 0 && ordinal < 64)
+    detached[ordinal].store(true, std::memory_order_release);
+  os::OSProcess::unmirror_server_mappings();
+  clear_copies();
+  fprintf(stderr,
+          "Lockstep: ordinal %d DETACHED at IR assert — clone halted, "
+          "master continues unverified\n", ordinal);
 }
 
 void Lockstep::report_waiting(QueueEntry* entry) {

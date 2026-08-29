@@ -33,13 +33,14 @@ public:
 
   struct Expr;                       // opaque AST node
   struct Stmt {
-    enum Kind { INSTR, STMT, CALL, RET, GOTO } kind = STMT;
+    enum Kind { INSTR, STMT, CALL, RET, GOTO, ASSERT } kind = STMT;
     uint32_t pc = 0;                 // INSTR: address; CALL: ret pc
     uint32_t target = 0;             // CALL: callee; GOTO: exit
     uint32_t ret = 0;                // CALL: declared return pc (belief)
     uint32_t marker = 0;             // CALL: marker slot (validated belief)
     int32_t  args = 0;               // CALL: elided arg-push count
-    std::shared_ptr<Expr> lhs, rhs;  // STMT only
+    std::shared_ptr<Expr> lhs, rhs;  // STMT: lhs/rhs; ASSERT: rhs = condition
+    std::string text;                // ASSERT: source text for the failure report
     bool flags = false;              // STMT: rhs contains a #-op
   };
   struct Block {

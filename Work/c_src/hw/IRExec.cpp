@@ -394,6 +394,31 @@ void IRExec::load(const std::string& path) {
         refuse("goto target " + t + " is not a listed block start");
     } else if (tok == "save") {
       refuse("'save' is reserved but not implemented this tranche");
+    } else if (body.rfind("assert(", 0) == 0) {
+      // P25: assert(expr) | assert(expr, "message").  Statement, never a
+      // terminator.  The message may not contain '"' (grammar rule) and
+      // cannot contain ';' by construction (comment stripping runs first).
+      st.kind = Stmt::ASSERT;
+      st.text = body;
+      const char* p = body.c_str() + 7;          // past "assert("
+      Parser pe(p, cur->start);
+      P cond = pe.expr();
+      std::string msg;
+      pe.ws();
+      if (*pe.s == ',') {
+        pe.s++; pe.ws();
+        if (*pe.s != '"') refuse("assert message must be a \"string\": " + body);
+        pe.s++;
+        const char* mstart = pe.s;
+        while (*pe.s && *pe.s != '"') pe.s++;
+        if (*pe.s != '"') refuse("assert message missing closing quote: " + body);
+        msg.assign(mstart, pe.s - mstart);
+        pe.s++;
+      }
+      pe.ws();
+      if (*pe.s != ')') refuse("assert missing closing paren: " + body);
+      pe.s++; pe.end();
+      st.rhs = cond;
     } else {
       st.kind = Stmt::STMT;
       size_t eq = body.find('=');
@@ -592,6 +617,24 @@ uint32_t IRExec::run_block(Machine& machine, uint32_t pc) {
                    "expected %08X", st.pc, new_pc, expected);
           throw std::runtime_error(buf);
         }
+      }
+      case Stmt::ASSERT: {
+        // P25: condition true -> free; condition 0 -> the clone's own IR
+        // is wrong by its own declaration.  Print the statement and
+        // DETACH (user ruling): master (ground truth) continues
+        // unverified; the throw ends this clone batch, which the
+        // compare_pair detached early-out then skips.
+        if (cx.eval(st.rhs) != 0)
+          break;
+        char rep[512];
+        snprintf(rep, sizeof rep,
+                 "IR ASSERT FAILED [block %08X stmt %zu]: %s",
+                 blk->start, i, st.text.c_str());
+        if (machine.lockstep_role == Lockstep::CLONE) {
+          Lockstep::assert_detach(&machine, rep);
+          throw std::runtime_error("IR assert failed (clone detached)");
+        }
+        throw std::runtime_error(rep);   // non-lockstep: loud, METHOD S8
       }
       case Stmt::STMT: {
         if (dbg)

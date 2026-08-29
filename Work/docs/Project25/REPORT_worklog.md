@@ -61,3 +61,19 @@
 Wrong turns kept: the "3 lines" undercount (§10); the first
 strictness pass refusing X-convention @ operands (evidence, not
 tuning, chose the reconciliation).
+13. `assert` op (user request, end of session): assert(e) /
+    assert(e, "msg") statement. Failure on the clone prints the
+    source statement and DETACHES via new Lockstep::assert_detach —
+    safe inline because batches run on the worker thread UNDER
+    shared_write_mutex (thread_main), i.e. the assert site already
+    owns the same world-pause the compare-site detach() uses; the
+    throw then ends the clone batch and compare_pair's new
+    detached early-out skips the truncated half (this early-out
+    also closes the documented straddling-batch latent race).
+    Non-lockstep: plain throw. Tests: 2 load refusals (missing
+    paren; unquoted message) refuse with exact tokens; K=1 green
+    leg with passing asserts (incl. a 0xW:b literal condition) in
+    the startup block, 0 div; fire test assert(0,"...") printed
+    the statement, DETACHED, 0 div, master played on unverified
+    (weather prompt reached post-assert). lower.py does not emit
+    asserts; they are for hand-authoring and future tooling.
