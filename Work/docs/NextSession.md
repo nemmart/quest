@@ -77,7 +77,12 @@ are unreached by scripted drivers — census-carried (ByteEA.md §5).
 (c) The disassembler byte-operand defect is DEFERRED with a standing
 lower.py shim (DISASSEMBLER_BYTE_OPERANDS.md). (d) KNIGHT_ATTACK /
 DIVX carry-consumer sites: observed opportunistically in ordinary
-play, nothing gated (P24 ruling).
+play, nothing gated (P24 ruling). (e) Aug 29, post-integration: the
+user ran a proper manual play session on the P25 tree — CLEAN (user
+report). Real-play datapoint on top of the scripted batteries;
+whether it reached the UPDATE_SCREENS borrow blocks or the
+KNIGHT_ATTACK cluster wasn't checked — coverage remains
+census-carried.
 
 ## P25 LANDED — battery GREEN, reviewed + integrated (Aug 29 2026)
 - Battery 035: attempt 1 12/13 (inj-emu endpoint-reach flake, user
