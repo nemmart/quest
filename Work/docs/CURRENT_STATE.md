@@ -21,8 +21,10 @@ disassembler artifact (raw 0xE0001998; 184 such lines flagged, FIX
 OWNED BY THE USER — lower.py reconstructs @→bit31 meanwhile). Local
 gates: k1fo/k1play (book, K=1 strict) + stock fo, 0 div; LPEFB site
 live at startup; borrow blocks 0/2 by scripted drivers
-(census-carried, ByteEA.md §5). Battery: task 035 queued (034
-template + P25 coverage lines). Docs: IR.md amended (§5/§6/§8/§9),
+(census-carried, ByteEA.md §5). Battery: task 035 RAN — 12/13
+green, all IR legs 0 div (incl. 5.5M-pair play); inj-emu red ruled
+flake by the user (all-emulated leg, injection pc unreached, zero
+P25 code; REPORT §5). Docs: IR.md amended (§5/§6/§8/§9),
 Project25/{ByteEA,REPORT,REPORT_worklog}.md.
 
 ## ★ PARALLEL BATTERY TEMPLATE LANDED — task 034 (Aug 29 2026)

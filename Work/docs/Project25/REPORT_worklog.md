@@ -42,6 +42,10 @@
 9. Docs: IR.md §5/§6/§8/§9 amended; ByteEA.md census; this report.
 10. Repo: branch p25-byte-addressing (Work: lower.py, IRExec.cpp,
     ir2.book/stock, docs); task 035 + 035-bform-blocks.txt to main.
+11. Battery verdict: 12/13 green, all IR legs clean; the one red
+    (inj-emu — all-emulated, zero P25 code, injection pc unreached,
+    green in 034's proof run) reported per boundary 6 and RULED
+    FLAKE by the user. Verdict + ruling recorded in REPORT §5.
 
 Wrong turns kept: the "3 lines" undercount (§10); the first
 strictness pass refusing X-convention @ operands (evidence, not
