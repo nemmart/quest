@@ -27,7 +27,11 @@ live at startup; borrow blocks 0/2 by scripted drivers
 green, all IR legs 0 div (incl. 5.5M-pair play); inj-emu red ruled flake,
 retries ridden, attempt 3 13/13 GREEN DONE (REPORT §5). Post-landing:
 0xW:b byte-pointer literals (dump-greppable; : is byte-select only,
-bitp reserved for M1), IR.md cross-refs, disassembler defect doc. Docs: IR.md amended (§5/§6/§8/§9),
+bitp reserved for M1), IR.md cross-refs, disassembler defect doc
+(fix deferred, shim standing), and the assert(e[, "msg"]) statement
+(clone prints + detaches on failure; compare_pair detached
+early-out closes the straddling-batch latent race). All specified
+in IR.md; K=1 re-gates green throughout. Docs: IR.md amended (§5/§6/§8/§9),
 Project25/{ByteEA,REPORT,REPORT_worklog}.md.
 
 ## ★ PARALLEL BATTERY TEMPLATE LANDED — task 034 (Aug 29 2026)

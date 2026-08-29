@@ -79,9 +79,15 @@ Findings against the spec and the toolchain:
 
 - Word pushes: `M32[slot] = wp(acN, d)` / constant / `R[…]`.
 - Byte pushes and XLEFB/LLEFB values: per the §2 table — `bp(acN, d)`
-  (X), `acN*2 + 0x…` (L register-indexed), constants otherwise; the
-  X pc-relative fold `(0xWORD:B)` is verified against the computed
-  value, refusing mismatch.
+  (X register-relative), `acN*2 + 0xW:b` (L register-indexed table
+  base), and byte-pointer LITERALS `0xW:b` for every constant case
+  (post-landing user ruling: the dis fold notation, word-addressed so
+  memory-dump greps work without dividing by 2; b = byte select, 0/1
+  EXCLUSIVELY — bitp(w,n) is reserved in IR.md §8 so bit addressing
+  can never overload the colon). The X pc-relative fold `(0xWORD:B)`
+  is verified against the computed value, refusing mismatch. wp/bp
+  are the register-relative forms ONLY — no wp(0,d)/bp(0,d) exists in
+  the output; word constants stay plain hex (already word-addressed).
 - Byte loads/stores: `acN = M8[…]`, `M8[…] = zx8(acN)`; WLDB/WSTB are
   `M8[acII]` with the register value raw (registerRegister renders
   II,AA — Disassembler.java bits 14:13 then 12:11; EagleGeneral::setup

@@ -12,8 +12,16 @@ template).
 **566/566 decorated call sites lowered** (target was 564/566 at
 prompt time; the user reversed the borrow exclusion at the plan gate
 — see §2). Byte addressing landed in full: byte-EA values, M8 loads/
-stores, wp/bp pointer builders, `*`; `<<` removed from the spec
-(never implemented). Embeds 31,116 → 27,600; statements 26,417 →
+stores, wp/bp pointer builders (register-relative only), byte-pointer
+literals `0xW:b` (dis fold notation, dump-greppable; `:` is
+byte-select exclusively, bitp reserved for M1), `*`; `<<` removed
+from the spec (never implemented). Post-landing additions on the same
+branch: the `assert(e[, "msg"])` statement (clone prints the
+statement and DETACHES on failure; master continues unverified;
+compare_pair gained a detached early-out that also closes the
+straddling-batch latent race), IR.md cross-references in lower.py and
+IRExec.cpp headers, and docs/DISASSEMBLER_BYTE_OPERANDS.md (the
+defect's standing record — fix deferred by user ruling). Embeds 31,116 → 27,600; statements 26,417 →
 30,013. Local gates 3/3 green (k1fo, k1play book K=1 strict; stock
 fo), 0 divergences. The census/derivation record is
 docs/Project25/ByteEA.md; docs/IR.md carries the spec amendment.
@@ -61,6 +69,10 @@ docs/Project25/ByteEA.md; docs/IR.md carries the spec amendment.
   fixed).
 
 ## 4. Implementation
+
+(§4 describes the landing as reviewed at the plan gate; the
+post-landing additions — :b literals, assert, cross-refs, defect doc
+— are itemized in §1 and the worklog, and specified in IR.md.)
 
 - tools/lower.py: pef_value fold regex; reconcile_at (both `@`
   conventions, refuse bit-without-@); byte_ea per the emulator

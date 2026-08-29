@@ -14,7 +14,9 @@
   the branch were regenerated AFTER the green battery for the 0xW:b
   literal (pure notation, identical census, K=1 local re-gate green);
   the reviewer may want the next battery run on the literal-form
-  artifacts or may accept the K=1 gate. NEXT: (1) integrate the branch.
+  artifacts or may accept the K=1 gate. Also on the branch
+  post-battery: the assert(e[, "msg"]) statement (spec'd in IR.md §3;
+  fire-tested: print + detach + 0 div + master continues). NEXT: (1) integrate the branch.
   (2) Disassembler byte-operand
   defect: fix DEFERRED by user ruling (the byteIndexed masking is
   buggy in multiple ways; too risky to touch) — the lower.py
