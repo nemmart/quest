@@ -1,5 +1,30 @@
 # Where things stand
 
+## ★ P25 LANDED (pending battery) — byte addressing + 566/566 (Aug 29 2026)
+
+Branch p25-byte-addressing. ALL 566 decorated call sites lower (was
+443): B-form pushes as byte-pointer VALUES, WPSH multi-wide as
+ascending group stores, the 2 borrow-adjacent sites with their
+brackets as @addr instruction pairs (user ruling — reverses the
+prompt's exclusion), plus 18 sites that were only parse-blocked
+(fold regex; L-form @-bit stripping — incl. all 6 XCALLs). Grammar:
+wp(b,d)/bp(b,d) pointer builders (masking in the executor, never in
+text — also retires pef_value's spelled mask and the latent
+unwrapped XLEF value emission), M8[] with RAW index
+(read_byte/write_byte pass-through; ring-7 self-segmented pointers,
+loud faults), `*` binop; `<<` removed from IR.md (never
+implemented). Full tier landed: XLEFB/LLEFB values + 6 byte ld/st
+ops; embeds 31,116→27,600. Semantics read from
+eagle_{x,l}_byte_indexed — IR.md §8's parked formula was wrong for
+L-forms (corrected); the "indirect LPEFB hard case" was a
+disassembler artifact (raw 0xE0001998; 184 such lines flagged, FIX
+OWNED BY THE USER — lower.py reconstructs @→bit31 meanwhile). Local
+gates: k1fo/k1play (book, K=1 strict) + stock fo, 0 div; LPEFB site
+live at startup; borrow blocks 0/2 by scripted drivers
+(census-carried, ByteEA.md §5). Battery: task 035 queued (034
+template + P25 coverage lines). Docs: IR.md amended (§5/§6/§8/§9),
+Project25/{ByteEA,REPORT,REPORT_worklog}.md.
+
 ## ★ PARALLEL BATTERY TEMPLATE LANDED — task 034 (Aug 29 2026)
 
 User ruling: no more 30+ minute serial batteries. tasks/034-parallel-

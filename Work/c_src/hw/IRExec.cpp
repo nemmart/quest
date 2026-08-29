@@ -96,9 +96,10 @@ IRExec* IRExec::instance = nullptr;
 // ------------------------------------------------------------ expression
 
 struct IRExec::Expr {
-  enum Kind { CONST, AC, MEM16, MEM32, RESOLVE,
-              ADD, SUB, AND, OR, XOR,
+  enum Kind { CONST, AC, MEM16, MEM32, MEM8, RESOLVE,
+              ADD, SUB, AND, OR, XOR, MUL,
               FADD, FSUB,                 // #+  #-
+              WP, BP,                     // P25: wp(b,d) bp(b,d) pointer builders
               SX16, ZX16, ZX8, TRUNC16 } kind;
   uint32_t value = 0;                     // CONST value / AC index
   std::shared_ptr<Expr> a, b;
@@ -132,7 +133,18 @@ struct Parser {
     if (lit("R[")) { P e = expr(); if (!lit("]")) bad("expected ]"); return node(Expr::RESOLVE, e); }
     if (lit("M32[")) { P e = expr(); if (!lit("]")) bad("expected ]"); return node(Expr::MEM32, e); }
     if (lit("M16[")) { P e = expr(); if (!lit("]")) bad("expected ]"); return node(Expr::MEM16, e); }
-    if (lit("M8[") || lit("M1[")) bad("M1/M8 not in Phase 1 (IQ3)");
+    if (lit("M8[")) { P e = expr(); if (!lit("]")) bad("expected ]"); return node(Expr::MEM8, e); }
+    if (lit("M1[")) bad("M1 not implemented (IQ3)");
+    if (lit("wp(")) {                        // P25 word-pointer builder
+      P a = expr(); if (!lit(",")) bad("wp expects two args");
+      P b = expr(); if (!lit(")")) bad("expected )");
+      return node(Expr::WP, a, b);
+    }
+    if (lit("bp(")) {                        // P25 byte-pointer builder
+      P a = expr(); if (!lit(",")) bad("bp expects two args");
+      P b = expr(); if (!lit(")")) bad("expected )");
+      return node(Expr::BP, a, b);
+    }
     if (lit("sx16(")) { P e = expr(); if (!lit(")")) bad("expected )"); return node(Expr::SX16, e); }
     if (lit("zx16(")) { P e = expr(); if (!lit(")")) bad("expected )"); return node(Expr::ZX16, e); }
     if (lit("zx8(")) { P e = expr(); if (!lit(")")) bad("expected )"); return node(Expr::ZX8, e); }
@@ -165,6 +177,7 @@ struct Parser {
       if      (lit("#+")) k = Expr::FADD;
       else if (lit("#-")) k = Expr::FSUB;
       else if (lit("#*") || lit("#/")) bad("#*/#/ not executable in Phase 1");
+      else if (lit("*"))  k = Expr::MUL;     // P25: host multiply, no flags
       else if (lit("+"))  k = Expr::ADD;
       else if (lit("-"))  k = Expr::SUB;
       else if (lit("&"))  k = Expr::AND;
@@ -370,7 +383,8 @@ void IRExec::load(const std::string& path) {
       std::string lhs = body.substr(0, eq), rhs = body.substr(eq + 1);
       Parser pl(lhs.c_str(), cur->start);
       P l = pl.primary(); pl.end();
-      if (l->kind != Expr::AC && l->kind != Expr::MEM16 && l->kind != Expr::MEM32)
+      if (l->kind != Expr::AC && l->kind != Expr::MEM16 && l->kind != Expr::MEM32
+          && l->kind != Expr::MEM8)                          // P25 byte store
         refuse("lhs must be an ac or memory cell: " + body);
       Parser pr(rhs.c_str(), cur->start);
       P r = pr.expr(); pr.end();
@@ -459,12 +473,21 @@ struct Ctx {
       case Expr::AC:      return ac[e->value];
       case Expr::MEM32:   return m.memory->read_wide(addr_of(e->a));
       case Expr::MEM16:   return m.memory->read_word(addr_of(e->a)) & 0xFFFF;
+      case Expr::MEM8:    return m.memory->read_byte(eval(e->a)) & 0xFF;  // RAW index:
+                          // byte pointers carry their own segment (bits 31:29);
+                          // the hardware applies no wrap at use (P25 ruling).
       case Expr::RESOLVE: return m.eagle_resolve_indirect(wrap(eval(e->a)) | 0x80000000u);
       case Expr::ADD:     return eval(e->a) + eval(e->b);
       case Expr::SUB:     return eval(e->a) - eval(e->b);
       case Expr::AND:     return eval(e->a) & eval(e->b);
       case Expr::OR:      return eval(e->a) | eval(e->b);
       case Expr::XOR:     return eval(e->a) ^ eval(e->b);
+      case Expr::MUL:     return eval(e->a) * eval(e->b);   // host mul, no flags (P25)
+      case Expr::WP:      // wp(b,d): word segment wrap of b+d — Machine::copy_segment
+        return ((eval(e->a) + eval(e->b)) & 0x0FFFFFFFu) | seg;
+      case Expr::BP:      // bp(b,d): Machine::set_byte_segment(seg, b*2+d)
+        return Machine::set_byte_segment((seg >> 28) & 0x7u,
+                                         eval(e->a) * 2u + eval(e->b));
       case Expr::FADD: {  // l #+ r  ==  add(src=r, dst=l): shared helper writes c/ovr
         uint32_t l = eval(e->a), r = eval(e->b);
         return uint32_t(EagleInstruction::add(m, int64_t(int32_t(r)), int64_t(int32_t(l))));
@@ -562,6 +585,8 @@ uint32_t IRExec::run_block(Machine& machine, uint32_t pc) {
           cx.ac[l.value] = v;
         else if (l.kind == Expr::MEM32)
           machine.memory->write_wide(cx.addr_of(l.a), v);
+        else if (l.kind == Expr::MEM8)
+          machine.memory->write_byte(cx.eval(l.a), v & 0xFF);   // RAW index (P25)
         else
           machine.memory->write_word(cx.addr_of(l.a), v & 0xFFFF);
         } catch (std::runtime_error& ex) {

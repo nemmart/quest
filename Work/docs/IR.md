@@ -96,20 +96,44 @@ sequence, not identities.
 
 ## 5. Statements and expressions
 
-    lvalue  := ac0..ac3 | M16[e] | M32[e]
+    lvalue  := ac0..ac3 | M8[e] | M16[e] | M32[e]
     expr    := unary/primary chained with binary ops (left-assoc,
                single level — emitters parenthesize anything else)
-    binops  := + - & | ^ << #+ #-        (#* #/ reserved, refused)
-    primary := acN | constant (0x… or signed decimal) | M16[e] |
-               M32[e] | R[e] | sx16(e) | zx16(e) | zx8(e) |
-               trunc16(e) | ( e )
-    M8/M1 and t-places are reserved (IQ3 / P24) and refused.
+    binops  := + - * & | ^ #+ #-         (#* #/ reserved, refused)
+    primary := acN | constant (0x… or signed decimal) | M8[e] | M16[e] |
+               M32[e] | R[e] | wp(e, e) | bp(e, e) | sx16(e) | zx16(e) |
+               zx8(e) | trunc16(e) | ( e )
+    M1 and t-places are reserved (IQ3 / P26) and refused.
+    (`<<` was listed as a binop by earlier revisions of this spec but
+    was never implemented by IRExec; P25 removed it in favor of `*` —
+    see ByteEA.md. Spec-vs-executor gaps are findings, not features.)
 
 Semantics (32-bit unsigned host arithmetic, wrap):
 
 - M16 reads return the raw 16-bit cell zero-extended; extension is
   ALWAYS explicit in the text (`sx16(M16[…])` etc.). M16 stores write
   value & 0xFFFF; emitters write `trunc16(…)` for the audit trail.
+- M8 (P25, byte addressing): reads return the byte zero-extended
+  (Memory::read_byte); stores write value & 0xFF (write_byte); emitters
+  write `zx8(…)` for the audit trail. The M8 INDEX IS RAW — no segment
+  wrap. Byte pointers carry their own segment in bits 31:29
+  (set_byte_segment packing) and the hardware applies no masking at the
+  point of use (WLDB/WSTB deref ac[II] unmasked; see
+  Project25/ByteEA.md). A garbage byte pointer faults in read_byte
+  exactly as the emulated instruction would — loud and identical, per
+  METHOD §8.
+- wp(b, d) / bp(b, d) (P25 pointer builders — masking lives in the
+  executor, never in emitted text; user ruling, Aug 29): wp is the word
+  segment wrap of b+d — ((b+d) & 0x0FFFFFFF) | seg, seg from the block
+  header (Machine::copy_segment semantics). bp is
+  Machine::set_byte_segment(seg, b*2 + d) — the base is a word address
+  scaled to bytes, the displacement is already in bytes (that asymmetry
+  is the hardware's; eagle_x_byte_indexed ii=2/3). L-form byte EAs
+  apply NO masking and therefore never render as bp: they emit raw
+  arithmetic (acN*2 + disp) or constants (ByteEA.md has the per-mode
+  table read out of the emulator source).
+- `*` is host 32-bit multiply, wrap, no flags (distinct from the
+  reserved #-op `#*`, which owns flag semantics if ever needed).
 - SEGMENT WRAP (executor rule): every M/R INDEX is evaluated as
   (e & 0x0FFFFFFF) | seg, seg from the block header. The emitter
   refuses any absolute or pc-folded EA outside the block's segment,
@@ -132,7 +156,11 @@ Semantics (32-bit unsigned host arithmetic, wrap):
   have no pc — accepted downgrade, the path has never fired).
 - Class cap (what lower.py currently emits): loads/stores (X/L ×
   N/W LDA/STA, modes 0–3, direct/indirect), XLEF/LLEF, NLDAI/WLDAI,
-  WMOV, WADD/WSUB/WADDI/WSBI, plus §6's argpush stores. Everything
+  WMOV, WADD/WSUB/WADDI/WSBI, byte addressing (XLEFB/LLEFB values,
+  XLDB/XSTB/LLDB/LSTB/WLDB/WSTB via M8 — P25), plus §6's argpush
+  stores (word wp/constant/R, byte value, and WPSH group stores —
+  P25). Word base-indexed EAs render as wp(acN, d) in BOTH value and
+  index positions (index wrap on a wp result is identity). Everything
   else stays an instruction. The cap widens by extraction, never by
   assumption.
 
@@ -168,9 +196,16 @@ Scope by decoration ("no mixed metaphors", user ruling): a decorated
 site's pushes lower ONLY if every decorated push of the site is
 expressible and in the site's block; otherwise the whole push
 sequence AND its call stay instructions (uniform accounting per
-site). Currently inexpressible: B-form byte-pointer pushes
-(XPEFB/LPEFB), WPSH multi-wide pushes, borrow-adjacent blocks (all
-listed with counts in Project23/REPORT.md §5/§8).
+site). As of P25 all 566 decorated sites lower (566/566;
+Project25/ByteEA.md is the ledger): B-form pushes emit byte-pointer
+VALUES, one WPSH x,a emits its wides as ascending group stores
+M32[slot+2k] = ac((x+k)&3) (AC[XX] at the base slot — the emulated
+hook's verified ordering, EagleStack.cpp P18 tranche B), and borrow
+brackets inside decorated blocks stay @addr INSTRUCTION pairs (user
+ruling, Aug 29: push/pop as instructions, args as stores — the P20
+slot-redirect hooks fire on the normal execute path and the
+bracket's note_arg_write/pop nets zero; the site's args= never
+counted the bracket).
 
 ## 7. Execution model (normative behavior of hw/IRExec)
 
@@ -200,11 +235,17 @@ listed with counts in Project23/REPORT.md §5/§8).
 
 ## 8. Reserved / roadmap
 
-`save`; `#*` `#/`; M8/M1 (IQ3 byte addressing — also unlocks B-form
-pushes; byte pointers are values: ((base<<1)+disp)&0x1FFFFFFF |
-(seg<<29), no executor wrap); t-places and conditional exits
-(`end if`-class) are P24; borrows are the designated P24 t-place
-pilot (do not add borrow ops — see REPORT.md §8.6).
+`save`; `#*` `#/`; M1 (bit addressing, IQ3). Byte addressing (M8,
+wp/bp, B-form pushes) LANDED in P25 — and the formula this section
+used to park, ((base<<1)+disp)&0x1FFFFFFF | (seg<<29), was found to
+describe only the X-form ii=0/2/3 cases: the L-form byte EA applies
+no masking in any mode and the X pc-relative mode none either
+(Project25/ByteEA.md §2, semantics read from
+Machine::eagle_{x,l}_byte_indexed per METHOD §5; recorded as a
+correction, METHOD §11). t-places and conditional exits
+(`end if`-class) are P26; borrows convert to t-places there (no
+borrow ops — standing ruling; the two decorated borrow brackets ride
+as @addr instructions until then).
 
 ## 9. Version history
 
@@ -214,3 +255,13 @@ ir 2 (this spec): addressless statements, @addr instructions only,
 blank-line blocks + trailer, call/ret/goto, mode discipline,
 decoder-length continuation. Amended once in-session: call gained
 site= (length knowledge removed).
+ir 2, P25 amendment (byte addressing + pointer builders, Aug 29
+2026): M8[e] lvalue/primary (raw index; read_byte/write_byte
+pass-through), wp(b,d)/bp(b,d) pointer builders (masking in the
+executor, not the text — retires pef_value's spelled-out word mask
+and the old unwrapped XLEF/LLEF value emission, a latent
+inconsistency recorded in ByteEA.md), `*` host-multiply binop, `<<`
+removed (was specified, never implemented), WPSH group stores, and
+@addr borrow brackets inside lowered decorated blocks. Grammar is a
+superset except `<<`; pre-P25 loaders refuse the new forms (regenerate
+artifacts and binaries together, as always).
