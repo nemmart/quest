@@ -394,6 +394,41 @@ void IRExec::load(const std::string& path) {
   for (size_t i = 1; i < blocks_.size(); i++)
     if (blocks_[i].start == blocks_[i-1].start)
       refuse("duplicate block");
+  // F6 fix (user ruling, Aug 29 2026 — Project24 REPORT §10.1, option c):
+  // QUEST_INJECT/QUEST_TERMINAL arm a pc that Machine::run_steps tests on
+  // ARRIVAL. The emulating master arrives at every instruction pc; an IR
+  // clone arrives only at block entries — so an armed MID-BLOCK pc fires
+  // one-sided and the pair diverges structurally (task 032 inj/abort
+  // reds). Restore the tooling invariant "an armed pc is observed by both
+  // engines": drop the IR block whose span contains a non-entry armed pc
+  // — absent = emulated = symmetric, the master emulates regardless.
+  // Entry-armed pcs stay lowered (task 032 inj3: entry arming pairs
+  // correctly). Precision note: without span data the FLOOR block
+  // (greatest start <= armed pc) is dropped; if the armed pc actually
+  // sits in a listing hole past the block's end this drops one block
+  // needlessly — conservative and harmless. An armed pc far past the
+  // last game block (e.g. an rt-range QUEST_TERMINAL) is left alone.
+  {
+    auto drop_for = [&](const char* env_name) {
+      const char* v = getenv(env_name);
+      if (!v) return;
+      uint32_t armed = uint32_t(strtoul(v, nullptr, 16));  // parse stops at ':'
+      if (!armed) return;
+      auto it = std::upper_bound(blocks_.begin(), blocks_.end(), armed,
+                                 [](uint32_t a, const Block& b) { return a < b.start; });
+      if (it == blocks_.begin()) return;      // below every game block
+      --it;
+      if (it->start == armed) return;         // entry-armed: arrival check works
+      if (it + 1 == blocks_.end() && armed - it->start > 0x1000)
+        return;                               // beyond the game range (rt pc)
+      fprintf(stderr, "IRExec: %s=%08X is mid-block — dropping IR block %08X "
+                      "(clone emulates it) so both engines observe the armed pc\n",
+              env_name, armed, it->start);
+      blocks_.erase(it);
+    };
+    drop_for("QUEST_INJECT");
+    drop_for("QUEST_TERMINAL");
+  }
   fprintf(stderr, "IRExec: loaded %zu IR blocks from %s\n", blocks_.size(), path.c_str());
 }
 
