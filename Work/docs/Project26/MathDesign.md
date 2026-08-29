@@ -45,9 +45,12 @@ out-of-range fault is the only backstop. Checker untouched.
 
 ## 3. Word layer
 
-- Bitwise, FUNCTIONAL spellings (house builder style, kills
-  precedence questions): `and(a,b)` `or(a,b)` `xor(a,b)` `com(x)`
-  (com = the actual mnemonic). Word in, word out, no 0/1 constraint.
+- Bitwise: INFIX `&` `|` `^` (user ruling, Aug 29 follow-up —
+  supersedes the same-day functional and/or/xor spellings);
+  complement stays `com(x)` (ruled earlier: "complement is too
+  long", and no bare-`~` ruling exists). Word in, word out, no 0/1
+  constraint. Lowering parenthesizes compound emissions (no
+  precedence reliance) — same rule as §2.
 - Shifts, ISA-SHAPED (supersedes the ls/ars/lrs draft from earlier
   the same discussion): `ash(x, amount)` and `lsh(x, amount)`,
   SIGNED amount, positive=left / negative=right, semantics COPIED
@@ -116,12 +119,8 @@ ruled for WHEN this happens (not P26):
 
 ## 6. Open items (not yet ruled — collect at the P26 plan gate)
 
-1. "We support the regular C set" once conversion exists: does the
-   PURE tier reinstate C infix bitwise (`& | ^ ~`), superseding the
-   functional and/or/xor/com ruling — or does functional stand for
-   bitwise at both tiers? (Functional was chosen explicitly earlier
-   the same day; the C-set remark may or may not have intended to
-   reverse it.)
+1. RESOLVED (user, Aug 29): infix `&` `|` `^` — one bitwise
+   spelling at all tiers; `com(x)` stands for complement.
 2. Pure-tier shift spelling after conversion: C `<<`/`>>` (with the
    `>>` s/u question) vs `ash`/`lsh`-as-pure (flag-free). Integrator
    lean: keep ash/lsh as the only shift vocabulary — one spelling,
