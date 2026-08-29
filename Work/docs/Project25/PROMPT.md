@@ -1,9 +1,10 @@
 # Project 25 — byte addressing (M8[]) + close the call-lowering ledger
 
 GOAL (user ruling, Aug 29): push the decorated-call ledger from
-443/566 lowered toward **100%** — B-form (96) + WPSH multi-wide (25)
-+ the 2 borrow-adjacent sites — backing off the 100% ONLY where an
-issue needs a user ruling, reported not decided.
+443/566 lowered to **564/566 = 100% of the in-scope set** — B-form
+(96) + WPSH multi-wide (25). The 2 borrow-adjacent sites are RULED
+OUT of scope (below); back off the target ONLY where an issue needs
+a user ruling, reported not decided.
 
 Hi Claude! Solo implementation session; the user reviews at the plan
 gate and at the landing. Read docs/METHOD.md first, as always. Context
@@ -26,13 +27,12 @@ lowered to `call` + plain arg-slot stores. The 123 remaining:
   (addressless statements — P23 REPORT §4), and the wides accounting
   already exists (note_arg_write scales; quest.wpsh_wpop has the
   data). This is expected to be grammar-free mechanical work.
-- **2 borrow-adjacent**: their blocks contain WPSH/WPOP borrow
-  brackets. STANDING RULING (P23 REPORT §8.6 / IR.md §8): do NOT
-  build borrow/restore ops — borrows are the P26 t-place pilot.
-  Analyze whether these 2 call sites can lower without touching the
-  brackets (e.g. the bracket stays embedded around a lowered call);
-  if they cannot, 564/566 with the 2 censused is the correct outcome
-  absent a new ruling — present the analysis, don't force it. DG byte pointers
+- **2 borrow-adjacent: RULED OUT (user, Aug 29).** The borrow
+  brackets are not call args at all — they're the slot-notation
+  scratch-register idiom, and they are best solved with temps
+  (t-places, P26). Their blocks stay embedded; do not attempt to
+  lower these 2 sites or build any borrow machinery. Census them as
+  the two deliberate exclusions; 564/566 is the 100% mark. DG byte pointers
 are word addresses doubled plus a byte-select bit; IR.md §8 records the
 parked value formula:
 
@@ -78,8 +78,8 @@ inexpressible.
 5. WPSH multi-wide plan: per-site mapping from quest.wpsh_wpop to
    N addressless stores + the call's wides accounting; identify any
    site that does not fit the expected shape (finding, not fix).
-6. Borrow-adjacent analysis (see "The gap"): can the 2 sites lower
-   under the standing no-borrow-ops ruling? Present with evidence.
+6. (Borrow pair: no analysis owed — excluded by ruling, see "The
+   gap"; just census the two sites as deliberate exclusions.)
 
 STOP AND REPORT at the plan gate with the census + proposals. Parts
 2–3 proceed only on the user's rulings.
@@ -91,8 +91,8 @@ STOP AND REPORT at the plan gate with the census + proposals. Parts
   instruction → N addressless stores); TOTALITY unchanged — anything
   still inexpressible is omitted with a censused reason. Regenerate
   quest.ir2.book/.stock; ledger every newly lowered site (target:
-  566/566; per-site census for any shortfall, with the borrow pair's
-  disposition explicitly recorded).
+  564/566; per-site census for any shortfall beyond the two ruled-out
+  borrow sites).
 - IRExec: evaluate the new forms; loader validation extended in the
   refuse-on-anything style (malformed byte-EA lines refuse, never
   skip — the P23 pushmap-parser lesson).
