@@ -1,0 +1,29 @@
+fo        cfg=book  K=50  div=0   guard=0  liberr_native=1  pairs=7896 blk_equal=7896 blk_mismatch=0 k_heartbeats=7257 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+m         cfg=book  K=50  div=0   guard=0  liberr_native=1  pairs=7287 blk_equal=7287 blk_mismatch=0 k_heartbeats=6808 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=I.STOP leg=OK
+inj       cfg=book  K=50  div=0   guard=0  liberr_native=0  pairs=7271 blk_equal=7271 blk_mismatch=0 k_heartbeats=6807 gaps_over_k=0 max_gap=50 floor=1000 OK end=FATAL want=FATAL leg=OK
+abort     cfg=book  K=50  div=0   guard=0  liberr_native=0  pairs=5994 blk_equal=5994 blk_mismatch=0 k_heartbeats=5788 gaps_over_k=0 max_gap=50 floor=10 OK end=WORLD-ABORT want=WORLD-ABORT leg=OK
+play      cfg=book  K=50  div=0   guard=0  liberr_native=0  pairs=5517286 blk_equal=5517286 blk_mismatch=0 k_heartbeats=5516204 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+inj3      cfg=book  K=50  div=0   guard=0  liberr_native=1  pairs=7442 blk_equal=7442 blk_mismatch=0 k_heartbeats=6961 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=clean,I.STOP leg=OK
+k1fo      cfg=book  K=1   div=0   guard=0  liberr_native=1  pairs=382593 blk_equal=382593 blk_mismatch=0 k_heartbeats=381989 gaps_over_k=0 max_gap=1 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+fo-st     cfg=stock K=50  div=0   guard=0  liberr_native=1  pairs=8355 blk_equal=8355 blk_mismatch=0 k_heartbeats=7716 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+play-st   cfg=stock K=50  div=0   guard=0  liberr_native=0  pairs=9840548 blk_equal=9840548 blk_mismatch=0 k_heartbeats=9839208 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+fo-emu    cfg=emu   K=50  div=0   guard=0  liberr_native=1  pairs=8373 blk_equal=8373 blk_mismatch=0 k_heartbeats=7734 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+m-emu     cfg=emu   K=50  div=0   guard=0  liberr_native=1  pairs=7245 blk_equal=7245 blk_mismatch=0 k_heartbeats=6766 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=I.STOP leg=OK
+inj-emu   cfg=emu   K=50  div=0   guard=0  liberr_native=0  pairs=7435 blk_equal=7435 blk_mismatch=0 k_heartbeats=6876 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=FATAL leg=FAIL
+abort-emu cfg=emu   K=50  div=0   guard=0  liberr_native=0  pairs=6057 blk_equal=6057 blk_mismatch=0 k_heartbeats=5851 gaps_over_k=0 max_gap=50 floor=10 OK end=WORLD-ABORT want=WORLD-ABORT leg=OK
+== Task 035 P25 byte battery (JOBS=6) ==
+inj: armed-pc block drops=1 (want 1)
+abort: armed-pc block drops=1 (want 1)
+inj-emu: armed-pc block drops=0 (want 0)
+abort-emu: armed-pc block drops=0 (want 0)
+-- carry-consumer-site block coverage (CarryCensus.md; book/stock legs) --
+70160E64:2 70160E65:2 70160E73:2 70160E74:2 7016E75B:0 7016E75C:0 7016E76A:0 7016E76B:0 7015E701:0 701644C5:0 70168107:0 7016A5E5:0 7016B852:0 7016DB9A:0 7016DCD0:0 7016DCEF:0 70171734:0 70171984:0 70171E2B:0 7017200B:0 701723F2:0 701727AB:0 70177336:0 701785C8:0 7017860D:0 70178738:0 70179BFC:0 70169B56:8 
+-- P25 newly-lowered-site block coverage (ByteEA.md; book legs) --
+LPEFB+parse-fix sites:
+7015C2B2:9 7015C323:0 7017178A:0 70171965:0 70171E7F:0 70174760:0 70174788:0 701747AE:0 701747D4:0 701747FA:0 70174828:0 70177A1A:0 70177E7A:0 70177EF4:0 70177F03:8 7017867E:0 701787F2:0 7017D26C:0 7017D3D5:0 
+WPSH multi-wide sites:
+7015BE5F:0 7015C4FB:8 70160E9A:2 70161714:0 70161861:0 70161AFB:0 70161B46:0 70161B6B:0 70161BC3:0 70161BE8:0 70163014:0 70165127:0 701670D7:8 70169B77:0 7016B81D:0 7016F259:0 70171164:3 70171325:3 70172642:2 7017341C:0 701740C8:0 70175EB0:0 70175EE8:0 7017BE89:0 7017D7C4:0 
+borrow sites (UPDATE_SCREENS; census-carried if 0 — ByteEA.md §5):
+7015F795:0 7016A3C7:0 
+B-form (GET_INPUT) blocks live: 7/78 — 7015C2B2 7015FAA0 7016DEA7 7016EBAB 701760C2 7017826A 70178C36
+wall_clock_seconds=487

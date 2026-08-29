@@ -1,13 +1,22 @@
 # Next session
 
-## P25 queued (Aug 29 2026)
-- P25 = byte addressing (M8[]/byte-EA values) + CLOSE THE CALL
-  LEDGER: 443/566 -> 564/566 = 100% of in-scope (B-form 96 + WPSH
-  multi-wide 25; the 2 borrow sites RULED OUT — slot-notation scratch
-  idiom, solved with temps in P26; back off only via reported
-  rulings). Prompt:
-  docs/Project25/PROMPT.md — census + grammar/scope rulings at the
-  plan gate. t-places renumber to P26.
+## P25 LANDED — pending battery verdict (Aug 29 2026)
+- P25 (byte addressing + call ledger) is IMPLEMENTED on branch
+  p25-byte-addressing: **566/566 decorated sites lowered** (the user
+  reversed the borrow exclusion in-session — bracket as @addr
+  instruction pairs, args as stores; the old 564 target and the
+  "96 B-form" framing are superseded — 18 of those 96 were word-form
+  parse gaps, see Project25/ByteEA.md §1). Grammar: wp/bp pointer
+  builders (masking in the executor), M8 raw-index loads/stores, `*`;
+  `<<` removed (was spec'd, never implemented). Local gates 3/3
+  green, 0 div. NEXT: (1) task 035 verdict (queued on main; runs the
+  p25 branch) → append to Project25/REPORT.md §5 and integrate; a
+  red battery is STOP-and-report. (2) USER'S disassembler fix for
+  the 184 byte-operand @ lines (ByteEA.md §2) → regen + diff-audit
+  (expect exactly those lines) → retire lower.py's @-reconstruction
+  for byte forms. (3) P26 = t-places (the two @addr borrow bracket
+  pairs in lowered blocks are the pilot's first customers) +
+  conditional exits.
 
 ## Battery template (Aug 29 2026)
 - tasks/034-parallel-battery.sh is the battery template of record

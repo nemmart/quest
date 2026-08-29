@@ -136,13 +136,25 @@ def ea_expr(pc, base, raw_disp, wide, folded=None):
             die("pc-relative EA 0x%08X outside block segment at %08X" % (folded, pc))
         e = "0x%08X" % folded
     else:
-        e = "%s + %d" % (base, disp) if disp >= 0 else "%s - %d" % (base, -disp)
+        # P25: wp(base, disp) — the executor applies the word segment
+        # wrap (copy_segment), which the hardware applies to base-indexed
+        # word EAs.  Replaces both the naked sum (old XLEF/LLEF value
+        # emission, latent unwrapped inconsistency) and the spelled-out
+        # mask (old pef_value).  Indirect base forms keep R[base + d]:
+        # the R index gets the executor wrap already (identical result).
+        if indirect:
+            e = "%s + %d" % (base, disp)
+        else:
+            e = "wp(%s, %d)" % (base, disp)
     if indirect:
         e = "R[%s]" % e
     return e, indirect
 
-# [base+0xHHHH] with optional @ prefix and optional " (0xADDR)" fold
+# [base+0xHHHH] with optional @ prefix and optional " (0xADDR)" fold.
+# Byte forms fold as " (0xWORD:B)" — word address + byte select (P25).
 MEMOP = re.compile(r"^(@?)\[(?:(pc|ac2|ac3)\+)?0x([0-9A-Fa-f]+)\](?: \(0x([0-9A-Fa-f]+)\))?$")
+BMEMOP = re.compile(r"^(@?)\[(?:(pc|ac2|ac3)\+)?0x([0-9A-Fa-f]+)\]"
+                    r"(?: \(0x([0-9A-Fa-f]+):([01])\))?$")
 
 def parse_memop(pc, text, wide):
     m = MEMOP.match(text.strip())
@@ -150,32 +162,139 @@ def parse_memop(pc, text, wide):
         return None
     at, base, disp, folded = m.group(1), m.group(2) or "", int(m.group(3), 16), m.group(4)
     folded = int(folded, 16) if folded else None
+    # P25: the dis strips the indirect bit into the '@' prefix (word L
+    # forms print e.g. "@[0x70000210]" for raw 0xF0000210).  The prefix
+    # is authoritative; reconstruct the bit.  A set bit WITHOUT the
+    # prefix is an inconsistent rendering: refuse.
+    disp = reconcile_at(pc, text, at, disp, wide)
     e, indirect = ea_expr(pc, base, disp, wide, folded)
     if bool(at) != indirect:
         die("@-prefix vs indirect bit disagree at %08X: %s" % (pc, text))
     return e
 
+def byte_ea(pc, operand, wide):
+    """Byte-EA operand -> VALUE expression, per Machine::eagle_{x,l}_
+    byte_indexed (P25; semantics read from the emulator source, NOT the
+    IR.md §8 parked formula — see Project25/ByteEA.md):
+      X ii=0:   set_byte_segment(seg, raw16)       (raw16 NOT sign-extended)
+      X ii=1:   (pc+1)*2 + sext16(raw16)           (no masking; constant)
+      X ii=2/3: set_byte_segment(seg, ac*2+sext16) -> bp(acN, d)
+      L ii=0:   raw wide, unchanged                 (constant)
+      L ii=1:   (pc+1)*2 + raw wide                 (no masking; constant)
+      L ii=2/3: ac*2 + raw wide                     (no masking; acN*2 + d)
+    The dis renders bit 31 of an L-form byte displacement as an '@'
+    prefix with the bit stripped from the number (disassembler defect,
+    flagged; fix owned by the user).  Reconstruct: raw = printed | bit31.
+    X-form byte displacements are full 16-bit fields with NO indirect
+    bit: an '@' there is unrenderable -> refuse.
+    Returns the expression string, or None if the operand shape is
+    unrecognized (caller embeds).  Malformed recognized shapes refuse."""
+    mm = BMEMOP.match(operand.strip())
+    if not mm:
+        return None
+    at, base = mm.group(1), mm.group(2) or ""
+    disp = int(mm.group(3), 16)
+    fold_w = int(mm.group(4), 16) if mm.group(4) else None
+    fold_b = int(mm.group(5)) if mm.group(5) else 0
+    seg3 = (pc >> 28) & 0x7
+    if wide:
+        if at:
+            if disp & 0x80000000:
+                die("@ prefix AND bit 31 set at %08X: %s" % (pc, operand))
+            disp |= 0x80000000        # user ruling: '@' -> high bit
+    else:
+        if at:
+            die("@ on X-form byte operand (no indirect bit exists) at %08X: %s"
+                % (pc, operand))
+        if disp > 0xFFFF:
+            die("X-form byte displacement > 16 bits at %08X: %s" % (pc, operand))
+    opw = pc + 1                      # operand word address (address+1)
+    if base == "":
+        if wide:
+            value = disp & 0xFFFFFFFF                     # L ii=0: raw
+        else:
+            value = ((disp & 0x1FFFFFFF) | (seg3 << 29)) & 0xFFFFFFFF
+        return "0x%08X" % value
+    if base == "pc":
+        if wide:
+            value = (opw * 2 + disp) & 0xFFFFFFFF
+        else:
+            value = (opw * 2 + (sext(disp, 16) & 0xFFFFFFFF)) & 0xFFFFFFFF
+        if fold_w is not None:
+            folded = ((fold_w * 2) + fold_b) & 0xFFFFFFFF
+            if folded != value:
+                die("byte fold 0x%08X:%d != computed 0x%08X at %08X: %s"
+                    % (fold_w, fold_b, value, pc, operand))
+        return "0x%08X" % value
+    # register base
+    if wide:
+        return "%s*2 + 0x%08X" % (base, disp & 0xFFFFFFFF)
+    d = sext(disp, 16)
+    return "bp(%s, %d)" % (base, d)
+
+
+WPSHRR = re.compile(r"^WPSH\s+([0-3]),([0-3]);$")
+
+def push_stores(pc, text, slot_wides):
+    """One decorated push -> list of arg-slot store statement bodies, or
+    None if inexpressible (site embeds).  wides==1: a single value store
+    (word or byte EA).  WPSH x,a (P25): the emulated hook writes AC[XX]
+    at the base slot ASCENDING (EagleStack.cpp WPSH, P18 tranche B,
+    ordering verified there); one instruction -> wides addressless
+    stores.  registerRegister renders XX,AA.  Group size must equal the
+    map's wides (same check the emulated hook enforces)."""
+    slot, wides = slot_wides
+    m = WPSHRR.match(text.strip())
+    if m:
+        xx, aa = int(m.group(1)), int(m.group(2))
+        if ((aa - xx) & 3) + 1 != wides:
+            die("WPSH group size != map wides at %08X: %s (wides=%d)"
+                % (pc, text, wides))
+        return ["M32[0x%08X] = ac%d" % (slot + 2 * k, (xx + k) & 3)
+                for k in range(wides)]
+    if wides != 1:
+        return None                   # multi-wide non-WPSH: unknown shape
+    v = pef_value(pc, text)
+    if v is None:
+        return None
+    return ["M32[0x%08X] = %s" % (slot, v)]
+
+
+def reconcile_at(pc, text, at, disp, wide):
+    """The dis renders the word-form indirect bit inconsistently: X forms
+    keep the bit IN the printed displacement with a decorative '@'
+    (e.g. "@[ac3+0xFFEC]"); L forms strip it into the '@'
+    (e.g. "@[0x70000210]" for raw 0xF0000210).  Accept both; refuse the
+    genuinely inconsistent rendering (bit set, no '@')."""
+    ibit = 0x80000000 if wide else 0x8000
+    if disp & ibit:
+        if not at:
+            die("indirect bit set but no @ prefix at %08X: %s" % (pc, text))
+        return disp                   # X convention: bit retained
+    if at:
+        return disp | ibit            # L convention: reconstruct
+    return disp
+
+
 def pef_value(pc, text):
-    """XPEF/LPEF operand -> the pushed EA as a VALUE expression (explicit
-    segment wrap; R[...] result used raw for indirect). None if not
-    expressible."""
-    m = re.match(r"^(X|L)PEF\s+(\S+);", text.strip())
+    """XPEF/LPEF/XPEFB/LPEFB operand -> the pushed EA as a VALUE
+    expression (wp/bp per P25 ruling; R[...] used raw for indirect;
+    byte pointers per byte_ea).  None if not expressible."""
+    m = re.match(r"^(X|L)PEF(B?)\s+(.+);$", text.strip())
     if not m:
         return None
     wide = m.group(1) == "L"
-    mm = MEMOP.match(m.group(2))
+    if m.group(2) == "B":
+        return byte_ea(pc, m.group(3), wide)
+    mm = MEMOP.match(m.group(3).strip())
     if not mm:
         return None
-    at, base, disp, folded = mm.group(1), mm.group(2) or "", int(mm.group(3), 16), mm.group(4)
-    folded = int(folded, 16) if folded else None
+    at, base = mm.group(1), mm.group(2) or ""
+    disp = int(mm.group(3), 16)
+    folded = int(mm.group(4), 16) if mm.group(4) else None
+    disp = reconcile_at(pc, text, at, disp, wide)
     e, indirect = ea_expr(pc, base, disp, wide, folded)
-    if bool(at) != indirect:
-        die("@-prefix vs indirect bit disagree at %08X: %s" % (pc, text))
-    if indirect:
-        return e                      # R[...] resolves to a full address
-    if base in ("", "pc"):
-        return e                      # already an absolute constant
-    return "((%s) & 0x0FFFFFFF) | 0x%08X" % (e, pc & SEG_KEEP)
+    return e            # R[...] full address / constant / wp(base, d)
 
 # ------------------------------------------------------------- lowering
 
@@ -229,6 +348,34 @@ def lower_one(pc, text, pushmap_pcs):
         if kind == "l":
             return "%s = %s" % (ac, cell) if width == 32 else "%s = sx16(%s)" % (ac, cell)
         return "%s = %s" % (cell, ac) if width == 32 else "%s = trunc16(%s)" % (cell, ac)
+
+    # ---- P25 byte addressing (Machine::eagle_{x,l}_byte_indexed,
+    # Memory::read_byte/write_byte; see byte_ea for the semantics).
+    # M8 reads return the byte zero-extended; M8 stores write value&0xFF
+    # (audit trail zx8).  M8 indices are RAW — byte pointers carry their
+    # own segment (bits 31:29); the hardware applies no wrap at use.
+    bldst = {"XLEFB": ("e", False), "LLEFB": ("e", True),
+             "XLDB":  ("l", False), "LLDB":  ("l", True),
+             "XSTB":  ("s", False), "LSTB":  ("s", True)}
+    if op in bldst and len(args) == 2:
+        kind, wide_form = bldst[op]
+        e = byte_ea(pc, args[1], wide_form)
+        if e is None:
+            return None
+        ac = "ac%s" % args[0]
+        if kind == "e":
+            return "%s = %s" % (ac, e)
+        if kind == "l":
+            return "%s = M8[%s]" % (ac, e)
+        return "M8[%s] = zx8(%s)" % (e, ac)
+    if op in ("WLDB", "WSTB") and len(args) == 2:
+        # registerRegister renders II,AA (Disassembler.java: bits 14:13
+        # then 12:11; EagleGeneral::setup: AA=12:11, II=14:13).
+        # WLDB: ac[AA] = read_byte(ac[II]); WSTB: write_byte(ac[II], ac[AA]&0xFF)
+        ii, aa = args[0], args[1]
+        if op == "WLDB":
+            return "ac%s = M8[ac%s]" % (aa, ii)
+        return "M8[ac%s] = zx8(ac%s)" % (ii, aa)
     return None
 
 # ----------------------------------------------------------------- main
@@ -324,15 +471,18 @@ def emit_block(start, blocks, succs, dis, dis_pcs, dis_index,
                 ok = all(p in body_pcs for p in pushes)
                 if ok:
                     for p in pushes:
-                        if push_slot[p][1] != 1 or pef_value(p, dis[p]) is None:
-                            ok = False    # WPSH/multi-wide: next tranche
+                        if push_stores(p, dis[p], push_slot[p]) is None:
+                            ok = False    # inexpressible push: site embeds
                             break
                 if ok and not (dis[pc].startswith("LCALL") or dis[pc].startswith("XCALL")):
                     ok = False            # unknown decorated call opcode
                 if not a.book:
                     ok = False            # stock emission: sites stay instructions
-                if body_pcs & borrow_pcs:
-                    ok = False            # borrow-decorated block: next tranche
+                # P25 (user ruling, Aug 29): borrow brackets no longer veto
+                # the block — bracket WPSH/WPOPs are decorated pcs, so
+                # lower_one embeds them as @addr instructions (all hooks
+                # fire; the bracket's note_arg_write/pop nets zero and the
+                # site's args= never counted it).
                 lowerable_sites[pc] = ok
         if start not in dis_index:
             die("block start %08X has no disassembly line" % start)
@@ -351,9 +501,12 @@ def emit_block(start, blocks, succs, dis, dis_pcs, dis_index,
             if pc in push_slot:
                 site = next((c for c, (mk, ps) in call_site.items() if pc in ps), None)
                 if site is not None and lowerable_sites.get(site):
-                    v = pef_value(pc, text)
-                    out.append("  M32[0x%08X] = %s ; %s" % (push_slot[pc][0], v, text))
-                    census["argpush"] += 1
+                    stores = push_stores(pc, text, push_slot[pc])
+                    for i, s in enumerate(stores):
+                        tail = " ; %s" % text if i == 0 else \
+                               " ; ^ wide %d/%d" % (i + 1, len(stores))
+                        out.append("  %s%s" % (s, tail))
+                    census["argpush"] += len(stores)
                     census["last"] = "stmt"
                     handled = True
             elif pc in call_site and lowerable_sites.get(pc):
