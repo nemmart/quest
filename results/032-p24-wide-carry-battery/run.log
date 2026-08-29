@@ -1,31 +1,13 @@
-fo       cfg=book  K=50  div=0   guard=0  liberr_native=1  pairs=7816 blk_equal=7816 blk_mismatch=0 k_heartbeats=7177 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
-m        cfg=book  K=50  div=0   guard=0  liberr_native=1  pairs=7654 blk_equal=7654 blk_mismatch=0 k_heartbeats=7175 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=I.STOP leg=OK
-tasks/032-p24-wide-carry-battery.sh: line 58: 53531 Aborted                 (core dumped) env QUEST_PORT=$port QUEST_BLOCKS=$BLK QUEST_SYNC_LIST=$SYN QUEST_SYNC_K=$k "${cfgenv[@]}" "$@" setsid stdbuf -o0 -e0 $EMU -lockstep -silent -trace $R/trace -types lockstep,rtcalls QUEST QUEST_SERVER @QUEST @QUEST > $R/out 2> $R/err 9>&-
-inj      cfg=book  K=50  div=1   guard=0  liberr_native=0  pairs=7586 blk_equal=7585 blk_mismatch=1 k_heartbeats=7123 gaps_over_k=0 max_gap=50 floor=1000 FAIL end=clean want=FATAL leg=FAIL
-tasks/032-p24-wide-carry-battery.sh: line 58: 53571 Aborted                 (core dumped) env QUEST_PORT=$port QUEST_BLOCKS=$BLK QUEST_SYNC_LIST=$SYN QUEST_SYNC_K=$k "${cfgenv[@]}" "$@" setsid stdbuf -o0 -e0 $EMU -lockstep -silent -trace $R/trace -types lockstep,rtcalls QUEST QUEST_SERVER @QUEST @QUEST > $R/out 2> $R/err 9>&-
-abort    cfg=book  K=50  div=1   guard=0  liberr_native=0  pairs=6003 blk_equal=6002 blk_mismatch=1 k_heartbeats=5797 gaps_over_k=0 max_gap=50 floor=10 FAIL end=clean want=WORLD-ABORT leg=FAIL
-play     cfg=book  K=50  div=0   guard=0  liberr_native=0  pairs=6384539 blk_equal=6384539 blk_mismatch=0 k_heartbeats=6383479 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
-inj3     cfg=book  K=50  div=0   guard=0  liberr_native=1  pairs=7487 blk_equal=7487 blk_mismatch=0 k_heartbeats=7006 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=clean,I.STOP leg=OK
-k1fo     cfg=book  K=1   div=0   guard=0  liberr_native=1  pairs=381818 blk_equal=381818 blk_mismatch=0 k_heartbeats=381214 gaps_over_k=0 max_gap=1 floor=1000 OK end=clean want=clean,I.STOP leg=OK
-fo-st    cfg=stock K=50  div=0   guard=0  liberr_native=1  pairs=7697 blk_equal=7697 blk_mismatch=0 k_heartbeats=7058 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
-play-st  cfg=stock K=50  div=0   guard=0  liberr_native=0  pairs=10732400 blk_equal=10732400 blk_mismatch=0 k_heartbeats=10731172 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
-fo-emu   cfg=emu   K=50  div=0   guard=0  liberr_native=1  pairs=8246 blk_equal=8246 blk_mismatch=0 k_heartbeats=7607 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
-m-emu    cfg=emu   K=50  div=0   guard=0  liberr_native=1  pairs=7049 blk_equal=7049 blk_mismatch=0 k_heartbeats=6570 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=I.STOP leg=OK
-== P24 wide-carry battery verdicts ==
--- carry-consumer-site block coverage (CarryCensus.md; IRExec first-execution, book/stock legs) --
-70160E64:2 70160E65:2 70160E73:2 70160E74:2 7016E75B:0 7016E75C:0 7016E76A:0 7016E76B:0 7015E701:0 701644C5:0 70168107:0 7016A5E5:0 7016B852:0 7016DB9A:0 7016DCD0:0 7016DCEF:0 70171734:0 70171984:0 70171E2B:0 7017200B:0 701723F2:0 701727AB:0 70177336:0 701785C8:0 7017860D:0 70178738:0 70179BFC:0 70169B56:8 
-fo       cfg=book  K=50  div=0   guard=0  liberr_native=1  pairs=7816 blk_equal=7816 blk_mismatch=0 k_heartbeats=7177 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
-m        cfg=book  K=50  div=0   guard=0  liberr_native=1  pairs=7654 blk_equal=7654 blk_mismatch=0 k_heartbeats=7175 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=I.STOP leg=OK
-inj      cfg=book  K=50  div=1   guard=0  liberr_native=0  pairs=7586 blk_equal=7585 blk_mismatch=1 k_heartbeats=7123 gaps_over_k=0 max_gap=50 floor=1000 FAIL end=clean want=FATAL leg=FAIL
-abort    cfg=book  K=50  div=1   guard=0  liberr_native=0  pairs=6003 blk_equal=6002 blk_mismatch=1 k_heartbeats=5797 gaps_over_k=0 max_gap=50 floor=10 FAIL end=clean want=WORLD-ABORT leg=FAIL
-play     cfg=book  K=50  div=0   guard=0  liberr_native=0  pairs=6384539 blk_equal=6384539 blk_mismatch=0 k_heartbeats=6383479 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
-inj3     cfg=book  K=50  div=0   guard=0  liberr_native=1  pairs=7487 blk_equal=7487 blk_mismatch=0 k_heartbeats=7006 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=clean,I.STOP leg=OK
-k1fo     cfg=book  K=1   div=0   guard=0  liberr_native=1  pairs=381818 blk_equal=381818 blk_mismatch=0 k_heartbeats=381214 gaps_over_k=0 max_gap=1 floor=1000 OK end=clean want=clean,I.STOP leg=OK
-fo-st    cfg=stock K=50  div=0   guard=0  liberr_native=1  pairs=7697 blk_equal=7697 blk_mismatch=0 k_heartbeats=7058 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
-play-st  cfg=stock K=50  div=0   guard=0  liberr_native=0  pairs=10732400 blk_equal=10732400 blk_mismatch=0 k_heartbeats=10731172 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
-fo-emu   cfg=emu   K=50  div=0   guard=0  liberr_native=1  pairs=8246 blk_equal=8246 blk_mismatch=0 k_heartbeats=7607 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
-m-emu    cfg=emu   K=50  div=0   guard=0  liberr_native=1  pairs=7049 blk_equal=7049 blk_mismatch=0 k_heartbeats=6570 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=I.STOP leg=OK
-== P24 wide-carry battery verdicts ==
--- carry-consumer-site block coverage (CarryCensus.md; IRExec first-execution, book/stock legs) --
-70160E64:2 70160E65:2 70160E73:2 70160E74:2 7016E75B:0 7016E75C:0 7016E76A:0 7016E76B:0 7015E701:0 701644C5:0 70168107:0 7016A5E5:0 7016B852:0 7016DB9A:0 7016DCD0:0 7016DCEF:0 70171734:0 70171984:0 70171E2B:0 7017200B:0 701723F2:0 701727AB:0 70177336:0 701785C8:0 7017860D:0 70178738:0 70179BFC:0 70169B56:8 
-P24 BATTERY RED (2 legs)
+fo       cfg=book  K=50  div=0   guard=0  liberr_native=1  pairs=7959 blk_equal=7959 blk_mismatch=0 k_heartbeats=7320 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+m        cfg=book  K=50  div=0   guard=0  liberr_native=1  pairs=7397 blk_equal=7397 blk_mismatch=0 k_heartbeats=6918 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=I.STOP leg=OK
+tasks/032-p24-wide-carry-battery.sh: line 58: 54720 Aborted                 (core dumped) env QUEST_PORT=$port QUEST_BLOCKS=$BLK QUEST_SYNC_LIST=$SYN QUEST_SYNC_K=$k "${cfgenv[@]}" "$@" setsid stdbuf -o0 -e0 $EMU -lockstep -silent -trace $R/trace -types lockstep,rtcalls QUEST QUEST_SERVER @QUEST @QUEST > $R/out 2> $R/err 9>&-
+inj      cfg=book  K=50  div=1   guard=0  liberr_native=0  pairs=7554 blk_equal=7553 blk_mismatch=1 k_heartbeats=7091 gaps_over_k=0 max_gap=50 floor=1000 FAIL end=clean want=FATAL leg=FAIL
+tasks/032-p24-wide-carry-battery.sh: line 58: 54760 Aborted                 (core dumped) env QUEST_PORT=$port QUEST_BLOCKS=$BLK QUEST_SYNC_LIST=$SYN QUEST_SYNC_K=$k "${cfgenv[@]}" "$@" setsid stdbuf -o0 -e0 $EMU -lockstep -silent -trace $R/trace -types lockstep,rtcalls QUEST QUEST_SERVER @QUEST @QUEST > $R/out 2> $R/err 9>&-
+abort    cfg=book  K=50  div=1   guard=0  liberr_native=0  pairs=5993 blk_equal=5992 blk_mismatch=1 k_heartbeats=5787 gaps_over_k=0 max_gap=50 floor=10 FAIL end=clean want=WORLD-ABORT leg=FAIL
+play     cfg=book  K=50  div=0   guard=0  liberr_native=0  pairs=6401536 blk_equal=6401536 blk_mismatch=0 k_heartbeats=6400456 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+inj3     cfg=book  K=50  div=0   guard=0  liberr_native=1  pairs=7652 blk_equal=7652 blk_mismatch=0 k_heartbeats=7171 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=clean,I.STOP leg=OK
+k1fo     cfg=book  K=1   div=0   guard=0  liberr_native=1  pairs=381784 blk_equal=381784 blk_mismatch=0 k_heartbeats=381180 gaps_over_k=0 max_gap=1 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+fo-st    cfg=stock K=50  div=0   guard=0  liberr_native=1  pairs=7937 blk_equal=7937 blk_mismatch=0 k_heartbeats=7298 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+tasks/032-p24-wide-carry-battery.sh: line 58: 54958 Killed                  QUEST_PORT=$port timeout 360 python3 $drv $mode $R/session.log > /dev/null 2>&1
+tasks/032-p24-wide-carry-battery.sh: line 58: 54954 Killed                  env QUEST_PORT=$port QUEST_BLOCKS=$BLK QUEST_SYNC_LIST=$SYN QUEST_SYNC_K=$k "${cfgenv[@]}" "$@" setsid stdbuf -o0 -e0 $EMU -lockstep -silent -trace $R/trace -types lockstep,rtcalls QUEST QUEST_SERVER @QUEST @QUEST > $R/out 2> $R/err 9>&-
+play-st  cfg=stock K=50  div=0   guard=0  liberr_native=0  pairs=9566942 blk_equal=9566942 blk_mismatch=0 k_heartbeats=9565650 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
