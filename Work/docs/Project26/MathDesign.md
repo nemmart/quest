@@ -45,12 +45,12 @@ out-of-range fault is the only backstop. Checker untouched.
 
 ## 3. Word layer
 
-- Bitwise: INFIX `&` `|` `^` (user ruling, Aug 29 follow-up —
-  supersedes the same-day functional and/or/xor spellings);
-  complement stays `com(x)` (ruled earlier: "complement is too
-  long", and no bare-`~` ruling exists). Word in, word out, no 0/1
-  constraint. Lowering parenthesizes compound emissions (no
-  precedence reliance) — same rule as §2.
+- Bitwise: `&` `|` `^` infix, `~` prefix (user rulings, Aug 29
+  follow-ups — supersede the same-day functional
+  and/or/xor/com spellings entirely). Word in, word out, no 0/1
+  constraint. `~` flips 32 bits; `!` remains boolean-only (§2).
+  Lowering parenthesizes compound emissions (no precedence
+  reliance) — same rule as §2.
 - Shifts, ISA-SHAPED (supersedes the ls/ars/lrs draft from earlier
   the same discussion): `ash(x, amount)` and `lsh(x, amount)`,
   SIGNED amount, positive=left / negative=right, semantics COPIED
@@ -119,8 +119,9 @@ ruled for WHEN this happens (not P26):
 
 ## 6. Open items (not yet ruled — collect at the P26 plan gate)
 
-1. RESOLVED (user, Aug 29): infix `&` `|` `^` — one bitwise
-   spelling at all tiers; `com(x)` stands for complement.
+1. RESOLVED (user, Aug 29): `&` `|` `^` `~` — C spellings, one
+   bitwise vocabulary at all tiers; the functional
+   and/or/xor/com forms are fully retired.
 2. Pure-tier shift spelling after conversion: C `<<`/`>>` (with the
    `>>` s/u question) vs `ash`/`lsh`-as-pure (flag-free). Integrator
    lean: keep ash/lsh as the only shift vocabulary — one spelling,
