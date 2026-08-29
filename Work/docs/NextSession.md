@@ -1,5 +1,11 @@
 # Next session
 
+## P25 queued (Aug 29 2026)
+- P25 = byte addressing in the IR (M8[] / byte-EA values) + B-form
+  push lowering (the 96 blocked call sites). Prompt:
+  docs/Project25/PROMPT.md — census + grammar/scope rulings at the
+  plan gate. t-places renumber to P26.
+
 ## Battery template (Aug 29 2026)
 - tasks/034-parallel-battery.sh is the battery template of record
   (parallel, JOBS=6, 13 legs incl. the emu isolation pair); hold/031's
