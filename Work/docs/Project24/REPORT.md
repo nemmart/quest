@@ -145,8 +145,42 @@ all-emulated × {fo, m}, all on the split CFG + split synclist, with a
 carry-consumer-site coverage report (all 28 census consumer blocks)
 appended to the verdicts. Landing bar: 0 divergences everywhere,
 blk_mismatch=0, gaps_over_k=0, endpoints pinned, coverage evidence
-recorded. RESULT: see results/032-p24-wide-carry-battery/ —
-**[recorded below when the runner reports]**.
+recorded. RESULT (results/032-p24-wide-carry-battery/, Aug 29):
+**9 of 11 legs GREEN, 2 RED — the reds are a pre-existing P23 tooling
+gap, not a carry divergence (finding F6, below).**
+
+GREEN: fo (7,816 pairs), m (7,654), play (6,384,539), inj3 (7,487),
+k1fo (K=1, 381,818), fo-st (7,697), play-st (10,732,400), fo-emu
+(8,246), m-emu (7,049) — every one div=0, blk_mismatch=0,
+gaps_over_k=0, endpoint pinned; ?LIB_ERROR(native) ran in seven legs
+(the re-derived staged carries paired clean at K=1 and K=50, book,
+stock, and all-emulated).
+
+RED: inj (QUEST_INJECT=7016A896) and abort (QUEST_TERMINAL=7016871D),
+both div=1 at the armed pc with end=clean instead of FATAL/WORLD-ABORT.
+
+**F6 — inject/terminal arming is incompatible with IR mode at
+non-block-entry pcs (P23 latent, first exposed here).** The armed-site
+checks in Machine::run_steps test the arrival pc; the emulating master
+passes through every instruction pc, but the IR clone arrives only at
+block entries. 7016A896 is FIND_OBJECT+0x7 (mid-block in 7016A88F) and
+7016871D is DIST+0x6 (mid-block in 70168717) — the master fired, the
+clone sailed through the block, and the pair diverged structurally at
+the armed pc (register scatter, no carry involvement in either dump).
+The decisive cross-check: inj3's site 70176AA7 IS a block entry in
+quest.blocks.split, and that leg is GREEN. Corroboration: task 031 ran
+the same inj/abort legs GREEN on the pre-IR tree, and P23's own gates
+(REPORT §9) never included inj/abort legs. Both red legs paired clean
+for 6.0-7.6k pairs up to the armed pc (blk_mismatch=1 IS the
+divergence pair). Per boundary 3 this is a STOP-and-report; the fix
+options (emu-config those legs; or teach lower.py/IRExec to split or
+exclude blocks containing armed pcs, absent=emulated) touch P23
+machinery and are the user's ruling, not this session's.
+
+Coverage line: the FIRST ADC.C cluster **executed live** — 70160E64/
+65/73/74 (BEING_ATTACK) at 2 hits each (a play leg found combat) —
+plus LOCK_FILE 70169B56 at 8. The KNIGHT_ATTACK cluster and the DIVX
+sites did not fire in the scripted legs, as flagged in advance.
 
 Coverage honesty, stated in advance: the four ADC.C sites live in
 BEING_ATTACK/KNIGHT_ATTACK (combat) and several DIVX sites in
@@ -168,7 +202,51 @@ against §14 — an unimplemented-decode rendering, not a listing defect).
 ## 9. Deliverables ledger
 
 CarryCensus.md ✓; fix landed + residue re-derived (atomic) ✓; doc
-corrections ✓; local gates ✓; battery task queued (032) — result to be
-appended; REPORT_worklog.md ✓; CURRENT_STATE/NextSession — updated in
-the same push as the battery verdict (or handed to the integrator if
-the session ends first; noted there either way).
+corrections ✓; local gates ✓; battery run (032): 9/11 GREEN, 2 RED
+explained as pre-existing F6, ruling owed; REPORT_worklog.md ✓; CURRENT_STATE/NextSession updated with the
+battery verdict and the owed rulings.
+
+## 10. Rulings owed to the user (open at session end)
+
+1. **F6 disposition** (§7): inject/terminal arming vs IR at
+   non-block-entry pcs. Options: (a) run inj/abort battery legs
+   all-emulated (no code; equivalent to the pre-IR 031 check);
+   (b) IR-loader excludes blocks containing QUEST_INJECT/QUEST_TERMINAL
+   pcs (absent=emulated — the clone then emulates through the armed
+   site; small IRExec/loader change, P23 machinery); (c) both. The two
+   red legs re-run green under any of these if F6's analysis is right.
+2. **Consumer-site live coverage**: the battery demonstrated the
+   BEING_ATTACK ADC.C cluster and LOCK_FILE live; KNIGHT_ATTACK's
+   cluster and the 19 DIVX sites did not fire in scripted legs. Rule
+   whether the census classification (NOVA-reached, fix-invariant)
+   suffices for the landing bar, or a manual combat/store play session
+   should demonstrate them as live pairs.
+3. **Merge order**: p24-wide-carry carries the P23-integrated tree as
+   its base (main lacks P23); integrator merges P23 then P24, or the
+   branch wholesale.
+
+## 11. Reviewer notes (integration review, Aug 29 2026)
+
+Verdict: GREEN. Verified in code: the fixed add/sub formulas (bit-32
+carry-out, complement-add for sub — matches the manual citations and
+the sanity vector), frames.cpp thin-forwards, the annotated staged
+carries in lib_error/o_signal/o_on/p_defon/unsigned_to_char (the
+lib_error.cpp:124 `>>31` is frame-word carry TRANSPORT — the packed
+ac3|c unwind word — not arithmetic; checked and correct). Census
+spot-checks: DIVX site count matches mechanically (19); the CRYTO
+consumer and the ADC.C→ADD.O adjacency corroborated against the
+listing (the latter independently observed by the reviewer before P24
+ran). Battery verdicts file consistent with §7; the two red legs'
+dumps are F6-shaped (mid-block armed pcs, no carry terms).
+
+INTEGRATION FINDING: the P24 tree was cut from a base that PREDATED
+the Aug 29 detached-master tripwire (TerminalDetach.md) — turn_loop_pc
+and its Machine::run_steps check were absent. Ported forward at
+integration (tripwire hunks re-applied; TerminalDetach section and
+CURRENT_STATE entry restored), tree rebuilt, and both tripwire legs
+re-run on the MERGED tree: forced-detach leg fires with the exact
+message; clean K=1 book leg (2,129 IR blocks) 0 div, no false fire —
+which also serves as the reviewer's independent P24 spot-check (the
+fixed carries live under K=1 strict). Lesson for session hand-offs:
+a project session should state the tgz vintage it was cut from; the
+integrator diffs against the last integrated tree either way.
