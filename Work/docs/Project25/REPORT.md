@@ -152,11 +152,13 @@ rather than argued here.
    docs/DISASSEMBLER_BYTE_OPERANDS.md records the defect, the
    compensation contract, and the §14 protocol if a fix is ever
    attempted.
-3. P26: t-places (borrows convert; the two @addr bracket pairs in
-   lowered blocks are the pilot's first customers), conditional
-   exits.
-4. UPDATE_SCREENS reachability (the two borrow blocks): find a
-   driver path or record permanently as census-carried.
+3. P26: t-places (borrows convert — all 23 game borrow brackets
+   get the same treatment; the two sitting in call-lowered blocks
+   are not special [user ruling Aug 29, superseding this item's
+   original framing]), conditional exits.
+4. UPDATE_SCREENS reachability (the two borrow-bracket blocks the
+   scripted drivers miss): find a driver path or record permanently
+   as census-carried.
 
 ## 9. Reviewer notes (integration review, Aug 29 2026)
 

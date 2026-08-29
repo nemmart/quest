@@ -4,8 +4,10 @@
 - Battery 035: attempt 1 12/13 (inj-emu endpoint-reach flake, user
   ruling, evidence in REPORT §5); attempt 3 **13/13 GREEN DONE**.
   Reviewed + merged to main Aug 29; reviewer notes REPORT §9.
-  Next: **P26 = t-places** (borrows convert — the two @addr bracket
-  pairs are the pilot's first customers; conditional exits).
+  Next: **P26 = t-places** (borrows convert — 23 borrow brackets in
+  the game, ALL get the same t-place treatment [user ruling Aug 29:
+  the two brackets that happen to sit in call-lowered blocks are not
+  special]; conditional exits).
 - P25 (byte addressing + call ledger) is IMPLEMENTED on branch
   p25-byte-addressing: **566/566 decorated sites lowered** (the user
   reversed the borrow exclusion in-session — bracket as @addr
@@ -27,7 +29,8 @@
   buggy in multiple ways; too risky to touch) — the lower.py
   reconstruction shim is STANDING; docs/DISASSEMBLER_BYTE_OPERANDS.md
   is the record and the future-fix protocol. (3) P26 = t-places (the two @addr borrow bracket
-  pairs in lowered blocks are the pilot's first customers) +
+  pairs get the same treatment as the other 21 — no special
+  casing, user ruling Aug 29) +
   conditional exits.
 
 ## Battery template (Aug 29 2026)
