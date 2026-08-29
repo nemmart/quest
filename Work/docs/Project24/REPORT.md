@@ -203,6 +203,24 @@ against §14 — an unimplemented-decode rendering, not a listing defect).
 
 CarryCensus.md ✓; fix landed + residue re-derived (atomic) ✓; doc
 corrections ✓; local gates ✓; battery run (032): 9/11 GREEN, 2 RED
-explained as pre-existing F6, ruling owed; REPORT_worklog.md ✓; CURRENT_STATE/NextSession — updated in
-the same push as the battery verdict (or handed to the integrator if
-the session ends first; noted there either way).
+explained as pre-existing F6, ruling owed; REPORT_worklog.md ✓; CURRENT_STATE/NextSession updated with the
+battery verdict and the owed rulings.
+
+## 10. Rulings owed to the user (open at session end)
+
+1. **F6 disposition** (§7): inject/terminal arming vs IR at
+   non-block-entry pcs. Options: (a) run inj/abort battery legs
+   all-emulated (no code; equivalent to the pre-IR 031 check);
+   (b) IR-loader excludes blocks containing QUEST_INJECT/QUEST_TERMINAL
+   pcs (absent=emulated — the clone then emulates through the armed
+   site; small IRExec/loader change, P23 machinery); (c) both. The two
+   red legs re-run green under any of these if F6's analysis is right.
+2. **Consumer-site live coverage**: the battery demonstrated the
+   BEING_ATTACK ADC.C cluster and LOCK_FILE live; KNIGHT_ATTACK's
+   cluster and the 19 DIVX sites did not fire in scripted legs. Rule
+   whether the census classification (NOVA-reached, fix-invariant)
+   suffices for the landing bar, or a manual combat/store play session
+   should demonstrate them as live pairs.
+3. **Merge order**: p24-wide-carry carries the P23-integrated tree as
+   its base (main lacks P23); integrator merges P23 then P24, or the
+   branch wholesale.
