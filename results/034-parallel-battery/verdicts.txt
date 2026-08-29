@@ -1,0 +1,21 @@
+fo        cfg=book  K=50  div=0   guard=0  liberr_native=1  pairs=8239 blk_equal=8239 blk_mismatch=0 k_heartbeats=7600 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+m         cfg=book  K=50  div=0   guard=0  liberr_native=1  pairs=7639 blk_equal=7639 blk_mismatch=0 k_heartbeats=7160 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=I.STOP leg=OK
+inj       cfg=book  K=50  div=0   guard=0  liberr_native=0  pairs=7623 blk_equal=7623 blk_mismatch=0 k_heartbeats=7159 gaps_over_k=0 max_gap=50 floor=1000 OK end=FATAL want=FATAL leg=OK
+abort     cfg=book  K=50  div=0   guard=0  liberr_native=0  pairs=6369 blk_equal=6369 blk_mismatch=0 k_heartbeats=6163 gaps_over_k=0 max_gap=50 floor=10 OK end=WORLD-ABORT want=WORLD-ABORT leg=OK
+play      cfg=book  K=50  div=0   guard=0  liberr_native=0  pairs=5387528 blk_equal=5387528 blk_mismatch=0 k_heartbeats=5386508 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+inj3      cfg=book  K=50  div=0   guard=0  liberr_native=1  pairs=7440 blk_equal=7440 blk_mismatch=0 k_heartbeats=6959 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=clean,I.STOP leg=OK
+k1fo      cfg=book  K=1   div=0   guard=0  liberr_native=1  pairs=382722 blk_equal=382722 blk_mismatch=0 k_heartbeats=382118 gaps_over_k=0 max_gap=1 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+fo-st     cfg=stock K=50  div=0   guard=0  liberr_native=1  pairs=8034 blk_equal=8034 blk_mismatch=0 k_heartbeats=7395 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+play-st   cfg=stock K=50  div=0   guard=0  liberr_native=0  pairs=9678460 blk_equal=9678460 blk_mismatch=0 k_heartbeats=9677224 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+fo-emu    cfg=emu   K=50  div=0   guard=0  liberr_native=1  pairs=7715 blk_equal=7715 blk_mismatch=0 k_heartbeats=7076 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+m-emu     cfg=emu   K=50  div=0   guard=0  liberr_native=1  pairs=7236 blk_equal=7236 blk_mismatch=0 k_heartbeats=6757 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=I.STOP leg=OK
+inj-emu   cfg=emu   K=50  div=0   guard=0  liberr_native=0  pairs=7605 blk_equal=7605 blk_mismatch=0 k_heartbeats=7141 gaps_over_k=0 max_gap=50 floor=1000 OK end=FATAL want=FATAL leg=OK
+abort-emu cfg=emu   K=50  div=0   guard=0  liberr_native=0  pairs=6065 blk_equal=6065 blk_mismatch=0 k_heartbeats=5859 gaps_over_k=0 max_gap=50 floor=10 OK end=WORLD-ABORT want=WORLD-ABORT leg=OK
+== Task 034 parallel battery (JOBS=6) ==
+inj: armed-pc block drops=1 (want 1)
+abort: armed-pc block drops=1 (want 1)
+inj-emu: armed-pc block drops=0 (want 0)
+abort-emu: armed-pc block drops=0 (want 0)
+-- carry-consumer-site block coverage (CarryCensus.md; book/stock legs) --
+70160E64:2 70160E65:2 70160E73:2 70160E74:2 7016E75B:0 7016E75C:0 7016E76A:0 7016E76B:0 7015E701:0 701644C5:0 70168107:0 7016A5E5:0 7016B852:0 7016DB9A:0 7016DCD0:0 7016DCEF:0 70171734:0 70171984:0 70171E2B:0 7017200B:0 701723F2:0 701727AB:0 70177336:0 701785C8:0 7017860D:0 70178738:0 70179BFC:0 70169B56:8 
+wall_clock_seconds=523
