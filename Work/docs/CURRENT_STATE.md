@@ -17,8 +17,10 @@ implemented). Full tier landed: XLEFB/LLEFB values + 6 byte ld/st
 ops; embeds 31,116→27,600. Semantics read from
 eagle_{x,l}_byte_indexed — IR.md §8's parked formula was wrong for
 L-forms (corrected); the "indirect LPEFB hard case" was a
-disassembler artifact (raw 0xE0001998; 184 such lines flagged, FIX
-OWNED BY THE USER — lower.py reconstructs @→bit31 meanwhile). Local
+disassembler artifact (raw 0xE0001998; 184 such lines flagged; fix DEFERRED by
+user ruling — byteIndexed disassembler masking judged too risky to
+touch — so lower.py's @→bit31 reconstruction is STANDING;
+docs/DISASSEMBLER_BYTE_OPERANDS.md). Local
 gates: k1fo/k1play (book, K=1 strict) + stock fo, 0 div; LPEFB site
 live at startup; borrow blocks 0/2 by scripted drivers
 (census-carried, ByteEA.md §5). Battery: task 035 RAN — 12/13

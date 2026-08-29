@@ -1,3 +1,13 @@
+// IRExec — the clone-side IR interpreter.
+//
+// THE SPEC IS docs/IR.md (consolidated, normative; spec-wins).  The
+// grammar parsed here, the wp/bp/M8 semantics (P25 byte addressing),
+// the segment-wrap index rule, the refuse-on-anything loader posture,
+// and the terminator discipline are all defined there; this file is
+// the implementation.  Where an operation corresponds to machine
+// behavior, call the SAME emulator code paths the instruction would
+// (Machine/Memory/EagleInstruction helpers) — never a local formula.
+// Byte-EA derivation record: docs/Project25/ByteEA.md.
 #include "IRExec.hpp"
 #include "Machine.hpp"
 #include "Memory.hpp"

@@ -1,8 +1,18 @@
 #!/usr/bin/env python3
-# P23 lower.py — quest.dis + quest.blocks (+ pushmap, argmap) -> quest.ir
-# Spec: docs/Project23/IRPhase1.md. Register-faithful 1:1, class-capped,
-# no temps, no folding. Everything not in the cap is an embedded
-# statement. TOTAL: an all-embed block is valid output.
+# lower.py — quest.dis + quest.blocks (+ pushmap, argmap) -> quest.ir
+#
+# THE SPEC IS docs/IR.md (consolidated, normative; spec-wins).  This
+# emitter implements it — grammar, wp/bp/M8 semantics, WPSH group
+# stores, @addr borrow brackets, the byte-EA per-mode table — and any
+# emitter/spec disagreement is a bug in one of them, to be reported,
+# not papered over.  Byte-EA derivation record + the disassembler
+# byte-operand defect this parser compensates for:
+# docs/Project25/ByteEA.md and docs/DISASSEMBLER_BYTE_OPERANDS.md.
+# (Historical phase-1 rationale: docs/Project23/IRPhase1.md.)
+#
+# Register-faithful 1:1, class-capped, no temps, no folding.
+# Everything not in the cap is an embedded statement.  TOTAL: an
+# all-embed block is valid output.
 #
 # Phase 1 cap (spec §4): NLDAI WLDAI / X,L x N,W LDA/STA (modes 0-3,
 # direct or @-indirect via R) / XLEF LLEF / WMOV / WADD WSUB WADDI WSBI.

@@ -52,7 +52,8 @@ Findings against the spec and the toolchain:
   indirection or an ii=0 arm — the raw wide is the pushed value, and
   0xE0001998 is precisely the byte pointer for word 0x70000CCC. No
   dereference exists to lower.
-- **Disassembler defect (§14 flag; fix owned by the user).** For
+- **Disassembler defect (§14 flag; fix DEFERRED by user ruling — see
+  docs/DISASSEMBLER_BYTE_OPERANDS.md, the standing record).** For
   L-form BYTE operands, bit 31 is data (top bit of a byte-pointer
   constant), not an indirect flag; the renderer strips it into `@`
   and prints the wrong value. **184 lines** (183 LLEFB + 1 LPEFB;

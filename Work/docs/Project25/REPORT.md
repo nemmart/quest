@@ -131,9 +131,12 @@ rather than argued here.
 ## 8. TODO / next session
 
 1. Battery 035 verdict (runner box) → append here.
-2. User's disassembler fix → regenerate listings → diff-audit (expect
-   exactly the 184 lines) → lower.py's `@`-reconstruction for byte
-   forms becomes dead code to retire.
+2. Disassembler fix DEFERRED (user ruling, post-landing: the
+   byteIndexed masking is buggy in multiple ways and too risky to
+   touch) — the lower.py shim is standing, not temporary.
+   docs/DISASSEMBLER_BYTE_OPERANDS.md records the defect, the
+   compensation contract, and the §14 protocol if a fix is ever
+   attempted.
 3. P26: t-places (borrows convert; the two @addr bracket pairs in
    lowered blocks are the pilot's first customers), conditional
    exits.
