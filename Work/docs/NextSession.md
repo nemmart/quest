@@ -4,6 +4,11 @@
 - Battery 035: attempt 1 12/13 (inj-emu endpoint-reach flake, user
   ruling, evidence in REPORT §5); attempt 3 **13/13 GREEN DONE**.
   Reviewed + merged to main Aug 29; reviewer notes REPORT §9.
+  P26 DESIGN OF RECORD: docs/Project26/MathDesign.md (Aug 29
+  discussion — goto [list] tN terminator, tf(), mandatory <s/<u,
+  strict &&/||/!, and/or/xor/com, ash/lsh ISA-exact, add()/sub()
+  family SUPERSEDING #+/#-, flag-conversion future parked, 2 open
+  items for the plan gate).
   Next: **P26 = t-places** (borrows convert — 23 borrow brackets in
   the game, ALL get the same t-place treatment [user ruling Aug 29:
   the two brackets that happen to sit in call-lowered blocks are not
