@@ -84,6 +84,16 @@ public:
   // True if pc is any terminal point (used by Machine's any-address check).
   static bool is_terminal_pc(uint32_t pc);
 
+  // Detached-master tripwire (Aug 29 2026 session): entry pc of the
+  // game's per-turn command dispatch (START_TURN — it dispatches both
+  // MOVE_PLAYER and MOVE_IN_CAVE, so one pc covers overworld and cave
+  // mode). Resolved from symbols at initialize; 0 = unresolved, tripwire
+  // disarmed (warned). Machine::run_steps aborts the world when the
+  // MASTER arrives here with its clone detached: without this, a mid-game
+  // detach leaves the player playing an unverified master on the strength
+  // of one stderr line they likely never saw.
+  static uint32_t turn_loop_pc;
+
   // ---- Crossings-only checker helpers (docs/CrossingsChecker.md) ----
   // True if pc is an L2-tagged entry (in-range check included).
   static bool is_l2_entry(uint32_t pc);

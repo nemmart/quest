@@ -158,3 +158,38 @@ without any pairing involvement.
   see UNIMPLEMENTED.md §8: it is the server's `IPC_TASK` dying inside
   `UPDATE_USER_DATA_FILE` at **first login**, every session; the
   multi-task server survives it.
+  `UPDATE_USER_DATA_FILE` at **first login**, every session; the
+  multi-task server survives it.
+
+## Detached-master tripwire (Aug 29 2026 session)
+
+Detach leaves the master "continuing unverified" on one stderr line — a
+player mid-game likely never sees it. Fix (user design): when the
+MASTER arrives at the entry of the game's per-turn command dispatch —
+**START_TURN** (0x7017821F; it dispatches both MOVE_PLAYER and
+MOVE_IN_CAVE, so one anchor covers overworld and cave mode) — with its
+clone ordinal detached, the world hard-aborts via
+`abort_world(save=false)` (user ruling: a detach "shouldn't happen", so
+the post-detach master is not trusted to write the data files).
+
+Mechanism: `RTStubs::turn_loop_pc`, resolved from symbols at
+initialize (unresolvable = disarmed + stderr warning); checked in
+`Machine::run_steps` beside the terminal-arrival check, master role
+only. Cadence is once per turn — worst case one turn of unverified
+play before the stop, which is the point of anchoring at the loop
+head rather than a hot pc.
+
+Why graceful shutdowns cannot false-fire (this matters: a false fire
+on a clean quit would suppress a legitimate save): START_TURN's only
+caller in the entire listing is the main-loop site 7015C5DC; the
+DETACH-kind terminals (I.STOP/?FATAL) never return to the loop — the
+master runs them forward to exit; ?RETURN retirement marks the ordinal
+at the exit syscall itself. Validated: forced-detach leg
+(QUEST_TERMINAL=7016AA35, GET_INPUT, detach during login) aborts at
+the first START_TURN arrival with the "Internal error: Master did not
+terminate after clone detach" report; clean
+K=1 book-IR leg (full login + a live-clone turn) runs with 0
+divergences and no fire. An ESC-quit leg was attempted but the quit
+never registered against the turn cadence (inconclusive — the
+structural argument above stands on its own); if a future session
+drives a real ESC quit under lockstep, record the result here.

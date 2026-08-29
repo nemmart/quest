@@ -307,6 +307,32 @@ uint32_t Machine::run_steps(uint32_t address, int32_t count) {
       block_ordinal++;
       blocks_since_sync++;
     }
+    // Detached-master tripwire (user ruling, Aug 29 2026): the MASTER
+    // arriving at the per-turn command dispatch (START_TURN) with its
+    // clone detached means the player is about to keep playing an
+    // UNVERIFIED master on the strength of one stderr line. Hard abort
+    // instead, write-back suppressed — post-detach master state is
+    // deliberately not trusted with the data files ("it shouldn't
+    // happen"). Graceful shutdowns can't false-fire: START_TURN's ONLY
+    // caller in the listing is the main-loop site 7015C5DC, and the
+    // detach-kind terminals (I.STOP/?FATAL) never return to the loop —
+    // the master runs them forward to exit. ?RETURN retirement marks
+    // detached at the exit syscall itself, after the last game
+    // instruction. Empirical: a full live-clone turn does not fire
+    // (clean leg); a forced pre-turn detach fires at the first
+    // START_TURN arrival (QUEST_TERMINAL leg).
+    if(rt_sync && lockstep_role == Lockstep::MASTER &&
+       RTStubs::turn_loop_pc != 0 &&
+       static_cast<uint32_t>(pc) == RTStubs::turn_loop_pc &&
+       Lockstep::is_detached(lockstep_ordinal)) {
+      char buf[200];
+      snprintf(buf, sizeof(buf),
+               "Internal error: Master did not terminate after clone detach "
+               "(ordinal %d, turn dispatch START_TURN %08X)",
+               lockstep_ordinal, RTStubs::turn_loop_pc);
+      Lockstep::abort_world(buf, this, /*save=*/false);
+      throw std::runtime_error(buf);
+    }
     // Terminal detach (Lockstep::detach): pc arriving at a terminal point
     // ends the batch with the terminal flag set. Both engines emulate the
     // same code, so master and clone converge here and form one final

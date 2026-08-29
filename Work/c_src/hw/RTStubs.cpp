@@ -79,6 +79,7 @@ static constexpr int L2_COUNT=sizeof(l2_table)/sizeof(l2_table[0]);
 static const uint32_t return_crossings[]={ 0x7017EE40u, 0x7017E3EFu };
 uint32_t RTStubs::terminal_test_pc=0;
 uint8_t  RTStubs::terminal_test_kind=1;
+uint32_t RTStubs::turn_loop_pc=0;   // detached-master tripwire; see RTStubs.hpp
 
 // Game-range terminal sites: pcs OUTSIDE the RT range where execution
 // is about to leave the world by a never-returning syscall. Both
@@ -470,6 +471,16 @@ void RTStubs::initialize(SymbolTable& symbols, const std::string& program) {
     terminal_test_kind = strstr(env, ":ABORT") ? 2 : 1;
     fprintf(stderr, "RTStubs: TEST terminal point at %08X kind=%s (QUEST_TERMINAL)\n",
             terminal_test_pc, terminal_test_kind==2?"ABORT":"DETACH");
+  }
+
+  // Detached-master tripwire anchor (see RTStubs.hpp). Symbol-derived,
+  // never hardcoded; unresolvable = disarmed + warned (fail loud enough
+  // to notice, but a missing game symbol shouldn't kill non-game runs).
+  turn_loop_pc=symbols.address_for_name("START_TURN");
+  if(turn_loop_pc==0xFFFFFFFF) {
+    turn_loop_pc=0;
+    fprintf(stderr, "RTStubs: START_TURN unresolved - "
+                    "detached-master tripwire DISARMED\n");
   }
 
   start=range_start;
