@@ -75,6 +75,11 @@ fix is unobservable to gameplay**, and the WADC routing question with it
 increment) call `add()` and are wide carry writers; WideCarry.md's
 15-instruction list omits them (33 occurrences across the listings).
 This widens the fix's write surface but, per §4, changes no consumer.
+MANUAL-CONFIRMED (user-supplied XWDO page, Aug 29 2026): Function
+"ALU CRY -> CRY"; Registers/Flags: "CARRY set to value of CARRY after
+each DO-loop increment" — i.e. the ALU carry of (E)+1, which is
+exactly what the fixed helper produces for the emulator's
+`add(1, src)` implementation.
 
 IR note: `#+`/`#-` ops call the same helpers (P23 ruling), so every
 classification below covers emulated master, emulated clone, and IR
