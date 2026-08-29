@@ -302,3 +302,8 @@ compare_pair gained the detached early-out (which also closes the
 documented straddling-batch latent race after process-wide detach). Grammar is a
 superset except `<<`; pre-P25 loaders refuse the new forms (regenerate
 artifacts and binaries together, as always).
+
+> Forward design of record for the NEXT grammar revision (terminator,
+> booleans, s/u comparisons, add()/sub() family superseding #+/#-):
+> docs/Project26/MathDesign.md (Aug 29 2026). This spec remains the law
+> for the shipped rev-2 artifacts until that revision lands.

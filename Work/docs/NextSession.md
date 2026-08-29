@@ -1,18 +1,80 @@
 # Next session
 
+## ★ RE-ENTRY BRIEF (written Aug 29 2026 — project going to sleep for a week+)
+
+**Where we are in one paragraph.** The 1986 PL/I game Quest runs under
+a C++ emulator with a master/clone lockstep harness (METHOD.md is the
+binding discipline; Run.md how to run). Gen-6: the clone can execute
+the game as an IR (docs/IR.md = the law for the shipped rev-2
+grammar). ALL 566 decorated game→game call sites lower (P25); byte
+addressing landed (wp/bp/M8, 0xW:b literals); the wide-carry emulator
+bug is fixed with residue re-derived (P24); the block-sync checker
+compares regs+c+ovr+wsp+block-ordinal at every K rendezvous (P22/P24);
+batteries run PARALLEL on the runner box in ~9 min (task 034 template,
+13 legs). Latest state entries: CURRENT_STATE.md (newest on top).
+Latest battery: 035, 13/13 GREEN. Everything is merged to main; the
+user works from Work.tgz archives, the runner box works from the repo.
+
+**THE ROADMAP (user, Aug 29 2026 — priority order):**
+
+1. **Add the new IR features** — the P26 grammar package,
+   design of record docs/Project26/MathDesign.md: t-places (all 23
+   borrow brackets, uniform), the strict `goto [label list] tN`
+   terminator (conditional exits + switches), `tf()`, mandatory
+   `<s/<u` ordering comparisons (bare `==`/`!=`), strict eager
+   `&&`/`||`/`!`, C bitwise `& | ^ ~`, ISA-exact `ash()`/`lsh()`,
+   and the `add()`/`sub()` effectful family REPLACING `#+`/`#-`.
+   One open ruling left for the plan gate (pure-tier shift spelling
+   after flag conversion — MathDesign §6).
+2. **Compress the DERR clusters into single blocks with asserts.**
+   DERR sites fragment the CFG: each design-era check is a chain of
+   skip tests, so one DERR guard = many tiny blocks. Ruling: fold
+   each cluster into ONE basic block whose checks are `assert`
+   statements (the P25 assert op's first production use — note this
+   is a DIFFERENT purpose from the rejected jump-table asserts:
+   here asserts REPLACE control flow, shrinking the block census).
+   Mechanism note: coarser blocks change block-ordinal accounting —
+   this is the first real customer of the P22 "translations ship
+   their own sync list" contract.
+3. **Push hard on de-embedding** — get `@addr` instructions OUT of
+   the lowered IR. Current census: 27,600 embeds across 18,006
+   blocks (was 31,116 pre-P25). The grammar from item 1 (temps,
+   conditional exits, add/sub family, shifts) is what unlocks most
+   of them; measure by the embed count dropping.
+4. **String formatting / MSP into the IR.** The PL/I string
+   formatting machinery and its WMSP dynamic stack allocations
+   (see Layering.md M4c for the WMSP/stack-residue background)
+   need a census and an IR design — currently these paths are
+   embed-heavy. Scope/design is plan-gate homework for that
+   session.
+
+**How to resume:** read CURRENT_STATE.md top-down until it's
+familiar, then MathDesign.md, then spec the next project prompt in
+the Project-prompt house style (docs/Project25/PROMPT.md is the
+freshest example; require the tree-vintage statement). Batteries:
+copy tasks/034-parallel-battery.sh. Integrator diffs any incoming
+tree against the last integrated Work.tgz.
+
+**Small open notes:** (a) P25's ir2 artifacts were regenerated
+post-battery for the 0xW:b literal (pure notation; reviewer accepted
+the K=1 re-gate + an independent smoke on the literal-form artifacts;
+the next battery re-covers them). (b) UPDATE_SCREENS borrow blocks
+are unreached by scripted drivers — census-carried (ByteEA.md §5).
+(c) The disassembler byte-operand defect is DEFERRED with a standing
+lower.py shim (DISASSEMBLER_BYTE_OPERANDS.md). (d) KNIGHT_ATTACK /
+DIVX carry-consumer sites: observed opportunistically in ordinary
+play, nothing gated (P24 ruling).
+
 ## P25 LANDED — battery GREEN, reviewed + integrated (Aug 29 2026)
 - Battery 035: attempt 1 12/13 (inj-emu endpoint-reach flake, user
   ruling, evidence in REPORT §5); attempt 3 **13/13 GREEN DONE**.
   Reviewed + merged to main Aug 29; reviewer notes REPORT §9.
-  P26 DESIGN OF RECORD: docs/Project26/MathDesign.md (Aug 29
-  discussion — goto [list] tN terminator, tf(), mandatory <s/<u,
-  strict &&/||/!, and/or/xor/com, ash/lsh ISA-exact, add()/sub()
-  family SUPERSEDING #+/#-, flag-conversion future parked, 2 open
-  items for the plan gate).
-  Next: **P26 = t-places** (borrows convert — 23 borrow brackets in
-  the game, ALL get the same t-place treatment [user ruling Aug 29:
-  the two brackets that happen to sit in call-lowered blocks are not
-  special]; conditional exits).
+  P26 DESIGN OF RECORD: docs/Project26/MathDesign.md (goto [list] tN
+  terminator, tf(), mandatory <s/<u, strict &&/||/!, C bitwise
+  & | ^ ~, ash/lsh ISA-exact, add()/sub() family superseding #+/#-;
+  1 open item for the plan gate). NEXT WORK: the four-item roadmap in
+  the RE-ENTRY BRIEF at the top of this file (item 1 = the P26
+  grammar package incl. t-places — all 23 borrow brackets uniform).
 - P25 (byte addressing + call ledger) is IMPLEMENTED on branch
   p25-byte-addressing: **566/566 decorated sites lowered** (the user
   reversed the borrow exclusion in-session — bracket as @addr
@@ -75,7 +137,7 @@
 > re-verification (parked task, docs/Project23/WideCarry.md — redo the
 > carry-live-in census BEFORE landing the parked patch), then B-form
 > byte-EA extraction (96 call sites), WPSH multi-wide (25), `save`,
-> and the @/bit-15 listing fix+regen. **P24 = t-places** (borrows are
+> and the @/bit-15 listing fix+regen. **P24 = t-places** [historic — renumbered, then folded into roadmap item 1 at top] (borrows are
 > the pilot per user ruling; `end if` conditional exits are the
 > boundary). The narrative below remains valid history for
 > Milestones 1–3.

@@ -21,7 +21,10 @@ test expr may read post-op state (DG skips test the just-computed
 result/carry); nothing follows the terminator in a block.
 
 No asserts on table bounds (earlier idea DROPPED by ruling): under
-lockstep a wrong arm cannot hide — the clone picks differently and
+lockstep a wrong arm cannot hide. (Distinct from roadmap item 2 —
+DERR-cluster compression — which DOES use asserts: there they REPLACE
+skip-chain control flow to shrink the block census, not double-check
+an index the checker already verifies.) — the clone picks differently and
 the next rendezvous flags blk/ordinal mismatch. The executor's
 out-of-range fault is the only backstop. Checker untouched.
 

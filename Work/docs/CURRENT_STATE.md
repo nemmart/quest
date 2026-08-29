@@ -1,6 +1,18 @@
 # Where things stand
 
-## ★ P25 LANDED (pending battery) — byte addressing + 566/566 (Aug 29 2026)
+## ★ ROADMAP SET (Aug 29 2026, evening — project sleeping for a week+)
+
+User's priority order for the next work (full detail: the RE-ENTRY
+BRIEF atop NextSession.md; grammar design: Project26/MathDesign.md):
+**(1)** the new IR features (t-places, strict goto-list terminator,
+tf, s/u comparisons, booleans, C bitwise, ash/lsh, add()/sub()
+replacing #+/#-); **(2)** compress each DERR skip-check cluster into
+a single block of asserts (assert's first production use; first
+customer of the translations-ship-their-sync-list contract);
+**(3)** push embeds out of the lowered IR (27,600 → down);
+**(4)** census + IR design for the string-formatting/WMSP machinery.
+
+## ★ P25 LANDED — byte addressing + 566/566; battery 035 13/13 GREEN (Aug 29 2026; reviewed + integrated same day)
 
 Branch p25-byte-addressing. ALL 566 decorated call sites lower (was
 443): B-form pushes as byte-pointer VALUES, WPSH multi-wide as
@@ -175,7 +187,8 @@ docs/Project23/REPORT.md (reviewer notes appended §10).
 REDO the carry-live-in ∩ wide-producer census, record it, then land
 the patch + re-derive translation residue). Then the §8 queue: B-form
 byte-EA extraction (unlocks 96 call sites), WPSH multi-wide (25),
-`save`, @/bit-15 fix+regen+diff-audit (25 blocks). P24 = t-places
+`save`, @/bit-15 fix+regen+diff-audit (25 blocks — RESOLVED by P25's
+@-fix). P24 = t-places [historic renumbering — see roadmap]
 (borrows pilot per user ruling — no borrow/restore ops; `end if`
 conditional exits at the P24 boundary; pre-P24 census owed: crossings
 inside borrow-bracket interiors).**

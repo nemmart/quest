@@ -1,3 +1,9 @@
+> [HISTORIC PROMPT — as handed to the P25 session. The 564/566 target
+> and borrow exclusion below were REVERSED by user ruling at the plan
+> gate (all 566 lowered, brackets as @addr pairs); see
+> Project25/REPORT.md §2. Later ruling: 23 borrow brackets total, none
+> special. Kept verbatim as history.]
+
 # Project 25 — byte addressing (M8[]) + close the call-lowering ledger
 
 GOAL (user ruling, Aug 29): push the decorated-call ledger from
