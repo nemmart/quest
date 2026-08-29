@@ -1210,13 +1210,13 @@ RTBridge::zero_frame_claim: entry 70167C9C opcode A6C9 is not WSAVx/WSSVx — cl
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 466 (addr 0x701801FE)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 555 (addr 0x70180257)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 556 (addr 0x70180258)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 557 (addr 0x70180259)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 555 (addr 0x70180257)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 556 (addr 0x70180258)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 557 (addr 0x70180259)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 558 (addr 0x7018025A)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 559 (addr 0x7018025B)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 560 (addr 0x7018025C)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 557 (addr 0x70180259)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 558 (addr 0x7018025A)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 559 (addr 0x7018025B)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 560 (addr 0x7018025C)
@@ -1234,7 +1234,6 @@ RTBridge::zero_frame_claim: entry 70167C9C opcode A6C9 is not WSAVx/WSSVx — cl
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 557 (addr 0x70180259)
 *** RESERVED ACCESS [QUEST]: WRITE player[0] rec 557 (addr 0x70180259)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 558 (addr 0x7018025A)
-*** RESERVED ACCESS [QUEST]: WRITE player[0] rec 558 (addr 0x7018025A)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 564 (addr 0x70180260)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 555 (addr 0x70180257)
 *** RESERVED ACCESS [QUEST]: WRITE player[0] rec 555 (addr 0x70180257)
@@ -1253,7 +1252,7 @@ RTBridge::zero_frame_claim: entry 70167C9C opcode A6C9 is not WSAVx/WSSVx — cl
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 562 (addr 0x7018025E)
 *** RESERVED ACCESS [QUEST]: WRITE player[0] rec 562 (addr 0x7018025E)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 563 (addr 0x7018025F)
-*** RESERVED ACCESS [QUEST]: WRITE player[0] rec 563 (addr 0x7018025F)
+*** RESERVED ACCESS [QUEST]: WRITE player[0] rec 558 (addr 0x7018025A)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 559 (addr 0x7018025B)
 *** RESERVED ACCESS [QUEST]: WRITE player[0] rec 559 (addr 0x7018025B)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 560 (addr 0x7018025C)
@@ -1266,6 +1265,7 @@ RTBridge::zero_frame_claim: entry 70167C9C opcode A6C9 is not WSAVx/WSSVx — cl
 *** RESERVED ACCESS [QUEST]: WRITE player[0] rec 563 (addr 0x7018025F)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 564 (addr 0x70180260)
 *** RESERVED ACCESS [QUEST]: WRITE player[0] rec 564 (addr 0x70180260)
+*** RESERVED ACCESS [QUEST]: WRITE player[0] rec 563 (addr 0x7018025F)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 564 (addr 0x70180260)
 *** RESERVED ACCESS [QUEST]: WRITE player[0] rec 564 (addr 0x70180260)
 *** RESERVED ACCESS [QUEST]: WRITE player[0] rec 660 (addr 0x701802C0)
@@ -1273,7 +1273,6 @@ RTBridge::zero_frame_claim: entry 70167C9C opcode A6C9 is not WSAVx/WSSVx — cl
 *** RESERVED ACCESS [QUEST]: WRITE player[0] rec 683 (addr 0x701802D7)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 660 (addr 0x701802C0)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 555 (addr 0x70180257)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 556 (addr 0x70180258)
 *** RESERVED ACCESS [QUEST]: WRITE player[0] rec 683 (addr 0x701802D7)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 660 (addr 0x701802C0)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 555 (addr 0x70180257)
@@ -1281,13 +1280,13 @@ RTBridge::zero_frame_claim: entry 70167C9C opcode A6C9 is not WSAVx/WSSVx — cl
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 557 (addr 0x70180259)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 558 (addr 0x7018025A)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 559 (addr 0x7018025B)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 556 (addr 0x70180258)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 557 (addr 0x70180259)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 558 (addr 0x7018025A)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 559 (addr 0x7018025B)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 560 (addr 0x7018025C)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 561 (addr 0x7018025D)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 562 (addr 0x7018025E)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 563 (addr 0x7018025F)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 560 (addr 0x7018025C)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 561 (addr 0x7018025D)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 562 (addr 0x7018025E)
@@ -1298,7 +1297,7 @@ RTBridge::zero_frame_claim: entry 70167C9C opcode A6C9 is not WSAVx/WSSVx — cl
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 556 (addr 0x70180258)
 *** RESERVED ACCESS [QUEST]: WRITE player[0] rec 556 (addr 0x70180258)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 557 (addr 0x70180259)
-*** RESERVED ACCESS [QUEST]: WRITE player[0] rec 557 (addr 0x70180259)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 563 (addr 0x7018025F)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 564 (addr 0x70180260)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 555 (addr 0x70180257)
 *** RESERVED ACCESS [QUEST]: WRITE player[0] rec 555 (addr 0x70180257)
@@ -1315,7 +1314,7 @@ RTBridge::zero_frame_claim: entry 70167C9C opcode A6C9 is not WSAVx/WSSVx — cl
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 561 (addr 0x7018025D)
 *** RESERVED ACCESS [QUEST]: WRITE player[0] rec 561 (addr 0x7018025D)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 562 (addr 0x7018025E)
-*** RESERVED ACCESS [QUEST]: WRITE player[0] rec 562 (addr 0x7018025E)
+*** RESERVED ACCESS [QUEST]: WRITE player[0] rec 557 (addr 0x70180259)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 558 (addr 0x7018025A)
 *** RESERVED ACCESS [QUEST]: WRITE player[0] rec 558 (addr 0x7018025A)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 559 (addr 0x7018025B)
@@ -1330,6 +1329,7 @@ RTBridge::zero_frame_claim: entry 70167C9C opcode A6C9 is not WSAVx/WSSVx — cl
 *** RESERVED ACCESS [QUEST]: WRITE player[0] rec 563 (addr 0x7018025F)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 564 (addr 0x70180260)
 *** RESERVED ACCESS [QUEST]: WRITE player[0] rec 564 (addr 0x70180260)
+*** RESERVED ACCESS [QUEST]: WRITE player[0] rec 562 (addr 0x7018025E)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 563 (addr 0x7018025F)
 *** RESERVED ACCESS [QUEST]: WRITE player[0] rec 563 (addr 0x7018025F)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 564 (addr 0x70180260)
@@ -1609,12 +1609,12 @@ Lockstep: ordinal 0 RETIRED at terminal syscall ?RETURN — both processes exit 
 no termination message
 Waiting for tasks to terminate
 Exception: INTWT interrupted
-Exception: INTWT interrupted
 Unregistering process 102
 OPEN Channel 1, path :QUEST.PR modified: 0
 OPEN Channel 2, path :SHARED_DATA_FILE modified: 1
 OPEN Channel 3, path :WORLD_DATA_FILE modified: 1
 OPEN Channel 4, path :CASTLE_DATA_FILE modified: 1
+Exception: INTWT interrupted
 Exception: EXIT!
 Unregistering process 101
 OPEN Channel 1, path :QUEST.PR modified: 0

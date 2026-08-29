@@ -17,7 +17,7 @@ WRITE EXTENSION
 RETURNING AC1=00000000
 RETURNING AC1=00000000
 Thread halt
-1173707 instructions run
+1192665 instructions run
 dispatchSystemCall: 7000115C
 System Call 310, called from 7017FCF0
  ac0=00000000
@@ -27,14 +27,14 @@ TERMINATING PROCESS
    no termination message
 frame  2 -- 7017FDED     guessing: .UKIL+0x8
 frame  1 -- C_A_LISTENER+0x2   [70165715]
+frame  0 -- 7017E7C1     guessing: T.INIT+0x3B
+68 instructions run
 frame  2 -- 7017FDED     guessing: .UKIL+0x8
 frame  1 -- C_A_LISTENER+0x2   [70165715]
 frame  0 -- 7017E7C1     guessing: T.INIT+0x3B
-frame  0 -- 7017E7C1     guessing: T.INIT+0x3B
-68 instructions run
 68 instructions run
 frame  3 -- 7017FDED     guessing: .UKIL+0x8
 frame  2 -- START_TURN+0xB01   [70178D20]
 frame  1 -- QUEST+0x5D7   [7015C5DC]
 frame  0 -- 7017EA51     guessing: I.INIT+0x23
-1178850 instructions run
+1197808 instructions run
