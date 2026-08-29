@@ -170,7 +170,16 @@ struct Parser {
     if (s[0] == '0' && (s[1] == 'x' || s[1] == 'X')) {
       char* end; uint64_t v = strtoull(s, &end, 16);
       if (end == s || v > 0xFFFFFFFFull) bad("bad hex constant");
-      s = end; return node(Expr::CONST, nullptr, nullptr, uint32_t(neg ? -int64_t(v) : int64_t(v)));
+      s = end;
+      if (*s == ':') {                  // P25: byte-pointer literal 0xW:b
+        s++;                            // (dis fold notation; b = byte select)
+        if (neg) bad("negative byte-pointer literal");
+        if (*s != '0' && *s != '1') bad("byte select must be 0 or 1");
+        uint32_t b = uint32_t(*s++ - '0');
+        if (v > 0x7FFFFFFFull) bad("byte-pointer word address exceeds 31 bits");
+        return node(Expr::CONST, nullptr, nullptr, uint32_t(v) * 2u + b);
+      }
+      return node(Expr::CONST, nullptr, nullptr, uint32_t(neg ? -int64_t(v) : int64_t(v)));
     }
     if (*s >= '0' && *s <= '9') {
       char* end; uint64_t v = strtoull(s, &end, 10);

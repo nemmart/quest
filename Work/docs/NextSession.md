@@ -9,9 +9,12 @@
   parse gaps, see Project25/ByteEA.md §1). Grammar: wp/bp pointer
   builders (masking in the executor), M8 raw-index loads/stores, `*`;
   `<<` removed (was spec'd, never implemented). Local gates 3/3
-  green, 0 div. Battery 035: 12/13 green, ALL IR legs clean; the inj-emu red
-  (all-emulated leg, injection pc unreached) RULED FLAKE by the user
-  — verdict recorded in REPORT §5. NEXT: (1) integrate the branch.
+  green, 0 div. Battery 035: attempt 1 12/13 (inj-emu red ruled flake), attempt 3
+  **13/13 GREEN, DONE** — flake confirmed. NOTE: the ir2 artifacts on
+  the branch were regenerated AFTER the green battery for the 0xW:b
+  literal (pure notation, identical census, K=1 local re-gate green);
+  the reviewer may want the next battery run on the literal-form
+  artifacts or may accept the K=1 gate. NEXT: (1) integrate the branch.
   (2) Disassembler byte-operand
   defect: fix DEFERRED by user ruling (the byteIndexed masking is
   buggy in multiple ways; too risky to touch) — the lower.py

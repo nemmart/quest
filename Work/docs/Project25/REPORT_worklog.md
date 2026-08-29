@@ -45,7 +45,18 @@
 11. Battery verdict: 12/13 green, all IR legs clean; the one red
     (inj-emu — all-emulated, zero P25 code, injection pc unreached,
     green in 034's proof run) reported per boundary 6 and RULED
-    FLAKE by the user. Verdict + ruling recorded in REPORT §5.
+    FLAKE by the user; retries left to ride (user: "green tells us
+    something, red tells us something else") — attempt 3: 13/13
+    GREEN, DONE. Flake confirmed empirically.
+12. Post-landing polish (user requests): IR.md referenced from
+    lower.py + IRExec.cpp headers; DISASSEMBLER_BYTE_OPERANDS.md
+    (fix deferred by ruling, shim standing); byte-pointer literal
+    0xW:b (dis fold notation, word-addressed — dumps grep; b=byte
+    select 0/1 EXCLUSIVELY, bitp(w,n) reserved for M1 so bit
+    addressing can never overload the colon); wp/bp confirmed
+    register-relative-only. Regen + K=1 re-gate green (0 div,
+    LPEFB block live: the :b literal round-trips under strict
+    pairing).
 
 Wrong turns kept: the "3 lines" undercount (§10); the first
 strictness pass refusing X-convention @ operands (evidence, not

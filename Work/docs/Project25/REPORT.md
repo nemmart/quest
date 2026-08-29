@@ -98,16 +98,19 @@ path); TERRAIN 7015C4FB + 5 more WPSH blocks LIVE; 7/78 B-form
 census classification (plain wp arg stores + the P20-proven bracket
 hooks), recorded as-is per the carry-coverage precedent.
 
-Battery: task 035 RESULT (results/035-p25-byte-battery, attempt 1):
-**12/13 GREEN, 1 RED — ruled flake by the user (Aug 29), not a P25
-regression.** Every IR leg green: book K=1 (382,593 pairs), book
+Battery: task 035 RESULT: attempt 1 **12/13 GREEN, 1 RED — ruled
+flake by the user (Aug 29)**; the user let the runner's automatic
+retries ride, and **attempt 3 came back 13/13 GREEN (DONE)** —
+inj-emu reached its FATAL, confirming reach variance rather than
+regression. Attempt-1 detail: Every IR leg green: book K=1 (382,593 pairs), book
 K=50, 5.5M-pair patient play, stock ×2, inj/abort with exact drop
 counts — 0 divergences, blk_mismatch=0, strict gate held. The red
 was inj-emu, the ALL-EMULATED isolation leg (no IR loaded; executes
 zero P25 code): the armed pc 7016A896 (FIND_OBJECT+0x7) was never
 reached, the session played through and ended I.STOP instead of
-FATAL, div=0. Same leg was green in 034's proof run; armed-pc reach
-variance in the play driver. Battery coverage (verdicts.txt):
+FATAL, div=0. Same leg was green in 034's proof run and in
+attempt 3; armed-pc reach variance in the play driver, now
+demonstrated both ways. Battery coverage (verdicts.txt):
 LPEFB block 7015C2B2 at 9 hits, LOCK_FILE 70177F03 at 8, 6/25 WPSH
 blocks live (TERRAIN 8), 7/78 B-form blocks live, borrow 0/2
 (census-carried as ruled).
