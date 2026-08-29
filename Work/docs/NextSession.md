@@ -55,6 +55,12 @@ freshest example; require the tree-vintage statement). Batteries:
 copy tasks/034-parallel-battery.sh. Integrator diffs any incoming
 tree against the last integrated Work.tgz.
 
+**Also on the shelf:** the routine treatment classification
+(terminal / summarize / graphize / clone) from the Aug 23–24
+flat-graph session — docs/TreatmentLadder.md (a RECONSTRUCTION; the
+original M5FlatWorld.md never made it into the tree — if the user
+still has that downloaded file, it replaces the reconstruction).
+
 **Small open notes:** (a) P25's ir2 artifacts were regenerated
 post-battery for the 0xW:b literal (pure notation; reviewer accepted
 the K=1 re-gate + an independent smoke on the literal-form artifacts;
