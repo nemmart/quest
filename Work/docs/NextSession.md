@@ -48,6 +48,14 @@ user works from Work.tgz archives, the runner box works from the repo.
    embed-heavy. Scope/design is plan-gate homework for that
    session.
 
+**THE ARC AFTER THE ROADMAP (user, Aug 29):** once the IR is good
+(items 1–4 above), the project RETURNS TO GETTING EVERYTHING FLAT —
+the flat-graph analysis world: classify every routine per the
+treatment ladder (terminal / summarize / graphize / clone,
+docs/TreatmentLadder.md), build the flat per-routine graphs with
+summarized calls, and proceed toward decompiled source from there.
+IR maturation first; flattening second.
+
 **How to resume:** read CURRENT_STATE.md top-down until it's
 familiar, then MathDesign.md, then spec the next project prompt in
 the Project-prompt house style (docs/Project25/PROMPT.md is the

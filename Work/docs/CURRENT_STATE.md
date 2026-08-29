@@ -11,6 +11,9 @@ a single block of asserts (assert's first production use; first
 customer of the translations-ship-their-sync-list contract);
 **(3)** push embeds out of the lowered IR (27,600 → down);
 **(4)** census + IR design for the string-formatting/WMSP machinery.
+THEN (the arc): return to getting everything FLAT — the flat-graph
+world per docs/TreatmentLadder.md (terminal/summarize/graphize/
+clone), toward decompiled source.
 
 ## ★ P25 LANDED — byte addressing + 566/566; battery 035 13/13 GREEN (Aug 29 2026; reviewed + integrated same day)
 
