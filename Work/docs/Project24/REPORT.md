@@ -220,12 +220,12 @@ battery verdict and the owed rulings.
    gate throughout. With 033, the P24 battery record is complete:
    every 032 leg green or superseded-green. F6's analysis confirmed
    by the fix behaving exactly as predicted.
-2. **Consumer-site live coverage**: the battery demonstrated the
-   BEING_ATTACK ADC.C cluster and LOCK_FILE live; KNIGHT_ATTACK's
-   cluster and the 19 DIVX sites did not fire in scripted legs. Rule
-   whether the census classification (NOVA-reached, fix-invariant)
-   suffices for the landing bar, or a manual combat/store play session
-   should demonstrate them as live pairs.
+2. **Consumer-site live coverage**: RESOLVED (user ruling, Aug 29):
+   the census classification (NOVA-reached, fix-invariant) suffices
+   for the landing bar; KNIGHT_ATTACK (and the DIVX sites) get looked
+   at opportunistically during ordinary manual game play — no
+   dedicated session. Any future play session that reaches them under
+   lockstep adds a free live-pair datapoint; nothing is gated on it.
 3. **Merge order**: p24-wide-carry carries the P23-integrated tree as
    its base (main lacks P23); integrator merges P23 then P24, or the
    branch wholesale.

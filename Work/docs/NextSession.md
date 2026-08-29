@@ -12,8 +12,9 @@
   pre-existing P23 gap, no carry involvement, evidence in the report).
   **F6 RESOLVED (Aug 29, user ruling: both):** loader drops armed-pc
   blocks + standing all-emulated inj/abort legs; task 033 4/4 GREEN —
-  the terminal legs are back in the battery. STILL OWED (user):
-  (b) whether the KNIGHT_ATTACK ADC.C cluster + DIVX consumer sites
+  the terminal legs are back in the battery. (b) RESOLVED (Aug 29,
+  user): census suffices; KNIGHT_ATTACK/DIVX observed opportunistically
+  in ordinary play — nothing gated. (was: whether the sites
   need live-pair demonstration (a manual combat/store play session) or
   the census classification suffices.
 - Coverage caveat of record: the four ADC.C consumer sites are in

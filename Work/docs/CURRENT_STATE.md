@@ -32,9 +32,9 @@ dispatch/unwind/die still work" independent of the IR layer. Task 033
 book WORLD-ABORT (1 drop), inj-emu FATAL (0 drops), abort-emu
 WORLD-ABORT (0 drops), div=0 everywhere. The two task-032 reds are
 superseded green; the P24 battery record is complete. Repo: fix +
-task 033 on main. Remaining P24 open item: the consumer-site live
-coverage ruling (KNIGHT_ATTACK/DIVX — census-sufficient vs manual
-combat/store session).
+task 033 on main. Coverage ruling CLOSED (user, Aug 29): census
+suffices; KNIGHT_ATTACK/DIVX observed opportunistically in ordinary
+play. P24 has no open items.
 
 ## ★ P24 LANDED — THE WIDE-CARRY CORRECTION (Aug 29 2026)
 
