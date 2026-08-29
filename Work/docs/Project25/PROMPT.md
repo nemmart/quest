@@ -1,4 +1,9 @@
-# Project 25 — byte addressing in the IR (M8[]), B-form push lowering
+# Project 25 — byte addressing (M8[]) + close the call-lowering ledger
+
+GOAL (user ruling, Aug 29): push the decorated-call ledger from
+443/566 lowered toward **100%** — B-form (96) + WPSH multi-wide (25)
++ the 2 borrow-adjacent sites — backing off the 100% ONLY where an
+issue needs a user ruling, reported not decided.
 
 Hi Claude! Solo implementation session; the user reviews at the plan
 gate and at the landing. Read docs/METHOD.md first, as always. Context
@@ -11,9 +16,23 @@ in older banners) shift to **P26**; this project is P25.
 
 ## The gap
 
-lower.py cannot express a byte effective address, so every XPEFB/LPEFB
-arg push (78 occurrences in quest.dis) stays an embedded instruction
-and the 96 call sites containing them stay unlowered. DG byte pointers
+566 decorated game→game call sites exist (quest.pushmap.M4); 443 are
+lowered to `call` + plain arg-slot stores. The 123 remaining:
+- **96 B-form**: lower.py cannot express a byte effective address, so
+  every XPEFB/LPEFB arg push (78 occurrences in quest.dis) stays
+  embedded and its call site stays unlowered.
+- **25 WPSH multi-wide**: one instruction pushes several wides; the
+  rev-2 grammar was SHAPED for one-instruction-to-many-statements
+  (addressless statements — P23 REPORT §4), and the wides accounting
+  already exists (note_arg_write scales; quest.wpsh_wpop has the
+  data). This is expected to be grammar-free mechanical work.
+- **2 borrow-adjacent**: their blocks contain WPSH/WPOP borrow
+  brackets. STANDING RULING (P23 REPORT §8.6 / IR.md §8): do NOT
+  build borrow/restore ops — borrows are the P26 t-place pilot.
+  Analyze whether these 2 call sites can lower without touching the
+  brackets (e.g. the bracket stays embedded around a lowered call);
+  if they cannot, 564/566 with the 2 censused is the correct outcome
+  absent a new ruling — present the analysis, don't force it. DG byte pointers
 are word addresses doubled plus a byte-select bit; IR.md §8 records the
 parked value formula:
 
@@ -50,11 +69,17 @@ inexpressible.
    - whether **R8[]** is needed at all — registers hold byte pointers
      as ordinary word values, so a register byte-accessor may have no
      use; present the question with evidence rather than deciding.
-4. Scope proposal for the user's ruling: minimal (byte-EA values →
-   the 96 push sites) vs. full byte addressing (also lower
-   XLDB/XSTB/WLDB/WSTB statements through M8[]). Census how many
-   byte load/store instructions the game blocks contain so the ruling
-   is sized, and recommend one scope with reasoning.
+4. Scope proposal for the user's ruling on byte LOADS/STORES: the
+   push sites need only byte-EA values, but if M8[] is adopted,
+   lowering XLDB/XSTB/WLDB/WSTB statements may come nearly free.
+   Census the counts so the ruling is sized; recommend one scope.
+   (The 100% call-ledger goal itself is already ruled — it is this
+   project's target, not a plan-gate question.)
+5. WPSH multi-wide plan: per-site mapping from quest.wpsh_wpop to
+   N addressless stores + the call's wides accounting; identify any
+   site that does not fit the expected shape (finding, not fix).
+6. Borrow-adjacent analysis (see "The gap"): can the 2 sites lower
+   under the standing no-borrow-ops ruling? Present with evidence.
 
 STOP AND REPORT at the plan gate with the census + proposals. Parts
 2–3 proceed only on the user's rulings.
@@ -62,10 +87,12 @@ STOP AND REPORT at the plan gate with the census + proposals. Parts
 ### Part 2 — implementation
 
 - lower.py: emit the ruled grammar for B-form pushes (and byte
-  load/stores if in scope); TOTALITY unchanged — anything still
-  inexpressible is omitted with a censused reason. Regenerate
-  quest.ir2.book/.stock; ledger the newly lowered sites (96 expected;
-  any shortfall censused per-site).
+  load/stores if in scope), and the WPSH multi-wide expansion (one
+  instruction → N addressless stores); TOTALITY unchanged — anything
+  still inexpressible is omitted with a censused reason. Regenerate
+  quest.ir2.book/.stock; ledger every newly lowered site (target:
+  566/566; per-site census for any shortfall, with the borrow pair's
+  disposition explicitly recorded).
 - IRExec: evaluate the new forms; loader validation extended in the
   refuse-on-anything style (malformed byte-EA lines refuse, never
   skip — the P23 pushmap-parser lesson).
@@ -84,18 +111,22 @@ STOP AND REPORT at the plan gate with the census + proposals. Parts
   serial shape) — as task 035, pointing at the new artifacts, with a
   B-form-site coverage line appended to the verdicts alongside the
   carry line. Landing bar: 13/13 green, strict gate, predicted
-  B-form sites demonstrably live, honest reporting of any that the
-  scripted legs cannot reach (the carry-coverage precedent: census
+  newly lowered sites demonstrably live — the WPSH multi-wide set
+  includes TERRAIN/TERRITORY, which every play leg hammers, so
+  liveness evidence there should be abundant; honest reporting of any
+  that the scripted legs cannot reach (the carry-coverage precedent: census
   classification carries the safety argument; liveness is
   demonstrated where the drivers go, recorded as-is).
 
 ## Boundaries — BINDING
 
-1. **Scope = byte addressing per the plan-gate ruling, nothing
-   else.** No t-places, no `save`, no WPSH multi-wide, no @/bit-15
-   regeneration, no checker changes. Tempting adjacencies go in the
-   report.
-2. **Part 1 before any code; the grammar and scope are user rulings.**
+1. **Scope = the call-lowering ledger + byte addressing per the
+   plan-gate ruling, nothing else.** No t-places, no borrow/restore
+   ops (standing ruling), no `save`, no @/bit-15 regeneration, no
+   checker changes. Tempting adjacencies go in the report.
+2. **Part 1 before any code; the grammar and byte-load scope are
+   user rulings.** The 100% ledger target is pre-ruled; back off only
+   via a reported issue (the borrow pair being the anticipated one).
 3. **Semantics from the emulator source and, where it speaks, the DG
    manual** — never from the parked formula alone or from what a byte
    pointer "obviously" is. The indirect LPEFB's dereference order in

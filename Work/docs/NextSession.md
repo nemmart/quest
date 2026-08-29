@@ -1,8 +1,10 @@
 # Next session
 
 ## P25 queued (Aug 29 2026)
-- P25 = byte addressing in the IR (M8[] / byte-EA values) + B-form
-  push lowering (the 96 blocked call sites). Prompt:
+- P25 = byte addressing (M8[]/byte-EA values) + CLOSE THE CALL
+  LEDGER: 443/566 -> 100% (B-form 96 + WPSH multi-wide 25 + the 2
+  borrow-adjacent analyzed under the standing no-borrow-ops ruling;
+  back off 100% only via reported rulings). Prompt:
   docs/Project25/PROMPT.md — census + grammar/scope rulings at the
   plan gate. t-places renumber to P26.
 
