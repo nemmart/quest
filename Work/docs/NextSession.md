@@ -1,3 +1,27 @@
+# Next session
+
+## P24 handoff (Aug 29 2026)
+- P24 (wide-carry) is LANDED on branch p24-wide-carry; battery = task
+  032, verdict RECORDED in Project24/REPORT.md §7: 9/11 GREEN; 2 RED =
+  finding F6 (inject/terminal arming vs IR at non-block-entry pcs — a
+  pre-existing P23 gap, no carry involvement, evidence in the report).
+  **RULINGS OWED (user):** (a) F6 disposition — emu-config the inj/
+  abort legs, or IR-loader exclusion of armed-pc blocks, or both;
+  (b) whether the KNIGHT_ATTACK ADC.C cluster + DIVX consumer sites
+  need live-pair demonstration (a manual combat/store play session) or
+  the census classification suffices.
+- Coverage caveat of record: the four ADC.C consumer sites are in
+  BEING_ATTACK/KNIGHT_ATTACK (combat); scripted legs may not reach
+  them. Census proves them fix-invariant regardless; live combat pairs
+  need a manual play session if the user wants them demonstrated.
+- Integrator: main lacks the P23-integrated tree; p24-wide-carry
+  carries it as its base. Merge order: P23 integration then P24 (or
+  the branch wholesale).
+- NEXT per the P23 queue: P25 = t-places (borrows pilot), then B-form
+  byte-EA extraction (96 call sites), WPSH multi-wide (25), `save`,
+  @/bit-15 fix+regen+diff-audit (25 blocks). Pre-P25 census owed:
+  crossings inside borrow-bracket interiors.
+
 > **[Aug 29 2026 — P23 banner]** This re-entry narrative is from Aug 13
 > and predates P14–P23. Current state now lives in CURRENT_STATE.md
 > (newest entry on top). **P23 LANDED** (Gen-6.1: the IR — reviewed and

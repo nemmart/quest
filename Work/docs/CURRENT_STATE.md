@@ -1,5 +1,42 @@
 # Where things stand
 
+## ★ P24 LANDED — THE WIDE-CARRY CORRECTION (Aug 29 2026)
+
+`EagleInstruction::add()/sub()` now compute CARRY as the ALU carry-out
+(bit 32, manual-backed) instead of the result sign bit (>>31). One fix
+covers emulated master, emulated clone, IR clone (`#`-ops, P23 ruling)
+and native runtime (frames.cpp's replicas are now thin forwards to the
+helpers — replica drift eliminated as a class). WADC ruled by the user
+(Aug 29): fixed with the rest, `WADC x,x` → ac=-1, **c=0**, no routing.
+docs/Project24/CarryCensus.md is the census of record: **zero
+wide-reached and zero ambiguous carry consumers anywhere** — every
+reachable consumer is Nova/DIVX/CRYTO-fed (the four P23-era candidate
+ADC.C sites read the adjacent ADD.O, not anything wide) — so the fix is
+gameplay-unobservable and its correctness rests on the manual + the
+census, not lockstep (METHOD §2 argument in the P24 report §6).
+Native staged-carry residue re-derived atomically with the fix:
+lib_error (O?SIGNAL boundary c=1; I.FREEW staging c=1; c_x default 1;
+I.ALLOC staging stays 0, re-justified), o_signal/o_on catch-all 0→1
+(the ee7B/ee37/edf8 WSUB producers), p_defon type==6 → c=0 (WADC
+ruling), unsigned_to_char k==1/argc≤2 → 1, i_alloc unlock word drops
+its 0x80000000 (pre-fix captures showing F017EA08 are historical).
+Doc corrections per METHOD §11 (annotated): METHOD §5, WideCarry.md
+(landing note; XWDO/LWDO added to the writer list, manual-confirmed),
+Project1/2/3 DERIVATION headers, L2Contract normative rows, I_ALLOC
+carry chains, UNSIGNED_TO_CHAR. Local gates: 4 legs (book fo/m/play +
+stock fo), K=1 strict on the split pair, 0 div each, ?LIB_ERROR native
+on both fo legs. Battery (repo task 032, 11 legs: book/stock/all-emulated ×
+natural triggers, 031 hardened template): **9/11 GREEN** (incl. K=1 fo
+381,818 pairs; 6.38M-pair book play; 10.73M-pair stock play; ?LIB_ERROR
+native in seven legs; BEING_ATTACK ADC.C cluster executed live). The 2
+RED legs (inj, abort) are **F6 — NOT carry**: QUEST_INJECT/
+QUEST_TERMINAL arming at non-block-entry pcs cannot fire on the IR
+clone (P23 latent; inj3's block-entry site passed; 031 ran the same
+legs green pre-IR). **USER RULING OWED on F6** — options in the P24
+report §7: (1) run inj/abort legs all-emulated, (2) IR-loader excludes
+blocks containing armed pcs, (3) both. Branch p24-wide-carry (carries the P23-integrated tree as
+its base — main still lacks P23; integrator to merge).
+
 ## ★ P23 LANDED — GEN-6.1: THE IR (Aug 28–29 2026; reviewed + integrated Aug 29)
 
 The clone executes the game as an intermediate representation. Built:
