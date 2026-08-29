@@ -1,0 +1,19 @@
+inj      cfg=book  K=50  div=0   guard=0  liberr_native=0  pairs=7301 blk_equal=7301 blk_mismatch=0 k_heartbeats=6837 gaps_over_k=0 max_gap=50 floor=1000 OK end=FATAL want=FATAL leg=OK
+abort    cfg=book  K=50  div=0   guard=0  liberr_native=0  pairs=5836 blk_equal=5836 blk_mismatch=0 k_heartbeats=5630 gaps_over_k=0 max_gap=50 floor=10 OK end=WORLD-ABORT want=WORLD-ABORT leg=OK
+inj-emu  cfg=emu   K=50  div=0   guard=0  liberr_native=0  pairs=7792 blk_equal=7792 blk_mismatch=0 k_heartbeats=7328 gaps_over_k=0 max_gap=50 floor=1000 OK end=FATAL want=FATAL leg=OK
+abort-emu cfg=emu   K=50  div=0   guard=0  liberr_native=0  pairs=6348 blk_equal=6348 blk_mismatch=0 k_heartbeats=6142 gaps_over_k=0 max_gap=50 floor=10 OK end=WORLD-ABORT want=WORLD-ABORT leg=OK
+== Task 033 F6 terminal-leg verdicts ==
+inj: armed-pc block drops=1 (want 1)
+abort: armed-pc block drops=1 (want 1)
+inj-emu: armed-pc block drops=0 (want 0 — no IR loaded)
+abort-emu: armed-pc block drops=0 (want 0 — no IR loaded)
+inj      cfg=book  K=50  div=0   guard=0  liberr_native=0  pairs=7301 blk_equal=7301 blk_mismatch=0 k_heartbeats=6837 gaps_over_k=0 max_gap=50 floor=1000 OK end=FATAL want=FATAL leg=OK
+abort    cfg=book  K=50  div=0   guard=0  liberr_native=0  pairs=5836 blk_equal=5836 blk_mismatch=0 k_heartbeats=5630 gaps_over_k=0 max_gap=50 floor=10 OK end=WORLD-ABORT want=WORLD-ABORT leg=OK
+inj-emu  cfg=emu   K=50  div=0   guard=0  liberr_native=0  pairs=7792 blk_equal=7792 blk_mismatch=0 k_heartbeats=7328 gaps_over_k=0 max_gap=50 floor=1000 OK end=FATAL want=FATAL leg=OK
+abort-emu cfg=emu   K=50  div=0   guard=0  liberr_native=0  pairs=6348 blk_equal=6348 blk_mismatch=0 k_heartbeats=6142 gaps_over_k=0 max_gap=50 floor=10 OK end=WORLD-ABORT want=WORLD-ABORT leg=OK
+== Task 033 F6 terminal-leg verdicts ==
+inj: armed-pc block drops=1 (want 1)
+abort: armed-pc block drops=1 (want 1)
+inj-emu: armed-pc block drops=0 (want 0 — no IR loaded)
+abort-emu: armed-pc block drops=0 (want 0 — no IR loaded)
+F6 BATTERY GREEN
