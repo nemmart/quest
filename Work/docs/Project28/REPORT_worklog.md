@@ -53,3 +53,12 @@
   task 041 written from 040; REPORT/CURRENT_STATE/NextSession.
 - Tool runtimes: rt_sites.py 1.1 s; lower.py full emission ~6 s per
   mode; nothing > 10 s.
+
+## Sep 5 2026 — battery
+
+- 041: 15/15 legs GREEN, 0 div, 903 s; marker FAILED (2 attempts) from two
+  verdict lines I had not run against the artifacts (METHOD §10): ledger
+  header counted as a row (988), and `WPSH 0,0` matching the RETURN_MESSAGE
+  temp at 70169B77. Reported; user ruled: run 042.
+- 042: lines corrected and pre-verified (987/0, 0, 2273); 15/15 GREEN,
+  DONE attempt 1, 0 div, 902 s. REPORT §5c, CURRENT_STATE, NextSession.

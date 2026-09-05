@@ -5,9 +5,10 @@
   987/987 runtime call sites, LNDO, the LDSP pair, the 67 Nova loads;
   embeds 6,258 → 2,322 (book) / 8,137 → 4,201 (stock); sync list
   unchanged (quest.synclist.p27). Local K=1 gates 9 legs green, 0 div.
-  Task 041 queued (040's 15 legs + P28 verdict lines; expected 15/15,
-  embeds 2322/4201, rt_call 987/987, WRITE_SCREEN + RANDOM_NUMBER live
-  in the K=50 play legs). Records: docs/Project28/{Census,
+  Battery: 041 15/15 legs green but RED marker (two verdict-line grep
+  bugs, METHOD §10); 042 = same legs, lines fixed: **15/15 GREEN DONE,
+  0 div, 902 s**, every P28 line on prediction (results/042-p28-rt-call).
+  Ready to integrate. Records: docs/Project28/{Census,
   RTConventions,REPORT,REPORT_worklog}.md; IR.md ir 4 §3/§6/§9.
 - Integration notes: ir 4 loader refuses ir 3 files — regenerate
   artifacts + binaries together (Provenance.md has the command; `--rt-

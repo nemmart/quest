@@ -160,6 +160,33 @@ the executor's word check throws — LOCKSTEP DIVERGENCE at trap_pc
 7015C047 on the clone at pair 41, master continuing into ?WRITE_SCREEN.
 Loud at the site, never a silent value.
 
+### 5c. Battery — tasks 041 / 042 on the runner (Sep 5 2026)
+
+**041: 15/15 legs GREEN, 0 divergences, 903 s — RED marker from two
+verdict-line bugs** (METHOD §10: the expected values had not been
+produced by running the exact commands against the exact artifact):
+`grep -c ' emitted '` counted the ledger's header line (988 vs 987), and
+the leftover-embed pattern's `WPSH 0,0` matched the out-of-scope
+RETURN_MESSAGE by-reference temp at 70169B77 (boundary 1; correctly
+still an embed). Every P28 prediction was on target in 041 already.
+
+**042 (same 15 legs, the two lines corrected and pre-verified): 15/15
+GREEN, 0 divergences, DONE on attempt 1, 902 s.** Verdict lines:
+embeds_book 2322 / embeds_stock 4201; rt_call 987/987; ledger 987
+emitted / 0 refused; leftover embeds 0; asserts 2273; derr_embeds 2;
+sync list 13510 (4499 delisted); armed-pc drops 1/1/0/0; **rt_call
+coverage 93/987 across the IR legs — ?WRITE_SCREEN 61, ?RANDOM_NUMBER 6,
+?UNSIGNED_TO_CHAR 8 (interleaved windows), ?OPEN_FILE 3, and 1/1 on
+?OPEN_SHARED_IO_FILE (3/3), ?GET_SHARED_PAGE (3/3), ?CREATE_TASK,
+?AWAIT_CONSOLE_INTERRUPT, ?LOOKUP_PORT, ?CONNECT, ?CURRENT_PID,
+?READ_SCREEN; 16 of 18 callees exercised live (unreached: ?WRITE,
+?LIB_ERROR_CODE)**; Nova load carry-consumer blocks 70160E64/65/73/74
+live; derr pair at 7015C48E on both roles and derr-emu TERMINAL-ABORT
+as in 040; P26 class coverage 65/75 (was 63/75). LNDO 7015C0C5, the LDSP
+blocks and the six Nova SKP blocks were not reached by any leg —
+carried on census classification (init-loop / menu paths outside the
+scripted legs), as recorded in §5. Landing bar met in full.
+
 ## 6. Tempting adjacencies NOT taken (boundary 1)
 
 Game→game calls (P25's), WMSP/STASP dynamic allocation and the 3
