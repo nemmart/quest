@@ -2413,7 +2413,7 @@ disassemble: 0x7017E12B 0x7017E3D1
 7017e3c7 XLEF 2,[ac2+0x8];
 7017e3c9 XWLDA 1,[ac2+0x20];
 7017e3cb XWLDA 2,[ac2+0x1E];
-7017e3cd XCALL 0,0,[ac2+0x0]; # addr not found
+7017e3cd XCALL [ac2+0x0],0; # addr not found
 7017e3d0 WRTN;
 
 memory_data: 0x7017E3D1 0x7017E3D2
@@ -2665,7 +2665,7 @@ disassemble: 0x7017E572 0x7017E688
 7017e58f WPSH 0,1;
 7017e590 LWLDA 1,[pc+0x7FE81BFE] (0x7000018F);
 7017e593 LWLDA 2,[pc+0x7FE81BF9] (0x7000018D);
-7017e596 XCALL 0,1,[ac2+0x0]; # addr not found
+7017e596 XCALL [ac2+0x0],1; # addr not found
 7017e599 LLEF 2,[pc+0x7FE81BFB] (0x70000195);
 7017e59c XWSTA 0,[ac2+0x6];
 7017e59e WSUB 1,1;
@@ -3018,7 +3018,7 @@ disassemble: 0x7017E71B 0x7017E85C
 7017e7bb XLEF 0,[pc+0x8] (0x7017E7C4);
 7017e7bd SYSCALL 0505
 7017e7c0 WMOV 0,0;
-7017e7c1 XCALL 0,1,[ac2+0x0]; # addr not found
+7017e7c1 XCALL [ac2+0x0],1; # addr not found
 # ----------------------------------------------------------------
 # T?KILL
 # ----------------------------------------------------------------
@@ -3746,7 +3746,7 @@ disassemble: 0x7017EBC0 0x7017EC79
 7017ec20 XWSTA 0,[ac2+0x7FCE];
 7017ec22 XWLDA 3,[ac2+0x7FCC];
 7017ec24 XWSTA 0,[ac2+0x7FCC];
-7017ec26 XCALL 0,0,[ac3+0x0]; # addr not found
+7017ec26 XCALL [ac3+0x0],0; # addr not found
 7017ec29 WLDAI 2,0x00011636;
 7017ec2c LCALL [0x7017EE33],0; # O.SERROR
 7017ec30 WLDAI 0,0x00011615;
@@ -4132,9 +4132,9 @@ disassemble: 0x7017ED8F 0x7017EF50
 7017ee33 WSAVS 0x0000;
 7017ee35 NLDAI 65535 (0xFFFF),0;
 7017ee37 WSUB 1,1;
-7017ee38 XCALL 0,0,[pc+0x1D] (0x7017EE56); # O.SET
+7017ee38 XCALL [pc+0x1D] (0x7017EE56),0; # O.SET
 7017ee3b XPSHJ [pc+0x26] (0x7017EE62);
-7017ee3d XCALL 0,0,[ac2+0x0]; # addr not found
+7017ee3d XCALL [ac2+0x0],0; # addr not found
 7017ee40 LDASB 2;
 7017ee41 XWLDA 2,[ac2+0x7FD6];
 7017ee43 WSEQ 2,2;
@@ -4437,7 +4437,7 @@ disassemble: 0x7017F030 0x7017F274
 7017f07d XNSTA 0,[ac3+0x2E];
 7017f07f XNSTA 0,[ac3+0xE];
 7017f081 WMOV 3,1;
-7017f082 XCALL 0,0,[pc+0x221] (0x7017F2A4); # symbol not found
+7017f082 XCALL [pc+0x221] (0x7017F2A4),0; # symbol not found
 7017f085 XWLDA 1,[ac3+0x14];
 7017f087 WSGTI 1,65530 (0xFFFA);
 7017f089 WBR 4 (0x7017F08D);
@@ -4496,9 +4496,9 @@ disassemble: 0x7017F030 0x7017F274
 7017f0df LDAFP 3;
 7017f0e0 XPEF [ac3+0x130];
 7017f0e2 WMOV 3,1;
-7017f0e3 XCALL 0,2,[pc+0x1AB] (0x7017F28F); # symbol not found
+7017f0e3 XCALL [pc+0x1AB] (0x7017F28F),2; # symbol not found
 7017f0e6 WMOV 3,1;
-7017f0e7 XCALL 0,0,[pc+0x1BC] (0x7017F2A4); # symbol not found
+7017f0e7 XCALL [pc+0x1BC] (0x7017F2A4),0; # symbol not found
 7017f0ea XWLDA 0,[ac3+0x14];
 7017f0ec WSLE 0,0;
 7017f0ed WBR 5 (0x7017F0F2);
@@ -4529,14 +4529,14 @@ disassemble: 0x7017F030 0x7017F274
 7017f118 XPEF [pc+0x7EA9] (0x7017EFC2);
 7017f11a XPEFB @[pc+0xFE22] (0x7017EF3D);
 7017f11c WXCH 3,1;
-7017f11d XCALL 0,2,[pc+0x15B] (0x7017F279); # symbol not found
+7017f11d XCALL [pc+0x15B] (0x7017F279),2; # symbol not found
 7017f120 XWLDA 1,[ac3+0x1C];
 7017f122 WSGT 1,1;
 7017f123 WBR 55 (0x7017F15A);
 7017f124 XPEF [pc+0x7E9D] (0x7017EFC2);
 7017f126 XPEFB @[pc+0xFE02] (0x7017EF29);
 7017f128 WMOV 3,1;
-7017f129 XCALL 0,2,[pc+0x14F] (0x7017F279); # symbol not found
+7017f129 XCALL [pc+0x14F] (0x7017F279),2; # symbol not found
 7017f12c NLDAI 2816 (0x0B00),1;
 7017f12e XNSTA 1,[ac3+0x22];
 7017f130 XWLDA 2,[ac3+0x1C];
@@ -4554,15 +4554,15 @@ disassemble: 0x7017F030 0x7017F274
 7017f14a XPEF [ac3+0x22];
 7017f14c XPEF [ac3+0x1CE];
 7017f14e WXCH 3,1;
-7017f14f XCALL 0,2,[pc+0x13F] (0x7017F28F); # symbol not found
+7017f14f XCALL [pc+0x13F] (0x7017F28F),2; # symbol not found
 7017f152 XPEF [pc+0x7E6B] (0x7017EFBE);
 7017f154 XPEFB @[pc+0xFDA2] (0x7017EEF7);
 7017f156 WMOV 3,1;
-7017f157 XCALL 0,2,[pc+0x121] (0x7017F279); # symbol not found
+7017f157 XCALL [pc+0x121] (0x7017F279),2; # symbol not found
 7017f15a XPEF [pc+0x7E5F] (0x7017EFBA);
 7017f15c XPEF @[ac3+0x801A];
 7017f15e WMOV 3,1;
-7017f15f XCALL 0,2,[pc+0x12F] (0x7017F28F); # symbol not found
+7017f15f XCALL [pc+0x12F] (0x7017F28F),2; # symbol not found
 7017f162 LNLDA 0,@[0x7015BCE7];
 7017f165 WSNEI 0,1 (0x0001);
 7017f167 WBR 5 (0x7017F16C);
@@ -4577,7 +4577,7 @@ disassemble: 0x7017F030 0x7017F274
 7017f173 XPEF [pc+0x7E42] (0x7017EFB6);
 7017f175 XPEFB @[pc+0xFD5C] (0x7017EED2);
 7017f177 WMOV 3,1;
-7017f178 XCALL 0,2,[pc+0x100] (0x7017F279); # symbol not found
+7017f178 XCALL [pc+0x100] (0x7017F279),2; # symbol not found
 7017f17b NLDAI 32768 (0x8000),0;
 7017f17d XNSTA 0,[ac3+0xD];
 7017f17f XNLDA 1,[ac3+0x20];
@@ -4586,7 +4586,7 @@ disassemble: 0x7017F030 0x7017F274
 7017f183 XPEF [pc+0x7E2E] (0x7017EFB2);
 7017f185 XPEFB @[pc+0xFD34] (0x7017EEBA);
 7017f187 WMOV 3,1;
-7017f188 XCALL 0,2,[pc+0xF0] (0x7017F279); # symbol not found
+7017f188 XCALL [pc+0xF0] (0x7017F279),2; # symbol not found
 7017f18b NLDAI 2816 (0x0B00),1;
 7017f18d XNSTA 1,[ac3+0x26];
 7017f18f XNLDA 2,[ac3+0x20];
@@ -4604,15 +4604,15 @@ disassemble: 0x7017F030 0x7017F274
 7017f1a9 XPEF [ac3+0x26];
 7017f1ab XPEF [ac3+0x1CE];
 7017f1ad WXCH 3,1;
-7017f1ae XCALL 0,2,[pc+0xE0] (0x7017F28F); # symbol not found
+7017f1ae XCALL [pc+0xE0] (0x7017F28F),2; # symbol not found
 7017f1b1 XPEF [pc+0x7E04] (0x7017EFB6);
 7017f1b3 XPEFB @[pc+0xFCE0] (0x7017EE94);
 7017f1b5 WMOV 3,1;
-7017f1b6 XCALL 0,2,[pc+0xC2] (0x7017F279); # symbol not found
+7017f1b6 XCALL [pc+0xC2] (0x7017F279),2; # symbol not found
 7017f1b9 XPEF [pc+0x7DF4] (0x7017EFAE);
 7017f1bb XPEFB @[pc+0xFCB4] (0x7017EE70);
 7017f1bd WMOV 3,1;
-7017f1be XCALL 0,2,[pc+0xBA] (0x7017F279); # symbol not found
+7017f1be XCALL [pc+0xBA] (0x7017F279),2; # symbol not found
 7017f1c1 NLDAI 2816 (0x0B00),0;
 7017f1c3 XNSTA 0,[ac3+0x2A];
 7017f1c5 XNLDA 1,[ac3+0x1E];
@@ -4631,20 +4631,20 @@ disassemble: 0x7017F030 0x7017F274
 7017f1e2 XPEF [ac3+0x2A];
 7017f1e4 XPEF [ac3+0x1CE];
 7017f1e6 WXCH 3,1;
-7017f1e7 XCALL 0,2,[pc+0xA7] (0x7017F28F); # symbol not found
+7017f1e7 XCALL [pc+0xA7] (0x7017F28F),2; # symbol not found
 7017f1ea XPEF [pc+0x7DCB] (0x7017EFB6);
 7017f1ec XPEFB @[pc+0xFC4E] (0x7017EE3B);
 7017f1ee WMOV 3,1;
-7017f1ef XCALL 0,2,[pc+0x89] (0x7017F279); # symbol not found
+7017f1ef XCALL [pc+0x89] (0x7017F279),2; # symbol not found
 7017f1f2 XNLDA 0,[ac3+0xD];
 7017f1f4 MOV.L# 0,0,SNC;
 7017f1f5 WBR 13 (0x7017F202);
 7017f1f6 XPEF [pc+0x7DBF] (0x7017EFB6);
 7017f1f8 XPEFB @[pc+0xFC6C] (0x7017EE65);
 7017f1fa WMOV 3,1;
-7017f1fb XCALL 0,2,[pc+0x7D] (0x7017F279); # symbol not found
+7017f1fb XCALL [pc+0x7D] (0x7017F279),2; # symbol not found
 7017f1fe WMOV 3,1;
-7017f1ff XCALL 0,0,[pc+0xA4] (0x7017F2A4); # symbol not found
+7017f1ff XCALL [pc+0xA4] (0x7017F2A4),0; # symbol not found
 7017f202 XNLDA 0,[ac3+0x7FF7];
 7017f204 ADD.O# 0,0,SBN;
 7017f205 WBR 11 (0x7017F210);
@@ -4653,7 +4653,7 @@ disassemble: 0x7017F030 0x7017F274
 7017f209 WBR 7 (0x7017F210);
 7017f20a WPSH 0,0;
 7017f20b WMOV 3,1;
-7017f20c XCALL 0,1,[pc+0x163] (0x7017F370); # symbol not found
+7017f20c XCALL [pc+0x163] (0x7017F370),1; # symbol not found
 7017f20f WBR 12 (0x7017F21B);
 7017f210 XNLDA 0,[ac3+0xC];
 7017f212 MOV.L# 0,0,SNC;
@@ -4662,21 +4662,21 @@ disassemble: 0x7017F030 0x7017F274
 7017f215 WPSH 3,3;
 7017f216 LDAFP 1;
 7017f217 LDAFP 2;
-7017f218 XCALL 0,1,[pc+0x157] (0x7017F370); # symbol not found
+7017f218 XCALL [pc+0x157] (0x7017F370),1; # symbol not found
 7017f21b XWLDA 0,[ac3+0x18];
 7017f21d WSNE 0,0;
 7017f21e WBR 7 (0x7017F225);
 7017f21f XPEF [ac3+0x18];
 7017f221 WMOV 3,1;
-7017f222 XCALL 0,1,[pc+0x117] (0x7017F33A); # symbol not found
+7017f222 XCALL [pc+0x117] (0x7017F33A),1; # symbol not found
 7017f225 XWLDA 0,[ac3+0x10];
 7017f227 WSNE 0,0;
 7017f228 WBR 7 (0x7017F22F);
 7017f229 XPEF [ac3+0x10];
 7017f22b WMOV 3,1;
-7017f22c XCALL 0,1,[pc+0x10D] (0x7017F33A); # symbol not found
+7017f22c XCALL [pc+0x10D] (0x7017F33A),1; # symbol not found
 7017f22f WMOV 3,1;
-7017f230 XCALL 0,0,[pc+0xCB] (0x7017F2FC); # symbol not found
+7017f230 XCALL [pc+0xCB] (0x7017F2FC),0; # symbol not found
 7017f233 XNLDA 0,[ac3+0xC];
 7017f235 WCOM 0,0;
 7017f236 MOV.L# 0,0,SNC;
@@ -4725,7 +4725,7 @@ disassemble: 0x7017F279 0x7017F339
 7017f284 XNSTA 0,[ac3+0xE];
 7017f286 XPEF [ac3+0xE];
 7017f288 XPEF [ac3+0xC];
-7017f28a XCALL 0,2,[pc+0x2D] (0x7017F2B8); # symbol not found
+7017f28a XCALL [pc+0x2D] (0x7017F2B8),2; # symbol not found
 7017f28d WRTN;
 7017f28e WBR 109 (0x7017F2FB);
 7017f28f WSAVS 0x0008;
@@ -4736,7 +4736,7 @@ disassemble: 0x7017F279 0x7017F339
 7017f299 XNSTA 0,[ac3+0xE];
 7017f29b XPEF [ac3+0xE];
 7017f29d XPEF [ac3+0xC];
-7017f29f XCALL 0,2,[pc+0x18] (0x7017F2B8); # symbol not found
+7017f29f XCALL [pc+0x18] (0x7017F2B8),2; # symbol not found
 7017f2a2 WRTN;
 7017f2a3 WBR 88 (0x7017F2FB);
 7017f2a4 WSAVS 0x0008;
@@ -4746,7 +4746,7 @@ disassemble: 0x7017F279 0x7017F339
 7017f2ad XNSTA 0,[ac3+0xE];
 7017f2af XPEF [ac3+0xE];
 7017f2b1 XPEF [ac3+0xC];
-7017f2b3 XCALL 0,2,[pc+0x4] (0x7017F2B8); # symbol not found
+7017f2b3 XCALL [pc+0x4] (0x7017F2B8),2; # symbol not found
 7017f2b6 WRTN;
 7017f2b7 WBR 68 (0x7017F2FB);
 7017f2b8 WSAVS 0x0008;
@@ -4757,7 +4757,7 @@ disassemble: 0x7017F279 0x7017F339
 7017f2c0 WSGTI 0,512 (0x0200);
 7017f2c2 WBR 5 (0x7017F2C7);
 7017f2c3 WMOV 2,1;
-7017f2c4 XCALL 0,0,[pc+0x37] (0x7017F2FC); # symbol not found
+7017f2c4 XCALL [pc+0x37] (0x7017F2FC),0; # symbol not found
 7017f2c7 LLEF 0,[0x7015BCE9];
 7017f2ca XNLDA 1,@[ac3+0xFFF2];
 7017f2cc XWLDA 3,@[ac3+0xFFF4];
@@ -4860,8 +4860,8 @@ disassemble: 0x7017F33A 0x7017F6B3
 7017f362 XWLDA 2,[ac3+0x7FFA];
 7017f364 XPEF [ac2+0x142];
 7017f366 WMOV 2,1;
-7017f367 XCALL 0,2,[pc+0x7F27] (0x7017F28F); # symbol not found
-7017f36a XCALL 0,0,[pc+0x7F39] (0x7017F2A4); # symbol not found
+7017f367 XCALL [pc+0x7F27] (0x7017F28F),2; # symbol not found
+7017f36a XCALL [pc+0x7F39] (0x7017F2A4),0; # symbol not found
 7017f36d WRTN;
 7017f36e XJMP [pc+0x305] (0x7017F674);
 7017f370 WSAVS 0x0029;
@@ -4878,7 +4878,7 @@ disassemble: 0x7017F33A 0x7017F6B3
 7017f382 XPEFB @[pc+0xF90E] (0x7017EC91);
 7017f384 LDAFP 3;
 7017f385 XWLDA 1,[ac3+0x7FFA];
-7017f387 XCALL 0,2,[pc+0x7EF1] (0x7017F279); # symbol not found
+7017f387 XCALL [pc+0x7EF1] (0x7017F279),2; # symbol not found
 7017f38a WSUB 2,2;
 7017f38b XNSTA 2,[ac3+0x13];
 7017f38d XLEF 2,[ac3+0xE];
@@ -5073,7 +5073,7 @@ disassemble: 0x7017F33A 0x7017F6B3
 7017f4c1 XPEF [pc+0x7AF0] (0x7017EFB2);
 7017f4c3 XPEFB @[pc+0xF670] (0x7017EB34);
 7017f4c5 XWLDA 1,[ac3+0x7FFA];
-7017f4c7 XCALL 0,2,[pc+0x7DB1] (0x7017F279); # symbol not found
+7017f4c7 XCALL [pc+0x7DB1] (0x7017F279),2; # symbol not found
 7017f4ca XWLDA 0,[ac3+0xC];
 7017f4cc WSBI 2,0;
 7017f4cd WMOV 0,2;
@@ -5081,13 +5081,13 @@ disassemble: 0x7017F33A 0x7017F6B3
 7017f4d0 XWSTA 2,[ac3+0x3E];
 7017f4d2 XPEF [ac3+0x3E];
 7017f4d4 XLEF 2,[ac3+0x42];
-7017f4d6 XCALL 0,1,[pc+0x19E] (0x7017F675); # symbol not found
+7017f4d6 XCALL [pc+0x19E] (0x7017F675),1; # symbol not found
 7017f4d9 XPEF [pc+0x7AC8] (0x7017EFA2);
 7017f4db XPEFB [ac3+0x87];
-7017f4dd XCALL 0,2,[pc+0x7D9B] (0x7017F279); # symbol not found
+7017f4dd XCALL [pc+0x7D9B] (0x7017F279),2; # symbol not found
 7017f4e0 XPEF [pc+0x7ABD] (0x7017EF9E);
 7017f4e2 XPEFB @[pc+0xF62A] (0x7017EB0D);
-7017f4e4 XCALL 0,2,[pc+0x7D94] (0x7017F279); # symbol not found
+7017f4e4 XCALL [pc+0x7D94] (0x7017F279),2; # symbol not found
 7017f4e7 WMOV 1,2;
 7017f4e8 XNLDA 0,[ac2+0x142];
 7017f4ea WSNE 0,0;
@@ -5095,20 +5095,20 @@ disassemble: 0x7017F33A 0x7017F6B3
 7017f4ec XPEF [pc+0x7AAD] (0x7017EF9A);
 7017f4ee XPEF [ac2+0x142];
 7017f4f0 WMOV 2,1;
-7017f4f1 XCALL 0,2,[pc+0x7D9D] (0x7017F28F); # symbol not found
+7017f4f1 XCALL [pc+0x7D9D] (0x7017F28F),2; # symbol not found
 7017f4f4 XWLDA 0,[ac3+0x18];
 7017f4f6 WSNE 0,0;
 7017f4f7 WBR 42 (0x7017F521);
 7017f4f8 XPEF [pc+0x7ABD] (0x7017EFB6);
 7017f4fa XPEFB @[pc+0xF5F6] (0x7017EAF1);
-7017f4fc XCALL 0,2,[pc+0x7D7C] (0x7017F279); # symbol not found
+7017f4fc XCALL [pc+0x7D7C] (0x7017F279),2; # symbol not found
 7017f4ff NLDAI 2816 (0x0B00),0;
 7017f501 XNSTA 0,[ac3+0x32];
 7017f503 XWLDA 2,[ac3+0x18];
 7017f505 XWSTA 2,[ac3+0x3E];
 7017f507 XPEF [ac3+0x3E];
 7017f509 XLEF 2,[ac3+0x42];
-7017f50b XCALL 0,1,[pc+0x169] (0x7017F675); # symbol not found
+7017f50b XCALL [pc+0x169] (0x7017F675),1; # symbol not found
 7017f50e XPEFB [ac3+0x84];
 7017f510 XLEF 2,[ac3+0x4A];
 7017f512 LCALL [0x7017FB81],1; # C?TRIM
@@ -5116,24 +5116,24 @@ disassemble: 0x7017F33A 0x7017F6B3
 7017f518 XWSTA 2,[ac3+0x33];
 7017f51a XPEF [ac3+0x32];
 7017f51c XPEF [ac3+0x4A];
-7017f51e XCALL 0,2,[pc+0x7D70] (0x7017F28F); # symbol not found
+7017f51e XCALL [pc+0x7D70] (0x7017F28F),2; # symbol not found
 7017f521 XNLDA 0,[ac3+0x11];
 7017f523 WSNEI 0,7 (0x0007);
 7017f525 WBR 70 (0x7017F56B);
 7017f526 XPEF [pc+0x7A6F] (0x7017EF96);
 7017f528 XPEFB @[pc+0xF592] (0x7017EABB);
 7017f52a XWLDA 1,[ac3+0x7FFA];
-7017f52c XCALL 0,2,[pc+0x7D4C] (0x7017F279); # symbol not found
+7017f52c XCALL [pc+0x7D4C] (0x7017F279),2; # symbol not found
 7017f52f XNLDA 0,[ac3+0x11];
 7017f531 WNADI 0,48 (0x0030);
 7017f533 WANDI 0,255 (0x000000FF);
 7017f536 XSTB 0,[ac3+0x7C];
 7017f538 XPEF [pc+0x7A7D] (0x7017EFB6);
 7017f53a XPEFB [ac3+0x7C];
-7017f53c XCALL 0,2,[pc+0x7D3C] (0x7017F279); # symbol not found
+7017f53c XCALL [pc+0x7D3C] (0x7017F279),2; # symbol not found
 7017f53f XPEF [pc+0x7A76] (0x7017EFB6);
 7017f541 XPEFB @[pc+0xF5A4] (0x7017EAE6);
-7017f543 XCALL 0,2,[pc+0x7D35] (0x7017F279); # symbol not found
+7017f543 XCALL [pc+0x7D35] (0x7017F279),2; # symbol not found
 7017f546 WBR 37 (0x7017F56B);
 7017f547 NLDAI 2816 (0x0B00),0;
 7017f549 XNSTA 0,[ac3+0x36];
@@ -5142,7 +5142,7 @@ disassemble: 0x7017F33A 0x7017F6B3
 7017f54f XPEF [ac3+0x3E];
 7017f551 XLEF 2,[ac3+0x42];
 7017f553 XWLDA 1,[ac3+0x7FFA];
-7017f555 XCALL 0,1,[pc+0x11F] (0x7017F675); # symbol not found
+7017f555 XCALL [pc+0x11F] (0x7017F675),1; # symbol not found
 7017f558 XPEFB [ac3+0x84];
 7017f55a XLEF 2,[ac3+0x4A];
 7017f55c LCALL [0x7017FB81],1; # C?TRIM
@@ -5150,7 +5150,7 @@ disassemble: 0x7017F33A 0x7017F6B3
 7017f562 XWSTA 2,[ac3+0x37];
 7017f564 XPEF [ac3+0x36];
 7017f566 XPEF [ac3+0x4A];
-7017f568 XCALL 0,2,[pc+0x7D26] (0x7017F28F); # symbol not found
+7017f568 XCALL [pc+0x7D26] (0x7017F28F),2; # symbol not found
 7017f56b XNLDA 0,[ac3+0x11];
 7017f56d XNLDA 1,[ac3+0x10];
 7017f56f WSEQ 0,1;
@@ -5227,13 +5227,13 @@ disassemble: 0x7017F33A 0x7017F6B3
 7017f5e6 XPEF [pc+0x79AB] (0x7017EF92);
 7017f5e8 XPEFB @[pc+0xF40A] (0x7017E9F3);
 7017f5ea WMOV 2,1;
-7017f5eb XCALL 0,2,[pc+0x7C8D] (0x7017F279); # symbol not found
+7017f5eb XCALL [pc+0x7C8D] (0x7017F279),2; # symbol not found
 7017f5ee XWLDA 0,[ac3+0x14];
 7017f5f0 WSNE 0,0;
 7017f5f1 WBR 53 (0x7017F626);
 7017f5f2 XPEF [pc+0x79AB] (0x7017EF9E);
 7017f5f4 XPEFB @[pc+0xF3EA] (0x7017E9DF);
-7017f5f6 XCALL 0,2,[pc+0x7C82] (0x7017F279); # symbol not found
+7017f5f6 XCALL [pc+0x7C82] (0x7017F279),2; # symbol not found
 7017f5f9 NLDAI 2816 (0x0B00),0;
 7017f5fb XNSTA 0,[ac3+0x3A];
 7017f5fd XLEFB 0,[ac3+0x84];
@@ -5250,17 +5250,17 @@ disassemble: 0x7017F33A 0x7017F6B3
 7017f616 XPEF [ac3+0x3A];
 7017f618 XPEF [ac3+0x4A];
 7017f61a XWLDA 1,[ac3+0x7FFA];
-7017f61c XCALL 0,2,[pc+0x7C72] (0x7017F28F); # symbol not found
+7017f61c XCALL [pc+0x7C72] (0x7017F28F),2; # symbol not found
 7017f61f XPEF [pc+0x799E] (0x7017EFBE);
 7017f621 XPEFB @[pc+0xF408] (0x7017EA2A);
-7017f623 XCALL 0,2,[pc+0x7C55] (0x7017F279); # symbol not found
+7017f623 XCALL [pc+0x7C55] (0x7017F279),2; # symbol not found
 7017f626 XPEF [pc+0x799F] (0x7017EFC6);
 7017f628 XWLDA 2,[ac3+0x7FFA];
 7017f62a XPEF [ac2+0x142];
 7017f62c WMOV 2,1;
-7017f62d XCALL 0,2,[pc+0x7C61] (0x7017F28F); # symbol not found
+7017f62d XCALL [pc+0x7C61] (0x7017F28F),2; # symbol not found
 7017f630 XWLDA 1,[ac3+0x7FFA];
-7017f632 XCALL 0,0,[pc+0x7C71] (0x7017F2A4); # symbol not found
+7017f632 XCALL [pc+0x7C71] (0x7017F2A4),0; # symbol not found
 7017f635 XJMP [pc+0x7D69] (0x7017F39F);
 7017f637 XNLDA 0,[ac3+0x13];
 7017f639 WSEQI 0,100 (0x0064);
@@ -5268,10 +5268,10 @@ disassemble: 0x7017F33A 0x7017F6B3
 7017f63c XPEF [pc+0x7951] (0x7017EF8E);
 7017f63e XPEFB @[pc+0xF316] (0x7017E955);
 7017f640 XWLDA 1,[ac3+0x7FFA];
-7017f642 XCALL 0,2,[pc+0x7C36] (0x7017F279); # symbol not found
-7017f645 XCALL 0,0,[pc+0x7C5E] (0x7017F2A4); # symbol not found
+7017f642 XCALL [pc+0x7C36] (0x7017F279),2; # symbol not found
+7017f645 XCALL [pc+0x7C5E] (0x7017F2A4),0; # symbol not found
 7017f648 XWLDA 1,[ac3+0x7FFA];
-7017f64a XCALL 0,0,[pc+0x7C59] (0x7017F2A4); # symbol not found
+7017f64a XCALL [pc+0x7C59] (0x7017F2A4),0; # symbol not found
 7017f64d WSUB 0,0;
 7017f64e XNSTA 0,[ac3+0x11];
 7017f650 WBR 6 (0x7017F656);
@@ -5989,31 +5989,31 @@ disassemble: 0x7017FABC 0x7017FB80
 7017fac4 XPEF [pc+0x7FE3] (0x7017FAA8);
 7017fac6 XPEFB @[pc+0xFFE2] (0x7017FAA9);
 7017fac8 WMOV 3,1;
-7017fac9 XCALL 0,2,[pc+0x5F] (0x7017FB29); # symbol not found
+7017fac9 XCALL [pc+0x5F] (0x7017FB29),2; # symbol not found
 7017facc XPEF [pc+0x7FD7] (0x7017FAA4);
 7017face XWLDA 2,[ac3+0x7FF0];
 7017fad0 XWLDA 2,[ac2+0x0];
 7017fad2 XPEF @[ac2+0x800C];
 7017fad4 WMOV 3,1;
-7017fad5 XCALL 0,2,[pc+0x71] (0x7017FB47); # symbol not found
+7017fad5 XCALL [pc+0x71] (0x7017FB47),2; # symbol not found
 7017fad8 XPEF [pc+0x7FC7] (0x7017FAA0);
 7017fada XPEFB @[pc+0xFFB6] (0x7017FA91);
 7017fadc WMOV 3,1;
-7017fadd XCALL 0,2,[pc+0x4B] (0x7017FB29); # symbol not found
+7017fadd XCALL [pc+0x4B] (0x7017FB29),2; # symbol not found
 7017fae0 WMOV 3,1;
-7017fae1 XCALL 0,0,[pc+0x82] (0x7017FB64); # symbol not found
+7017fae1 XCALL [pc+0x82] (0x7017FB64),0; # symbol not found
 7017fae4 XPEF [pc+0x7FC3] (0x7017FAA8);
 7017fae6 XPEFB @[pc+0xFF96] (0x7017FA7D);
 7017fae8 WMOV 3,1;
-7017fae9 XCALL 0,2,[pc+0x3F] (0x7017FB29); # symbol not found
+7017fae9 XCALL [pc+0x3F] (0x7017FB29),2; # symbol not found
 7017faec XPEF [pc+0x7FB7] (0x7017FAA4);
 7017faee XWLDA 2,[ac3+0x7FF0];
 7017faf0 XWLDA 2,[ac2+0x0];
 7017faf2 XPEF @[ac2+0x8008];
 7017faf4 WMOV 3,1;
-7017faf5 XCALL 0,2,[pc+0x51] (0x7017FB47); # symbol not found
+7017faf5 XCALL [pc+0x51] (0x7017FB47),2; # symbol not found
 7017faf8 WMOV 3,1;
-7017faf9 XCALL 0,0,[pc+0x6A] (0x7017FB64); # symbol not found
+7017faf9 XCALL [pc+0x6A] (0x7017FB64),0; # symbol not found
 7017fafc XWLDA 2,@[ac3+0xFFF0];
 7017fafe XWLDA 0,[ac2+0xA];
 7017fb00 WSNE 0,0;
@@ -6021,19 +6021,19 @@ disassemble: 0x7017FABC 0x7017FB80
 7017fb02 XPEF [pc+0x7F99] (0x7017FA9C);
 7017fb04 XPEFB @[pc+0xFF4E] (0x7017FA53);
 7017fb06 WMOV 3,1;
-7017fb07 XCALL 0,2,[pc+0x21] (0x7017FB29); # symbol not found
+7017fb07 XCALL [pc+0x21] (0x7017FB29),2; # symbol not found
 7017fb0a XPEF [pc+0x7F99] (0x7017FAA4);
 7017fb0c XWLDA 2,[ac3+0x7FF0];
 7017fb0e XWLDA 2,[ac2+0x0];
 7017fb10 XPEF @[ac2+0x800A];
 7017fb12 WMOV 3,1;
-7017fb13 XCALL 0,2,[pc+0x33] (0x7017FB47); # symbol not found
+7017fb13 XCALL [pc+0x33] (0x7017FB47),2; # symbol not found
 7017fb16 XPEF [pc+0x7F89] (0x7017FAA0);
 7017fb18 XPEFB @[pc+0xFF3A] (0x7017FA53);
 7017fb1a WMOV 3,1;
-7017fb1b XCALL 0,2,[pc+0xD] (0x7017FB29); # symbol not found
+7017fb1b XCALL [pc+0xD] (0x7017FB29),2; # symbol not found
 7017fb1e WMOV 3,1;
-7017fb1f XCALL 0,0,[pc+0x44] (0x7017FB64); # symbol not found
+7017fb1f XCALL [pc+0x44] (0x7017FB64),0; # symbol not found
 7017fb22 XWLDA 2,@[ac3+0xFFF0];
 7017fb24 XWLDA 0,[ac2+0x6];
 7017fb26 XWSTA 0,[ac3+0x7FF8];
@@ -6052,7 +6052,7 @@ disassemble: 0x7017FABC 0x7017FB80
 7017fb3d XWLDA 1,[ac2+0x2];
 7017fb3f XWLDA 2,[ac3+0x7FFA];
 7017fb41 XWLDA 2,@[ac2+0xFFF4];
-7017fb43 XCALL 0,2,[ac2+0x0]; # addr not found
+7017fb43 XCALL [ac2+0x0],2; # addr not found
 7017fb46 WRTN;
 7017fb47 WSAVS 0x0009;
 7017fb49 XWLDA 2,[ac3+0x7FF4];
@@ -6067,7 +6067,7 @@ disassemble: 0x7017FABC 0x7017FB80
 7017fb5a XWLDA 1,[ac2+0x2];
 7017fb5c XWLDA 2,[ac3+0x7FFA];
 7017fb5e XWLDA 2,@[ac2+0xFFF4];
-7017fb60 XCALL 0,2,[ac2+0x0]; # addr not found
+7017fb60 XCALL [ac2+0x0],2; # addr not found
 7017fb63 WRTN;
 7017fb64 WSAVS 0x0009;
 7017fb66 LLEFB 2,@[0x60001F9E];
@@ -6081,7 +6081,7 @@ disassemble: 0x7017FABC 0x7017FB80
 7017fb76 XWLDA 1,[ac2+0x2];
 7017fb78 XWLDA 2,[ac3+0x7FFA];
 7017fb7a XWLDA 2,@[ac2+0xFFF4];
-7017fb7c XCALL 0,2,[ac2+0x0]; # addr not found
+7017fb7c XCALL [ac2+0x0],2; # addr not found
 7017fb7f WRTN;
 
 memory_data: 0x7017FB80 0x7017FB81

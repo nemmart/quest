@@ -121,7 +121,10 @@ def main():
 
     # ---- call sites ----
     re_lcall = re.compile(r'\[0x([0-9A-Fa-f]{8})\],(\d+)')
-    re_xcall = re.compile(r'^(\d+),(\d+),\[pc[+-]0x[0-9A-Fa-f]+\]\s*\(0x([0-9A-Fa-f]{8})\)')
+    # XCALL renders as `[pc+0xNNN] (0xTARGET),argc` since the Sep 5 2026
+    # disassembler fix (wordIndirectArgument = ea,arg like LCALL; the old
+    # `0,argc,[pc...]` form printed opcode bits as a phantom register).
+    re_xcall = re.compile(r'^\[pc[+-]0x[0-9A-Fa-f]+\]\s*\(0x([0-9A-Fa-f]{8})\),(\d+)')
     unnamed_lcall_targets = []
     nonconforming_xcall = []
     for i, (addr, mnem, ops) in enumerate(insns):
@@ -142,8 +145,8 @@ def main():
             m = re_xcall.match(ops)
             if not m:
                 continue
+            tgt = int(m.group(1), 16)
             argc = int(m.group(2))
-            tgt = int(m.group(3), 16)
             if tgt in entries:
                 e = entries[tgt]
                 e['sites'].append(addr); e['argcs'].append(argc); e['xcall_sites'].append(addr)
