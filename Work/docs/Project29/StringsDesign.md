@@ -32,21 +32,13 @@ Two kinds of string value:
     terminator. Never live at a listed block entry, so they need no
     arena and no mapping — they are pure notation for an expression that
     is stored or passed before the block ends.
-  - `pN` — PERSISTENT (routine-scoped) strings with explicit lifetime:
-    `pN = create(<size expr>)` at the WMSP claim pc (the arena allocation;
-    the master-side binding hook fires at the same pc). The clone's value
-    lives until the routine RETURNS: the executor frees a frame's pN at
-    WRTN (keyed by wfp), so the C++ translation is a local std::string
-    with RAII — there is NO destroy statement in the IR (RULED, Sep 5).
-    A `pN = create(…)` on a pN that is already live FREES the previous
-    value first (assignment semantics: `MSG = a‖b‖c; PUT MSG; MSG = d‖e;`
-    gives MSG several lives, each its own claim group on the master; a
-    create inside a loop must not grow the arena). Each life binds its
-    own triple at its WMSP pc.
-    The STASP that releases the master's claim group is checker
-    bookkeeping only (§6): it unbinds the master half of the triple. These
-    are the WMSP temporaries and ONLY those (57 creates) — see §5 for why
-    the frame scratch chains do not need them.
+  - There is NO routine-scoped string variable (RULED, Sep 5, after the
+    Sep 5 block-boundary check): PL/I has no conditional expression, so a
+    temporary never lives across the program's control flow; named strings
+    always have a declared capacity and are located. What DOES outlive a
+    block is the compiler's STACK CLAIM for a dynamic-length result (WMSP
+    before the pieces, STASP after the consuming call) — that is storage,
+    not a value, and it is mirrored by `claim`/`release` below.
 
 Primitives (statement level unless noted):
 
@@ -54,11 +46,11 @@ Primitives (statement level unless noted):
 sN = "literal"                 ; from quest.strings (address + length recorded)
 sN = [@a, n] | [@a, n varying] ; read a located string (expression)
 sN = sM + <piece>              ; concat; a piece is a literal, a located read,
-                               ;   another sK/pK, char(x) (one byte: the WSTB idiom),
+                               ;   another sK, char(x) (one byte: the WSTB idiom),
                                ;   or substr(<string>, i, n)
-pN = create(<wides>)           ; WMSP claim: arena allocation, master binding
-pN = pN + <piece>              ; append to a persistent string
-                               ; (no destroy: pN dies at WRTN; STASP is checker-side)
+tN = claim(<wides>)            ; WMSP through the same helper (wsp += 2·wides, guard);
+                               ;   tN = the claimed area's address (a located string)
+release(<expr>)                ; STASP through the same helper (wsp = expr)
 append([@a, n], <piece>)       ; a piece WCMV'd into a located scratch buffer
                                ;   (frame scratch chains — §5); residues per §4
 [@a, n] = <string>             ; PL/I assignment: truncate or blank-pad to n
@@ -75,28 +67,21 @@ rt_call ?X(sN, …)              ; an unlimited string passed to the runtime:
 writes to the string sink). `?READ`/`?READ_SCREEN` fill a located
 string (`IN_BUFFER`); unchanged rt_calls.
 
-## 2. Scope — RULED (Sep 5, after the census)
+## 2. Scope — RULED (Sep 5)
 
-`sN` is block-scoped; `pN` is routine-scoped. The census forces the
-second kind, but minimally: in all 19 WMSP groups the claims and pieces
-are STRAIGHT-LINE (zero block boundaries between first and last claim);
-the temp then crosses 2–5 listed block entries at the group's TAIL — the
-`min()` skip of the copy-out into the located target and the
-`?WRITE_SCREEN` rt_call that consumes it — before the STASP (checked
-Sep 5 against blocks.split; HELP's group is entirely in one block). A
-claim group is one PL/I statement; PL/I has no conditional expression,
-so no temp is ever live across the program's own control flow.
-Conditional pieces exist only in the frame-scratch `append` chains
-(P32), which are located. A `pN` is defined at its first piece or claim and dies at its
-region end (the STASP, or the consumer that takes the value: an
-assignment, a compare, an rt_call). Regions are single-entry (census:
-every group is closed within its routine, no interleaving). The emitter
-uses `sN` whenever the whole idiom closes inside one block (the 528
-`s = 'lit'` sites need neither: `[@a, n varying] = "lit"` is one
-statement), `pN` otherwise, and refuses any region it cannot close
-(totality: the sites stay embedded `@WCMV`, which works today). The
-loader checks: no `sN` read after its block's terminator; every `pN`
-has one definition region and one release.
+`sN` is block-local, single-assignment, like the t-places; the loader
+refuses a read after the block's terminator. Every concatenation closes
+inside one PL/I statement, and the Sep 5 check against blocks.split
+shows that in all 19 WMSP groups the claims and pieces are STRAIGHT-LINE
+(zero block boundaries between first claim and last piece). Our CFG cuts
+a group only at its tail: the `min()` skip of the copy-out and the
+consuming `?WRITE_SCREEN` rt_call (2–5 listed entries; HELP's group is
+one block). Across those cuts only the STACK CLAIM is live, and it is
+real memory at the same address on both sides (§5), so nothing differs
+at any rendezvous. The 528 `s = 'lit'` sites need no temporary at all:
+`[@a, n varying] = "lit"` is one statement. The emitter refuses any
+group it cannot close within the census's claim…release bracket
+(totality: the sites stay embedded `@WCMV`, which works today).
 
 ## 3. Timing — RULED
 
@@ -117,26 +102,39 @@ splits use ac1), so they are not optional. Pointers into the arena are
 compared through the translation (§6). ovr is untouched (B-1 of
 EmulatorDivergences.md). No deadness argument is needed anywhere.
 
-## 5. Where unlimited strings live — RULED
+## 5. Where dynamic-length results live — RULED (Sep 5, revised)
 
 - **Frame scratch chains** (≈500 pieces): the master WCMVs pieces into a
   fixed CHAR(n) frame local. That buffer IS a located string, so the
   chain is `append([@fp+k, n], piece)` per piece — same bytes, same
-  address, same time (§3) — with the final `[@v, m varying] =
-  [@fp+k, len]` copy-out where the compiler emits one. No `pN`, no arena,
-  no mapping: memory agrees byte for byte, and the region bookkeeping is
-  just the ac2 continuation (§4). The appended length is tracked by the
-  emitter from the residues, never guessed.
-- **WMSP temporaries** (57 claims, 19 groups; all `pN`): the clone keeps them in
-  the **arena** — a heap in an otherwise unused emulated segment
-  (0x75000000), first-fit allocation, deterministic across runs, freed
-  at the group's release. In emulated memory so the runtime reads a temp
-  through a plain pointer; no materialisation at the call.
-- The master is NOT changed. Its temps stay on its stack; the deviation
-  lives entirely in the checker's compare (§6). Stock mode is the only
-  mode for strings — there is one master behaviour.
+  address, same time (§3) — with the final copy-out where the compiler
+  emits one. Conditional pieces (the `IF … THEN MSG = MSG ‖ …` shape)
+  live here, as separate statements on separate blocks.
+- **WMSP temporaries** (57 claims, 19 groups): `tN = claim(wides)` at
+  the WMSP pc does what WMSP does — through the same helper, with the
+  stack-limit guard — and yields the address of the claimed area; the
+  pieces are `sN` values written into it as a located string;
+  `release(expr)` at the STASP. The temp lives WHERE THE MASTER'S DOES,
+  so memory, residues and wsp agree at every rendezvous, including the
+  post-call entry. No arena, no address translation, no checker change.
+- The master is not changed. Stock mode is the only mode for strings.
 
-## 6. Verification — the translated compare — RULED (shape); OPEN (details)
+**Future (not this family)**: when frames move to the clone side and the
+stack becomes virtual, dynamic temporaries can move to a heap arena
+(0x75000000) with a `(clone_addr, master_addr, length)` triple table
+translating addresses at compare time. That design is recorded in §6b
+for that day; it is NOT needed to retire the string family.
+
+## 6. Verification — RULED
+
+Unchanged from every prior project: the strict surface (ac0–ac3, c, ovr,
+wsp, block ordinal) compares raw at every listed block entry; located
+assignments and claimed temporaries write master-identical bytes at
+master-identical addresses; a memory footprint hash over string-statement
+writes (both sides) is an OPTIONAL extra oracle, K-gated. No masks, no
+translation.
+
+## 6b. FUTURE — the translated compare (recorded for the frames project)
 
 A **triple table** `(clone_addr, master_addr, length)` sorted by
 clone_addr:
@@ -181,26 +179,22 @@ listed, embedded.
 ## 8. Projects — RULED (split), sequence LEAN
 
 - **P30 — the C++ string library** (no IR, no emulator behaviour
-  change; ships dark): `hw/strings/`: Arena (first-fit over the
-  0x75 segment inside Memory; deterministic; free by variable),
-  EagleString (value type; construct from literal/located/char; concat;
+  change; ships dark): `hw/strings/`: EagleString (value type; construct from literal/located/char; concat;
   assign-to-located with pad/truncate and the varying length word;
   blank-padded equality; residue computation for each replaced
-  instruction), TripleTable (§6), and unit tests in the
+  instruction), and unit tests in the
   tests/helpers_selftest.cpp style: residues checked against
   EagleSpecial's WCMV/WCMP/WBLM on random operands; assignment/compare
-  against a reference; table invariants. One K=1 stock gate to prove the
+  against a reference. One K=1 stock gate to prove the
   library's presence changes nothing.
 - **P31 — located slice**: ir 5 grammar for §1; IRExec on the library;
   `s = 'lit'` and `s = t` into fixed/varying targets (≈720 sites);
   residues per §4. NO arena, NO checker change. Battery.
 - **P32 — frame scratch chains**: `append` to located scratch buffers, per-piece, conditional pieces, CALLRESULT/SUBSTR/WSTB pieces, tail
   splits (≈900 sites). Still no arena, no checker change. Battery.
-- **P33 — WMSP temporaries**: `pN` with create (freed at WRTN), the arena live, the map artifact, the
-  Lockstep translation layer and memory oracle (§6), `rt_call` with an
-  arena argument. 57 claims. The checker work lands LAST, for the
-  smallest population, with everything else green. Battery + a leg that
-  forces an unbound-triple mismatch to prove the checks fire.
+- **P33 — WMSP temporaries**: `claim`/`release` through the stack helpers,
+  the 19 groups as `tN = claim(n); [@tN, n varying] = …; rt_call; release`.
+  57 claims. No checker change. Battery.
 - **P34 — the rest**: WCMP, WBLM/fill, `?UNSIGNED_TO_CHAR` as a
   constructor, LOCK_FILE constants; then the string family is gone
   (embeds ≈460: frames, syscalls, float, divides).
@@ -221,9 +215,7 @@ assumption to verify in P31's census.
 
 ## 10. Open items for the P30/P31 plan gates
 
-- Arena size and allocator policy (first-fit ruled; block size,
-  fragmentation guard, exhaustion = loud fault).
-- Where the memory oracle runs (§6 OPEN).
+- Whether the optional footprint-hash oracle (§6) is worth landing in P31.
 - The 28 unresolved destinations (all frame/argument; 3 TERRITORY_MAP
   by-reference array writes need the callers read).
 - `substr` with computed byte offsets: grammar form for `bp + expr`.
