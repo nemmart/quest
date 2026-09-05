@@ -53,7 +53,7 @@ Primitives (statement level unless noted):
 sN = "literal"                 ; from quest.strings (address + length recorded)
 sN = [@a, n] | [@a, n varying] ; read a located string (expression)
 sN = sM + <piece>              ; concat; a piece is a literal, a located read,
-                               ;   another sK, char(x) (one byte: the WSTB idiom),
+                               ;   another sK, char(x) (ONE BYTE: the WSTB idiom),
                                ;   or substr(<string>, i, n)
 append([@a, n], <piece>)       ; a piece WCMV'd into a located scratch buffer
                                ;   (frame scratch chains — §5); residues per §4
@@ -68,9 +68,11 @@ rt_call ?X(pN, …)              ; pushes pN's arena address (§5)
 rt_call ?X([@a, n varying], …) ; a located string: its address is pushed, as today
 ```
 
-`?UNSIGNED_TO_CHAR` is a constructor (`sN = char(v)`; native today,
-writes to the string sink). `?READ`/`?READ_SCREEN` fill a located
-string (`IN_BUFFER`); unchanged rt_calls.
+`?UNSIGNED_TO_CHAR` is NOT a constructor: it is an ordinary rt_call whose
+result is a LOCATED piece — the digits at the frame scratch address the
+caller put in ac2, with the length returned in ac0 — consumed as
+`[@fp+k, ac0]` in the next block (the 112 CALLRESULT pieces). `?READ`/
+`?READ_SCREEN` fill a located string (`IN_BUFFER`); unchanged rt_calls.
 
 ## 2. Scope — RULED (Sep 5)
 
