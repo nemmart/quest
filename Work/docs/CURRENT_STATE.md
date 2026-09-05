@@ -1,3 +1,4 @@
+> Emulator↔hardware divergence register: docs/EmulatorDivergences.md (fixed / benign / guard; add to it whenever a manual page is read).
 > Artifact checksums of record: docs/Provenance.md (Sep 5 2026).
 
 # Where things stand

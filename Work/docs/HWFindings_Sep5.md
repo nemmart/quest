@@ -1,5 +1,8 @@
 # Hardware findings — Sep 5 2026 manual review
 
+> Consolidated register of ALL known emulator↔hardware divergences (this
+> file, P28 §7, P29 Census §10, CHANGE_FLOAT_SHADOW): docs/EmulatorDivergences.md.
+
 Planning session, user + integrator, reading the DG MV/Family
 instruction pages the P26 report flagged (WMOVR, WHLV, WDIV, the Nova
 and narrow 16-bit families) plus ECLIPSE 16-Bit Programming ch. 10.
