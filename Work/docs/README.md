@@ -26,6 +26,7 @@ one-time change/review notes.
 |---|---|---|
 | NextSession.md | CURRENT | Re-entry prompt: state, next task, gotchas |
 | METHOD.md | CURRENT | How to work on this project (binding) |
+| IR.md | CURRENT | THE quest.ir specification (ir 3, P26) — normative, spec-wins; grammar, block rules, executor model, version history |
 | Plan.md | CURRENT | Milestones + Steps 1–4 big picture |
 | M3Plan.md | CURRENT | Milestone 3 minimal lift (616w), decisions, order |
 | TerminalDetach.md | CURRENT | Terminal-detach design + validation (implemented) |
@@ -44,6 +45,7 @@ one-time change/review notes.
 | Project13/ | REFERENCE | M4a widening: batches 1+2 LANDED (45 live, base 0x74000000, end-inclusive T + stride, @-flag inverse); REPORT.md §6 |
 | Project8/ | CURRENT | Phase 2 prompt: the stack-free L2 implementation (rulings to settle, landing stages, hazards H2–H7, A/B matrix) |
 | Project22/ | REFERENCE | Gen-6.0 block-sync checker LANDED (Aug 28): BlockSyncDesign.md (design of record), PROMPT.md (rulings), REPORT.md (as-built + task-030 gate + Q2 carry census 163/13495 + the 029 invalid-green record); IRDesign.md = P23 context |
+| Project26/ | CURRENT | The math & control grammar (ir 3) LANDED on branch (Sep 5): MathDesign.md (design input + rulings), Census.md (27,600-embed census + per-mnemonic semantics with emulator citations), REPORT.md (as-built + battery 037 13/13), PROMPT.md, p26cov.py (coverage tool) |
 | Project4/ | REFERENCE | The DEF?ON cluster (O?AREA, P?DEFON, R?SIGNAL, DEF?ON-staged): derivations, reports, lift checklist |
 
 ## Working docs
