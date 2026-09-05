@@ -33,7 +33,10 @@ Two kinds of string value:
     intermediate of a WMSP group (`temp1 = A‖B`, `temp2 = temp1‖C`) is an
     sN.
   - `pN` — one STATIC ARENA VARIABLE per block that contains a WMSP claim
-    group (19 in Quest; the census's "claims on path" table). It holds
+    group (19 in Quest; the census's "claims on path" table), IDENTIFIED
+    BY THE BLOCK ADDRESS: every WMSP in a block refers to the same pN; the
+    arena layout artifact, the triple table and the hook table are all
+    keyed by block address (RULED, Sep 5). It holds
     the group's RESULT — the one value that leaves the block through the
     consuming rt_call — as a varying image at a FIXED arena address with a
     FIXED capacity computed at lowering time from the operands' declared
