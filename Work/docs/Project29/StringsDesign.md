@@ -25,46 +25,41 @@ Two kinds of string value:
   `[@addr, n varying]` (PL/I VARYING: length word at addr, data at
   addr+1 word, capacity n). Frame locals, statics, record fields,
   `IN_BUFFER`, the ?WRITE_SCREEN buffers.
-- **unlimited**: a variable holding a byte string of any length, in two
-  scopes (RULED, Sep 5):
-  - `sN` — BLOCK-LOCAL temporaries, like the t-places: single-assignment,
-    defined and consumed within one block, dead at the block's
-    terminator, never in memory. Every concatenation piece and every
-    intermediate of a WMSP group (`temp1 = A‖B`, `temp2 = temp1‖C`) is an
-    sN.
-  - `pN` — one STATIC ARENA VARIABLE per block that contains a WMSP claim
-    group (19 in Quest; the census's "claims on path" table), IDENTIFIED
-    BY THE BLOCK ADDRESS: every WMSP in a block refers to the same pN; the
-    arena layout artifact, the triple table and the hook table are all
-    keyed by block address (RULED, Sep 5). The block's first statement is
-    `p@<block> = ""` (RULED): the value is rebuilt from empty on every
-    execution; the loader refuses a read of a pN before its assignment
-    in the block. It holds
-    the group's RESULT — the one value that leaves the block through the
-    consuming rt_call — as a varying image at a FIXED arena address with a
-    FIXED capacity computed at lowering time from the operands' declared
-    lengths. Re-executing the block reassigns it; nothing is ever freed
-    (the arena is bounded by the program: ≤ 19 live strings). In C++ a
-    `static std::string` per site until addresses stop mattering.
+- **unlimited**: exactly ONE kind of string variable (RULED, Sep 5):
+  `pN` — one STATIC ARENA VARIABLE per block that contains a WMSP claim
+  group (19 in Quest; the census's "claims on path" table), IDENTIFIED
+  BY THE BLOCK ADDRESS: every WMSP in a block refers to the same pN; the
+  arena layout artifact, the triple table and the hook table are all
+  keyed by block address. It holds the group's RESULT — the one value
+  that leaves the block through the consuming rt_call — as a varying
+  image at a FIXED arena address with a FIXED capacity computed at
+  lowering time from the operands' declared lengths. The block's first
+  statement is `p@<block> = ""`; pieces are APPENDED (`p = p + piece`);
+  the master's intermediate temps (`temp1 = A‖B; temp2 = temp1‖C`) are
+  implicit in the successive appends — their residues never reach a
+  rendezvous. Re-executing the block rebuilds it; nothing is ever freed
+  (≤ 19 live strings). In C++ a `static std::string` per site until
+  addresses stop mattering. There are NO block-local string temporaries:
+  pieces are expressions (literal, located read, substr, char(x)).
 
 Primitives (statement level unless noted):
 
 ```
-sN = "literal"                 ; from quest.strings (address + length recorded)
-sN = [@a, n] | [@a, n varying] ; read a located string (expression)
-sN = sM + <piece>              ; concat; a piece is a literal, a located read,
-                               ;   another sK, char(x) (ONE BYTE: the WSTB idiom),
-                               ;   or substr(<string>, i, n)
+<piece> := "literal"           ; from quest.strings (address + length recorded)
+         | [@a, n] | [@a, n varying]     ; a located string (expression)
+         | substr(<piece>, i, n)
+         | char(x)                        ; ONE BYTE: the WSTB idiom
+p@blk = ""                     ; first statement of a claim-group block
+p@blk = p@blk + <piece>        ; append (one per WCMV/WSTB piece; residues per §4)
 append([@a, n], <piece>)       ; a piece WCMV'd into a located scratch buffer
                                ;   (frame scratch chains — §5); residues per §4
-[@a, n] = <string>             ; PL/I assignment: truncate or blank-pad to n
-[@a, n varying] = <string>     ; ... and write the length word = min(len, n)
-<string> == <string>           ; expression; WCMP semantics: blank-padded
+[@a, n] = <piece> | p@blk      ; PL/I assignment: truncate or blank-pad to n
+[@a, n varying] = <piece> | p@blk ; ... and write the length word = min(len, n)
+<piece> == <piece>             ; expression; WCMP semantics: blank-padded
                                ;   equality (the ONLY relation Quest uses — F2)
 words(@dst, n) = words(@src, n); WBLM; the 6 self-overlapping forms render as
 fill(@dst, n, 0)               ;   fill (F6) — same helper, sequential order
-pN = <string>                  ; the group result, materialised at pN's fixed arena address
-rt_call ?X(pN, …)              ; pushes pN's arena address (§5)
+rt_call ?X(p@blk, …)           ; pushes the arena address (§5)
 rt_call ?X([@a, n varying], …) ; a located string: its address is pushed, as today
 ```
 
@@ -76,19 +71,22 @@ caller put in ac2, with the length returned in ac0 — consumed as
 
 ## 2. Scope — RULED (Sep 5)
 
-`sN` is block-local, single-assignment, like the t-places; the loader
-refuses a read after the block's terminator. Every concatenation closes
-inside one PL/I statement, and the Sep 5 check against blocks.split
-shows that in all 19 WMSP groups the claims and pieces are STRAIGHT-LINE
-(zero block boundaries between first claim and last piece). Our CFG cuts
-a group only at its tail: the `min()` skip of the copy-out and the
-consuming `?WRITE_SCREEN` rt_call (2–5 listed entries; HELP's group is
-one block). Across those cuts only the STACK CLAIM is live, and it is
-real memory at the same address on both sides (§5), so nothing differs
-at any rendezvous. The 528 `s = 'lit'` sites need no temporary at all:
-`[@a, n varying] = "lit"` is one statement. The emitter refuses any
-group it cannot close within the census's claim…release bracket
-(totality: the sites stay embedded `@WCMV`, which works today).
+The only string variable is `pN`, and its block is the unit. The Sep 5
+check against blocks.split: in all 19 WMSP groups the claims and pieces
+are STRAIGHT-LINE (zero block boundaries between first claim and last
+piece); our CFG cuts a group only at its tail — the `min()` skip of the
+copy-out and the consuming `?WRITE_SCREEN` rt_call (2–5 listed entries;
+HELP's group is one block). A claim group is one PL/I statement; PL/I
+has no conditional expression, so no temp is ever live across the
+program's own control flow. Nor is a group ever split by a call: the
+compiler evaluates every `CHAR(n)` piece (`?UNSIGNED_TO_CHAR`) BEFORE
+the first claim — it needs the length to size the claim — so the only
+call inside any group is the consuming `?WRITE_SCREEN` (19/19). The 528
+`s = 'lit'` sites need no variable: `[@a, n varying] = "lit"` is one
+statement. The emitter refuses any group it cannot close within the
+census's claim…release bracket (totality: the sites stay embedded
+`@WCMV`, which works today). Loader rule: a `p@blk` read before its
+assignment in the block is refused.
 
 ## 3. Timing — RULED
 
@@ -117,7 +115,7 @@ EmulatorDivergences.md). No deadness argument is needed anywhere.
   emits one. Conditional pieces (the `IF … THEN MSG = MSG ‖ …` shape)
   live here, as separate statements on separate blocks.
 - **WMSP temporaries** (57 claims, 19 groups): in the IR text the group
-  is `p@blk = ""; … s0 = A + B; s1 = s0 + C; p@blk = s1;
+  is `p@blk = ""; p@blk = p@blk + A; p@blk = p@blk + B; p@blk = p@blk + C;
   rt_call ?WRITE_SCREEN(p@blk, …)` — no
   claim, no release, no metadata (RULED, Sep 5). `p3` is the block's
   static arena variable (§1): fixed address in the otherwise unused
