@@ -136,20 +136,24 @@ clone_addr:
   master; invariants asserted on insert: clone ranges disjoint and inside
   the arena, live master ranges disjoint.
 - Binding is dynamic: the master's existing per-pc hooks fire at the
-  mapped WMSP pcs and record `[wsp_before+2, wsp_after]`; the arena sN
-  materialised for the group's rt_call binds to the group's LAST claim
-  (the temp whose address the master pushes — census: the +5/+6 one with
-  room for the length word); the STASP hook UNBINDS the group's triples
-  and FREES the clone's arena string (same moment the master frees its
-  temp); WRTN sweeps anything still bound in the frame. A translation hitting an unbound-on-master triple after its STASP
+  mapped WMSP pcs (the only hooks needed) and record
+  `[wsp_before+2, wsp_after]`; the arena sN materialised for the group's
+  rt_call binds to the group's LAST claim (the temp whose address the
+  master pushes — census: the +5/+6 one with room for the length word).
+- RELEASE has no hook: at every rendezvous the checker SWEEPS — a triple
+  whose master range lies above the master's current wsp is dead
+  (released by STASP, popped by WRTN, or discarded by a condition-system
+  unwind); it is unbound and its arena string freed. Liveness is a
+  property of the master's stack, so error paths need no special case. A translation hitting an unbound-on-master triple after its STASP
   is a MISMATCH (the compiler never reads a released temp; a hit is an
   emitter bug). The clone reports its arena allocation per variable and
   the frame free at WRTN.
   Static input: a map artifact in the pushmap style (57 claim pcs, 19
   release pcs, variable ids) with provenance headers.
-- **compare_pair**: an AC value inside the arena segment translates
-  through the table before comparing; anything else compares raw. wsp
-  compares as `clone_wsp + Σ live master claim sizes`. A value hitting an
+- **compare_pair** (after the sweep): an AC value inside the arena segment
+  translates through the table before comparing; anything else compares
+  raw. wsp: `master_wsp − clone_wsp` must equal EXACTLY the sum of the
+  still-live claim sizes — any other divergence breaks the equality. A value hitting an
   unbound triple, or a master hook with no unbound clone variable, is a
   MISMATCH (catches emitter ordering bugs).
 - **Memory oracle**: at rendezvous, each live variable's arena bytes are
