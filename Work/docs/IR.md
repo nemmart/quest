@@ -135,13 +135,15 @@ possible — statements are sequence, not identities.
 
 ## 5. Statements and expressions
 
+### 5.1 Grammar
+
     lvalue  := ac0..ac3 | tN | c | ovr | M8[e] | M16[e] | M32[e]
                (wfp wsp wsb wsl are grammatically registers but WRITES are
                RESERVED — the loader refuses them until the RT-call
                decoration project owns the wsp/wsl overflow gate; P26
                emits stack-register READS only)
     stmt    := lvalue = expr                         pure
-             | lvalue = effop(args)                  effectful, ROOT ONLY (see below)
+             | lvalue = effop(args)                  effectful, ROOT ONLY (§5.5)
              | assert(e[, "msg"])
     expr    := one flat left-associative chain of ONE operator class
                over primaries — emitters parenthesize everything else;
@@ -159,22 +161,31 @@ possible — statements are sequence, not identities.
     effop   := add(a, b) | sub(a, b) | mul(a, b) | div(a, b) | cvwn(a) |
                ash(a, amount) | nadd(a, b) | nsub(a, b) | nmul(a, b)
 
-    REFUSED AT LOAD (P26): bare `< <= > >=`; bare `/ %`; the whole `#`
-    family (`#+ #- #* #/`); C `<<`/`>>` at any tier (ruling R9: ash/lsh
-    are the only shift vocabulary); functional and()/or()/xor()/com();
-    an effectful op anywhere but statement root; mixed-class or
-    chained-comparison chains; t read-before-write or double write;
-    stack-register writes; `goto [L] k` with k != 0; M1 (reserved).
+    REFUSED AT LOAD: bare `< <= > >=`; bare `/ %`; the whole `#` family
+    (`#+ #- #* #/`, retired in ir 3); C `<<`/`>>` at any tier (ruling
+    R9: ash/lsh are the only shift vocabulary); functional
+    and()/or()/xor()/com(); an effectful op anywhere but statement
+    root; mixed-class or chained-comparison chains; t read-before-write
+    or double write; stack-register writes; `goto [L] k` with k != 0;
+    M1 (reserved). Anything else unrecognized: refuse.
 
     EXECUTOR FAULTS (loud, never a silent value): goto index outside
     [0, count); zero divisor in `/s /u %s %u`; INT_MIN `/s`/`%s` -1;
-    a non-0/1 operand to `&& || !`; a non-0/1 value assigned to c/ovr.
+    a non-0/1 operand to `&& || !`; a non-0/1 value assigned to c/ovr;
+    plus every fault the underlying Machine/Memory helper throws.
 
-Semantics (32-bit unsigned host arithmetic, wrap):
+All host arithmetic is 32-bit unsigned with wrap unless a rule below
+says otherwise; signedness is never implicit — it is in the operator
+(`<s`, `/u`), the extension (`sx16`), or the helper.
+
+### 5.2 Memory, pointers, segments
 
 - M16 reads return the raw 16-bit cell zero-extended; extension is
   ALWAYS explicit in the text (`sx16(M16[…])` etc.). M16 stores write
-  value & 0xFFFF; emitters write `trunc16(…)` for the audit trail.
+  value & 0xFFFF; emitters write `trunc16(…)` for the audit trail on
+  pure stores — but NOT around an effectful op (`M16[e] = nadd(M16[e],
+  k)`; ruling R6, §5.5): the store's truncation is the rule, the
+  wrapper is only audit trail.
 - M8 (P25, byte addressing): reads return the byte zero-extended
   (Memory::read_byte); stores write value & 0xFF (write_byte); emitters
   write `zx8(…)` for the audit trail. The M8 INDEX IS RAW — no segment
@@ -184,18 +195,24 @@ Semantics (32-bit unsigned host arithmetic, wrap):
   Project25/ByteEA.md). A garbage byte pointer faults in read_byte
   exactly as the emulated instruction would — loud and identical, per
   METHOD §8.
+- SEGMENT WRAP (executor rule): every M16/M32/R INDEX is evaluated as
+  (e & 0x0FFFFFFF) | seg, seg from the block header. The emitter
+  refuses any absolute or pc-folded EA outside the block's segment,
+  which makes the uniform wrap provably identity-or-hardware-exact
+  (it is Machine::copy_segment). The wrap applies ONLY to memory/
+  resolve indices — a computed address stored as a VALUE (an arg-slot
+  EA, a byte pointer, an LEF result) must carry any needed masking
+  explicitly in its expression (wp/bp).
 - wp(b, d) / bp(b, d) (P25 pointer builders — masking lives in the
   executor, never in emitted text; user ruling, Aug 29): wp is the word
-  segment wrap of b+d — ((b+d) & 0x0FFFFFFF) | seg, seg from the block
-  header (Machine::copy_segment semantics). bp is
+  segment wrap of b+d — ((b+d) & 0x0FFFFFFF) | seg. bp is
   Machine::set_byte_segment(seg, b*2 + d) — the base is a word address
   scaled to bytes, the displacement is already in bytes (that asymmetry
   is the hardware's; eagle_x_byte_indexed ii=2/3). L-form byte EAs
   apply NO masking and therefore never render as bp: they emit raw
   arithmetic (acN*2 + disp) or constants (ByteEA.md has the per-mode
-  table read out of the emulator source).
-- `*` is host 32-bit multiply, wrap, no flags (distinct from the
-  reserved #-op `#*`, which owns flag semantics if ever needed).
+  table read out of the emulator source). wp/bp are the REGISTER-
+  RELATIVE forms only — no wp(0,d)/bp(0,d) is ever emitted.
 - Byte-pointer literal `0xW:b` (P25, user ruling): value = W*2 + b.
   Pure notation for a 32-bit byte pointer in the disassembler's fold
   form — W is the WORD address (what memory dumps use), b the byte
@@ -203,104 +220,154 @@ Semantics (32-bit unsigned host arithmetic, wrap):
   or 1, anything else refuses. Emitters use it for every constant
   byte EA and for L-form byte-table bases (`acN*2 + 0xW:b`), so the
   IR text is greppable against word-addressed dumps and matches the
-  dis rendering. Word-pointer constants stay plain hex (already
-  word-addressed). wp/bp remain the REGISTER-RELATIVE forms only —
-  no wp(0,d)/bp(0,d) is ever emitted. Bit-pointer literals (M1,
-  future) must NOT overload `:` — see §8.
-- SEGMENT WRAP (executor rule): every M/R INDEX is evaluated as
-  (e & 0x0FFFFFFF) | seg, seg from the block header. The emitter
-  refuses any absolute or pc-folded EA outside the block's segment,
-  which makes the uniform wrap provably identity-or-hardware-exact.
-  The wrap applies ONLY to memory/resolve indices — a computed
-  address stored as a VALUE (e.g. an arg-slot EA, a byte pointer)
-  must carry any needed masking explicitly in its expression.
-- R[e]: hardware indirect resolution — deref e, then follow bit 31
-  until clear (executor: eagle_resolve_indirect(wrap(e)|0x80000000),
-  inheriting the depth limit and its throw). An R result used as a
-  memory index is NOT re-wrapped (chain pointers are full addresses).
-  Emitters produce R only where the instruction's indirect bit is set.
-- Pure integer ops (P26): `/s %s` are truncating signed 32-bit divide
-  and remainder, `/u %u` unsigned; both FAULT on a zero divisor and
-  `/s %s` fault on INT_MIN ÷ −1 (host UB otherwise). No flags. (No
-  emission site in the P26 census uses them — WDIV is the effectful
-  `div`; they exist as grammar so the s/u convention is complete.)
-- Booleans (P26, MathDesign §2): comparisons yield exactly 0/1;
-  ordering comparisons carry a MANDATORY s/u suffix (`<s` signed int32,
-  `<u` unsigned); `==`/`!=` compare the 32-bit patterns. `&& ||` are
-  EAGER (both operands evaluated; exprs are pure) and require 0/1
-  operands (fault otherwise); `!` is boolean-only. `tf(e)` is the
-  word→boolean normalizer: 0 if e==0 else 1.
-- Word layer (P26, MathDesign §3): `& | ^` infix, `~` prefix — 32-bit,
-  no 0/1 constraint. `lsh(x, amount)` is EagleInstruction::logical_shift
-  (writes no flag): signed amount, positive=left, negative=right,
-  |amount| >= 32 → 0, amount 0 passthrough. There is no pure
-  arithmetic shift primary: `ash` is effectful (its ISA form
-  accumulates ovr) and therefore statement-root only.
-- Registers beyond the ACs (P26): `c` and `ovr` READ the machine flags
-  and are assignable at statement root (`c = 1` is CRYTO). `wfp wsp wsb
-  wsl` read machine.wfp/wsp/wsb/wsl — the clone's own registers, the
-  same values LDAFP/LDASP read (EagleStack.cpp:527/:512); writes are
-  reserved (refused).
-- t-places tN (P26): 32-bit block-local scratch. Emitted for the 23
-  P20 borrow brackets (`t = acX` at the WPSH, `acX = t` at the WPOP —
-  the bracket's memory write is dropped: in book mode the borrow slot
-  is read only by its own WPOP; in stock mode the real-stack word
-  below wsp is no longer written, wsp is restored inside the block, so
-  every rendezvous agrees and only dead-stack residue differs —
-  recorded in Project26/REPORT.md), for WXCH, for XNDO/XWDO, and for
-  the Nova test decomposition.
-- `ind(e)` (P26, ruling R4): Machine::eagle_resolve_indirect(e) — follow
-  bit 31 from the VALUE e: while bit 31 is set, e = M32[e & 0x7FFFFFFF]
-  (depth limit and throw inherited). RELATIONSHIP TO R[e]: R[e] is
-  eagle_resolve_indirect(wrap(e) | 0x80000000) — it FORCES one
-  dereference of the wrapped index and then follows the chain, i.e.
-  R[e] == ind(M32[e] as the hardware reads it through the same helper).
+  dis rendering. Word-pointer constants stay plain hex. Bit-pointer
+  literals (M1, future) must NOT overload `:` — see §8.
+- R[e]: hardware indirect resolution of an EA operand — deref the
+  wrapped index, then follow bit 31 until clear (executor:
+  eagle_resolve_indirect(wrap(e) | 0x80000000), inheriting the depth
+  limit and its throw). An R result used directly as a memory index is
+  NOT re-wrapped (chain pointers are full addresses). Emitters produce
+  R only where the instruction's indirect bit is set.
+- ind(e) (P26, ruling R4): hardware indirect resolution of a VALUE —
+  Machine::eagle_resolve_indirect(e): while bit 31 of e is set, e =
+  M32[e & 0x7FFFFFFF]; the result is e with bit 31 clear. SAME helper
+  as R, different entry: R[e] forces one dereference of the wrapped
+  index first, so R[e] ≡ ind(the word the hardware reads at wrap(e)).
   `ind` is what WBTZ/WBTO/WSZB apply to ac[XX] (EagleCompute.cpp
-  :261/:272/:283); `R` is what an indirect EA operand applies. Neither
-  result is re-wrapped when used as a memory index... except that an
-  `ind()` result used inside a larger index expression (`M16[ind(acX) +
-  lsh(acY, -4)]`) IS wrapped by the uniform M-index rule — which is
-  exactly the instruction's copy_segment(address, resolved + …).
-- EFFECTFUL OPS (P26, MathDesign §4; replaces `#+`/`#-`): each is
-  DEFINED as the shared EagleInstruction helper it names, with
-  f(a, b) == helper(machine, src=b, dst=a):
-    add(a,b)  = EagleInstruction::add   (c = ALU carry-out; ovr |=)
-    sub(a,b)  = EagleInstruction::sub   (a − b; c = complement-add carry; ovr |=)
-    mul(a,b)  = EagleInstruction::mul   (ovr |= 1 if the int64 product does not fit int32; no c)
-    div(a,b)  = EagleInstruction::div   (a ÷ b truncating; divisor 0 or INT_MIN÷−1 → ovr = 1 and
-                                         the RESULT IS a UNCHANGED — hoisted from WDIV, P26)
-    cvwn(a)   = EagleInstruction::cvwn  (sx16(low 16); ovr |= 1 if a did not fit — hoisted from CVWN)
-    ash(a,n)  = EagleInstruction::arithmetic_shift (ISA amount semantics; ovr |= sign change)
-    nadd(a,b) = EagleInstruction::narrow_add   (16-bit; result SIGN-EXTENDED; c/ovr)
-    nsub(a,b) = EagleInstruction::narrow_sub   (16-bit; a − b; result sign-extended; c/ovr)
-    nmul(a,b) = EagleInstruction::narrow_mul   (16-bit; result ZERO-extended (& 0xFFFF); ovr = 1 on overflow)
-  Exactly one effectful op per statement, at the root; arguments are
-  pure exprs (evaluated first, then the helper). No formulas live in
-  the IR: when the helpers change, the IR changes with them. Every
-  effectful statement ends with the emulator's `ovk && ovr` check; the
-  throw attributes to the BLOCK. An effectful op storing to M16
-  (`M16[e] = nadd(M16[e], k)`) is NOT wrapped in trunc16 — the M16
-  store truncates (ruling R6).
-- Class cap (what lower.py emits, P26): everything in Project26/
-  Census.md buckets (a), (b) and the ruled-in (c) set — loads/stores,
-  LEFs, constants, WMOV, byte addressing (P25), argpush stores (P25);
-  the skip family WSEQ/WSNE/WSLT/WSLE/WSGT/WSGE/WUSGT/WUSGE + the I/
-  wide-I forms and WSZB/WSKBO/XNISZ as `goto [fall, skip] test`; direct
-  XJMP and WBR as `goto [L] 0`; the effectful family (WADD WSUB WADC
-  WINC WNEG WADI WSBI WADDI WNADI XWADD LWADD XWSUB LWSUB XWADI XWSBI
-  WMUL XWMUL LWMUL WDIV CVWN NADD NSUB NNEG NADI NSBI NADDI XNADD LNADD
-  XNSUB LNSUB XNADI LNADI XNSBI LNSBI NMUL XNMUL LNMUL, WHLV as root
-  ash); the word layer (WCOM WAND WIOR WXOR WANDI WIORI WXORI ANDI WLSI
-  WLSHI WMOVR SEX ZEX); WBTZ/WBTO via ind(); LDAFP/LDASP reads; CRYTO;
-  WXCH and the 23 borrow brackets via t-places; XNDO/XWDO; the Nova
-  no-load (`#`) skip forms as derived pure tests (Census.md §2d).
-  Signedness per skip is the emulator's cast, per mnemonic (Census.md
-  §2a). Everything else stays an instruction — in particular the 67
-  Nova LOAD forms (deferred pending the user's manual check on the
-  high-half convention), indirect XJMP, LNDO (the dis omits its
-  register field — rendering gap), DIVX/WDIVS, DERR, the string/WMSP
-  family, calls, frames, floats. The cap widens by extraction, never
-  by assumption.
+  :261/:272/:283); `R` is what an indirect EA operand applies. An
+  `ind()` result standing alone as an index is a full address; used
+  inside a larger index expression (`M16[ind(acX) + lsh(acY, -4)]`) the
+  sum is wrapped by the uniform index rule — which is exactly the
+  instruction's copy_segment(address, resolved + …).
+
+### 5.3 Pure operators, booleans, the word layer
+
+- `+ - *` are host 32-bit arithmetic, wrap, no flags. `*` is distinct
+  from the effectful `mul()`, which owns the ISA's ovr semantics.
+- `/s %s` are truncating signed 32-bit divide and remainder, `/u %u`
+  unsigned; both FAULT on a zero divisor and `/s %s` fault on INT_MIN
+  ÷ −1 (host UB otherwise). No flags. (No emission site in the P26
+  census uses them — WDIV is the effectful `div`; they exist so the
+  s/u convention is complete.)
+- Booleans (MathDesign §2): comparisons yield exactly 0/1; ordering
+  comparisons carry a MANDATORY s/u suffix (`<s` compares as int32,
+  `<u` as uint32); `==`/`!=` compare the 32-bit patterns. `&& ||` are
+  EAGER (both operands evaluated; exprs are pure, so order is
+  unobservable) and require 0/1 operands (fault otherwise); `!` is
+  boolean-only. `tf(e)` is the word→boolean normalizer: 0 if e == 0
+  else 1. A `goto` index expression is an ordinary expr — for the
+  two-label form emitters use a comparison or `tf()` so it is 0/1 by
+  construction.
+- Word layer (MathDesign §3): `& | ^` infix, `~` prefix — 32-bit, no
+  0/1 constraint. `lsh(x, amount)` is EagleInstruction::logical_shift
+  (writes no flag): signed amount, positive = left, negative = right,
+  |amount| >= 32 → 0, amount 0 = passthrough. There is no pure
+  arithmetic-shift primary: `ash` is effectful (its ISA form
+  accumulates ovr) and therefore statement-root only (§5.5).
+- Extensions: `sx16` sign-extends bits 15:0; `zx16`/`trunc16` are both
+  `& 0xFFFF` (the names record intent: load vs store); `zx8` is
+  `& 0xFF`.
+
+### 5.4 Registers, flags, t-places
+
+- ac0..ac3: the interpreter's register locals (§7).
+- `c` and `ovr` READ the machine flags (machine.c / machine.ovr) and are
+  assignable at statement root with a 0/1 value (`c = 1` is CRYTO).
+  They are the SAME cells the effectful helpers write, so a pure
+  expression may consume a flag an earlier effectful statement set.
+- `wfp wsp wsb wsl` read machine.wfp/wsp/wsb/wsl — the clone's own
+  registers, the same values LDAFP/LDASP read (EagleStack.cpp:527/
+  :512). Writes are reserved (refused) until the RT-call decoration
+  project owns the wsp/wsl overflow gate.
+- t-places tN: 32-bit block-local scratch, SINGLE-ASSIGNMENT (loader:
+  refuse a read before the write, refuse a second write in the block;
+  straight-line blocks make definite assignment exact). A t may be the
+  destination of an effectful op. Emitted where the instruction
+  itself needs scratch: the 23 P20 borrow brackets (`t = acX` at the
+  WPSH, `acX = t` at the WPOP — the bracket's memory write is dropped:
+  in book mode the borrow slot is read only by its own WPOP; in stock
+  mode the real-stack word below wsp is no longer written, wsp is
+  restored inside the block, so every rendezvous agrees and only
+  dead-stack residue differs — Project26/REPORT.md §3), WXCH,
+  XNDO/XWDO (new value / test), and the Nova test decomposition (the
+  17-bit ALU value).
+
+### 5.5 Effectful operations (statement root only)
+
+Each is DEFINED as the shared EagleInstruction helper it names, with
+f(a, b) == helper(machine, src=b, dst=a) — so `sub(a, b)` is a − b and
+the first argument is always the destination-like operand:
+
+    add(a,b)  = EagleInstruction::add           c = ALU carry-out; ovr |=
+    sub(a,b)  = EagleInstruction::sub           a − b; c = complement-add carry; ovr |=
+    mul(a,b)  = EagleInstruction::mul           ovr |= 1 if the int64 product does not fit int32; no c
+    div(a,b)  = EagleInstruction::div           a ÷ b truncating; divisor 0 or INT_MIN ÷ −1 → ovr = 1
+                                                and the RESULT IS a UNCHANGED (hoisted from WDIV, P26)
+    cvwn(a)   = EagleInstruction::cvwn          sx16(a & 0xFFFF); ovr |= 1 if a did not fit int16
+                                                (hoisted from CVWN, P26)
+    ash(a,n)  = EagleInstruction::arithmetic_shift  ISA amount semantics (as lsh); ovr |= sign change
+    nadd(a,b) = EagleInstruction::narrow_add    16-bit add; result SIGN-EXTENDED to 32; c/ovr
+    nsub(a,b) = EagleInstruction::narrow_sub    16-bit a − b; result sign-extended; c/ovr
+    nmul(a,b) = EagleInstruction::narrow_mul    16-bit; result ZERO-extended (& 0xFFFF); ovr = 1 on overflow
+
+Rules: exactly one effectful op per statement, at the root; its
+arguments are pure exprs, evaluated first (they may read c/ovr), then
+the helper runs, then the result is assigned. NO FORMULAS live in the
+IR or in IRExec: when a helper changes, the IR's meaning changes with
+it (WideCarry.md ruling). Every effectful statement ends with the
+emulator's `ovk && ovr` check, identical throw string, attributed to
+the BLOCK (statements have no pc). An effectful op storing to M16 is
+NOT wrapped in trunc16 (ruling R6). The result conventions listed
+(sign-extend vs zero-extend, `|=` vs `=`) are the emulator's, recorded
+not judged — see Project26/Census.md §2d and REPORT §3 for the open
+manual question.
+
+### 5.6 Class cap — what lower.py emits
+
+Everything in Project26/Census.md buckets (a), (b) and the ruled-in
+(c) set: loads/stores (X/L × N/W LDA/STA, modes 0–3, direct/indirect),
+XLEF/LLEF, NLDAI/WLDAI, WMOV, byte addressing (XLEFB/LLEFB values,
+XLDB/XSTB/LLDB/LSTB/WLDB/WSTB — P25), §6's argpush stores (P25); the
+skip family WSEQ/WSNE/WSLT/WSLE/WSGT/WSGE/WUSGT/WUSGE + the word-I and
+wide-I forms and WSZB/WSKBO/XNISZ as `goto [fall, skip] test`
+(signedness per skip is the emulator's cast, per mnemonic — Census.md
+§2a; XX==YY compares against 0); direct XJMP and WBR as `goto [L] 0`;
+the effectful family (WADD WSUB WADC WINC WNEG WADI WSBI WADDI WNADI
+XWADD LWADD XWSUB LWSUB XWADI XWSBI WMUL XWMUL LWMUL WDIV CVWN NADD
+NSUB NNEG NADI NSBI NADDI XNADD LNADD XNSUB LNSUB XNADI LNADI XNSBI
+LNSBI NMUL XNMUL LNMUL, WHLV as root `ash(x, -1)`); the word layer
+(WCOM WAND WIOR WXOR WANDI WIORI WXORI ANDI WLSI WLSHI WMOVR SEX ZEX);
+WBTZ/WBTO via ind(); LDAFP/LDASP reads; CRYTO; WXCH and the 23 borrow
+brackets via t-places; XNDO/XWDO; the Nova no-load (`#`) skip forms as
+tests derived mechanically from NovaCompute.cpp's CC/op/SS/KKK tables
+(Census.md §2d). Everything else stays an instruction — in particular
+the 67 Nova LOAD forms (deferred pending the user's manual check on
+the high-half convention), indirect XJMP, LNDO (the dis omits its
+register field), DIVX/WDIVS, DERR, the string/WMSP/stack-write family,
+calls (undecorated), frames, floats. The cap widens by extraction,
+never by assumption.
+
+### 5.7 Worked example (an emitted block, ir 3)
+
+    block 7015C2A6 seg 0x70000000
+      ac1 = 0x000002AE ; NLDAI 686 (0x02AE),1;
+      ac0 = mul(ac0, ac1) ; WMUL 1,0;
+      ac2 = 0x00000010 ; NLDAI 16 (0x0010),2;
+      ac0 = mul(ac0, ac2) ; WMUL 2,0;
+      ac0 = add(ac0, 0xFFFFDB11) ; WNADI 0,56081 (0xDB11);
+      ac1 = M32[0x70000210] ; LWLDA 1,[0x70000210];
+      M16[ind(ac1) + lsh(ac0, -4)] = M16[ind(ac1) + lsh(ac0, -4)] & ~lsh(0x8000, 0 - (ac0 & 15)) ; WBTZ 1,0;
+      goto [7015C2B2] 0 ; fall-through
+
+    block 7015C2BB seg 0x70000000
+      ac0 = sx16(M16[0x7000021A]) ; LNLDA 0,[0x7000021A];
+      t1 = ((ac0 & 0xFFFF) | lsh(c, 16)) ; MOV.L# 0,0,SNC;
+      goto [7015C2BF, 7015C2C0] ((lsh(t1, -15) & 1) == 1) ; MOV.L# 0,0,SNC;
+
+Reading the second block: the Nova `#` form writes nothing, so it is a
+pure test; t1 holds NovaCompute's 17-bit source (carry-in from `c`
+because CC=0), the L shift's carry is bit 15 of it, and SNC skips when
+that carry is 1 — exits [no-skip, skip] in ascending pc order.
 
 ## 6. Operations
 
@@ -342,12 +409,11 @@ site). As of P25 all 566 decorated sites lower (566/566;
 Project25/ByteEA.md is the ledger): B-form pushes emit byte-pointer
 VALUES, one WPSH x,a emits its wides as ascending group stores
 M32[slot+2k] = ac((x+k)&3) (AC[XX] at the base slot — the emulated
-hook's verified ordering, EagleStack.cpp P18 tranche B), and borrow
-brackets inside decorated blocks stay @addr INSTRUCTION pairs (user
-ruling, Aug 29: push/pop as instructions, args as stores — the P20
-slot-redirect hooks fire on the normal execute path and the
-bracket's note_arg_write/pop nets zero; the site's args= never
-counted the bracket).
+hook's verified ordering, EagleStack.cpp P18 tranche B). Borrow
+brackets (the pushmap's `borrow` lines) are NOT part of a site's
+accounting (args= never counted them); since P26 they lower to
+t-place save/restore pairs (§5.4) in both modes — the P25 form (@addr
+WPSH/WPOP instruction pairs) is superseded.
 
 ## 7. Execution model (normative behavior of hw/IRExec)
 
@@ -367,8 +433,17 @@ counted the bracket).
   This rule presumes the post-split CFG: ALL conditional-length
   instructions are block terminators (tools/split_skips.py; user
   ruling).
+- Statements: pure statements evaluate the rhs then assign; effectful
+  statements evaluate the pure arguments, call the shared helper (which
+  writes machine.c/ovr directly), assign, then run the `ovk && ovr`
+  check. Statements do not advance instruction_count and do not fire
+  the Capture hook (accepted since P23: the pair gate compares block
+  structure, not per-statement counts). t-places live in the block
+  context and die with it.
+- `goto [..] e`: evaluate e, range-check (fault), materialize, return
+  the label. No hook, no count.
 - Statement memory faults are rethrown with [block, statement index,
-  store address] context.
+  store address] context; grammar faults (§5.1) name the block.
 - Debug: QUEST_IR_DEBUG_BLOCK=<hex> prints per-statement ac state for
   that block. First execution of each block logs once to stderr
   (coverage evidence).

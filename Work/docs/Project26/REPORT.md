@@ -7,8 +7,8 @@ argmap 39c42d4c… — all re-verified against the re-uploaded
 Disassembled/). Repo main differed from the upload by ONE later
 NextSession.md note (the user's Aug 29 manual-play datapoint); the
 branch is based on main so that note is kept. Branch:
-p26-math-grammar; battery: task 037 (034 template, JOBS=3) — PENDING the
-user's check-in ruling before push.
+p26-math-grammar; battery: task 037 (034 template, JOBS=3) — 13/13
+GREEN (§5). Ready for the planning session's review + integration.
 
 ## 1. Outcome
 
@@ -167,11 +167,19 @@ unlisted goto label, `goto [L] 1`, functional `and()`, an `ir 2`
 header. Runtime faults (goto index, zero divisor, non-0/1 boolean) are
 code-reviewed only — no game path reaches them by construction.
 
-Battery: task 037 = 034 template, JOBS=3, new artifacts, embed-count
-line + new-mnemonic coverage line appended to verdicts — DRAFTED
-(tasks/037-p26-math-grammar.sh), NOT PUSHED: the user asked to
-coordinate the launch. Landing bar: 13/13 green, strict gate, 0 div,
-embeds ≤ 8,600 (artifact says 8,529), coverage line present.
+Battery: task 037 (034 template, JOBS=3, ports 8831–8843; launch
+coordinated with the user) RAN on the runner — **13/13 GREEN, DONE,
+847 s wall clock** (results/037-p26-math-grammar/verdicts.txt). Every
+leg div=0, blk_mismatch=0, gaps_over_k=0, endpoints as wanted; the
+strict K=1 leg k1fo 389,610 pairs max_gap=1; play (book) 1,870,514
+pairs, play-st (stock) 3,593,858 pairs. `embeds_book=8529 (bar <=
+8600)`. Coverage across the battery: 66/77 newly-lowered classes live
+in 2,431 executed IR blocks (WSGT 330/2268, WSGTI 314/2027, WMUL
+274/1805, LWADD 234/1528, XJMP 126/1160, MOV.L# 133/669, WSZB 106/361,
+XNDO 43/176, WDIV 11/87, CVWN 24/216, borrow-bracket blocks 4/14…);
+the same 11 census-carried classes unreached as locally. Regression
+lines unchanged from 035 (armed-pc drops 1/1/0/0; carry-consumer-site
+pattern identical). Landing bar MET.
 
 ## 6. Corrections recorded (METHOD §10/§11)
 
@@ -190,7 +198,7 @@ analysis (MathDesign §5), a pure arithmetic-shift primary (unneeded).
 
 ## 8. TODO / next session
 
-1. Task 037 launch (coordinated) → verdict appended here.
+1. Review + integrate p26-math-grammar (037 green, §5).
 2. User's manual checks (WMOVR, WHLV, WDIV, Nova/narrow high half) →
    findings recorded here; only an emulator change would follow.
 3. Nova load forms (67) once the high-half convention is settled.
