@@ -38,8 +38,8 @@ Two kinds of string value:
     always have a declared capacity and are located. What DOES outlive a
     block is the compiler's STACK CLAIM for a dynamic-length result (WMSP
     before the pieces, STASP after the consuming call) — that is storage,
-    not a value, and it is NOT in the IR text: it rides on the consuming
-    `rt_call` as emitter metadata (§5).
+    not a value, and it is NOT in the IR text at all: the checker tracks
+    it through a site map (§5–§6).
 
 Primitives (statement level unless noted):
 
@@ -58,7 +58,8 @@ append([@a, n], <piece>)       ; a piece WCMV'd into a located scratch buffer
 words(@dst, n) = words(@src, n); WBLM; the 6 self-overlapping forms render as
 fill(@dst, n, 0)               ;   fill (F6) — same helper, sequential order
 rt_call ?X(sN, …)              ; an sN passed to the runtime: the executor materialises
-                               ;   its varying image on the stack (see §5 metadata)
+                               ;   its varying image in the ARENA (0x75000000) and pushes
+                               ;   that address (§5)
 rt_call ?X([@a, n varying], …) ; a located string: its address is pushed, as today
 ```
 
@@ -110,35 +111,22 @@ EmulatorDivergences.md). No deadness argument is needed anywhere.
   live here, as separate statements on separate blocks.
 - **WMSP temporaries** (57 claims, 19 groups): in the IR text the group
   is just `sN = … + …; rt_call ?WRITE_SCREEN(sN, …)` — no claim, no
-  release, no cleanup (RULED, Sep 5: temps are values that die with the
-  block). The master's stack shape is EMITTER METADATA on the rt_call,
-  in the argmap/pushmap tradition: `stack=<wides expr>` (the group's
-  TOTAL claim, e.g. ⌈(len+6)/4⌉+⌈(len+29)/4⌉+⌈(len+31)/4⌉ — the census's
-  size(wides) column summed) and `release@<pc>` (the STASP). The
-  executor materialises sN's varying image at the top of a claim of
-  exactly <wides> (same helper, same guard), pushes its address, and
-  drops the claim when it reaches the release pc. wsp therefore agrees
-  at the post-call entry and after the STASP; the bytes the runtime
-  reads are identical; residues per §4. The C++ translation ignores the
-  metadata: `write_screen("Hi " + name)`.
+  release, no metadata (RULED, Sep 5). An sN that is passed to an rt_call
+  is materialised as a varying image in the **arena** — a heap in the
+  otherwise unused emulated segment 0x75000000 (first-fit, deterministic)
+  — and its arena address is pushed; sN that are only assigned or
+  compared never touch memory. Lifetime: the arena string is freed when
+  the master's corresponding claim is released (the STASP hook that also
+  unbinds the triple, §6); WRTN sweeps anything still bound in the frame.
+  The bytes the runtime reads are identical; wsp and the AC residues
+  differ from the master's (its temp is on its stack) and are compared
+  through the translation of §6.
 - The master is not changed. Stock mode is the only mode for strings.
+  The same arena + translation later serves the frames project when the
+  stack itself becomes virtual.
 
-**Future (not this family)**: when frames move to the clone side and the
-stack becomes virtual, dynamic temporaries can move to a heap arena
-(0x75000000) with a `(clone_addr, master_addr, length)` triple table
-translating addresses at compare time. That design is recorded in §6b
-for that day; it is NOT needed to retire the string family.
+## 6. Verification — the translated compare — RULED (shape); OPEN (details)
 
-## 6. Verification — RULED
-
-Unchanged from every prior project: the strict surface (ac0–ac3, c, ovr,
-wsp, block ordinal) compares raw at every listed block entry; located
-assignments and claimed temporaries write master-identical bytes at
-master-identical addresses; a memory footprint hash over string-statement
-writes (both sides) is an OPTIONAL extra oracle, K-gated. No masks, no
-translation.
-
-## 6b. FUTURE — the translated compare (recorded for the frames project)
 
 A **triple table** `(clone_addr, master_addr, length)` sorted by
 clone_addr:
@@ -148,10 +136,12 @@ clone_addr:
   master; invariants asserted on insert: clone ranges disjoint and inside
   the arena, live master ranges disjoint.
 - Binding is dynamic: the master's existing per-pc hooks fire at the
-  mapped WMSP pcs and record `[wsp_before+2, wsp_after]`; the STASP hook
-  UNBINDS the master half of every triple in the group (the master reuses
-  that stack region afterwards) — the clone's arena value stays live until
-  WRTN. A translation hitting an unbound-on-master triple after its STASP
+  mapped WMSP pcs and record `[wsp_before+2, wsp_after]`; the arena sN
+  materialised for the group's rt_call binds to the group's LAST claim
+  (the temp whose address the master pushes — census: the +5/+6 one with
+  room for the length word); the STASP hook UNBINDS the group's triples
+  and FREES the clone's arena string (same moment the master frees its
+  temp); WRTN sweeps anything still bound in the frame. A translation hitting an unbound-on-master triple after its STASP
   is a MISMATCH (the compiler never reads a released temp; a hit is an
   emitter bug). The clone reports its arena allocation per variable and
   the frame free at WRTN.
@@ -183,22 +173,26 @@ listed, embedded.
 ## 8. Projects — RULED (split), sequence LEAN
 
 - **P30 — the C++ string library** (no IR, no emulator behaviour
-  change; ships dark): `hw/strings/`: EagleString (value type; construct from literal/located/char; concat;
+  change; ships dark): `hw/strings/`: Arena (first-fit over the 0x75
+  segment inside Memory; deterministic; free by variable), EagleString (value type; construct from literal/located/char; concat;
   assign-to-located with pad/truncate and the varying length word;
   blank-padded equality; residue computation for each replaced
-  instruction), and unit tests in the
+  instruction), TripleTable (§6), and unit tests in the
   tests/helpers_selftest.cpp style: residues checked against
   EagleSpecial's WCMV/WCMP/WBLM on random operands; assignment/compare
-  against a reference. One K=1 stock gate to prove the
+  against a reference; table invariants. One K=1 stock gate to prove the
   library's presence changes nothing.
 - **P31 — located slice**: ir 5 grammar for §1; IRExec on the library;
   `s = 'lit'` and `s = t` into fixed/varying targets (≈720 sites);
   residues per §4. NO arena, NO checker change. Battery.
 - **P32 — frame scratch chains**: `append` to located scratch buffers, per-piece, conditional pieces, CALLRESULT/SUBSTR/WSTB pieces, tail
   splits (≈900 sites). Still no arena, no checker change. Battery.
-- **P33 — WMSP temporaries**: the 19 groups as `sN = …; rt_call ?X(sN)`
-  with the stack/release metadata; executor materialisation through the
-  stack helpers. 57 claims. No checker change. Battery.
+- **P33 — WMSP temporaries**: the 19 groups as `sN = …; rt_call ?X(sN)`;
+  arena materialisation, the site map (57 claim pcs, 19 release pcs), the
+  Lockstep translation layer (§6) and memory oracle. 57 claims. The
+  checker work lands LAST, for the smallest population, with everything
+  else green. Battery + a leg that forces an unbound-triple mismatch to
+  prove the checks fire.
 - **P34 — the rest**: WCMP, WBLM/fill, `?UNSIGNED_TO_CHAR` as a
   constructor, LOCK_FILE constants; then the string family is gone
   (embeds ≈460: frames, syscalls, float, divides).
@@ -219,7 +213,8 @@ assumption to verify in P31's census.
 
 ## 10. Open items for the P30/P31 plan gates
 
-- Whether the optional footprint-hash oracle (§6) is worth landing in P31.
+- Arena size and allocator policy (first-fit ruled; exhaustion = loud fault).
+- Where the memory oracle runs (§6 OPEN).
 - The 28 unresolved destinations (all frame/argument; 3 TERRITORY_MAP
   by-reference array writes need the callers read).
 - `substr` with computed byte offsets: grammar form for `bp + expr`.
