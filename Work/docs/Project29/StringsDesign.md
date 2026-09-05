@@ -34,11 +34,14 @@ Two kinds of string value:
     is stored or passed before the block ends.
   - `pN` — PERSISTENT (routine-scoped) strings with explicit lifetime:
     `pN = create(<size expr>)` at the WMSP claim pc (the arena allocation;
-    the master-side binding hook fires at the same pc), and
-    `destroy(pA, pB, …)` at the STASP that releases the group. Live
-    across blocks between the two. These are the WMSP temporaries and
-    ONLY those (57 creates, 19 destroys) — see §5 for why the frame
-    scratch chains do not need them.
+    the master-side binding hook fires at the same pc). The clone's value
+    lives until the routine RETURNS: the executor frees a frame's pN at
+    WRTN (keyed by wfp), so the C++ translation is a local std::string
+    with RAII — there is NO destroy statement in the IR (RULED, Sep 5).
+    The STASP that releases the master's claim group is checker
+    bookkeeping only (§6): it unbinds the master half of the triple. These
+    are the WMSP temporaries and ONLY those (57 creates) — see §5 for why
+    the frame scratch chains do not need them.
 
 Primitives (statement level unless noted):
 
@@ -50,7 +53,7 @@ sN = sM + <piece>              ; concat; a piece is a literal, a located read,
                                ;   or substr(<string>, i, n)
 pN = create(<wides>)           ; WMSP claim: arena allocation, master binding
 pN = pN + <piece>              ; append to a persistent string
-destroy(pA, pB, …)             ; STASP release of a claim group
+                               ; (no destroy: pN dies at WRTN; STASP is checker-side)
 append([@a, n], <piece>)       ; a piece WCMV'd into a located scratch buffer
                                ;   (frame scratch chains — §5); residues per §4
 [@a, n] = <string>             ; PL/I assignment: truncate or blank-pad to n
@@ -131,8 +134,13 @@ clone_addr:
   master; invariants asserted on insert: clone ranges disjoint and inside
   the arena, live master ranges disjoint.
 - Binding is dynamic: the master's existing per-pc hooks fire at the
-  mapped WMSP pcs and record `[wsp_before+2, wsp_after]`; STASP unbinds
-  the group. The clone reports its arena allocation/free per variable.
+  mapped WMSP pcs and record `[wsp_before+2, wsp_after]`; the STASP hook
+  UNBINDS the master half of every triple in the group (the master reuses
+  that stack region afterwards) — the clone's arena value stays live until
+  WRTN. A translation hitting an unbound-on-master triple after its STASP
+  is a MISMATCH (the compiler never reads a released temp; a hit is an
+  emitter bug). The clone reports its arena allocation per variable and
+  the frame free at WRTN.
   Static input: a map artifact in the pushmap style (57 claim pcs, 19
   release pcs, variable ids) with provenance headers.
 - **compare_pair**: an AC value inside the arena segment translates
@@ -176,7 +184,7 @@ listed, embedded.
   residues per §4. NO arena, NO checker change. Battery.
 - **P32 — frame scratch chains**: `append` to located scratch buffers, per-piece, conditional pieces, CALLRESULT/SUBSTR/WSTB pieces, tail
   splits (≈900 sites). Still no arena, no checker change. Battery.
-- **P33 — WMSP temporaries**: `pN` with create/destroy, the arena live, the map artifact, the
+- **P33 — WMSP temporaries**: `pN` with create (freed at WRTN), the arena live, the map artifact, the
   Lockstep translation layer and memory oracle (§6), `rt_call` with an
   arena argument. 57 claims. The checker work lands LAST, for the
   smallest population, with everything else green. Battery + a leg that
