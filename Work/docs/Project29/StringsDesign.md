@@ -32,11 +32,13 @@ Two kinds of string value:
     terminator. Never live at a listed block entry, so they need no
     arena and no mapping — they are pure notation for an expression that
     is stored or passed before the block ends.
-  - `pN` — PERSISTENT (routine-scoped) strings: live across blocks —
-    the WMSP temporaries and the frame-scratch chains built through
-    conditional pieces. Defined at the first piece or claim, dead at the
-    region end (§2). These are the ones that need a home the master can
-    be compared against (§5).
+  - `pN` — PERSISTENT (routine-scoped) strings with explicit lifetime:
+    `pN = create(<size expr>)` at the WMSP claim pc (the arena allocation;
+    the master-side binding hook fires at the same pc), and
+    `destroy(pA, pB, …)` at the STASP that releases the group. Live
+    across blocks between the two. These are the WMSP temporaries and
+    ONLY those (57 creates, 19 destroys) — see §5 for why the frame
+    scratch chains do not need them.
 
 Primitives (statement level unless noted):
 
@@ -44,8 +46,13 @@ Primitives (statement level unless noted):
 sN = "literal"                 ; from quest.strings (address + length recorded)
 sN = [@a, n] | [@a, n varying] ; read a located string (expression)
 sN = sM + <piece>              ; concat; a piece is a literal, a located read,
-                               ;   another sK, char(x) (one byte: the WSTB idiom),
+                               ;   another sK/pK, char(x) (one byte: the WSTB idiom),
                                ;   or substr(<string>, i, n)
+pN = create(<wides>)           ; WMSP claim: arena allocation, master binding
+pN = pN + <piece>              ; append to a persistent string
+destroy(pA, pB, …)             ; STASP release of a claim group
+append([@a, n], <piece>)       ; a piece WCMV'd into a located scratch buffer
+                               ;   (frame scratch chains — §5); residues per §4
 [@a, n] = <string>             ; PL/I assignment: truncate or blank-pad to n
 [@a, n varying] = <string>     ; ... and write the length word = min(len, n)
 <string> == <string>           ; expression; WCMP semantics: blank-padded
@@ -98,9 +105,13 @@ EmulatorDivergences.md). No deadness argument is needed anywhere.
 ## 5. Where unlimited strings live — RULED
 
 - **Frame scratch chains** (≈500 pieces): the master WCMVs pieces into a
-  fixed CHAR(n) frame local. The clone does the same bytes at the same
-  address — `[@fp+k, n] = p0 + p1 + …` built piece by piece per §3. No
-  arena, no mapping: memory agrees byte for byte.
+  fixed CHAR(n) frame local. That buffer IS a located string, so the
+  chain is `append([@fp+k, n], piece)` per piece — same bytes, same
+  address, same time (§3) — with the final `[@v, m varying] =
+  [@fp+k, len]` copy-out where the compiler emits one. No `pN`, no arena,
+  no mapping: memory agrees byte for byte, and the region bookkeeping is
+  just the ac2 continuation (§4). The appended length is tracked by the
+  emitter from the residues, never guessed.
 - **WMSP temporaries** (57 claims, 19 groups; all `pN`): the clone keeps them in
   the **arena** — a heap in an otherwise unused emulated segment
   (0x75000000), first-fit allocation, deterministic across runs, freed
@@ -163,10 +174,9 @@ listed, embedded.
 - **P31 — located slice**: ir 5 grammar for §1; IRExec on the library;
   `s = 'lit'` and `s = t` into fixed/varying targets (≈720 sites);
   residues per §4. NO arena, NO checker change. Battery.
-- **P32 — frame scratch chains**: routine-scoped `pN`, per-piece
-  appends, conditional pieces, CALLRESULT/SUBSTR/WSTB pieces, tail
+- **P32 — frame scratch chains**: `append` to located scratch buffers, per-piece, conditional pieces, CALLRESULT/SUBSTR/WSTB pieces, tail
   splits (≈900 sites). Still no arena, no checker change. Battery.
-- **P33 — WMSP temporaries**: the arena live, the map artifact, the
+- **P33 — WMSP temporaries**: `pN` with create/destroy, the arena live, the map artifact, the
   Lockstep translation layer and memory oracle (§6), `rt_call` with an
   arena argument. 57 claims. The checker work lands LAST, for the
   smallest population, with everything else green. Battery + a leg that
