@@ -38,6 +38,11 @@ Two kinds of string value:
     lives until the routine RETURNS: the executor frees a frame's pN at
     WRTN (keyed by wfp), so the C++ translation is a local std::string
     with RAII — there is NO destroy statement in the IR (RULED, Sep 5).
+    A `pN = create(…)` on a pN that is already live FREES the previous
+    value first (assignment semantics: `MSG = a‖b‖c; PUT MSG; MSG = d‖e;`
+    gives MSG several lives, each its own claim group on the master; a
+    create inside a loop must not grow the arena). Each life binds its
+    own triple at its WMSP pc.
     The STASP that releases the master's claim group is checker
     bookkeeping only (§6): it unbinds the master half of the triple. These
     are the WMSP temporaries and ONLY those (57 creates) — see §5 for why
