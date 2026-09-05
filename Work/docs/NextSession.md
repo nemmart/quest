@@ -3,13 +3,13 @@
 ## P26 IMPLEMENTED (Sep 5 2026) — read this first, then the brief below
 - Roadmap item 1 (the P26 grammar package) is IMPLEMENTED on branch
   p26-math-grammar: IR.md is now ir 3; embeds 27,600 → 8,529 (bar
-  8,600); local K=1 gates 3/3 green; battery 037 drafted, launch
-  coordinated with the user. Full record: docs/Project26/{Census,
+  8,600); local K=1 gates 3/3 green; battery 037 13/13 GREEN on the
+  runner (0 div everywhere; REPORT §5). Awaiting review + integration. Full record: docs/Project26/{Census,
   REPORT,REPORT_worklog}.md. Roadmap item 3 (de-embedding) is thereby
   largely delivered: everything left embedded is out of P26 scope by
   construction (list in REPORT §8.4) except the 67 Nova load forms
   (waiting on the user's manual check) and 1 LNDO (dis rendering gap).
-- NEXT: (a) 037 verdict → REPORT §5; (b) the user's manual findings
+- NEXT: (a) review + integrate the branch; (b) the user's manual findings
   (WMOVR/WHLV/WDIV/Nova high half) → REPORT §3; (c) roadmap item 2 =
   P27 DERR cluster compression (2,273 DERR embeds; the first customer
   of the translations-ship-their-sync-list contract); (d) the XJMP CFG

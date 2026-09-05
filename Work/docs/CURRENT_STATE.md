@@ -1,6 +1,6 @@
 # Where things stand
 
-## ★ P26 IMPLEMENTED — the math & control grammar (ir 3); embeds 27,600 → 8,529; battery 037 PENDING (Sep 5 2026)
+## ★ P26 LANDED ON BRANCH — the math & control grammar (ir 3); embeds 27,600 → 8,529; battery 037 13/13 GREEN (Sep 5 2026; awaiting review + integration)
 
 Branch p26-math-grammar (based on main). Plan gate Sep 5: census of
 record docs/Project26/Census.md, rulings R1–R10 all as recommended
@@ -34,10 +34,13 @@ fixes the CFG tool); LNDO rendering gap; three 16-bit result
 conventions in the emulator (Nova zero / narrow_add sign / narrow_mul
 zero + `ovr = 1`). Manual checks owed by the user: WMOVR, WHLV, WDIV,
 Nova high half — emulator remains the law. Deviation recorded: slices
-implemented in one emitter pass and gated whole, not per slice. Task
-037 (034 template, JOBS=3, embed + coverage lines) DRAFTED, launch
-being coordinated with the user before push. NEXT: 037 verdict; Nova
-loads after the manual ruling; P27 = DERR cluster compression.
+implemented in one emitter pass and gated whole, not per slice. Battery
+037 (034 template, JOBS=3) RAN: 13/13 GREEN, 0 div on every leg,
+strict K=1 leg 389,610 pairs, play legs 1.87M (book) / 3.59M (stock)
+pairs, embeds_book=8529, 66/77 classes live in 2,431 executed blocks,
+847 s wall clock (REPORT §5). NEXT: planning-session review +
+integration to main; Nova loads after the manual ruling; P27 = DERR
+cluster compression.
 
 ## ★ ROADMAP SET (Aug 29 2026, evening — project sleeping for a week+)
 
