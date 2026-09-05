@@ -1,0 +1,42 @@
+== Task 037 P26 math-grammar battery (JOBS=3) ==
+inj: armed-pc block drops=1 (want 1)
+abort: armed-pc block drops=1 (want 1)
+inj-emu: armed-pc block drops=0 (want 0)
+abort-emu: armed-pc block drops=0 (want 0)
+-- carry-consumer-site block coverage (CarryCensus.md; book/stock legs) --
+70160E64:2 70160E65:2 70160E73:2 70160E74:2 7016E75B:0 7016E75C:0 7016E76A:0 7016E76B:0 7015E701:0 701644C5:0 70168107:0 7016A5E5:0 7016B852:0 7016DB9A:0 7016DCD0:0 7016DCEF:0 70171734:0 70171984:0 70171E2B:0 7017200B:0 701723F2:0 701727AB:0 70177336:0 701785C8:0 7017860D:0 70178738:0 70179BFC:0 70169B56:8 
+-- P26 embed census (IR.md ir 3; Census.md) --
+embeds_book=8529 (bar <= 8600)
+-- P26 newly-lowered mnemonic coverage (book+stock legs) --
+P26 newly-lowered mnemonic coverage (blocks live/blocks carrying, 2453 live blocks):
+  WSGT 331/2268  WSGTI 317/2027  WMUL 276/1805  LWADD 234/1528  XJMP 130/1160  LDAFP 118/1053  WNADI 154/735  MOV.L# 131/669  WADC 82/646  WSEQI 106/615  WSNEI 86/415  WSZB 106/361  WUGTI 35/279  CVWN 26/216  WSEQ 66/202  WCOM 37/200  WSLE 47/188  WSGE 54/185  XNDO 43/176  MOV.# 41/172  WINC 23/164  XWADD 14/143  WBTO 22/140  WSNE 16/115  WBTZ 20/106  WSLEI 25/97  WDIV 13/87  NADI 3/85  ADD.O# 23/81  XNSUB 6/81  WIOR 23/78  WAND 17/72  WADI 14/72  XNADI 9/69  XNADD 3/69  NSBI 11/65  NADDI 4/58  WSLT 15/46  XWMUL 2/45  WLSI 6/43  WPSH 10/39  COM.# 3/32  XWDO 3/30  XNSBI 2/26  NSUB 6/26  NNEG 0/25  SEX 2/23  LDASP 5/22  NMUL 5/21  ADD.# 0/19  WMOVR 4/19  WXOR 4/18  WNEG 5/16  NADD 1/16  WHLV 1/15  WULEI 4/14  WPOP 4/14  WANDI 2/10  WUSGE 1/9  LNADI 0/8  WXCH 3/7  LNADD 1/5  ANDI 4/4  LNSBI 1/3  ZEX 3/3  WLSHI 2/2  XWADI 0/2  XWSUB 0/2  MOV.R# 1/2  WIORI 0/2  NEG.L# 1/1  WSKBO 0/1  XNISZ 0/1  LNSUB 0/1  CRYTO 1/1  XNMUL 0/1  XWSBI 0/1
+  classes live: 66/77; unreached: ADD.# LNADI LNSUB NNEG WIORI WSKBO XNISZ XNMUL XWADI XWSBI XWSUB
+wall_clock_seconds=848
+fo        cfg=book  K=50  div=0   guard=0  liberr_native=1  pairs=8336 blk_equal=8336 blk_mismatch=0 k_heartbeats=7697 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+m         cfg=book  K=50  div=0   guard=0  liberr_native=1  pairs=7426 blk_equal=7426 blk_mismatch=0 k_heartbeats=6947 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=I.STOP leg=OK
+inj       cfg=book  K=50  div=0   guard=0  liberr_native=0  pairs=7504 blk_equal=7504 blk_mismatch=0 k_heartbeats=6945 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=FATAL leg=FAIL
+abort     cfg=book  K=50  div=0   guard=0  liberr_native=0  pairs=6446 blk_equal=6446 blk_mismatch=0 k_heartbeats=6240 gaps_over_k=0 max_gap=50 floor=10 OK end=WORLD-ABORT want=WORLD-ABORT leg=OK
+play      cfg=book  K=50  div=0   guard=0  liberr_native=0  pairs=1862800 blk_equal=1862800 blk_mismatch=0 k_heartbeats=1861934 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+inj3      cfg=book  K=50  div=0   guard=0  liberr_native=1  pairs=7345 blk_equal=7345 blk_mismatch=0 k_heartbeats=6864 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=clean,I.STOP leg=OK
+k1fo      cfg=book  K=1   div=0   guard=0  liberr_native=1  pairs=389561 blk_equal=389561 blk_mismatch=0 k_heartbeats=388957 gaps_over_k=0 max_gap=1 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+fo-st     cfg=stock K=50  div=0   guard=0  liberr_native=1  pairs=7797 blk_equal=7797 blk_mismatch=0 k_heartbeats=7158 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+play-st   cfg=stock K=50  div=0   guard=0  liberr_native=0  pairs=3630912 blk_equal=3630912 blk_mismatch=0 k_heartbeats=3629980 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+fo-emu    cfg=emu   K=50  div=0   guard=0  liberr_native=1  pairs=8320 blk_equal=8320 blk_mismatch=0 k_heartbeats=7681 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+m-emu     cfg=emu   K=50  div=0   guard=0  liberr_native=1  pairs=7518 blk_equal=7518 blk_mismatch=0 k_heartbeats=7039 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=I.STOP leg=OK
+inj-emu   cfg=emu   K=50  div=0   guard=0  liberr_native=0  pairs=7649 blk_equal=7649 blk_mismatch=0 k_heartbeats=7185 gaps_over_k=0 max_gap=50 floor=1000 OK end=FATAL want=FATAL leg=OK
+abort-emu cfg=emu   K=50  div=0   guard=0  liberr_native=0  pairs=6206 blk_equal=6206 blk_mismatch=0 k_heartbeats=6000 gaps_over_k=0 max_gap=50 floor=10 OK end=WORLD-ABORT want=WORLD-ABORT leg=OK
+== Task 037 P26 math-grammar battery (JOBS=3) ==
+inj: armed-pc block drops=1 (want 1)
+abort: armed-pc block drops=1 (want 1)
+inj-emu: armed-pc block drops=0 (want 0)
+abort-emu: armed-pc block drops=0 (want 0)
+-- carry-consumer-site block coverage (CarryCensus.md; book/stock legs) --
+70160E64:2 70160E65:2 70160E73:2 70160E74:2 7016E75B:0 7016E75C:0 7016E76A:0 7016E76B:0 7015E701:0 701644C5:0 70168107:0 7016A5E5:0 7016B852:0 7016DB9A:0 7016DCD0:0 7016DCEF:0 70171734:0 70171984:0 70171E2B:0 7017200B:0 701723F2:0 701727AB:0 70177336:0 701785C8:0 7017860D:0 70178738:0 70179BFC:0 70169B56:8 
+-- P26 embed census (IR.md ir 3; Census.md) --
+embeds_book=8529 (bar <= 8600)
+-- P26 newly-lowered mnemonic coverage (book+stock legs) --
+P26 newly-lowered mnemonic coverage (blocks live/blocks carrying, 2453 live blocks):
+  WSGT 331/2268  WSGTI 317/2027  WMUL 276/1805  LWADD 234/1528  XJMP 130/1160  LDAFP 118/1053  WNADI 154/735  MOV.L# 131/669  WADC 82/646  WSEQI 106/615  WSNEI 86/415  WSZB 106/361  WUGTI 35/279  CVWN 26/216  WSEQ 66/202  WCOM 37/200  WSLE 47/188  WSGE 54/185  XNDO 43/176  MOV.# 41/172  WINC 23/164  XWADD 14/143  WBTO 22/140  WSNE 16/115  WBTZ 20/106  WSLEI 25/97  WDIV 13/87  NADI 3/85  ADD.O# 23/81  XNSUB 6/81  WIOR 23/78  WAND 17/72  WADI 14/72  XNADI 9/69  XNADD 3/69  NSBI 11/65  NADDI 4/58  WSLT 15/46  XWMUL 2/45  WLSI 6/43  WPSH 10/39  COM.# 3/32  XWDO 3/30  XNSBI 2/26  NSUB 6/26  NNEG 0/25  SEX 2/23  LDASP 5/22  NMUL 5/21  ADD.# 0/19  WMOVR 4/19  WXOR 4/18  WNEG 5/16  NADD 1/16  WHLV 1/15  WULEI 4/14  WPOP 4/14  WANDI 2/10  WUSGE 1/9  LNADI 0/8  WXCH 3/7  LNADD 1/5  ANDI 4/4  LNSBI 1/3  ZEX 3/3  WLSHI 2/2  XWADI 0/2  XWSUB 0/2  MOV.R# 1/2  WIORI 0/2  NEG.L# 1/1  WSKBO 0/1  XNISZ 0/1  LNSUB 0/1  CRYTO 1/1  XNMUL 0/1  XWSBI 0/1
+  classes live: 66/77; unreached: ADD.# LNADI LNSUB NNEG WIORI WSKBO XNISZ XNMUL XWADI XWSBI XWSUB
+wall_clock_seconds=848
+PARALLEL BATTERY RED (1 fails)

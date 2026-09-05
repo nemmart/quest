@@ -1,10 +1,15 @@
 // IRExec — the clone-side IR interpreter.
 //
-// THE SPEC IS docs/IR.md (consolidated, normative; spec-wins).  The
-// grammar parsed here, the wp/bp/M8 semantics (P25 byte addressing),
-// the segment-wrap index rule, the refuse-on-anything loader posture,
-// and the terminator discipline are all defined there; this file is
-// the implementation.  Where an operation corresponds to machine
+// THE SPEC IS docs/IR.md (consolidated, normative; spec-wins) — ir 3
+// since Project 26.  The grammar parsed here (goto [labels] e, strict
+// 0/1 booleans, s/u comparisons, class-homogeneous chains, the
+// statement-root effectful family add/sub/mul/div/cvwn/ash/nadd/nsub/
+// nmul, t-places, c/ovr and stack-register reads, ind()), the wp/bp/M8
+// semantics (P25 byte addressing), the segment-wrap index rule, the
+// refuse-on-anything loader posture, and the terminator discipline are
+// all defined there; this file is the implementation.  Every loud
+// executor fault (goto index, zero divisor, non-0/1 boolean) is listed
+// in IR.md §5.  Census of what is lowered: docs/Project26/Census.md.  Where an operation corresponds to machine
 // behavior, call the SAME emulator code paths the instruction would
 // (Machine/Memory/EagleInstruction helpers) — never a local formula.
 // Byte-EA derivation record: docs/Project25/ByteEA.md.
@@ -26,6 +31,8 @@
 #include <fstream>
 #include <sstream>
 #include <stdexcept>
+#include <climits>
+#include <cctype>
 
 // SHA-256 (compact, public-domain style) — provenance check only.
 namespace {
@@ -106,18 +113,26 @@ IRExec* IRExec::instance = nullptr;
 // ------------------------------------------------------------ expression
 
 struct IRExec::Expr {
-  enum Kind { CONST, AC, MEM16, MEM32, MEM8, RESOLVE,
-              ADD, SUB, AND, OR, XOR, MUL,
-              FADD, FSUB,                 // #+  #-
+  enum Kind { CONST, AC, TPLACE, CFLAG, OVRFLAG, WFP, WSP, WSB, WSL,
+              MEM16, MEM32, MEM8, RESOLVE, IND,
+              ADD, SUB, AND, OR, XOR, MUL, DIVS, DIVU, MODS, MODU,
+              EQ, NE, LTS, LES, GTS, GES, LTU, LEU, GTU, GEU,
+              LAND, LOR, LNOT, COM,       // && || ! ~
               WP, BP,                     // P25: wp(b,d) bp(b,d) pointer builders
+              TF, LSH,                    // P26: tf(e), lsh(e, amount) (pure, flag-free)
               SX16, ZX16, ZX8, TRUNC16 } kind;
-  uint32_t value = 0;                     // CONST value / AC index
+  uint32_t value = 0;                     // CONST value / AC index / t index
   std::shared_ptr<Expr> a, b;
 };
 
 namespace {
 using Expr = IRExec::Expr;
 using P = std::shared_ptr<Expr>;
+
+// Operator classes: a flat chain must be homogeneous (docs/IR.md §5 —
+// emitters parenthesize; the loader refuses mixed chains rather than
+// owning a precedence table).  A comparison chain has exactly one op.
+enum OpClass { OC_NONE, OC_ARITH, OC_CMP, OC_BOOL };
 
 struct Parser {
   const char* s;
@@ -133,37 +148,72 @@ struct Parser {
     if (strncmp(s, t, n) == 0) { s += n; return true; }
     return false;
   }
+  // keyword: literal followed by a non-identifier char (so "wsp" != "wspx")
+  bool kw(const char* t) {
+    ws(); size_t n = strlen(t);
+    if (strncmp(s, t, n) != 0) return false;
+    char c = s[n];
+    if (isalnum(uchar(c)) || c == '_') return false;
+    s += n; return true;
+  }
+  static unsigned char uchar(char c) { return static_cast<unsigned char>(c); }
   P node(Expr::Kind k, P a = nullptr, P b = nullptr, uint32_t v = 0) {
     P e = std::make_shared<Expr>(); e->kind = k; e->a = a; e->b = b; e->value = v;
     return e;
   }
+  P fn1(Expr::Kind k) { P e = expr(); if (!lit(")")) bad("expected )"); return node(k, e); }
+  P fn2(Expr::Kind k, const char* name) {
+    P a = expr(); if (!lit(",")) bad(std::string(name) + " expects two args");
+    P b = expr(); if (!lit(")")) bad("expected )");
+    return node(k, a, b);
+  }
+  bool at_effectful() {                   // effectful op names: root only (§5)
+    ws();
+    static const char* names[] = {"add(", "sub(", "mul(", "div(", "cvwn(", "ash(",
+                                  "nadd(", "nsub(", "nmul(", nullptr};
+    for (int i = 0; names[i]; i++)
+      if (strncmp(s, names[i], strlen(names[i])) == 0) return true;
+    return false;
+  }
   P primary() {
     ws();
+    if (at_effectful()) bad("effectful op (add/sub/mul/div/cvwn/ash/nadd/nsub/nmul) is statement-root only");
     if (lit("(")) { P e = expr(); if (!lit(")")) bad("expected )"); return e; }
+    if (lit("~")) return node(Expr::COM, primary());          // word complement
+    if (lit("!")) return node(Expr::LNOT, primary());         // boolean not (0/1 operand)
     if (lit("R[")) { P e = expr(); if (!lit("]")) bad("expected ]"); return node(Expr::RESOLVE, e); }
     if (lit("M32[")) { P e = expr(); if (!lit("]")) bad("expected ]"); return node(Expr::MEM32, e); }
     if (lit("M16[")) { P e = expr(); if (!lit("]")) bad("expected ]"); return node(Expr::MEM16, e); }
     if (lit("M8[")) { P e = expr(); if (!lit("]")) bad("expected ]"); return node(Expr::MEM8, e); }
     if (lit("M1[")) bad("M1 not implemented (IQ3)");
-    if (lit("wp(")) {                        // P25 word-pointer builder
-      P a = expr(); if (!lit(",")) bad("wp expects two args");
-      P b = expr(); if (!lit(")")) bad("expected )");
-      return node(Expr::WP, a, b);
-    }
-    if (lit("bp(")) {                        // P25 byte-pointer builder
-      P a = expr(); if (!lit(",")) bad("bp expects two args");
-      P b = expr(); if (!lit(")")) bad("expected )");
-      return node(Expr::BP, a, b);
-    }
-    if (lit("sx16(")) { P e = expr(); if (!lit(")")) bad("expected )"); return node(Expr::SX16, e); }
-    if (lit("zx16(")) { P e = expr(); if (!lit(")")) bad("expected )"); return node(Expr::ZX16, e); }
-    if (lit("zx8(")) { P e = expr(); if (!lit(")")) bad("expected )"); return node(Expr::ZX8, e); }
-    if (lit("trunc16(")) { P e = expr(); if (!lit(")")) bad("expected )"); return node(Expr::TRUNC16, e); }
+    if (lit("wp(")) return fn2(Expr::WP, "wp");                // P25 word-pointer builder
+    if (lit("bp(")) return fn2(Expr::BP, "bp");                // P25 byte-pointer builder
+    if (lit("lsh(")) return fn2(Expr::LSH, "lsh");             // P26 pure logical shift (ISA amount)
+    if (lit("ind(")) return fn1(Expr::IND);                    // P26 resolve-from-value
+    if (lit("tf(")) return fn1(Expr::TF);
+    if (lit("sx16(")) return fn1(Expr::SX16);
+    if (lit("zx16(")) return fn1(Expr::ZX16);
+    if (lit("zx8(")) return fn1(Expr::ZX8);
+    if (lit("trunc16(")) return fn1(Expr::TRUNC16);
+    if (lit("and(") || lit("or(") || lit("xor(") || lit("com("))
+      bad("functional and/or/xor/com are retired — use & | ^ ~");
+    if (kw("wfp")) return node(Expr::WFP);
+    if (kw("wsp")) return node(Expr::WSP);
+    if (kw("wsb")) return node(Expr::WSB);
+    if (kw("wsl")) return node(Expr::WSL);
+    if (kw("ovr")) return node(Expr::OVRFLAG);
+    if (kw("c"))   return node(Expr::CFLAG);
     if (lit("ac")) {
       if (*s < '0' || *s > '3') bad("bad ac index");
       return node(Expr::AC, nullptr, nullptr, uint32_t(*s++ - '0'));
     }
-    if (*s == 't') bad("t-places are P24+, invalid in Phase 1");
+    if (*s == 't' && s[1] >= '1' && s[1] <= '9') {            // t-place t1..t255
+      s++; char* end; unsigned long v = strtoul(s, &end, 10);
+      if (v < 1 || v > 255) bad("t-place index must be 1..255");
+      s = end;
+      if (isalnum(uchar(*s)) || *s == '_') bad("bad t-place name");
+      return node(Expr::TPLACE, nullptr, nullptr, uint32_t(v));
+    }
     ws();
     bool neg = false;
     if (*s == '-') { neg = true; s++; }
@@ -188,21 +238,44 @@ struct Parser {
     }
     bad("expected primary");
   }
+  // One flat left-associative chain of a single operator class.
   P expr() {
     P left = primary();
+    OpClass cls = OC_NONE; int ncmp = 0;
     for (;;) {
       ws();
-      Expr::Kind k;
-      if      (lit("#+")) k = Expr::FADD;
-      else if (lit("#-")) k = Expr::FSUB;
-      else if (lit("#*") || lit("#/")) bad("#*/#/ not executable in Phase 1");
-      else if (lit("*"))  k = Expr::MUL;     // P25: host multiply, no flags
-      else if (lit("+"))  k = Expr::ADD;
-      else if (lit("-"))  k = Expr::SUB;
-      else if (lit("&"))  k = Expr::AND;
-      else if (lit("|"))  k = Expr::OR;
-      else if (lit("^"))  k = Expr::XOR;
+      Expr::Kind k; OpClass c;
+      if      (lit("#"))   bad("#-ops are retired (ir 3): use add()/sub() at statement root");
+      else if (lit("&&"))  { k = Expr::LAND; c = OC_BOOL; }
+      else if (lit("||"))  { k = Expr::LOR;  c = OC_BOOL; }
+      else if (lit("=="))  { k = Expr::EQ;  c = OC_CMP; }
+      else if (lit("!="))  { k = Expr::NE;  c = OC_CMP; }
+      else if (lit("<=s")) { k = Expr::LES; c = OC_CMP; }
+      else if (lit("<=u")) { k = Expr::LEU; c = OC_CMP; }
+      else if (lit(">=s")) { k = Expr::GES; c = OC_CMP; }
+      else if (lit(">=u")) { k = Expr::GEU; c = OC_CMP; }
+      else if (lit("<s"))  { k = Expr::LTS; c = OC_CMP; }
+      else if (lit("<u"))  { k = Expr::LTU; c = OC_CMP; }
+      else if (lit(">s"))  { k = Expr::GTS; c = OC_CMP; }
+      else if (lit(">u"))  { k = Expr::GTU; c = OC_CMP; }
+      else if (lit("<<") || lit(">>")) bad("C shifts are not IR (ir 3): use ash()/lsh()");
+      else if (*s == '<' || *s == '>') bad("ordering comparison needs an s/u suffix (<s <=s >s >=s <u <=u >u >=u)");
+      else if (lit("/s"))  { k = Expr::DIVS; c = OC_ARITH; }
+      else if (lit("/u"))  { k = Expr::DIVU; c = OC_ARITH; }
+      else if (lit("%s"))  { k = Expr::MODS; c = OC_ARITH; }
+      else if (lit("%u"))  { k = Expr::MODU; c = OC_ARITH; }
+      else if (*s == '/' || *s == '%') bad("bare / or % refused: use /s /u %s %u");
+      else if (lit("*"))   { k = Expr::MUL; c = OC_ARITH; }
+      else if (lit("+"))   { k = Expr::ADD; c = OC_ARITH; }
+      else if (lit("-"))   { k = Expr::SUB; c = OC_ARITH; }
+      else if (lit("&"))   { k = Expr::AND; c = OC_ARITH; }
+      else if (lit("|"))   { k = Expr::OR;  c = OC_ARITH; }
+      else if (lit("^"))   { k = Expr::XOR; c = OC_ARITH; }
       else break;
+      if (cls != OC_NONE && cls != c)
+        bad("mixed operator classes in one chain — parenthesize");
+      cls = c;
+      if (c == OC_CMP && ++ncmp > 1) bad("chained comparisons refused — parenthesize");
       left = node(k, left, primary());
     }
     return left;
@@ -210,10 +283,12 @@ struct Parser {
   void end() { ws(); if (*s) bad("trailing text"); }
 };
 
-bool has_flag_op(const P& e) {
-  if (!e) return false;
-  if (e->kind == Expr::FADD || e->kind == Expr::FSUB) return true;
-  return has_flag_op(e->a) || has_flag_op(e->b);
+// t-place static discipline (loader): straight-line block, so definite
+// assignment is exact — every read must follow its (single) write.
+void collect_treads(const P& e, std::vector<uint32_t>& out) {
+  if (!e) return;
+  if (e->kind == Expr::TPLACE) out.push_back(e->value);
+  collect_treads(e->a, out); collect_treads(e->b, out);
 }
 } // namespace
 
@@ -269,7 +344,13 @@ void IRExec::load(const std::string& path) {
   Block* cur = nullptr;
   uint32_t prev_ipc = 0;
   const char* blocks_env = getenv("QUEST_BLOCKS");
+  std::vector<bool> tdef(256, false);          // P26: t-places defined so far in cur
 
+  auto check_treads = [&](const P& e, const std::string& body) {
+    std::vector<uint32_t> reads; collect_treads(e, reads);
+    for (uint32_t t : reads)
+      if (!tdef[t]) refuse("t" + std::to_string(t) + " read before its write: " + body);
+  };
   auto close_block = [&]() {
     if (!cur) return;
     if (cur->stmts.empty()) refuse("empty block");
@@ -277,6 +358,7 @@ void IRExec::load(const std::string& path) {
     if (k != Stmt::INSTR && k != Stmt::CALL && k != Stmt::RET && k != Stmt::GOTO)
       refuse("block does not end in a terminator (instruction/call/ret/goto)");
     cur = nullptr;
+    std::fill(tdef.begin(), tdef.end(), false);
   };
 
   while (std::getline(f, line)) {
@@ -292,8 +374,9 @@ void IRExec::load(const std::string& path) {
     std::string body = line.substr(b0);
 
     if (!got_header) {
-      if (body != "ir 2")
-        refuse("missing/unknown version header (want 'ir 2')");
+      if (body != "ir 3")
+        refuse("missing/unknown version header (want 'ir 3'; ir 2 files carry the "
+               "retired #-ops and plain-goto dumps — regenerate with tools/lower.py)");
       got_header = true;
       continue;
     }
@@ -352,6 +435,7 @@ void IRExec::load(const std::string& path) {
       if (!BlockSync::listed(cur->start))
         refuse("block " + pcs + " is not a listed quest.blocks start");
       prev_ipc = 0;
+      std::fill(tdef.begin(), tdef.end(), false);
       continue;
     }
     if (!cur) refuse("content outside any block: " + body);
@@ -387,11 +471,44 @@ void IRExec::load(const std::string& path) {
     } else if (tok == "ret") {
       st.kind = Stmt::RET;
     } else if (tok == "goto") {
+      // P26 (ir 3): `goto [L0, L1, ...] e` — strict index, false=0/true=1
+      // (docs/IR.md §3/§6).  Plain `goto L` is parser sugar for `goto [L] 0`.
       st.kind = Stmt::GOTO;
-      std::string t; is >> t;
-      st.target = uint32_t(strtoul(t.c_str(), nullptr, 16));
-      if (!BlockSync::listed(st.target))
-        refuse("goto target " + t + " is not a listed block start");
+      std::string rest; std::getline(is, rest);
+      size_t b1 = rest.find_first_not_of(" \t");
+      if (b1 == std::string::npos) refuse("goto without target: " + body);
+      rest = rest.substr(b1);
+      if (rest[0] == '[') {
+        size_t rb = rest.find(']');
+        if (rb == std::string::npos) refuse("goto label list missing ]: " + body);
+        std::string lst = rest.substr(1, rb - 1), idx = rest.substr(rb + 1);
+        std::istringstream ls(lst); std::string lab;
+        while (std::getline(ls, lab, ',')) {
+          size_t x = lab.find_first_not_of(" \t"), y = lab.find_last_not_of(" \t");
+          if (x == std::string::npos) refuse("empty goto label: " + body);
+          lab = lab.substr(x, y - x + 1);
+          if (lab.size() != 8 || lab.find_first_not_of("0123456789ABCDEFabcdef") != std::string::npos)
+            refuse("goto label must be hex8: " + body);
+          uint32_t L = uint32_t(strtoul(lab.c_str(), nullptr, 16));
+          if (!BlockSync::listed(L)) refuse("goto target " + lab + " is not a listed block start");
+          st.labels.push_back(L);
+        }
+        if (st.labels.empty()) refuse("goto with empty label list: " + body);
+        Parser pe(idx.c_str(), cur->start);
+        st.rhs = pe.expr(); pe.end();
+        check_treads(st.rhs, body);
+        if (st.labels.size() == 1 && !(st.rhs->kind == Expr::CONST && st.rhs->value == 0))
+          refuse("single-label goto must use index 0: " + body);
+      } else {
+        std::istringstream ts(rest); std::string t; ts >> t;
+        std::string tail; if (ts >> tail) refuse("trailing text after goto target: " + body);
+        if (t.size() != 8 || t.find_first_not_of("0123456789ABCDEFabcdef") != std::string::npos)
+          refuse("goto target must be hex8: " + body);
+        uint32_t L = uint32_t(strtoul(t.c_str(), nullptr, 16));
+        if (!BlockSync::listed(L)) refuse("goto target " + t + " is not a listed block start");
+        st.labels.push_back(L);
+        st.rhs = std::make_shared<Expr>(); st.rhs->kind = Expr::CONST; st.rhs->value = 0;
+      }
     } else if (tok == "save") {
       refuse("'save' is reserved but not implemented this tranche");
     } else if (body.rfind("assert(", 0) == 0) {
@@ -418,22 +535,62 @@ void IRExec::load(const std::string& path) {
       pe.ws();
       if (*pe.s != ')') refuse("assert missing closing paren: " + body);
       pe.s++; pe.end();
+      check_treads(cond, body);
       st.rhs = cond;
     } else {
       st.kind = Stmt::STMT;
-      size_t eq = body.find('=');
+      // The assignment '=' is the first '=' that is not part of '=='/'!='/'<='/'>='.
+      size_t eq = std::string::npos;
+      for (size_t i = 0; i + 1 < body.size(); i++) {
+        if (body[i] == '=' && body[i+1] != '=' &&
+            (i == 0 || (body[i-1] != '!' && body[i-1] != '<' && body[i-1] != '>' && body[i-1] != '='))) {
+          eq = i; break;
+        }
+      }
       if (eq == std::string::npos)
         refuse("unrecognized line: " + body);
       std::string lhs = body.substr(0, eq), rhs = body.substr(eq + 1);
       Parser pl(lhs.c_str(), cur->start);
       P l = pl.primary(); pl.end();
+      if (l->kind == Expr::WFP || l->kind == Expr::WSP || l->kind == Expr::WSB || l->kind == Expr::WSL)
+        refuse("stack-register writes are reserved (P26 emits reads only): " + body);
       if (l->kind != Expr::AC && l->kind != Expr::MEM16 && l->kind != Expr::MEM32
-          && l->kind != Expr::MEM8)                          // P25 byte store
-        refuse("lhs must be an ac or memory cell: " + body);
+          && l->kind != Expr::MEM8 && l->kind != Expr::TPLACE
+          && l->kind != Expr::CFLAG && l->kind != Expr::OVRFLAG)
+        refuse("lhs must be an ac, t-place, c, ovr, or memory cell: " + body);
+      if (l->kind != Expr::AC && l->kind != Expr::TPLACE && l->kind != Expr::CFLAG
+          && l->kind != Expr::OVRFLAG)
+        check_treads(l->a, body);
       Parser pr(rhs.c_str(), cur->start);
-      P r = pr.expr(); pr.end();
-      st.lhs = l; st.rhs = r;
-      st.flags = has_flag_op(r);
+      // Effectful root op?  (docs/IR.md §5: exactly one, at the root, args pure.)
+      static const struct { const char* name; EffOp op; int nargs; } effs[] = {
+        {"add(", EFF_ADD, 2}, {"sub(", EFF_SUB, 2}, {"mul(", EFF_MUL, 2}, {"div(", EFF_DIV, 2},
+        {"cvwn(", EFF_CVWN, 1}, {"ash(", EFF_ASH, 2},
+        {"nadd(", EFF_NADD, 2}, {"nsub(", EFF_NSUB, 2}, {"nmul(", EFF_NMUL, 2}, {nullptr, EFF_NONE, 0}};
+      pr.ws();
+      EffOp eff = EFF_NONE; int nargs = 0;
+      for (int i = 0; effs[i].name; i++)
+        if (strncmp(pr.s, effs[i].name, strlen(effs[i].name)) == 0) {
+          eff = effs[i].op; nargs = effs[i].nargs; pr.s += strlen(effs[i].name); break;
+        }
+      if (eff != EFF_NONE) {
+        P a = pr.expr();
+        P b2;
+        if (nargs == 2) { if (!pr.lit(",")) refuse("effectful op expects two args: " + body); b2 = pr.expr(); }
+        if (!pr.lit(")")) refuse("effectful op missing ): " + body);
+        pr.end();
+        check_treads(a, body); if (b2) check_treads(b2, body);
+        st.rhs = a; st.rhs2 = b2; st.eff = eff; st.flags = true;
+      } else {
+        P r = pr.expr(); pr.end();
+        check_treads(r, body);
+        st.rhs = r;
+      }
+      st.lhs = l;
+      if (l->kind == Expr::TPLACE) {
+        if (tdef[l->value]) refuse("t" + std::to_string(l->value) + " assigned twice in one block: " + body);
+        tdef[l->value] = true;
+      }
     }
     cur->stmts.push_back(st);
   }
@@ -501,51 +658,111 @@ bool IRExec::has(uint32_t pc) const { return find(pc) != nullptr; }
 // ------------------------------------------------------------- execution
 
 namespace {
+[[noreturn]] void fault(const char* what, uint32_t blk) {
+  char buf[128];
+  snprintf(buf, sizeof buf, "IRExec: FAULT %s [IR block %08X]", what, blk);
+  throw std::runtime_error(buf);          // loud (METHOD §8); never a silent value
+}
 struct Ctx {
   Machine& m;
   uint32_t seg;
+  uint32_t blk;
   uint32_t ac[4];
+  uint32_t t[256];                        // t-places (block-local; loader-checked)
   uint32_t wrap(uint32_t e) const { return (e & 0x0FFFFFFF) | seg; }
   uint32_t addr_of(const P& e) {          // MEM index rule: R result raw, else wrapped
     if (e->kind == Expr::RESOLVE)
       return eval(e);
     return wrap(eval(e));
   }
+  uint32_t boolean(const P& e) {          // strict 0/1 operand (docs/IR.md §5)
+    uint32_t v = eval(e);
+    if (v > 1) fault("non-0/1 boolean operand", blk);
+    return v;
+  }
   uint32_t eval(const P& e) {
     switch (e->kind) {
       case Expr::CONST:   return e->value;
       case Expr::AC:      return ac[e->value];
+      case Expr::TPLACE:  return t[e->value];
+      case Expr::CFLAG:   return uint32_t(m.c);
+      case Expr::OVRFLAG: return uint32_t(m.ovr);
+      case Expr::WFP:     return uint32_t(m.wfp);       // LDAFP reads machine.wfp (EagleStack.cpp:527)
+      case Expr::WSP:     return uint32_t(m.wsp);       // LDASP reads machine.wsp (:512)
+      case Expr::WSB:     return uint32_t(m.wsb);
+      case Expr::WSL:     return uint32_t(m.wsl);
       case Expr::MEM32:   return m.memory->read_wide(addr_of(e->a));
       case Expr::MEM16:   return m.memory->read_word(addr_of(e->a)) & 0xFFFF;
       case Expr::MEM8:    return m.memory->read_byte(eval(e->a)) & 0xFF;  // RAW index:
                           // byte pointers carry their own segment (bits 31:29);
                           // the hardware applies no wrap at use (P25 ruling).
       case Expr::RESOLVE: return m.eagle_resolve_indirect(wrap(eval(e->a)) | 0x80000000u);
+      case Expr::IND:     return m.eagle_resolve_indirect(eval(e->a));   // P26: from the VALUE
       case Expr::ADD:     return eval(e->a) + eval(e->b);
       case Expr::SUB:     return eval(e->a) - eval(e->b);
       case Expr::AND:     return eval(e->a) & eval(e->b);
       case Expr::OR:      return eval(e->a) | eval(e->b);
       case Expr::XOR:     return eval(e->a) ^ eval(e->b);
       case Expr::MUL:     return eval(e->a) * eval(e->b);   // host mul, no flags (P25)
+      case Expr::DIVS: case Expr::MODS: {                    // P26 pure signed divide: total, loud
+        int32_t l = int32_t(eval(e->a)), r = int32_t(eval(e->b));
+        if (r == 0) fault("zero divisor (/s %s)", blk);
+        if (l == INT32_MIN && r == -1) fault("INT_MIN /s -1 overflow", blk);
+        return uint32_t(e->kind == Expr::DIVS ? l / r : l % r);
+      }
+      case Expr::DIVU: case Expr::MODU: {
+        uint32_t l = eval(e->a), r = eval(e->b);
+        if (r == 0) fault("zero divisor (/u %u)", blk);
+        return e->kind == Expr::DIVU ? l / r : l % r;
+      }
+      case Expr::EQ:  return eval(e->a) == eval(e->b);
+      case Expr::NE:  return eval(e->a) != eval(e->b);
+      case Expr::LTS: return int32_t(eval(e->a)) <  int32_t(eval(e->b));
+      case Expr::LES: return int32_t(eval(e->a)) <= int32_t(eval(e->b));
+      case Expr::GTS: return int32_t(eval(e->a)) >  int32_t(eval(e->b));
+      case Expr::GES: return int32_t(eval(e->a)) >= int32_t(eval(e->b));
+      case Expr::LTU: return eval(e->a) <  eval(e->b);
+      case Expr::LEU: return eval(e->a) <= eval(e->b);
+      case Expr::GTU: return eval(e->a) >  eval(e->b);
+      case Expr::GEU: return eval(e->a) >= eval(e->b);
+      case Expr::LAND: { uint32_t l = boolean(e->a), r = boolean(e->b); return l & r; }  // eager
+      case Expr::LOR:  { uint32_t l = boolean(e->a), r = boolean(e->b); return l | r; }
+      case Expr::LNOT: return boolean(e->a) ^ 1u;
+      case Expr::COM:  return ~eval(e->a);
+      case Expr::TF:   return eval(e->a) != 0;
+      case Expr::LSH: {   // pure: EagleInstruction::logical_shift writes no flag
+        uint32_t v = eval(e->a), n = eval(e->b);
+        return uint32_t(EagleInstruction::logical_shift(m, int32_t(v), int32_t(n)));
+      }
       case Expr::WP:      // wp(b,d): word segment wrap of b+d — Machine::copy_segment
         return ((eval(e->a) + eval(e->b)) & 0x0FFFFFFFu) | seg;
       case Expr::BP:      // bp(b,d): Machine::set_byte_segment(seg, b*2+d)
         return Machine::set_byte_segment((seg >> 28) & 0x7u,
                                          eval(e->a) * 2u + eval(e->b));
-      case Expr::FADD: {  // l #+ r  ==  add(src=r, dst=l): shared helper writes c/ovr
-        uint32_t l = eval(e->a), r = eval(e->b);
-        return uint32_t(EagleInstruction::add(m, int64_t(int32_t(r)), int64_t(int32_t(l))));
-      }
-      case Expr::FSUB: {  // l #- r  ==  sub(src=r, dst=l)
-        uint32_t l = eval(e->a), r = eval(e->b);
-        return uint32_t(EagleInstruction::sub(m, int64_t(int32_t(r)), int64_t(int32_t(l))));
-      }
       case Expr::SX16:    return uint32_t(int32_t(int16_t(eval(e->a) & 0xFFFF)));
       case Expr::ZX16:    return eval(e->a) & 0xFFFF;
       case Expr::ZX8:     return eval(e->a) & 0xFF;
       case Expr::TRUNC16: return eval(e->a) & 0xFFFF;
     }
     throw std::runtime_error("IRExec: unreachable expr kind");
+  }
+  // Effectful root op: the SAME EagleInstruction helper the emulated
+  // instruction calls (same-helpers principle, P23 ruling).  Arg order:
+  // f(a, b) == helper(machine, src=b, dst=a)  (so sub(a,b) == a - b).
+  uint32_t effectful(IRExec::EffOp op, uint32_t a, uint32_t b) {
+    switch (op) {
+      case IRExec::EFF_ADD:  return uint32_t(EagleInstruction::add(m, int64_t(int32_t(b)), int64_t(int32_t(a))));
+      case IRExec::EFF_SUB:  return uint32_t(EagleInstruction::sub(m, int64_t(int32_t(b)), int64_t(int32_t(a))));
+      case IRExec::EFF_MUL:  return uint32_t(EagleInstruction::mul(m, int64_t(int32_t(b)), int64_t(int32_t(a))));
+      case IRExec::EFF_DIV:  return uint32_t(EagleInstruction::div(m, int32_t(b), int32_t(a)));
+      case IRExec::EFF_CVWN: return uint32_t(EagleInstruction::cvwn(m, int32_t(a)));
+      case IRExec::EFF_ASH:  return uint32_t(EagleInstruction::arithmetic_shift(m, int32_t(a), int32_t(b)));
+      case IRExec::EFF_NADD: return uint32_t(EagleInstruction::narrow_add(m, int32_t(b), int32_t(a)));
+      case IRExec::EFF_NSUB: return uint32_t(EagleInstruction::narrow_sub(m, int32_t(b), int32_t(a)));
+      case IRExec::EFF_NMUL: return uint32_t(EagleInstruction::narrow_mul(m, int32_t(b), int32_t(a)));
+      case IRExec::EFF_NONE: break;
+    }
+    throw std::runtime_error("IRExec: unreachable effectful op");
   }
 };
 } // namespace
@@ -558,8 +775,8 @@ uint32_t IRExec::run_block(Machine& machine, uint32_t pc) {
     blk->executed = true;
     fprintf(stderr, "IRExec: first execution of block %08X\n", pc);
   }
-  Ctx cx{machine, blk->seg, {uint32_t(machine.ac[0]), uint32_t(machine.ac[1]),
-                             uint32_t(machine.ac[2]), uint32_t(machine.ac[3])}};
+  Ctx cx{machine, blk->seg, blk->start, {uint32_t(machine.ac[0]), uint32_t(machine.ac[1]),
+                             uint32_t(machine.ac[2]), uint32_t(machine.ac[3])}, {}};
   const size_t n = blk->stmts.size();
   const bool dbg = getenv("QUEST_IR_DEBUG_BLOCK") &&
       blk->start == uint32_t(strtoul(getenv("QUEST_IR_DEBUG_BLOCK"), nullptr, 16));
@@ -641,19 +858,32 @@ uint32_t IRExec::run_block(Machine& machine, uint32_t pc) {
           fprintf(stderr, "IRExec DEBUG blk %08X stmt %zu: acs=%08X %08X %08X %08X\n",
                   blk->start, i, cx.ac[0], cx.ac[1], cx.ac[2], cx.ac[3]);
         try {
-        uint32_t v = cx.eval(st.rhs);
+        uint32_t v;
+        if (st.eff != EFF_NONE) {           // pure args first, then the shared helper
+          uint32_t a = cx.eval(st.rhs);
+          uint32_t b = st.rhs2 ? cx.eval(st.rhs2) : 0;
+          v = cx.effectful(st.eff, a, b);
+        } else
+          v = cx.eval(st.rhs);
         const Expr& l = *st.lhs;
         if (l.kind == Expr::AC)
           cx.ac[l.value] = v;
+        else if (l.kind == Expr::TPLACE)
+          cx.t[l.value] = v;
+        else if (l.kind == Expr::CFLAG || l.kind == Expr::OVRFLAG) {
+          if (v > 1) throw std::runtime_error("IRExec: FAULT non-0/1 flag assignment");
+          (l.kind == Expr::CFLAG ? machine.c : machine.ovr) = int32_t(v);
+        }
         else if (l.kind == Expr::MEM32)
           machine.memory->write_wide(cx.addr_of(l.a), v);
         else if (l.kind == Expr::MEM8)
           machine.memory->write_byte(cx.eval(l.a), v & 0xFF);   // RAW index (P25)
         else
-          machine.memory->write_word(cx.addr_of(l.a), v & 0xFFFF);
+          machine.memory->write_word(cx.addr_of(l.a), v & 0xFFFF);  // M16 store truncates (§5)
         } catch (std::runtime_error& ex) {
           char buf[192];
-          uint32_t a = (st.lhs->kind != Expr::AC) ? cx.addr_of(st.lhs->a) : 0;
+          bool mem = st.lhs->kind == Expr::MEM32 || st.lhs->kind == Expr::MEM16 || st.lhs->kind == Expr::MEM8;
+          uint32_t a = mem ? cx.addr_of(st.lhs->a) : 0;
           snprintf(buf, sizeof buf, "%s [IR block %08X stmt %zu, store addr %08X]",
                    ex.what(), blk->start, i, a);
           throw std::runtime_error(buf);
@@ -701,8 +931,17 @@ uint32_t IRExec::run_block(Machine& machine, uint32_t pc) {
       case Stmt::GOTO: {
         if (i + 1 != n)
           throw std::runtime_error("IRExec: interior goto (loader bug)");
+        // P26: strict index into the label table — out of range is a loud
+        // fault (no defined arm to take; MathDesign §1: no coercion).
+        uint32_t idx = cx.eval(st.rhs);
+        if (idx >= st.labels.size()) {
+          char buf[128];
+          snprintf(buf, sizeof buf, "IRExec: FAULT goto index %u out of range [0,%zu) [IR block %08X]",
+                   idx, st.labels.size(), blk->start);
+          throw std::runtime_error(buf);
+        }
         for (int r = 0; r < 4; r++) machine.ac[r] = int32_t(cx.ac[r]);
-        return st.target;
+        return st.labels[idx];
       }
     }
   }

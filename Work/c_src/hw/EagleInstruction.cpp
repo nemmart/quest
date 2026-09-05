@@ -53,6 +53,25 @@ int32_t EagleInstruction::mul(Machine& machine, int64_t src, int64_t dst) {
   return static_cast<int32_t>(product & 0xFFFFFFFF);
 }
 
+int32_t EagleInstruction::div(Machine& machine, int32_t src, int32_t dst) {
+  // Hoisted verbatim from EagleCompute.cpp WDIV (P26).  The emulator
+  // ASSIGNS ovr=1 (equivalent to |= for a 0/1 flag) and leaves the
+  // destination untouched on the two fault shapes.
+  if(src==0 || (src==-1 && static_cast<uint32_t>(dst)==0x80000000u)) {
+    machine.ovr=1;
+    return dst;
+  }
+  return dst/src;
+}
+
+int32_t EagleInstruction::cvwn(Machine& machine, int32_t src) {
+  // Hoisted verbatim from EagleCompute.cpp CVWN (P26).
+  int32_t result=static_cast<int32_t>(static_cast<uint32_t>(src)<<16)>>16;
+  int32_t hi=src>>15;
+  machine.ovr|=(hi!=0 && hi!=-1)?1:0;
+  return result;
+}
+
 int32_t EagleInstruction::arithmetic_shift(Machine& machine, int32_t src, int32_t amount) {
   int32_t result = src;
   if (amount > 0) {

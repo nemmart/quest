@@ -1,0 +1,40 @@
+ ac1=00000000
+ ac2=700010AA
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E0002212
+   (fs wt) byte count = 0001
+1
+WRITE EXTENSION
+   location = F0001192
+   options = 0000
+   rel pos = 0000
+   init pos = 0000
+
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+Thread halt
+37682 instructions run
+dispatchSystemCall: 7000115C
+System Call 310, called from 7017FCF0
+ ac0=00000000
+ ac1=70180000
+ ac2=00000000
+TERMINATING PROCESS
+   no termination message
+frame  2 -- 7017FDED     guessing: .UKIL+0x8
+frame  1 -- C_A_LISTENER+0x2   [70165715]
+frame  0 -- 7017E7C1     guessing: T.INIT+0x3B
+68 instructions run
+frame  2 -- 7017FDED     guessing: .UKIL+0x8
+frame  1 -- C_A_LISTENER+0x2   [70165715]
+frame  0 -- 7017E7C1     guessing: T.INIT+0x3B
+68 instructions run
+frame  3 -- 7017FDED     guessing: .UKIL+0x8
+frame  2 -- START_TURN+0xB01   [70178D20]
+frame  1 -- QUEST+0x5D7   [7015C5DC]
+frame  0 -- 7017EA51     guessing: I.INIT+0x23
+1188351 instructions run

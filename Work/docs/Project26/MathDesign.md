@@ -1,5 +1,11 @@
 # P26 math & control design — rulings of record (user + integrator, Aug 29 2026)
 
+> **LANDED Sep 5 2026 (Project 26).** The normative grammar is now
+> **docs/IR.md (ir 3)** — spec-wins. This document is the design input
+> of record; where it and IR.md differ, IR.md is the law. Open item §6.2
+> was ruled at the P26 plan gate: ash/lsh only, no C `<<`/`>>` at any
+> tier. Census + per-mnemonic semantics: Project26/Census.md.
+
 Design discussion captured verbatim-in-substance; each item below is a
 USER RULING unless marked open. Supersedes conflicting notes in
 IR.md §8's roadmap; IR.md itself is amended when P26 lands (spec-wins

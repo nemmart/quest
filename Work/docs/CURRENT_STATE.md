@@ -1,5 +1,44 @@
 # Where things stand
 
+## ★ P26 IMPLEMENTED — the math & control grammar (ir 3); embeds 27,600 → 8,529; battery 037 PENDING (Sep 5 2026)
+
+Branch p26-math-grammar (based on main). Plan gate Sep 5: census of
+record docs/Project26/Census.md, rulings R1–R10 all as recommended
+(REPORT §2; R9 = ash/lsh only; bar ≤ 8,600). Landed: docs/IR.md is now
+**ir 3** — `goto [labels] e` strict-index terminator (plain `goto L` =
+parser sugar, dump form `goto [L] 0`), strict 0/1 booleans + mandatory
+s/u ordering suffixes + eager `&& || !` + `tf()`, word layer `& | ^ ~`
++ `lsh`, pure `/s /u %s %u` (loud faults; no emission sites yet), the
+statement-root effectful family add/sub/mul/div/cvwn/ash/nadd/nsub/nmul
+DEFINED as the shared EagleInstruction helpers (div/cvwn hoisted from
+EagleCompute first, own stock K=1 gate), `#+ #- #* #/` RETIRED
+(refused), c/ovr readable + root-assignable, stack-register READS
+(writes refused), `ind(e)` (= eagle_resolve_indirect on the value;
+R[e] forces one deref first — IR.md §5), block-local single-
+assignment t-places (all 23 borrow brackets converted uniformly, both
+modes; WXCH; XNDO/XWDO; Nova test scratch), direct XJMP → goto, Nova
+no-load `#` tests derived mechanically from NovaCompute's tables, bit-
+in-memory WBTZ/WBTO/WSZB, the narrow family, SEX/ZEX/ANDI/CRYTO/WSKBO/
+XNISZ. Remaining 8,529 embeds = 8,461 out of scope by construction
+(DERR 2,273 → P27; RT-call 2,887; calls 1,313; string/WMSP/stack 1,765;
+frames/OS/float/misc 223) + 67 Nova LOAD forms (deferred — user
+checking the manual on the high-half convention) + 1 LNDO (dis drops
+its register field — finding). Local gates 3/3 GREEN at K=1 strict:
+k1fo 0 div/1,584 blocks, k1st 0 div, k1play 0 div/10.19M pairs/2,276
+blocks; 66/77 newly-lowered classes demonstrably executed (coverage
+tool docs/Project26/p26cov.py); 16/16 negative loader tests refuse.
+Findings: Nova SNC/SZC prose polarity + a 43→67 count slip in the
+plan-gate draft (both corrected in Census.md; emission never wrong);
+XJMP spurious fall-through edge in blocks.split (e.g. 7015C0B1 — user
+fixes the CFG tool); LNDO rendering gap; three 16-bit result
+conventions in the emulator (Nova zero / narrow_add sign / narrow_mul
+zero + `ovr = 1`). Manual checks owed by the user: WMOVR, WHLV, WDIV,
+Nova high half — emulator remains the law. Deviation recorded: slices
+implemented in one emitter pass and gated whole, not per slice. Task
+037 (034 template, JOBS=3, embed + coverage lines) DRAFTED, launch
+being coordinated with the user before push. NEXT: 037 verdict; Nova
+loads after the manual ruling; P27 = DERR cluster compression.
+
 ## ★ ROADMAP SET (Aug 29 2026, evening — project sleeping for a week+)
 
 User's priority order for the next work (full detail: the RE-ENTRY

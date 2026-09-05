@@ -1,9 +1,16 @@
 # quest.ir — THE IR SPECIFICATION (consolidated, standalone)
 
-Version: ir 2. This document is self-contained and normative; it
-consolidates IRPhase1.md (as amended) and Project23/IR2.md. History
-and rationale live in Project23/REPORT.md. When this spec and older
-documents disagree, this spec wins.
+Version: **ir 3** (Project 26, Sep 5 2026 — the math & control grammar:
+`goto [labels] e` terminator, strict booleans, s/u comparisons, word
+layer, the effectful op family replacing `#+`/`#-`, t-places, stack-
+register reads). This document is self-contained and normative; it
+consolidates IRPhase1.md (as amended), Project23/IR2.md and
+Project26/MathDesign.md (the P26 design input — rulings of record;
+this spec is the law once landed). History and rationale live in
+Project23/REPORT.md and Project26/REPORT.md; the P26 census and
+per-mnemonic semantics table (emulator source citations) is
+Project26/Census.md. When this spec and older documents disagree, this
+spec wins.
 
 ## 1. Role and dispatch
 
@@ -19,12 +26,12 @@ pair on the strict surface (registers, c AND ovr, wsp/shadow, fp
 state, pc, structure). The IR carries no semantics of its own beyond
 this spec: wherever an operation corresponds to machine behavior, the
 executor calls the SAME emulator code paths the instruction would
-(shared helpers for #-ops; the real decode/execute path for
-instructions, calls, and rets).
+(shared EagleInstruction helpers for the effectful ops; the real
+decode/execute path for instructions, calls, and rets).
 
 ## 2. File structure
 
-    ir 2
+    ir 3
     mode <stock|book>
     source  <path> sha256=<hex>
     blocks  <path> sha256=<hex>
@@ -68,11 +75,22 @@ addresses; blocks are single-entry, so statements need no identities.
     call <tgt> args=<n> marker=<hex8> site=<hex8> ret=<hex8>
                                    Decorated call. TERMINATOR. §6.
     ret                            WRTN. TERMINATOR. §6.
-    goto <hex8>                    Unconditional exit. TERMINATOR.
-                                   Target must be a listed block
-                                   start. Covers fall-through into
-                                   the next block and lowered
-                                   unconditional WBR.
+    goto [<hex8>, ...] <expr>      Exit. TERMINATOR (P26). The expr is
+                                   a STRICT index into the label list:
+                                   false=0 / true=1 for the two-label
+                                   if, k for a table. Every label must
+                                   be a listed block start; an index
+                                   outside [0, count) is a loud
+                                   executor FAULT — no coercion, no
+                                   clamping, no default arm. The
+                                   canonical unconditional exit is
+                                   `goto [L] 0` (fall-through, WBR,
+                                   direct XJMP); a single-label goto
+                                   with any other index REFUSES at
+                                   load.
+    goto <hex8>                    Parser SUGAR for `goto [<hex8>] 0`
+                                   (accepted, never emitted — the dump
+                                   form is the list form).
     save <hex>                     RESERVED (not implemented; loader
                                    refuses). WSAVS reads its frame
                                    word from memory, so it needs an
@@ -95,9 +113,9 @@ addresses; blocks are single-entry, so statements need no identities.
                                    first); malformed forms REFUSE at
                                    load.
 
-One machine instruction MAY lower to several statements (e.g. WPSH,
-future): no bookkeeping is required or possible — statements are
-sequence, not identities.
+One machine instruction MAY lower to several statements (WPSH group
+stores, WXCH, XNDO, Nova tests): no bookkeeping is required or
+possible — statements are sequence, not identities.
 
 ## 4. Block rules (loader-enforced; violations REFUSE at load)
 
@@ -107,24 +125,50 @@ sequence, not identities.
 - Instruction addresses within a block strictly increase.
 - TERMINATOR RULE: the last line of every block is an instruction,
   `call`, `ret`, or `goto`. (A final instruction's control transfer —
-  branch, skip, return, call, fault — IS the exit.)
+  branch, skip, return, call, fault — IS the exit.) A lowered skip is
+  a `goto [fall, skip] test`; nothing follows a terminator.
+- t-places (P26) are BLOCK-LOCAL, SINGLE-ASSIGNMENT: the loader refuses
+  a read before the write and a second write in the same block
+  (straight-line blocks make definite assignment exact).
 - Anything unrecognized refuses. No silent skips, ever — including in
   the emitter's own input parsers.
 
 ## 5. Statements and expressions
 
-    lvalue  := ac0..ac3 | M8[e] | M16[e] | M32[e]
-    expr    := unary/primary chained with binary ops (left-assoc,
-               single level — emitters parenthesize anything else)
-    binops  := + - * & | ^ #+ #-         (#* #/ reserved, refused)
-    primary := acN | constant (0x… or signed decimal) |
-               byte-pointer literal 0xW:b (b in {0,1}) | M8[e] | M16[e] |
-               M32[e] | R[e] | wp(e, e) | bp(e, e) | sx16(e) | zx16(e) |
-               zx8(e) | trunc16(e) | ( e )
-    M1 and t-places are reserved (IQ3 / P26) and refused.
-    (`<<` was listed as a binop by earlier revisions of this spec but
-    was never implemented by IRExec; P25 removed it in favor of `*` —
-    see ByteEA.md. Spec-vs-executor gaps are findings, not features.)
+    lvalue  := ac0..ac3 | tN | c | ovr | M8[e] | M16[e] | M32[e]
+               (wfp wsp wsb wsl are grammatically registers but WRITES are
+               RESERVED — the loader refuses them until the RT-call
+               decoration project owns the wsp/wsl overflow gate; P26
+               emits stack-register READS only)
+    stmt    := lvalue = expr                         pure
+             | lvalue = effop(args)                  effectful, ROOT ONLY (see below)
+             | assert(e[, "msg"])
+    expr    := one flat left-associative chain of ONE operator class
+               over primaries — emitters parenthesize everything else;
+               the loader REFUSES a chain that mixes classes or has
+               more than one comparison (no precedence table exists)
+    classes := word   + - * & | ^ /s /u %s %u
+               cmp    == != <s <=s >s >=s <u <=u >u >=u   (exactly one)
+               bool   && ||
+    prefix  := ~ e (32-bit complement, word)   |   ! e (boolean NOT, 0/1 operand)
+    primary := acN | tN (N = 1..255) | c | ovr | wfp | wsp | wsb | wsl |
+               constant (0x… or signed decimal) | byte-pointer literal
+               0xW:b (b in {0,1}) | M8[e] | M16[e] | M32[e] | R[e] |
+               ind(e) | wp(e, e) | bp(e, e) | lsh(e, amount) | tf(e) |
+               sx16(e) | zx16(e) | zx8(e) | trunc16(e) | ( e )
+    effop   := add(a, b) | sub(a, b) | mul(a, b) | div(a, b) | cvwn(a) |
+               ash(a, amount) | nadd(a, b) | nsub(a, b) | nmul(a, b)
+
+    REFUSED AT LOAD (P26): bare `< <= > >=`; bare `/ %`; the whole `#`
+    family (`#+ #- #* #/`); C `<<`/`>>` at any tier (ruling R9: ash/lsh
+    are the only shift vocabulary); functional and()/or()/xor()/com();
+    an effectful op anywhere but statement root; mixed-class or
+    chained-comparison chains; t read-before-write or double write;
+    stack-register writes; `goto [L] k` with k != 0; M1 (reserved).
+
+    EXECUTOR FAULTS (loud, never a silent value): goto index outside
+    [0, count); zero divisor in `/s /u %s %u`; INT_MIN `/s`/`%s` -1;
+    a non-0/1 operand to `&& || !`; a non-0/1 value assigned to c/ovr.
 
 Semantics (32-bit unsigned host arithmetic, wrap):
 
@@ -175,23 +219,88 @@ Semantics (32-bit unsigned host arithmetic, wrap):
   inheriting the depth limit and its throw). An R result used as a
   memory index is NOT re-wrapped (chain pointers are full addresses).
   Emitters produce R only where the instruction's indirect bit is set.
-- #+ / #-: `l #+ r` == EagleInstruction::add(machine, src=r, dst=l);
-  `l #- r` == sub(machine, src=r, dst=l) — the SAME helpers the
-  emulated instructions call, including their c/ovr writes (sticky
-  ovr |=). No formulas live in the IR: when the helpers change (see
-  Project23/WideCarry.md), the IR changes with them. Every statement
-  whose expression contains a #-op ends with the emulator's
-  `ovk && ovr` check; the throw attributes to the BLOCK (statements
-  have no pc — accepted downgrade, the path has never fired).
-- Class cap (what lower.py currently emits): loads/stores (X/L ×
-  N/W LDA/STA, modes 0–3, direct/indirect), XLEF/LLEF, NLDAI/WLDAI,
-  WMOV, WADD/WSUB/WADDI/WSBI, byte addressing (XLEFB/LLEFB values,
-  XLDB/XSTB/LLDB/LSTB/WLDB/WSTB via M8 — P25), plus §6's argpush
-  stores (word wp/constant/R, byte value, and WPSH group stores —
-  P25). Word base-indexed EAs render as wp(acN, d) in BOTH value and
-  index positions (index wrap on a wp result is identity). Everything
-  else stays an instruction. The cap widens by extraction, never by
-  assumption.
+- Pure integer ops (P26): `/s %s` are truncating signed 32-bit divide
+  and remainder, `/u %u` unsigned; both FAULT on a zero divisor and
+  `/s %s` fault on INT_MIN ÷ −1 (host UB otherwise). No flags. (No
+  emission site in the P26 census uses them — WDIV is the effectful
+  `div`; they exist as grammar so the s/u convention is complete.)
+- Booleans (P26, MathDesign §2): comparisons yield exactly 0/1;
+  ordering comparisons carry a MANDATORY s/u suffix (`<s` signed int32,
+  `<u` unsigned); `==`/`!=` compare the 32-bit patterns. `&& ||` are
+  EAGER (both operands evaluated; exprs are pure) and require 0/1
+  operands (fault otherwise); `!` is boolean-only. `tf(e)` is the
+  word→boolean normalizer: 0 if e==0 else 1.
+- Word layer (P26, MathDesign §3): `& | ^` infix, `~` prefix — 32-bit,
+  no 0/1 constraint. `lsh(x, amount)` is EagleInstruction::logical_shift
+  (writes no flag): signed amount, positive=left, negative=right,
+  |amount| >= 32 → 0, amount 0 passthrough. There is no pure
+  arithmetic shift primary: `ash` is effectful (its ISA form
+  accumulates ovr) and therefore statement-root only.
+- Registers beyond the ACs (P26): `c` and `ovr` READ the machine flags
+  and are assignable at statement root (`c = 1` is CRYTO). `wfp wsp wsb
+  wsl` read machine.wfp/wsp/wsb/wsl — the clone's own registers, the
+  same values LDAFP/LDASP read (EagleStack.cpp:527/:512); writes are
+  reserved (refused).
+- t-places tN (P26): 32-bit block-local scratch. Emitted for the 23
+  P20 borrow brackets (`t = acX` at the WPSH, `acX = t` at the WPOP —
+  the bracket's memory write is dropped: in book mode the borrow slot
+  is read only by its own WPOP; in stock mode the real-stack word
+  below wsp is no longer written, wsp is restored inside the block, so
+  every rendezvous agrees and only dead-stack residue differs —
+  recorded in Project26/REPORT.md), for WXCH, for XNDO/XWDO, and for
+  the Nova test decomposition.
+- `ind(e)` (P26, ruling R4): Machine::eagle_resolve_indirect(e) — follow
+  bit 31 from the VALUE e: while bit 31 is set, e = M32[e & 0x7FFFFFFF]
+  (depth limit and throw inherited). RELATIONSHIP TO R[e]: R[e] is
+  eagle_resolve_indirect(wrap(e) | 0x80000000) — it FORCES one
+  dereference of the wrapped index and then follows the chain, i.e.
+  R[e] == ind(M32[e] as the hardware reads it through the same helper).
+  `ind` is what WBTZ/WBTO/WSZB apply to ac[XX] (EagleCompute.cpp
+  :261/:272/:283); `R` is what an indirect EA operand applies. Neither
+  result is re-wrapped when used as a memory index... except that an
+  `ind()` result used inside a larger index expression (`M16[ind(acX) +
+  lsh(acY, -4)]`) IS wrapped by the uniform M-index rule — which is
+  exactly the instruction's copy_segment(address, resolved + …).
+- EFFECTFUL OPS (P26, MathDesign §4; replaces `#+`/`#-`): each is
+  DEFINED as the shared EagleInstruction helper it names, with
+  f(a, b) == helper(machine, src=b, dst=a):
+    add(a,b)  = EagleInstruction::add   (c = ALU carry-out; ovr |=)
+    sub(a,b)  = EagleInstruction::sub   (a − b; c = complement-add carry; ovr |=)
+    mul(a,b)  = EagleInstruction::mul   (ovr |= 1 if the int64 product does not fit int32; no c)
+    div(a,b)  = EagleInstruction::div   (a ÷ b truncating; divisor 0 or INT_MIN÷−1 → ovr = 1 and
+                                         the RESULT IS a UNCHANGED — hoisted from WDIV, P26)
+    cvwn(a)   = EagleInstruction::cvwn  (sx16(low 16); ovr |= 1 if a did not fit — hoisted from CVWN)
+    ash(a,n)  = EagleInstruction::arithmetic_shift (ISA amount semantics; ovr |= sign change)
+    nadd(a,b) = EagleInstruction::narrow_add   (16-bit; result SIGN-EXTENDED; c/ovr)
+    nsub(a,b) = EagleInstruction::narrow_sub   (16-bit; a − b; result sign-extended; c/ovr)
+    nmul(a,b) = EagleInstruction::narrow_mul   (16-bit; result ZERO-extended (& 0xFFFF); ovr = 1 on overflow)
+  Exactly one effectful op per statement, at the root; arguments are
+  pure exprs (evaluated first, then the helper). No formulas live in
+  the IR: when the helpers change, the IR changes with them. Every
+  effectful statement ends with the emulator's `ovk && ovr` check; the
+  throw attributes to the BLOCK. An effectful op storing to M16
+  (`M16[e] = nadd(M16[e], k)`) is NOT wrapped in trunc16 — the M16
+  store truncates (ruling R6).
+- Class cap (what lower.py emits, P26): everything in Project26/
+  Census.md buckets (a), (b) and the ruled-in (c) set — loads/stores,
+  LEFs, constants, WMOV, byte addressing (P25), argpush stores (P25);
+  the skip family WSEQ/WSNE/WSLT/WSLE/WSGT/WSGE/WUSGT/WUSGE + the I/
+  wide-I forms and WSZB/WSKBO/XNISZ as `goto [fall, skip] test`; direct
+  XJMP and WBR as `goto [L] 0`; the effectful family (WADD WSUB WADC
+  WINC WNEG WADI WSBI WADDI WNADI XWADD LWADD XWSUB LWSUB XWADI XWSBI
+  WMUL XWMUL LWMUL WDIV CVWN NADD NSUB NNEG NADI NSBI NADDI XNADD LNADD
+  XNSUB LNSUB XNADI LNADI XNSBI LNSBI NMUL XNMUL LNMUL, WHLV as root
+  ash); the word layer (WCOM WAND WIOR WXOR WANDI WIORI WXORI ANDI WLSI
+  WLSHI WMOVR SEX ZEX); WBTZ/WBTO via ind(); LDAFP/LDASP reads; CRYTO;
+  WXCH and the 23 borrow brackets via t-places; XNDO/XWDO; the Nova
+  no-load (`#`) skip forms as derived pure tests (Census.md §2d).
+  Signedness per skip is the emulator's cast, per mnemonic (Census.md
+  §2a). Everything else stays an instruction — in particular the 67
+  Nova LOAD forms (deferred pending the user's manual check on the
+  high-half convention), indirect XJMP, LNDO (the dis omits its
+  register field — rendering gap), DIVX/WDIVS, DERR, the string/WMSP
+  family, calls, frames, floats. The cap widens by extraction, never
+  by assumption.
 
 ## 6. Operations
 
@@ -219,7 +328,11 @@ a false belief diverges loudly rather than being trusted.
   decode path (WRTN is address-independent; the synthetic address is
   the block start, reaching only abort messages). Frame pop, psr/ovk
   restore, carry from bit 31 of the return slot — all shared code.
-- `goto <t>` — pure exit: materialize registers, return t.
+- `goto [L0..Lk] e` — pure exit: evaluate e (a strict index; out of
+  range FAULTS), materialize registers, return L[e]. Lowered skips use
+  [no-skip, skip] with the test yielding 1 for skip (the CFG lists the
+  two successors ascending in that order); lowered XNDO/XWDO use
+  [fall, loop-target]. `goto L` is sugar for `goto [L] 0`.
 
 Scope by decoration ("no mixed metaphors", user ruling): a decorated
 site's pushes lower ONLY if every decorated push of the site is
@@ -264,26 +377,25 @@ counted the bracket).
 
 ## 8. Reserved / roadmap
 
-`save`; `#*` `#/`; M1 (bit addressing, IQ3 — when it lands, bit
-pointers get the function-style literal `bitp(w, n)` (n = 0..31),
-matching the wp/bp precedent; the colon form `0xW:b` is byte-select
-FOREVER and is not to be overloaded — user ruling, Aug 29 2026). Byte addressing (M8,
-wp/bp, B-form pushes) LANDED in P25 — and the formula this section
-used to park, ((base<<1)+disp)&0x1FFFFFFF | (seg<<29), was found to
-describe only the X-form ii=0/2/3 cases: the L-form byte EA applies
-no masking in any mode and the X pc-relative mode none either
-(Project25/ByteEA.md §2, semantics read from
-Machine::eagle_{x,l}_byte_indexed per METHOD §5; recorded as a
-correction, METHOD §11). t-places and conditional exits
-(`end if`-class) are P26; borrows convert to t-places there (no
-borrow ops — standing ruling; the two decorated borrow brackets ride
-as @addr instructions until then).
+`save`; M1 (bit addressing, IQ3 — when it lands, bit pointers get the
+function-style literal `bitp(w, n)` (n = 0..31), matching the wp/bp
+precedent; the colon form `0xW:b` is byte-select FOREVER and is not to
+be overloaded — user ruling, Aug 29 2026); stack-register WRITES (wfp
+wsp wsb wsl — grammatically registers, refused until the RT-call
+decoration project); a pure (flag-free) arithmetic shift primary
+(none needed by the census; `ash` is root-effectful). Byte addressing
+LANDED in P25 (the parked formula was wrong for L-forms — Project25/
+ByteEA.md §2, METHOD §11). The `#` family, t-places, conditional
+exits and borrow→t-place conversion LANDED in P26 (`#*`/`#/` retired
+unimplemented with the family — `mul`/`div` own the flag semantics).
+Flag-conversion (add→+ where flags are provably dead) is parked with
+direction ruled: MathDesign §5.
 
 ## 9. Version history
 
 ir 1 (Project 23 phase 1): @pc-prefixed statements, `embed` keyword,
 `end` / `end fall`, per-statement pcs. Superseded; loaders refuse it.
-ir 2 (this spec): addressless statements, @addr instructions only,
+ir 2 (Project 23 phase 2): addressless statements, @addr instructions only,
 blank-line blocks + trailer, call/ret/goto, mode discipline,
 decoder-length continuation. Amended once in-session: call gained
 site= (length knowledge removed).
@@ -303,7 +415,18 @@ documented straddling-batch latent race after process-wide detach). Grammar is a
 superset except `<<`; pre-P25 loaders refuse the new forms (regenerate
 artifacts and binaries together, as always).
 
-> Forward design of record for the NEXT grammar revision (terminator,
-> booleans, s/u comparisons, add()/sub() family superseding #+/#-):
-> docs/Project26/MathDesign.md (Aug 29 2026). This spec remains the law
-> for the shipped rev-2 artifacts until that revision lands.
+ir 3 (Project 26, Sep 5 2026 — docs/Project26/{MathDesign,Census,
+REPORT}.md): `goto [labels] e` terminator (plain `goto L` kept as
+parser sugar; the dump form is `goto [L] 0`); strict 0/1 booleans
+(`tf`, `==`/`!=`, mandatory-suffix `<s <=s >s >=s <u <=u >u >=u`, eager
+`&& || !`); word layer (`& | ^ ~`, `lsh`); pure `/s /u %s %u` with loud
+faults; the effectful root-only family add/sub/mul/div/cvwn/ash/nadd/
+nsub/nmul defined as the shared EagleInstruction helpers (div and cvwn
+hoisted from EagleCompute's inline bodies); `#+ #- #* #/` RETIRED
+(refused); `c`/`ovr` readable and root-assignable; stack-register
+reads (`wfp wsp wsb wsl`, writes refused); `ind(e)`; t-places (block-
+local, single-assignment, loader-checked); flat chains must be
+class-homogeneous (loader-enforced, no precedence table). NOT a
+superset of ir 2 (the `#` family and the plain-goto dump form are
+gone); loaders refuse `ir 2` files — regenerate artifacts and
+binaries together, as always.
