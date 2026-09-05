@@ -132,6 +132,51 @@ possible — statements are sequence, not identities.
   (straight-line blocks make definite assignment exact).
 - Anything unrecognized refuses. No silent skips, ever — including in
   the emitter's own input parsers.
+- SYNC LIST (P27, ir 3 note — no grammar change): the loader validates
+  block starts AND goto labels against the SHIPPED sync list
+  (QUEST_SYNC_LIST), not against quest.blocks. A translation that
+  removes blocks ships a list without them (BlockSyncDesign.md rules
+  1–2), and any IR line naming a delisted pc refuses at load.
+
+### 4a. DERR clusters (Project 27, Sep 5 2026 — docs/Project27/Census.md)
+
+A compiler-generated bounds check is a skip chain with exactly two
+exits — a `DERR nn` sink (TERMINAL: DERR.TRP is an ABORT-kind terminal,
+nothing downstream of it is ever observed) and one continuation K.
+`tools/lower.py --assumed-foldable docs/Project27/assumed-foldable.txt
+--tags …` folds each listed cluster INTO ITS GUARD BLOCK (user ruling
+F1 = A): the guard skip becomes
+
+    assert(<path condition to K>, "DERR nn @<derr pc>")
+    goto [K] 0
+
+where the condition is a transcription of the skips (cond(K)=true,
+cond(DERR)=false, `t ? cond(skip) : cond(fall)` rendered `(t) && …` /
+`!(t) && …`, no other algebra) re-derived through lower_one and
+cross-checked against the artifact text. The cluster's INTERIOR blocks
+(second skip, DERR) are not emitted and are delisted from the shipped
+list `c_src/quest.synclist.p27` (identity minus interiors of the
+clusters actually folded; lower.py writes it with tags/blocks/artifact
+sha256 provenance). K stays a listed block — the clone ticks its
+ordinal on ARRIVAL at a listed pc (Machine.cpp:306), so a merged K
+would skew ordinals. Totality: a guard block that refuses keeps its
+interiors emitted AND listed — never a half fold.
+
+Checker consequence (ruling F2-a, honest statement): a folded DERR is
+no longer a VERIFIED terminal pair. The clone's assert fires inside
+the IR block → `Lockstep::assert_detach` (clone halts); the master
+executes the real DERR → DERR.TRP → O.SERROR → DEF?ON → ?FATAL and dies
+its own way (the compare_pair detached early-out means no
+`TERMINAL-ABORT … verified on both engines` line). The `derr` battery
+leg therefore matches TWO lines: the clone's `IR ASSERT FAILED …
+"DERR nn @pc"` at the predicted pc AND a non-clean master end
+(DERR.TRP on its backtrace, START_TURN never reached). Follow-up F2-b
+(assert-detach paired with a kind-2 terminal → TERMINAL-ABORT) is
+recorded in Project27/REPORT.md, not landed.
+
+Test knob: `QUEST_POKE=<hexpc>:<ac>:<value>` (RTStubs.hpp) — one-shot,
+both roles, on arrival at pc; the derr leg's mechanism. Harness, not
+checker; zero effect unset.
 
 ## 5. Statements and expressions
 
@@ -505,3 +550,9 @@ class-homogeneous (loader-enforced, no precedence table). NOT a
 superset of ir 2 (the `#` family and the plain-goto dump form are
 gone); loaders refuse `ir 2` files — regenerate artifacts and
 binaries together, as always.
+
+ir 3 P27 note (Sep 5 2026, no grammar change): DERR clusters fold to
+`assert(cond, "DERR nn @pc"); goto [K] 0` in the guard block (§4a);
+interior blocks delisted via the shipped `quest.synclist.p27`; 2,271
+of 2,273 DERR embeds gone (the 2 LDSP-fed sinks are P28); `assert` is
+now emitted by lower.py (P25 made it hand-authorable only).

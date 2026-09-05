@@ -47,6 +47,7 @@ public:
   Memory* memory;
   hw::NativeRegistry native_registry;
   bool inject_armed = false;   // Project 5 fault injector: one shot per process (QUEST clients only)
+  bool poke_armed = false;     // Project 27 register poke: one shot per process (QUEST clients only)
   std::vector<OSTask*> tasks;
   std::vector<FSChannel*> channels;
   int32_t unshared_stop;

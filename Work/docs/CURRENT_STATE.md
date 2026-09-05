@@ -2,6 +2,39 @@
 
 # Where things stand
 
+## ★ P27 LANDED ON BRANCH — DERR cluster compression: 2,271 clusters → assert; DERR embeds 2,273 → 2; embeds 8,529 → 6,258; sync list 18,009 → 13,510 (Sep 5 2026; task 040 queued, awaiting review + integration)
+
+Branch p27-derr-clusters (based on main 29a1c24). Plan gate: docs/
+Project27/Census.md — census reproduced the prompt's table exactly
+(2,271 foldable in seven skip shapes; the LDSP pair → P28); three
+design-vs-reality findings ruled: **F1 = A** (guard block ends
+`assert(cond, "DERR nn @pc"); goto [K] 0`; K stays listed because the
+clone ticks its ordinal on ARRIVAL at a listed pc, Machine.cpp:306;
+delist only the skip/DERR interiors, 4,499), **F2-a** (a folded DERR is
+no longer a verified terminal pair — clone assert-detaches, master runs
+DERR.TRP → ?FATAL on its own; F2-b = pair an assert-detach with a
+kind-2 terminal as TERMINAL-ABORT is a recorded follow-up), **F3 =
+QUEST_POKE=<hexpc>:<ac>:<value>** (one-shot register poke on arrival,
+both roles, INJECT hygiene; harness knob — QUEST_INJECT cannot set a
+register). Landed: tools/derr_clusters.py (analysis, 8.5 s) +
+docs/Project27/assumed-foldable.txt (2,271 lines, tags sha, per-
+cluster evidence; the checklist the goto-graph project discharges);
+lower.py `--assumed-foldable/--tags/--synclist-in/--synclist-out`
+(condition re-derived through lower_one and cross-checked against the
+artifact; totality — a refusing guard keeps its interiors emitted AND
+listed); **c_src/quest.synclist.p27** (13,510; provenance header);
+ir2.book/stock regenerated (13,507 blocks, 6,258 / 8,137 instr, 11,400
+goto, 2,271 assert). Local K=1 gates: k1fo book 0 div (322,425 pairs,
+1,350 IR blocks), k1st stock 0 div, **derr leg**: clone `IR ASSERT
+FAILED [block 7015C48B stmt 0]: … "DERR 17 @7015C48E"`, master
+DERR.TRP+0x20 → O.SERROR → DEF?ON → ?FATAL → `Unimplemented system
+call 0351` (a never-executed path; METHOD §3), last verified pair
+7015C48B on both. Task 040 = 034 template + derr leg via
+bin/task_source.sh, P27 verdict lines. Records: docs/Project27/
+{Census,REPORT,REPORT_worklog}.md; IR.md §4a. Remaining embeds 6,258 =
+RT-call 2,887 + calls 1,313 + string/WMSP/stack 1,765 + frames/OS/
+float/misc 223 + 67 Nova loads + 1 LNDO + 2 LDSP DERR sinks.
+
 ## ★ P26 LANDED ON BRANCH — the math & control grammar (ir 3); embeds 27,600 → 8,529; battery 037 13/13 GREEN (Sep 5 2026; awaiting review + integration)
 
 Branch p26-math-grammar (based on main). Plan gate Sep 5: census of
