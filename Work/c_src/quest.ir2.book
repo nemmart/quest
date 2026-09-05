@@ -1,7 +1,7 @@
 ir 3
 mode book
-source  ../../Disassembled/quest.dis sha256=1f9153c0299cd48207e0f45bb1f36522f4ec83dcd56f29e5f0ea4579aab4d6a5
-blocks  quest.blocks.split sha256=a5efa05f59e7af6705c4525eb3c2b2012f0faaf592d0ea01a5056a64117e0b75
+source  ../../Disassembled/quest.dis sha256=5c1db5fb75c8c26a70eaeab5760213973d1c80e8711b6dacbb9c28376d4118f4
+blocks  quest.blocks.split sha256=1d3baaf6487a8e3faf4c900e49dbcaae6ddbe1e7f996a47b161c74b502b43477
 pushmap quest.pushmap.M4 sha256=b89536597005f3045dcf31756d02bc6b315b6b09a7fd5b1b05765be44eb73229
 argmap  ../../Disassembled/quest.argmap sha256=39c42d4c4b749f323cb6193b4fcc52d513e9bf080f159e199569e63c3177e035
 
@@ -422,7 +422,7 @@ block 7015C0C1 seg 0x70000000
 
 block 7015C0C5 seg 0x70000000
   ac0 = sx16(M16[wp(ac3, 14)]) ; XNLDA 0,[ac3+0xE];
-  @7015C0C7 LNDO [0x70000216],25;
+  @7015C0C7 LNDO 0,25,[0x70000216];
 
 block 7015C0CB seg 0x70000000
   goto [7015C0CD, 7015C0CE] (ac0 >s 0x0000000A) ; WSGTI 0,10 (0x000A);
@@ -1018,7 +1018,7 @@ block 7015C323 seg 0x70000000
 
 block 7015C336 seg 0x70000000
   ac1 = ac3 ; WMOV 3,1;
-  @7015C337 XCALL 0,0,[pc+0x2A9] (0x7015C5E1); # symbol not found
+  @7015C337 XCALL [pc+0x2A9] (0x7015C5E1),0; # symbol not found
 
 block 7015C33A seg 0x70000000
   ac0 = sub(ac0, ac0) ; WSUB 0,0;
@@ -2090,7 +2090,7 @@ block 7015C93C seg 0x70000000
 
 block 7015C93D seg 0x70000000
   ac1 = ac3 ; WMOV 3,1;
-  @7015C93E XCALL 0,0,[pc+0x339] (0x7015CC78); # symbol not found
+  @7015C93E XCALL [pc+0x339] (0x7015CC78),0; # symbol not found
 
 block 7015C941 seg 0x70000000
   M32[0x740072DC] = 0x70151D47 ; LPEF [0x70151D47];
@@ -5370,7 +5370,7 @@ block 7015DC0A seg 0x70000000
 
 block 7015DC1E seg 0x70000000
   ac1 = ac3 ; WMOV 3,1;
-  @7015DC1F XCALL 0,0,[pc+0xC2A] (0x7015E84A); # symbol not found
+  @7015DC1F XCALL [pc+0xC2A] (0x7015E84A),0; # symbol not found
 
 block 7015DC22 seg 0x70000000
   goto [7015E0F0] 0 ; XJMP [pc+0x4CD] (0x7015E0F0);
@@ -5499,7 +5499,7 @@ block 7015DC8D seg 0x70000000
 
 block 7015DC8E seg 0x70000000
   ac1 = ac3 ; WMOV 3,1;
-  @7015DC8F XCALL 0,0,[pc+0x1C66] (0x7015F8F6); # symbol not found
+  @7015DC8F XCALL [pc+0x1C66] (0x7015F8F6),0; # symbol not found
 
 block 7015DC92 seg 0x70000000
   goto [7015E0EC] 0 ; XJMP [pc+0x459] (0x7015E0EC);
@@ -6137,7 +6137,7 @@ block 7015DEFC seg 0x70000000
 
 block 7015DF06 seg 0x70000000
   ac1 = ac3 ; WMOV 3,1;
-  @7015DF07 XCALL 0,0,[pc+0x2E9] (0x7015E1F1); # symbol not found
+  @7015DF07 XCALL [pc+0x2E9] (0x7015E1F1),0; # symbol not found
 
 block 7015DF0A seg 0x70000000
   goto [7015E0EC] 0 ; XJMP [pc+0x1E1] (0x7015E0EC);
@@ -6393,7 +6393,7 @@ block 7015E004 seg 0x70000000
   ac2 = ac1 ; WMOV 1,2;
   M16[wp(ac2, -170)] = trunc16(ac0) ; XNSTA 0,[ac2+0x7F56];
   ac1 = ac3 ; WMOV 3,1;
-  @7015E00D XCALL 0,0,[pc+0x105] (0x7015E113); # symbol not found
+  @7015E00D XCALL [pc+0x105] (0x7015E113),0; # symbol not found
 
 block 7015E010 seg 0x70000000
   goto [7015E071] 0 ; WBR 97 (0x7015E071);
@@ -6438,7 +6438,7 @@ block 7015E030 seg 0x70000000
 
 block 7015E031 seg 0x70000000
   ac1 = ac3 ; WMOV 3,1;
-  @7015E032 XCALL 0,0,[pc+0x1BE] (0x7015E1F1); # symbol not found
+  @7015E032 XCALL [pc+0x1BE] (0x7015E1F1),0; # symbol not found
 
 block 7015E035 seg 0x70000000
   goto [7015E071] 0 ; WBR 60 (0x7015E071);
@@ -8701,7 +8701,7 @@ block 7015E8F1 seg 0x70000000
 
 block 7015E8F2 seg 0x70000000
   ac1 = M32[wp(ac3, -6)] ; XWLDA 1,[ac3+0x7FFA];
-  @7015E8F4 XCALL 0,0,[pc+0x1001] (0x7015F8F6); # symbol not found
+  @7015E8F4 XCALL [pc+0x1001] (0x7015F8F6),0; # symbol not found
 
 block 7015E8F7 seg 0x70000000
   goto [7015F8CC] 0 ; XJMP [pc+0xFD4] (0x7015F8CC);
@@ -8877,7 +8877,7 @@ block 7015E9CC seg 0x70000000
   ac2 = ac1 ; WMOV 1,2;
   M16[wp(ac2, -170)] = trunc16(ac0) ; XNSTA 0,[ac2+0x7F56];
   ac1 = M32[wp(ac3, -6)] ; XWLDA 1,[ac3+0x7FFA];
-  @7015E9D6 XCALL 0,0,[pc+0x773C] (0x7015E113); # symbol not found
+  @7015E9D6 XCALL [pc+0x773C] (0x7015E113),0; # symbol not found
 
 block 7015E9D9 seg 0x70000000
   goto [7015E9FB] 0 ; WBR 34 (0x7015E9FB);
@@ -8944,7 +8944,7 @@ block 7015EA10 seg 0x70000000
 
 block 7015EA11 seg 0x70000000
   ac1 = M32[wp(ac3, -6)] ; XWLDA 1,[ac3+0x7FFA];
-  @7015EA13 XCALL 0,0,[pc+0x77DD] (0x7015E1F1); # symbol not found
+  @7015EA13 XCALL [pc+0x77DD] (0x7015E1F1),0; # symbol not found
 
 block 7015EA16 seg 0x70000000
   goto [7015EA5B] 0 ; WBR 69 (0x7015EA5B);
@@ -9890,7 +9890,7 @@ block 7015EDCA seg 0x70000000
 
 block 7015EDCB seg 0x70000000
   ac1 = M32[wp(ac3, -6)] ; XWLDA 1,[ac3+0x7FFA];
-  @7015EDCD XCALL 0,0,[pc+0xB28] (0x7015F8F6); # symbol not found
+  @7015EDCD XCALL [pc+0xB28] (0x7015F8F6),0; # symbol not found
 
 block 7015EDD0 seg 0x70000000
   goto [7015F8CC] 0 ; XJMP [pc+0xAFB] (0x7015F8CC);
@@ -10033,7 +10033,7 @@ block 7015EE7E seg 0x70000000
   ac2 = ac1 ; WMOV 1,2;
   M16[wp(ac2, -170)] = trunc16(ac0) ; XNSTA 0,[ac2+0x7F56];
   ac1 = M32[wp(ac3, -6)] ; XWLDA 1,[ac3+0x7FFA];
-  @7015EE88 XCALL 0,0,[pc+0x728A] (0x7015E113); # symbol not found
+  @7015EE88 XCALL [pc+0x728A] (0x7015E113),0; # symbol not found
 
 block 7015EE8B seg 0x70000000
   goto [7015EEAD] 0 ; WBR 34 (0x7015EEAD);
@@ -10100,7 +10100,7 @@ block 7015EEC2 seg 0x70000000
 
 block 7015EEC3 seg 0x70000000
   ac1 = M32[wp(ac3, -6)] ; XWLDA 1,[ac3+0x7FFA];
-  @7015EEC5 XCALL 0,0,[pc+0x732B] (0x7015E1F1); # symbol not found
+  @7015EEC5 XCALL [pc+0x732B] (0x7015E1F1),0; # symbol not found
 
 block 7015EEC8 seg 0x70000000
   goto [7015EF0D] 0 ; WBR 69 (0x7015EF0D);
@@ -10237,7 +10237,7 @@ block 7015EF52 seg 0x70000000
 
 block 7015EF53 seg 0x70000000
   ac1 = M32[wp(ac3, -6)] ; XWLDA 1,[ac3+0x7FFA];
-  @7015EF55 XCALL 0,0,[pc+0x9A0] (0x7015F8F6); # symbol not found
+  @7015EF55 XCALL [pc+0x9A0] (0x7015F8F6),0; # symbol not found
 
 block 7015EF58 seg 0x70000000
   goto [7015F8CC] 0 ; XJMP [pc+0x973] (0x7015F8CC);
@@ -10405,7 +10405,7 @@ block 7015F01C seg 0x70000000
   ac2 = ac1 ; WMOV 1,2;
   M16[wp(ac2, -170)] = trunc16(ac0) ; XNSTA 0,[ac2+0x7F56];
   ac1 = M32[wp(ac3, -6)] ; XWLDA 1,[ac3+0x7FFA];
-  @7015F025 XCALL 0,0,[pc+0x70ED] (0x7015E113); # symbol not found
+  @7015F025 XCALL [pc+0x70ED] (0x7015E113),0; # symbol not found
 
 block 7015F028 seg 0x70000000
   goto [7015F04A] 0 ; WBR 34 (0x7015F04A);
@@ -10472,7 +10472,7 @@ block 7015F05F seg 0x70000000
 
 block 7015F060 seg 0x70000000
   ac1 = M32[wp(ac3, -6)] ; XWLDA 1,[ac3+0x7FFA];
-  @7015F062 XCALL 0,0,[pc+0x718E] (0x7015E1F1); # symbol not found
+  @7015F062 XCALL [pc+0x718E] (0x7015E1F1),0; # symbol not found
 
 block 7015F065 seg 0x70000000
   goto [7015F0AA] 0 ; WBR 69 (0x7015F0AA);
@@ -10609,7 +10609,7 @@ block 7015F0EF seg 0x70000000
 
 block 7015F0F0 seg 0x70000000
   ac1 = M32[wp(ac3, -6)] ; XWLDA 1,[ac3+0x7FFA];
-  @7015F0F2 XCALL 0,0,[pc+0x803] (0x7015F8F6); # symbol not found
+  @7015F0F2 XCALL [pc+0x803] (0x7015F8F6),0; # symbol not found
 
 block 7015F0F5 seg 0x70000000
   goto [7015F8CC] 0 ; XJMP [pc+0x7D6] (0x7015F8CC);
@@ -10700,14 +10700,14 @@ block 7015F14A seg 0x70000000
   M16[wp(ac2, -377)] = trunc16(ac0) ; XNSTA 0,[ac2+0x7E87];
   ac3 = wfp ; LDAFP 3;
   ac1 = M32[wp(ac3, -6)] ; XWLDA 1,[ac3+0x7FFA];
-  @7015F158 XCALL 0,0,[pc+0x6FBA] (0x7015E113); # symbol not found
+  @7015F158 XCALL [pc+0x6FBA] (0x7015E113),0; # symbol not found
 
 block 7015F15B seg 0x70000000
   goto [7015F160] 0 ; WBR 5 (0x7015F160);
 
 block 7015F15C seg 0x70000000
   ac1 = ac2 ; WMOV 2,1;
-  @7015F15D XCALL 0,0,[pc+0x7093] (0x7015E1F1); # symbol not found
+  @7015F15D XCALL [pc+0x7093] (0x7015E1F1),0; # symbol not found
 
 block 7015F160 seg 0x70000000
   ac2 = M32[wp(ac3, -6)] ; XWLDA 2,[ac3+0x7FFA];
@@ -11359,7 +11359,7 @@ block 7015F3D4 seg 0x70000000
 
 block 7015F3D5 seg 0x70000000
   ac1 = M32[wp(ac3, -6)] ; XWLDA 1,[ac3+0x7FFA];
-  @7015F3D7 XCALL 0,0,[pc+0x51E] (0x7015F8F6); # symbol not found
+  @7015F3D7 XCALL [pc+0x51E] (0x7015F8F6),0; # symbol not found
 
 block 7015F3DA seg 0x70000000
   goto [7015F8CC] 0 ; XJMP [pc+0x4F1] (0x7015F8CC);
@@ -14128,7 +14128,7 @@ block 701604D5 seg 0x70000000
 
 block 701604E1 seg 0x70000000
   ac1 = ac3 ; WMOV 3,1;
-  @701604E2 XCALL 0,0,[pc+0x43D] (0x70160920); # symbol not found
+  @701604E2 XCALL [pc+0x43D] (0x70160920),0; # symbol not found
 
 block 701604E5 seg 0x70000000
   t1 = ((ac0 & 0xFFFF) | lsh(c, 16)) ; MOV.L# 0,0,SNC;
@@ -14401,7 +14401,7 @@ block 7016063D seg 0x70000000
   ac0 = 0x00000075 ; NLDAI 117 (0x0075),0;
   M16[wp(ac3, 4)] = trunc16(ac0) ; XNSTA 0,[ac3+0x4];
   ac1 = ac3 ; WMOV 3,1;
-  @70160642 XCALL 0,0,[pc+0x2DD] (0x70160920); # symbol not found
+  @70160642 XCALL [pc+0x2DD] (0x70160920),0; # symbol not found
 
 block 70160645 seg 0x70000000
   t1 = ((ac0 & 0xFFFF) | lsh(c, 16)) ; MOV.L# 0,0,SNC;
@@ -14489,7 +14489,7 @@ block 701606AB seg 0x70000000
   M16[wp(ac3, 16)] = trunc16(ac0) ; XNSTA 0,[ac3+0x10];
   M32[0x74000C8C] = wp(ac3, 16) ; XPEF [ac3+0x10];
   ac1 = ac3 ; WMOV 3,1;
-  call 70160854 args=1 marker=74000C8E site=701606B2 ret=701606B5 ; XCALL 0,1,[pc+0x1A1] (0x70160854); # symbol not found
+  call 70160854 args=1 marker=74000C8E site=701606B2 ret=701606B5 ; XCALL [pc+0x1A1] (0x70160854),1; # symbol not found
 
 block 701606B5 seg 0x70000000
   t1 = ((ac0 & 0xFFFF) | lsh(c, 16)) ; MOV.L# 0,0,SNC;
@@ -14507,7 +14507,7 @@ block 701606B9 seg 0x70000000
   M16[wp(ac3, 16)] = trunc16(ac0) ; XNSTA 0,[ac3+0x10];
   M32[0x74000C8C] = wp(ac3, 16) ; XPEF [ac3+0x10];
   ac1 = ac3 ; WMOV 3,1;
-  call 70160854 args=1 marker=74000C8E site=701606C0 ret=701606C3 ; XCALL 0,1,[pc+0x193] (0x70160854); # symbol not found
+  call 70160854 args=1 marker=74000C8E site=701606C0 ret=701606C3 ; XCALL [pc+0x193] (0x70160854),1; # symbol not found
 
 block 701606C3 seg 0x70000000
   t1 = ((ac0 & 0xFFFF) | lsh(c, 16)) ; MOV.L# 0,0,SNC;
@@ -14525,7 +14525,7 @@ block 701606C7 seg 0x70000000
   M16[wp(ac3, 16)] = trunc16(ac0) ; XNSTA 0,[ac3+0x10];
   M32[0x74000C8C] = wp(ac3, 16) ; XPEF [ac3+0x10];
   ac1 = ac3 ; WMOV 3,1;
-  call 70160854 args=1 marker=74000C8E site=701606CE ret=701606D1 ; XCALL 0,1,[pc+0x185] (0x70160854); # symbol not found
+  call 70160854 args=1 marker=74000C8E site=701606CE ret=701606D1 ; XCALL [pc+0x185] (0x70160854),1; # symbol not found
 
 block 701606D1 seg 0x70000000
   t1 = ((ac0 & 0xFFFF) | lsh(c, 16)) ; MOV.L# 0,0,SNC;
@@ -14722,7 +14722,7 @@ block 70160790 seg 0x70000000
   M16[wp(ac3, 16)] = trunc16(ac0) ; XNSTA 0,[ac3+0x10];
   M32[0x74000C8C] = wp(ac3, 16) ; XPEF [ac3+0x10];
   ac1 = ac3 ; WMOV 3,1;
-  call 70160854 args=1 marker=74000C8E site=70160797 ret=7016079A ; XCALL 0,1,[pc+0xBC] (0x70160854); # symbol not found
+  call 70160854 args=1 marker=74000C8E site=70160797 ret=7016079A ; XCALL [pc+0xBC] (0x70160854),1; # symbol not found
 
 block 7016079A seg 0x70000000
   t1 = ((ac0 & 0xFFFF) | lsh(c, 16)) ; MOV.L# 0,0,SZC;
@@ -14878,7 +14878,7 @@ block 70160832 seg 0x70000000
   M16[wp(ac3, 16)] = trunc16(ac0) ; XNSTA 0,[ac3+0x10];
   M32[0x74000C8C] = wp(ac3, 16) ; XPEF [ac3+0x10];
   ac1 = ac3 ; WMOV 3,1;
-  call 70160854 args=1 marker=74000C8E site=70160839 ret=7016083C ; XCALL 0,1,[pc+0x1A] (0x70160854); # symbol not found
+  call 70160854 args=1 marker=74000C8E site=70160839 ret=7016083C ; XCALL [pc+0x1A] (0x70160854),1; # symbol not found
 
 block 7016083C seg 0x70000000
   t1 = ((ac0 & 0xFFFF) | lsh(c, 16)) ; MOV.L# 0,0,SNC;
@@ -18929,7 +18929,7 @@ block 70161926 seg 0x70000000
   M16[wp(ac3, 34)] = trunc16(ac2) ; XNSTA 2,[ac3+0x22];
   M32[0x74000ECC] = wp(ac3, 34) ; XPEF [ac3+0x22];
   ac1 = ac3 ; WMOV 3,1;
-  call 70161AA3 args=1 marker=74000ECE site=7016192B ret=7016192E ; XCALL 0,1,[pc+0x177] (0x70161AA3); # symbol not found
+  call 70161AA3 args=1 marker=74000ECE site=7016192B ret=7016192E ; XCALL [pc+0x177] (0x70161AA3),1; # symbol not found
 
 block 7016192E seg 0x70000000
   t1 = ((ac0 & 0xFFFF) | lsh(c, 16)) ; MOV.L# 0,0,SNC;
@@ -18960,7 +18960,7 @@ block 70161945 seg 0x70000000
   M16[wp(ac3, 34)] = trunc16(ac2) ; XNSTA 2,[ac3+0x22];
   M32[0x74000ECC] = wp(ac3, 34) ; XPEF [ac3+0x22];
   ac1 = ac3 ; WMOV 3,1;
-  call 70161AA3 args=1 marker=74000ECE site=7016194A ret=7016194D ; XCALL 0,1,[pc+0x158] (0x70161AA3); # symbol not found
+  call 70161AA3 args=1 marker=74000ECE site=7016194A ret=7016194D ; XCALL [pc+0x158] (0x70161AA3),1; # symbol not found
 
 block 7016194D seg 0x70000000
   ac0 = ~ac0 ; WCOM 0,0;
@@ -19008,7 +19008,7 @@ block 7016197A seg 0x70000000
   M16[wp(ac3, 34)] = trunc16(ac1) ; XNSTA 1,[ac3+0x22];
   M32[0x74000ECC] = wp(ac3, 34) ; XPEF [ac3+0x22];
   ac1 = ac3 ; WMOV 3,1;
-  call 70161AA3 args=1 marker=74000ECE site=7016197F ret=70161982 ; XCALL 0,1,[pc+0x123] (0x70161AA3); # symbol not found
+  call 70161AA3 args=1 marker=74000ECE site=7016197F ret=70161982 ; XCALL [pc+0x123] (0x70161AA3),1; # symbol not found
 
 block 70161982 seg 0x70000000
   ac0 = ~ac0 ; WCOM 0,0;
@@ -20647,7 +20647,7 @@ block 70162407 seg 0x70000000
 
 block 7016241B seg 0x70000000
   ac1 = ac3 ; WMOV 3,1;
-  @7016241C XCALL 0,0,[pc+0x22] (0x7016243F); # symbol not found
+  @7016241C XCALL [pc+0x22] (0x7016243F),0; # symbol not found
 
 block 7016241F seg 0x70000000
   ret ; WRTN;
@@ -22176,7 +22176,7 @@ block 70162A4B seg 0x70000000
   ac2 = M32[wp(ac3, 14)] ; XWLDA 2,[ac3+0xE];
   M32[0x7400110E] = wp(ac2, 11495) ; XPEF [ac2+0x2CE7];
   ac1 = M32[wp(ac3, -6)] ; XWLDA 1,[ac3+0x7FFA];
-  call 70163682 args=2 marker=74001110 site=70162A58 ret=70162A5B ; XCALL 0,2,[pc+0xC29] (0x70163682); # symbol not found
+  call 70163682 args=2 marker=74001110 site=70162A58 ret=70162A5B ; XCALL [pc+0xC29] (0x70163682),2; # symbol not found
 
 block 70162A5B seg 0x70000000
   goto [70163658] 0 ; XJMP [pc+0xBFC] (0x70163658);
@@ -22448,7 +22448,7 @@ block 70162B66 seg 0x70000000
   ac2 = M32[wp(ac3, 68)] ; XWLDA 2,[ac3+0x44];
   M32[0x7400110E] = wp(ac2, -23) ; XPEF [ac2+0x7FE9];
   ac1 = M32[wp(ac3, -6)] ; XWLDA 1,[ac3+0x7FFA];
-  call 70163682 args=2 marker=74001110 site=70162B75 ret=70162B78 ; XCALL 0,2,[pc+0xB0C] (0x70163682); # symbol not found
+  call 70163682 args=2 marker=74001110 site=70162B75 ret=70162B78 ; XCALL [pc+0xB0C] (0x70163682),2; # symbol not found
 
 block 70162B78 seg 0x70000000
   goto [70162B12] 0 ; WBR -102 (0x70162B12);
@@ -27045,7 +27045,7 @@ block 70164186 seg 0x70000000
 
 block 7016419A seg 0x70000000
   ac1 = ac3 ; WMOV 3,1;
-  @7016419B XCALL 0,0,[pc+0x464] (0x70164600); # symbol not found
+  @7016419B XCALL [pc+0x464] (0x70164600),0; # symbol not found
 
 block 7016419E seg 0x70000000
   goto [701643BD] 0 ; XJMP [pc+0x21E] (0x701643BD);
@@ -27397,7 +27397,7 @@ block 70164326 seg 0x70000000
 
 block 70164330 seg 0x70000000
   ac1 = ac3 ; WMOV 3,1;
-  @70164331 XCALL 0,0,[pc+0xAE] (0x701643E0); # symbol not found
+  @70164331 XCALL [pc+0xAE] (0x701643E0),0; # symbol not found
 
 block 70164334 seg 0x70000000
   goto [701643BD] 0 ; XJMP [pc+0x88] (0x701643BD);
@@ -27471,7 +27471,7 @@ block 7016438E seg 0x70000000
 
 block 7016438F seg 0x70000000
   ac1 = ac3 ; WMOV 3,1;
-  @70164390 XCALL 0,0,[pc+0x4F] (0x701643E0); # symbol not found
+  @70164390 XCALL [pc+0x4F] (0x701643E0),0; # symbol not found
 
 block 70164393 seg 0x70000000
   goto [701643BD] 0 ; WBR 42 (0x701643BD);
@@ -28134,7 +28134,7 @@ block 70164684 seg 0x70000000
 
 block 70164685 seg 0x70000000
   ac1 = M32[wp(ac3, -6)] ; XWLDA 1,[ac3+0x7FFA];
-  @70164687 XCALL 0,0,[pc+0x7D58] (0x701643E0); # symbol not found
+  @70164687 XCALL [pc+0x7D58] (0x701643E0),0; # symbol not found
 
 block 7016468A seg 0x70000000
   goto [701646A3] 0 ; WBR 25 (0x701646A3);
@@ -28729,7 +28729,7 @@ block 70164900 seg 0x70000000
 
 block 70164901 seg 0x70000000
   ac1 = M32[wp(ac3, -6)] ; XWLDA 1,[ac3+0x7FFA];
-  @70164903 XCALL 0,0,[pc+0x7ADC] (0x701643E0); # symbol not found
+  @70164903 XCALL [pc+0x7ADC] (0x701643E0),0; # symbol not found
 
 block 70164906 seg 0x70000000
   goto [7016491F] 0 ; WBR 25 (0x7016491F);
@@ -28899,7 +28899,7 @@ block 701649D6 seg 0x70000000
 
 block 701649D7 seg 0x70000000
   ac1 = M32[wp(ac3, -6)] ; XWLDA 1,[ac3+0x7FFA];
-  @701649D9 XCALL 0,0,[pc+0x7A06] (0x701643E0); # symbol not found
+  @701649D9 XCALL [pc+0x7A06] (0x701643E0),0; # symbol not found
 
 block 701649DC seg 0x70000000
   goto [701649F5] 0 ; WBR 25 (0x701649F5);
@@ -28977,7 +28977,7 @@ block 70164A1F seg 0x70000000
 
 block 70164A33 seg 0x70000000
   ac1 = M32[wp(ac3, -6)] ; XWLDA 1,[ac3+0x7FFA];
-  @70164A35 XCALL 0,0,[pc+0x79AA] (0x701643E0); # symbol not found
+  @70164A35 XCALL [pc+0x79AA] (0x701643E0),0; # symbol not found
 
 block 70164A38 seg 0x70000000
   ac2 = M32[wp(ac3, -6)] ; XWLDA 2,[ac3+0x7FFA];
@@ -43568,7 +43568,7 @@ block 701692A4 seg 0x70000000
 
 block 701692A5 seg 0x70000000
   ac1 = ac3 ; WMOV 3,1;
-  @701692A6 XCALL 0,0,[pc+0x3DC] (0x70169683); # symbol not found
+  @701692A6 XCALL [pc+0x3DC] (0x70169683),0; # symbol not found
 
 block 701692A9 seg 0x70000000
   ac0 = sx16(M16[wp(ac3, 11)]) ; XNLDA 0,[ac3+0xB];
@@ -43903,7 +43903,7 @@ block 701693DD seg 0x70000000
 
 block 701693DE seg 0x70000000
   ac1 = ac3 ; WMOV 3,1;
-  @701693DF XCALL 0,0,[pc+0x2A3] (0x70169683); # symbol not found
+  @701693DF XCALL [pc+0x2A3] (0x70169683),0; # symbol not found
 
 block 701693E2 seg 0x70000000
   ac0 = sx16(M16[wp(ac3, 11)]) ; XNLDA 0,[ac3+0xB];
@@ -46468,7 +46468,7 @@ block 7016A04F seg 0x70000000
 
 block 7016A08B seg 0x70000000
   ac1 = ac3 ; WMOV 3,1;
-  @7016A08C XCALL 0,0,[pc+0x330] (0x7016A3BD); # symbol not found
+  @7016A08C XCALL [pc+0x330] (0x7016A3BD),0; # symbol not found
 
 block 7016A08F seg 0x70000000
   goto [7016A399] 0 ; XJMP [pc+0x309] (0x7016A399);
@@ -46759,7 +46759,7 @@ block 7016A1E3 seg 0x70000000
 
 block 7016A1E4 seg 0x70000000
   ac1 = ac3 ; WMOV 3,1;
-  @7016A1E5 XCALL 0,0,[pc+0x312] (0x7016A4F8); # symbol not found
+  @7016A1E5 XCALL [pc+0x312] (0x7016A4F8),0; # symbol not found
 
 block 7016A1E8 seg 0x70000000
   ac0 = sx16(M16[wp(ac3, 2)]) ; XNLDA 0,[ac3+0x2];
@@ -46982,7 +46982,7 @@ block 7016A301 seg 0x70000000
   ac2 = add(ac2, M32[0x70000210]) ; LWADD 2,[0x70000210];
   M16[wp(ac2, -170)] = trunc16(ac0) ; XNSTA 0,[ac2+0x7F56];
   ac1 = ac3 ; WMOV 3,1;
-  @7016A309 XCALL 0,0,[pc+0x157] (0x7016A461); # symbol not found
+  @7016A309 XCALL [pc+0x157] (0x7016A461),0; # symbol not found
 
 block 7016A30C seg 0x70000000
   ac0 = sx16(M16[wp(ac3, 2)]) ; XNLDA 0,[ac3+0x2];
@@ -53486,7 +53486,7 @@ block 7016E55D seg 0x70000000
 block 7016E573 seg 0x70000000
   M32[0x74005A8C] = wp(ac3, 21) ; XPEF [ac3+0x15];
   ac1 = ac3 ; WMOV 3,1;
-  call 7016E5CB args=1 marker=74005A8E site=7016E576 ret=7016E579 ; XCALL 0,1,[pc+0x54] (0x7016E5CB); # symbol not found
+  call 7016E5CB args=1 marker=74005A8E site=7016E576 ret=7016E579 ; XCALL [pc+0x54] (0x7016E5CB),1; # symbol not found
 
 block 7016E579 seg 0x70000000
   goto [7016E5AD] 0 ; WBR 52 (0x7016E5AD);
@@ -54878,7 +54878,7 @@ block 7016ED67 seg 0x70000000
 block 7016ED6B seg 0x70000000
   M32[0x74005EBC] = wp(ac3, 19) ; XPEF [ac3+0x13];
   ac1 = ac3 ; WMOV 3,1;
-  call 7016F556 args=1 marker=74005EBE site=7016ED6E ret=7016ED71 ; XCALL 0,1,[pc+0x7E7] (0x7016F556); # symbol not found
+  call 7016F556 args=1 marker=74005EBE site=7016ED6E ret=7016ED71 ; XCALL [pc+0x7E7] (0x7016F556),1; # symbol not found
 
 block 7016ED71 seg 0x70000000
   t1 = ((ac0 & 0xFFFF) | lsh(c, 16)) ; MOV.L# 0,0,SZC;
@@ -55094,7 +55094,7 @@ block 7016EE3A seg 0x70000000
 block 7016EE7D seg 0x70000000
   M32[0x74005EBC] = wp(ac3, 19) ; XPEF [ac3+0x13];
   ac1 = ac3 ; WMOV 3,1;
-  call 7016F556 args=1 marker=74005EBE site=7016EE80 ret=7016EE83 ; XCALL 0,1,[pc+0x6D5] (0x7016F556); # symbol not found
+  call 7016F556 args=1 marker=74005EBE site=7016EE80 ret=7016EE83 ; XCALL [pc+0x6D5] (0x7016F556),1; # symbol not found
 
 block 7016EE83 seg 0x70000000
   t1 = ((ac0 & 0xFFFF) | lsh(c, 16)) ; MOV.L# 0,0,SNC;
@@ -55175,7 +55175,7 @@ block 7016EEC1 seg 0x70000000
 block 7016EEE4 seg 0x70000000
   M32[0x74005EBC] = wp(ac3, 19) ; XPEF [ac3+0x13];
   ac1 = ac3 ; WMOV 3,1;
-  call 7016F556 args=1 marker=74005EBE site=7016EEE7 ret=7016EEEA ; XCALL 0,1,[pc+0x66E] (0x7016F556); # symbol not found
+  call 7016F556 args=1 marker=74005EBE site=7016EEE7 ret=7016EEEA ; XCALL [pc+0x66E] (0x7016F556),1; # symbol not found
 
 block 7016EEEA seg 0x70000000
   t1 = ((ac0 & 0xFFFF) | lsh(c, 16)) ; MOV.L# 0,0,SNC;
@@ -55256,7 +55256,7 @@ block 7016EF28 seg 0x70000000
 block 7016EF4B seg 0x70000000
   M32[0x74005EBC] = wp(ac3, 19) ; XPEF [ac3+0x13];
   ac1 = ac3 ; WMOV 3,1;
-  call 7016F556 args=1 marker=74005EBE site=7016EF4E ret=7016EF51 ; XCALL 0,1,[pc+0x607] (0x7016F556); # symbol not found
+  call 7016F556 args=1 marker=74005EBE site=7016EF4E ret=7016EF51 ; XCALL [pc+0x607] (0x7016F556),1; # symbol not found
 
 block 7016EF51 seg 0x70000000
   t1 = ((ac0 & 0xFFFF) | lsh(c, 16)) ; MOV.L# 0,0,SNC;
@@ -55337,7 +55337,7 @@ block 7016EF8F seg 0x70000000
 block 7016EFB2 seg 0x70000000
   M32[0x74005EBC] = wp(ac3, 19) ; XPEF [ac3+0x13];
   ac1 = ac3 ; WMOV 3,1;
-  call 7016F556 args=1 marker=74005EBE site=7016EFB5 ret=7016EFB8 ; XCALL 0,1,[pc+0x5A0] (0x7016F556); # symbol not found
+  call 7016F556 args=1 marker=74005EBE site=7016EFB5 ret=7016EFB8 ; XCALL [pc+0x5A0] (0x7016F556),1; # symbol not found
 
 block 7016EFB8 seg 0x70000000
   t1 = ((ac0 & 0xFFFF) | lsh(c, 16)) ; MOV.L# 0,0,SNC;
@@ -55418,7 +55418,7 @@ block 7016EFF6 seg 0x70000000
 block 7016F019 seg 0x70000000
   M32[0x74005EBC] = wp(ac3, 19) ; XPEF [ac3+0x13];
   ac1 = ac3 ; WMOV 3,1;
-  call 7016F556 args=1 marker=74005EBE site=7016F01C ret=7016F01F ; XCALL 0,1,[pc+0x539] (0x7016F556); # symbol not found
+  call 7016F556 args=1 marker=74005EBE site=7016F01C ret=7016F01F ; XCALL [pc+0x539] (0x7016F556),1; # symbol not found
 
 block 7016F01F seg 0x70000000
   t1 = ((ac0 & 0xFFFF) | lsh(c, 16)) ; MOV.L# 0,0,SNC;
@@ -55498,7 +55498,7 @@ block 7016F05D seg 0x70000000
 block 7016F07E seg 0x70000000
   M32[0x74005EBC] = wp(ac3, 19) ; XPEF [ac3+0x13];
   ac1 = ac3 ; WMOV 3,1;
-  call 7016F556 args=1 marker=74005EBE site=7016F081 ret=7016F084 ; XCALL 0,1,[pc+0x4D4] (0x7016F556); # symbol not found
+  call 7016F556 args=1 marker=74005EBE site=7016F081 ret=7016F084 ; XCALL [pc+0x4D4] (0x7016F556),1; # symbol not found
 
 block 7016F084 seg 0x70000000
   t1 = ((ac0 & 0xFFFF) | lsh(c, 16)) ; MOV.L# 0,0,SNC;
@@ -55578,7 +55578,7 @@ block 7016F0C2 seg 0x70000000
 block 7016F0E3 seg 0x70000000
   M32[0x74005EBC] = wp(ac3, 19) ; XPEF [ac3+0x13];
   ac1 = ac3 ; WMOV 3,1;
-  call 7016F556 args=1 marker=74005EBE site=7016F0E6 ret=7016F0E9 ; XCALL 0,1,[pc+0x46F] (0x7016F556); # symbol not found
+  call 7016F556 args=1 marker=74005EBE site=7016F0E6 ret=7016F0E9 ; XCALL [pc+0x46F] (0x7016F556),1; # symbol not found
 
 block 7016F0E9 seg 0x70000000
   t1 = ((ac0 & 0xFFFF) | lsh(c, 16)) ; MOV.L# 0,0,SNC;
@@ -55659,7 +55659,7 @@ block 7016F127 seg 0x70000000
 block 7016F14A seg 0x70000000
   M32[0x74005EBC] = wp(ac3, 19) ; XPEF [ac3+0x13];
   ac1 = ac3 ; WMOV 3,1;
-  call 7016F556 args=1 marker=74005EBE site=7016F14D ret=7016F150 ; XCALL 0,1,[pc+0x408] (0x7016F556); # symbol not found
+  call 7016F556 args=1 marker=74005EBE site=7016F14D ret=7016F150 ; XCALL [pc+0x408] (0x7016F556),1; # symbol not found
 
 block 7016F150 seg 0x70000000
   t1 = ((ac0 & 0xFFFF) | lsh(c, 16)) ; MOV.L# 0,0,SNC;
@@ -67260,7 +67260,7 @@ block 70172831 seg 0x70000000
 
 block 7017286A seg 0x70000000
   ac1 = ac3 ; WMOV 3,1;
-  @7017286B XCALL 0,0,[pc+0x176] (0x701729E2); # symbol not found
+  @7017286B XCALL [pc+0x176] (0x701729E2),0; # symbol not found
 
 block 7017286E seg 0x70000000
   ac0 = sx16(M16[wp(ac3, 30)]) ; XNLDA 0,[ac3+0x1E];
@@ -67628,7 +67628,7 @@ block 701729CF seg 0x70000000
 
 block 701729D9 seg 0x70000000
   ac1 = ac3 ; WMOV 3,1;
-  @701729DA XCALL 0,0,[pc+0x7] (0x701729E2); # symbol not found
+  @701729DA XCALL [pc+0x7] (0x701729E2),0; # symbol not found
 
 block 701729DD seg 0x70000000
   ac1 = sx16(M16[wp(ac3, 29)]) ; XNLDA 1,[ac3+0x1D];
@@ -72896,7 +72896,7 @@ block 70174760 seg 0x70000000
   M32[0x740069C0] = wp(ac2, -17) ; XPEF [ac2+0x7FEF];
   M32[0x740069C2] = wp(ac3, 40) ; XPEF [ac3+0x28];
   ac1 = ac3 ; WMOV 3,1;
-  call 70175897 args=4 marker=740069C4 site=70174771 ret=70174774 ; XCALL 0,4,[pc+0x1125] (0x70175897); # symbol not found
+  call 70175897 args=4 marker=740069C4 site=70174771 ret=70174774 ; XCALL [pc+0x1125] (0x70175897),4; # symbol not found
 
 block 70174774 seg 0x70000000
   ac1 = 0x0000000C ; NLDAI 12 (0x000C),1;
@@ -72925,7 +72925,7 @@ block 70174788 seg 0x70000000
   M32[0x7400694E] = wp(ac2, -21) ; XPEF [ac2+0x7FEB];
   M32[0x74006950] = wp(ac3, 40) ; XPEF [ac3+0x28];
   ac1 = ac3 ; WMOV 3,1;
-  call 701757A8 args=3 marker=74006952 site=70174797 ret=7017479A ; XCALL 0,3,[pc+0x1010] (0x701757A8); # symbol not found
+  call 701757A8 args=3 marker=74006952 site=70174797 ret=7017479A ; XCALL [pc+0x1010] (0x701757A8),3; # symbol not found
 
 block 7017479A seg 0x70000000
   ac1 = 0x0000000F ; NLDAI 15 (0x000F),1;
@@ -72954,7 +72954,7 @@ block 701747AE seg 0x70000000
   M32[0x7400694E] = wp(ac2, -20) ; XPEF [ac2+0x7FEC];
   M32[0x74006950] = wp(ac3, 40) ; XPEF [ac3+0x28];
   ac1 = ac3 ; WMOV 3,1;
-  call 701757A8 args=3 marker=74006952 site=701747BD ret=701747C0 ; XCALL 0,3,[pc+0xFEA] (0x701757A8); # symbol not found
+  call 701757A8 args=3 marker=74006952 site=701747BD ret=701747C0 ; XCALL [pc+0xFEA] (0x701757A8),3; # symbol not found
 
 block 701747C0 seg 0x70000000
   ac1 = 0x00000013 ; NLDAI 19 (0x0013),1;
@@ -72983,7 +72983,7 @@ block 701747D4 seg 0x70000000
   M32[0x7400694E] = wp(ac2, -19) ; XPEF [ac2+0x7FED];
   M32[0x74006950] = wp(ac3, 40) ; XPEF [ac3+0x28];
   ac1 = ac3 ; WMOV 3,1;
-  call 701757A8 args=3 marker=74006952 site=701747E3 ret=701747E6 ; XCALL 0,3,[pc+0xFC4] (0x701757A8); # symbol not found
+  call 701757A8 args=3 marker=74006952 site=701747E3 ret=701747E6 ; XCALL [pc+0xFC4] (0x701757A8),3; # symbol not found
 
 block 701747E6 seg 0x70000000
   ac1 = 0x0000000A ; NLDAI 10 (0x000A),1;
@@ -73016,7 +73016,7 @@ block 701747FA seg 0x70000000
   M32[0x740068DE] = wp(ac3, 54) ; XPEF [ac3+0x36];
   M32[0x740068E0] = wp(ac3, 40) ; XPEF [ac3+0x28];
   ac1 = ac3 ; WMOV 3,1;
-  call 70175672 args=3 marker=740068E2 site=70174811 ret=70174814 ; XCALL 0,3,[pc+0xE60] (0x70175672); # symbol not found
+  call 70175672 args=3 marker=740068E2 site=70174811 ret=70174814 ; XCALL [pc+0xE60] (0x70175672),3; # symbol not found
 
 block 70174814 seg 0x70000000
   ac0 = 0x0000000C ; NLDAI 12 (0x000C),0;
@@ -73049,7 +73049,7 @@ block 70174828 seg 0x70000000
   M32[0x740068DE] = wp(ac3, 54) ; XPEF [ac3+0x36];
   M32[0x740068E0] = wp(ac3, 40) ; XPEF [ac3+0x28];
   ac1 = ac3 ; WMOV 3,1;
-  call 70175672 args=3 marker=740068E2 site=7017483F ret=70174842 ; XCALL 0,3,[pc+0xE32] (0x70175672); # symbol not found
+  call 70175672 args=3 marker=740068E2 site=7017483F ret=70174842 ; XCALL [pc+0xE32] (0x70175672),3; # symbol not found
 
 block 70174842 seg 0x70000000
   goto [70174935] 0 ; XJMP [pc+0xF2] (0x70174935);

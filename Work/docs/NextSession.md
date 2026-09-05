@@ -1,5 +1,32 @@
 # Next session
 
+## Sep 5 2026 planning session — integrator notes (read after the P26 block)
+- **Branch hw-findings-sep5** (on top of p26-math-grammar) carries:
+  (1) the seven emulator helper fixes from the manual review —
+  docs/HWFindings_Sep5.md (WHLV rounds toward 0; narrow_add/sub/mul
+  overflow bit 15, sign-extended results, ~src+1 carry, sticky ovr) +
+  c_src/tests/helpers_selftest.cpp (red on the old code, green on the
+  fix); task 038 k1fo + play-st GREEN, 0 div, clean endpoints;
+  (2) the regenerated Disassembled/ after the user's Tools fixes —
+  Follow.java XJMP pc+2 edge dropped (1,160 tag/blocks successor lists;
+  targets + synclist UNCHANGED), OldDisassembler XCALL `ea,arg` (63
+  lines) and LNDO/LWDO register field (1 line); build_address_book.py
+  re_xcall updated (generated book byte-identical); blocks.split,
+  ir2.book, ir2.stock regenerated (embeds 8,529 / 10,408 unchanged);
+  task 039 (same two legs) queued — check results/039 before merging.
+  quest.addrbook and quest.pushmap.M4 are NOT regenerated (hand-curated
+  live set; dis-independent) — do not overwrite them.
+- Rulings of record from the manual (HWFindings §3–4): ECLIPSE 16-bit
+  ops leave the high half UNDEFINED → the 67 deferred Nova load forms
+  may lower matching the emulator's zero-fill, spec says don't-care;
+  the emulator's sticky OVR model is a documented, benign divergence
+  from the hardware — do not "fix" it without re-reading §4.
+- Merge order: p26-math-grammar → hw-findings-sep5 → main.  Then P27 =
+  DERR cluster compression (Python only; predecessor census from
+  quest.tags now clean; `assumed-foldable` artifact; asserts carry the
+  DERR code).  Small follow-ons: LNDO lowering (register now visible;
+  mirror XNDO with pc+4), the 67 Nova loads.
+
 ## P26 IMPLEMENTED (Sep 5 2026) — read this first, then the brief below
 - Roadmap item 1 (the P26 grammar package) is IMPLEMENTED on branch
   p26-math-grammar: IR.md is now ir 3; embeds 27,600 → 8,529 (bar
