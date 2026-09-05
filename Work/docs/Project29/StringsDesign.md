@@ -78,9 +78,16 @@ string (`IN_BUFFER`); unchanged rt_calls.
 ## 2. Scope — RULED (Sep 5, after the census)
 
 `sN` is block-scoped; `pN` is routine-scoped. The census forces the
-second kind: 819 of 1,765 windows cross a block boundary; every WMSP
-group and most scratch chains span several blocks with conditional
-pieces. A `pN` is defined at its first piece or claim and dies at its
+second kind, but minimally: in all 19 WMSP groups the claims and pieces
+are STRAIGHT-LINE (zero block boundaries between first and last claim);
+the temp then crosses 2–5 listed block entries at the group's TAIL — the
+`min()` skip of the copy-out into the located target and the
+`?WRITE_SCREEN` rt_call that consumes it — before the STASP (checked
+Sep 5 against blocks.split; HELP's group is entirely in one block). A
+claim group is one PL/I statement; PL/I has no conditional expression,
+so no temp is ever live across the program's own control flow.
+Conditional pieces exist only in the frame-scratch `append` chains
+(P32), which are located. A `pN` is defined at its first piece or claim and dies at its
 region end (the STASP, or the consumer that takes the value: an
 assignment, a compare, an rt_call). Regions are single-entry (census:
 every group is closed within its routine, no interleaving). The emitter
