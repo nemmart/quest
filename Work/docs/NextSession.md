@@ -1,5 +1,16 @@
 # Next session
 
+## Queue (Sep 5, post-P27 merge)
+- P28 rt_call — Phase B in flight on branch p28-rt-call (task 041 to come).
+- P29 strings — RESEARCH session first: docs/Project29/RESEARCH.md
+  (idiom classification, quest.strings, destination classes, open
+  questions). Design session (StringsDesign.md) follows; no prompt for
+  implementation until then.
+- Later: float + DIVX/WDIVS/WLOB (~80 embeds), F2-b checker item + ABORT
+  readout off-by-one, retire borrow-slot allocation from the address
+  book, the typing pass (flat-graph world). Frames stay embedded until
+  the flat-graph world makes them function boundaries.
+
 ## P27 IMPLEMENTED (Sep 5 2026) — read this first
 - Roadmap item 2 (DERR cluster compression) is IMPLEMENTED on branch
   p27-derr-clusters: 2,271/2,273 DERR embeds gone (the 2 LDSP sinks →
