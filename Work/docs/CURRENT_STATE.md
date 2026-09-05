@@ -1,3 +1,5 @@
+> Artifact checksums of record: docs/Provenance.md (Sep 5 2026).
+
 # Where things stand
 
 ## ★ P26 LANDED ON BRANCH — the math & control grammar (ir 3); embeds 27,600 → 8,529; battery 037 13/13 GREEN (Sep 5 2026; awaiting review + integration)
