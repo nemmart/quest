@@ -508,8 +508,8 @@ IREC RETURN:
 *** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 547 (addr 0x7018024F)
 *** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 547 (addr 0x7018024F)
 *** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 547 (addr 0x7018024F)
-*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 548 (addr 0x70180250)
-*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 547 (addr 0x7018024F)
 *** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 548 (addr 0x70180250)
 *** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 548 (addr 0x70180250)
 *** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 548 (addr 0x70180250)
@@ -889,13 +889,13 @@ pc=7017ED1C ac0=0000000B ac1=0000000A ac2=70180000 ac3=70001098 wsp=700010E0 wfp
 Data write-back SUPPRESSED (state presumed corrupt).
 =============================================
 Exception: INTWT interrupted
-Exception: INTWT interrupted
-Unregistering process 102
+Unregistering process 101
 OPEN Channel 1, path :QUEST.PR modified: 0
 OPEN Channel 2, path :SHARED_DATA_FILE modified: 1
 OPEN Channel 3, path :WORLD_DATA_FILE modified: 1
 OPEN Channel 4, path :CASTLE_DATA_FILE modified: 1
-Unregistering process 101
+Exception: INTWT interrupted
+Unregistering process 102
 OPEN Channel 1, path :QUEST.PR modified: 0
 OPEN Channel 2, path :SHARED_DATA_FILE modified: 1
 OPEN Channel 3, path :WORLD_DATA_FILE modified: 1
