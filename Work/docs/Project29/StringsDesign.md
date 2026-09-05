@@ -59,8 +59,8 @@ append([@a, n], <piece>)       ; a piece WCMV'd into a located scratch buffer
                                ;   equality (the ONLY relation Quest uses — F2)
 words(@dst, n) = words(@src, n); WBLM; the 6 self-overlapping forms render as
 fill(@dst, n, 0)               ;   fill (F6) — same helper, sequential order
-rt_call ?X(sN, …)              ; an unlimited string passed to the runtime:
-                               ;   the arena address of its varying image is pushed
+rt_call ?X([@t, n varying], …) ; a string passed to the runtime is always located
+                               ;   (frame local, static, or a claimed area)
 ```
 
 `?UNSIGNED_TO_CHAR` is a constructor (`sN = char(v)`; native today,
@@ -98,8 +98,7 @@ c exactly as the instruction would (EagleSpecial.cpp semantics, manual-
 verified in Census §10): after a copy ac0 = 0, ac1 = source bytes left
 (c = ac1 ≠ 0), ac2 = destination end pointer, ac3 = source end pointer.
 The compiler READS these (349 continuation pieces use ac2; 17 tail
-splits use ac1), so they are not optional. Pointers into the arena are
-compared through the translation (§6). ovr is untouched (B-1 of
+splits use ac1), so they are not optional. ovr is untouched (B-1 of
 EmulatorDivergences.md). No deadness argument is needed anywhere.
 
 ## 5. Where dynamic-length results live — RULED (Sep 5, revised)
