@@ -36,7 +36,10 @@ Two kinds of string value:
     group (19 in Quest; the census's "claims on path" table), IDENTIFIED
     BY THE BLOCK ADDRESS: every WMSP in a block refers to the same pN; the
     arena layout artifact, the triple table and the hook table are all
-    keyed by block address (RULED, Sep 5). It holds
+    keyed by block address (RULED, Sep 5). The block's first statement is
+    `p@<block> = ""` (RULED): the value is rebuilt from empty on every
+    execution; the loader refuses a read of a pN before its assignment
+    in the block. It holds
     the group's RESULT — the one value that leaves the block through the
     consuming rt_call — as a varying image at a FIXED arena address with a
     FIXED capacity computed at lowering time from the operands' declared
@@ -112,7 +115,8 @@ EmulatorDivergences.md). No deadness argument is needed anywhere.
   emits one. Conditional pieces (the `IF … THEN MSG = MSG ‖ …` shape)
   live here, as separate statements on separate blocks.
 - **WMSP temporaries** (57 claims, 19 groups): in the IR text the group
-  is `s0 = A + B; s1 = s0 + C; p3 = s1; rt_call ?WRITE_SCREEN(p3, …)` — no
+  is `p@blk = ""; … s0 = A + B; s1 = s0 + C; p@blk = s1;
+  rt_call ?WRITE_SCREEN(p@blk, …)` — no
   claim, no release, no metadata (RULED, Sep 5). `p3` is the block's
   static arena variable (§1): fixed address in the otherwise unused
   emulated segment 0x75000000, fixed capacity, reassigned each time the
