@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# lower.py — quest.dis + quest.blocks (+ pushmap, argmap) -> quest.ir (ir 3)
+# lower.py — quest.dis + quest.blocks (+ pushmap, argmap) -> quest.ir (ir 4)
 #
 # THE SPEC IS docs/IR.md (consolidated, normative; spec-wins).  This
 # emitter implements it — the P26 grammar (goto [labels] e terminator,
@@ -92,6 +92,12 @@ def parse_blocks(path):
             cur, body = int(m.group(1), 16), []
             continue
         m = re.match(r"^n((?: [0-9A-Fa-f]{8})+)$", line)
+        if m and cur is not None:
+            succs[cur] = [int(x, 16) for x in m.group(1).split()]
+            continue
+        # P28: a call block's edge line is `c <callee> n <return pc>` — the
+        # return pc is the block's (only) game-side successor.
+        m = re.match(r"^c [0-9A-Fa-f]{8} n((?: [0-9A-Fa-f]{8})+)$", line)
         if m and cur is not None:
             succs[cur] = [int(x, 16) for x in m.group(1).split()]
             continue
@@ -331,6 +337,175 @@ def pef_value(pc, text):
     e, indirect = ea_expr(pc, base, disp, wide, folded)
     return e            # R[...] full address / constant / wp(base, d)
 
+
+# ---------------------------------------------------------------- rt_call (P28)
+#
+# docs/Project28/{Census,RTConventions}.md; spec docs/IR.md §3/§6 (ir 4).
+# A game -> runtime `LCALL [..],argc; # ?NAME` is ALWAYS the last
+# instruction of its block (987/987; the CFG's `c <callee> n <site+4>`
+# edge).  Its argument pushes (XPEF/LPEF/WPSH, walked backward from the
+# LCALL inside the block) fold into the terminator
+#     rt_call ?NAME(e1, ..., eN) site=<pc>
+# in PL/I order: e1 = argument 1 = the LAST push (RTBridge::arg_pointer(n)
+# = M32[wsp-2n] at entry, hw/RTBridge.cpp:111).  The executor pushes eN
+# first through Machine::wide_push and runs the LCALL at `site` through
+# the normal instruction path.  Interleaved XLEF/XWSTA (the ac2 register
+# argument of ?UNSIGNED_TO_CHAR; compiler spills) lower as the ordinary
+# statements they are, in program order, before the rt_call.  Refuse,
+# don't guess: anything outside [pushes + XLEF/XWSTA], an argc mismatch,
+# a window leaving the block, an argument pef_value cannot render, an
+# indirect (memory-reading) argument with an interleaved store, an
+# argument reading a register an interleaved XLEF writes (would need a
+# t-place; 0 today — refused rather than emitted untested), an argc
+# outside the callee's known set — the site stays embedded, censused.
+
+RT_LCALL = re.compile(r"^LCALL\s+\[0x([0-9A-Fa-f]+)\],(\d+);\s*#\s*(\?\S+)")
+RT_PUSH_WORD = re.compile(r"^(X|L)PEF\s+(.+);$")
+RT_PUSH_BYTE = re.compile(r"^(X|L)PEFB\s+(.+);$")
+RT_WPSH = re.compile(r"^WPSH\s+([0-3]),([0-3]);$")
+RT_XLEF = re.compile(r"^XLEF\s+([0-3]),(.+);$")
+RT_XWSTA = re.compile(r"^XWSTA\s+([0-3]),(.+);$")
+RT_MEMOP = re.compile(r"^(@?)\[(?:(pc|ac2|ac3)\+)?0x([0-9A-Fa-f]+)\](?: \(0x([0-9A-Fa-f:]+)\))?$")
+
+# argc SET per callee — docs/Project28/RTConventions.md (Sep 5 census;
+# ruling F2: a site whose argc is not in its callee's set REFUSES).
+RT_ARGC = {"?WRITE_SCREEN": {2, 5}, "?RANDOM_NUMBER": {3}, "?UNSIGNED_TO_CHAR": {1},
+           "?DELAY": {1}, "?READ": {4, 6, 7}, "?CHAR_TO_UNSIGNED": {1},
+           "?OPEN_FILE": {2}, "?CLOSE_FILE": {1}, "?OPEN_SHARED_IO_FILE": {5},
+           "?GET_SHARED_PAGE": {4}, "?WRITE": {3, 6}, "?CREATE_TASK": {2},
+           "?AWAIT_CONSOLE_INTERRUPT": {0}, "?LOOKUP_PORT": {3}, "?LIB_ERROR_CODE": {0},
+           "?CONNECT": {1}, "?CURRENT_PID": {0}, "?READ_SCREEN": {3}}
+
+def rt_push_of(text):
+    """(kind, wides, regs_read, reads_memory) for a push instruction, else None."""
+    t = text.strip()
+    m = RT_WPSH.match(t)
+    if m:
+        x, a = int(m.group(1)), int(m.group(2))
+        if a < x:
+            die("WPSH wraparound (never in QUEST — WPSH_WPOP.md): " + t)
+        return "WPSH", a - x + 1, {"ac%d" % r for r in range(x, a + 1)}, False
+    for rx, kinds in ((RT_PUSH_BYTE, ("XPEFB", "LPEFB")), (RT_PUSH_WORD, ("XPEF", "LPEF"))):
+        m = rx.match(t)
+        if m:
+            mm = RT_MEMOP.match(m.group(2).strip())
+            regs = {mm.group(2)} if mm and mm.group(2) in ("ac2", "ac3") else set()
+            return kinds[0 if m.group(1) == "X" else 1], 1, regs, bool(mm and mm.group(1))
+    return None
+
+class RTSite:
+    """One runtime call site's window.  pushes/inter in PROGRAM order;
+    args in PL/I order (arg1 first); refuse = reason or None."""
+    def __init__(self, pc, callee, target, argc):
+        self.pc, self.callee, self.target, self.argc = pc, callee, target, argc
+        self.pushes, self.inter, self.args = [], [], []
+        self.refuse = None
+        self.crosses = False
+        self.needs_t = 0
+        self.shape = ""
+    def line(self):
+        return "rt_call %s(%s) site=%08X" % (self.callee, ", ".join(e for _, e, _ in self.args), self.pc)
+
+def rt_window(pc, block_pcs, dis):
+    """The site at pc (an RT LCALL) with its window inside block_pcs (the
+    block's pcs in order).  Returns an RTSite (refuse set on any reason)."""
+    m = RT_LCALL.match(dis[pc])
+    if not m:
+        return None
+    s = RTSite(pc, m.group(3), int(m.group(1), 16), int(m.group(2)))
+    i = block_pcs.index(pc)
+    wides, window, j = 0, [], i - 1
+    while wides < s.argc and j >= 0:
+        text = dis[block_pcs[j]]
+        p = rt_push_of(text)
+        if p:
+            wides += p[1]
+        window.append((block_pcs[j], text, p))
+        j -= 1
+    if wides < s.argc:
+        s.crosses = True
+        s.refuse = "window crosses block start"
+        return s
+    if wides > s.argc:
+        s.refuse = "WPSH overshoot"
+        return s
+    window.reverse()
+    for wpc, text, p in window:
+        if p:
+            s.pushes.append((wpc, text, p[0], p[1], p[2], p[3]))
+        else:
+            mn = text.split()[0] if text.split() else "?"
+            s.inter.append((wpc, text, mn))
+    bad = sorted({mn for _, _, mn in s.inter if mn not in ("XLEF", "XWSTA")})
+    if bad:
+        s.refuse = "interleaved non-XLEF/XWSTA: " + ",".join(bad)
+    s.shape = "+".join(mn for _, _, mn in s.inter) or "contiguous"
+    if s.callee not in RT_ARGC:
+        s.refuse = s.refuse or "callee not in RTConventions table"
+    elif s.argc not in RT_ARGC[s.callee]:
+        s.refuse = s.refuse or "argc outside the callee's known set"
+    exprs = []                       # program order, one per wide
+    for wpc, text, kind, w, regs, mem in s.pushes:
+        if kind == "WPSH":
+            for r in sorted(regs):   # ac x pushed first = deepest = higher-numbered arg
+                exprs.append((wpc, r, {r}, False))
+        else:
+            e = None
+            try:
+                e = pef_value(wpc, text)
+            except Refuse as ex:
+                s.refuse = s.refuse or ("pef_value refuses: " + str(ex).split(":")[0][:50])
+            if e is None:
+                s.refuse = s.refuse or ("pef_value cannot render: " + text.split(";")[0])
+            exprs.append((wpc, e, regs or set(), mem))
+    n = len(exprs)
+    for k, (wpc, e, regs, mem) in enumerate(exprs):
+        written, stores = set(), 0
+        for ipc, t, mn in s.inter:
+            if ipc > wpc:
+                mx = RT_XLEF.match(t.strip())
+                if mx:
+                    written.add("ac" + mx.group(1))
+                if RT_XWSTA.match(t.strip()):
+                    stores += 1
+        inline = not (regs & written)
+        if mem and stores:
+            s.refuse = s.refuse or "indirect argument with an interleaved store"
+        if not inline:
+            s.needs_t += 1
+            s.refuse = s.refuse or "argument reads a register an interleaved XLEF writes (t-place form not emitted)"
+        s.args.append((n - k, e, inline))
+    s.args.reverse()                 # arg1 .. argN
+    return s
+
+def rt_slice_ok(site, slice_):
+    """Slice gating (Phase B landing order): 1 = contiguous ?WRITE_SCREEN,
+    2 = every contiguous site, 3 = all sites (interleaved included)."""
+    if slice_ >= 3:
+        return True
+    if site.shape != "contiguous":
+        return False
+    if slice_ == 2:
+        return True
+    return slice_ == 1 and site.callee == "?WRITE_SCREEN"
+
+# ---- LDSP jump tables (P28): the dis renders the table at the folded
+# operand as "<tbl> VALID RANGE: [lo, hi]" + "JUMP TARGETS: ..." lines
+# (parse_dis keeps only the first as an instruction-shaped line, so the
+# table is read from the raw file here).  Semantics EagleGeneral.cpp:251-
+# 260: L=M32[tbl-4], H=M32[tbl-2]; in range and entry != -1 -> jump; else
+# fall through to pc+3 (the DERR 17 sink, terminal by ruling).
+def parse_ldsp_tables(dis_path):
+    text = open(dis_path, encoding="ascii", errors="replace").read().replace("\r", "")
+    out = {}
+    for m in re.finditer(r"^([0-9a-fA-F]{8}) VALID RANGE: \[(-?\d+), (-?\d+)\]\n\s*JUMP TARGETS: ((?:.|\n)*?)\n\n", text, re.M):
+        tbl = int(m.group(1), 16)
+        targets = [int(x, 16) for x in re.findall(r"0x([0-9A-Fa-f]{8})", m.group(4))]
+        out[tbl] = (int(m.group(2)), int(m.group(3)), targets)
+    return out
+
+LDSP_TABLES = {}          # filled by main() from --dis
+
 # ------------------------------------------------------------- lowering
 #
 # P26 (docs/Project26/Census.md; spec docs/IR.md rev 3): lower_one returns
@@ -372,6 +547,7 @@ class BlockCtx:
         self.borrow_slot = borrow_slot     # pc -> slot for borrow pcs
         self.slot_t = {}                   # slot -> tN (open bracket)
         self.nt = 0
+        self.leftovers = False             # P28: LNDO / LDSP / Nova LOAD forms
     def newt(self):
         self.nt += 1
         return "t%d" % self.nt
@@ -407,9 +583,10 @@ def nova_test(body, ctx):
     if not m:
         return None
     op, carry, shift, noload, x, y, skip = m.groups()
-    if not noload:
-        return None                       # load form: deferred
-    if not skip:
+    carry, shift = carry or "", shift or ""     # `ADD 2,0` has no `.CC SS` group at all
+    if not noload and not ctx.leftovers:
+        return None                       # load form: behind --leftovers (P28)
+    if noload and not skip:
         die("no-load Nova op without a skip is a no-op: %s" % body)
     acx, acy = "ac" + x, "ac" + y
     stmts = []
@@ -446,6 +623,18 @@ def nova_test(body, ctx):
     cn = "(%s == 1)" % cbit
     rz = "(%s == 0)" % res
     rn = "(%s != 0)" % res
+    if not noload:
+        # P28 LOAD form (ruling Sep 5): the emulator's writes at
+        # NovaCompute.cpp:63-66 — c then ac[YY] = the shifted value, whose
+        # high half is what the SS arm leaves (zero, except that SS=1 keeps
+        # bit 16 = old bit 15 — replicated, see Project28/REPORT.md).  The
+        # manual says bits 16-31 are UNDEFINED (HWFindings_Sep5.md §3), so
+        # the high half is a don't-care by spec; the IR matches the emulator
+        # because the strict surface compares the whole register.
+        stmts.append("c = %s" % cbit)
+        stmts.append("%s = %s" % (acy, res))
+    if not skip:
+        return stmts, None
     test = {"SKP": "1", "SZC": cz, "SNC": cn, "SZR": rz, "SNR": rn,
             "SEZ": "(%s || %s)" % (cz, rz), "SBN": "(%s && %s)" % (cn, rn)}[skip]
     return stmts, test
@@ -658,26 +847,69 @@ def lower_one(pc, text, pushmap_pcs, ctx):
             if tgt not in ctx.succs:
                 die("XJMP target %08X not among successors of %08X" % (tgt, ctx.start))
             return [], "goto [%08X] 0" % tgt
-    if op in ("XNDO", "XWDO") and len(args) == 3 and REG.match(args[0]):   # EagleGeneral.cpp:167/:180
-        e = parse_memop(pc, args[2], False)
+    if (op in ("XNDO", "XWDO") or (op == "LNDO" and ctx.leftovers)) \
+            and len(args) == 3 and REG.match(args[0]):   # EagleGeneral.cpp:167/:180/:225
+        # P28: LNDO is XNDO with an L-form (wide) EA and a 4-word length —
+        # same narrow_add helper, same test, fall-through pc+4 (:236).
+        e = parse_memop(pc, args[2], op == "LNDO")
         if e is not None:
             arg = int(args[1])
             target = (pc + 1 + arg) & 0xFFFFFFFF
             s = ctx.succs
-            if len(s) != 2 or s[0] != ctx.next_pc(pc) or s[1] != target:
+            nxt = ctx.next_pc(pc)
+            if op == "LNDO" and nxt != pc + 4:
+                die("LNDO at %08X: dis successor %08X is not pc+4" % (pc, nxt))
+            if len(s) != 2 or s[0] != nxt or s[1] != target:
                 die("%s at %08X: successors %s do not match [next, pc+1+%d]"
                     % (op, pc, ["%08X" % v for v in s], arg))
             acii = "ac" + args[0]
-            width, f = (16, "nadd") if op == "XNDO" else (32, "add")
+            width, f = (16, "nadd") if op in ("XNDO", "LNDO") else (32, "add")
             t1, t2 = ctx.newt(), ctx.newt()
             return (["%s = %s(M%d[%s], 1)" % (t1, f, width, e),
                      "M%d[%s] = %s" % (width, e, t1),
                      "%s = (%s >s %s)" % (t2, t1, acii),
                      "%s = %s" % (acii, t1)],
                     goto2(s[0], s[1], t2))
+    if op == "LDSP" and ctx.leftovers and len(args) == 2 and REG.match(args[0]):
+        # P28 (Census.md §4, option A1): EagleGeneral.cpp:251-260.  L/H and
+        # the entries come from the dis's rendering of the table (LDSP_TABLES);
+        # in range and entry != -1 -> that target, else fall through to pc+3
+        # = the DERR 17 sink (terminal by ruling; its block stays an embedded
+        # instruction = a verified terminal pair).  Out of range -> assert
+        # (P27's detach pairing); a -1 entry -> the sink's label.
+        mm = re.match(r"^\[pc\+0x([0-9A-Fa-f]+)\] \(0x([0-9A-Fa-f]{8})\)$", args[1])
+        if not mm:
+            die("LDSP at %08X: operand not a folded pc-relative table: %s" % (pc, body))
+        tbl = int(mm.group(2), 16)
+        if tbl not in LDSP_TABLES:
+            die("LDSP at %08X: no table rendering for %08X in the dis" % (pc, tbl))
+        lo, hi, targets = LDSP_TABLES[tbl]
+        if len(targets) != hi - lo + 1:
+            die("LDSP at %08X: table has %d entries for range [%d, %d]" % (pc, len(targets), lo, hi))
+        sink = pc + 3
+        if ctx.next_pc(pc) != sink:
+            die("LDSP at %08X: dis successor is not pc+3" % pc)
+        labels = [sink if t == 0xFFFFFFFF else t for t in targets]
+        want = set(labels) | {sink}
+        if set(ctx.succs) != want:
+            die("LDSP at %08X: successors %s != table targets + sink %s"
+                % (pc, ["%08X" % v for v in ctx.succs], ["%08X" % v for v in sorted(want)]))
+        acx = "ac" + args[0]
+        stmts = ['assert((%d <=s %s) && (%s <=s %d), "DERR 17 @%08X")' % (lo, acx, acx, hi, sink)]
+        return stmts, "goto [%s] (%s - %d)" % (", ".join("%08X" % L for L in labels), acx, lo)
     nv = nova_test(body, ctx)
     if nv is not None:
         stmts, test = nv
+        if test is None:                  # P28: load form without a skip
+            return stmts, None
+        if test == "1":
+            # SKP: unconditional skip of the next word (the `ADC c,c,SKP` /
+            # `WSUB c,c` idiom).  Follow lists ONE successor, pc+2 (the
+            # skipped word is not a block start); canonical exit is
+            # `goto [L] 0` (IR.md §3).  NovaCompute.cpp:70.
+            if ctx.succs != [pc + 2]:
+                die("SKP at %08X: successors %s != [pc+2]" % (pc, ["%08X" % x for x in ctx.succs]))
+            return stmts, "goto [%08X] 0" % (pc + 2)
         fall, skip = ctx.skip_exits(pc)
         return stmts, goto2(fall, skip, test)
 
@@ -827,7 +1059,17 @@ def main():
     ap.add_argument("--tags", help="quest.tags the artifact was built from (sha256 checked)")
     ap.add_argument("--synclist-in", help="identity sync list (quest.synclist.split)")
     ap.add_argument("--synclist-out", help="write the shipped list: identity minus folded interiors")
+    ap.add_argument("--rt-slice", type=int, default=0,
+                    help="P28 rt_call emission: 0 = off (RT LCALLs + pushes stay instructions), "
+                         "1 = contiguous ?WRITE_SCREEN sites, 2 = every contiguous site, "
+                         "3 = all sites (interleaved XLEF/XWSTA windows included)")
+    ap.add_argument("--leftovers", action="store_true",
+                    help="P28 leftovers: lower LNDO, the LDSP pair (assert + goto table) and the "
+                         "Nova LOAD forms (pure; high half as the emulator leaves it)")
+    ap.add_argument("--rt-census", help="write the per-site rt_call ledger (emitted / refused + reason)")
     a = ap.parse_args()
+    global LDSP_TABLES
+    LDSP_TABLES = parse_ldsp_tables(a.dis)
     if a.assumed_foldable and not a.tags:
         die("--assumed-foldable needs --tags")
     if bool(a.synclist_in) != bool(a.synclist_out):
@@ -859,14 +1101,15 @@ def main():
     else:
         die("need --pilot or --all")
 
-    out = ["ir 3",
+    out = ["ir 4",
            "mode %s" % ("book" if a.book else "stock"),
            "source  %s sha256=%s" % (a.dis, sha256(a.dis)),
            "blocks  %s sha256=%s" % (a.blocks, sha256(a.blocks)),
            "pushmap %s sha256=%s" % (a.pushmap, sha256(a.pushmap)),
            "argmap  %s sha256=%s" % (a.argmap, sha256(a.argmap)), ""]
     census = {"expr": 0, "embed": 0, "argpush": 0, "call": 0, "ret": 0,
-              "goto": 0, "assert": 0, "last": None}
+              "goto": 0, "assert": 0, "rt_call": 0, "last": None,
+              "rt_sites": []}               # P28 ledger: (site, callee, argc, emitted, reason)
 
     # P27: a guard block is lowered with its fold; its interiors are held
     # back and emitted only if the guard REFUSES (totality: never a half
@@ -922,10 +1165,25 @@ def main():
     with open(a.out, "w", newline="\n") as f:
         f.write("\n".join(out) + "\n")
     print("wrote %s: %d blocks, %d expr, %d instr, %d argpush, %d call, "
-          "%d ret, %d goto, %d assert, %d skipped"
+          "%d ret, %d goto, %d assert, %d rt_call, %d skipped"
           % (a.out, nblocks, census["expr"], census["embed"], census["argpush"],
              census["call"], census["ret"], census["goto"], census["assert"],
-             sum(len(v) for v in skipped.values())))
+             census["rt_call"], sum(len(v) for v in skipped.values())))
+    rts = census["rt_sites"]
+    if rts:
+        emitted = [r for r in rts if r[3]]
+        refused = [r for r in rts if not r[3]]
+        reasons = {}
+        for r in refused:
+            reasons.setdefault(r[4], []).append(r[0])
+        print("  rt_sites: emitted=%d refused=%d (slice %d)" % (len(emitted), len(refused), a.rt_slice))
+        for why, lst in sorted(reasons.items()):
+            print("    refused %4d  %s  (e.g. %08X)" % (len(lst), why, lst[0]))
+        if a.rt_census:
+            with open(a.rt_census, "w", newline="\n") as f:
+                f.write("# P28 rt_call ledger: site callee argc emitted reason  (lower.py --rt-slice %d)\n" % a.rt_slice)
+                for site, callee, argc, ok, why in sorted(rts):
+                    f.write("%08X %s %d %s %s\n" % (site, callee, argc, "emitted" if ok else "REFUSED", why or "-"))
     for reason, lst in sorted(skipped.items()):
         print("  skipped %4d  %s  (e.g. %08X)" % (len(lst), reason, lst[0]))
     if folds:
@@ -992,8 +1250,29 @@ def emit_block(start, blocks, succs, dis, dis_pcs, dis_index,
             die("block start %08X has no disassembly line" % start)
         i0 = dis_index[start]
         ctx = BlockCtx(start, succs.get(start, []), dis_pcs, dis_index, borrow_pcs)
+        ctx.leftovers = a.leftovers
         term = None
         nbody = len(body_text)
+        # P28 rt_call: a game -> runtime LCALL is block-final (987/987).  Its
+        # window is walked backward inside this block; when the site is
+        # emittable in the requested slice, its push pcs fold into the
+        # terminator and are not emitted on their own.
+        rt_site, rt_push_pcs = None, set()
+        block_pcs = dis_pcs[i0:i0 + nbody]
+        if nbody and RT_LCALL.match(dis[block_pcs[-1]]):
+            rt_site = rt_window(block_pcs[-1], block_pcs, dis)
+            if rt_site is not None:
+                if rt_site.refuse is None and rt_site.pc + 4 not in blocks:
+                    rt_site.refuse = "site+4 is not a block start"
+                if rt_site.refuse is None and succs.get(start, []) != [rt_site.pc + 4]:
+                    rt_site.refuse = "block successor list is not [site+4]"
+                emit_rt = rt_site.refuse is None and rt_slice_ok(rt_site, a.rt_slice)
+                census["rt_sites"].append((rt_site.pc, rt_site.callee, rt_site.argc, emit_rt,
+                                           rt_site.refuse or ("" if emit_rt else "outside --rt-slice %d" % a.rt_slice)))
+                if emit_rt:
+                    rt_push_pcs = {p[0] for p in rt_site.pushes}
+                else:
+                    rt_site = None
         for k, expected in enumerate(body_text):
             if i0 + k >= len(dis_pcs):
                 die("disassembly ends inside block %08X" % start)
@@ -1008,7 +1287,16 @@ def emit_block(start, blocks, succs, dis, dis_pcs, dis_index,
                 die("terminator emitted before the last instruction in block %08X (at %08X)"
                     % (start, pc))
             handled = False
-            if pc in push_slot:
+            if pc in rt_push_pcs:
+                handled = True            # folded into the rt_call terminator (echoed there)
+            elif rt_site is not None and pc == rt_site.pc:
+                out.append("  %s ; %s  <- %s" % (rt_site.line(), text,
+                           " ".join(p[1].split(";")[0].strip() + ";" for p in rt_site.pushes)))
+                census["rt_call"] += 1
+                census["last"] = "rt_call"
+                term = rt_site.line()
+                handled = True
+            elif pc in push_slot:
                 site = next((c for c, (mk, ps) in call_site.items() if pc in ps), None)
                 if site is not None and lowerable_sites.get(site):
                     stores = push_stores(pc, text, push_slot[pc])
@@ -1052,7 +1340,7 @@ def emit_block(start, blocks, succs, dis, dis_pcs, dis_index,
                     for i, st in enumerate(stmts):
                         tail = " ; %s" % text if i == 0 else ""
                         out.append("  %s%s" % (st, tail))
-                        census["expr"] += 1
+                        census["assert" if st.startswith("assert(") else "expr"] += 1
                         census["last"] = "stmt"
                     if term is not None:
                         if k != nbody - 1:

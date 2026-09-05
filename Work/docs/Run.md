@@ -48,7 +48,7 @@ is Work/c_src/quest.blocks.split, the all-skips-split CFG; the
 pre-split Disassembled/quest.blocks is its regeneration input),
 `QUEST_SYNC_LIST=<path>` (the sync list — since P27 (Sep 5 2026)
 Work/c_src/quest.synclist.p27, the identity list MINUS the 4,499
-DERR-cluster interiors the ir 3 artifacts fold; it must match the IR
+DERR-cluster interiors the ir 3/ir 4 artifacts fold; unchanged by P28 — it must match the IR
 file's provenance header. quest.synclist.split, the full identity
 list, remains correct for all-emulated runs and for IR files built
 without --assumed-foldable), and `QUEST_SYNC_K=<n>` (rendezvous every n

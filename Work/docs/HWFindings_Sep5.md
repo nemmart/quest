@@ -98,3 +98,20 @@ tag lines lose the edge, targets/blocks/synclist unchanged (every XJMP
 sits behind a skip whose target is exactly pc+2, so the phantom edge
 never created a block, only over-counted predecessors).  P27's
 predecessor census now sees the clean graph.
+
+## 7. Addendum (P28, Sep 5 2026) — Nova SS=1 leaves bit 16 in the loaded ac: benign
+
+Found lowering the 67 Nova LOAD forms (docs/Project28/REPORT.md).
+NovaCompute.cpp:50–51 computes the L (rotate-left-through-carry) result
+as `(src & 0xFFFF) << 1 | carry` — a 17-bit value whose bit 16 is the
+old bit 15 — and :65 stores it whole into `ac[YY]` (the other SS arms
+mask to 16 bits). The hardware result is 16 bits and bits 16–31 are
+UNDEFINED per the manual (§3), so this is a **benign undefined-high-half
+case, not a bug**: no L-form in QUEST is followed by a result-test skip
+(SZR/SNR/SEZ/SBN — grep of quest.dis and quest-rt.dis), and the loaded
+register of every live L form (`MOV.L 2,1` ×19 → ac1 overwritten before
+any read; `SUB.CL n,n` ×4 → followed by `SEX`, which reads bits 15:0)
+is dead in its high half. The IR replicates the emulator's value
+because the strict surface compares the whole register (user ruling:
+match the emulator, mark undefined). Recorded so nobody "fixes" one
+engine without the other.

@@ -50,3 +50,25 @@ above are prefixes for reading; the files themselves are the record.
 | c_src/quest.ir2.stock       | d5e4cb13653c0b29 | regenerated |
 | c_src/quest.synclist.split  | 42bde6c45c24658c | unchanged (identity; all-emulated runs) |
 | Disassembled/*, blocks.split, pushmap, addrbook | — | unchanged from the table above |
+
+## Sep 5 2026 — after P28 (rt_call decoration, ir 4; branch p28-rt-call)
+
+| file | sha256 (first 16) | note |
+|---|---|---|
+| c_src/quest.ir2.book        | 294f81d3ef779121 | regenerated ir 4: 987 rt_call, embeds 2,322, 2,273 assert, 11,442 goto |
+| c_src/quest.ir2.stock       | 1cf12f3393744fdd | regenerated ir 4: 987 rt_call, embeds 4,201 |
+| c_src/quest.synclist.p27    | af1be42f5831fb2c | UNCHANGED — still the list of record (rt_call adds/removes no block) |
+| docs/Project28/rt_call.ledger | — | NEW: per-site emitted/refused ledger (987 emitted, 0 refused) |
+| Disassembled/*, blocks.split, pushmap, addrbook, tags | — | unchanged from the tables above |
+
+Regeneration command (from Work/c_src; identical inputs, `--rt-slice 3
+--leftovers` is the ir 4 artifact of record):
+
+    python3 tools/lower.py --dis ../../Disassembled/quest.dis --blocks quest.blocks.split \
+      --pushmap quest.pushmap.M4 --argmap ../../Disassembled/quest.argmap --all [--book] \
+      --assumed-foldable ../docs/Project27/assumed-foldable.txt --tags ../../Disassembled/quest.tags \
+      --rt-slice 3 --leftovers --out quest.ir2.<book|stock> --rt-census ../docs/Project28/rt_call.ledger
+
+With `--rt-slice 0` and no `--leftovers` the output is byte-identical to
+the P27 artifacts above except for the `ir 4` header (P28 regression
+check, Sep 5).

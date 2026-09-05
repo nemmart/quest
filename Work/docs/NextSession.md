@@ -1,7 +1,28 @@
 # Next session
 
+## P28 MERGED to main (Sep 5 2026) — read this first
+- rt_call decoration is IMPLEMENTED on branch p28-rt-call (ir 4):
+  987/987 runtime call sites, LNDO, the LDSP pair, the 67 Nova loads;
+  embeds 6,258 → 2,322 (book) / 8,137 → 4,201 (stock); sync list
+  unchanged (quest.synclist.p27). Local K=1 gates 9 legs green, 0 div.
+  Battery: 041 15/15 legs green but RED marker (two verdict-line grep
+  bugs, METHOD §10); 042 = same legs, lines fixed: **15/15 GREEN DONE,
+  0 div, 902 s**, every P28 line on prediction (results/042-p28-rt-call).
+  Integrated (merge on main). Records: docs/Project28/{Census,
+  RTConventions,REPORT,REPORT_worklog}.md; IR.md ir 4 §3/§6/§9.
+- Integration notes: ir 4 loader refuses ir 3 files — regenerate
+  artifacts + binaries together (Provenance.md has the command; `--rt-
+  slice 3 --leftovers` is the artifact of record). QUEST_SYNC_LIST stays
+  quest.synclist.p27. docs/Project28/rt_call.ledger is the per-site
+  record (task 041 checks it).
+- Follow-ups: F2-b (P27) now has a second customer (the LDSP range
+  assert); the t-place argument form is specified but unemitted (0
+  sites); the next embed census by mnemonic is in CURRENT_STATE (WCMV
+  1,637 dominates — string ops; then the 159 + 130 + 37 undecorated
+  calls/LJSR/XCALL and 130 WSAVS frames).
+
 ## Queue (Sep 5, post-P27 merge)
-- P28 rt_call — Phase B in flight on branch p28-rt-call (task 041 to come).
+- P28 rt_call — DONE, merged (042 15/15 GREEN).
 - P29 strings — RESEARCH session first: docs/Project29/RESEARCH.md
   (idiom classification, quest.strings, destination classes, open
   questions). Design session (StringsDesign.md) follows; no prompt for

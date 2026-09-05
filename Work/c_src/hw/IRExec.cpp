@@ -1,7 +1,7 @@
 // IRExec — the clone-side IR interpreter.
 //
-// THE SPEC IS docs/IR.md (consolidated, normative; spec-wins) — ir 3
-// since Project 26.  The grammar parsed here (goto [labels] e, strict
+// THE SPEC IS docs/IR.md (consolidated, normative; spec-wins) — ir 4
+// since Project 28 (rt_call; ir 3 grammar since Project 26).  The grammar parsed here (goto [labels] e, strict
 // 0/1 booleans, s/u comparisons, class-homogeneous chains, the
 // statement-root effectful family add/sub/mul/div/cvwn/ash/nadd/nsub/
 // nmul, t-places, c/ovr and stack-register reads, ind()), the wp/bp/M8
@@ -23,6 +23,7 @@
 #include "RTStubs.hpp"
 #include "Lockstep.hpp"
 #include "../debug/Capture.hpp"
+#include "../debug/SymbolTable.hpp"
 #include "../debug/Disassembler.hpp"
 #include "Mapper.hpp"
 #include <algorithm>
@@ -355,8 +356,8 @@ void IRExec::load(const std::string& path) {
     if (!cur) return;
     if (cur->stmts.empty()) refuse("empty block");
     Stmt::Kind k = cur->stmts.back().kind;
-    if (k != Stmt::INSTR && k != Stmt::CALL && k != Stmt::RET && k != Stmt::GOTO)
-      refuse("block does not end in a terminator (instruction/call/ret/goto)");
+    if (k != Stmt::INSTR && k != Stmt::CALL && k != Stmt::RET && k != Stmt::GOTO && k != Stmt::RT_CALL)
+      refuse("block does not end in a terminator (instruction/call/rt_call/ret/goto)");
     cur = nullptr;
     std::fill(tdef.begin(), tdef.end(), false);
   };
@@ -374,9 +375,9 @@ void IRExec::load(const std::string& path) {
     std::string body = line.substr(b0);
 
     if (!got_header) {
-      if (body != "ir 3")
-        refuse("missing/unknown version header (want 'ir 3'; ir 2 files carry the "
-               "retired #-ops and plain-goto dumps — regenerate with tools/lower.py)");
+      if (body != "ir 4")
+        refuse("missing/unknown version header (want 'ir 4'; ir 3 files predate rt_call "
+               "and the P28 leftovers — regenerate with tools/lower.py)");
       got_header = true;
       continue;
     }
@@ -467,6 +468,67 @@ void IRExec::load(const std::string& path) {
           refuse("call site not in QUEST_PUSH_MAP: " + body);
         if (it->second.marker != st.marker || it->second.pushes != st.args)
           refuse("call operands disagree with pushmap: " + body);
+      }
+    } else if (tok == "rt_call") {
+      // P28 (ir 4): `rt_call ?NAME(e1, ..., eN) site=<hex8>` — TERMINATOR.
+      // The game -> runtime LCALL at `site` with its N argument pushes
+      // folded into pure argument expressions in PL/I order (e1 = arg 1 =
+      // the LAST push; the executor pushes eN first — RTBridge::arg_pointer
+      // (n) = M32[wsp-2n]).  docs/IR.md §3/§6, docs/Project28/Census.md.
+      st.kind = Stmt::RT_CALL;
+      std::string rest; std::getline(is, rest);
+      size_t b1 = rest.find_first_not_of(" \t");
+      if (b1 == std::string::npos) refuse("rt_call without callee: " + body);
+      rest = rest.substr(b1);
+      size_t lp = rest.find('(');
+      if (lp == std::string::npos) refuse("rt_call missing argument list: " + body);
+      st.text = rest.substr(0, lp);
+      if (st.text.size() < 2 || st.text[0] != '?')
+        refuse("rt_call callee must be a `?` runtime symbol: " + body);
+      for (char ch : st.text)
+        if (!(isalnum(static_cast<unsigned char>(ch)) || ch == '?' || ch == '_' || ch == '.'))
+          refuse("rt_call callee has a bad character: " + body);
+      // argument list: balanced parens, split on top-level commas
+      size_t depth = 0, rp = std::string::npos, argstart = lp + 1;
+      std::vector<std::string> argtexts;
+      for (size_t i = lp; i < rest.size(); i++) {
+        char ch = rest[i];
+        if (ch == '(' || ch == '[') depth++;
+        else if (ch == ')' || ch == ']') {
+          if (depth == 0) refuse("rt_call unbalanced ): " + body);
+          depth--;
+          if (depth == 0) { rp = i; break; }
+        } else if (ch == ',' && depth == 1) {
+          argtexts.push_back(rest.substr(argstart, i - argstart));
+          argstart = i + 1;
+        }
+      }
+      if (rp == std::string::npos) refuse("rt_call missing ): " + body);
+      {
+        std::string last = rest.substr(argstart, rp - argstart);
+        if (last.find_first_not_of(" \t") != std::string::npos || !argtexts.empty())
+          argtexts.push_back(last);
+      }
+      std::istringstream ts(rest.substr(rp + 1)); std::string si, tail;
+      ts >> si;
+      if (si.rfind("site=", 0) != 0 || si.size() != 13 ||
+          si.find_first_not_of("0123456789ABCDEFabcdef", 5) != std::string::npos)
+        refuse("rt_call needs site=<hex8>: " + body);
+      if (ts >> tail) refuse("trailing text after rt_call site: " + body);
+      st.pc = uint32_t(strtoul(si.c_str() + 5, nullptr, 16));
+      if (st.pc == 0) refuse("bad rt_call site: " + body);
+      if (prev_ipc && st.pc <= prev_ipc)
+        refuse("rt_call site not after the block's last instruction: " + body);
+      if (st.pc < cur->start) refuse("rt_call site before its block: " + body);
+      if (!BlockSync::listed(st.pc + 4))
+        refuse("rt_call return pc (site+4) is not a listed block start: " + body);
+      for (const std::string& at : argtexts) {
+        if (at.find_first_not_of(" \t") == std::string::npos)
+          refuse("rt_call empty argument: " + body);
+        Parser pa(at.c_str(), cur->start);
+        P e = pa.expr(); pa.end();            // pure: the parser rejects effectful ops
+        check_treads(e, body);
+        st.argv.push_back(e);
       }
     } else if (tok == "ret") {
       st.kind = Stmt::RET;
@@ -907,6 +969,52 @@ uint32_t IRExec::run_block(Machine& machine, uint32_t pc) {
         // byte-exact protocol via the shared path. ret= is a validated
         // belief only — ac3 comes from the instruction; a disagreement
         // surfaces at the next pair.
+        return run_instr(st.pc);
+      }
+      case Stmt::RT_CALL: {
+        if (i + 1 != n)
+          throw std::runtime_error("IRExec: interior rt_call (loader bug)");
+        // P28: evaluate every argument first (pure; order unobservable),
+        // then push them RIGHT TO LEFT through the SAME helper XPEF/LPEF/
+        // WPSH use (Machine::wide_push — owner of the wsp>wsl overflow
+        // fault), then run the LCALL at `site` through the normal
+        // instruction path exactly as `call` does.  machine.pc = site
+        // before the pushes so wide_push's copy_segment(pc, wsp) folds the
+        // block's segment and its fault text names a real pc (the master's
+        // would name the push's own pc — a recorded difference on a fault
+        // that has never fired; Census.md F6).
+        std::vector<uint32_t> vals;
+        vals.reserve(st.argv.size());
+        for (const auto& e : st.argv) vals.push_back(cx.eval(e));
+        for (int r = 0; r < 4; r++) machine.ac[r] = int32_t(cx.ac[r]);
+        machine.pc = int32_t(st.pc);
+        // Declared-belief check against the real instruction words (cheap:
+        // two reads).  LCALL opcode pattern 101ii11011001001 (Decoder.cpp);
+        // argc field is the word at site+3 (EagleStack.cpp:239).
+        {
+          uint32_t op = machine.memory->read_instruction_word(st.pc) & 0xFFFF;
+          uint32_t argc = machine.memory->read_word(Machine::copy_segment(st.pc, st.pc + 3)) & 0x7FFF;
+          if ((op & 0xE7FF) != 0xA6C9 || argc != st.argv.size()) {
+            char buf[160];
+            snprintf(buf, sizeof buf, "IRExec: rt_call %s at %08X: site word %04X / argc %u disagree "
+                     "with the IR's %zu arguments", st.text.c_str(), st.pc, op, argc, st.argv.size());
+            throw std::runtime_error(buf);
+          }
+          if (machine.symbols) {
+            uint32_t sym = machine.symbols->address_for_name(st.text);
+            uint32_t ii = (op >> 11) & 3;
+            uint32_t tgt = machine.eagle_l_resolve_indirect(Machine::copy_segment(st.pc, st.pc + 1), ii);
+            if (sym != 0xFFFFFFFF && sym != tgt) {
+              char buf[160];
+              snprintf(buf, sizeof buf, "IRExec: rt_call %s at %08X resolves to %08X, symbol is %08X",
+                       st.text.c_str(), st.pc, tgt, sym);
+              throw std::runtime_error(buf);
+            }
+          }
+        }
+        for (size_t k = vals.size(); k-- > 0; )
+          machine.wide_push(int32_t(vals[k]));
+        for (int r = 0; r < 4; r++) cx.ac[r] = uint32_t(machine.ac[r]);
         return run_instr(st.pc);
       }
       case Stmt::RET: {
