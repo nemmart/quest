@@ -141,7 +141,7 @@ A **triple table** `(clone_addr, master_addr, length)`, one row per pN:
   census claim sizes — plan-gate choice). A group whose base is no longer
   below wsp is unbound (STASP, WRTN, or an unwind — all the same to the
   rule). No release hooks exist.
-- **compare_pair** (after the sweep): an AC value inside the arena segment
+- **compare_pair** (after re-evaluating group liveness against wsp): an AC value inside the arena segment
   translates through the table before comparing; anything else compares
   raw. wsp: `master_wsp − clone_wsp` must equal EXACTLY `Σ over live groups of
   (master_wsp − base)` — normally one term or none; any other divergence
