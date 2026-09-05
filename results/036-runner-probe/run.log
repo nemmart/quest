@@ -1,0 +1,28 @@
+== host
+godspeed
+Linux godspeed 5.15.0-177-generic #187-Ubuntu SMP Sat Apr 11 22:54:33 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
+4
+               total        used        free      shared  buff/cache   available
+Mem:            15Gi       354Mi        10Gi       1.0Mi       4.2Gi        14Gi
+/dev/mapper/ubuntu--vg-ubuntu--lv   98G   87G  6.9G  93% /
+== cpu
+model name	: Intel(R) Core(TM) i5-7400 CPU @ 3.00GHz
+== git
+e6e2929
+?? results/036-runner-probe/
+== g++
+g++ (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0
+== make
+GNU Make 4.3
+== python3
+Python 3.10.12
+== java
+tasks/036-runner-probe.sh: line 13: java: command not found
+== javac
+tasks/036-runner-probe.sh: line 14: javac: command not found
+== build
+
+real	0m18.312s
+user	0m56.413s
+sys	0m4.238s
+-rwxrwxr-x 1 questrunner questrunner 969672 Sep  5 09:13 emulator
