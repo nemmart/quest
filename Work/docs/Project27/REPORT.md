@@ -4,9 +4,10 @@ Session Sep 5 2026, solo implementation; plan gate (Census.md) and
 landing reviewed by the user. TREE VINTAGE: the Sep 5 Work.tgz
 (Work__75_) + Disassembled.tgz, verified against docs/Provenance.md
 (17/17 prefixes) and byte-identical to repo `main` @ 29a1c24.
-Branch: p27-derr-clusters. Battery: task 040 (034 template + `derr` +
-`derr-emu` legs, JOBS=3, via bin/task_source.sh) — queued; see §5 for the local
-gates. Plan-gate record: docs/Project27/Census.md; artifact of record:
+Branch: p27-derr-clusters (ef97fc2). Battery: task 040 (034 template +
+`derr` + `derr-emu` legs, JOBS=3, via bin/task_source.sh) — **15/15
+GREEN, 0 div, 903 s** (results/040-p27-derr-clusters/verdicts.txt; §5).
+Landing bar MET; ready for review + integration. Plan-gate record: docs/Project27/Census.md; artifact of record:
 docs/Project27/assumed-foldable.txt.
 
 ## 1. Outcome
@@ -188,7 +189,29 @@ P27 verdict lines (embeds_book 6258, derr_embeds_remaining 2,
 clusters_folded 2271, synclist 13510 / delisted 4499, derr: poke
 fired ×2 / clone assert at 7015C48E / master DERR.TRP frame ≥1 /
 START_TURN tripwire 0, master_end line; derr-emu: TERMINAL-ABORT at
-7017ED1C). Landing bar: 15/15 green, 0 div. Result: pending on the runner (results/040-p27-derr-clusters).
+7017ED1C). Landing bar: 15/15 green, 0 div.
+
+**Result (runner godspeed, JOBS=3): 15/15 GREEN, DONE, 903 s wall
+clock** (results/040-p27-derr-clusters/verdicts.txt). Every leg div=0,
+blk_mismatch=0, gaps_over_k=0, endpoints as wanted; k1fo 300,615
+pairs max_gap=1; play (book) 1,803,008 pairs; play-st (stock)
+3,493,616 pairs. P27 lines exactly as predicted: `embeds_book=6258`,
+`derr_embeds_remaining=2`, `clusters_folded=2271`, `synclist_delisted=
+4499 synclist_entries=13510`; `derr: poke_fired=2 clone_assert_at_
+7015C48E=1 master_DERR.TRP_frame=1 start_turn_tripwire=0` (master end
+= `Unimplemented system call 0351`, as locally); `derr-emu:
+poke_fired=2 terminal_abort_at_DERR.TRP=1` with the recorded off-by-one
+readout tail. Regression lines unchanged from 037: armed-pc drops
+1/1/0/0; the carry-consumer-site coverage line byte-identical. P26
+coverage reference: 64/75 classes live in 2,060 blocks (the WSGT/WSGTI
+denominators fell to 58/96 because folded skips now live inside
+asserts rather than as gotos — p26cov counts goto-bearing blocks; an
+accounting shift, not a coverage loss).
+
+Verdict-script cosmetics for the next template edit (no effect on the
+result): the `derr: master_end=` grep caught `CALL HAS ALREADY BEEN
+AUGMENTED: QUEST` instead of the 0351 exception line; the section
+banner still reads "P26 math-grammar battery".
 
 ## 6. Corrections recorded (METHOD §10/§11)
 
@@ -224,8 +247,9 @@ START_TURN tripwire 0, master_end line; derr-emu: TERMINAL-ABORT at
 
 ## 8. TODO / next session
 
-1. Read results/040 (14/14, 0 div, P27 verdict lines) → review +
-   integrate p27-derr-clusters; update Provenance.md (ir2.book/stock,
-   new synclist.p27; blocks.split/synclist.split unchanged).
+1. Review + integrate p27-derr-clusters (040 GREEN, §5); update
+   Provenance.md (ir2.book/stock regenerated, new synclist.p27;
+   blocks.split/synclist.split unchanged); future task scripts point
+   QUEST_SYNC_LIST at c_src/quest.synclist.p27.
 2. F2-b ruling/implementation if wanted.
 3. P28: LDSP jump tables (+ the two DERR sinks), LNDO, Nova loads.

@@ -2,7 +2,7 @@
 
 # Where things stand
 
-## ★ P27 LANDED ON BRANCH — DERR cluster compression: 2,271 clusters → assert; DERR embeds 2,273 → 2; embeds 8,529 → 6,258; sync list 18,009 → 13,510 (Sep 5 2026; task 040 queued, awaiting review + integration)
+## ★ P27 LANDED ON BRANCH — DERR cluster compression: 2,271 clusters → assert; DERR embeds 2,273 → 2; embeds 8,529 → 6,258; sync list 18,009 → 13,510 (Sep 5 2026; battery 040 15/15 GREEN, awaiting review + integration)
 
 Branch p27-derr-clusters (based on main 29a1c24). Plan gate: docs/
 Project27/Census.md — census reproduced the prompt's table exactly
@@ -29,8 +29,9 @@ goto, 2,271 assert). Local K=1 gates: k1fo book 0 div (322,425 pairs,
 FAILED [block 7015C48B stmt 0]: … "DERR 17 @7015C48E"`, master
 DERR.TRP+0x20 → O.SERROR → DEF?ON → ?FATAL → `Unimplemented system
 call 0351` (a never-executed path; METHOD §3), last verified pair
-7015C48B on both. Task 040 = 034 template + derr leg via
-bin/task_source.sh, P27 verdict lines. Records: docs/Project27/
+7015C48B on both. Task 040 (034 template + derr + derr-emu legs via
+bin/task_source.sh) 15/15 GREEN on the runner, 0 div, 903 s, every P27
+verdict line on prediction. Records: docs/Project27/
 {Census,REPORT,REPORT_worklog}.md; IR.md §4a. Remaining embeds 6,258 =
 RT-call 2,887 + calls 1,313 + string/WMSP/stack 1,765 + frames/OS/
 float/misc 223 + 67 Nova loads + 1 LNDO + 2 LDSP DERR sinks.

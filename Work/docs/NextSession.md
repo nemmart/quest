@@ -6,10 +6,9 @@
   P28), embeds 8,529 → 6,258, shipped sync list quest.synclist.p27 =
   13,510 (identity minus 4,499 interiors). Rulings F1=A / F2-a / F3=
   QUEST_POKE (docs/Project27/Census.md §2, REPORT §2). Local K=1 gates
-  3/3 green + the derr leg paired at 7015C48E; task 040 QUEUED — read
-  results/040-p27-derr-clusters before integrating (bar: 14/14, 0 div,
-  the P27 verdict lines incl. `derr: poke_fired=2 clone_assert…=1
-  master_DERR.TRP_frame>=1 start_turn_tripwire=0`).
+  3/3 green + the derr leg paired at 7015C48E; task 040 15/15 GREEN on
+  the runner (0 div, 903 s; results/040-p27-derr-clusters) — every P27
+  verdict line on prediction. Ready to integrate.
 - Integration notes: task scripts must now point QUEST_SYNC_LIST at
   c_src/quest.synclist.p27 (the identity .split stays the record of
   blocks.split, untouched); Provenance.md gains ir2.book/stock (new)
