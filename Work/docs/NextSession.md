@@ -21,8 +21,10 @@
   may lower matching the emulator's zero-fill, spec says don't-care;
   the emulator's sticky OVR model is a documented, benign divergence
   from the hardware — do not "fix" it without re-reading §4.
-- Merge order: p26-math-grammar → hw-findings-sep5 → main.  Then P27 =
-  DERR cluster compression (Python only; predecessor census from
+- Merge order: p26-math-grammar → hw-findings-sep5 → main.  Task 039
+  (regenerated artifacts) GREEN.  Then P27 = DERR cluster compression
+  — PROMPT DRAFTED: docs/Project27/PROMPT.md (seven skip shapes in
+  scope; the LDSP pair → P28 with LNDO + Nova loads) (Python only; predecessor census from
   quest.tags now clean; `assumed-foldable` artifact; asserts carry the
   DERR code).  Small follow-ons: LNDO lowering (register now visible;
   mirror XNDO with pc+4), the 67 Nova loads.
