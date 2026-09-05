@@ -96,6 +96,10 @@ while true; do
     log "$name FAILED (exit $rc, attempt $attempts/$MAX_ATTEMPTS)"
   fi
 
+  # Sep 5 2026: unstage anything a task may have left in the index (a
+  # `git checkout <tree> -- paths` stages them) so results commits carry
+  # ONLY results.  Tasks should use bin/task_source.sh instead.
+  git reset --quiet
   git add -A "results/$name"
   git -c user.name="quest-runner" -c user.email="runner@localhost" commit --quiet -m "results: $name" || true
   # push with retry; a lost race just re-pulls

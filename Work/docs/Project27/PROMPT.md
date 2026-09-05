@@ -175,7 +175,13 @@ plan, predicted numbers. Part 2 proceeds only on the user's go.
 
 - Local K=1 book/stock/play legs after each slice; the `derr` leg
   locally first (it is the one that proves the fold does what we say).
-- Task 040 = 034 template + the `derr` leg, JOBS=3, on the runner
+- Task 040 = 034 template + the `derr` leg, JOBS=3, on the runner.
+  BUT: replace the template's `git checkout origin/<branch> -- Work
+  Disassembled` with `SRC=$(bin/task_source.sh <branch> 040-…)` and
+  point W/DIS at $SRC — the old form staged the branch tree into the
+  queue checkout and the runner's results commit carried it onto main
+  (results: 037–039 did this; bin/task_source.sh header). Verify the
+  tree you were handed against docs/Provenance.md before starting.
   (godspeed: 4 cores, no Java). Verdict lines appended: DERR embeds
   remaining, clusters folded / unfoldable, synclist entries delisted,
   and the `derr` leg's paired pc. Landing bar: 14/14 green, 0 div,
