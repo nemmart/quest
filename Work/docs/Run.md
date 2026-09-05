@@ -46,9 +46,12 @@ honors a third — it refuses to launch without the first two:
 `QUEST_BLOCKS=<path>` (ground-truth CFG — since P23 the operative file
 is Work/c_src/quest.blocks.split, the all-skips-split CFG; the
 pre-split Disassembled/quest.blocks is its regeneration input),
-`QUEST_SYNC_LIST=<path>` (the sync list — since P23 normally
-Work/c_src/quest.synclist.split, the identity list over the split
-CFG), and `QUEST_SYNC_K=<n>` (rendezvous every n
+`QUEST_SYNC_LIST=<path>` (the sync list — since P27 (Sep 5 2026)
+Work/c_src/quest.synclist.p27, the identity list MINUS the 4,499
+DERR-cluster interiors the ir 3 artifacts fold; it must match the IR
+file's provenance header. quest.synclist.split, the full identity
+list, remains correct for all-emulated runs and for IR files built
+without --assumed-foldable), and `QUEST_SYNC_K=<n>` (rendezvous every n
 listed block entries; default 50; K=1 = per-entry debug pairing, the
 first bisection tool for any future divergence). QUEST clients under
 lockstep no longer batch by instruction count: a 100M-instruction

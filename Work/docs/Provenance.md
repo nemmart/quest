@@ -40,3 +40,13 @@ Unchanged (verified byte-identical):
 Full digests: `sha256sum Disassembled/* Work/c_src/quest.*` on branch
 hw-findings-sep5 commit 244d0c8 (Disassembled + regen) — the values
 above are prefixes for reading; the files themselves are the record.
+
+## Sep 5 2026 — after P27 (DERR cluster compression, merged bd3369c)
+
+| file | sha256 (first 16) | note |
+|---|---|---|
+| c_src/quest.synclist.p27    | af1be42f5831fb2c | NEW — the sync list of record for the ir 3 artifacts (13,510 entries) |
+| c_src/quest.ir2.book        | 1dc6356a2b45cc06 | regenerated: 2,271 clusters folded, embeds 6,258 |
+| c_src/quest.ir2.stock       | d5e4cb13653c0b29 | regenerated |
+| c_src/quest.synclist.split  | 42bde6c45c24658c | unchanged (identity; all-emulated runs) |
+| Disassembled/*, blocks.split, pushmap, addrbook | — | unchanged from the table above |
