@@ -25,9 +25,18 @@ Two kinds of string value:
   `[@addr, n varying]` (PL/I VARYING: length word at addr, data at
   addr+1 word, capacity n). Frame locals, statics, record fields,
   `IN_BUFFER`, the ?WRITE_SCREEN buffers.
-- **unlimited**: `sN`, a routine-scoped variable holding a byte string
-  of any length. Compiler temporaries; the WMSP claims and the pieces
-  of a frame-scratch chain before the final assignment.
+- **unlimited**: a variable holding a byte string of any length, in two
+  scopes (RULED, Sep 5):
+  - `sN` — BLOCK-LOCAL temporaries, like the t-places: single-assignment,
+    defined and consumed within one block, dead at the block's
+    terminator. Never live at a listed block entry, so they need no
+    arena and no mapping — they are pure notation for an expression that
+    is stored or passed before the block ends.
+  - `pN` — PERSISTENT (routine-scoped) strings: live across blocks —
+    the WMSP temporaries and the frame-scratch chains built through
+    conditional pieces. Defined at the first piece or claim, dead at the
+    region end (§2). These are the ones that need a home the master can
+    be compared against (§5).
 
 Primitives (statement level unless noted):
 
@@ -51,16 +60,21 @@ rt_call ?X(sN, …)              ; an unlimited string passed to the runtime:
 writes to the string sink). `?READ`/`?READ_SCREEN` fill a located
 string (`IN_BUFFER`); unchanged rt_calls.
 
-## 2. Scope of `sN` — RULED (Sep 5, after the census)
+## 2. Scope — RULED (Sep 5, after the census)
 
-Routine-scoped, not block-scoped. 819 of 1,765 windows cross a block
-boundary; every WMSP group and most scratch chains span several blocks
-with conditional pieces. An `sN` is defined at its first piece or claim
-and dies at its region end (the STASP, or the consumer that takes the
-value: an assignment, a compare, an rt_call). Regions are single-entry
-(census: every group is closed within its routine, no interleaving).
-The emitter refuses any region it cannot close (totality: the sites
-stay embedded `@WCMV`, which works today).
+`sN` is block-scoped; `pN` is routine-scoped. The census forces the
+second kind: 819 of 1,765 windows cross a block boundary; every WMSP
+group and most scratch chains span several blocks with conditional
+pieces. A `pN` is defined at its first piece or claim and dies at its
+region end (the STASP, or the consumer that takes the value: an
+assignment, a compare, an rt_call). Regions are single-entry (census:
+every group is closed within its routine, no interleaving). The emitter
+uses `sN` whenever the whole idiom closes inside one block (the 528
+`s = 'lit'` sites need neither: `[@a, n varying] = "lit"` is one
+statement), `pN` otherwise, and refuses any region it cannot close
+(totality: the sites stay embedded `@WCMV`, which works today). The
+loader checks: no `sN` read after its block's terminator; every `pN`
+has one definition region and one release.
 
 ## 3. Timing — RULED
 
@@ -85,9 +99,9 @@ EmulatorDivergences.md). No deadness argument is needed anywhere.
 
 - **Frame scratch chains** (≈500 pieces): the master WCMVs pieces into a
   fixed CHAR(n) frame local. The clone does the same bytes at the same
-  address — `[@fp+k, n] = s0 + s1 + …` built piece by piece per §3. No
+  address — `[@fp+k, n] = p0 + p1 + …` built piece by piece per §3. No
   arena, no mapping: memory agrees byte for byte.
-- **WMSP temporaries** (57 claims, 19 groups): the clone keeps them in
+- **WMSP temporaries** (57 claims, 19 groups; all `pN`): the clone keeps them in
   the **arena** — a heap in an otherwise unused emulated segment
   (0x75000000), first-fit allocation, deterministic across runs, freed
   at the group's release. In emulated memory so the runtime reads a temp
@@ -149,7 +163,7 @@ listed, embedded.
 - **P31 — located slice**: ir 5 grammar for §1; IRExec on the library;
   `s = 'lit'` and `s = t` into fixed/varying targets (≈720 sites);
   residues per §4. NO arena, NO checker change. Battery.
-- **P32 — frame scratch chains**: routine-scoped `sN`, per-piece
+- **P32 — frame scratch chains**: routine-scoped `pN`, per-piece
   appends, conditional pieces, CALLRESULT/SUBSTR/WSTB pieces, tail
   splits (≈900 sites). Still no arena, no checker change. Battery.
 - **P33 — WMSP temporaries**: the arena live, the map artifact, the
