@@ -1,24 +1,29 @@
 #!/usr/bin/env python3
-# lower.py — quest.dis + quest.blocks (+ pushmap, argmap) -> quest.ir
+# lower.py — quest.dis + quest.blocks (+ pushmap, argmap) -> quest.ir (ir 3)
 #
 # THE SPEC IS docs/IR.md (consolidated, normative; spec-wins).  This
-# emitter implements it — grammar, wp/bp/M8 semantics, WPSH group
-# stores, @addr borrow brackets, the byte-EA per-mode table — and any
-# emitter/spec disagreement is a bug in one of them, to be reported,
-# not papered over.  Byte-EA derivation record + the disassembler
+# emitter implements it — the P26 grammar (goto [labels] e terminator,
+# strict booleans, s/u comparisons, word layer, the effectful op family,
+# t-places, stack-register reads, ind()), wp/bp/M8 semantics (P25), WPSH
+# group stores, the byte-EA per-mode table — and any emitter/spec
+# disagreement is a bug in one of them, to be reported, not papered
+# over.  Census + per-mnemonic semantics with emulator source citations:
+# docs/Project26/Census.md.  Byte-EA derivation record + the disassembler
 # byte-operand defect this parser compensates for:
 # docs/Project25/ByteEA.md and docs/DISASSEMBLER_BYTE_OPERANDS.md.
 # (Historical phase-1 rationale: docs/Project23/IRPhase1.md.)
 #
-# Register-faithful 1:1, class-capped, no temps, no folding.
-# Everything not in the cap is an embedded statement.  TOTAL: an
-# all-embed block is valid output.
+# Register-faithful 1:1, class-capped, no folding; t-places only where the
+# instruction itself needs scratch (borrow brackets, WXCH, XNDO, Nova
+# tests).  Everything not in the cap is an embedded @addr instruction.
+# TOTAL: an all-embed block is valid output.
 #
-# Phase 1 cap (spec §4): NLDAI WLDAI / X,L x N,W LDA/STA (modes 0-3,
-# direct or @-indirect via R) / XLEF LLEF / WMOV / WADD WSUB WADDI WSBI.
-# The #-ops carry NO formulas here — IRExec calls the same
+# Effectful ops carry NO formulas here — IRExec calls the same
 # EagleInstruction helpers the emulated instructions call (user ruling,
-# Aug 28 2026, docs/Project23/WideCarry.md). lower.py only CLASSIFIES.
+# Aug 28 2026, docs/Project23/WideCarry.md; P23 same-helpers principle).
+# lower.py only CLASSIFIES and renders operands.  Every skip's signedness
+# and every derived test is read from the emulator source cited in
+# Census.md, never from the ISA name.
 #
 # Exclusions (P22 REPORT §4): block 7015BD6B (interior LJSR) and any
 # block containing ENQT/DEQUE text or an XCT site — refused entirely,
@@ -87,16 +92,16 @@ def parse_blocks(path):
     return blocks, succs
 
 def parse_pushmap(path):
-    """Returns (decorated_pcs, push_slot{pc->slot}, call_site{pc->(marker,[push_pcs])}).
+    """Returns (decorated_pcs, push_slot{pc->slot}, call_site{pc->(marker,[push_pcs])}, borrow{pc->slot}).
     Push lines bind to the next call line (the file is grouped per site)."""
-    pcs, push_slot, call_site, borrow_pcs = set(), {}, {}, set()
+    pcs, push_slot, call_site, borrow_pcs = set(), {}, {}, {}
     pending = []
     for raw in open(path, encoding="ascii", errors="replace"):
         line = raw.split("#")[0].strip()
-        mb = re.match(r"^borrow ([0-9A-Fa-f]{8}) ", line)
+        mb = re.match(r"^borrow ([0-9A-Fa-f]{8}) ([0-9A-Fa-f]{8})$", line)
         if mb:
             pcs.add(int(mb.group(1), 16))
-            borrow_pcs.add(int(mb.group(1), 16))
+            borrow_pcs[int(mb.group(1), 16)] = int(mb.group(2), 16)   # pc -> slot (P26 t-places)
             continue
         m = re.match(r"^(push|call) ([0-9A-Fa-f]{8}) ([0-9A-Fa-f]{8})(?: (\d+))?$", line)
         if not m:
@@ -314,40 +319,356 @@ def pef_value(pc, text):
     return e            # R[...] full address / constant / wp(base, d)
 
 # ------------------------------------------------------------- lowering
+#
+# P26 (docs/Project26/Census.md; spec docs/IR.md rev 3): lower_one returns
+# (statements, terminator) or None.  Statements are addressless bodies;
+# the terminator, when present, is a complete `goto [..] e` body and the
+# instruction MUST be the block's last line (split-CFG invariant: every
+# conditional-length instruction ends its block — verified by the census,
+# refused here if violated).  Effectful ops (add sub mul div cvwn ash
+# nadd nsub nmul) appear ONLY at statement root; pure exprs are
+# parenthesized per class (no precedence reliance).  Every formula here
+# is read from the emulator source cited in Census.md §2 — not from the
+# ISA name.
 
 IMM = re.compile(r"^(-?\d+) \(0x([0-9A-Fa-f]+)\)$")
+REG = re.compile(r"^[0-3]$")
 
-def lower_one(pc, text, pushmap_pcs):
-    """Return IR statement body (without @pc) or None -> embed."""
-    if pc in pushmap_pcs:
-        return None                      # decorated site: embed (or future argstore)
+def imm_word(a):
+    """'dec (0xHHHH)' word immediate -> raw 16-bit value, or None."""
+    m = IMM.match(a)
+    return int(m.group(2), 16) & 0xFFFF if m else None
+
+def hexc(v):
+    return "0x%08X" % (v & 0xFFFFFFFF)
+
+def rr(args):
+    """registerRegister renders XX,YY (source, destination)."""
+    if len(args) == 2 and REG.match(args[0]) and REG.match(args[1]):
+        return "ac" + args[0], "ac" + args[1]
+    return None, None
+
+class BlockCtx:
+    """Per-block lowering state: t-place allocator, borrow slot -> t,
+    successors, dis adjacency (for skip fall-through verification)."""
+    def __init__(self, start, succs, dis_pcs, dis_index, borrow_slot):
+        self.start = start
+        self.succs = succs
+        self.dis_pcs = dis_pcs
+        self.dis_index = dis_index
+        self.borrow_slot = borrow_slot     # pc -> slot for borrow pcs
+        self.slot_t = {}                   # slot -> tN (open bracket)
+        self.nt = 0
+    def newt(self):
+        self.nt += 1
+        return "t%d" % self.nt
+    def next_pc(self, pc):
+        i = self.dis_index[pc] + 1
+        return self.dis_pcs[i] if i < len(self.dis_pcs) else None
+    def skip_exits(self, pc):
+        """(fall, skip) for a skip-class terminator: the CFG lists the
+        successors ascending = [no-skip, skip]; the no-skip successor must
+        be the dis-adjacent pc.  Anything else refuses."""
+        s = self.succs
+        if len(s) != 2 or not (s[0] < s[1]):
+            die("skip at %08X: block %08X has successors %s, expected 2 ascending"
+                % (pc, self.start, ["%08X" % x for x in s]))
+        if s[0] != self.next_pc(pc):
+            die("skip at %08X: no-skip successor %08X != next pc" % (pc, s[0]))
+        return s[0], s[1]
+
+def goto2(fall, skip, test):
+    return "goto [%08X, %08X] %s" % (fall, skip, test)
+
+# ---- Nova ALU (NovaCompute.cpp:8-80), no-load forms only (P26 ruling R3).
+# The test is DERIVED from the emulator's field decomposition, never from
+# the mnemonic: src = (acX & 0xFFFF) | carry-in<<16; op; shift/carry per
+# SS; skip per KKK on (c, 17-bit-ish result).  With N (#) set nothing is
+# written (:63-66) so the instruction is a pure test.  Load forms (43)
+# are DEFERRED (Census.md §2d) and stay embedded.
+NOVA = re.compile(r"^(MOV|ADD|SUB|COM|NEG|ADC|INC|AND)(?:\.([ZOC]?)([LRS]?))?(#?) "
+                  r"([0-3]),([0-3])(?:,(SKP|SZC|SNC|SZR|SNR|SEZ|SBN))?$")
+
+def nova_test(body, ctx):
+    m = NOVA.match(body)
+    if not m:
+        return None
+    op, carry, shift, noload, x, y, skip = m.groups()
+    if not noload:
+        return None                       # load form: deferred
+    if not skip:
+        die("no-load Nova op without a skip is a no-op: %s" % body)
+    acx, acy = "ac" + x, "ac" + y
+    stmts = []
+    # carry-in (CC): 0 -> c, Z -> 0, O -> 1, C -> complement of c
+    cin = {"": "lsh(c, 16)", "Z": None, "O": "0x00010000", "C": "(lsh(c, 16) ^ 0x00010000)"}[carry]
+    src16 = "(%s & 0xFFFF)" % acx
+    s = src16 if cin is None else "(%s | %s)" % (src16, cin)
+    dst16 = "(%s & 0xFFFF)" % acy
+    val = {"COM": "(%s ^ 0xFFFF)" % s,
+           "NEG": "((%s ^ 0xFFFF) + 1)" % s,
+           "MOV": s,
+           "INC": "(%s + 1)" % s,
+           "ADC": "((%s ^ 0xFFFF) + %s)" % (s, dst16),
+           "SUB": "((%s ^ 0xFFFF) + %s + 1)" % (s, dst16),
+           "ADD": "(%s + %s)" % (s, dst16),
+           "AND": "(%s & (%s | 0x00010000))" % (s, dst16)}[op]
+    t = ctx.newt()
+    stmts.append("%s = %s" % (t, val))
+    # shift (SS): carry bit and result per the emulator
+    if shift == "":
+        cbit = "(lsh(%s, -16) & 1)" % t
+        res = "(%s & 0xFFFF)" % t
+    elif shift == "L":
+        cbit = "(lsh(%s, -15) & 1)" % t
+        res = "(((%s & 0xFFFF) * 2) | (lsh(%s, -16) & 1))" % (t, t)
+    elif shift == "R":
+        cbit = "(%s & 1)" % t
+        res = "(lsh(%s, -1) & 0xFFFF)" % t
+    else:  # S
+        cbit = "(lsh(%s, -16) & 1)" % t
+        res = "(((%s & 0xFF) * 0x100) | (lsh(%s & 0xFF00, -8)))" % (t, t)
+    # skip (KKK)
+    cz = "(%s == 0)" % cbit
+    cn = "(%s == 1)" % cbit
+    rz = "(%s == 0)" % res
+    rn = "(%s != 0)" % res
+    test = {"SKP": "1", "SZC": cz, "SNC": cn, "SZR": rz, "SNR": rn,
+            "SEZ": "(%s || %s)" % (cz, rz), "SBN": "(%s && %s)" % (cn, rn)}[skip]
+    return stmts, test
+
+# ---- skip family (EagleCompute.cpp: WSEQ/WSNE/WSLT/WSLE/WSGT/WSGE :175-203,
+# WUSGT/WUSGE :205-213, W*I :215-237, WUGTI/WULEI :362-370).  XX==YY compares
+# the register against 0 (dst=0 in the source).  Signedness per row is the
+# source's cast, never guessed.
+SKIP_RR = {"WSEQ": "==", "WSNE": "!=", "WSLT": "<s", "WSLE": "<=s",
+           "WSGT": ">s", "WSGE": ">=s", "WUSGT": ">u", "WUSGE": ">=u"}
+SKIP_RI16 = {"WSEQI": "==", "WSNEI": "!=", "WSLEI": "<=s", "WSGTI": ">s"}
+SKIP_RI32 = {"WUGTI": ">u", "WULEI": "<=u"}
+
+def lower_one(pc, text, pushmap_pcs, ctx):
+    """Return (stmts, terminator) or None -> embed."""
     body = text.rstrip(";").strip()
+    if pc in pushmap_pcs:
+        # P26: borrow-bracket WPSH/WPOP (the P20 borrow map) -> t-place
+        # save/restore.  Everything else decorated stays an instruction
+        # (or is handled by the site machinery in emit_block).
+        if pc in ctx.borrow_slot:
+            m = re.match(r"^(WPSH|WPOP) ([0-3]),([0-3])$", body)
+            if not m or m.group(2) != m.group(3):
+                die("borrow bracket at %08X is not WPSH/WPOP r,r: %s" % (pc, body))
+            slot, r = ctx.borrow_slot[pc], "ac" + m.group(2)
+            if m.group(1) == "WPSH":
+                if slot in ctx.slot_t:
+                    die("borrow slot %08X pushed twice in block %08X" % (slot, ctx.start))
+                t = ctx.newt(); ctx.slot_t[slot] = t
+                return ["%s = %s" % (t, r)], None
+            t = ctx.slot_t.pop(slot, None)
+            if t is None:
+                die("borrow WPOP at %08X without its WPSH in block %08X" % (pc, ctx.start))
+            return ["%s = %s" % (r, t)], None
+        return None
     m = re.match(r"^(\S+)\s*(.*)$", body)
     if not m:
         return None
     op, rest = m.group(1), m.group(2)
     args = [a.strip() for a in rest.split(",")] if rest else []
+    S = lambda *stmts: (list(stmts), None)
 
+    # ---- loads / constants (unchanged from P23/P25)
     if op == "NLDAI" and len(args) == 2:
-        im = IMM.match(args[0])
-        if im:
-            return "ac%s = 0x%08X" % (args[1], sext(int(im.group(2), 16), 16) & 0xFFFFFFFF)
+        v = imm_word(args[0])
+        if v is not None:
+            return S("ac%s = %s" % (args[1], hexc(sext(v, 16))))
     if op == "WLDAI" and len(args) == 2:
         m32 = re.match(r"^0x([0-9A-Fa-f]{1,8})$", args[1])
-        if m32:                       # WLDAI <ac>,<0xvalue> — note: ac FIRST
-            return "ac%s = 0x%08X" % (args[0], int(m32.group(1), 16) & 0xFFFFFFFF)
+        if m32:                       # WLDAI <ac>,<0xvalue> — ac FIRST
+            return S("ac%s = %s" % (args[0], hexc(int(m32.group(1), 16))))
     if op == "WMOV" and len(args) == 2:
-        return "ac%s = ac%s" % (args[1], args[0])
-    if op in ("WADD", "WSUB") and len(args) == 2:
-        o = "#+" if op == "WADD" else "#-"
-        return "ac%s = ac%s %s ac%s" % (args[1], args[1], o, args[0])
-    if op == "WSBI" and len(args) == 2:
-        return "ac%s = ac%s #- %s" % (args[1], args[1], args[0])
-    if op == "WADDI" and len(args) == 2:
-        im = IMM.match(args[1])           # WADDI <ac>,<value (0xhex)> — ac FIRST
-        if im:
-            return "ac%s = ac%s #+ 0x%08X" % (args[0], args[0], int(im.group(2), 16) & 0xFFFFFFFF)
+        return S("ac%s = ac%s" % (args[1], args[0]))
 
+    # ---- effectful family (statement root; helpers named in Census.md §2b)
+    x, y = rr(args)
+    if op in ("WADD", "WSUB") and x:
+        return S("%s = %s(%s, %s)" % (y, "add" if op == "WADD" else "sub", y, x))
+    if op == "WADC" and x:                         # :51 add(~src, dst)
+        return S("%s = add(%s, ~%s)" % (y, y, x))
+    if op == "WINC" and x:                         # :87 add(1, src) -> dst
+        return S("%s = add(%s, 1)" % (y, x))
+    if op == "WNEG" and x:                         # :29 sub(src, 0)
+        return S("%s = sub(0, %s)" % (y, x))
+    if op in ("WMUL",) and x:                      # :57 mul(src, dst)
+        return S("%s = mul(%s, %s)" % (y, y, x))
+    if op == "WDIV" and x:                         # :63 -> EagleInstruction::div
+        return S("%s = div(%s, %s)" % (y, y, x))
+    if op in ("NADD", "NSUB", "NMUL") and x:       # :121/:126/:136
+        return S("%s = %s(%s, %s)" % (y, {"NADD": "nadd", "NSUB": "nsub", "NMUL": "nmul"}[op], y, x))
+    if op == "NNEG" and x:                         # :131 narrow_sub(src, 0)
+        return S("%s = nsub(0, %s)" % (y, x))
+    if op in ("WADI", "WSBI", "NADI", "NSBI") and len(args) == 2 and REG.match(args[1]):
+        k = int(args[0])                           # tinyImmediateRegister: imm(1..4),ac
+        if not 1 <= k <= 4:
+            die("tiny immediate out of range at %08X: %s" % (pc, body))
+        f = {"WADI": "add", "WSBI": "sub", "NADI": "nadd", "NSBI": "nsub"}[op]
+        return S("ac%s = %s(ac%s, %d)" % (args[1], f, args[1], k))
+    if op == "WADDI" and len(args) == 2:
+        im = IMM.match(args[1])                    # WADDI <ac>,<value (0xhex)>
+        if im:
+            return S("ac%s = add(ac%s, %s)" % (args[0], args[0], hexc(int(im.group(2), 16))))
+    if op == "WNADI" and len(args) == 2:           # :316 sext16(word) via add
+        v = imm_word(args[1])
+        if v is not None:
+            return S("ac%s = add(ac%s, %s)" % (args[0], args[0], hexc(sext(v, 16))))
+    if op == "NADDI" and len(args) == 2:           # :151 narrow_add(word, dst)
+        v = imm_word(args[1])
+        if v is not None:
+            return S("ac%s = nadd(ac%s, %s)" % (args[0], args[0], hexc(v)))
+    if op == "CVWN" and len(args) == 1 and REG.match(args[0]):   # :80 -> cvwn
+        return S("ac%s = cvwn(ac%s)" % (args[0], args[0]))
+    memeff = {"LWADD": ("add", 32, True), "XWADD": ("add", 32, False),
+              "XWSUB": ("sub", 32, False), "LWSUB": ("sub", 32, True),
+              "XWMUL": ("mul", 32, False), "LWMUL": ("mul", 32, True),
+              "XNADD": ("nadd", 16, False), "LNADD": ("nadd", 16, True),
+              "XNSUB": ("nsub", 16, False), "LNSUB": ("nsub", 16, True),
+              "XNMUL": ("nmul", 16, False), "LNMUL": ("nmul", 16, True)}
+    if op in memeff and len(args) == 2 and REG.match(args[0]):
+        f, width, wide = memeff[op]
+        e = parse_memop(pc, args[1], wide)
+        if e is None:
+            return None
+        return S("ac%s = %s(ac%s, M%d[%s])" % (args[0], f, args[0], width, e))
+    memrmw = {"XWADI": ("add", 32, False), "XWSBI": ("sub", 32, False),
+              "XNADI": ("nadd", 16, False), "XNSBI": ("nsub", 16, False),
+              "LNADI": ("nadd", 16, True), "LNSBI": ("nsub", 16, True)}
+    if op in memrmw and len(args) == 2:
+        f, width, wide = memrmw[op]
+        k = int(args[0])
+        if not 1 <= k <= 4:
+            die("tiny immediate out of range at %08X: %s" % (pc, body))
+        e = parse_memop(pc, args[1], wide)
+        if e is None:
+            return None
+        # M16 store truncates (spec §5); the effectful op is NOT wrapped
+        # in trunc16 (ruling R6).
+        return S("M%d[%s] = %s(M%d[%s], %d)" % (width, e, f, width, e, k))
+
+    # ---- word layer (pure)
+    if op == "WCOM" and x:
+        return S("%s = ~%s" % (y, x))
+    if op in ("WAND", "WIOR", "WXOR") and x:
+        return S("%s = %s %s %s" % (y, y, {"WAND": "&", "WIOR": "|", "WXOR": "^"}[op], x))
+    if op in ("WANDI", "WIORI", "WXORI") and len(args) == 2 and REG.match(args[0]):
+        m32 = IMM.match(args[1])                   # registerWideImmediate: dec (0xHHHHHHHH)
+        if m32:
+            return S("ac%s = ac%s %s %s" % (args[0], args[0],
+                     {"WANDI": "&", "WIORI": "|", "WXORI": "^"}[op], hexc(int(m32.group(2), 16))))
+    if op == "ANDI" and len(args) == 2 and REG.match(args[0]):     # :170 16-bit imm, zero-extended
+        v = imm_word(args[1])
+        if v is not None:
+            return S("ac%s = ac%s & %s" % (args[0], args[0], hexc(v)))
+    if op == "WLSI" and len(args) == 2 and REG.match(args[1]):     # :102 logical_shift(dst, k)
+        k = int(args[0])
+        if not 1 <= k <= 4:
+            die("tiny immediate out of range at %08X: %s" % (pc, body))
+        return S("ac%s = lsh(ac%s, %d)" % (args[1], args[1], k))
+    if op == "WLSHI" and len(args) == 2 and REG.match(args[0]):    # :327 sext8 of the word
+        v = imm_word(args[1])
+        if v is not None:
+            return S("ac%s = lsh(ac%s, %d)" % (args[0], args[0], sext(v & 0xFF, 8)))
+    if op == "WMOVR" and len(args) == 1 and REG.match(args[0]):    # :161 uint32 >> 1
+        return S("ac%s = lsh(ac%s, -1)" % (args[0], args[0]))
+    if op == "WHLV" and len(args) == 1 and REG.match(args[0]):     # :157 int32 >> 1 (root ash: ovr += 0)
+        return S("ac%s = ash(ac%s, -1)" % (args[0], args[0]))
+    if op == "SEX" and x:
+        return S("%s = sx16(%s)" % (y, x))
+    if op == "ZEX" and x:
+        return S("%s = zx16(%s)" % (y, x))
+    if op == "WXCH" and x:
+        t = ctx.newt()
+        return S("%s = %s" % (t, x), "%s = %s" % (x, y), "%s = %s" % (y, t))
+    if op == "LDAFP" and len(args) == 1 and REG.match(args[0]):    # EagleStack.cpp:527
+        return S("ac%s = wfp" % args[0])
+    if op == "LDASP" and len(args) == 1 and REG.match(args[0]):    # EagleStack.cpp:512
+        return S("ac%s = wsp" % args[0])
+    if op == "CRYTO" and not args:                                 # EagleGeneral.cpp:127
+        return S("c = 1")
+    # ---- bit-in-memory (EagleCompute.cpp WBTZ :257, WBTO :268): base =
+    # XX==YY ? 0 : eagle_resolve_indirect(acX) [ind()], + (acY >>> 4);
+    # bit = 0x8000 >> (acY & 15); the M16 index wrap is copy_segment.
+    if op in ("WBTZ", "WBTO") and x:
+        base = "0" if x == y else "ind(%s)" % x
+        cell = "M16[%s + lsh(%s, -4)]" % (base, y)
+        mask = "lsh(0x8000, 0 - (%s & 15))" % y
+        if op == "WBTZ":
+            return S("%s = %s & ~%s" % (cell, cell, mask))
+        return S("%s = %s | %s" % (cell, cell, mask))
+
+    # ---- terminators: skips (MathDesign §1/§2), XJMP, Nova tests, loops
+    if op in SKIP_RR and x:
+        fall, skip = ctx.skip_exits(pc)
+        rhs = "0" if x == y else y                 # src=acX vs dst=acY; XX==YY: dst = 0
+        return [], goto2(fall, skip, "(%s %s %s)" % (x, SKIP_RR[op], rhs))
+    if op in SKIP_RI16 and len(args) == 2 and REG.match(args[0]):
+        v = imm_word(args[1])
+        if v is not None:
+            fall, skip = ctx.skip_exits(pc)
+            return [], goto2(fall, skip, "(ac%s %s %s)" % (args[0], SKIP_RI16[op], hexc(sext(v, 16))))
+    if op in SKIP_RI32 and len(args) == 2 and REG.match(args[0]):
+        m32 = IMM.match(args[1])                   # registerWideImmediate: dec (0xHHHHHHHH)
+        if m32:
+            fall, skip = ctx.skip_exits(pc)
+            return [], goto2(fall, skip, "(ac%s %s %s)" % (args[0], SKIP_RI32[op], hexc(int(m32.group(2), 16))))
+    if op == "WSZB" and x:                                          # :279
+        fall, skip = ctx.skip_exits(pc)
+        base = "0" if x == y else "ind(%s)" % x
+        cell = "M16[%s + lsh(%s, -4)]" % (base, y)
+        bit = "(lsh(%s, 0 - (15 - (%s & 15))) & 1)" % (cell, y)
+        return [], goto2(fall, skip, "(%s == 0)" % bit)
+    if op == "WSKBO" and len(args) == 1 and re.match(r"^\d+$", args[0]):   # :252
+        n = int(args[0])
+        if not 0 <= n <= 31:
+            die("WSKBO bit out of range at %08X: %s" % (pc, body))
+        fall, skip = ctx.skip_exits(pc)
+        return [], goto2(fall, skip, "((lsh(ac0, %d) & 1) == 1)" % (-(31 - n)))
+    if op == "XNISZ" and len(args) == 1:                            # :447
+        e = parse_memop(pc, args[0], False)
+        if e is not None:
+            fall, skip = ctx.skip_exits(pc)
+            return ["M16[%s] = (M16[%s] + 1) & 0xFFFF" % (e, e)], goto2(fall, skip, "(M16[%s] == 0)" % e)
+    if op == "XJMP" and len(args) == 1:
+        # Direct pc-relative only (ruling R2); indirect (@) stays embedded.
+        mm = re.match(r"^\[pc\+0x([0-9A-Fa-f]+)\] \(0x([0-9A-Fa-f]{8})\)$", args[0])
+        if mm:
+            tgt = int(mm.group(2), 16)
+            if (tgt & ~SEG_MASK) != seg_of(pc):
+                die("XJMP target %08X outside block segment at %08X" % (tgt, pc))
+            if tgt not in ctx.succs:
+                die("XJMP target %08X not among successors of %08X" % (tgt, ctx.start))
+            return [], "goto [%08X] 0" % tgt
+    if op in ("XNDO", "XWDO") and len(args) == 3 and REG.match(args[0]):   # EagleGeneral.cpp:167/:180
+        e = parse_memop(pc, args[2], False)
+        if e is not None:
+            arg = int(args[1])
+            target = (pc + 1 + arg) & 0xFFFFFFFF
+            s = ctx.succs
+            if len(s) != 2 or s[0] != ctx.next_pc(pc) or s[1] != target:
+                die("%s at %08X: successors %s do not match [next, pc+1+%d]"
+                    % (op, pc, ["%08X" % v for v in s], arg))
+            acii = "ac" + args[0]
+            width, f = (16, "nadd") if op == "XNDO" else (32, "add")
+            t1, t2 = ctx.newt(), ctx.newt()
+            return (["%s = %s(M%d[%s], 1)" % (t1, f, width, e),
+                     "M%d[%s] = %s" % (width, e, t1),
+                     "%s = (%s >s %s)" % (t2, t1, acii),
+                     "%s = %s" % (acii, t1)],
+                    goto2(s[0], s[1], t2))
+    nv = nova_test(body, ctx)
+    if nv is not None:
+        stmts, test = nv
+        fall, skip = ctx.skip_exits(pc)
+        return stmts, goto2(fall, skip, test)
+
+    # ---- loads/stores (P23) and byte addressing (P25), unchanged
     ldst = {"XWLDA": ("l", 32, False), "LWLDA": ("l", 32, True),
             "XNLDA": ("l", 16, False), "LNLDA": ("l", 16, True),
             "XWSTA": ("s", 32, False), "LWSTA": ("s", 32, True),
@@ -360,17 +681,11 @@ def lower_one(pc, text, pushmap_pcs):
             return None
         ac = "ac%s" % args[0]
         if kind == "e":
-            return "%s = %s" % (ac, e)
+            return S("%s = %s" % (ac, e))
         cell = "M%d[%s]" % (width, e)
         if kind == "l":
-            return "%s = %s" % (ac, cell) if width == 32 else "%s = sx16(%s)" % (ac, cell)
-        return "%s = %s" % (cell, ac) if width == 32 else "%s = trunc16(%s)" % (cell, ac)
-
-    # ---- P25 byte addressing (Machine::eagle_{x,l}_byte_indexed,
-    # Memory::read_byte/write_byte; see byte_ea for the semantics).
-    # M8 reads return the byte zero-extended; M8 stores write value&0xFF
-    # (audit trail zx8).  M8 indices are RAW — byte pointers carry their
-    # own segment (bits 31:29); the hardware applies no wrap at use.
+            return S("%s = %s" % (ac, cell) if width == 32 else "%s = sx16(%s)" % (ac, cell))
+        return S("%s = %s" % (cell, ac) if width == 32 else "%s = trunc16(%s)" % (cell, ac))
     bldst = {"XLEFB": ("e", False), "LLEFB": ("e", True),
              "XLDB":  ("l", False), "LLDB":  ("l", True),
              "XSTB":  ("s", False), "LSTB":  ("s", True)}
@@ -381,18 +696,15 @@ def lower_one(pc, text, pushmap_pcs):
             return None
         ac = "ac%s" % args[0]
         if kind == "e":
-            return "%s = %s" % (ac, e)
+            return S("%s = %s" % (ac, e))
         if kind == "l":
-            return "%s = M8[%s]" % (ac, e)
-        return "M8[%s] = zx8(%s)" % (e, ac)
+            return S("%s = M8[%s]" % (ac, e))
+        return S("M8[%s] = zx8(%s)" % (e, ac))
     if op in ("WLDB", "WSTB") and len(args) == 2:
-        # registerRegister renders II,AA (Disassembler.java: bits 14:13
-        # then 12:11; EagleGeneral::setup: AA=12:11, II=14:13).
-        # WLDB: ac[AA] = read_byte(ac[II]); WSTB: write_byte(ac[II], ac[AA]&0xFF)
         ii, aa = args[0], args[1]
         if op == "WLDB":
-            return "ac%s = M8[ac%s]" % (aa, ii)
-        return "M8[ac%s] = zx8(ac%s)" % (ii, aa)
+            return S("ac%s = M8[ac%s]" % (aa, ii))
+        return S("M8[ac%s] = zx8(ac%s)" % (ii, aa))
     return None
 
 # ----------------------------------------------------------------- main
@@ -427,7 +739,7 @@ def main():
     else:
         die("need --pilot or --all")
 
-    out = ["ir 2",
+    out = ["ir 3",
            "mode %s" % ("book" if a.book else "stock"),
            "source  %s sha256=%s" % (a.dis, sha256(a.dis)),
            "blocks  %s sha256=%s" % (a.blocks, sha256(a.blocks)),
@@ -504,6 +816,9 @@ def emit_block(start, blocks, succs, dis, dis_pcs, dis_index,
         if start not in dis_index:
             die("block start %08X has no disassembly line" % start)
         i0 = dis_index[start]
+        ctx = BlockCtx(start, succs.get(start, []), dis_pcs, dis_index, borrow_pcs)
+        term = None
+        nbody = len(body_text)
         for k, expected in enumerate(body_text):
             if i0 + k >= len(dis_pcs):
                 die("disassembly ends inside block %08X" % start)
@@ -514,6 +829,9 @@ def emit_block(start, blocks, succs, dis, dis_pcs, dis_index,
             if text.rstrip() != expected.rstrip():
                 die("dis/blocks text mismatch at %08X:\n  dis:    %s\n  blocks: %s"
                     % (pc, text, expected))
+            if term is not None:
+                die("terminator emitted before the last instruction in block %08X (at %08X)"
+                    % (start, pc))
             handled = False
             if pc in push_slot:
                 site = next((c for c, (mk, ps) in call_site.items() if pc in ps), None)
@@ -549,15 +867,29 @@ def emit_block(start, blocks, succs, dis, dis_pcs, dis_index,
                 census["last"] = "ret"
                 handled = True
             if not handled:
-                stmt = lower_one(pc, text, pushmap_pcs)
-                if stmt is None:
+                low = lower_one(pc, text, pushmap_pcs, ctx)
+                if low is None:
                     out.append("  @%08X %s" % (pc, text))
                     census["embed"] += 1
                     census["last"] = "instr"
                 else:
-                    out.append("  %s ; %s" % (stmt, text))
-                    census["expr"] += 1
-                    census["last"] = "stmt"
+                    stmts, term = low
+                    for i, st in enumerate(stmts):
+                        tail = " ; %s" % text if i == 0 else ""
+                        out.append("  %s%s" % (st, tail))
+                        census["expr"] += 1
+                        census["last"] = "stmt"
+                    if term is not None:
+                        if k != nbody - 1:
+                            die("skip/jump %08X is not the last instruction of block %08X"
+                                % (pc, start))
+                        out.append("  %s ; %s" % (term, text))
+                        census["goto"] += 1
+                        census["last"] = "goto"
+                    elif not stmts:
+                        die("lower_one returned nothing for %08X" % pc)
+        if ctx.slot_t:
+            die("borrow bracket left open at block %08X end" % start)
         last_text = blocks[start][-1] if blocks[start] else ""
         wbr = re.match(r"^WBR .*\(0x([0-9A-Fa-f]{8})\);", last_text)
         if census["last"] == "stmt":
@@ -565,11 +897,12 @@ def emit_block(start, blocks, succs, dis, dis_pcs, dis_index,
             if len(fs) != 1:
                 die("block %08X ends in a lowered statement but has %d successors"
                     % (start, len(fs)))
-            out.append("  goto %08X ; fall-through" % fs[0])
+            out.append("  goto [%08X] 0 ; fall-through" % fs[0])
+            census["goto"] += 1
         elif census["last"] == "instr" and wbr:
-            out[-1] = "  goto %s ; %s" % (wbr.group(1), last_text)
+            out[-1] = "  goto [%s] 0 ; %s" % (wbr.group(1), last_text)
             census["embed"] -= 1
-            census["goto"] = census.get("goto", 0) + 1
+            census["goto"] += 1
         out.append("")
 
     return 1

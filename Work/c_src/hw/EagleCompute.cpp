@@ -61,10 +61,8 @@ uint32_t EagleCompute::execute(Machine& machine, uint32_t address, uint32_t opco
     return copy_segment(address, address+1);
 
    case WDIV:
-    if(machine.ac[XX]==0 || (static_cast<int32_t>(machine.ac[XX])==-1 && machine.ac[YY]==0x80000000u))
-     machine.ovr=1;
-    else
-     machine.ac[YY]=static_cast<int32_t>(machine.ac[YY])/static_cast<int32_t>(machine.ac[XX]);
+    // P26: body hoisted into EagleInstruction::div (shared with IRExec).
+    machine.ac[YY]=div(machine, machine.ac[XX], machine.ac[YY]);
     return copy_segment(address, address+1);
 
    case ZEX:
@@ -78,10 +76,8 @@ uint32_t EagleCompute::execute(Machine& machine, uint32_t address, uint32_t opco
     return copy_segment(address, address+1);
 
    case CVWN:
-    src=machine.ac[YY];
-    machine.ac[YY]=static_cast<int32_t>(src<<16)>>16;
-    src=src>>15;
-    machine.ovr|=(src!=0 && src!=-1)?1:0;
+    // P26: body hoisted into EagleInstruction::cvwn (shared with IRExec).
+    machine.ac[YY]=cvwn(machine, machine.ac[YY]);
     return copy_segment(address, address+1);
 
    case WINC:
