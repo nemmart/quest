@@ -1,9 +1,13 @@
 # quest.ir — THE IR SPECIFICATION (consolidated, standalone)
 
-Version: **ir 3** (Project 26, Sep 5 2026 — the math & control grammar:
-`goto [labels] e` terminator, strict booleans, s/u comparisons, word
-layer, the effectful op family replacing `#+`/`#-`, t-places, stack-
-register reads). This document is self-contained and normative; it
+Version: **ir 4** (Project 28, Sep 5 2026 — the `rt_call` terminator:
+the 987 game→runtime LCALL sites with their argument pushes folded into
+PL/I-order argument expressions, real stack in both modes; plus LNDO,
+the LDSP pair and the Nova LOAD forms; docs/Project28/{Census,
+RTConventions,REPORT}.md). ir 3 (Project 26) was the math & control
+grammar: `goto [labels] e` terminator, strict booleans, s/u
+comparisons, word layer, the effectful op family replacing `#+`/`#-`,
+t-places, stack-register reads. This document is self-contained and normative; it
 consolidates IRPhase1.md (as amended), Project23/IR2.md and
 Project26/MathDesign.md (the P26 design input — rulings of record;
 this spec is the law once landed). History and rationale live in
@@ -31,7 +35,7 @@ decode/execute path for instructions, calls, and rets).
 
 ## 2. File structure
 
-    ir 3
+    ir 4
     mode <stock|book>
     source  <path> sha256=<hex>
     blocks  <path> sha256=<hex>
@@ -74,6 +78,17 @@ addresses; blocks are single-entry, so statements need no identities.
     <lvalue> = <expr>              STATEMENT (addressless). §5.
     call <tgt> args=<n> marker=<hex8> site=<hex8> ret=<hex8>
                                    Decorated call. TERMINATOR. §6.
+    rt_call <callee>(<expr>, ...) site=<hex8>
+                                   Runtime call (P28, ir 4). TERMINATOR.
+                                   The game→runtime LCALL at `site` (a
+                                   `?`-prefixed callee) with its argument
+                                   pushes folded into pure argument
+                                   EXPRESSIONS in PL/I order: the first
+                                   expression is argument 1. Exit =
+                                   whatever the LCALL instruction
+                                   returns (callee entry / native return
+                                   / syscall sentinel), as for a final
+                                   instruction. §6.
     ret                            WRTN. TERMINATOR. §6.
     goto [<hex8>, ...] <expr>      Exit. TERMINATOR (P26). The expr is
                                    a STRICT index into the label list:
@@ -124,7 +139,7 @@ possible — statements are sequence, not identities.
   refused.
 - Instruction addresses within a block strictly increase.
 - TERMINATOR RULE: the last line of every block is an instruction,
-  `call`, `ret`, or `goto`. (A final instruction's control transfer —
+  `call`, `rt_call`, `ret`, or `goto`. (A final instruction's control transfer —
   branch, skip, return, call, fault — IS the exit.) A lowered skip is
   a `goto [fall, skip] test`; nothing follows a terminator.
 - t-places (P26) are BLOCK-LOCAL, SINGLE-ASSIGNMENT: the loader refuses
@@ -184,9 +199,10 @@ checker; zero effect unset.
 
     lvalue  := ac0..ac3 | tN | c | ovr | M8[e] | M16[e] | M32[e]
                (wfp wsp wsb wsl are grammatically registers but WRITES are
-               RESERVED — the loader refuses them until the RT-call
-               decoration project owns the wsp/wsl overflow gate; P26
-               emits stack-register READS only)
+               RESERVED — refused. The RT-call decoration project (P28)
+               chose NOT to spell stack writes out: `rt_call` moves wsp
+               only inside Machine::wide_push, §6; P26/P28 emit
+               stack-register READS only)
     stmt    := lvalue = expr                         pure
              | lvalue = effop(args)                  effectful, ROOT ONLY (§5.5)
              | assert(e[, "msg"])
@@ -205,6 +221,15 @@ checker; zero effect unset.
                sx16(e) | zx16(e) | zx8(e) | trunc16(e) | ( e )
     effop   := add(a, b) | sub(a, b) | mul(a, b) | div(a, b) | cvwn(a) |
                ash(a, amount) | nadd(a, b) | nsub(a, b) | nmul(a, b)
+
+    REFUSED AT LOAD (rt_call, P28): a callee that is not a `?` symbol;
+    a `site=` whose word is not an LCALL or whose argc field (site+3,
+    & 0x7FFF) != the number of argument expressions (checked against
+    memory at execution, loud); a callee symbol that does not resolve to
+    the LCALL's target; site+4 not a listed block start; rt_call
+    anywhere but the last line of a block; an argument that is not a
+    pure expr (effectful ops are not exprs; t-places ARE allowed — a
+    pure read, single-assignment checked as everywhere).
 
     REFUSED AT LOAD: bare `< <= > >=`; bare `/ %`; the whole `#` family
     (`#+ #- #* #/`, retired in ir 3); C `<<`/`>>` at any tier (ruling
@@ -322,8 +347,10 @@ says otherwise; signedness is never implicit — it is in the operator
   expression may consume a flag an earlier effectful statement set.
 - `wfp wsp wsb wsl` read machine.wfp/wsp/wsb/wsl — the clone's own
   registers, the same values LDAFP/LDASP read (EagleStack.cpp:527/
-  :512). Writes are reserved (refused) until the RT-call decoration
-  project owns the wsp/wsl overflow gate.
+  :512). Writes are reserved (refused): the RT-call decoration project
+  (P28) kept it so — `rt_call` is the one construct that moves wsp and
+  does it inside `Machine::wide_push`, which owns the wsp>wsl overflow
+  fault (§6).
 - t-places tN: 32-bit block-local scratch, SINGLE-ASSIGNMENT (loader:
   refuse a read before the write, refuse a second write in the block;
   straight-line blocks make definite assignment exact). A t may be the
@@ -385,14 +412,20 @@ LNSBI NMUL XNMUL LNMUL, WHLV as root `ash(x, -1)`); the word layer
 WBTZ/WBTO via ind(); LDAFP/LDASP reads; CRYTO; WXCH and the 23 borrow
 brackets via t-places; XNDO/XWDO; the Nova no-load (`#`) skip forms as
 tests derived mechanically from NovaCompute.cpp's CC/op/SS/KKK tables
-(Census.md §2d). Everything else stays an instruction — in particular
-the 67 Nova LOAD forms (deferred pending the user's manual check on
-the high-half convention), indirect XJMP, LNDO (the dis omits its
-register field), DIVX/WDIVS, DERR, the string/WMSP/stack-write family,
-calls (undecorated), frames, floats. The cap widens by extraction,
-never by assumption.
+(Census.md §2d); since P28 (ir 4): the 67 Nova LOAD forms (pure — the
+no-load decomposition plus `c = <carry>; acY = <16-bit result>`; the
+high half is what NovaCompute.cpp:63–66 leaves, zero except that the
+SS=1 rotate keeps bit 16 = old bit 15 — UNDEFINED per the manual,
+HWFindings_Sep5.md §3/§7, a don't-care replicated for the strict
+surface; a `SKP` form is `goto [pc+2] 0`), LNDO (as XNDO with the
+L-form EA and pc+4 fall-through, EagleGeneral.cpp:225–236), the LDSP
+pair (§6), and the 987 runtime call sites as `rt_call` (§6).
+Everything else stays an instruction — in particular indirect XJMP,
+DIVX/WDIVS, the two LDSP-fed `DERR 17` sinks (terminal, verified
+pairs), the string/WMSP/stack-write family, calls (undecorated),
+frames, floats. The cap widens by extraction, never by assumption.
 
-### 5.7 Worked example (an emitted block, ir 3)
+### 5.7 Worked example (an emitted block, ir 3 grammar — unchanged in ir 4)
 
     block 7015C2A6 seg 0x70000000
       ac1 = 0x000002AE ; NLDAI 686 (0x02AE),1;
@@ -408,6 +441,18 @@ never by assumption.
       ac0 = sx16(M16[0x7000021A]) ; LNLDA 0,[0x7000021A];
       t1 = ((ac0 & 0xFFFF) | lsh(c, 16)) ; MOV.L# 0,0,SNC;
       goto [7015C2BF, 7015C2C0] ((lsh(t1, -15) & 1) == 1) ; MOV.L# 0,0,SNC;
+
+    block 7015D923 seg 0x70000000                ; (ir 4) an rt_call block
+      ...
+      M32[wp(ac3, 44)] = ac2 ; XWSTA 2,[ac3+0x2C];
+      ac2 = wp(ac3, 50) ; XLEF 2,[ac3+0x32];       ; register argument (ac2)
+      rt_call ?UNSIGNED_TO_CHAR(wp(ac3, 44)) site=7015D930 ; LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR  <- XPEF [ac3+0x2C];
+
+Reading the third block: the XPEF at 7015D92C is folded into the
+terminator's argument (echoed after `<-`); the interleaved XLEF stays
+an ordinary statement in program order; the executor pushes wp(ac3,44)
+and runs the LCALL at 7015D930, exiting to the callee — the block at
+7015D934 (site+4) resumes on return.
 
 Reading the second block: the Nova `#` form writes nothing, so it is a
 pure test; t1 holds NovaCompute's 17-bit source (carry-in from `c`
@@ -436,6 +481,65 @@ a false belief diverges loudly rather than being trusted.
   n equals the pushmap's wides sum for the site. NOTE deliberately
   absent: any notion of instruction LENGTH — that is why `site` is
   explicit.
+- `rt_call <callee>(e1, …, eN) site=<s>` (P28, ir 4;
+  docs/Project28/Census.md, RTConventions.md) — the game→runtime LCALL
+  at `s` with its N argument pushes (XPEF/LPEF/WPSH; the site is always
+  block-final, 987/987) folded in. Executor: evaluate e1…eN (pure —
+  order unobservable), materialize registers, `machine.pc = s`, verify
+  the declared beliefs against the instruction words (LCALL opcode;
+  argc field == N; callee symbol == the LCALL's resolved target — loud
+  throw on any mismatch), then push eN FIRST and e1 LAST, each through
+  `Machine::wide_push` — the SAME helper XPEF/LPEF/WPSH call
+  (EagleStack.cpp:665–701, :601), owner of the wsp>wsl overflow fault —
+  then execute the LCALL instruction at `s` through the normal fetch/
+  decode/execute path (as `call` does: hooks, ovk/ovr check, count) and
+  return its new_pc. The runtime then runs exactly as today (emulated,
+  logging stub, or native body — the LCALL body's own registry lookup).
+  **Evaluation order is RIGHT TO LEFT** because the callee reads
+  argument n at wsp−2n from the LCALL marker (`RTBridge::arg_pointer`,
+  hw/RTBridge.cpp:111; marker `(psr<<16)|argc` pushed by LCALL,
+  EagleStack.cpp:239–244; WSAVS saves ac0 ac1 ac2 wfp ac3|c above it,
+  :421–425, so arg n sits at wfp−10−2n): the LAST push is argument 1.
+  The pushmap's `# XPEF arg2` (lower pc) / `# LPEFB arg1` (higher pc)
+  comments record the same fact for game→game sites. Worked example
+  (site 7015C047): `XPEF [ac3+0x14]; LPEF [0x70000260]; LCALL
+  [0x7017E27A],2` → `rt_call ?WRITE_SCREEN(0x70000260, wp(ac3, 20))
+  site=7015C047`: the executor pushes wp(ac3,20) then 0x70000260; the
+  callee's arg 1 is the channel word at 0x70000260 and arg 2 the text at
+  ac3+20 (rt/write_screen.hpp: channel, text). Arguments render with
+  the P25 grammar and nothing new: XPEF/LPEF → `wp(base, d)`, a word
+  constant, or `R[base + d]`; WPSH x,a → the register values `acx…aca`
+  ascending (ac x pushed first = the HIGHER-numbered argument);
+  XPEFB/LPEFB → `bp(...)`/`0xW:b` (none occur at runtime sites). The
+  emitter folds an argument inline only when the expression reads no
+  state an interleaved statement writes (987/987 in the Sep 5 census —
+  every interleaved XLEF writes ac2, every such argument reads ac3);
+  interleaved XLEF/XWSTA (the ac2 register argument of
+  ?UNSIGNED_TO_CHAR; compiler spills) lower as the ordinary statements
+  they are, in program order, before the rt_call, which does not
+  declare them — RTConventions.md documents which registers each
+  callee reads on entry / writes on return. Emitter refuse list (each
+  censused, the site stays an instruction): window not [pushes +
+  XLEF/XWSTA]; argc != wides captured; window crossing the block
+  start; argc outside the callee's known set (RTConventions.md, ruling
+  F2); pef_value cannot render a push; an indirect argument with an
+  interleaved store; an argument reading a register an interleaved
+  XLEF writes (the t-place form is legal but not emitted — 0 sites);
+  block successors != [site+4]. No wsp arithmetic lives in the IR or in
+  IRExec; stack-register writes stay refused. Real stack in BOTH modes
+  (no book slots, no argpush machinery); block-ordinal accounting and
+  the ovk/ovr check are unchanged — the callee's blocks are not IR
+  blocks. Recorded difference (Census.md F6): a wsp>wsl fault names
+  `pc=` the LCALL site on the clone and the overflowing push's pc on
+  the master — never fired, accepted.
+- LDSP (P28, option A1; EagleGeneral.cpp:251–260): `assert((lo <=s acX)
+  && (acX <=s hi), "DERR 17 @<sink>")` then `goto [L(lo) … L(hi)] acX −
+  lo`, where L(k) is the table's target for index k and a −1 entry's
+  label is the fall-through `DERR 17` sink block (pc+3), which stays a
+  listed, embedded, TERMINAL instruction — a verified terminal pair.
+  Out of range detaches by assert (P27's pairing). Table bounds and
+  entries come from the dis's rendering of the table; the emitter
+  refuses if the successor set disagrees.
 - `ret` — executes WRTN's fixed opcode (0x87A9) through the normal
   decode path (WRTN is address-independent; the synthetic address is
   the block start, reaching only abort messages). Frame pop, psr/ovk
@@ -534,6 +638,20 @@ compare_pair gained the detached early-out (which also closes the
 documented straddling-batch latent race after process-wide detach). Grammar is a
 superset except `<<`; pre-P25 loaders refuse the new forms (regenerate
 artifacts and binaries together, as always).
+
+ir 4 (Project 28, Sep 5 2026 — docs/Project28/{Census,RTConventions,
+REPORT}.md): `rt_call <callee>(e1,…,eN) site=<s>` TERMINATOR for the
+987 game→runtime LCALL sites (right-to-left evaluation, real stack in
+both modes, pushes only through `wide_push`, the LCALL run through the
+normal instruction path as `call` does; loader/executor belief checks
+against the site's words and the callee symbol); LNDO lowered as XNDO
+with the L-form EA (pc+4 fall-through); the LDSP pair as range-assert
++ `goto` table with −1 entries labelled to the terminal DERR sink; the
+67 Nova LOAD forms lowered pure with the high half as the emulator
+leaves it (UNDEFINED per the manual — a don't-care, not a contract);
+Nova `SKP` as `goto [pc+2] 0`. Superset of ir 3; the loader refuses
+`ir 3` files (regenerate artifacts and binaries together, as always).
+Embeds 6,258 → 2,322 (book), 8,137 → 4,201 (stock).
 
 ir 3 (Project 26, Sep 5 2026 — docs/Project26/{MathDesign,Census,
 REPORT}.md): `goto [labels] e` terminator (plain `goto L` kept as

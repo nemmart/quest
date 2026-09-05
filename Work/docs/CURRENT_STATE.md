@@ -2,6 +2,39 @@
 
 # Where things stand
 
+## ★ P28 IMPLEMENTED ON BRANCH — `rt_call`: 987/987 runtime call sites decorated (ir 4); embeds 6,258 → 2,322 (book), 8,137 → 4,201 (stock); LNDO + LDSP pair + 67 Nova loads lowered (Sep 5 2026; local K=1 gates 9/9 green, task 041 queued)
+
+Branch p28-rt-call (based on main 9972b85, P27 merged). Plan gate:
+docs/Project28/Census.md — census reproduced the Sep 5 numbers exactly
+(987; 887/72/15/11/2; 0 refusals; 0 t-places); rulings **F1** rt_call is
+a TERMINATOR mirroring `call` (`rt_call ?NAME(e1,…,eN) site=<pc>`; the
+CFG ends every site's block at the LCALL), **F2** argc ∈ the callee's
+known set (RTConventions.md: ?WRITE_SCREEN {2,5}, ?READ {4,6,7},
+?WRITE {3,6} read argc from the frame word), **F6** machine.pc = site
+before the pushes (stack-fault text difference recorded), **F7** no
+EagleStack hoist — the LCALL at `site` runs through run_instr, **LDSP
+A1** (assert range + goto table, −1 entries → the terminal DERR sink,
+which stays an embedded verified pair — the 2 remaining DERR embeds),
+Nova loads pure per shape (high half as the emulator leaves it;
+UNDEFINED per the manual — HWFindings §7 records the SS=1 bit-16 case
+as benign). Landed: tools/rt_sites.py (census, 1.1 s), lower.py
+`--rt-slice 0..3 / --leftovers / --rt-census`, IRExec `rt_call`
+(parse + belief checks against the site's words and the callee symbol
++ right-to-left `wide_push` + run_instr), IR.md → ir 4, artifacts
+regenerated (987 rt_call both modes, 13,507 blocks, sync list
+UNCHANGED = quest.synclist.p27), docs/Project28/rt_call.ledger,
+Provenance.md post-P28 table + regen command. Local gates: k1fo book/
+stock at slices 1, 2, 3, 3+leftovers and k1play book — 9 legs, 0 div,
+90 rt_call sites live incl. the interleaved ?UNSIGNED_TO_CHAR windows;
+?RANDOM_NUMBER needs a turn (K=50 play legs — battery). Task 041 =
+040's 15 legs + P28 verdict lines (embeds 2322/4201, rt_call 987/987,
+ledger 987/0, coverage by callee with WRITE_SCREEN and RANDOM_NUMBER
+required live). Records: docs/Project28/{Census,RTConventions,REPORT,
+REPORT_worklog}.md. Remaining embeds 2,322 (book) by mnemonic: WCMV
+1,637, LCALL 159 (undecorated game calls), WSAVS 130, LJSR 130, WMSP 57,
+WCMP 40, XCALL 37, STASP 19, DIVX 19, WBLM 12, SYSCALL 10, floats ~50,
+WPSH 8, DERR 2.
+
 ## ★ P27 LANDED ON BRANCH — DERR cluster compression: 2,271 clusters → assert; DERR embeds 2,273 → 2; embeds 8,529 → 6,258; sync list 18,009 → 13,510 (Sep 5 2026; battery 040 15/15 GREEN, awaiting review + integration)
 
 Branch p27-derr-clusters (based on main 29a1c24). Plan gate: docs/

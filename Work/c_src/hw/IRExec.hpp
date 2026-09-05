@@ -37,8 +37,8 @@ public:
   enum EffOp { EFF_NONE = 0, EFF_ADD, EFF_SUB, EFF_MUL, EFF_DIV, EFF_CVWN,
                EFF_ASH, EFF_NADD, EFF_NSUB, EFF_NMUL };
   struct Stmt {
-    enum Kind { INSTR, STMT, CALL, RET, GOTO, ASSERT } kind = STMT;
-    uint32_t pc = 0;                 // INSTR: address; CALL: ret pc
+    enum Kind { INSTR, STMT, CALL, RET, GOTO, ASSERT, RT_CALL } kind = STMT;
+    uint32_t pc = 0;                 // INSTR: address; CALL/RT_CALL: site pc
     uint32_t target = 0;             // CALL: callee
     uint32_t ret = 0;                // CALL: declared return pc (belief)
     uint32_t marker = 0;             // CALL: marker slot (validated belief)
@@ -48,7 +48,9 @@ public:
     std::shared_ptr<Expr> rhs2;      // STMT: second arg of a binary effectful op
     EffOp eff = EFF_NONE;            // STMT: effectful root op (flags written)
     std::vector<uint32_t> labels;    // GOTO: exit table (goto [L0..Lk] e)
-    std::string text;                // ASSERT: source text for the failure report
+    std::string text;                // ASSERT: source text for the failure report;
+                                     // RT_CALL: callee symbol (`?NAME`)
+    std::vector<std::shared_ptr<Expr>> argv;   // RT_CALL: e1..eN in PL/I order (P28, ir 4)
     bool flags = false;              // STMT: writes c/ovr (effectful) -> ovk/ovr check
   };
   struct Block {

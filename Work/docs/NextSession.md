@@ -1,5 +1,25 @@
 # Next session
 
+## P28 IMPLEMENTED (Sep 5 2026) — read this first
+- rt_call decoration is IMPLEMENTED on branch p28-rt-call (ir 4):
+  987/987 runtime call sites, LNDO, the LDSP pair, the 67 Nova loads;
+  embeds 6,258 → 2,322 (book) / 8,137 → 4,201 (stock); sync list
+  unchanged (quest.synclist.p27). Local K=1 gates 9 legs green, 0 div.
+  Task 041 queued (040's 15 legs + P28 verdict lines; expected 15/15,
+  embeds 2322/4201, rt_call 987/987, WRITE_SCREEN + RANDOM_NUMBER live
+  in the K=50 play legs). Records: docs/Project28/{Census,
+  RTConventions,REPORT,REPORT_worklog}.md; IR.md ir 4 §3/§6/§9.
+- Integration notes: ir 4 loader refuses ir 3 files — regenerate
+  artifacts + binaries together (Provenance.md has the command; `--rt-
+  slice 3 --leftovers` is the artifact of record). QUEST_SYNC_LIST stays
+  quest.synclist.p27. docs/Project28/rt_call.ledger is the per-site
+  record (task 041 checks it).
+- Follow-ups: F2-b (P27) now has a second customer (the LDSP range
+  assert); the t-place argument form is specified but unemitted (0
+  sites); the next embed census by mnemonic is in CURRENT_STATE (WCMV
+  1,637 dominates — string ops; then the 159 + 130 + 37 undecorated
+  calls/LJSR/XCALL and 130 WSAVS frames).
+
 ## P27 IMPLEMENTED (Sep 5 2026) — read this first
 - Roadmap item 2 (DERR cluster compression) is IMPLEMENTED on branch
   p27-derr-clusters: 2,271/2,273 DERR embeds gone (the 2 LDSP sinks →
