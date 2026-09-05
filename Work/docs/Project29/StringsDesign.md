@@ -38,7 +38,8 @@ Two kinds of string value:
     always have a declared capacity and are located. What DOES outlive a
     block is the compiler's STACK CLAIM for a dynamic-length result (WMSP
     before the pieces, STASP after the consuming call) — that is storage,
-    not a value, and it is mirrored by `claim`/`release` below.
+    not a value, and it is NOT in the IR text: it rides on the consuming
+    `rt_call` as emitter metadata (§5).
 
 Primitives (statement level unless noted):
 
@@ -48,9 +49,6 @@ sN = [@a, n] | [@a, n varying] ; read a located string (expression)
 sN = sM + <piece>              ; concat; a piece is a literal, a located read,
                                ;   another sK, char(x) (one byte: the WSTB idiom),
                                ;   or substr(<string>, i, n)
-tN = claim(<wides>)            ; WMSP through the same helper (wsp += 2·wides, guard);
-                               ;   tN = the claimed area's address (a located string)
-release(<expr>)                ; STASP through the same helper (wsp = expr)
 append([@a, n], <piece>)       ; a piece WCMV'd into a located scratch buffer
                                ;   (frame scratch chains — §5); residues per §4
 [@a, n] = <string>             ; PL/I assignment: truncate or blank-pad to n
@@ -59,8 +57,9 @@ append([@a, n], <piece>)       ; a piece WCMV'd into a located scratch buffer
                                ;   equality (the ONLY relation Quest uses — F2)
 words(@dst, n) = words(@src, n); WBLM; the 6 self-overlapping forms render as
 fill(@dst, n, 0)               ;   fill (F6) — same helper, sequential order
-rt_call ?X([@t, n varying], …) ; a string passed to the runtime is always located
-                               ;   (frame local, static, or a claimed area)
+rt_call ?X(sN, …)              ; an sN passed to the runtime: the executor materialises
+                               ;   its varying image on the stack (see §5 metadata)
+rt_call ?X([@a, n varying], …) ; a located string: its address is pushed, as today
 ```
 
 `?UNSIGNED_TO_CHAR` is a constructor (`sN = char(v)`; native today,
@@ -109,13 +108,19 @@ EmulatorDivergences.md). No deadness argument is needed anywhere.
   address, same time (§3) — with the final copy-out where the compiler
   emits one. Conditional pieces (the `IF … THEN MSG = MSG ‖ …` shape)
   live here, as separate statements on separate blocks.
-- **WMSP temporaries** (57 claims, 19 groups): `tN = claim(wides)` at
-  the WMSP pc does what WMSP does — through the same helper, with the
-  stack-limit guard — and yields the address of the claimed area; the
-  pieces are `sN` values written into it as a located string;
-  `release(expr)` at the STASP. The temp lives WHERE THE MASTER'S DOES,
-  so memory, residues and wsp agree at every rendezvous, including the
-  post-call entry. No arena, no address translation, no checker change.
+- **WMSP temporaries** (57 claims, 19 groups): in the IR text the group
+  is just `sN = … + …; rt_call ?WRITE_SCREEN(sN, …)` — no claim, no
+  release, no cleanup (RULED, Sep 5: temps are values that die with the
+  block). The master's stack shape is EMITTER METADATA on the rt_call,
+  in the argmap/pushmap tradition: `stack=<wides expr>` (the group's
+  TOTAL claim, e.g. ⌈(len+6)/4⌉+⌈(len+29)/4⌉+⌈(len+31)/4⌉ — the census's
+  size(wides) column summed) and `release@<pc>` (the STASP). The
+  executor materialises sN's varying image at the top of a claim of
+  exactly <wides> (same helper, same guard), pushes its address, and
+  drops the claim when it reaches the release pc. wsp therefore agrees
+  at the post-call entry and after the STASP; the bytes the runtime
+  reads are identical; residues per §4. The C++ translation ignores the
+  metadata: `write_screen("Hi " + name)`.
 - The master is not changed. Stock mode is the only mode for strings.
 
 **Future (not this family)**: when frames move to the clone side and the
@@ -191,9 +196,9 @@ listed, embedded.
   residues per §4. NO arena, NO checker change. Battery.
 - **P32 — frame scratch chains**: `append` to located scratch buffers, per-piece, conditional pieces, CALLRESULT/SUBSTR/WSTB pieces, tail
   splits (≈900 sites). Still no arena, no checker change. Battery.
-- **P33 — WMSP temporaries**: `claim`/`release` through the stack helpers,
-  the 19 groups as `tN = claim(n); [@tN, n varying] = …; rt_call; release`.
-  57 claims. No checker change. Battery.
+- **P33 — WMSP temporaries**: the 19 groups as `sN = …; rt_call ?X(sN)`
+  with the stack/release metadata; executor materialisation through the
+  stack helpers. 57 claims. No checker change. Battery.
 - **P34 — the rest**: WCMP, WBLM/fill, `?UNSIGNED_TO_CHAR` as a
   constructor, LOCK_FILE constants; then the string family is gone
   (embeds ≈460: frames, syscalls, float, divides).
