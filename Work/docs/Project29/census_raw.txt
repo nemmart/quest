@@ -1,0 +1,504 @@
+# string_sites.py raw census (input to docs/Project29/Census.md)
+
+## counts
+STASP      19
+WBLM       12
+WCMP       40
+WCMV       1637
+WMSP       57
+pbr-WPSH   3
+WSTB       99 (byte stores; 86 with a constant byte)
+
+## WCMV operand-class signatures (dst_count/src_count/dst/src)
+  843  const/const/frame/literal                  e.g. 7015BE68
+  305  computed/computed/frame/frame              e.g. 7015C916
+  114  const/const/frame/frame                    e.g. 7015E976
+   86  computed/computed/frame/computed           e.g. 7015C90D
+   85  frame/frame/frame/frame                    e.g. 7015DA15
+   38  computed/computed/temp/temp                e.g. 7016617A
+   19  computed/computed/frame/literal            e.g. 701664FD
+   14  const/const/temp/literal                   e.g. 7016615D
+   11  computed/computed/frame/static             e.g. 7015D131
+   11  computed/computed/temp/computed            e.g. 70166166
+   11  frame/frame/temp/frame                     e.g. 701665C6
+    9  computed/static/computed/static            e.g. 7015F75E
+    9  const/const/computed/literal               e.g. 70163467
+    9  computed/const/frame/frame                 e.g. 701664F6
+    9  computed/computed/static/frame             e.g. 701667F5
+    7  static/static/frame/static                 e.g. 70165111
+    7  computed/computed/temp/frame               e.g. 70166973
+    5  computed/const/frame/literal               e.g. 7015D942
+    5  const/const/frame/static                   e.g. 70166735
+    5  computed/const/frame/temp                  e.g. 70166EE9
+    4  computed/computed/temp/literal             e.g. 70166591
+    4  const/const/static/literal                 e.g. 701680A4
+    4  const/const/computed/static                e.g. 7016E072
+    2  computed/computed/static/static            e.g. 70166703
+    2  computed/const/static/frame                e.g. 7016675A
+    2  computed/computed/computed/literal         e.g. 7016DF66
+    2  const/const/temp/frame                     e.g. 7016EDD9
+    2  const/frame/frame/frame                    e.g. 7016EEA6
+    2  computed/computed/computed/frame           e.g. 7017CA4A
+    1  const/const/frame/computed                 e.g. 70165655
+    1  computed/computed/static/temp              e.g. 7016698B
+    1  static/static/temp/static                  e.g. 7016B8B6
+    1  const/computed/frame/temp                  e.g. 7016DC29
+    1  const/computed/computed/temp               e.g. 7016DFD6
+    1  const/computed/computed/computed           e.g. 7016E033
+    1  const/computed/frame/computed              e.g. 7016ED28
+    1  computed/computed/computed/static          e.g. 7017C380
+    1  computed/computed/computed/computed        e.g. 7017CED6
+    1  computed/const/computed/literal            e.g. 7017CF35
+    1  computed/computed/static/computed          e.g. 7017D004
+
+## WCMV idioms
+  528  ASSIGN-LIT-VARYING                       e.g. 7015BE68
+  349  CONCAT-PIECE                             e.g. 7015C91C
+  225  COPY-STR-EXACT                           e.g. 7015CE7D
+  153  COPY-LIT-EXACT                           e.g. 7015C902
+  136  ASSIGN-STR-VARYING                       e.g. 7015CE8E
+   49  TEMP-FIRST-PIECE                         e.g. 7016617A
+   38  COPY-STR-EXACT+CALLRESULT                e.g. 7015C916
+   33  ASSIGN-STR-VARYING+CALLRESULT            e.g. 7015C927
+   30  CONCAT-PIECE+CALLRESULT                  e.g. 7015C90D
+   21  ASSIGN-STR-VARYING-PAD                   e.g. 7015D131
+   18  ASSIGN-STR-FIXED                         e.g. 7016ED28
+   10  COPY-LIT-EXACT+SUBSTR                    e.g. 70167EE1
+    7  ASSIGN-LIT-FIXED                         e.g. 7015D942
+    7  ASSIGN-STR-MIN                           e.g. 701664F6
+    5  COPY-STR-EXACT+SUBSTR                    e.g. 70165655
+    5  ASSIGN-FROM-TEMP                         e.g. 70166EE9
+    5  TEMP-FIRST-PIECE+CALLRESULT              e.g. 7016B8AE
+    4  CONCAT-PIECE+SUBSTR                      e.g. 7016697A
+    2  ASSIGN-STR-MIN+CALLRESULT                e.g. 701671F1
+    2  ASSIGN-STR-FIXED+SUBSTR                  e.g. 7016E033
+    2  ASSIGN-STR-VARYING-PAD+CALLRESULT        e.g. 7017CED6
+    1  ASSIGN-FROM-TEMP-VARYING                 e.g. 7016698B
+    1  ASSIGN-STR-VARYING-PAD+SUBSTR            e.g. 70166DB8
+    1  ASSIGN-FROM-TEMP+SUBSTR                  e.g. 7016DFD6
+    1  TEMP-FIRST-PIECE+SUBSTR                  e.g. 7016EDBB
+    1  ASSIGN-FROM-TEMP+CALLRESULT              e.g. 70172F1F
+    1  ASSIGN-LIT-VARYING+CALLRESULT            e.g. 70173365
+    1  ASSIGN-LIT-FIXED+SUBSTR                  e.g. 7017B811
+    1  ASSIGN-LIT-VARYING-PAD                   e.g. 7017CF35
+
+## WCMV features
+ 1550  counts-equal                             e.g. 7015BE68
+  733  lenword-store                            e.g. 7015BE68
+  383  dst-cont                                 e.g. 7015C90D
+  112  count-from-call                          e.g. 7015C90D
+   85  dst_count=min()                          e.g. 7015D131
+   28  src_count=phi                            e.g. 7015D131
+   17  src_count=residue                        e.g. 7015D94A
+   17  pad-fill                                 e.g. 7016ED0D
+   16  dst-byte-offset                          e.g. 7016566D
+   10  src-byte-offset                          e.g. 70165655
+    2  lenword-store(value differs from dst_count!) e.g. 701678C8
+
+## pad-fill / truncate sites (dst_count != src_count, both constant)
+7016ED0D pad-fill(12<-1)        LIST_PLAYERS  dst=frame byte +48 (word fp+24)  src=0x7016EA65:0
+7016EF0D pad-fill(12<-6)        LIST_PLAYERS  dst=frame byte +48 (word fp+24)  src=frame byte +1046 (word fp+523)
+7016EF26 pad-fill(12<-6)        LIST_PLAYERS  dst=frame byte +48 (word fp+24)  src=frame byte +1046 (word fp+523)
+7016EF74 pad-fill(12<-8)        LIST_PLAYERS  dst=frame byte +48 (word fp+24)  src=frame byte +1046 (word fp+523)
+7016EF8D pad-fill(12<-8)        LIST_PLAYERS  dst=frame byte +48 (word fp+24)  src=frame byte +1046 (word fp+523)
+7016EFDB pad-fill(12<-8)        LIST_PLAYERS  dst=frame byte +48 (word fp+24)  src=frame byte +1046 (word fp+523)
+7016EFF4 pad-fill(12<-8)        LIST_PLAYERS  dst=frame byte +48 (word fp+24)  src=frame byte +1046 (word fp+523)
+7016F042 pad-fill(12<-9)        LIST_PLAYERS  dst=frame byte +48 (word fp+24)  src=frame byte +1046 (word fp+523)
+7016F05B pad-fill(12<-9)        LIST_PLAYERS  dst=frame byte +48 (word fp+24)  src=frame byte +1046 (word fp+523)
+7016F0A7 pad-fill(12<-6)        LIST_PLAYERS  dst=frame byte +48 (word fp+24)  src=frame byte +1046 (word fp+523)
+7016F0C0 pad-fill(12<-6)        LIST_PLAYERS  dst=frame byte +48 (word fp+24)  src=frame byte +1046 (word fp+523)
+7016F10C pad-fill(12<-8)        LIST_PLAYERS  dst=frame byte +48 (word fp+24)  src=frame byte +1046 (word fp+523)
+7016F125 pad-fill(12<-8)        LIST_PLAYERS  dst=frame byte +48 (word fp+24)  src=frame byte +1046 (word fp+523)
+7016F173 pad-fill(12<-9)        LIST_PLAYERS  dst=frame byte +48 (word fp+24)  src=frame byte +1046 (word fp+523)
+7016F18C pad-fill(12<-9)        LIST_PLAYERS  dst=frame byte +48 (word fp+24)  src=frame byte +1046 (word fp+523)
+70178D66 pad-fill(1<-0)         START_TURN  dst=frame byte +60 (word fp+30)  src=0x7017804D:0
+7017B811 pad-fill(80<-1)        TERRITORY_MAP  dst=frame byte -48 (word fp-24)  src=0x7017B71D:0
+
+## WCMV per-operand class totals
+dst_count const=1002  computed=531  frame=96  static=8
+src_count const=1018  computed=504  frame=98  static=17
+dst       frame=1499  temp=88  computed=31  static=19
+src       literal=901  frame=548  computed=102  temp=46  static=40
+
+## destinations of WCMV/WBLM writes (direct, then ultimate through scratch buffers)
+class  direct  ultimate   meaning
+a        785      1334   buffer fed to ?WRITE_SCREEN/?WRITE (ephemeral, visible)
+b         46        88   game state (static / shared-data record via SD_PTR,OBJ_PTR,CAS_PTR)
+b?         0         0   record via ac2 at block entry (based record field; pointer origin not resolved)
+c        750       135   temp / scratch consumed only by another WCMV or WCMP
+d         31        46   frame local passed to some other call
+p          9        18   written through a by-reference argument (caller decides)
+?         28        28   unresolved
+
+### (b) game-state writes, in full (ultimate class b)
+7015C2E4 WBLM QUEST                  pointer W[0x70000216 (PLAYER_NUM)] + W[0x70000210 (SD_PTR)]-640 words
+7015F75E WCMV ATTACK                 record via static pointer W[0x70000216 (PLAYER_NUM)], W[0x70000210 (SD_PTR)] + 0 words +0, byte +48
+70166067 WCMV DIED                   record via static pointer W[0x70000210 (SD_PTR)], W[0x70000216 (PLAYER_NUM)] + 0 words +0, byte -1248
+70166084 WCMV DIED                   record via static pointer W[0x70000216 (PLAYER_NUM)], W[0x70000210 (SD_PTR)] + 0 words +0, byte -1214
+7016635B WBLM DIED                   pointer W[0x70000216 (PLAYER_NUM)] + W[0x70000210 (SD_PTR)]-86 words
+70166703 WCMV DISPLAY_CAVE           static 0x70000A78:0 (OLD_CAVE_STR)
+70166735 WCMV DISPLAY_CAVE           via WCMV@70166744: via WCMV@7016675A: static 0x70000A4F:0 (CAVE_STR+0x1)
+7016673B WCMV DISPLAY_CAVE           via WCMV@70166744: via WCMV@7016675A: static 0x70000A4F:0 (CAVE_STR+0x1)
+70166744 WCMV DISPLAY_CAVE           via WCMV@7016675A: static 0x70000A4F:0 (CAVE_STR+0x1)
+7016674A WCMV DISPLAY_CAVE           via WCMV@7016675A: static 0x70000A4F:0 (CAVE_STR+0x1)
+7016675A WCMV DISPLAY_CAVE           static 0x70000A4F:0 (CAVE_STR+0x1)
+7016676F WCMV DISPLAY_CAVE           via WCMV@7016677E: via WCMV@70166794: static 0x70000A4F:0 (CAVE_STR+0x1)
+70166775 WCMV DISPLAY_CAVE           via WCMV@7016677E: via WCMV@70166794: static 0x70000A4F:0 (CAVE_STR+0x1)
+7016677E WCMV DISPLAY_CAVE           via WCMV@70166794: static 0x70000A4F:0 (CAVE_STR+0x1)
+70166784 WCMV DISPLAY_CAVE           via WCMV@70166794: static 0x70000A4F:0 (CAVE_STR+0x1)
+70166794 WCMV DISPLAY_CAVE           static 0x70000A4F:0 (CAVE_STR+0x1)
+701667B8 WCMV DISPLAY_CAVE           via WCMV@701667C7: via WCMV@701667D3: via WCMV@701667E2: via WCMV@701667F5: static 0x70000A4F:0 (CAVE_STR+0x1)
+701667BE WCMV DISPLAY_CAVE           via WCMV@701667C7: via WCMV@701667D3: via WCMV@701667E2: via WCMV@701667F5: static 0x70000A4F:0 (CAVE_STR+0x1)
+701667C7 WCMV DISPLAY_CAVE           via WCMV@701667D3: via WCMV@701667E2: via WCMV@701667F5: static 0x70000A4F:0 (CAVE_STR+0x1)
+701667D3 WCMV DISPLAY_CAVE           via WCMV@701667E2: via WCMV@701667F5: static 0x70000A4F:0 (CAVE_STR+0x1)
+701667D9 WCMV DISPLAY_CAVE           via WCMV@701667E2: via WCMV@701667F5: static 0x70000A4F:0 (CAVE_STR+0x1)
+701667E2 WCMV DISPLAY_CAVE           via WCMV@701667F5: static 0x70000A4F:0 (CAVE_STR+0x1)
+701667F5 WCMV DISPLAY_CAVE           static 0x70000A4F:0 (CAVE_STR+0x1)
+70166813 WCMV DISPLAY_CAVE           via WCMV@70166822: via WCMV@7016682E: via WCMV@7016683D: via WCMV@70166850: static 0x70000A4F:0 (CAVE_STR+0x1)
+70166819 WCMV DISPLAY_CAVE           via WCMV@70166822: via WCMV@7016682E: via WCMV@7016683D: via WCMV@70166850: static 0x70000A4F:0 (CAVE_STR+0x1)
+70166822 WCMV DISPLAY_CAVE           via WCMV@7016682E: via WCMV@7016683D: via WCMV@70166850: static 0x70000A4F:0 (CAVE_STR+0x1)
+7016682E WCMV DISPLAY_CAVE           via WCMV@7016683D: via WCMV@70166850: static 0x70000A4F:0 (CAVE_STR+0x1)
+70166834 WCMV DISPLAY_CAVE           via WCMV@7016683D: via WCMV@70166850: static 0x70000A4F:0 (CAVE_STR+0x1)
+7016683D WCMV DISPLAY_CAVE           via WCMV@70166850: static 0x70000A4F:0 (CAVE_STR+0x1)
+70166850 WCMV DISPLAY_CAVE           static 0x70000A4F:0 (CAVE_STR+0x1)
+70166874 WCMV DISPLAY_CAVE           via WCMV@70166883: via WCMV@7016688F: via WCMV@7016689E: via WCMV@701668B1: static 0x70000A4F:0 (CAVE_STR+0x1)
+7016687A WCMV DISPLAY_CAVE           via WCMV@70166883: via WCMV@7016688F: via WCMV@7016689E: via WCMV@701668B1: static 0x70000A4F:0 (CAVE_STR+0x1)
+70166883 WCMV DISPLAY_CAVE           via WCMV@7016688F: via WCMV@7016689E: via WCMV@701668B1: static 0x70000A4F:0 (CAVE_STR+0x1)
+7016688F WCMV DISPLAY_CAVE           via WCMV@7016689E: via WCMV@701668B1: static 0x70000A4F:0 (CAVE_STR+0x1)
+70166895 WCMV DISPLAY_CAVE           via WCMV@7016689E: via WCMV@701668B1: static 0x70000A4F:0 (CAVE_STR+0x1)
+7016689E WCMV DISPLAY_CAVE           via WCMV@701668B1: static 0x70000A4F:0 (CAVE_STR+0x1)
+701668B1 WCMV DISPLAY_CAVE           static 0x70000A4F:0 (CAVE_STR+0x1)
+701668CF WCMV DISPLAY_CAVE           via WCMV@701668DE: via WCMV@701668EA: via WCMV@701668F9: via WCMV@7016690C: static 0x70000A4F:0 (CAVE_STR+0x1)
+701668D5 WCMV DISPLAY_CAVE           via WCMV@701668DE: via WCMV@701668EA: via WCMV@701668F9: via WCMV@7016690C: static 0x70000A4F:0 (CAVE_STR+0x1)
+701668DE WCMV DISPLAY_CAVE           via WCMV@701668EA: via WCMV@701668F9: via WCMV@7016690C: static 0x70000A4F:0 (CAVE_STR+0x1)
+701668EA WCMV DISPLAY_CAVE           via WCMV@701668F9: via WCMV@7016690C: static 0x70000A4F:0 (CAVE_STR+0x1)
+701668F0 WCMV DISPLAY_CAVE           via WCMV@701668F9: via WCMV@7016690C: static 0x70000A4F:0 (CAVE_STR+0x1)
+701668F9 WCMV DISPLAY_CAVE           via WCMV@7016690C: static 0x70000A4F:0 (CAVE_STR+0x1)
+7016690C WCMV DISPLAY_CAVE           static 0x70000A4F:0 (CAVE_STR+0x1)
+7016698B WCMV DISPLAY_CAVE           static 0x70000A4F:0 (CAVE_STR+0x1)
+701669BC WCMV DISPLAY_CAVE           via WCMV@701669CB: via WCMV@701669E1: static 0x70000A4F:0 (CAVE_STR+0x1)
+701669C2 WCMV DISPLAY_CAVE           via WCMV@701669CB: via WCMV@701669E1: static 0x70000A4F:0 (CAVE_STR+0x1)
+701669CB WCMV DISPLAY_CAVE           via WCMV@701669E1: static 0x70000A4F:0 (CAVE_STR+0x1)
+701669D1 WCMV DISPLAY_CAVE           via WCMV@701669E1: static 0x70000A4F:0 (CAVE_STR+0x1)
+701669E1 WCMV DISPLAY_CAVE           static 0x70000A4F:0 (CAVE_STR+0x1)
+701669F6 WCMV DISPLAY_CAVE           via WCMV@70166A05: via WCMV@70166A1B: static 0x70000A4F:0 (CAVE_STR+0x1)
+701669FC WCMV DISPLAY_CAVE           via WCMV@70166A05: via WCMV@70166A1B: static 0x70000A4F:0 (CAVE_STR+0x1)
+70166A05 WCMV DISPLAY_CAVE           via WCMV@70166A1B: static 0x70000A4F:0 (CAVE_STR+0x1)
+70166A0B WCMV DISPLAY_CAVE           via WCMV@70166A1B: static 0x70000A4F:0 (CAVE_STR+0x1)
+70166A1B WCMV DISPLAY_CAVE           static 0x70000A4F:0 (CAVE_STR+0x1)
+7016708E WCMV DISPLAY_SCREEN         static 0x70000AA2:0 (OLD_SCREEN_STR)
+7016715F WCMV DISPLAY_SCREEN         static 0x70000C1E:0 (OLD_NAME)
+70167278 WCMV DISPLAY_SCREEN         static 0x70000C44:0 (OLD_LAND_MASS_STR)
+701680A4 WCMV DISPLAY_INVENTORY      static 0x7000021D:0 (IN_BUFFER+0x1)
+701680BC WCMV DISPLAY_INVENTORY      static 0x7000021D:0 (IN_BUFFER+0x1)
+701680D4 WCMV DISPLAY_INVENTORY      static 0x7000021D:0 (IN_BUFFER+0x1)
+701680EB WCMV DISPLAY_INVENTORY      static 0x7000021D:0 (IN_BUFFER+0x1)
+7016812B WCMV DISPLAY_INVENTORY      via WCMV@70168143: static 0x7000021D:0 (IN_BUFFER+0x1)
+70168136 WCMV DISPLAY_INVENTORY      via WCMV@70168143: static 0x7000021D:0 (IN_BUFFER+0x1)
+70168143 WCMV DISPLAY_INVENTORY      static 0x7000021D:0 (IN_BUFFER+0x1)
+7016817F WCMV DISPLAY_INVENTORY      record via static pointer W[0x70000210 (SD_PTR)] + (+686*N[W[(fp-12)]]) words +0, byte -122
+7016BCD8 WBLM GET_QUEST              pointer W[0x70000216 (PLAYER_NUM)] + W[0x70000210 (SD_PTR)]-86 words
+7016DF66 WCMV INIT_OBJ_TBL           record via static pointer W[0x70000210 (SD_PTR)] + 0 words +126906, byte +2
+7016DFD6 WCMV INIT_OBJ_TBL           deref: pointer in static 0x70000210 (SD_PTR), byte +1
+7016E005 WCMV INIT_OBJ_TBL           record via static pointer W[0x70000210 (SD_PTR)] + 0 words +127208, byte +2
+7016E033 WCMV INIT_OBJ_TBL           deref: pointer in static 0x70000210 (SD_PTR), byte +1
+7016E048 WCMV INIT_OBJ_TBL           record via static pointer W[0x70000210 (SD_PTR)] + 0 words +127511, byte +0
+7016E05D WCMV INIT_OBJ_TBL           record via static pointer W[0x70000210 (SD_PTR)] + 0 words +127813, byte +0
+7016E072 WCMV INIT_OBJ_TBL           record via static pointer W[0x70000210 (SD_PTR)] + 0 words +128115, byte +0
+7016E087 WCMV INIT_OBJ_TBL           record via static pointer W[0x70000210 (SD_PTR)] + 0 words +128417, byte +0
+7017426E WCMV OP_EDIT                record via static pointer W[0x70000212 (OBJ_PTR)] + (+20*N[W[0x70000212]]) words +0, byte -28
+701744EC WCMV OP_EDIT                record via static pointer W[0x70000212 (OBJ_PTR)] + (+22*N[(W[0x70000212]+0XFCC2B)]) words +1035289, byte +0
+701749FC WCMV OP_EDIT                record via static pointer W[0x70000212 (OBJ_PTR)] + (+19*N[(W[0x70000212]+0X7D1)]) words +0, byte +3974
+70175F9B WCMV LOGON                  record via static pointer W[0x70000216 (PLAYER_NUM)], W[0x70000210 (SD_PTR)] + 0 words +0, byte -1248
+70175FBD WCMV LOGON                  record via static pointer W[0x70000216 (PLAYER_NUM)], W[0x70000210 (SD_PTR)] + 0 words +0, byte -1248
+70175FF7 WCMV LOGON                  record via static pointer W[0x70000216 (PLAYER_NUM)], W[0x70000210 (SD_PTR)] + 0 words +0, byte -1248
+70176054 WCMV LOGON                  record via static pointer W[0x70000216 (PLAYER_NUM)], W[0x70000210 (SD_PTR)] + 0 words +0, byte -1214
+70176076 WCMV LOGON                  record via static pointer W[0x70000216 (PLAYER_NUM)], W[0x70000210 (SD_PTR)] + 0 words +0, byte -1214
+70178A31 WBLM START_TURN             pointer W[0x70000216 (PLAYER_NUM)] + W[0x70000210 (SD_PTR)]-86 words
+70178E30 WCMV START_TURN             record via static pointer W[0x70000214 (CAS_PTR)] + (+23*N[(fp+13)]) words +0, byte -32
+7017A597 WBLM STORE                  pointer W[0x70000210 (SD_PTR)] + N[W[(fp-12)]]-86 words
+7017C380 WCMV TAKE_OVER_CASTLE       record via static pointer W[0x70000214 (CAS_PTR)] + (+23*N[W[(fp-14)]]) words +0, byte -32
+7017D004 WCMV TERRITORY              static 0x70000C34:0 (LAND_MASS_STR)
+
+### (p) by-reference argument writes
+70163467 WCMV CAST                   deref: pointer in frame word fp-6, byte +38 (by-reference argument: the caller decides)
+7016348A WCMV CAST                   deref: pointer in frame word fp-6, byte +38 (by-reference argument: the caller decides)
+7016E431 WCMV KILL_PLAYER            deref: pointer in frame word fp+18, byte +2 (by-reference argument: the caller decides)
+7016E43F WCMV KILL_PLAYER            deref: pointer in frame word fp+18, byte +36 (by-reference argument: the caller decides)
+7017597B WCMV OP_EDIT                deref: pointer in frame word fp-14, byte +2 (by-reference argument: the caller decides)
+7017CA2D WCMV TERRAIN                via WCMV@7017CA4A: deref: pointer in frame word fp-18, byte +2 (by-reference argument: the caller decides)
+7017CA38 WCMV TERRAIN                via WCMV@7017CA4A: deref: pointer in frame word fp-18, byte +2 (by-reference argument: the caller decides)
+7017CA4A WCMV TERRAIN                deref: pointer in frame word fp-18, byte +2 (by-reference argument: the caller decides)
+7017CE1F WCMV TERRITORY              via WCMV@7017CEF1: via WCMV@7017CF04: via WCMV@7017CF22: deref: pointer in frame word fp-16, byte +2 (by-reference argument: the caller decides)
+7017CE39 WCMV TERRITORY              via WCMV@7017CEF1: via WCMV@7017CF04: via WCMV@7017CF22: deref: pointer in frame word fp-16, byte +2 (by-reference argument: the caller decides)
+7017CE70 WCMV TERRITORY              via WCMV@7017CEF1: via WCMV@7017CF04: via WCMV@7017CF22: deref: pointer in frame word fp-16, byte +2 (by-reference argument: the caller decides)
+7017CEA7 WCMV TERRITORY              via WCMV@7017CEF1: via WCMV@7017CF04: via WCMV@7017CF22: deref: pointer in frame word fp-16, byte +2 (by-reference argument: the caller decides)
+7017CED6 WCMV TERRITORY              deref: pointer in frame word fp-16, byte +2 (by-reference argument: the caller decides)
+7017CEF1 WCMV TERRITORY              via WCMV@7017CF04: via WCMV@7017CF22: deref: pointer in frame word fp-16, byte +2 (by-reference argument: the caller decides)
+7017CF04 WCMV TERRITORY              via WCMV@7017CF22: deref: pointer in frame word fp-16, byte +2 (by-reference argument: the caller decides)
+7017CF10 WCMV TERRITORY              via WCMV@7017CF22: deref: pointer in frame word fp-16, byte +2 (by-reference argument: the caller decides)
+7017CF22 WCMV TERRITORY              deref: pointer in frame word fp-16, byte +2 (by-reference argument: the caller decides)
+7017CF35 WCMV TERRITORY              deref: pointer in frame word fp-16, byte +2 (by-reference argument: the caller decides)
+
+### (d) passed to other calls
+7015BE68 WCMV INIT_SHARED_DATA       frame word fp+13 -> passed to RETURN_MESSAGE, ?OPEN_SHARED_IO_FILE, ?OPEN_SHARED_IO_FILE, ?OPEN_SHARED_IO_FILE, ?GET_SHARED_PAGE, ?GET_SHARED_PAGE, ?GET_SHARED_PAGE; also WCMV@7015BE81(dst), WCMV@7015BE9E(dst), WCMV@7015BEBB(dst)
+7015BE81 WCMV INIT_SHARED_DATA       frame word fp+13 -> passed to ?OPEN_SHARED_IO_FILE, ?OPEN_SHARED_IO_FILE, ?OPEN_SHARED_IO_FILE, ?GET_SHARED_PAGE, ?GET_SHARED_PAGE, ?GET_SHARED_PAGE; also WCMV@7015BE9E(dst), WCMV@7015BEBB(dst)
+7015BE9E WCMV INIT_SHARED_DATA       frame word fp+13 -> passed to ?OPEN_SHARED_IO_FILE, ?OPEN_SHARED_IO_FILE, ?GET_SHARED_PAGE, ?GET_SHARED_PAGE, ?GET_SHARED_PAGE; also WCMV@7015BEBB(dst)
+7015BEBB WCMV INIT_SHARED_DATA       frame word fp+13 -> passed to ?OPEN_SHARED_IO_FILE, ?GET_SHARED_PAGE, ?GET_SHARED_PAGE, ?GET_SHARED_PAGE
+7015C018 WCMV QUEST                  frame word fp+15 -> passed to ?OPEN_FILE, ?OPEN_FILE; also WCMV@7015C02C(dst)
+7015C02C WCMV QUEST                  frame word fp+15 -> passed to ?OPEN_FILE
+7015C32C WCMV QUEST                  frame word fp+47 -> passed to DIED
+7015D08E WCMV ALLY_PLAYER            frame word fp+535 -> passed to ?OPEN_FILE
+70165D1F WCMV DEFEND                 via WCMV@70165D33: via WCMV@70165D44: frame word fp+133 -> passed to DIED
+70165D2A WCMV DEFEND                 via WCMV@70165D33: via WCMV@70165D44: frame word fp+133 -> passed to DIED
+70165D33 WCMV DEFEND                 via WCMV@70165D44: frame word fp+133 -> passed to DIED
+70165D39 WCMV DEFEND                 via WCMV@70165D44: frame word fp+133 -> passed to DIED
+70165D44 WCMV DEFEND                 frame word fp+133 -> passed to DIED
+70165ED7 WCMV DEFEND                 via WCMV@70165EE7: frame word fp+132 -> passed to DIED; also WCMV@70165EED(dst), WCMV@70165EF8(src)
+70165EDE WCMV DEFEND                 via WCMV@70165EE7: frame word fp+132 -> passed to DIED; also WCMV@70165EED(dst), WCMV@70165EF8(src)
+70165EE7 WCMV DEFEND                 frame word fp+132 -> passed to DIED; also WCMV@70165EED(dst), WCMV@70165EF8(src)
+70165EED WCMV DEFEND                 frame word fp+132 -> passed to DIED; also WCMV@70165EF8(src)
+70165F46 WCMV DEFEND                 via WCMV@70165F5A: via WCMV@70165F6B: frame word fp+133 -> passed to DIED
+70165F51 WCMV DEFEND                 via WCMV@70165F5A: via WCMV@70165F6B: frame word fp+133 -> passed to DIED
+70165F5A WCMV DEFEND                 via WCMV@70165F6B: frame word fp+133 -> passed to DIED
+70165F60 WCMV DEFEND                 via WCMV@70165F6B: frame word fp+133 -> passed to DIED
+70165F6B WCMV DEFEND                 frame word fp+133 -> passed to DIED
+7016E302 WCMV KILL_PLAYER            frame word fp+535 -> passed to ?OPEN_FILE
+7016EC7D WCMV LIST_PLAYERS           frame word fp+569 -> passed to ?OPEN_FILE
+7016ED54 WCMV LIST_PLAYERS           frame word fp+564 -> passed to ?UNSIGNED_TO_CHAR, ?UNSIGNED_TO_CHAR; also WCMV@7016ED61(src)
+70171793 WCMV MOVE_PLAYER            frame word fp+119 -> passed to DIED
+7017196E WCMV MOVE_PLAYER            frame word fp+71 -> passed to DIED
+70171E88 WCMV MOVE_PLAYER            frame word fp+185 -> passed to DIED
+70174755 WCMV OP_EDIT                frame word fp+41 -> passed to symbol not found, symbol not found, symbol not found, symbol not found; also WCMV@7017477D(dst), WCMV@701747A3(dst), WCMV@701747C9(dst), WCMV@701747EF(dst)
+7017477D WCMV OP_EDIT                frame word fp+41 -> passed to symbol not found, symbol not found, symbol not found, symbol not found; also WCMV@701747A3(dst), WCMV@701747C9(dst), WCMV@701747EF(dst), WCMV@7017481D(dst)
+701747A3 WCMV OP_EDIT                frame word fp+41 -> passed to symbol not found, symbol not found, symbol not found, symbol not found; also WCMV@701747C9(dst), WCMV@701747EF(dst), WCMV@7017481D(dst)
+701747C9 WCMV OP_EDIT                frame word fp+41 -> passed to symbol not found, symbol not found, symbol not found; also WCMV@701747EF(dst), WCMV@7017481D(dst)
+701747EF WCMV OP_EDIT                frame word fp+41 -> passed to symbol not found, symbol not found; also WCMV@7017481D(dst)
+70175EBB WCMV LOGON                  frame word fp+3 -> passed to RETURN_MESSAGE
+70175EF3 WCMV LOGON                  frame word fp+3 -> passed to RETURN_MESSAGE
+70176EEF WCMV REPORT                 via WCMV@70176F03: via WCMV@70176F16: frame word fp+70 -> passed to DIED; also WCMV@70176F22(dst), WCMV@70176F2B(src)
+70176EFA WCMV REPORT                 via WCMV@70176F03: via WCMV@70176F16: frame word fp+70 -> passed to DIED; also WCMV@70176F22(dst), WCMV@70176F2B(src)
+70176F03 WCMV REPORT                 via WCMV@70176F16: frame word fp+70 -> passed to DIED; also WCMV@70176F22(dst), WCMV@70176F2B(src)
+70176F16 WCMV REPORT                 frame word fp+70 -> passed to DIED; also WCMV@70176F22(dst), WCMV@70176F2B(src)
+70176F22 WCMV REPORT                 frame word fp+70 -> passed to DIED; also WCMV@70176F2B(src)
+70176F2B WCMV REPORT                 via WCMV@70176F3C: frame word fp+71 -> passed to DIED
+70176F31 WCMV REPORT                 via WCMV@70176F3C: frame word fp+71 -> passed to DIED
+70176F3C WCMV REPORT                 frame word fp+71 -> passed to DIED
+70177A23 WCMV SEIGE                  frame word fp+51 -> passed to DIED; also WCMV@70177A66(src)
+70178687 WCMV START_TURN             frame word fp+35 -> passed to DIED, DIED; also WCMV@701787FB(dst)
+7017D7CD WCMV UPDATE_USER_DATA_FILE  frame word fp+509 -> passed to RETURN_MESSAGE
+
+### unresolved
+7015D131 WCMV ALLY_PLAYER            frame word fp+517: no consumer found within 12 blocks
+7015FE7A WCMV BACKPACK               frame word fp+13: no consumer found within 12 blocks
+7015FEBC WCMV BACKPACK               frame word fp+13: no consumer found within 12 blocks
+701604CD WBLM BARGAIN                frame word fp+6 (WBLM): no call consumer found
+7016092F WBLM BARGAIN                frame word fp+8 (WBLM): no call consumer found
+701609CA WCMV BARGAIN                frame word fp+18: no consumer found within 12 blocks
+701609E0 WCMV BARGAIN                frame word fp+18: no consumer found within 12 blocks
+7016357B WBLM CAST                   ((N[0x70000216] WMUL unk(LCALL:DISPLAY_SCREEN@70163563))+W[0x70000210]-86)
+70165205 WBLM DISPLAY_MAP            frame word fp+64 (WBLM): no call consumer found
+70166DB8 WCMV DISPLAY_SCREEN         frame word fp+11: no consumer found within 12 blocks
+70166EF1 WCMV DISPLAY_SCREEN         frame word fp+239: no consumer found within 12 blocks
+70166FC4 WCMV DISPLAY_SCREEN         frame word fp+239: no consumer found within 12 blocks
+70167683 WCMV DISPLAY_INVENTORY      frame word fp+6: no consumer found within 12 blocks
+7016769A WCMV DISPLAY_INVENTORY      frame word fp+6: no consumer found within 12 blocks
+70167EA4 WCMV DISPLAY_INVENTORY      frame word fp+11: no consumer found within 12 blocks
+70167EBD WCMV DISPLAY_INVENTORY      frame word fp+11: no consumer found within 12 blocks
+7016E355 WCMV KILL_PLAYER            frame word fp+517: no consumer found within 12 blocks
+70175F1A WBLM LOGON                  frame word fp+18 (WBLM): no call consumer found
+70176082 WBLM LOGON                  frame word fp+18 (WBLM): no call consumer found
+701772DD WCMV SEIGE                  frame word fp+9: no consumer found within 12 blocks
+701772E9 WCMV SEIGE                  frame word fp+9: no consumer found within 12 blocks
+701772FB WCMV SEIGE                  frame word fp+8: no consumer found within 12 blocks
+70178D66 WCMV START_TURN             frame word fp+30: no consumer found within 12 blocks
+7017B7A4 WBLM TERRITORY_MAP          frame word fp+1042 (WBLM): no call consumer found
+7017B811 WCMV TERRITORY_MAP          frame word fp-24: no consumer found within 12 blocks
+7017B831 WCMV TERRITORY_MAP          frame word fp+16: no consumer found within 12 blocks
+7017B866 WCMV TERRITORY_MAP          frame word fp-25: no consumer found within 12 blocks
+7017BD95 WCMV TERRITORY_MAP          frame word fp-25: no consumer found within 12 blocks
+
+## WCMP sites
+7015C09C QUEST                dst_count=0                            src_count=2                            dst=0x7015BF5F:0                             src=0x70000CCC:0 (INITIALS)                  then WSEQ 1,1;
+7015C0AD QUEST                dst_count=3                            src_count=N[0x7000021C] (IN_BUFFER)    dst=0x7015BF5D:0                             src=0x7000021D:0 (IN_BUFFER+0x1)             then WSNE 1,1;
+7015C259 QUEST                dst_count=2                            src_count=2                            dst=0x70000CCC:0 (INITIALS)                  src=deref: pointer in static 0x70000210 (SD_ then WSEQ 1,1;
+7015D1F4 ALLY_PLAYER          dst_count=N[fp+516]                    src_count=deref: N[*(fp+16)] (length w dst=frame byte +1034 (word fp+517)           src=deref: pointer in frame word fp+16, byte then WSNE 1,1;
+7015D207 ALLY_PLAYER          dst_count=N[0x7000021C] (IN_BUFFER)    src_count=load N[(W[(fp+16)]+17)]      dst=0x7000021D:0 (IN_BUFFER+0x1)             src=deref: pointer in frame word fp+16, byte then WSNE 1,1;
+7016296A CAST                 dst_count=6                            src_count=load N[(W[(fp-6)]+18)]       dst=0x70162163:0                             src=deref: pointer in frame word fp-6, byte  then WSNE 1,1;
+70162979 CAST                 dst_count=7                            src_count=load N[(W[(fp-6)]+18)]       dst=0x7016215F:0                             src=deref: pointer in frame word fp-6, byte  then WSNE 1,1;
+70162988 CAST                 dst_count=6                            src_count=load N[(W[(fp-6)]+18)]       dst=0x7016215B:0                             src=deref: pointer in frame word fp-6, byte  then WSNE 1,1;
+70162997 CAST                 dst_count=7                            src_count=load N[(W[(fp-6)]+18)]       dst=0x70162157:0                             src=deref: pointer in frame word fp-6, byte  then WSNE 1,1;
+701629A6 CAST                 dst_count=7                            src_count=load N[(W[(fp-6)]+18)]       dst=0x70162153:0                             src=deref: pointer in frame word fp-6, byte  then WSNE 1,1;
+701629B7 CAST                 dst_count=6                            src_count=load N[(W[(fp-6)]+18)]       dst=0x70162163:0                             src=deref: pointer in frame word fp-6, byte  then WSEQ 1,1;
+701629D1 CAST                 dst_count=7                            src_count=load N[(W[(fp-6)]+18)]       dst=0x7016215F:0                             src=deref: pointer in frame word fp-6, byte  then WSEQ 1,1;
+701629EB CAST                 dst_count=6                            src_count=load N[(W[(fp-6)]+18)]       dst=0x7016215B:0                             src=deref: pointer in frame word fp-6, byte  then WSEQ 1,1;
+70162A05 CAST                 dst_count=7                            src_count=load N[(W[(fp-6)]+18)]       dst=0x70162157:0                             src=deref: pointer in frame word fp-6, byte  then WSEQ 1,1;
+70162A1F CAST                 dst_count=7                            src_count=load N[(W[(fp-6)]+18)]       dst=0x70162153:0                             src=deref: pointer in frame word fp-6, byte  then WSEQ 1,1;
+70162AAF CAST                 dst_count=N[0x7000021C] (IN_BUFFER)    src_count=load N[(W[0x70000210]+686*W[ dst=0x7000021D:0 (IN_BUFFER+0x1)             src=record via static pointer W[0x70000210 ( then WSEQ 1,1;
+70162B53 CAST                 dst_count=load N[(+23*W[(ac2@entry+10) src_count=N[0x7000021C] (IN_BUFFER)    dst=record via static pointer W[0x70000214 ( src=0x7000021D:0 (IN_BUFFER+0x1)             then WSEQ 1,1;
+70162D72 CAST                 dst_count=phi((N[0x7000021C] WUSGE N[0 src_count=phi((N[0x7000021C] WUSGE N[( dst=0x7000021D:0 (IN_BUFFER+0x1)             src=deref: pointer in static 0x70000214 (CAS then WSNE 1,1;
+70166A4A DISPLAY_CAVE         dst_count=N[0x70000A78] (OLD_CAVE_STR) src_count=phi(80, (phi(80, (phi((N[(W[ dst=0x70000A79:0 (OLD_CAVE_STR+0x1)          src=0x70000A4F:0 (CAVE_STR+0x1)              then WSNE 1,1;
+70167081 DISPLAY_SCREEN       dst_count=N[0x70000AA2] (OLD_SCREEN_ST src_count=(-phi(wcmv.src_left@70167049 dst=0x70000AA3:0 (OLD_SCREEN_STR+0x1)        src=frame byte +1238 (word fp+619)           then WSNE 1,1;
+7016713B DISPLAY_SCREEN       dst_count=N[0x70000C1E] (OLD_NAME)     src_count=(-wcmv.src_left@70167127+39) dst=0x70000C1F:0 (OLD_NAME+0x1)              src=frame byte +38 (word fp+19)              then WSEQ 1,1;
+70167250 DISPLAY_SCREEN       dst_count=N[0x70000C44] (OLD_LAND_MASS src_count=N[0x70000C34] (LAND_MASS_STR dst=0x70000C45:0 (OLD_LAND_MASS_STR+0x1)     src=0x70000C35:0 (LAND_MASS_STR+0x1)         then WSEQ 1,1;
+70167281 DISPLAY_SCREEN       dst_count=0                            src_count=N[0x70000C34] (LAND_MASS_STR dst=0x70166A7D:0                             src=0x70000C35:0 (LAND_MASS_STR+0x1)         then WSEQ 1,1;
+7016816B DISPLAY_INVENTORY    dst_count=N[0x7000021C] (IN_BUFFER)    src_count=load N[(+686*N[W[(fp-12)]]+W dst=0x7000021D:0 (IN_BUFFER+0x1)             src=record via static pointer W[0x70000210 ( then WSNE 1,1;
+70168188 DISPLAY_INVENTORY    dst_count=0                            src_count=N[0x7000021C] (IN_BUFFER)    dst=0x70167425:0                             src=0x7000021D:0 (IN_BUFFER+0x1)             then WSNE 1,1;
+7016E3B7 KILL_PLAYER          dst_count=N[fp+516]                    src_count=deref: N[*(fp+18)] (length w dst=frame byte +1034 (word fp+517)           src=deref: pointer in frame word fp+18, byte then WSNE 1,1;
+7016E3CA KILL_PLAYER          dst_count=N[0x7000021C] (IN_BUFFER)    src_count=load N[(W[(fp+18)]+17)]      dst=0x7000021D:0 (IN_BUFFER+0x1)             src=deref: pointer in frame word fp+18, byte then WSNE 1,1;
+7016ECE2 LIST_PLAYERS         dst_count=0                            src_count=deref: N[*(fp+16)] (length w dst=0x7016EA67:0                             src=deref: pointer in frame word fp+16, byte then WSEQ 1,1;
+70172DA8 OBSERVE              dst_count=0                            src_count=load N[(+51*N[(+686*N[W[(fp- dst=0x70172C67:0                             src=bp((+51*N[(+686*N[W[(fp-12)]]+N[(fp+12)] then WSEQ 1,1;
+70172E7A OBSERVE              dst_count=0                            src_count=load N[(+51*N[(+686*N[W[(fp- dst=0x70172C67:0                             src=bp((+51*N[(+686*N[W[(fp-12)]]+N[(fp+12)] then WSEQ 1,1;
+701732E7 OBSERVE              dst_count=0                            src_count=N[fp+18]                     dst=0x70172C67:0                             src=frame byte +38 (word fp+19)              then WSNE 1,1;
+701733BF OBSERVE              dst_count=N[0x7000021C] (IN_BUFFER)    src_count=load N[(+19*N[(fp+13)]+W[0x7 dst=0x7000021D:0 (IN_BUFFER+0x1)             src=record via static pointer W[0x70000212 ( then WSNE 1,1;
+7017390D OP_EDIT              dst_count=load N[(+20*N[(fp+17)]+W[0x7 src_count=N[0x7000021C] (IN_BUFFER)    dst=record via static pointer W[0x70000212 ( src=0x7000021D:0 (IN_BUFFER+0x1)             then WSEQ 1,1;
+70173EE6 OP_EDIT              dst_count=load N[(+20*N[(fp+17)]+W[0x7 src_count=N[0x7000021C] (IN_BUFFER)    dst=record via static pointer W[0x70000212 ( src=0x7000021D:0 (IN_BUFFER+0x1)             then WSEQ 1,1;
+70173FCE OP_EDIT              dst_count=load N[(+19*N[(fp+17)]+W[0x7 src_count=N[0x7000021C] (IN_BUFFER)    dst=record via static pointer W[0x70000212 ( src=0x7000021D:0 (IN_BUFFER+0x1)             then WSEQ 1,1;
+70178DBE START_TURN           dst_count=unk(LCALL:READ_IN@70178DB1)  src_count=N[0x7000021C] (IN_BUFFER)    dst=0x7017804D:0                             src=0x7000021D:0 (IN_BUFFER+0x1)             then WSEQ 1,1;
+70179DCD STORE                dst_count=load N[(+23*N[(fp+12)]+W[0x7 src_count=N[0x7000021C] (IN_BUFFER)    dst=record via static pointer W[0x70000214 ( src=0x7000021D:0 (IN_BUFFER+0x1)             then WSEQ 1,1;
+7017CE4D TERRITORY            dst_count=0                            src_count=N[fp+6]                      dst=0x7017CCF7:0                             src=frame byte +14 (word fp+7)               then WSEQ 1,1;
+7017CE84 TERRITORY            dst_count=0                            src_count=N[fp+6]                      dst=0x7017CCF7:0                             src=frame byte +14 (word fp+7)               then WSEQ 1,1;
+7017CEB0 TERRITORY            dst_count=0                            src_count=N[fp+6]                      dst=0x7017CCF7:0                             src=frame byte +14 (word fp+7)               then WSEQ 1,1;
+
+## WBLM sites
+7015C2E4 QUEST                count=10       src=pointer W[0x70000216 (PLAYER_NUM)] + W[0x7000 dst=pointer W[0x70000216 (PLAYER_NUM)] + W[0x7000  dest(b)
+701604CD BARGAIN              count=8        src=word fp+4                                     dst=word fp+6                                      dest(?)
+7016092F BARGAIN              count=8        src=word fp+6                                     dst=word fp+8                                      dest(?)
+7016357B CAST                 count=90       src=((N[0x70000216] WMUL unk(LCALL:DISPLAY_SCREEN dst=((N[0x70000216] WMUL unk(LCALL:DISPLAY_SCREEN  dest(?)
+70165205 DISPLAY_MAP          count=3040     src=word fp+62                                    dst=word fp+64                                     dest(?)
+7016635B DIED                 count=90       src=pointer W[0x70000216 (PLAYER_NUM)] + W[0x7000 dst=pointer W[0x70000216 (PLAYER_NUM)] + W[0x7000  dest(b)
+7016BCD8 GET_QUEST            count=90       src=pointer W[0x70000216 (PLAYER_NUM)] + W[0x7000 dst=pointer W[0x70000216 (PLAYER_NUM)] + W[0x7000  dest(b)
+70175F1A LOGON                count=10       src=word fp+16                                    dst=word fp+18                                     dest(?)
+70176082 LOGON                count=10       src=word fp+16                                    dst=word fp+18                                     dest(?)
+70178A31 START_TURN           count=90       src=pointer W[0x70000216 (PLAYER_NUM)] + W[0x7000 dst=pointer W[0x70000216 (PLAYER_NUM)] + W[0x7000  dest(b)
+7017A597 STORE                count=90       src=pointer W[0x70000210 (SD_PTR)] + N[W[(fp-12)] dst=pointer W[0x70000210 (SD_PTR)] + N[W[(fp-12)]  dest(b)
+7017B7A4 TERRITORY_MAP        count=5758     src=word fp+1040                                  dst=word fp+1042                                   dest(?)
+
+## WMSP claims
+70166152 DIED                 size(wides)=>>2((N[W[(fp-12)]]+6))                                       wsp_before=sp@70166144
+7016616F DIED                 size(wides)=>>2((N[W[(fp-12)]]+29))                                      wsp_before=(sp@70166144+2*>>2((N[W[(fp-12)]]+6)))
+7016618A DIED                 size(wides)=>>2((N[W[(fp-12)]]+31))                                      wsp_before=(sp@70166144+2*>>2((N[W[(fp-12)]]+6))+2*>>2((N[W[(fp-12)]]+29)))
+701661BC DIED                 size(wides)=>>2((N[W[(fp-12)]]+6))                                       wsp_before=sp@7016603D
+701661DA DIED                 size(wides)=>>2((N[W[(fp-12)]]+82))                                      wsp_before=(sp@7016603D+2*>>2((N[W[(fp-12)]]+6)))
+701661F5 DIED                 size(wides)=>>2((N[W[(fp-12)]]+84))                                      wsp_before=(sp@7016603D+2*>>2((N[W[(fp-12)]]+6))+2*>>2((N[W[(fp-12)]]+82)))
+70166578 DISPLAY_MAGIC        size(wides)=>>2((N[(+16*N[(fp+2)]-0XFEAFBB8)]+WULEI((-N[(+16*N[(fp+2)]-0 wsp_before=sp@70166550
+7016659A DISPLAY_MAGIC        size(wides)=>>2((N[(+16*N[(fp+2)]-0XFEAFBB8)]+WULEI((-N[(+16*N[(fp+2)]-0 wsp_before=(sp@70166550+2*>>2((N[(+16*N[(fp+2)]-0XFEAFBB8)]+WULEI((-N[(+16*N[(fp+2)]-0XFEAFBB8)]+30))+3)))
+701665B4 DISPLAY_MAGIC        size(wides)=>>2((N[(+16*N[(fp+2)]-0XFEAFBB8)]+WULEI((-N[(+16*N[(fp+2)]-0 wsp_before=(sp@70166550+2*>>2((N[(+16*N[(fp+2)]-0XFEAFBB8)]+WULEI((-N[(+16*N[(fp+2)]-0XFEAFBB8)]+30))+3))+2*>>2((N[(+16*N[(fp+2)]-0XFEAFBB8)]+WULEI((-N[(+16*N[(fp+2)]-0XFEAFBB8)]+30))+5)))
+701665D0 DISPLAY_MAGIC        size(wides)=>>2((N[(+16*N[(fp+2)]-0XFEAFBB8)]+WULEI((-N[(+16*N[(fp+2)]-0 wsp_before=(sp@70166550+2*>>2((N[(+16*N[(fp+2)]-0XFEAFBB8)]+WULEI((-N[(+16*N[(fp+2)]-0XFEAFBB8)]+30))+3))+2*>>2((N[(+16*N[(fp+2)]-0XFEAFBB8)]+WULEI((-N[(+16*N[(fp+2)]-0XFEAFBB8)]+30))+5))+2*>>2((N[(+16*N[(fp+2)]-0XFEAFBB8)]+WULEI((-N[(+16*N[(fp+2)]-0XFEAFBB8)]+30))+N[(fp+6)]+5)))
+70166967 DISPLAY_CAVE         size(wides)=>>2((phi((N[(W[0x70000210]+0X1EFB9)] WUSGE (N[(W[0x70000210] wsp_before=sp@701666A3
+70166E91 DISPLAY_SCREEN       size(wides)=>>2((N[(fp+238)]+4))                                         wsp_before=sp@70166E42
+70166EAC DISPLAY_SCREEN       size(wides)=>>2((N[(fp+238)]+5))                                         wsp_before=(sp@70166E42+2*>>2((N[(fp+238)]+4)))
+70166ECA DISPLAY_SCREEN       size(wides)=>>2((N[(fp+238)]+6))                                         wsp_before=(sp@70166E42+2*>>2((N[(fp+238)]+4))+2*>>2((N[(fp+238)]+5)))
+70166F64 DISPLAY_SCREEN       size(wides)=>>2((N[(fp+238)]+4))                                         wsp_before=sp@70166E42
+70166F7F DISPLAY_SCREEN       size(wides)=>>2((N[(fp+238)]+5))                                         wsp_before=(sp@70166E42+2*>>2((N[(fp+238)]+4)))
+70166F9D DISPLAY_SCREEN       size(wides)=>>2((N[(fp+238)]+6))                                         wsp_before=(sp@70166E42+2*>>2((N[(fp+238)]+4))+2*>>2((N[(fp+238)]+5)))
+70166FFE DISPLAY_SCREEN       size(wides)=>>2((N[(fp+0X26A)]+N[(fp+0X3E6)]+phi((-N[(fp+0X3E6)]+84), N[ wsp_before=sp@70166E42
+70167017 DISPLAY_SCREEN       size(wides)=>>2((N[(fp+0X26A)]+N[(fp+0X3E6)]+phi((-N[(fp+0X3E6)]+84), N[ wsp_before=(sp@70166E42+2*>>2((N[(fp+0X26A)]+N[(fp+0X3E6)]+phi((-N[(fp+0X3E6)]+84), N[(fp+10)])+3)))
+7016702E DISPLAY_SCREEN       size(wides)=>>2((N[(fp+0X26A)]+N[(fp+0X3E6)]+phi((-N[(fp+0X3E6)]+84), N[ wsp_before=(sp@70166E42+2*>>2((N[(fp+0X26A)]+N[(fp+0X3E6)]+phi((-N[(fp+0X3E6)]+84), N[(fp+10)])+3))+2*>>2((N[(fp+0X26A)]+N[(fp+0X3E6)]+phi((-N[(fp+0X3E6)]+84), N[(fp+10)])+4)))
+7016774C DISPLAY_INVENTORY    size(wides)=>>2((N[(fp+6)]+WULEI((-N[(fp+6)]+19))+3))                    wsp_before=sp@70167664
+70167769 DISPLAY_INVENTORY    size(wides)=>>2((N[(fp+6)]+WULEI((-N[(fp+6)]+19))+5))                    wsp_before=(sp@70167664+2*>>2((N[(fp+6)]+WULEI((-N[(fp+6)]+19))+3)))
+7016B8A4 GET_QUEST            size(wides)=>>2((N[(+16*unk(NADI@7016B85B)-0XFEAF5A6)]+N[0x7000021C]+189 wsp_before=sp@7016B832
+7016B8BF GET_QUEST            size(wides)=>>2((N[(+16*unk(NADI@7016B85B)-0XFEAF5A6)]+N[0x7000021C]+191 wsp_before=(sp@7016B832+2*>>2((N[(+16*unk(NADI@7016B85B)-0XFEAF5A6)]+N[0x7000021C]+189)))
+7016B8DA GET_QUEST            size(wides)=>>2((N[(+16*unk(NADI@7016B85B)-0XFEAF5A6)]+N[0x7000021C]+193 wsp_before=(sp@7016B832+2*>>2((N[(+16*unk(NADI@7016B85B)-0XFEAF5A6)]+N[0x7000021C]+189))+2*>>2((N[(+16*unk(NADI@7016B85B)-0XFEAF5A6)]+N[0x7000021C]+191)))
+7016BC2D GET_QUEST            size(wides)=>>2((N[(+19*N[(+686*N[0x70000216]+W[0x70000210]+43)]+W[0x700 wsp_before=sp@7016BBCD
+7016BC47 GET_QUEST            size(wides)=>>2((N[(+19*N[(+686*N[0x70000216]+W[0x70000210]+43)]+W[0x700 wsp_before=(sp@7016BBCD+2*>>2((N[(+19*N[(+686*N[0x70000216]+W[0x70000210]+43)]+W[0x70000212]+0X7C2)]+0X11C)))
+7016DC06 HELP                 size(wides)=>>2((N[(+12*N[(fp+16)]-0XFFFFD9A)]+WULEI((-N[(+12*N[(fp+16)] wsp_before=sp@7016DBB9
+7016DF7F INIT_OBJ_TBL         size(wides)=>>2((W[(W[(fp-14)]+1)]+4))                                   wsp_before=sp@7016DF39
+7016DF9E INIT_OBJ_TBL         size(wides)=>>2((W[(W[(fp-14)]+1)]+5))                                   wsp_before=(sp@7016DF39+2*>>2((W[(W[(fp-14)]+1)]+4)))
+7016EDB2 LIST_PLAYERS         size(wides)=>>2((phi((N[(W[0x70000210]+0X1EFB9)] WUSGE (N[(W[0x70000210] wsp_before=sp@7016ED6E
+7016EDC7 LIST_PLAYERS         size(wides)=>>2((phi((N[(W[0x70000210]+0X1EFB9)] WUSGE (N[(W[0x70000210] wsp_before=(sp@7016ED6E+2*>>2((phi((N[(W[0x70000210]+0X1EFB9)] WUSGE (N[(W[0x70000210]+0X1EFBA)]-((N[(fp+19)]-1) WMUL N[(W[0x70000210]+0X1EFB9)]))), phi(N[(W[0x70000210]+0X1EFB9)], (N[(W[0x70000210]+0X1EFB9)] WUSGE (N[(W[0x70000210]+0X1EFBA)]-((N[(fp+19)]-1) WMUL N[(W[0x70000210]+0X1EFB9)])))))+4)))
+7016EDE2 LIST_PLAYERS         size(wides)=>>2((phi((N[(W[0x70000210]+0X1EFB9)] WUSGE (N[(W[0x70000210] wsp_before=(sp@7016ED6E+2*>>2((phi((N[(W[0x70000210]+0X1EFB9)] WUSGE (N[(W[0x70000210]+0X1EFBA)]-((N[(fp+19)]-1) WMUL N[(W[0x70000210]+0X1EFB9)]))), phi(N[(W[0x70000210]+0X1EFB9)], (N[(W[0x70000210]+0X1EFB9)] WUSGE (N[(W[0x70000210]+0X1EFBA)]-((N[(fp+19)]-1) WMUL N[(W[0x70000210]+0X1EFB9)])))))+4))+2*>>2((phi((N[(W[0x70000210]+0X1EFB9)] WUSGE (N[(W[0x70000210]+0X1EFBA)]-((N[(fp+19)]-1) WMUL N[(W[0x70000210]+0X1EFB9)]))), phi(N[(W[0x70000210]+0X1EFB9)], (N[(W[0x70000210]+0X1EFB9)] WUSGE (N[(W[0x70000210]+0X1EFBA)]-((N[(fp+19)]-1) WMUL N[(W[0x70000210]+0X1EFB9)])))))+16)))
+7016EDFD LIST_PLAYERS         size(wides)=>>2((phi((N[(W[0x70000210]+0X1EFB9)] WUSGE (N[(W[0x70000210] wsp_before=(sp@7016ED6E+2*>>2((phi((N[(W[0x70000210]+0X1EFB9)] WUSGE (N[(W[0x70000210]+0X1EFBA)]-((N[(fp+19)]-1) WMUL N[(W[0x70000210]+0X1EFB9)]))), phi(N[(W[0x70000210]+0X1EFB9)], (N[(W[0x70000210]+0X1EFB9)] WUSGE (N[(W[0x70000210]+0X1EFBA)]-((N[(fp+19)]-1) WMUL N[(W[0x70000210]+0X1EFB9)])))))+4))+2*>>2((phi((N[(W[0x70000210]+0X1EFB9)] WUSGE (N[(W[0x70000210]+0X1EFBA)]-((N[(fp+19)]-1) WMUL N[(W[0x70000210]+0X1EFB9)]))), phi(N[(W[0x70000210]+0X1EFB9)], (N[(W[0x70000210]+0X1EFB9)] WUSGE (N[(W[0x70000210]+0X1EFBA)]-((N[(fp+19)]-1) WMUL N[(W[0x70000210]+0X1EFB9)])))))+16))+2*>>2((phi((N[(W[0x70000210]+0X1EFB9)] WUSGE (N[(W[0x70000210]+0X1EFBA)]-((N[(fp+19)]-1) WMUL N[(W[0x70000210]+0X1EFB9)]))), phi(N[(W[0x70000210]+0X1EFB9)], (N[(W[0x70000210]+0X1EFB9)] WUSGE (N[(W[0x70000210]+0X1EFBA)]-((N[(fp+19)]-1) WMUL N[(W[0x70000210]+0X1EFB9)])))))+20)))
+7016EE18 LIST_PLAYERS         size(wides)=>>2((phi((N[(W[0x70000210]+0X1EFB9)] WUSGE (N[(W[0x70000210] wsp_before=(sp@7016ED6E+2*>>2((phi((N[(W[0x70000210]+0X1EFB9)] WUSGE (N[(W[0x70000210]+0X1EFBA)]-((N[(fp+19)]-1) WMUL N[(W[0x70000210]+0X1EFB9)]))), phi(N[(W[0x70000210]+0X1EFB9)], (N[(W[0x70000210]+0X1EFB9)] WUSGE (N[(W[0x70000210]+0X1EFBA)]-((N[(fp+19)]-1) WMUL N[(W[0x70000210]+0X1EFB9)])))))+4))+2*>>2((phi((N[(W[0x70000210]+0X1EFB9)] WUSGE (N[(W[0x70000210]+0X1EFBA)]-((N[(fp+19)]-1) WMUL N[(W[0x70000210]+0X1EFB9)]))), phi(N[(W[0x70000210]+0X1EFB9)], (N[(W[0x70000210]+0X1EFB9)] WUSGE (N[(W[0x70000210]+0X1EFBA)]-((N[(fp+19)]-1) WMUL N[(W[0x70000210]+0X1EFB9)])))))+16))+2*>>2((phi((N[(W[0x70000210]+0X1EFB9)] WUSGE (N[(W[0x70000210]+0X1EFBA)]-((N[(fp+19)]-1) WMUL N[(W[0x70000210]+0X1EFB9)]))), phi(N[(W[0x70000210]+0X1EFB9)], (N[(W[0x70000210]+0X1EFB9)] WUSGE (N[(W[0x70000210]+0X1EFBA)]-((N[(fp+19)]-1) WMUL N[(W[0x70000210]+0X1EFB9)])))))+20))+2*>>2((phi((N[(W[0x70000210]+0X1EFB9)] WUSGE (N[(W[0x70000210]+0X1EFBA)]-((N[(fp+19)]-1) WMUL N[(W[0x70000210]+0X1EFB9)]))), phi(N[(W[0x70000210]+0X1EFB9)], (N[(W[0x70000210]+0X1EFB9)] WUSGE (N[(W[0x70000210]+0X1EFBA)]-((N[(fp+19)]-1) WMUL N[(W[0x70000210]+0X1EFB9)])))))+22)))
+70172E30 OBSERVE              size(wides)=>>2((N[(fp+134)]+N[(+51*N[(+686*N[W[(fp-12)]]+N[(fp+12)]+W[0 wsp_before=sp@70172DDA
+70172F01 OBSERVE              size(wides)=>>2((unk(LCALL:?UNSIGNED_TO_CHAR@70172EAC)+N[(fp+134)]+3))   wsp_before=sp@70172EAC
+701756A9 OP_EDIT              size(wides)=>>2((N[W[(fp-12)]]+4))                                       wsp_before=sp@7017567B
+701756C3 OP_EDIT              size(wides)=>>2((N[W[(fp-12)]]+6))                                       wsp_before=(sp@7017567B+2*>>2((N[W[(fp-12)]]+4)))
+701756DD OP_EDIT              size(wides)=>>2((N[W[(fp-12)]]+N[(fp+12)]+6))                            wsp_before=(sp@7017567B+2*>>2((N[W[(fp-12)]]+4))+2*>>2((N[W[(fp-12)]]+6)))
+701756F8 OP_EDIT              size(wides)=>>2((N[W[(fp-12)]]+N[(fp+12)]+10))                           wsp_before=(sp@7017567B+2*>>2((N[W[(fp-12)]]+4))+2*>>2((N[W[(fp-12)]]+6))+2*>>2((N[W[(fp-12)]]+N[(fp+12)]+6)))
+70175713 OP_EDIT              size(wides)=>>2((N[W[(fp-12)]]+N[(fp+12)]+12))                           wsp_before=(sp@7017567B+2*>>2((N[W[(fp-12)]]+4))+2*>>2((N[W[(fp-12)]]+6))+2*>>2((N[W[(fp-12)]]+N[(fp+12)]+6))+2*>>2((N[W[(fp-12)]]+N[(fp+12)]+10)))
+701757D2 OP_EDIT              size(wides)=>>2((N[W[(fp-12)]]+4))                                       wsp_before=sp@701757C1
+701757EC OP_EDIT              size(wides)=>>2((N[W[(fp-12)]]+6))                                       wsp_before=(sp@701757C1+2*>>2((N[W[(fp-12)]]+4)))
+70175806 OP_EDIT              size(wides)=>>2((unk(LCALL:?UNSIGNED_TO_CHAR@701757C1)+N[(fp+14)]+3))    wsp_before=(sp@701757C1+2*>>2((N[W[(fp-12)]]+4))+2*>>2((N[W[(fp-12)]]+6)))
+70175821 OP_EDIT              size(wides)=>>2((unk(LCALL:?UNSIGNED_TO_CHAR@701757C1)+N[(fp+14)]+7))    wsp_before=(sp@701757C1+2*>>2((N[W[(fp-12)]]+4))+2*>>2((N[W[(fp-12)]]+6))+2*>>2((unk(LCALL:?UNSIGNED_TO_CHAR@701757C1)+N[(fp+14)]+3)))
+7017583C OP_EDIT              size(wides)=>>2((unk(LCALL:?UNSIGNED_TO_CHAR@701757C1)+N[(fp+14)]+9))    wsp_before=(sp@701757C1+2*>>2((N[W[(fp-12)]]+4))+2*>>2((N[W[(fp-12)]]+6))+2*>>2((unk(LCALL:?UNSIGNED_TO_CHAR@701757C1)+N[(fp+14)]+3))+2*>>2((unk(LCALL:?UNSIGNED_TO_CHAR@701757C1)+N[(fp+14)]+7)))
+701758B5 OP_EDIT              size(wides)=>>2((N[W[(fp-12)]]+4))                                       wsp_before=sp@701758A0
+701758CF OP_EDIT              size(wides)=>>2((N[W[(fp-12)]]+6))                                       wsp_before=(sp@701758A0+2*>>2((N[W[(fp-12)]]+4)))
+701758E9 OP_EDIT              size(wides)=>>2((N[W[(fp-12)]]+N[W[(fp-14)]]+6))                         wsp_before=(sp@701758A0+2*>>2((N[W[(fp-12)]]+4))+2*>>2((N[W[(fp-12)]]+6)))
+70175906 OP_EDIT              size(wides)=>>2((N[W[(fp-12)]]+N[W[(fp-14)]]+10))                        wsp_before=(sp@701758A0+2*>>2((N[W[(fp-12)]]+4))+2*>>2((N[W[(fp-12)]]+6))+2*>>2((N[W[(fp-12)]]+N[W[(fp-14)]]+6)))
+70175921 OP_EDIT              size(wides)=>>2((N[W[(fp-12)]]+N[W[(fp-14)]]+12))                        wsp_before=(sp@701758A0+2*>>2((N[W[(fp-12)]]+4))+2*>>2((N[W[(fp-12)]]+6))+2*>>2((N[W[(fp-12)]]+N[W[(fp-14)]]+6))+2*>>2((N[W[(fp-12)]]+N[W[(fp-14)]]+10)))
+7017A149 STORE                size(wides)=>>2((WULEI((-N[(+9*N[(+16*N[(fp+17)]+N[(fp+14)]-0XFEAEAFB)]- wsp_before=sp@7017A112
+7017A164 STORE                size(wides)=>>2((WULEI((-N[(+9*N[(+16*N[(fp+17)]+N[(fp+14)]-0XFEAEAFB)]- wsp_before=(sp@7017A112+2*>>2((WULEI((-N[(+9*N[(+16*N[(fp+17)]+N[(fp+14)]-0XFEAEAFB)]-0XFFFFA73)]+16))+N[(fp+64)]+N[(+9*N[(+16*N[(fp+17)]+N[(fp+14)]-0XFEAEAFB)]-0XFFFFA73)]+5)))
+7017A17F STORE                size(wides)=>>2((N[(fp+116)]+WULEI((-N[(+9*N[(+16*N[(fp+17)]+N[(fp+14)]- wsp_before=(sp@7017A112+2*>>2((WULEI((-N[(+9*N[(+16*N[(fp+17)]+N[(fp+14)]-0XFEAEAFB)]-0XFFFFA73)]+16))+N[(fp+64)]+N[(+9*N[(+16*N[(fp+17)]+N[(fp+14)]-0XFEAEAFB)]-0XFFFFA73)]+5))+2*>>2((WULEI((-N[(+9*N[(+16*N[(fp+17)]+N[(fp+14)]-0XFEAEAFB)]-0XFFFFA73)]+16))+N[(fp+64)]+N[(+9*N[(+16*N[(fp+17)]+N[(fp+14)]-0XFEAEAFB)]-0XFFFFA73)]+N[(fp+22)]+5)))
+7017A19A STORE                size(wides)=>>2((N[(fp+116)]+WULEI((-N[(+9*N[(+16*N[(fp+17)]+N[(fp+14)]- wsp_before=(sp@7017A112+2*>>2((WULEI((-N[(+9*N[(+16*N[(fp+17)]+N[(fp+14)]-0XFEAEAFB)]-0XFFFFA73)]+16))+N[(fp+64)]+N[(+9*N[(+16*N[(fp+17)]+N[(fp+14)]-0XFEAEAFB)]-0XFFFFA73)]+5))+2*>>2((WULEI((-N[(+9*N[(+16*N[(fp+17)]+N[(fp+14)]-0XFEAEAFB)]-0XFFFFA73)]+16))+N[(fp+64)]+N[(+9*N[(+16*N[(fp+17)]+N[(fp+14)]-0XFEAEAFB)]-0XFFFFA73)]+N[(fp+22)]+5))+2*>>2((N[(fp+116)]+WULEI((-N[(+9*N[(+16*N[(fp+17)]+N[(fp+14)]-0XFEAEAFB)]-0XFFFFA73)]+16))+N[(fp+64)]+N[(+9*N[(+16*N[(fp+17)]+N[(fp+14)]-0XFEAEAFB)]-0XFFFFA73)]+N[(fp+22)]+5)))
+7017A1B2 STORE                size(wides)=>>2((N[(fp+116)]+WULEI((-N[(+9*N[(+16*N[(fp+17)]+N[(fp+14)]- wsp_before=(sp@7017A112+2*>>2((WULEI((-N[(+9*N[(+16*N[(fp+17)]+N[(fp+14)]-0XFEAEAFB)]-0XFFFFA73)]+16))+N[(fp+64)]+N[(+9*N[(+16*N[(fp+17)]+N[(fp+14)]-0XFEAEAFB)]-0XFFFFA73)]+5))+2*>>2((WULEI((-N[(+9*N[(+16*N[(fp+17)]+N[(fp+14)]-0XFEAEAFB)]-0XFFFFA73)]+16))+N[(fp+64)]+N[(+9*N[(+16*N[(fp+17)]+N[(fp+14)]-0XFEAEAFB)]-0XFFFFA73)]+N[(fp+22)]+5))+2*>>2((N[(fp+116)]+WULEI((-N[(+9*N[(+16*N[(fp+17)]+N[(fp+14)]-0XFEAEAFB)]-0XFFFFA73)]+16))+N[(fp+64)]+N[(+9*N[(+16*N[(fp+17)]+N[(fp+14)]-0XFEAEAFB)]-0XFFFFA73)]+N[(fp+22)]+5))+2*>>2((N[(fp+116)]+WULEI((-N[(+9*N[(+16*N[(fp+17)]+N[(fp+14)]-0XFEAEAFB)]-0XFFFFA73)]+16))+N[(fp+64)]+N[(+9*N[(+16*N[(fp+17)]+N[(fp+14)]-0XFEAEAFB)]-0XFFFFA73)]+N[(fp+22)]+6)))
+
+## STASP releases
+701661AA DIED                 wsp:=sp@70166144                                        claims on path: 70166152, 7016616F, 7016618A
+70166215 DIED                 wsp:=sp@7016603D                                        claims on path: 701661BC, 701661DA, 701661F5
+701665F0 DISPLAY_MAGIC        wsp:=sp@70166550                                        claims on path: 70166578, 7016659A, 701665B4, 701665D0
+70166990 DISPLAY_CAVE         wsp:=sp@701666A3                                        claims on path: 70166967
+70166EFB DISPLAY_SCREEN       wsp:=sp@70166E42                                        claims on path: 70166E91, 70166EAC, 70166ECA
+70166FCE DISPLAY_SCREEN       wsp:=sp@70166E42                                        claims on path: 70166F64, 70166F7F, 70166F9D
+70167059 DISPLAY_SCREEN       wsp:=sp@70166E42                                        claims on path: 70166FFE, 70167017, 7016702E
+70167797 DISPLAY_INVENTORY    wsp:=sp@70167664                                        claims on path: 7016774C, 70167769
+7016B8FA GET_QUEST            wsp:=sp@7016B832                                        claims on path: 7016B8A4, 7016B8BF, 7016B8DA
+7016BC67 GET_QUEST            wsp:=sp@7016BBCD                                        claims on path: 7016BC2D, 7016BC47
+7016DC2E HELP                 wsp:=sp@7016DBB9                                        claims on path: 7016DC06
+7016DFDB INIT_OBJ_TBL         wsp:=sp@7016DF39                                        claims on path: 7016DF7F, 7016DF9E
+7016EE38 LIST_PLAYERS         wsp:=sp@7016ED6E                                        claims on path: 7016EDB2, 7016EDC7, 7016EDE2, 7016EDFD, 7016EE18
+70172E5F OBSERVE              wsp:=sp@70172DDA                                        claims on path: 70172E30
+70172F30 OBSERVE              wsp:=sp@70172EAC                                        claims on path: 70172F01
+70175743 OP_EDIT              wsp:=sp@7017567B                                        claims on path: 701756A9, 701756C3, 701756DD, 701756F8, 70175713
+7017586C OP_EDIT              wsp:=sp@701757C1                                        claims on path: 701757D2, 701757EC, 70175806, 70175821, 7017583C
+70175951 OP_EDIT              wsp:=sp@701758A0                                        claims on path: 701758B5, 701758CF, 701758E9, 70175906, 70175921
+7017A1D1 STORE                wsp:=sp@7017A112                                        claims on path: 7017A149, 7017A164, 7017A17F, 7017A19A, 7017A1B2
+
+## WMSP/STASP per function
+DIED                   WMSP  6  STASP  2
+DISPLAY_CAVE           WMSP  1  STASP  1
+DISPLAY_INVENTORY      WMSP  2  STASP  1
+DISPLAY_MAGIC          WMSP  4  STASP  1
+DISPLAY_SCREEN         WMSP  9  STASP  3
+GET_QUEST              WMSP  5  STASP  2
+HELP                   WMSP  1  STASP  1
+INIT_OBJ_TBL           WMSP  2  STASP  1
+LIST_PLAYERS           WMSP  5  STASP  1
+OBSERVE                WMSP  2  STASP  2
+OP_EDIT                WMSP 15  STASP  3
+STORE                  WMSP  5  STASP  1
+
+## pass-by-reference WPSH temps
+70169B77 LOCK_FILE            WPSH 0,0 ; LDASP 0
+70169B7C LOCK_FILE            WPSH 1,1 ; LDASP 1
+70169B7F LOCK_FILE            WPSH 2,2 ; LDASP 2
+
+## WSTB constant bytes
+   23  0x0A
+   20  0x0B
+    8  0x20
+    8  0x7C
+    5  0x0D
+    4  0x3A
+    3  0x2D
+    2  0x10
+    2  0x18
+    2  0x5D
+    2  0x15
+    1  0x00
+    1  0x1C
+    1  0x1D
+    1  0x25
+    1  0x14
+    1  0x17
+    1  0x3D
+
+## windows
+crossing a block boundary: 819 ; depending on unresolved block-entry state: 103
+entry-dependent sites: 7015E14C 7015E155 7015E15B 7015E166 7015E7B1 7015E7BA 7015E7C0 7015E7CB 7015F941 7015F94A 7015F95D 7015F969 7015F972 7015F978 7015F983 70162AAF 70162B53 70162D72 70164576 7016457F 70164585 70164590 7016616F 7016617A 70166180 7016618A 7016619C 7016659A 701665A5 701665AB 701665B4 701665BF 701665C6 701665D0 701665E2 70166EAC 70166EB9 70166ECA 70166ED9 70166EE9 70166F7F 70166F8C 70166F9D 70166FAC 70166FBC 70167769 7016777B 7016A524 7016A52D 7016A533 7016A53E 7016A694 7016A69D 7016A6A3 7016A6AE 7016BC47 7016BC59 7016FEFD 7016FF06 7016FF14 701756C3 701756CE 701756D4 701756DD 701756E8 701756EF 701756F8 70175703 70175709 70175713 70175725 701758CF 701758DA 701758E0 701758E9 701758F4 701758FD 70175906 70175911 70175917 70175921 70175933 70175F1A 70176C8B 70176C94 70176C9A 70176CAA 70176CB6 70176CBF 70176CCD 70176D3D 70176D46 70176D4C 70176D5C 70176D68 70176D71 70176D7F 7017AA07 7017AA10 7017AA16 7017AA21 7017B811 7017BF5C
+
+## literals used with more than one length
+7015155A:0 lengths 20(x2), 32(x5), None(x9), 39(x2), 19(x1), 22(x1)
+7015BF5F:0 lengths 23(x2), 0(x1)
+7016EA67:0 lengths 159(x1), 0(x1)
+7017804D:0 lengths 15(x1), 0(x1), None(x1)
