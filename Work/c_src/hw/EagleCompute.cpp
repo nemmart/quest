@@ -151,7 +151,9 @@ uint32_t EagleCompute::execute(Machine& machine, uint32_t address, uint32_t opco
     return copy_segment(address, address+2);
 
    case WHLV:
-    machine.ac[YY]=static_cast<int32_t>(machine.ac[YY])>>1;
+    // Sep 5 2026 (docs/HWFindings_Sep5.md): the DG manual's WHLV page —
+    // "rounds toward 0".  >>1 floors (-3 -> -2; hardware -1).
+    machine.ac[YY]=static_cast<int32_t>(machine.ac[YY])/2;
     return copy_segment(address, address+1);
 
    case WMOVR:

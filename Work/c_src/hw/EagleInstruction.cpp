@@ -103,35 +103,49 @@ int32_t EagleInstruction::logical_shift(Machine& machine, int32_t src, int32_t a
 }
 
 int32_t EagleInstruction::narrow_add(Machine& machine, int32_t src, int32_t dst) {
+  // Sep 5 2026 (docs/HWFindings_Sep5.md), against the DG manual's NADD
+  // page: "stores the 32-bit sign-extended result"; OVR = 16-bit ALU
+  // overflow; CARRY = 16-bit ALU carry.  The operands are sign-extended
+  // into 32 bits, so the 16-bit op's sign bit is BIT 15 — the overflow
+  // test read bit 16 (missed e.g. 0x7FFF+1), and the result was the raw
+  // 17-bit sum, not the sign-extended 16-bit result.
   src = (src << 16) >> 16;
   dst = (dst << 16) >> 16;
   int32_t result = dst + src;
   int32_t overflow = ((src ^ result) & ~(src ^ dst));
   int32_t carry = ((dst & 0xFFFF) + (src & 0xFFFF)) >> 16;
-  machine.ovr |= static_cast<int32_t>(static_cast<uint32_t>(overflow) >> 16) & 0x01;
+  machine.ovr |= static_cast<int32_t>(static_cast<uint32_t>(overflow) >> 15) & 0x01;
   machine.c = carry & 0x01;
-  return result;
+  return (result << 16) >> 16;
 }
 
 int32_t EagleInstruction::narrow_sub(Machine& machine, int32_t src, int32_t dst) {
+  // Sep 5 2026 (docs/HWFindings_Sep5.md): overflow bit 15 (see
+  // narrow_add); CARRY is the ALU carry of dst + ~src + 1 = 1 iff no
+  // borrow, matching the wide sub — the (-src)&0xFFFF shortcut gave 0
+  // for src==0 where the hardware gives 1; result sign-extended.
   src = (src << 16) >> 16;
   dst = (dst << 16) >> 16;
   int32_t result = dst - src;
   int32_t overflow = ((src ^ dst) & (result ^ dst));
-  int32_t carry = ((dst & 0xFFFF) + ((-src) & 0xFFFF)) >> 16;
-  machine.ovr |= static_cast<int32_t>(static_cast<uint32_t>(overflow) >> 16) & 0x01;
+  int32_t carry = ((dst & 0xFFFF) + (~src & 0xFFFF) + 1) >> 16;
+  machine.ovr |= static_cast<int32_t>(static_cast<uint32_t>(overflow) >> 15) & 0x01;
   machine.c = carry & 0x01;
-  return result;
+  return (result << 16) >> 16;
 }
 
 int32_t EagleInstruction::narrow_mul(Machine& machine, int32_t src, int32_t dst) {
+  // Sep 5 2026 (docs/HWFindings_Sep5.md), against the DG manual's NMUL
+  // page: "sign extends the lower 16 bits of result to 32 bits"; OVR=1
+  // iff the product leaves -32768..32767 (bit 15 test, as CVWN).  Was
+  // zero-filled (dst & 0xFFFF), bit-16 test, and ovr ASSIGNED.
   src = (src << 16) >> 16;
   dst = (dst << 16) >> 16;
   dst = dst * src;
-  int32_t overflow = dst >> 16;
+  int32_t overflow = dst >> 15;
   if (overflow != 0 && overflow != -1)
-    machine.ovr = 1;
-  return (dst & 0xFFFF);
+    machine.ovr |= 1;
+  return (dst << 16) >> 16;
 }
 
 void EagleInstruction::validate_exponent(Machine& machine, double x) {
