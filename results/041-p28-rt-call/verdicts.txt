@@ -1,18 +1,18 @@
-fo        cfg=book  K=50  div=0   guard=0  liberr_native=1  pairs=7026 blk_equal=7026 blk_mismatch=0 k_heartbeats=6387 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
-m         cfg=book  K=50  div=0   guard=0  liberr_native=1  pairs=6515 blk_equal=6515 blk_mismatch=0 k_heartbeats=6036 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=I.STOP leg=OK
-inj       cfg=book  K=50  div=0   guard=0  liberr_native=0  pairs=6113 blk_equal=6113 blk_mismatch=0 k_heartbeats=5649 gaps_over_k=0 max_gap=50 floor=1000 OK end=FATAL want=FATAL leg=OK
-abort     cfg=book  K=50  div=0   guard=0  liberr_native=0  pairs=5298 blk_equal=5298 blk_mismatch=0 k_heartbeats=5092 gaps_over_k=0 max_gap=50 floor=10 OK end=WORLD-ABORT want=WORLD-ABORT leg=OK
-play      cfg=book  K=50  div=0   guard=0  liberr_native=0  pairs=1802432 blk_equal=1802432 blk_mismatch=0 k_heartbeats=1801540 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
-inj3      cfg=book  K=50  div=0   guard=0  liberr_native=1  pairs=6392 blk_equal=6392 blk_mismatch=0 k_heartbeats=5911 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=clean,I.STOP leg=OK
-k1fo      cfg=book  K=1   div=0   guard=0  liberr_native=1  pairs=324158 blk_equal=324158 blk_mismatch=0 k_heartbeats=323554 gaps_over_k=0 max_gap=1 floor=1000 OK end=clean want=clean,I.STOP leg=OK
-derr      cfg=book  K=1   div=0   guard=0  liberr_native=0  pairs=258568 blk_equal=258568 blk_mismatch=0 k_heartbeats=258252 gaps_over_k=0 max_gap=1 floor=1000 OK end=IR-ASSERT want=IR-ASSERT leg=OK
-derr-emu  cfg=emu   K=1   div=0   guard=0  liberr_native=0  pairs=254375 blk_equal=254375 blk_mismatch=0 k_heartbeats=254058 gaps_over_k=0 max_gap=1 floor=1000 OK end=WORLD-ABORT want=WORLD-ABORT leg=OK
-fo-st     cfg=stock K=50  div=0   guard=0  liberr_native=1  pairs=7061 blk_equal=7061 blk_mismatch=0 k_heartbeats=6422 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
-play-st   cfg=stock K=50  div=0   guard=0  liberr_native=0  pairs=3422627 blk_equal=3422627 blk_mismatch=0 k_heartbeats=3421611 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
-fo-emu    cfg=emu   K=50  div=0   guard=0  liberr_native=1  pairs=7042 blk_equal=7042 blk_mismatch=0 k_heartbeats=6403 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
-m-emu     cfg=emu   K=50  div=0   guard=0  liberr_native=1  pairs=6687 blk_equal=6687 blk_mismatch=0 k_heartbeats=6208 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=I.STOP leg=OK
-inj-emu   cfg=emu   K=50  div=0   guard=0  liberr_native=0  pairs=6481 blk_equal=6481 blk_mismatch=0 k_heartbeats=6017 gaps_over_k=0 max_gap=50 floor=1000 OK end=FATAL want=FATAL leg=OK
-abort-emu cfg=emu   K=50  div=0   guard=0  liberr_native=0  pairs=5098 blk_equal=5098 blk_mismatch=0 k_heartbeats=4892 gaps_over_k=0 max_gap=50 floor=10 OK end=WORLD-ABORT want=WORLD-ABORT leg=OK
+fo        cfg=book  K=50  div=0   guard=0  liberr_native=1  pairs=6659 blk_equal=6659 blk_mismatch=0 k_heartbeats=6020 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+m         cfg=book  K=50  div=0   guard=0  liberr_native=1  pairs=6237 blk_equal=6237 blk_mismatch=0 k_heartbeats=5758 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=I.STOP leg=OK
+inj       cfg=book  K=50  div=0   guard=0  liberr_native=0  pairs=6404 blk_equal=6404 blk_mismatch=0 k_heartbeats=5940 gaps_over_k=0 max_gap=50 floor=1000 OK end=FATAL want=FATAL leg=OK
+abort     cfg=book  K=50  div=0   guard=0  liberr_native=0  pairs=5444 blk_equal=5444 blk_mismatch=0 k_heartbeats=5238 gaps_over_k=0 max_gap=50 floor=10 OK end=WORLD-ABORT want=WORLD-ABORT leg=OK
+play      cfg=book  K=50  div=0   guard=0  liberr_native=0  pairs=1811571 blk_equal=1811571 blk_mismatch=0 k_heartbeats=1810679 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+inj3      cfg=book  K=50  div=0   guard=0  liberr_native=1  pairs=6235 blk_equal=6235 blk_mismatch=0 k_heartbeats=5754 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=clean,I.STOP leg=OK
+k1fo      cfg=book  K=1   div=0   guard=0  liberr_native=1  pairs=300513 blk_equal=300513 blk_mismatch=0 k_heartbeats=299909 gaps_over_k=0 max_gap=1 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+derr      cfg=book  K=1   div=0   guard=0  liberr_native=0  pairs=282860 blk_equal=282860 blk_mismatch=0 k_heartbeats=282544 gaps_over_k=0 max_gap=1 floor=1000 OK end=IR-ASSERT want=IR-ASSERT leg=OK
+derr-emu  cfg=emu   K=1   div=0   guard=0  liberr_native=0  pairs=255742 blk_equal=255742 blk_mismatch=0 k_heartbeats=255425 gaps_over_k=0 max_gap=1 floor=1000 OK end=WORLD-ABORT want=WORLD-ABORT leg=OK
+fo-st     cfg=stock K=50  div=0   guard=0  liberr_native=1  pairs=7043 blk_equal=7043 blk_mismatch=0 k_heartbeats=6404 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+play-st   cfg=stock K=50  div=0   guard=0  liberr_native=0  pairs=3437153 blk_equal=3437153 blk_mismatch=0 k_heartbeats=3436159 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+fo-emu    cfg=emu   K=50  div=0   guard=0  liberr_native=1  pairs=7027 blk_equal=7027 blk_mismatch=0 k_heartbeats=6388 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+m-emu     cfg=emu   K=50  div=0   guard=0  liberr_native=1  pairs=6530 blk_equal=6530 blk_mismatch=0 k_heartbeats=6051 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=I.STOP leg=OK
+inj-emu   cfg=emu   K=50  div=0   guard=0  liberr_native=0  pairs=6590 blk_equal=6590 blk_mismatch=0 k_heartbeats=6126 gaps_over_k=0 max_gap=50 floor=1000 OK end=FATAL want=FATAL leg=OK
+abort-emu cfg=emu   K=50  div=0   guard=0  liberr_native=0  pairs=5480 blk_equal=5480 blk_mismatch=0 k_heartbeats=5274 gaps_over_k=0 max_gap=50 floor=10 OK end=WORLD-ABORT want=WORLD-ABORT leg=OK
 == Task 041 P28 rt_call battery (JOBS=3) ==
 inj: armed-pc block drops=1 (want 1)
 abort: armed-pc block drops=1 (want 1)
@@ -36,7 +36,7 @@ derr: poke_fired=2 (want 2: both roles)  clone_assert_at_7015C48E=1 (want 1)  ma
 derr: master_end=CALL HAS ALREADY BEEN AUGMENTED: QUEST
 derr-emu: poke_fired=2 (want 2)  terminal_abort_at_DERR.TRP=1 (want 1)  (top stack wides: C48E0000 00007015 — for DERR.TRP: number, faulting pc)
 -- P26 newly-lowered mnemonic coverage (book+stock legs; regression reference) --
-P26 newly-lowered mnemonic coverage (blocks live/blocks carrying, 2087 live blocks):
-  WMUL 274/1805  LWADD 233/1528  XJMP 122/1160  LDAFP 111/1053  WNADI 152/735  MOV.L# 130/669  WADC 78/646  WSEQI 103/615  WSNEI 86/415  WSZB 106/361  CVWN 24/216  WSEQ 66/202  WCOM 37/200  WSGE 58/185  XNDO 44/176  MOV.# 39/172  WINC 25/164  WSLE 39/149  XWADD 14/143  WBTO 21/140  WSNE 15/115  WBTZ 20/106  WSLEI 25/97  WSGTI 30/96  WDIV 11/87  NADI 5/85  ADD.O# 23/81  XNSUB 8/81  WIOR 23/78  WAND 17/72  WADI 14/72  XNADI 8/69  XNADD 3/69  NSBI 12/65  NADDI 5/58  WSGT 10/58  XWMUL 2/45  WLSI 6/43  WPSH 10/39  COM.# 2/32  XWDO 3/30  WSLT 10/28  XNSBI 2/26  NSUB 6/26  NNEG 0/25  SEX 2/23  LDASP 5/22  NMUL 5/21  ADD.# 0/19  WMOVR 4/19  WXOR 4/18  WNEG 5/16  NADD 1/16  WHLV 1/15  WPOP 4/14  WANDI 2/10  LNADI 0/8  WXCH 3/7  LNADD 1/5  ANDI 4/4  LNSBI 1/3  ZEX 3/3  WLSHI 2/2  XWADI 0/2  XWSUB 1/2  MOV.R# 1/2  WIORI 0/2  NEG.L# 1/1  WULEI 1/1  WSKBO 0/1  XNISZ 0/1  LNSUB 0/1  CRYTO 1/1  XNMUL 0/1  XWSBI 0/1
-  classes live: 65/75; unreached: ADD.# LNADI LNSUB NNEG WIORI WSKBO XNISZ XNMUL XWADI XWSBI
+P26 newly-lowered mnemonic coverage (blocks live/blocks carrying, 2076 live blocks):
+  WMUL 273/1805  LWADD 231/1528  XJMP 124/1160  LDAFP 112/1053  WNADI 152/735  MOV.L# 130/669  WADC 78/646  WSEQI 104/615  WSNEI 89/415  WSZB 106/361  CVWN 25/216  WSEQ 65/202  WCOM 37/200  WSGE 54/185  XNDO 42/176  MOV.# 39/172  WINC 24/164  WSLE 38/149  XWADD 13/143  WBTO 21/140  WSNE 15/115  WBTZ 20/106  WSLEI 25/97  WSGTI 30/96  WDIV 12/87  NADI 3/85  ADD.O# 23/81  XNSUB 7/81  WIOR 23/78  WAND 17/72  WADI 14/72  XNADI 9/69  XNADD 3/69  NSBI 12/65  NADDI 5/58  WSGT 9/58  XWMUL 2/45  WLSI 6/43  WPSH 10/39  COM.# 2/32  XWDO 3/30  WSLT 10/28  XNSBI 2/26  NSUB 6/26  NNEG 0/25  SEX 2/23  LDASP 5/22  NMUL 6/21  ADD.# 0/19  WMOVR 4/19  WXOR 4/18  WNEG 5/16  NADD 1/16  WHLV 1/15  WPOP 4/14  WANDI 2/10  LNADI 0/8  WXCH 3/7  LNADD 1/5  ANDI 4/4  LNSBI 1/3  ZEX 3/3  WLSHI 2/2  XWADI 0/2  XWSUB 0/2  MOV.R# 1/2  WIORI 0/2  NEG.L# 1/1  WULEI 1/1  WSKBO 0/1  XNISZ 0/1  LNSUB 0/1  CRYTO 1/1  XNMUL 0/1  XWSBI 0/1
+  classes live: 64/75; unreached: ADD.# LNADI LNSUB NNEG WIORI WSKBO XNISZ XNMUL XWADI XWSBI XWSUB
 wall_clock_seconds=903
