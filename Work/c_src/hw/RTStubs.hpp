@@ -75,6 +75,20 @@ public:
   static bool     bad_token_armed;
   static uint32_t inject_fire(Machine& machine);   // stages the call; returns the next pc
 
+  // ---- Register poke (Project 27; docs/Project27/Census.md F3) ----
+  // QUEST_POKE=<pc>:<ac>:<value> — on ARRIVAL at pc (the same dispatch-
+  // loop point where QUEST_INJECT fires; pc should be a block start so
+  // the clone, which dispatches whole IR blocks, arrives there too) set
+  // ac[<ac>] := <value> on QUEST clients, both lockstep roles, ONE SHOT
+  // per process. Harness knob, not checker: it exists to drive a
+  // guarded value out of range so a DERR cluster's master DERR and clone
+  // assert can be paired in the `derr` leg. Same hygiene as INJECT:
+  // env-gated, armed line at launch, malformed spec refuses to launch,
+  // zero effect when unset.
+  static uint32_t poke_pc;        // 0 = disarmed globally
+  static int      poke_ac;        // 0..3
+  static int32_t  poke_value;
+
   static uint32_t terminal_test_pc; // QUEST_TERMINAL=<hex>[:ABORT]: one extra terminal
                                     // address for testing, any pc; 0 = none
   static uint8_t  terminal_test_kind; // 1=DETACH (default) or 2=ABORT for the test pc

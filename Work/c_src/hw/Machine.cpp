@@ -371,6 +371,17 @@ uint32_t Machine::run_steps(uint32_t address, int32_t count) {
     // staging on both roles; the clone's registry (alone non-empty)
     // dispatches native, the master emulates from the entry via the
     // rt_sync entry block below, exactly like a real LCALL. One shot.
+    // Register poke (Project 27): at the armed pc, on arrival, set one
+    // AC on both roles before anything at pc runs (the clone's IR block
+    // for pc has not started; it reads machine.ac on entry). One shot.
+    if(process->poke_armed &&
+       static_cast<uint32_t>(pc) == RTStubs::poke_pc) {
+      process->poke_armed = false;
+      fprintf(stderr, "RTStubs: POKE firing at %08X: ac%d %08X -> %08X\n",
+              static_cast<uint32_t>(pc), RTStubs::poke_ac,
+              static_cast<uint32_t>(ac[RTStubs::poke_ac]), static_cast<uint32_t>(RTStubs::poke_value));
+      ac[RTStubs::poke_ac] = RTStubs::poke_value;
+    }
     if(process->inject_armed &&
        static_cast<uint32_t>(pc) == RTStubs::inject_site) {
       process->inject_armed = false;

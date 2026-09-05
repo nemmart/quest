@@ -135,6 +135,9 @@ int32_t  RTStubs::inject_type=0;
 int32_t  RTStubs::inject_code=0;
 bool     RTStubs::inject_resume=false;
 bool     RTStubs::bad_token_armed=false;
+uint32_t RTStubs::poke_pc=0;
+int      RTStubs::poke_ac=0;
+int32_t  RTStubs::poke_value=0;
 
 // Terminal entries: reached only when the game is dying (normal exit or
 // unhandled-condition death). Under -lockstep, arrival is the LAST verified
@@ -461,6 +464,32 @@ void RTStubs::initialize(SymbolTable& symbols, const std::string& program) {
       fprintf(stderr, "RTStubs: QUEST_INJECT malformed (want site:type:code[:RESUME]) — refusing to launch\n");
       exit(2);
     }
+  }
+  if(const char* env=getenv("QUEST_POKE")) {
+    // <pc>:<ac>:<value> — P27 register poke (RTStubs.hpp). Parsed with
+    // the INJECT discipline: an armed-but-unparseable knob is a broken
+    // test, so anything but exactly three well-formed fields refuses to
+    // launch.
+    std::string spec(env);
+    std::vector<std::string> f;
+    size_t p=0;
+    while(p<=spec.size()) {
+      size_t q=spec.find(':', p);
+      if(q==std::string::npos) { f.push_back(spec.substr(p)); break; }
+      f.push_back(spec.substr(p, q-p));
+      p=q+1;
+    }
+    char* endp=nullptr;
+    bool ok=f.size()==3 && !f[0].empty() && !f[1].empty() && !f[2].empty();
+    if(ok) { poke_pc=static_cast<uint32_t>(strtoul(f[0].c_str(), &endp, 16)); ok=ok && *endp==0 && poke_pc!=0; }
+    if(ok) { long a=strtol(f[1].c_str(), &endp, 10); ok=ok && *endp==0 && a>=0 && a<=3; poke_ac=static_cast<int>(a); }
+    if(ok) { long v=strtol(f[2].c_str(), &endp, 0); ok=ok && *endp==0; poke_value=static_cast<int32_t>(v); }
+    if(!ok) {
+      fprintf(stderr, "RTStubs: QUEST_POKE malformed (want <hexpc>:<ac 0-3>:<value>) — refusing to launch\n");
+      exit(2);
+    }
+    fprintf(stderr, "RTStubs: POKE armed at %08X: ac%d := %d (0x%08X) (QUEST_POKE, one shot, both roles)\n",
+            poke_pc, poke_ac, poke_value, static_cast<uint32_t>(poke_value));
   }
   if(getenv("QUEST_BAD_TOKEN")) {
     bad_token_armed=true;

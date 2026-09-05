@@ -1,5 +1,31 @@
 # Next session
 
+## P27 IMPLEMENTED (Sep 5 2026) — read this first
+- Roadmap item 2 (DERR cluster compression) is IMPLEMENTED on branch
+  p27-derr-clusters: 2,271/2,273 DERR embeds gone (the 2 LDSP sinks →
+  P28), embeds 8,529 → 6,258, shipped sync list quest.synclist.p27 =
+  13,510 (identity minus 4,499 interiors). Rulings F1=A / F2-a / F3=
+  QUEST_POKE (docs/Project27/Census.md §2, REPORT §2). Local K=1 gates
+  3/3 green + the derr leg paired at 7015C48E; task 040 15/15 GREEN on
+  the runner (0 div, 903 s; results/040-p27-derr-clusters) — every P27
+  verdict line on prediction. Ready to integrate.
+- Integration notes: task scripts must now point QUEST_SYNC_LIST at
+  c_src/quest.synclist.p27 (the identity .split stays the record of
+  blocks.split, untouched); Provenance.md gains ir2.book/stock (new)
+  and synclist.p27; docs/Project27/assumed-foldable.txt is the
+  artifact of record (tags sha 90659843…). lower.py without
+  --assumed-foldable still reproduces the P26 artifacts byte-for-byte.
+- Follow-ups recorded: F2-b (checker: assert-detach + kind-2 terminal
+  → TERMINAL-ABORT); `SYSCALL 0351` on the DERR.TRP → ?FATAL path
+  (excluded subtree; the master dies there today — fine for the
+  verdict, but a real DERR never prints its DG message); option B
+  (absorb K) belongs to the flat-graph block merge; the goto-graph
+  project discharges assumed-foldable.txt.
+- P28 next: LDSP jump tables → `goto [labels] idx-lo` with a range
+  assert in front (folds the last 2 DERRs), LNDO (register now
+  visible), the 67 Nova loads (HWFindings §3: high half undefined,
+  match the emulator's zero-fill).
+
 ## Sep 5 2026 planning session — integrator notes (read after the P26 block)
 - **Branch hw-findings-sep5** (on top of p26-math-grammar) carries:
   (1) the seven emulator helper fixes from the manual review —

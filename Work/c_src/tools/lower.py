@@ -28,6 +28,19 @@
 # Exclusions (P22 REPORT §4): block 7015BD6B (interior LJSR) and any
 # block containing ENQT/DEQUE text or an XCT site — refused entirely,
 # even fully-embedded.
+#
+# P27 (Sep 5 2026, docs/Project27/Census.md, ruling F1 = A): DERR
+# bounds-check clusters listed in --assumed-foldable (tools/
+# derr_clusters.py; refused unless its tags sha256 matches --tags) fold
+# into the GUARD block: the guard skip becomes `assert(<path condition
+# to the continuation>, "DERR nn @derr_pc")` followed by `goto [K] 0`;
+# the cluster's interior blocks (second skip, DERR) are not emitted and
+# are delisted from the shipped sync list (--synclist-in/--synclist-out,
+# identity minus the interiors of the clusters ACTUALLY folded — a guard
+# block that refuses keeps its interiors emitted and listed: never a
+# half-fold).  The condition is re-derived here from the skips through
+# lower_one and cross-checked against the artifact's text.  K stays a
+# listed block (Machine.cpp:306 arrival counting).
 
 import argparse, hashlib, re, sys
 
@@ -709,6 +722,92 @@ def lower_one(pc, text, pushmap_pcs, ctx):
 
 # ----------------------------------------------------------------- main
 
+# ---------------------------------------------------------- P27 DERR folds
+
+def parse_assumed_foldable(path, tags_path, dis_path):
+    """guard_pc -> dict(derr, code, cont, interior[list], assert_text).
+    Refuses unless the artifact's tags/dis sha256 match the inputs."""
+    folds, tags_sha, dis_sha = {}, None, None
+    for raw in open(path, encoding="ascii", errors="replace"):
+        line = raw.rstrip("\r\n")
+        if line.startswith("# tags sha256 "):
+            tags_sha = line.split()[-1]
+        elif line.startswith("# dis sha256 "):
+            dis_sha = line.split()[-1]
+        if not line or line.startswith("#"):
+            continue
+        head, _, evidence = line.partition(" | ")
+        toks = head.split()
+        if len(toks) < 4:
+            die("assumed-foldable line unparseable: " + line)
+        guard, derr, code, cont = int(toks[0], 16), int(toks[1], 16), toks[2], int(toks[3], 16)
+        interior = [int(t, 16) for t in toks[4:]]
+        m = re.search(r"\| (assert\(.*\))$", line)
+        if not m:
+            die("assumed-foldable line lacks the assert text: " + line)
+        if guard in folds:
+            die("assumed-foldable: duplicate guard %08X" % guard)
+        folds[guard] = dict(derr=derr, code=code, cont=cont, interior=interior,
+                            assert_text=m.group(1), skips=re.search(r"skips ([^|]*)", evidence).group(1).strip())
+    if tags_sha is None or tags_sha != sha256(tags_path):
+        die("assumed-foldable tags sha256 %s does not match %s (%s)" % (tags_sha, tags_path, sha256(tags_path)))
+    if dis_sha is not None and dis_sha != sha256(dis_path):
+        die("assumed-foldable dis sha256 does not match %s" % dis_path)
+    return folds
+
+GOTO2 = re.compile(r"^goto \[([0-9A-F]{8}), ([0-9A-F]{8})\] \((.*)\)$")
+
+def skip_test(pc, block_start, dis, succs, dis_pcs, dis_index):
+    """(fall, skip, test) of a skip instruction via lower_one itself, so the
+    folded condition is exactly the terminator lower.py would have emitted.
+    succs is keyed by BLOCK START; the guard sits at the end of its block,
+    every interior skip is a block start of its own (split_skips)."""
+    if block_start not in succs:
+        die("fold: no CFG successors for block %08X (skip %08X)" % (block_start, pc))
+    ctx = BlockCtx(block_start, succs[block_start], dis_pcs, dis_index, {})
+    low = lower_one(pc, dis[pc], set(), ctx)
+    if low is None or low[1] is None:
+        die("fold: %08X is not a lowerable skip: %s" % (pc, dis[pc]))
+    m = GOTO2.match(low[1])
+    if not m:
+        die("fold: %08X terminator is not a two-way goto: %s" % (pc, low[1]))
+    return int(m.group(1), 16), int(m.group(2), 16), m.group(3)
+
+def fold_condition(guard, guard_block, f, dis, succs, dis_pcs, dis_index):
+    """Path condition to the continuation, transcribed from the skips
+    (derr_clusters.py header rule): cond(K)=true, cond(DERR)=false,
+    cond(skip) = t ? cond(skip-arm) : cond(fall-arm)."""
+    derr, cont = f["derr"], f["cont"]
+    members = set(f["interior"]) | {guard, derr}
+    memo = {}
+    def cond(pc):
+        if pc == cont:
+            return True
+        if pc == derr:
+            return False
+        if pc not in members:
+            die("fold %08X: path leaves the cluster at %08X" % (guard, pc))
+        if pc in memo:
+            return memo[pc]
+        fall, skip, t = skip_test(pc, guard_block if pc == guard else pc, dis, succs, dis_pcs, dis_index)
+        cf, cs = cond(fall), cond(skip)
+        if cf is False and cs is True:
+            r = "(%s)" % t
+        elif cf is False:
+            r = "(%s) && %s" % (t, cs)
+        elif cs is False and cf is True:
+            r = "!(%s)" % t
+        elif cs is False:
+            r = "!(%s) && %s" % (t, cf)
+        else:
+            die("fold %08X: both arms of %08X reach the continuation" % (guard, pc))
+        memo[pc] = r
+        return r
+    r = cond(guard)
+    if not isinstance(r, str):
+        die("fold %08X: degenerate condition %r" % (guard, r))
+    return r
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dis", required=True)
@@ -724,7 +823,15 @@ def main():
                     help="attempt every listed block; SKIP (with censused reason) "
                          "any that refuses — omission is safe: absent = emulated")
     ap.add_argument("--out", required=True)
+    ap.add_argument("--assumed-foldable", help="P27 DERR cluster artifact (docs/Project27/assumed-foldable.txt)")
+    ap.add_argument("--tags", help="quest.tags the artifact was built from (sha256 checked)")
+    ap.add_argument("--synclist-in", help="identity sync list (quest.synclist.split)")
+    ap.add_argument("--synclist-out", help="write the shipped list: identity minus folded interiors")
     a = ap.parse_args()
+    if a.assumed_foldable and not a.tags:
+        die("--assumed-foldable needs --tags")
+    if bool(a.synclist_in) != bool(a.synclist_out):
+        die("--synclist-in and --synclist-out go together")
 
     dis = parse_dis(a.dis)
     dis_pcs = sorted(dis)
@@ -732,6 +839,19 @@ def main():
     blocks, succs = parse_blocks(a.blocks)
     pushmap_pcs, push_slot, call_site, borrow_pcs = parse_pushmap(a.pushmap)
     starts = sorted(blocks)
+    folds = parse_assumed_foldable(a.assumed_foldable, a.tags, a.dis) if a.assumed_foldable else {}
+    interior_of = {}                      # interior start -> guard
+    for g, f in folds.items():
+        if g not in dis_index:
+            die("fold guard %08X not in dis" % g)
+        if f["cont"] not in blocks:
+            die("fold %08X: continuation %08X is not a block start" % (g, f["cont"]))
+        for m in f["interior"]:
+            if m not in blocks:
+                die("fold %08X: interior %08X is not a block start" % (g, m))
+            if m in interior_of:
+                die("fold %08X: interior %08X shared with fold %08X" % (g, m, interior_of[m]))
+            interior_of[m] = g
     if a.all:
         pilot = list(starts)
     elif a.pilot:
@@ -746,39 +866,94 @@ def main():
            "pushmap %s sha256=%s" % (a.pushmap, sha256(a.pushmap)),
            "argmap  %s sha256=%s" % (a.argmap, sha256(a.argmap)), ""]
     census = {"expr": 0, "embed": 0, "argpush": 0, "call": 0, "ret": 0,
-              "goto": 0, "last": None}
+              "goto": 0, "assert": 0, "last": None}
+
+    # P27: a guard block is lowered with its fold; its interiors are held
+    # back and emitted only if the guard REFUSES (totality: never a half
+    # fold).  Guard blocks are found by their terminator pc = the guard.
+    guard_block = {}
+    bidx = 0
+    for g in sorted(folds):
+        while bidx + 1 < len(starts) and starts[bidx + 1] <= g:
+            bidx += 1
+        gb = starts[bidx]
+        if gb not in blocks or dis_pcs[dis_index[gb] + len(blocks[gb]) - 1] != g:
+            die("fold %08X: guard is not the last instruction of block %08X" % (g, gb))
+        if gb in interior_of:
+            die("fold %08X: guard block %08X is interior to fold %08X" % (g, gb, interior_of[gb]))
+        if gb in guard_block:
+            die("block %08X is the guard block of two folds" % gb)
+        guard_block[gb] = g
+    folded, unfolded = [], []
+    held = set(interior_of) & set(pilot)
 
     skipped = {}
     for start in pilot:
+        if start in held:
+            continue
         mark = len(out)
+        fold = folds[guard_block[start]] if start in guard_block else None
         try:
             emit_block(start, blocks, succs, dis, dis_pcs, dis_index,
                        pushmap_pcs, push_slot, call_site, borrow_pcs, starts,
-                       out, census, a)
+                       out, census, a, fold, guard_block.get(start))
+            if fold is not None:
+                folded.append(guard_block[start])
         except Refuse as e:
             del out[mark:]                # drop partial block text
             reason = str(e).split(":")[0][:60]
             skipped.setdefault(reason, []).append(start)
+            if fold is not None:
+                unfolded.append(guard_block[start])
+                sys.stderr.write("lower.py: FOLD REFUSED at guard %08X (interiors re-emitted, kept listed): %s\n"
+                                 % (guard_block[start], e))
             if not a.all:
                 sys.stderr.write("lower.py: REFUSE: %s\n" % e)
                 sys.exit(1)
-    nblocks = len(pilot) - sum(len(v) for v in skipped.values())
+    for g in unfolded:                    # totality: the whole cluster stays fragmented
+        for m in folds[g]["interior"]:
+            if m in held:
+                held.discard(m)
+                emit_block(m, blocks, succs, dis, dis_pcs, dis_index,
+                           pushmap_pcs, push_slot, call_site, borrow_pcs, starts,
+                           out, census, a, None, None)
+    nblocks = len(pilot) - sum(len(v) for v in skipped.values()) - len(held)
     out.append("blocks %d" % nblocks)
     with open(a.out, "w", newline="\n") as f:
         f.write("\n".join(out) + "\n")
     print("wrote %s: %d blocks, %d expr, %d instr, %d argpush, %d call, "
-          "%d ret, %d goto, %d skipped"
+          "%d ret, %d goto, %d assert, %d skipped"
           % (a.out, nblocks, census["expr"], census["embed"], census["argpush"],
-             census["call"], census["ret"], census["goto"],
+             census["call"], census["ret"], census["goto"], census["assert"],
              sum(len(v) for v in skipped.values())))
     for reason, lst in sorted(skipped.items()):
         print("  skipped %4d  %s  (e.g. %08X)" % (len(lst), reason, lst[0]))
+    if folds:
+        print("  P27 folds: %d folded, %d refused (interiors kept), %d interior blocks delisted"
+              % (len(folded), len(unfolded), len(held)))
+    if a.synclist_out:
+        identity = [l.rstrip("\r\n") for l in open(a.synclist_in)]
+        entries = [int(l, 16) for l in identity if l and not l.startswith("#")]
+        if set(entries) != set(blocks):
+            die("--synclist-in is not the identity list of --blocks")
+        keep = [e for e in entries if e not in held]
+        with open(a.synclist_out, "w", newline="\n") as f:
+            f.write("# Gen-6 sync list, P27 (docs/Project27/Census.md, ruling F1=A): identity minus\n")
+            f.write("# the interior block starts (second skip, DERR) of every DERR cluster that\n")
+            f.write("# lower.py actually folded.  %d entries = %d - %d.\n" % (len(keep), len(entries), len(held)))
+            f.write("# tags   %s sha256=%s\n" % (a.tags, sha256(a.tags)))
+            f.write("# blocks %s sha256=%s\n" % (a.blocks, sha256(a.blocks)))
+            f.write("# folds  %s sha256=%s\n" % (a.assumed_foldable, sha256(a.assumed_foldable)))
+            f.write("# ir     %s\n" % a.out)
+            for e in keep:
+                f.write("%08X\n" % e)
+        print("  wrote %s: %d entries (%d delisted)" % (a.synclist_out, len(keep), len(held)))
     return
 
 
 def emit_block(start, blocks, succs, dis, dis_pcs, dis_index,
                pushmap_pcs, push_slot, call_site, borrow_pcs, starts,
-               out, census, a):
+               out, census, a, fold=None, guard=None):
     if True:
         if start not in blocks:
             die("pilot %08X is not a quest.blocks start" % start)
@@ -883,9 +1058,28 @@ def emit_block(start, blocks, succs, dis, dis_pcs, dis_index,
                         if k != nbody - 1:
                             die("skip/jump %08X is not the last instruction of block %08X"
                                 % (pc, start))
-                        out.append("  %s ; %s" % (term, text))
-                        census["goto"] += 1
-                        census["last"] = "goto"
+                        if fold is not None and pc == guard:
+                            # P27 fold (ruling A): assert + goto [K] 0.  The
+                            # guard block's successors must all be cluster
+                            # members or K; the condition is re-derived from
+                            # the skips and must equal the artifact's text.
+                            allowed = set(fold["interior"]) | {fold["derr"], fold["cont"]}
+                            if not set(ctx.succs) <= allowed:
+                                die("fold %08X: guard block successors %s leave the cluster"
+                                    % (guard, ["%08X" % x for x in ctx.succs]))
+                            cond = fold_condition(guard, start, fold, dis, succs, dis_pcs, dis_index)
+                            stmt = 'assert(%s, "DERR %s @%08X")' % (cond, fold["code"], fold["derr"])
+                            if stmt != fold["assert_text"]:
+                                die("fold %08X: derived %s != artifact %s" % (guard, stmt, fold["assert_text"]))
+                            out.append("  %s ; P27 fold of %s" % (stmt, fold["skips"]))
+                            out.append("  goto [%08X] 0 ; continuation" % fold["cont"])
+                            census["assert"] += 1
+                            census["goto"] += 1
+                            census["last"] = "goto"
+                        else:
+                            out.append("  %s ; %s" % (term, text))
+                            census["goto"] += 1
+                            census["last"] = "goto"
                     elif not stmts:
                         die("lower_one returned nothing for %08X" % pc)
         if ctx.slot_t:

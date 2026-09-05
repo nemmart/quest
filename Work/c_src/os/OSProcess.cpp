@@ -132,6 +132,7 @@ void OSProcess::launch(FSStreamIO* terminal) {
     std::string upper=program;
     for(char& ch : upper) ch=toupper(ch);
     inject_armed = (upper=="QUEST" && hw::RTStubs::inject_site!=0);
+    poke_armed   = (upper=="QUEST" && hw::RTStubs::poke_pc!=0);
   }
 
   int32_t start_addr = static_cast<int32_t>(page0->read_wide(0x17C));
