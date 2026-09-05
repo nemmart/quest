@@ -1,0 +1,332 @@
+## Part 1 — site census
+
+sites: 987   (LCALL with a `# ?` callee comment, over Disassembled/quest.dis)
+argc == wides captured in-block: 987/987   refused (any reason): 0   cross-block: 0
+
+### by callee
+
+| callee | sites | argc values | target | native today |
+|---|---:|---|---|---|
+| ?WRITE_SCREEN | 723 | 2 (×436), 5 (×287) | 7017E27A | no |
+| ?RANDOM_NUMBER | 111 | 3 (×111) | 7017DE33 | no |
+| ?UNSIGNED_TO_CHAR | 89 | 1 (×89) | 7017DA75 | yes |
+| ?DELAY | 18 | 1 (×18) | 7017DC63 | no |
+| ?READ | 11 | 4 (×5), 6 (×1), 7 (×5) | 7017DE5F | no |
+| ?CHAR_TO_UNSIGNED | 10 | 1 (×10) | 7017D99B | no |
+| ?OPEN_FILE | 6 | 2 (×6) | 7017DD27 | no |
+| ?CLOSE_FILE | 4 | 1 (×4) | 7017DB63 | no |
+| ?OPEN_SHARED_IO_FILE | 3 | 5 (×3) | 7017DDBB | no |
+| ?GET_SHARED_PAGE | 3 | 4 (×3) | 7017DC7D | no |
+| ?WRITE | 2 | 3 (×1), 6 (×1) | 7017E1FC | no |
+| ?CREATE_TASK | 1 | 2 (×1) | 7017DBB3 | no |
+| ?AWAIT_CONSOLE_INTERRUPT | 1 | 0 (×1) | 7017DB4B | no |
+| ?LOOKUP_PORT | 1 | 3 (×1) | 7017DCCB | no |
+| ?LIB_ERROR_CODE | 1 | 0 (×1) | 7017DE25 | yes |
+| ?CONNECT | 1 | 1 (×1) | 7017DB9B | no |
+| ?CURRENT_PID | 1 | 0 (×1) | 7017E12B | no |
+| ?READ_SCREEN | 1 | 3 (×1) | 7017DEEB | no |
+
+callees with more than one argc: ?READ, ?WRITE, ?WRITE_SCREEN
+
+### by window shape (interleaved non-push mnemonics, program order)
+
+- contiguous                887
+- XLEF                       72
+- XLEF+XWSTA                 15
+- XWSTA                      11
+- XWSTA+XLEF+XWSTA            2
+
+### push mnemonics
+
+LPEF 750, WPSH 3, XPEF 2126   (total 2879 pushes, 2879 wides)
+
+### argument expression forms (all wides, arg1..argN)
+
+- wp(ac3, d)                      1985
+- word constant                    752
+- wp(ac2, d)                       122
+- R[...] indirect                   17
+- acN (WPSH value)                   3
+
+### inline vs t-place
+
+sites with every argument inline at the call: 987
+sites needing t-places: 0 (arguments needing a t: 0)
+
+### refusals
+
+none
+
+### interleaved sites — what the interleaved instruction does
+
+- ?UNSIGNED_TO_CHAR        XLEF   XLEF 2         89
+- ?RANDOM_NUMBER           XWSTA  XWSTA 0        11
+- ?UNSIGNED_TO_CHAR        XWSTA  XWSTA 0        10
+- ?UNSIGNED_TO_CHAR        XWSTA  XWSTA 1         7
+- ?UNSIGNED_TO_CHAR        XWSTA  XWSTA 2         2
+
+### worked examples
+
+    ; site 7015BE91  ?OPEN_SHARED_IO_FILE  argc 5  block 7015BE78  shape contiguous
+    7015BE87 XPEF [pc+0x7EEF] (0x7015BD77);
+    7015BE89 WPSH 0,0;
+    7015BE8A XPEF [ac3+0xA];
+    7015BE8C XPEF [ac3+0xC];
+    7015BE8E LPEF [0x70000264];
+    7015BE91 LCALL [0x7017DDBB],5; # ?OPEN_SHARED_IO_FILE
+    =>  rt_call ?OPEN_SHARED_IO_FILE(0x70000264, wp(ac3, 12), wp(ac3, 10), ac0, 0x7015BD77)
+
+    ; site 7015BEDF  ?GET_SHARED_PAGE  argc 4  block 7015BECF  shape contiguous
+    7015BED5 XPEF [ac3+0xC];
+    7015BED7 XPEF [ac3+0xA];
+    7015BED9 LPEF [0x70000210];
+    7015BEDC LPEF [0x70000264];
+    7015BEDF LCALL [0x7017DC7D],4; # ?GET_SHARED_PAGE
+    =>  rt_call ?GET_SHARED_PAGE(0x70000264, 0x70000210, wp(ac3, 10), wp(ac3, 12))
+
+    ; site 7015C01F  ?OPEN_FILE  argc 2  block 7015C00F  shape contiguous
+    7015C01A XPEF [ac3+0xE];
+    7015C01C LPEF [0x70000260];
+    7015C01F LCALL [0x7017DD27],2; # ?OPEN_FILE
+    =>  rt_call ?OPEN_FILE(0x70000260, wp(ac3, 14))
+
+    ; site 7015C047  ?WRITE_SCREEN  argc 2  block 7015C037  shape contiguous
+    7015C042 XPEF [ac3+0x14];
+    7015C044 LPEF [0x70000260];
+    7015C047 LCALL [0x7017E27A],2; # ?WRITE_SCREEN
+    =>  rt_call ?WRITE_SCREEN(0x70000260, wp(ac3, 20))
+
+    ; site 7015C3A0  ?CREATE_TASK  argc 2  block 7015C390  shape contiguous
+    7015C39C XPEF [ac3+0x14];
+    7015C39E XPEF [ac3+0xE];
+    7015C3A0 LCALL [0x7017DBB3],2; # ?CREATE_TASK
+    =>  rt_call ?CREATE_TASK(wp(ac3, 14), wp(ac3, 20))
+
+    ; site 7015C840  ?RANDOM_NUMBER  argc 3  block 7015C823  shape contiguous
+    7015C83A XPEF [ac2+0x28];
+    7015C83C XPEF [ac3+0x34];
+    7015C83E XPEF [ac3+0x32];
+    7015C840 LCALL [0x7017DE33],3; # ?RANDOM_NUMBER
+    =>  rt_call ?RANDOM_NUMBER(wp(ac3, 50), wp(ac3, 52), wp(ac2, 40))
+
+    ; site 7015D176  ?READ  argc 7  block 7015D150  shape contiguous
+    7015D168 XPEF [ac3+0x24C];
+    7015D16A XPEF [ac3+0x24A];
+    7015D16C XPEF [ac3+0x220];
+    7015D16E XPEF [ac3+0x17];
+    7015D170 XPEF [ac3+0x12];
+    7015D172 XPEF [ac3+0x216];
+    7015D174 XPEF [ac3+0xD];
+    7015D176 LCALL [0x7017DE5F],7; # ?READ
+    =>  rt_call ?READ(wp(ac3, 13), wp(ac3, 534), wp(ac3, 18), wp(ac3, 23), wp(ac3, 544), wp(ac3, 586), wp(ac3, 588))
+
+    ; site 7015D2F5  ?CLOSE_FILE  argc 1  block 7015D2F3  shape contiguous
+    7015D2F3 XPEF [ac3+0xD];
+    7015D2F5 LCALL [0x7017DB63],1; # ?CLOSE_FILE
+    =>  rt_call ?CLOSE_FILE(wp(ac3, 13))
+
+    ; site 7015D930  ?UNSIGNED_TO_CHAR  argc 1  block 7015D923  shape XLEF
+    7015D92C XPEF [ac3+0x2C];
+    7015D92E XLEF 2,[ac3+0x32];   <- interleaved
+    7015D930 LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR
+    =>  rt_call ?UNSIGNED_TO_CHAR(wp(ac3, 44))
+
+    ; site 7015E10E  ?DELAY  argc 1  block 7015E108  shape contiguous
+    7015E10C XPEF [ac3+0x2C];
+    7015E10E LCALL [0x7017DC63],1; # ?DELAY
+    =>  rt_call ?DELAY(wp(ac3, 44))
+
+    ; site 7015E1BF  ?RANDOM_NUMBER  argc 3  block 7015E1A6  shape XWSTA
+    7015E1B7 XPEF [ac2+0x28];
+    7015E1B9 XPEF [ac3+0x12];
+    7015E1BB XPEF [ac3+0x2];
+    7015E1BD XWSTA 0,[ac3+0x14];   <- interleaved
+    7015E1BF LCALL [0x7017DE33],3; # ?RANDOM_NUMBER
+    =>  rt_call ?RANDOM_NUMBER(wp(ac3, 2), wp(ac3, 18), wp(ac2, 40))
+
+    ; site 7015FBC2  ?CHAR_TO_UNSIGNED  argc 1  block 7015FBB5  shape contiguous
+    7015FBBF LPEF [0x7000021C];
+    7015FBC2 LCALL [0x7017D99B],1; # ?CHAR_TO_UNSIGNED
+    =>  rt_call ?CHAR_TO_UNSIGNED(0x7000021C)
+
+    ; site 70165715  ?AWAIT_CONSOLE_INTERRUPT  argc 0  block 70165715  shape contiguous
+    70165715 LCALL [0x7017DB4B],0; # ?AWAIT_CONSOLE_INTERRUPT
+    =>  rt_call ?AWAIT_CONSOLE_INTERRUPT()
+
+    ; site 70170BC6  ?UNSIGNED_TO_CHAR  argc 1  block 70170BBE  shape XLEF+XWSTA
+    70170BC0 XPEF [ac3+0x16];
+    70170BC2 XLEF 2,[ac3+0x1C];   <- interleaved
+    70170BC4 XWSTA 1,[ac3+0x18];   <- interleaved
+    70170BC6 LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR
+    =>  rt_call ?UNSIGNED_TO_CHAR(wp(ac3, 22))
+
+    ; site 70175ED5  ?LOOKUP_PORT  argc 3  block 70175ECD  shape contiguous
+    70175ECD XPEF [pc+0x7EDF] (0x70175DAD);
+    70175ECF LPEF [0x70000218];
+    70175ED2 LPEF [0x70150400];
+    70175ED5 LCALL [0x7017DCCB],3; # ?LOOKUP_PORT
+    =>  rt_call ?LOOKUP_PORT(0x70150400, 0x70000218, 0x70175DAD)
+
+    ; site 70175EE4  ?LIB_ERROR_CODE  argc 0  block 70175EE2  shape contiguous
+    70175EE4 LCALL [0x7017DE25],0; # ?LIB_ERROR_CODE
+    =>  rt_call ?LIB_ERROR_CODE()
+
+    ; site 70175F09  ?CONNECT  argc 1  block 70175F04  shape contiguous
+    70175F07 XPEF [ac2+0x2A];
+    70175F09 LCALL [0x7017DB9B],1; # ?CONNECT
+    =>  rt_call ?CONNECT(wp(ac2, 42))
+
+    ; site 70175F43  ?CURRENT_PID  argc 0  block 70175F3D  shape contiguous
+    70175F43 LCALL [0x7017E12B],0; # ?CURRENT_PID
+    =>  rt_call ?CURRENT_PID()
+
+    ; site 70176716  ?READ_SCREEN  argc 3  block 7017670A  shape contiguous
+    7017670E XPEF [ac3+0xC];
+    70176710 LPEF [0x7000021C];
+    70176713 LPEF [0x70000262];
+    70176716 LCALL [0x7017DEEB],3; # ?READ_SCREEN
+    =>  rt_call ?READ_SCREEN(0x70000262, 0x7000021C, wp(ac3, 12))
+
+    ; site 70176DDE  ?UNSIGNED_TO_CHAR  argc 1  block 70176DB5  shape XWSTA+XLEF+XWSTA
+    70176DD6 XPEF [ac3+0x16];
+    70176DD8 XWSTA 2,[ac3+0x18];   <- interleaved
+    70176DDA XLEF 2,[ac3+0x2C];   <- interleaved
+    70176DDC XWSTA 1,[ac3+0x2A];   <- interleaved
+    70176DDE LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR
+    =>  rt_call ?UNSIGNED_TO_CHAR(wp(ac3, 22))
+
+    ; site 7017D7A1  ?WRITE  argc 6  block 7017D78A  shape contiguous
+    7017D795 XPEF [ac3+0x1FA];
+    7017D797 XPEF [ac3+0x1F8];
+    7017D799 XPEF [ac3+0x1F6];
+    7017D79B XPEF [ac3+0x8];
+    7017D79D XPEF @[ac3+0xFFF2];
+    7017D79F XPEF @[ac3+0xFFF4];
+    7017D7A1 LCALL [0x7017E1FC],6; # ?WRITE
+    =>  rt_call ?WRITE(R[ac3 + -12], R[ac3 + -14], wp(ac3, 8), wp(ac3, 502), wp(ac3, 504), wp(ac3, 506))
+
+## Part 2 — callee scan (quest-rt.dis; evidence, hand-checked in RTConventions.md)
+
+| callee | entry | frame | lines | frame-slot reads (entry regs) | frame-slot writes (return regs) | arg refs | nested calls |
+|---|---|---|---:|---|---|---|---|
+| ?WRITE_SCREEN | 7017E27A | WSAVS 0x001E | 83 | - | - | arg1×1, arg2×1, arg3×2, arg4×2, arg5×3 | ?FILL_WORDS, ?LIB_ERROR |
+| ?RANDOM_NUMBER | 7017DE33 | WSAVS 0x0005 | 25 | - | ac0×1 | arg1×1, arg2×1, arg3×3 | D.MOD / F.MOD |
+| ?UNSIGNED_TO_CHAR | 7017DA75 | WSAVS 0x0019 | 103 | ac2×1 | - | arg1×1, arg2×2, arg3×1 | ?UDIV32 |
+| ?DELAY | 7017DC63 | WSAVS 0x0002 | 16 | - | - | arg1×1 | - |
+| ?READ | 7017DE5F | WSAVS 0x000E | 75 | - | - | arg1×1, arg2×1, arg3×2, arg4×2, arg5×1, arg6×1, arg7×1 | ?FILL_WORDS, ?LIB_ERROR |
+| ?CHAR_TO_UNSIGNED | 7017D99B | WSAVS 0x0007 | 123 | - | ac0×3 | arg1×3, arg2×1 | ?LIB_ERROR, ?UMUL32, C.INDEX |
+| ?OPEN_FILE | 7017DD27 | WSAVS 0x0010 | 92 | - | - | arg1×2, arg2×4, arg3×1 | ?LIB_ERROR |
+| ?CLOSE_FILE | 7017DB63 | WSAVS 0x000D | 29 | - | - | arg1×1 | ?FILL_WORDS, ?LIB_ERROR |
+| ?OPEN_SHARED_IO_FILE | 7017DDBB | WSAVS 0x0007 | 70 | - | - | arg1×2, arg2×3, arg3×1 | ?LIB_ERROR |
+| ?GET_SHARED_PAGE | 7017DC7D | WSAVS 0x0009 | 44 | - | - | arg1×1, arg2×1, arg3×1, arg4×1 | ?FILL_WORDS, ?LIB_ERROR |
+| ?WRITE | 7017E1FC | WSAVS 0x000E | 68 | - | - | arg1×1, arg2×1, arg3×2, arg4×1, arg5×2, arg6×1 | ?FILL_WORDS, ?LIB_ERROR |
+| ?CREATE_TASK | 7017DBB3 | WSAVS 0x0006 | 73 | - | - | arg2×1, arg3×1, arg4×1, arg5×1 | ?LIB_ERROR, LJSR [0x7017E866], LJSR [0x7017E949], MT?TASK |
+| ?AWAIT_CONSOLE_INTERRUPT | 7017DB4B | WSAVS 0x0001 | 14 | - | - | - | ?LIB_ERROR |
+| ?LOOKUP_PORT | 7017DCCB | WSAVS 0x0048 | 58 | - | - | arg1×2, arg2×1 | ?LIB_ERROR |
+| ?LIB_ERROR_CODE | 7017DE25 | WSAVS 0x0000 | 7 | - | ac0×1 | - | T?AREA |
+| ?CONNECT | 7017DB9B | WSAVS 0x0001 | 14 | - | - | arg1×1 | ?LIB_ERROR |
+| ?CURRENT_PID | 7017E12B | WSAVS 0x0002 | 21 | - | ac0×2 | - | ?LIB_ERROR |
+| ?READ_SCREEN | 7017DEEB | WSAVS 0x0023 | 250 | - | - | arg1×1, arg10×2, arg11×1, arg2×2, arg3×5, arg4×2, arg5×2, arg6×3, arg7×1 | ?FILL_WORDS, ?LIB_ERROR |
+
+## Part 3 — leftovers
+
+### LNDO (1)
+- 7015C0C7 LNDO 0,25,[0x70000216];   block 7015C0C5   last-in-block True
+
+### LDSP (2)
+- 701604D1 LDSP 1,[pc+0x7FFFFCBF] (0x70160191);   block 701604C4   last-in-block True
+  index ac1, table 70160191, range [2, 66] -> 65 entries, 22 valid, 43 -1 (fall to DERR at pc+3 = 701604D4)
+  quest.tags successors: 23; table's distinct valid targets + fall-through: 21; sets MATCH
+  every target a block start: yes
+- 7016D704 LDSP 0,[pc+0x7FFFE81A] (0x7016BF1F);   block 7016D702   last-in-block True
+  index ac0, table 7016BF1F, range [1, 37] -> 37 entries, 37 valid, 0 -1 (fall to DERR at pc+3 = 7016D707)
+  quest.tags successors: 38; table's distinct valid targets + fall-through: 38; sets MATCH
+  every target a block start: yes
+
+### Nova LOAD forms (68, in blocks.split blocks)
+
+| op | CC | SS | skip | count |
+|---|---|---|---|---:|
+| ADD | - | - | - | 23 |
+| MOV | - | L | - | 19 |
+| ADC | - | - | SKP | 6 |
+| ADC | C | - | SNC | 4 |
+| ADD | - | S | - | 4 |
+| ADD | O | - | SBN | 4 |
+| SUB | C | L | - | 4 |
+| SUB | Z | R | SNC | 2 |
+| MOV | - | S | - | 1 |
+| SUB | Z | R | - | 1 |
+
+with a skip: 16 (all block-terminal: True); without: 52 (block-terminal by coincidence: 23)
+by op: ADC 10, ADD 31, MOV 20, SUB 7
+
+sites:
+- 7015BD23 MOV.S 0,2              block 7015BD20
+- 7015BD3D SUB.ZR 0,2,SNC         block 7015BD3C  (terminal)
+- 7015BD40 ADD.S 0,2              block 7015BD3F
+- 7015BD44 ADD 2,0                block 7015BD3F
+- 7015BD49 ADD.S 0,2              block 7015BD47
+- 7015BD4D ADD 2,0                block 7015BD47
+- 7015BD50 SUB.ZR 0,2,SNC         block 7015BD50  (terminal)
+- 7015BD55 ADD.S 0,2              block 7015BD52
+- 7015BD59 ADD 2,0                block 7015BD52
+- 7015BD61 ADD.S 0,2              block 7015BD5C
+- 7015BD65 ADD 2,0                block 7015BD5C
+- 7015BD6B SUB.ZR 1,1             block 7015BD6B
+- 7015BE37 ADC 2,2,SKP            block 7015BE37  (terminal)
+- 7015BE59 ADC 1,1,SKP            block 7015BE59  (terminal)
+- 7015E710 MOV.L 2,1              block 7015E701
+- 7015E712 ADD 2,0                block 7015E712  (terminal)
+- 70160E63 ADD.O 0,0,SBN          block 70160E56  (terminal)
+- 70160E64 ADC.C 0,0,SNC          block 70160E64  (terminal)
+- 70160E65 SUB.CL 0,0             block 70160E65  (terminal)
+- 70160E72 ADD.O 1,1,SBN          block 70160E66  (terminal)
+- 70160E73 ADC.C 1,1,SNC          block 70160E73  (terminal)
+- 70160E74 SUB.CL 1,1             block 70160E74  (terminal)
+- 701644D4 MOV.L 2,1              block 701644C5
+- 701644D6 ADD 2,0                block 701644D6  (terminal)
+- 7016810E MOV.L 2,1              block 70168107
+- 70168110 ADD 2,0                block 70168110  (terminal)
+- 7016A5F4 MOV.L 2,1              block 7016A5E5
+- 7016A5F6 ADD 2,0                block 7016A5F6  (terminal)
+- 7016B857 MOV.L 2,1              block 7016B852
+- 7016B859 ADD 2,0                block 7016B859  (terminal)
+- 7016DB9F MOV.L 2,1              block 7016DB9A
+- 7016DBA1 ADD 2,0                block 7016DBA1  (terminal)
+- 7016DCD5 MOV.L 2,1              block 7016DCD0
+- 7016DCD7 ADD 2,0                block 7016DCD7  (terminal)
+- 7016DCF4 MOV.L 2,1              block 7016DCEF
+- 7016DCF6 ADD 2,0                block 7016DCF6  (terminal)
+- 7016E75A ADD.O 1,1,SBN          block 7016E74D  (terminal)
+- 7016E75B ADC.C 1,1,SNC          block 7016E75B  (terminal)
+- 7016E75C SUB.CL 1,1             block 7016E75C  (terminal)
+- 7016E769 ADD.O 0,0,SBN          block 7016E75D  (terminal)
+- 7016E76A ADC.C 0,0,SNC          block 7016E76A  (terminal)
+- 7016E76B SUB.CL 0,0             block 7016E76B  (terminal)
+- 7017173B MOV.L 2,1              block 70171734
+- 7017173D ADD 2,0                block 7017173D  (terminal)
+- 70171991 MOV.L 2,1              block 70171984
+- 70171993 ADD 2,0                block 70171993  (terminal)
+- 70171E32 MOV.L 2,1              block 70171E2B
+- 70171E34 ADD 2,0                block 70171E34  (terminal)
+- 70172013 MOV.L 2,1              block 7017200B
+- 70172015 ADD 2,0                block 70172015  (terminal)
+- 701723FA MOV.L 2,1              block 701723F2
+- 701723FC ADD 2,0                block 701723FC  (terminal)
+- 701727B2 MOV.L 2,1              block 701727AB
+- 701727B4 ADD 2,0                block 701727B4  (terminal)
+- 70175F31 ADC 1,1,SKP            block 70175F31  (terminal)
+- 7017609C ADC 1,1,SKP            block 7017609C  (terminal)
+- 70176102 ADC 1,1,SKP            block 70176102  (terminal)
+- 7017733E MOV.L 2,1              block 70177336
+- 70177340 ADD 2,0                block 70177340  (terminal)
+- 701785D5 MOV.L 2,1              block 701785C8
+- 701785D7 ADD 2,0                block 701785D7  (terminal)
+- 7017861A MOV.L 2,1              block 7017860D
+- 7017861C ADD 2,0                block 7017861C  (terminal)
+- 7017873C MOV.L 2,1              block 70178738
+- 7017873E ADD 2,0                block 7017873E  (terminal)
+- 70179C01 MOV.L 2,1              block 70179BFC
+- 70179C03 ADD 2,0                block 70179C03  (terminal)
+- 7017D7BC ADC 2,2,SKP            block 7017D7BC  (terminal)
