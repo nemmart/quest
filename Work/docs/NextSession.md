@@ -23,10 +23,12 @@
 
 ## Queue (Sep 5, post-P27 merge)
 - P28 rt_call — DONE, merged (042 15/15 GREEN).
-- P29 strings — RESEARCH session first: docs/Project29/RESEARCH.md
-  (idiom classification, quest.strings, destination classes, open
-  questions). Design session (StringsDesign.md) follows; no prompt for
-  implementation until then.
+- P29 strings — research DONE (Census.md) and design DONE:
+  **docs/Project29/StringsDesign.md** is the design of record (Sep 5–6).
+  Implementation is four projects: P30 library (docs/Project30/PROMPT.md)
+  and P31 located strings (docs/Project31/PROMPT.md) — Phase A of both
+  may run in parallel, P31 Phase B waits for P30 — then P32 append
+  chains, P33 p@b + the checker (prompts after P31).
 - Later: float + DIVX/WDIVS/WLOB (~80 embeds), F2-b checker item + ABORT
   readout off-by-one, retire borrow-slot allocation from the address
   book, the typing pass (flat-graph world). Frames stay embedded until
