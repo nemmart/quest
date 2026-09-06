@@ -85,9 +85,12 @@ census tool (`tools/string_sites.py`) is what says so.
    located target — HELP's write is after its STASP; corrected by P31's
    re-check on the regenerated census). Every `CHAR(n)` conversion (`?UNSIGNED_TO_CHAR`) is
    executed BEFORE the first claim — the compiler needs the length to
-   size the claim — writing its digits to a frame scratch word buffer at
-   the address passed in ac2 and returning the length in ac0 (112
-   CALLRESULT pieces overall).
+   size the claim — writing a VARYING (length word + digits) at the
+   frame word address passed in ac2 and returning ac0–ac2 UNCHANGED
+   like every LCALL routine (RTBridge::native_return; P32 correction,
+   Sep 6 — the earlier "length in ac0" was wrong). The CALLRESULT count
+   the compiler then uses is its own running total in ac1 plus the
+   length word it RELOADS from that slot (112 CALLRESULT pieces).
 5. **Every claim is released** in its own routine by an STASP (57/57);
    groups never nest or interleave; no temp pointer is read after the
    STASP. Two or three groups may live in one routine (DIED 3+3,
@@ -116,7 +119,8 @@ census tool (`tools/string_sites.py`) is what says so.
    `?WRITE` (2), `?OPEN_FILE`/`?OPEN_SHARED_IO_FILE`/`?GET_SHARED_PAGE`
    (names), `?CHAR_TO_UNSIGNED` (parses `IN_BUFFER` words),
    `?LOOKUP_PORT`/`?CONNECT`/`?CREATE_TASK`. Producers: `?UNSIGNED_TO_CHAR`
-   (writes raw digits at ac2, length in ac0) and `?READ`/`?READ_SCREEN`
+   (writes a varying — length word + digits — at the ac2 word address;
+   ac0–ac2 returned unchanged) and `?READ`/`?READ_SCREEN`
    (fill `IN_BUFFER`, a located varying string).
 9. **Manual vs emulator** (Census §10, EmulatorDivergences.md): WCMV,
    WCMP, WBLM, WMSP, STASP agree with the emulator on every semantic Quest
@@ -465,7 +469,7 @@ From Census §3 (counts are WCMV sites unless noted):
 | COPY-STR-EXACT / COPY-LIT-EXACT (first piece) | 225 / 153 | `append([@scratch, n], …)` or the first `p@b + …` |
 | CONCAT-PIECE (ac2 continuation) | 349 | `append(…)` / `p@b = p@b + …` |
 | TEMP-FIRST-PIECE | 49 | the first `p@b = p@b + …` |
-| …+CALLRESULT | 112 | piece = `[@fp+k, ac0]` after the `?UNSIGNED_TO_CHAR` rt_call |
+| …+CALLRESULT | 112 | piece = `[@fp+k, varying]` after the `?UNSIGNED_TO_CHAR` rt_call (count = ac1 running total + reloaded length word) |
 | …+SUBSTR | 23 | `substr(…)` piece |
 | tail split (ac1 as next count) | 17 | `append(…)` with the count from the residue |
 | ASSIGN-FROM-TEMP | 11 | `[@v, n varying] = p@b` |
@@ -585,3 +589,14 @@ dereference by ruling.
   `master_wsp − clone_wsp` must equal it.
 - **Mapper form** — a kind of row the Mapper's `equivalent()` knows how
   to translate; the arena form is clone→master only.
+
+## 13. Corrections log
+
+- Sep 6 (P32 gate): `?UNSIGNED_TO_CHAR` writes a varying at the ac2 word
+  address and returns ac0–ac2 unchanged; it does not return the length in
+  ac0 (§1.4, §1.8, §2.2, §7 corrected). Consequence found by P32: the
+  P29/P31 census tool kept tracked frame-slot values across calls, so 17
+  P31 statements rendered a constant count where the master reloads the
+  digit count the call wrote — never executed by any leg (census-carried
+  risk); fixed by P32's correction commit (tool: a slot whose address was
+  passed to a call is dropped; artifacts regenerated with 635 statements).

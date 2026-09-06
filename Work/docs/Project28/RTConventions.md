@@ -1,3 +1,11 @@
+> CORRECTION (Sep 6, P32 gate): `?UNSIGNED_TO_CHAR` does NOT return the
+> length in ac0. It writes a CHAR VARYING (length word + digits) at the
+> frame word address passed in ac2 (runtime/unsigned_to_char.cpp:141–146)
+> and returns ac0–ac2 = entry values like every LCALL routine
+> (RTBridge::native_return / WRTN restore). The "results in ac0" row
+> below is wrong for this callee; the four true ac0-returners are
+> ?RANDOM_NUMBER, ?CHAR_TO_UNSIGNED, ?LIB_ERROR_CODE, ?CURRENT_PID.
+
 # Project 28 — runtime call conventions, per callee (the 18 `?` routines the game LCALLs)
 
 Evidence: `tools/rt_sites.py` Part 2 (rt_sites.out) — a mechanical
