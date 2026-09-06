@@ -226,7 +226,7 @@ System Call 36, called from 7017E302
  ac0=00000000
  ac1=00000000
  ac2=00000000
-RETURNING AC1=00000004
+RETURNING AC1=00000013
 dispatchSystemCall: 70000CCE
 System Call 26, called from 7017A657
  ac0=00000000
@@ -242,11 +242,11 @@ IREC:
    data pointer = 00000000
 
 dispatchSystemCall: F0000EA5
+dispatchSystemCall: F0000EA5
 System Call 3, called from 7017EA8E
  ac0=7017EB63
  ac1=00000000
  ac2=70000F4F
-dispatchSystemCall: F0000EA5
 System Call 3, called from 7017EA8E
  ac0=7017EB63
  ac1=00000000
@@ -269,12 +269,12 @@ dispatchSystemCall: F0000EA5
 System Call 14, called from 7017EAE0
  ac0=00000059
  ac1=000004F0
+ ac2=700001F0
 dispatchSystemCall: F0000EA5
 System Call 14, called from 7017EAE0
  ac0=00000059
  ac1=000004F0
  ac2=700001F0
- ac2=700001F0
 
 MEMI (return values)
   ac1 = 70017BFF
@@ -285,15 +285,15 @@ MEMI (return values)
   ac1 = 70017BFF
 
 RETURNING AC1=70017BFF
-dispatchSystemCall: 7000109C
-System Call 542, called from 7017EBAA
- ac0=70000E87
- ac1=7001770A
 dispatchSystemCall: 7000109C
 System Call 542, called from 7017EBAA
  ac0=70000E87
  ac1=7001770A
  ac2=7015C005
+dispatchSystemCall: 7000109C
+System Call 542, called from 7017EBAA
+ ac0=70000E87
+ ac1=7001770A
  ac2=7015C005
 
 IXIT -- ignored
@@ -315,13 +315,13 @@ System Call 127, called from 7017E409
  ac2=7000019A
 RETURNING AC1=00000001
 RETURNING AC1=00000001
+dispatchSystemCall: 700010B8
+System Call 27, called from 7017E43B
 dispatchSystemCall: 700010B8
 System Call 27, called from 7017E43B
  ac0=E0000346
  ac1=00000000
  ac2=E0000354
-dispatchSystemCall: 700010B8
-System Call 27, called from 7017E43B
  ac0=E0000346
  ac1=00000000
  ac2=E0000354
@@ -330,30 +330,30 @@ ILKUP:
    service = ?1.SWAT.IPC
 
 RETURNING AC1=00000000
-****** ERROR RETURN ******  CODE=2006
-
 RETURNING AC1=00000000
 ****** ERROR RETURN ******  CODE=2006
 
-dispatchSystemCall: 70001106
-System Call 73, called from 7015BE34
+****** ERROR RETURN ******  CODE=2006
+
 dispatchSystemCall: 70001106
 System Call 73, called from 7015BE34
  ac0=00000000
  ac1=00000000
  ac2=00000000
+dispatchSystemCall: 70001106
+System Call 73, called from 7015BE34
  ac0=00000000
  ac1=00000000
  ac2=00000000
 RETURNING AC1=000005A1
 RETURNING AC1=000005A1
+dispatchSystemCall: 70001106
+System Call 44, called from 7015BE56
 dispatchSystemCall: 70001106
 System Call 44, called from 7015BE56
  ac0=0000005F
  ac1=00000637
  ac2=00000000
-dispatchSystemCall: 70001106
-System Call 44, called from 7015BE56
  ac0=0000005F
  ac1=00000637
  ac2=00000000
@@ -388,11 +388,11 @@ RETURNING AC1=00000002
 dispatchSystemCall: 70001134
 System Call 63, called from 7017DE01
  ac0=E0002250
+ ac1=FFFFFFFF
+ ac2=0000EEEE
 dispatchSystemCall: 70001134
 System Call 63, called from 7017DE01
  ac0=E0002250
- ac1=FFFFFFFF
- ac2=0000EEEE
  ac1=FFFFFFFF
  ac2=0000EEEE
 
@@ -454,6 +454,7 @@ SPAGE:
    page count (ignored) = 22
    start page = 0
 
+RETURNING AC1=00000002
 
 SPAGE:
    read only = 0
@@ -462,17 +463,20 @@ SPAGE:
    start page = 0
 
 RETURNING AC1=00000002
-RETURNING AC1=00000002
+dispatchSystemCall: 7000112C
 dispatchSystemCall: 7000112C
 System Call 60, called from 7017DCB5
  ac0=00000000
  ac1=00000003
  ac2=70001118
-dispatchSystemCall: 7000112C
 System Call 60, called from 7017DCB5
  ac0=00000000
  ac1=00000003
  ac2=70001118
+
+SPAGE:
+   read only = 0
+   memory destination = 70017C00
 
 SPAGE:
    read only = 0
@@ -480,10 +484,6 @@ SPAGE:
    page count (ignored) = 12
    start page = 0
 
-
-SPAGE:
-   read only = 0
-   memory destination = 70017C00
    page count (ignored) = 12
    start page = 0
 
@@ -510,20 +510,20 @@ SPAGE:
 SPAGE:
    read only = 0
    memory destination = 7012AC00
+RETURNING AC1=00000004
    page count (ignored) = 22
    start page = 0
 
 RETURNING AC1=00000004
-RETURNING AC1=00000004
-dispatchSystemCall: 70001116
-System Call 300, called from 7017DD9B
- ac0=00000000
- ac1=00000000
 dispatchSystemCall: 70001116
 System Call 300, called from 7017DD9B
  ac0=00000000
  ac1=00000000
  ac2=700010EE
+dispatchSystemCall: 70001116
+System Call 300, called from 7017DD9B
+ ac0=00000000
+ ac1=00000000
  ac2=700010EE
 
 OPEN (fs op):
@@ -644,8 +644,8 @@ dispatchSystemCall: 700011EA
 System Call 27, called from 7017DD03
  ac0=E00022BC
  ac1=00000000
- ac2=00000000
  ac1=00000000
+ ac2=00000000
  ac2=00000000
 
 ILKUP:
@@ -673,11 +673,11 @@ RETURNING AC1=00000000
 dispatchSystemCall: 70001148
 System Call 142, called from 70175F2E
  ac0=00000000
- ac1=00000000
- ac2=700010F8
 dispatchSystemCall: 70001148
 System Call 142, called from 70175F2E
  ac0=00000000
+ ac1=00000000
+ ac2=700010F8
  ac1=00000000
  ac2=700010F8
 
@@ -767,12 +767,12 @@ RETURNING AC1=00000000
 RETURNING AC1=00000000
 dispatchSystemCall: 70001208
 System Call 302, called from 7017DFEC
- ac0=00000000
 dispatchSystemCall: 70001208
 System Call 302, called from 7017DFEC
  ac0=00000000
  ac1=00000000
  ac2=7000118A
+ ac0=00000000
  ac1=00000000
  ac2=7000118A
 
@@ -1059,11 +1059,11 @@ RETURNING AC1=00000000
 RETURNING AC1=00000000
 dispatchSystemCall: 70001148
 System Call 142, called from 701760FF
-dispatchSystemCall: 70001148
-System Call 142, called from 701760FF
  ac0=00000000
  ac1=00000000
  ac2=700010F8
+dispatchSystemCall: 70001148
+System Call 142, called from 701760FF
  ac0=00000000
  ac1=00000000
  ac2=700010F8
@@ -1182,7 +1182,7 @@ frame  3 -- UPDATE_USER_DATA_FILE+0x77   [7017CA12]
 frame  2 -- IPC_TASK+0xB9A   [7017B1DD]
 frame  1 -- QUEST_SERVER+0x7D2   [70178BEB]
 frame  0 -- 7017EBD2     guessing: I.INIT+0x23
-94930437 instructions run
+101183710 instructions run
 RETURNING AC1=00000000
 RETURNING AC1=00000000
 dispatchSystemCall: 7000110C
@@ -1197,21 +1197,18 @@ System Call 500, called from 7017E1EE
  ac2=70017636
 
 TASK:
-   packet type = 11080000
-   priority = 0000
-   task ID = 0000
-   starting address = 7017E784
-   AC2 = 70165713
-   stack base = 70017650
-   stack size high = 0000
-   stack size low = 05AC
-   stack fault handler = FFFF
-   flags = 0000
 
 TASK:
    packet type = 11080000
-   task count = 0001
-
+   packet type = 11080000
+   priority = 0000
+   task ID = 0000
+   starting address = 7017E784
+   AC2 = 70165713
+   stack base = 70017650
+   stack size high = 0000
+   stack size low = 05AC
+   stack fault handler = FFFF
    priority = 0000
    task ID = 0000
    starting address = 7017E784
@@ -1223,12 +1220,15 @@ TASK:
    flags = 0000
    task count = 0001
 
+   flags = 0000
+   task count = 0001
+
 RETURNING AC1=7017E784
 RETURNING AC1=7017E784
-dispatchSystemCall: 700176B8
 dispatchSystemCall: 700176B8
 System Call 542, called from 7017EBAA
  ac0=70017652
+dispatchSystemCall: 700176B8
  ac1=7001770C
  ac2=70165713
 System Call 542, called from 7017EBAA
@@ -1255,12 +1255,12 @@ System Call 505, called from 7017E7BD
  ac2=70165713
 RETURNING AC1=7001770C
 RETURNING AC1=7001770C
-dispatchSystemCall: 700176C8
 dispatchSystemCall: 700176C8
 System Call 16, called from 7017DB52
  ac0=00000000
  ac1=00000000
  ac2=00000000
+dispatchSystemCall: 700176C8
 System Call 16, called from 7017DB52
  ac0=00000000
  ac1=00000000
@@ -1710,11 +1710,11 @@ WRITE EXTENSION
 RETURNING AC1=00000000
 RETURNING AC1=00000000
 dispatchSystemCall: 70002026
-dispatchSystemCall: 70002026
 System Call 303, called from 7017E2F4
  ac0=00000000
  ac1=00000000
  ac2=70001FEC
+dispatchSystemCall: 70002026
 System Call 303, called from 7017E2F4
  ac0=00000000
  ac1=00000000
@@ -1736,11 +1736,11 @@ WRITE EXTENSION
 RETURNING AC1=00000000
 RETURNING AC1=00000000
 dispatchSystemCall: 70002026
+dispatchSystemCall: 70002026
 System Call 303, called from 7017E2F4
  ac0=00000000
  ac1=00000000
  ac2=70001FEC
-dispatchSystemCall: 70002026
 System Call 303, called from 7017E2F4
  ac0=00000000
  ac1=00000000
@@ -1758,18 +1758,18 @@ WRITE EXTENSION
    options = 0800
    rel pos = 0000
    init pos = 000B
-    Southwest Vexharg                  
+    Sarell                             
 RETURNING AC1=00000000
 RETURNING AC1=00000000
 dispatchSystemCall: 70002026
 System Call 303, called from 7017E2F4
- ac0=00000000
- ac1=00000000
 dispatchSystemCall: 70002026
 System Call 303, called from 7017E2F4
  ac0=00000000
  ac1=00000000
  ac2=70001FEC
+ ac0=00000000
+ ac1=00000000
  ac2=70001FEC
 
 WRITE (fs wt):
@@ -1784,18 +1784,18 @@ WRITE EXTENSION
    options = 0800
    rel pos = 0000
    init pos = 000C
-    City of Rhomborg                   
+    City of Bunnoley                   
 RETURNING AC1=00000000
 RETURNING AC1=00000000
+dispatchSystemCall: 70002026
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
 dispatchSystemCall: 70002026
 System Call 303, called from 7017E2F4
  ac0=00000000
  ac1=00000000
  ac2=70001FEC
-dispatchSystemCall: 70002026
-System Call 303, called from 7017E2F4
- ac0=00000000
- ac1=00000000
  ac2=70001FEC
 
 WRITE (fs wt):
@@ -1918,11 +1918,11 @@ Water skin
 RETURNING AC1=00000000
 RETURNING AC1=00000000
 dispatchSystemCall: 70001D1C
+dispatchSystemCall: 70001D1C
 System Call 303, called from 7017E2F4
  ac0=00000000
  ac1=00000000
  ac2=70001CE2
-dispatchSystemCall: 70001D1C
 System Call 303, called from 7017E2F4
  ac0=00000000
  ac1=00000000
@@ -1945,11 +1945,11 @@ RETURNING AC1=00000000
 RETURNING AC1=00000000
 dispatchSystemCall: 70001D1C
 System Call 303, called from 7017E2F4
+dispatchSystemCall: 70001D1C
+System Call 303, called from 7017E2F4
  ac0=00000000
  ac1=00000000
  ac2=70001CE2
-dispatchSystemCall: 70001D1C
-System Call 303, called from 7017E2F4
  ac0=00000000
  ac1=00000000
  ac2=70001CE2
@@ -1971,11 +1971,11 @@ RETURNING AC1=00000000
 RETURNING AC1=00000000
 dispatchSystemCall: 70001D1C
 System Call 303, called from 7017E2F4
-dispatchSystemCall: 70001D1C
-System Call 303, called from 7017E2F4
  ac0=00000000
  ac1=00000000
  ac2=70001CE2
+dispatchSystemCall: 70001D1C
+System Call 303, called from 7017E2F4
  ac0=00000000
  ac1=00000000
  ac2=70001CE2
@@ -2512,20 +2512,20 @@ WRITE EXTENSION
    options = 0800
    rel pos = 0000
    init pos = 320D
-Wind from West - Rainy               
+Wind from East - Rainy               
 RETURNING AC1=00000000
 RETURNING AC1=00000000
 frame  1 -- 7017ED1C     guessing: DERR.TRP+0x0
 frame  0 -- 7017EA51     guessing: I.INIT+0x23
 Thread halt
-1095924 instructions run
+1092582 instructions run
 Thread halt
-1092666 instructions run
+1089324 instructions run
 frame  2 -- 7017FDED     guessing: .UKIL+0x8
 frame  1 -- C_A_LISTENER+0x2   [70165715]
+frame  2 -- 7017FDED     guessing: .UKIL+0x8
+frame  1 -- C_A_LISTENER+0x2   [70165715]
+frame  0 -- 7017E7C1     guessing: T.INIT+0x3B
 frame  0 -- 7017E7C1     guessing: T.INIT+0x3B
 68 instructions run
-frame  2 -- 7017FDED     guessing: .UKIL+0x8
-frame  1 -- C_A_LISTENER+0x2   [70165715]
-frame  0 -- 7017E7C1     guessing: T.INIT+0x3B
 68 instructions run

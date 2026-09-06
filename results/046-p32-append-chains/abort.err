@@ -1310,8 +1310,8 @@ IREC RETURN:
 *** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 547 (addr 0x7018024F)
 *** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 547 (addr 0x7018024F)
 *** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 547 (addr 0x7018024F)
-*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 547 (addr 0x7018024F)
-*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 548 (addr 0x70180250)
 *** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 548 (addr 0x70180250)
 *** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 548 (addr 0x70180250)
 *** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 548 (addr 0x70180250)
@@ -1562,10 +1562,10 @@ Unregistering process 100
 message to 101
 OPEN Channel 1, path :QUEST_SERVER.PR modified: 0
 OPEN Channel 2, path :SHARED_DATA_FILE modified: 1
+ISR RECEIVED MESSAGE
 OPEN Channel 3, path :WORLD_DATA_FILE modified: 1
 OPEN Channel 4, path :CASTLE_DATA_FILE modified: 1
 OPEN Channel 5, path :USER_DATA_FILE modified: 1
-ISR RECEIVED MESSAGE
 IRExec: first execution of block 70176103
 IRExec: first execution of block 70176104
 IRExec: first execution of block 70176107
@@ -1648,8 +1648,8 @@ IRExec: first execution of block 7016E1CB
 IRExec: first execution of block 7016E16B
 IRExec: first execution of block 7016E191
 IRExec: first execution of block 7016E194
-IRExec: first execution of block 7016E19B
 IRExec: first execution of block 7016E19E
+IRExec: first execution of block 7016E19B
 IRExec: first execution of block 7016E1D0
 IRExec: first execution of block 701697A1
 IRExec: first execution of block 701697A9
@@ -1668,22 +1668,18 @@ IRExec: first execution of block 701697DA
 IRExec: first execution of block 70169800
 IRExec: first execution of block 70169803
 IRExec: first execution of block 7016980C
+IRExec: first execution of block 7016981B
 IRExec: first execution of block 7016981C
 IRExec: first execution of block 7016982A
 IRExec: first execution of block 7016982B
+IRExec: first execution of block 70169830
 IRExec: first execution of block 7016982F
 IRExec: first execution of block 70169832
 IRExec: first execution of block 70169842
 IRExec: first execution of block 70169843
-IRExec: first execution of block 70169851
 IRExec: first execution of block 70169852
 IRExec: first execution of block 70169865
 IRExec: first execution of block 70169870
-IRExec: first execution of block 70169878
-IRExec: first execution of block 7016981B
-IRExec: first execution of block 70169830
-IRExec: first execution of block 70169864
-IRExec: first execution of block 7016986F
 IRExec: first execution of block 70169877
 IRExec: first execution of block 7016987A
 IRExec: first execution of block 7016988C
@@ -1700,15 +1696,16 @@ IRExec: first execution of block 701698DA
 IRExec: first execution of block 701698E0
 IRExec: first execution of block 701698E6
 IRExec: first execution of block 701698F1
-IRExec: first execution of block 701698FA
-IRExec: first execution of block 701698DB
-IRExec: first execution of block 70169933
-IRExec: first execution of block 701698A8
 IRExec: first execution of block 701698FB
 IRExec: first execution of block 70169901
 IRExec: first execution of block 7016990D
 IRExec: first execution of block 70169916
 IRExec: first execution of block 70169922
+IRExec: first execution of block 701698DB
+IRExec: first execution of block 70169933
+IRExec: first execution of block 701698A8
+IRExec: first execution of block 70169851
+IRExec: first execution of block 70169878
 IRExec: first execution of block 701697DB
 IRExec: first execution of block 70169939
 IRExec: first execution of block 7016E1D6
@@ -1733,12 +1730,12 @@ IRExec: first execution of block 7016B552
 IRExec: first execution of block 7016B55C
 IRExec: first execution of block 7016B569
 IRExec: first execution of block 7016B56C
+IRExec: first execution of block 70165713
+IRExec: first execution of block 70165715
 IRExec: first execution of block 7016B57A
 IRExec: first execution of block 7016B581
 IRExec: first execution of block 7016B592
 IRExec: first execution of string statement assign_varying in block 7016B592 stmt 0
-IRExec: first execution of block 70165713
-IRExec: first execution of block 70165715
 IRExec: first execution of block 7016B5A6
 IRExec: first execution of block 7016BCA0
 IRExec: first execution of block 7016DE91
@@ -1778,17 +1775,17 @@ IRExec: first execution of block 70166B68
 
 ================ WORLD ABORT ================
 TERMINAL-ABORT at 7016871D, verified on both engines (top stack wides: 70166B8A 70001B8A — for DERR.TRP: number, faulting pc)
-pc=7016871D ac0=00003ED2 ac1=00003F97 ac2=7012AC03 ac3=70001FE4 wsp=70001FE4 wfp=70001FE4
+pc=7016871D ac0=00003ED2 ac1=00003ED0 ac2=7012AC03 ac3=70001FE4 wsp=70001FE4 wfp=70001FE4
 Data write-back SUPPRESSED (state presumed corrupt).
 =============================================
 Exception: INTWT interrupted
-Unregistering process 102
+Unregistering process 101
 OPEN Channel 1, path :QUEST.PR modified: 0
 OPEN Channel 2, path :SHARED_DATA_FILE modified: 1
 OPEN Channel 3, path :WORLD_DATA_FILE modified: 1
 OPEN Channel 4, path :CASTLE_DATA_FILE modified: 1
 Exception: INTWT interrupted
-Unregistering process 101
+Unregistering process 102
 OPEN Channel 1, path :QUEST.PR modified: 0
 OPEN Channel 2, path :SHARED_DATA_FILE modified: 1
 OPEN Channel 3, path :WORLD_DATA_FILE modified: 1
