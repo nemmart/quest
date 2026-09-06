@@ -3,6 +3,23 @@
 
 # Where things stand
 
+## ★ P30 IMPLEMENTED ON BRANCH — the C++ string library, shipped DARK: hw/strings/EagleString (pieces as spans; copy/assign/compare/block_move mirroring WCMV/WCMP/WBLM/WSTB; §3 residues), the Mapper ARENA FORM (codec 0x75/0xEA/0xF5; 19-row static map, clone→master only, clone_location refuses), ClaimDelta; self-test 18,370 cases GREEN + teeth build RED; task 043 queued (Sep 6 2026; awaiting review + integration)
+
+Branch p30-string-library (based on main 00f641c, P28 merged). Plan gate
+rulings (user, Sep 6): operations take `site` (G-3 is the instruction's
+segment check); `compare()` ≡ `residues_after_compare()` (§3 "pure" is
+copy/blm only); codec rows with the I3 static_assert, dark while unbound;
+gate = the 038/039 pair (k1fo book K=1 + play-st stock) vs 042; mirror,
+not hoist — EagleSpecial.cpp untouched. Emulator behaviour unchanged: the
+only live-path diff is `Mapper::decode` gaining three cases (an arena
+value mismatches on "no mapped row" instead of "unlisted form"). Arena
+segment is [0x75000000, 0x75800000) so the byte form is one prefix.
+Local smoke k1fo: 0 div, clean, pairs 329,763. Records:
+docs/Project30/{REPORT,REPORT_worklog}.md. P31 Phase B can call the
+library once this merges (`hw/strings/EagleString.hpp`); P33 gets
+`configure_arena / arena_bind / arena_set_length / arena_unmap_frame` and
+`ClaimDelta`. No EmulatorDivergences.md addition (nothing new read).
+
 ## ★ P28 IMPLEMENTED ON BRANCH — `rt_call`: 987/987 runtime call sites decorated (ir 4); embeds 6,258 → 2,322 (book), 8,137 → 4,201 (stock); LNDO + LDSP pair + 67 Nova loads lowered (Sep 5 2026; local K=1 gates 9/9 green; battery 042 15/15 GREEN DONE — 041 was 15/15 legs green with two verdict-line bugs; awaiting review + integration)
 
 Branch p28-rt-call (based on main 9972b85, P27 merged). Plan gate:
