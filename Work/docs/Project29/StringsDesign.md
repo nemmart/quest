@@ -140,7 +140,8 @@ address translation for clone values in the arena segment, driven by a
 
     row = (arena_addr, length, wfp, master_addr)      ; master_addr == 0 ⇒ unmapped
 
-Rows have three states and four events (RULED, Sep 6):
+Rows have TWO states — mapped or not — and the map changes at exactly two
+events (RULED, Sep 6):
 
 1. **Block entry** (`p@b = ""`): the row is (re)bound — the master's
    first-WMSP hook in that block records the temp's stack address as
@@ -148,28 +149,35 @@ Rows have three states and four events (RULED, Sep 6):
    block's first WMSP pc; the pushed temp's address is the last claim's
    `wsp_before+2`, recorded by the same hook when the group's last WMSP
    fires, or computed from the census claim sizes — plan-gate choice.)
-2. **Append**: `length` updated; the arena image extended in place
-   (static capacity from the census bounds; overflow = loud fault).
-3. **STASP** in the owning frame: the frame's rows become RELEASED —
-   they stop counting toward the wsp equality and drop out of the
-   memory oracle — but they REMAIN TRANSLATABLE with their final
-   length. Reason: after the release the compiler reloads only ac1;
-   ac0/ac2/ac3 may carry the last piece's pointers (master: stack;
-   clone: arena) through many blocks as dead registers, and those must
-   keep comparing equal through the row. (19 STASP hooks.)
-4. **Frame exit** — WRTN of the frame, or the ON system popping it
-   (hook at the dispatcher's frame-restore point, ERROR_LIFT_SCOPE.md):
-   every row with that `wfp` is UNMAPPED (`master_addr = 0`). The arena
-   memory is never freed (static per block).
+   Appends update `length`; the arena image extends in place (static
+   capacity from the census bounds; overflow = loud fault).
+2. **Frame exit** — WRTN of the frame, or the ON system popping it (hook
+   at the dispatcher's frame-restore point, ERROR_LIFT_SCOPE.md): every
+   row with that `wfp` is UNMAPPED (`master_addr = 0`). The arena memory
+   is never freed (static per block).
+
+The STASP does NOT touch the map. Rows stay translatable until frame
+exit because, after the release, the compiler reloads only ac1 and
+ac0/ac2/ac3 may carry the last piece's pointers (master: stack; clone:
+arena) through many blocks as dead registers — those must keep
+comparing equal. On the clone the STASP lowers to a `release` statement
+whose only semantics is `assert(wsp == ac1)` (the clone's wsp never
+moved; this proves it is where the master's is about to be).
+
+What the STASP does affect is kept OUTSIDE the map:
+- **wsp equality**: a per-frame accumulator Δ — `+2·ac` at each WMSP
+  hook, `−(old−new)` at each STASP hook, zeroed at frame exit;
+  `master_wsp − clone_wsp == Δ(frame)` exactly.
+- **memory oracle**: a mapped row is compared (arena bytes[0..length)
+  vs master range) only while its master range lies inside the master's
+  live stack (`master_addr < master_wsp`) — a predicate at oracle time,
+  not a stored state.
 
 compare_pair: a clone AC in the arena segment translates through the
-(mapped or released) row that contains it; a hit on an unmapped row, or
-no row, is a MISMATCH. Everything else compares raw. wsp:
-`master_wsp − clone_wsp` must equal exactly the sum of the claim
-totals of the frame's MAPPED (not released) rows. Never translate
-master→clone in the compare path; the reverse direction serves only the
-memory oracle (mapped rows: arena bytes[0..length) vs master range) and
-diagnostics.
+mapped row that contains it; a hit on an unmapped row, or no row, is a
+MISMATCH. Everything else compares raw. Never translate master→clone in
+the compare path; the reverse direction serves only the memory oracle
+and diagnostics.
 
 Known edge (recorded, not designed around): a loop re-executing a pN
 block rebinds its row while a dead register may still hold the previous
@@ -179,7 +187,8 @@ drop at that entry — the existing escape hatch — not a change to the
 rules.
 
 Static input: the arena layout artifact (block → arena_addr, capacity)
-and the hook table (block → first-WMSP pc, STASP pcs), both with
+and the hook table (block → first-WMSP pc; the 57 WMSP and 19 STASP pcs
+for the Δ accumulator), both with
 provenance headers, in the pushmap tradition.
 
 ## 7. Idioms the emitter recognises (from Census §3) — RULED as the target set
