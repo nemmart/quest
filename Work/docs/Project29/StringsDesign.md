@@ -367,18 +367,29 @@ row = (arena_addr, length, wfp, master_addr)     ; master_addr == 0 ⇒ unmapped
 ### 6.3 Events — the map has TWO states and changes at TWO events
 
 1. **Block entry** (`p@b = ""`): the row is (re)bound. The master's
-   FIRST-WMSP hook in that block (19 hooks — the block's first WMSP pc)
-   records `master_addr` = the address the master will push for this
-   group (the LAST claim's `wsp_before+2`: recorded by the same hook
-   when the group's last WMSP fires, or computed from `wsp_before` and
-   the census claim sizes — plan-gate choice) and `wfp` = the master's
-   wfp; `length = 0`. Appends update `length` and extend the arena image
-   in place.
-2. **Frame exit** — the master's WRTN of that frame (an embedded
-   instruction the emulator runs; hook keyed on `wfp`), or the ON system
-   popping it (hook at the dispatcher's frame-restore point,
-   ERROR_LIFT_SCOPE.md): every row with that `wfp` is UNMAPPED
-   (`master_addr = 0`). Arena memory is never freed.
+   first-WMSP hook in that block binds `master_addr = wsp_before + 2`
+   (the address `LDASP r; WADI 2,r` yields) and `wfp` = the MASTER's
+   wfp (rows are keyed on the master's frame — in book mode the clone's
+   wfp is an area address; P33-A ruling); every later WMSP of the block
+   REBINDS to its own `wsp_before + 2`, so by the time the clone runs
+   the block the row holds the address the group actually pushes (the
+   last claim's — verified 19/19; no rendezvous exists between a group's
+   claims, so intermediate binds are unobservable). Nothing is computed
+   from census sizes at runtime. The master queues bind/rebind/unmap
+   events per ordinal; the clone drains them into its own mapper at the
+   top of its next batch, before any statement of the block runs.
+   Appends update `length` and extend the arena image in place.
+2. **Frame exit** — WRTN (hook keyed on `pre_wfp`, unmapping every row
+   with `wfp ≥ pre_wfp` — the ≥ rule also covers the emulated I.GOTO's
+   single WRTN after `STAFP 2`, and the R?SIGNAL/?ERROR frame walk),
+   and the ON-system pop (the I.GOTO landing stub's `STASP 0` at
+   7017EC9E restoring the target's wsp: unmap and frame-exit every row
+   with `wfp ≥ machine.wfp`). Every row so hit is UNMAPPED
+   (`master_addr = 0`); Δ for those frames asserts 0 and is erased.
+   Arena memory is never freed. (P33-A survey of frame-restoring paths:
+   WRTN, I.GOTO, R?SIGNAL — DEF?ON is ordinary verified L2 since Aug 12,
+   NOT terminal; T.INIT/I.SFALT/O.ON/WPOPB sites dismissed with
+   reasons.)
 
 **The STASP does NOT touch the map.** Rows stay translatable until frame
 exit because, after the release, the compiler reloads only ac1 —
@@ -390,10 +401,17 @@ proves it is exactly where the master's is about to be.
 
 What the STASP DOES affect is kept OUTSIDE the map:
 
-- **wsp equality**: a per-frame accumulator Δ — `+2·ac` at each WMSP
-  hook (57), `−(old−new)` at each STASP hook (19), zeroed at frame exit;
-  `master_wsp − clone_wsp == Δ(frame)` exactly. Any other cause of
-  divergence breaks the equality.
+- **wsp equality** (refined at the P33-A gate, Sep 6): EACH engine keeps
+  its own per-frame accumulator Δ on its own wfp — `+2·ac` at each WMSP,
+  `−(old−new)` at each STASP, zeroed at frame exit — and the compare is
+  `master_wsp − Δ_master == clone_wsp − Δ_clone` ("claim-free wsps
+  agree"). Today (both engines claim) it is identical to the plain wsp
+  check; after P33-B (only the master claims) it is `master_wsp −
+  clone_wsp == Δ_master`; a group P33-B refuses (both claim again) stays
+  exact instead of being silently accepted. Any other cause of
+  divergence breaks the equality. The hooks live IN the WMSP/STASP/WRTN
+  instruction arms (null-gated, the zero_claim precedent) so the clone's
+  embedded WMSPs inside IR blocks are seen too.
 - **memory oracle** (OPTIONAL, K-gated — plan gate): a mapped row is
   compared (arena bytes `[0, length)` vs its master range) only while
   its master range lies inside the master's live stack
@@ -533,8 +551,9 @@ dereference by ruling.
   oracle is worth landing early.
 - P32: the 28 unresolved destinations (3 TERRITORY_MAP by-reference
   array writes need the callers read); tail-split count expressions.
-- P33: last-claim address recorded vs computed (§6.3); the ON-pop hook's
-  exact pc; memory-oracle gating; the LOCK_FILE constants.
+- P33: memory-oracle gating; the LOCK_FILE constants; final arena
+  capacities per row (P33-A ships provisional 4 KiB columns in
+  quest.strhooks; P33-B replaces them from lowering).
 
 ---
 
