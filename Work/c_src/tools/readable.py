@@ -341,10 +341,18 @@ def load_block_succs(path):
             if m:
                 cur = int(m.group(1), 16)
                 continue
-            m = re.match(r"^(?:c [0-9A-Fa-f]{8} )?n((?: [0-9A-Fa-f]{8})+)$", line)
+            m = re.match(r"^(?:[cj] [0-9A-Fa-f]{8} )?n((?: [0-9A-Fa-f]{8})+)$", line)
             if m and cur is not None:
                 succs[cur] = [int(x, 16) for x in m.group(1).split()]
     return succs
+
+
+# runtime entry points that never return to the instruction after the LJSR
+# (PL/I GOTO out of a block / ON-unit, STOP): the blocks file still records a
+# fall-through edge for them, which must not be followed (it walks into the
+# enclosing routine's body).  Symbols from Disassembled/quest.symbols.
+NONRETURNING_LJSR = {"I.GOTO", "I.STOP"}
+SYMS_FOR_EDGES = {}
 
 
 def block_succs(block, file_succs):
@@ -353,6 +361,12 @@ def block_succs(block, file_succs):
     if last is None:
         return file_succs.get(block.pc, [])
     k = last[0]
+    if k == "instr":
+        m = re.match(r"LJSR \[0x([0-9A-Fa-f]+)\]", last[2])
+        if m and SYMS_FOR_EDGES.get(int(m.group(1), 16)) in NONRETURNING_LJSR:
+            return []
+        if last[2].startswith("DERR"):
+            return []
     if k == "goto":
         return list(last[1])
     if k == "rt_call":
@@ -756,6 +770,11 @@ def classify_addr(idx, width, ctx):
                           (b[0] == "regin" and b[1] == "ac3" and getattr(ctx, "fp_in", False))):
             dv = signed(num_val(d))
             return ("local", dv, dv + words)
+    # wp(i, K) with K (segment-wrapped) in the data range: a static table
+    # indexed by a register/expression — lands in the statics
+    sa = static_array(idx, ctx)
+    if sa is not None:
+        return ("static", sa[0], sa[0] + words)
     # R[ac3 + k] / M32[ac3 + k]: the frame word k itself (arg slots, images)
     if ctx.sw.frame and idx[0] == "chain" and len(idx[2]) == 1 and idx[2][0][0] == "+" and is_num(idx[2][0][1]):
         b = unparen(idx[1])
@@ -793,6 +812,21 @@ def classify_addr(idx, width, ctx):
         if r is not None:
             return ("heap", r.base, r.stride, r.K, r.K + words, repr(r.idx), r.elem_local)
     return None
+
+
+def static_array(idx, ctx):
+    """wp(X, K) where (K & 0x0FFFFFFF) | seg is a data address and X is not a
+    frame/record base -> (addr, X); the emitter's fold of `LEF/XLEF base+index`."""
+    idx = unparen(idx)
+    if not ctx.sw.static or idx[0] != "call" or idx[1] != "wp":
+        return None
+    b, d = idx[2]
+    if not is_num(d):
+        return None
+    a = (num_val(d) & 0x0FFFFFFF) | 0x70000000
+    if not (DATA_LO <= a < DATA_HI) or -65536 <= signed(num_val(d)) <= 65535:
+        return None
+    return (a, b)
 
 
 def byte_local(idx, ctx):
@@ -1362,9 +1396,16 @@ class Routine:
     # -- fp state: is ac3 the frame pointer at each statement? ----------------
     def analyse_fp(self):
         self.env_in = {}
-        for _ in range(4):
+        env_out = {}
+        dirty = set(self.pcs)
+        rounds = 0
+        while dirty and rounds < 12:
+            rounds += 1
             changed = False
+            todo, dirty = dirty, set()
             for b in self.blocks:
+                if b.pc not in todo:
+                    continue
                 ctx = self.ctx_for(b)
                 at = []
                 for st in b.stmts:
@@ -1372,19 +1413,31 @@ class Routine:
                     env_after(st, ctx)
                 self.fp_at[b.pc] = at
                 self.fp_out[b.pc] = ctx.fp
+                env_out[b.pc] = dict(ctx.env)
                 for s in self.succs[b.pc]:
                     if s in self.fp_in and not ctx.fp and self.fp_in[s]:
                         self.fp_in[s] = False
                         changed = True
-                    # a block with exactly one predecessor starts with the
-                    # predecessor's exit values (only those closed over memory,
-                    # constants and fp — no other entry-register markers)
-                    if self.world.sw.envinherit and s in self.fp_in and self.preds.get(s) == [b.pc] \
-                            and b.stmts and b.stmts[-1][0] == "goto" and self.fp_in.get(s) == self.fp_in.get(b.pc):
-                        inh = {r: v for r, v in ctx.env.items() if r in ("ac0", "ac1", "ac2")}
+                        dirty.add(s)
+                    # entry values: what EVERY goto-predecessor leaves in the
+                    # register (identical closed text, markers included);
+                    # single-pred chains and joins of a common ancestor qualify
+                    if self.world.sw.envinherit and s in self.fp_in:
+                        ps = self.preds.get(s, [])
+                        if not ps or any(p not in env_out for p in ps):
+                            continue
+                        ok = all(self.world.blocks[p].stmts and self.world.blocks[p].stmts[-1][0] == "goto"
+                                 and self.fp_in.get(p) == self.fp_in.get(s) for p in ps)
+                        inh = {}
+                        if ok:
+                            for r in ("ac0", "ac1", "ac2"):
+                                vals = [env_out[p].get(r) for p in ps]
+                                if all(v is not None for v in vals) and len({repr(v) for v in vals}) == 1:
+                                    inh[r] = vals[0]
                         if inh != self.env_in.get(s, {}):
                             self.env_in[s] = inh
                             changed = True
+                            dirty.add(s)
             if not changed:
                 break
         self.report.counts["env.inherited_blocks"] = sum(1 for v in self.env_in.values() if v)
@@ -1697,11 +1750,52 @@ def local_dead_after(rt, block, idx, lo, hi, stmts_by_pc, folded_arg=None):
                 changed = True
     def live(pc, _seen=None):
         return live_in.get(pc, True)
+
+    def culprit(start):
+        """The first reading statement reachable from start (for the census)."""
+        seen, stack = set(), [start]
+        while stack:
+            pc = stack.pop()
+            if pc in seen:
+                continue
+            seen.add(pc)
+            if fa.get(pc) == "read":
+                stmts, fpat = stmts_by_pc[pc]
+                ctx = rt.ctx_for(rt.world.blocks[pc])
+                for i, st in enumerate(stmts):
+                    if range_access(st, lo, hi, fpat[i] if i < len(fpat) else False, sw, None, ctx):
+                        return reader_kind(st)
+                    env_after(st, ctx)
+                return "?"
+            if fa.get(pc) == "write":
+                continue
+            stack.extend(rt.succs.get(pc, []))
+        return "unknown exit"
     ss = rt.succs.get(block.pc, [])
     for s in ss:
         if live(s, frozenset()):
-            return False, "live in successor %08X" % s
+            return False, "live after: %s (successor %08X)" % (culprit(s), s)
     return True, None
+
+
+def reader_kind(st):
+    """Shape of a statement that keeps a frame range live (census categories)."""
+    if st[0] == "instr":
+        return "instruction line " + instr_mnemonic(st[2])
+    if st[0] == "assign" and st[1][0] == "mem":
+        # a store that only partly covers the range = frame slot reused
+        return "partial overwrite (frame slot reused: %s store)" % st[1][1]
+    if st[0] in ("sassign", "cmp", "words"):
+        return "string operation reading it"
+    if st[0] == "rt_call":
+        return "passed to another rt_call"
+    for e in stmt_exprs(st):
+        for x in walk(e):
+            if x[0] == "mem" and x[1] == "R":
+                return "read through an indirect pointer"
+            if x[0] == "mem" and unparen(x[2])[0] in ("reg", "regin"):
+                return "read through a register pointer"
+    return "read (%s)" % st[0]
 
 
 # ----------------------------------------------------------------------------
@@ -1758,6 +1852,33 @@ class Renderer:
             return "arg_%d?" % n
         self.rep.hit("frame.odd_offset", "%s d=%d" % (e["name"], d))
         return "fpword_%d" % d
+
+    def frame_array(self, K):
+        """ac3 repurposed as fp + E (E non-constant): wp(ac3, K) is the frame
+        word K+c indexed by E -> local_<K+c>[E]."""
+        ctx = self.ctx
+        v = ctx.env.get("ac3")
+        if v is None or not ctx.fp_in:
+            return None
+        terms = flat_terms(v)
+        fp_terms = [t for sg, t in terms if sg == 1 and unparen(t)[0] == "regin" and unparen(t)[1] == "ac3"]
+        if len(fp_terms) != 1:
+            return None
+        c, idx = 0, []
+        for sg, t in terms:
+            t = unparen(t)
+            if t is fp_terms[0] or (t[0] == "regin" and t[1] == "ac3"):
+                continue
+            if is_num(t):
+                c += sg * signed(num_val(t))
+            elif sg == 1:
+                idx.append(t)
+            else:
+                return None
+        if not idx:
+            return None
+        self.rep.hit("frame.array")
+        return "%s[%s]" % (self.frame_name(K + c), " + ".join(self.expr(t) for t in idx))
 
     def arg_of_R(self, idx):
         """R[ac3 + -k] -> arg N (by-reference pointer) or None."""
@@ -1820,9 +1941,15 @@ class Renderer:
         if self.sw.frame:
             if i[0] == "call" and i[1] == "wp":
                 b, d = i[2]
+                bb = unparen(b)
+                if bb[0] == "regin" and bb[1] == "ac3" and is_num(d) and ctx.fp_in:
+                    return "%s.%s" % (self.frame_name(signed(num_val(d)), width), suf)
                 if unparen(b) == ("reg", "ac3") and is_num(d):
                     if ctx.fp:
                         return "%s.%s" % (self.frame_name(signed(num_val(d)), width), suf)
+                    fa = self.frame_array(signed(num_val(d)))
+                    if fa is not None:
+                        return fa + "." + suf
                     self.rep.hit("frame.ac3_not_fp", "%08X wp(ac3, %d)" % (ctx.block.pc, signed(num_val(d))))
             if width == "R" or (i[0] == "mem" and i[1] == "R"):
                 pass
@@ -1851,6 +1978,14 @@ class Renderer:
                     return "%s.arg_%d.slot" % (si[0]["name"], si[1])
                 self.rep.hit("callargs.slot_unknown", "%08X %08X" % (ctx.block.pc, a))
                 return "slot_%08X" % a
+        sa = static_array(i, ctx)
+        if sa is not None:
+            a = sa[0]
+            c = self.w.static_census[a]
+            c["routines"].add(ctx.entry["pc"])
+            (c["reads"] if kind == "read" else c["writes"])["%s[i]" % width] += 1
+            self.rep.hit("static.array")
+            return "%s[%s].%s" % (self.w.static_name(a), self.expr(sa[1]), suf)
         # record
         if self.sw.record:
             r = decompose(idx, ctx)
@@ -1867,7 +2002,8 @@ class Renderer:
         i = unparen(n)
         if i[0] == "call" and i[1] == "wp" and self.sw.frame:
             b, d = i[2]
-            if unparen(b) == ("reg", "ac3") and is_num(d) and ctx.fp:
+            bb = unparen(b)
+            if is_num(d) and ((bb == ("reg", "ac3") and ctx.fp) or (bb[0] == "regin" and bb[1] == "ac3" and ctx.fp_in)):
                 return "&" + self.frame_name(signed(num_val(d)))
         if i[0] == "mem" and i[1] == "R" and self.sw.frame and ctx.fp:
             d = self.arg_of_R(i[2])
@@ -2069,11 +2205,13 @@ def render_routine(world, entry_pc, header_lines):
                     break
                 if not found:
                     rep.hit("literal.unproven", "%08X %s: %s" % (b.pc, '"%s"' % st[2][2][:30], reason))
+                    rep.hit("literal.unproven_kind: " + reason.split(" (")[0])
                     continue
                 cpc, j, arg = found
                 dead, why = local_dead_after(rt, world.blocks[cpc], j, lo, hi, fp_tables, folded_arg=arg)
                 if not dead:
-                    rep.hit("literal.unproven", "%08X %s: live after the call (%s)" % (b.pc, '"%s"' % st[2][2][:30], why))
+                    rep.hit("literal.unproven", "%08X %s: %s" % (b.pc, '"%s"' % st[2][2][:30], why))
+                    rep.hit("literal.unproven_kind: " + why.split(" (")[0])
                     continue
                 # fold: replace the argument by the literal, drop the assignment
                 s2 = fp_tables[cpc][0]
@@ -2248,6 +2386,7 @@ def main():
     entries = load_addrbook(args.addrbook)
     syms = load_symbols(args.symbols)
     file_succs = load_block_succs(args.blocks)
+    SYMS_FOR_EDGES.update(syms)
     world = World(blocks, entries, syms, file_succs, sw)
     book_sha = sha256(args.book)
     hdr = ["; readable.py (Project 34 prototype) — rendering, not an artifact anything executes",
