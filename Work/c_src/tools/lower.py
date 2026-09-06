@@ -1053,7 +1053,8 @@ def fold_condition(guard, guard_block, f, dis, succs, dis_pcs, dis_index):
 # site, are pure loads/moves (or the absorbed length-word store), and
 # nothing but an LDAFP sits between the first folded pc and the site.
 STR_FOLDABLE = ("NLDAI", "WLDAI", "WMOV", "XNLDA", "XWLDA", "LNLDA", "LWLDA", "XLEF", "LLEF",
-                "XLEFB", "LLEFB", "XLDB", "LLDB", "WLDB", "ZEX", "SEX", "XNSTA", "LNSTA")
+                "XLEFB", "LLEFB", "XLDB", "LLDB", "WLDB", "ZEX", "SEX", "XNSTA", "LNSTA",
+                "LDASP")   # P33-B: the `LDASP r; WADI 2,r` pair folds into `acr = t@b.k` (site = the WADI)
 
 def parse_strings_sites(path, dis_path, blocks_path):
     """-> {site pc: {"op","block","idiom","verdict","fold":[pcs],"ir":text}}"""
@@ -1061,7 +1062,7 @@ def parse_strings_sites(path, dis_path, blocks_path):
     for line in open(path, encoding="utf-8"):
         line = line.rstrip("\r\n")
         if line.startswith("#"):
-            m = re.match(r"# (dis|blocks|mem) sha256=([0-9a-f]{64})", line)
+            m = re.match(r"# (dis|blocks|mem|strhooks|arena) sha256=([0-9a-f]{64})", line)
             if m:
                 shas[m.group(1)] = m.group(2)
             continue
@@ -1126,6 +1127,8 @@ def main():
     ap.add_argument("--rt-census", help="write the per-site rt_call ledger (emitted / refused + reason)")
     ap.add_argument("--strings-sites", help="P31 artifact: docs/Project31/p31.tsv (string_sites.py --p31-tsv)")
     ap.add_argument("--strings-sites32", help="P32 artifact: docs/Project32/p32.tsv (string_sites.py --p32-tsv); slices 4..6")
+    ap.add_argument("--strings-sites33", help="P33-B artifact: docs/Project33/p33.tsv (string_sites.py --p33-tsv); slice 7 (the arena twins)")
+    ap.add_argument("--arena", help="P33-B: quest.arena (the twins the ir 6 file names; provenance line)")
     ap.add_argument("--strings-slice", type=int, default=0,
                     help="P31 (ir 5): 0 = no string statements (ir 5 header only); 1 = literal assignments; "
                          "2 = + the other located assignments; 3 = + cmp and words")
@@ -1177,7 +1180,19 @@ def main():
                 a.str_rows[pc32] = row32
         elif a.strings_slice > 3:
             die("--strings-slice > 3 needs --strings-sites32")
-    out = ["ir 5",
+        if a.strings_sites33:
+            if not a.arena:
+                die("--strings-sites33 needs --arena (the ir 6 file names its twins)")
+            rows33, shas33 = parse_strings_sites(a.strings_sites33, a.dis, a.blocks)
+            if shas33.get("arena") != sha256(a.arena):
+                die("--strings-sites33 provenance: arena sha256 differs from %s" % a.arena)
+            for pc33, row33 in rows33.items():
+                if pc33 in a.str_rows and a.str_rows[pc33]["verdict"] == "EMIT":
+                    die("strings: site %08X is EMIT in both artifacts" % pc33)
+                a.str_rows[pc33] = row33
+        elif a.strings_slice > 6:
+            die("--strings-slice > 6 needs --strings-sites33")
+    out = ["ir 6",
            "mode %s" % ("book" if a.book else "stock"),
            "source  %s sha256=%s" % (a.dis, sha256(a.dis)),
            "blocks  %s sha256=%s" % (a.blocks, sha256(a.blocks)),
@@ -1187,6 +1202,9 @@ def main():
         out.append("strings %s sha256=%s" % (a.strings_sites, sha256(a.strings_sites)))
         if a.strings_sites32 and a.strings_slice > 3:
             out.append("strings32 %s sha256=%s" % (a.strings_sites32, sha256(a.strings_sites32)))
+        if a.strings_sites33 and a.strings_slice > 6:
+            out.append("strings33 %s sha256=%s" % (a.strings_sites33, sha256(a.strings_sites33)))
+            out.append("arena %s sha256=%s" % (a.arena, sha256(a.arena)))
     out.append("")
     census = {"expr": 0, "embed": 0, "argpush": 0, "call": 0, "ret": 0,
               "goto": 0, "assert": 0, "rt_call": 0, "last": None,
@@ -1273,6 +1291,9 @@ def main():
         print("  strings: emitted=%d refused=%d (slice %d; artifact EMIT rows %d)" % (
             len(emitted), len(refused), a.strings_slice,
             sum(1 for r in a.str_rows.values() if r["verdict"] == "EMIT")))
+        if a.strings_sites33:
+            print("  p33 twins: bases=%d claims=%d releases=%d (slice 7)" % (
+                census.get("p33_WADI", 0), census.get("p33_WMSP", 0), census.get("p33_STASP", 0)))
         if a.strings_census:
             with open(a.strings_census, "w", newline="\n") as f:
                 f.write("# P31 string ledger: site op emitted reason <TAB> ir  (lower.py --strings-slice %d)\n" % a.strings_slice)
@@ -1431,6 +1452,8 @@ def emit_block(start, blocks, succs, dis, dis_pcs, dis_index,
                                               ("  " + comment) if comment else ""))
                 census["strings"] += 1
                 census["str_sites"].append((pc, row["op"], True, "", ir))
+                if row["op"] in ("WADI", "WMSP", "STASP"):
+                    census["p33_" + row["op"]] = census.get("p33_" + row["op"], 0) + 1
                 census["last"] = "stmt"
                 handled = True
             elif pc in rt_push_pcs:

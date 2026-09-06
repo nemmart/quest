@@ -43,6 +43,7 @@
 #include "hw/QueueEntry.hpp"
 #include "hw/RTStubs.hpp"
 #include "hw/strings/StrHooks.hpp"
+#include "hw/strings/Arena.hpp"
 #include "os/ArrayPage.hpp"
 using namespace hw;
 using namespace hw::strings;
@@ -62,7 +63,9 @@ static constexpr uint32_t STACK = 0x70000000u;   // 8 pages: 0x70000000..0x70001
 static constexpr uint32_t BLK_A = 0x70100010u, A1 = 0x70100012u, A2 = 0x70100020u, A3 = 0x70100028u, AS = 0x70100030u;
 static constexpr uint32_t BLK_B = 0x70100040u, B1 = 0x70100042u, BS = 0x70100050u;
 static constexpr uint32_t ONPOP = 0x70100060u, UNWIND = 0x70100070u, PLAIN_WRTN = 0x70100080u;
-static constexpr uint32_t ARENA_A = 0x75000000u, ARENA_B = 0x75001000u;
+// P33-B: one twin per claim — A.1/A.2/A.3 and B.1 (quest.arena)
+static constexpr uint32_t ARENA_A1 = 0x75000000u, ARENA_A2 = 0x75001000u, ARENA_A3 = 0x75002000u, ARENA_B1 = 0x75003000u;
+static constexpr uint32_t ARENA_A = ARENA_A3, ARENA_B = ARENA_B1;   // the group results (p@b ≡ t@b.last)
 
 // opcodes (Decoder tables): WMSP yy = 111yy11001001001, STASP yy = 101yy11001011001, WRTN = 1000011110101001
 static uint16_t WMSP(int r)  { return static_cast<uint16_t>(0xE649u | (r << 11)); }
@@ -135,13 +138,20 @@ static void write_table(const char* path, const char* body) {
   fclose(f);
 }
 
+static const char* ARENA_FILE = "/tmp/strhooks_selftest.arena";
+static const char* ARENA_GOOD =
+  "temp 1 t@70100010.1 arena=75000000 cap=4096 bound=unbounded wmsp=70100012 routine=GROUP_A size=x\n"
+  "temp 2 t@70100010.2 arena=75001000 cap=4096 bound=unbounded wmsp=70100020 routine=GROUP_A size=y\n"
+  "temp 3 t@70100010.3 arena=75002000 cap=4096 bound=unbounded wmsp=70100028 routine=GROUP_A size=z\n"
+  "temp 4 t@70100040.1 arena=75003000 cap=4096 bound=unbounded wmsp=70100042 routine=GROUP_B size=w\n";
+
 static const char* GOOD =
-  "row 1 70100010 GROUP_A arena=75000000 cap=4096 first=70100012 last=70100028 nclaims=3\n"
+  "row 1 70100010 GROUP_A first=70100012 last=70100028 nclaims=3\n"
   "wmsp 70100012 row=1 n=1 size=x\n"
   "wmsp 70100020 row=1 n=2 size=y\n"
   "wmsp 70100028 row=1 n=3 size=z\n"
   "stasp 70100030 row=1\n"
-  "row 2 70100040 GROUP_B arena=75001000 cap=4096 first=70100042 last=70100042 nclaims=1\n"
+  "row 2 70100040 GROUP_B first=70100042 last=70100042 nclaims=1\n"
   "wmsp 70100042 row=2 n=1 size=w\n"
   "stasp 70100050 row=2\n"
   "onpop 70100060\n"
@@ -162,25 +172,41 @@ static int run() {
   Decoder::initialize();
   std::string err;
 
+  // ---- 0. the arena layout (P33-B) ------------------------------------------
+  write_table(ARENA_FILE, ARENA_GOOD);
+  expect(Arena::load_file(ARENA_FILE, &err), "arena.load", err.c_str());
+  expect(Arena::temps().size() == 4 && Arena::find(BLK_A, 3) && Arena::find(BLK_A, 3)->addr == ARENA_A3, "arena.lookup");
+  expect(Arena::by_wmsp(A2) && Arena::by_wmsp(A2)->claim == 2, "arena.by_wmsp");
+  {
+    std::string e2;
+    write_table(ARENA_FILE, "temp 1 t@70100010.1 arena=75000000 cap=4096 bound=unbounded wmsp=70100012 routine=A size=x\n"
+                            "temp 2 t@70100010.2 arena=75000800 cap=4096 bound=unbounded wmsp=70100020 routine=A size=y\n");
+    expect(!Arena::load_file(ARENA_FILE, &e2) && e2.find("overlaps") != std::string::npos, "arena.overlap refused", e2.c_str());
+    write_table(ARENA_FILE, "temp 1 t@70100010.2 arena=75000000 cap=4096 bound=unbounded wmsp=70100020 routine=A size=y\n");
+    expect(!Arena::load_file(ARENA_FILE, &e2) && e2.find("lacks claim 1") != std::string::npos, "arena.missing claim refused", e2.c_str());
+    write_table(ARENA_FILE, ARENA_GOOD);
+    expect(Arena::load_file(ARENA_FILE, &e2), "arena.reload", e2.c_str());
+  }
+
   // ---- 1. loader ----------------------------------------------------------
   expect(load(GOOD, &err), "load.good", err.c_str());
   expect(StrHooks::rows().size() == 2, "load.rows");
   expect(StrHooks::lookup(A2) && StrHooks::lookup(A2)->kind == HookKind::Wmsp && StrHooks::lookup(A2)->n == 2, "load.lookup");
   expect(StrHooks::onpop_pc() == ONPOP && StrHooks::is_unwind_wrtn(UNWIND) && !StrHooks::is_unwind_wrtn(PLAIN_WRTN), "load.onpop/unwind");
-  expect(!load("row 1 70100010 A arena=75000000 cap=1 first=70100012 last=70100012 nclaims=1\n"
+  expect(!load("row 1 70100010 A first=70100012 last=70100012 nclaims=1\n"
                "wmsp 70100012 row=1 n=1 size=x\nwmsp 70100012 row=1 n=1 size=x\nstasp 70100030 row=1\nonpop 70100060\n", &err)
          && err.find("duplicate") != std::string::npos, "load.duplicate pc", err.c_str());
-  expect(!load("row 1 70100010 A arena=75000000 cap=1 first=70100012 last=70100020 nclaims=2\n"
+  expect(!load("row 1 70100010 A first=70100012 last=70100020 nclaims=2\n"
                "wmsp 70100012 row=1 n=1 size=x\nwmsp 70100020 row=1 n=1 size=x\nstasp 70100030 row=1\nonpop 70100060\n", &err),
          "load.two first claims", err.c_str());
-  expect(!load("row 1 70100010 A arena=75000000 cap=1 first=70100012 last=70100012 nclaims=1\n"
+  expect(!load("row 1 70100010 A first=70100012 last=70100012 nclaims=1\n"
                "wmsp 70100012 row=1 n=1 size=x\nonpop 70100060\n", &err) && err.find("no STASP") != std::string::npos,
          "load.no stasp", err.c_str());
-  expect(!load("row 1 70100010 A arena=75000000 cap=1 first=70100012 last=70100012 nclaims=1\n"
+  expect(!load("row 1 70100010 A first=70100012 last=70100012 nclaims=1\n"
                "wmsp 70100012 row=1 n=1 size=x\nstasp 70100030 row=1\n", &err) && err.find("onpop") != std::string::npos,
          "load.no onpop", err.c_str());
-  expect(!load("row 1 70100010 A arena=75000000 cap=1 first=70100012 last=70100012 nclaims=1\n"
-               "row 2 70100010 B arena=75001000 cap=1 first=70100042 last=70100042 nclaims=1\n", &err)
+  expect(!load("row 1 70100010 A first=70100012 last=70100012 nclaims=1\n"
+               "row 2 70100010 B first=70100042 last=70100042 nclaims=1\n", &err)
          && err.find("duplicate block") != std::string::npos, "load.duplicate block", err.c_str());
   expect(!load("bogus 1\n", &err), "load.unknown kind");
   expect(load(GOOD, &err), "load.good again", err.c_str());
@@ -191,7 +217,7 @@ static int run() {
   StrHooks::attach(M.machine);           // decode check + arena rows
   StrHooks::attach(C.machine);
   expect(M.machine.strhooks && C.machine.strhooks, "attach.hooks");
-  expect(C.machine.mapper.arena_rows() == 2 && M.machine.mapper.arena_rows() == 2, "attach.arena rows");
+  expect(C.machine.mapper.arena_rows() == 4 && M.machine.mapper.arena_rows() == 4, "attach.arena rows (one per twin)");
   const int32_t F1 = 0x70001000, S0 = 0x70001040;
   M.frame(F1, S0); C.frame(F1, S0);
   M.machine.ac[0] = 3;  M.exec(A1);       // claim 1: 3 wides
@@ -202,7 +228,7 @@ static int run() {
   M.machine.ac[2] = 4;  M.exec(A3);       // claim 3: 4 wides (the result temp)
   expect(M.H().delta(F1) == 24, "group.delta 24");
   expect(M.H().max_delta == 24, "group.max_delta");
-  expect(StrHooks::queued(0) == 3 && M.H().n_bind == 1 && M.H().n_rebind == 2, "group.rebind per claim");
+  expect(StrHooks::queued(0) == 3 && M.H().n_bind == 1 && M.H().n_rebind == 0, "group.one bind event per claim, no rebind");
   // the clone claims too (today): same instructions, same Δ
   C.machine.ac[0] = 3; C.exec(A1); C.machine.ac[2] = 5; C.exec(A2); C.machine.ac[2] = 4; C.exec(A3);
   expect(C.H().delta(F1) == 24 && StrHooks::queued(0) == 3, "group.clone claims, no events from the clone");
@@ -211,11 +237,15 @@ static int run() {
   StrHooks::attach(C.machine);
   expect(StrHooks::queued(0) == 0, "drain.empties");
   const uint32_t last_base = static_cast<uint32_t>(S0 + 6 + 10 + 2);   // wsp before claim 3, +2
-  Mapper::Verdict v = C.machine.equivalent(last_base + 3, ARENA_A + 3);
-  expect(v.kind == Mapper::Kind::MAPPED, "drain.row A mapped to the last claim's base");
-  expect(C.machine.equivalent(static_cast<uint32_t>(S0 + 2) + 3, ARENA_A + 3).kind == Mapper::Kind::MISMATCH,
-         "drain.row A does not map to the first claim's base");
-  expect(C.machine.equivalent(0x70001234u, ARENA_B).kind == Mapper::Kind::MISMATCH, "drain.row B unmapped");
+  Mapper::Verdict v = C.machine.equivalent(last_base + 3, ARENA_A3 + 3);
+  expect(v.kind == Mapper::Kind::MAPPED, "drain.twin A.3 mapped to claim 3's base");
+  expect(C.machine.equivalent(static_cast<uint32_t>(S0 + 2) + 3, ARENA_A1 + 3).kind == Mapper::Kind::MAPPED,
+         "drain.twin A.1 mapped to claim 1's base");
+  expect(C.machine.equivalent(static_cast<uint32_t>(S0 + 6 + 2) + 1, ARENA_A2 + 1).kind == Mapper::Kind::MAPPED,
+         "drain.twin A.2 mapped to claim 2's base (the intermediate temp — INIT_OBJ_TBL's survivor)");
+  expect(C.machine.equivalent(static_cast<uint32_t>(S0 + 2) + 3, ARENA_A3 + 3).kind == Mapper::Kind::MISMATCH,
+         "drain.twin A.3 does not map to claim 1's base");
+  expect(C.machine.equivalent(0x70001234u, ARENA_B).kind == Mapper::Kind::MISMATCH, "drain.twin B.1 unmapped");
   // the STASP: restore + Δ back to 0; the row stays mapped
   M.machine.ac[1] = S0; M.exec(AS);
   C.machine.ac[1] = S0; C.exec(AS);
@@ -249,11 +279,12 @@ static int run() {
   M.frame(F1, S0);
   M.exec_wrtn(PLAIN_WRTN);
   expect(M.machine.wfp == 0x70000800, "wrtn.popped");
-  expect(M.H().n_frame_exit == 1 && M.H().n_unmap == 1, "wrtn.frame exit counted once (one frame)");
+  expect(M.H().n_frame_exit == 1 && M.H().n_unmap == 1, "wrtn.frame exit counted once (one frame, all four twins)");
   StrHooks::attach(C.machine);
   expect(C.machine.equivalent(last_base, ARENA_A).kind == Mapper::Kind::MISMATCH &&
+         C.machine.equivalent(static_cast<uint32_t>(S0 + 2), ARENA_A1).kind == Mapper::Kind::MISMATCH &&
          C.machine.equivalent(static_cast<uint32_t>(S0 + 2), ARENA_B).kind == Mapper::Kind::MISMATCH,
-         "wrtn.both rows unmapped on the clone");
+         "wrtn.every twin unmapped on the clone");
   expect(M.H().delta(F1) == 0 && M.H().claims().frames() == 0, "wrtn.delta erased");
   {   // loud: a return with a claim outstanding
     RIG(L, Lockstep::MASTER, 2); StrHooks::attach(L.machine);
@@ -303,7 +334,7 @@ static int run() {
     // iteration 2 at a different depth (a WPSH'd temp below the group, say)
     R.frame(F1, S0 + 4); R.machine.ac[0] = 3; R.exec(A1); R.machine.ac[2] = 5; R.exec(A2); R.machine.ac[2] = 4; R.exec(A3);
     R.machine.ac[1] = S0 + 4; R.exec(AS);
-    expect(R.H().n_rebind >= 3, "edge.rebind counted");
+    expect(R.H().n_rebind == 1, "edge.rebind counted (the block re-opened in the same frame)");
     StrHooks::attach(RC.machine);
     v = RC.machine.equivalent(dead_master, dead_clone);
     expect(v.kind == Mapper::Kind::MISMATCH && v.mapped == dead_master + 4,

@@ -381,7 +381,7 @@ void Mapper::configure_arena(const std::vector<ArenaLayout>& layout) {
   arena_.reserve(layout.size());
   for(const ArenaLayout& l : layout) {
     ArenaRow r;
-    r.block = l.block; r.arena_addr = l.arena_addr; r.capacity = l.capacity;
+    r.block = l.block; r.arena_addr = l.arena_addr; r.capacity = l.capacity; r.claim = l.claim;
     r.length = 0; r.wfp = 0; r.master_addr = 0;
     arena_.push_back(r);
   }

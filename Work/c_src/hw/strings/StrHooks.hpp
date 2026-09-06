@@ -29,10 +29,17 @@
 //     the worker runs master half, clone half, compare, nothing between,
 //     so every event precedes the clone's execution of the same block.
 //
+//  P33-B: the arena has one twin per claim (t@<block>.<k>, quest.arena —
+//  hw/strings/Arena). Claim k of block b binds ITS row at its WMSP hook
+//  (master_addr = wsp_before + 2); there is no rebind between claims any
+//  more — every master temp has its own clone twin, so every residue
+//  pointer maps. Rows are unmapped at frame exit as before.
+//
 //  Flag off: StrHooks::active is false, Machine::strhooks stays nullptr,
 //  the three instruction arms take one null test each — no other path.
 #pragma once
 #include "ClaimDelta.hpp"
+#include "Arena.hpp"
 #include "../Mapper.hpp"
 #include <cstdint>
 #include <map>
@@ -49,8 +56,6 @@ enum class HookKind : uint8_t { None, Wmsp, Stasp, OnPop, Unwind };
 struct HookRow {
   uint32_t id;            // 1-based row id (the artifact's)
   uint32_t block;         // the claim-group block address — the identity of p@b
-  uint32_t arena_addr;    // word address of the varying image (provisional layout)
-  uint32_t capacity;      // data bytes (provisional)
   uint32_t first, last;   // first / last WMSP pc of the group
   uint32_t nclaims;
   std::string routine;
@@ -85,7 +90,6 @@ public:
   }
   static const std::vector<HookRow>& rows() { return rows_; }
   static const HookRow& row(uint32_t id) { return rows_[id - 1]; }
-  static std::vector<Mapper::ArenaLayout> layout();
   static uint32_t onpop_pc() { return onpop_pc_; }
   static bool is_unwind_wrtn(uint32_t pc) { const HookPc* h = lookup(pc); return h && h->kind == HookKind::Unwind; }
 
@@ -151,6 +155,8 @@ private:
   Machine& m_;
   ClaimDelta delta_;
   std::map<uint32_t, Live> live_;              // row id → binding
+  std::map<uint32_t, uint32_t> max_claim_;     // twin id → largest 4·ac seen (bytes), for the capacity column
+  friend class StrHooks;
 };
 
 } // namespace strings

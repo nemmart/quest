@@ -14,6 +14,7 @@
 // (Machine/Memory/EagleInstruction helpers) — never a local formula.
 // Byte-EA derivation record: docs/Project25/ByteEA.md.
 #include "IRExec.hpp"
+#include "strings/Arena.hpp"
 #include "Machine.hpp"
 #include "Memory.hpp"
 #include "Decoder.hpp"
@@ -209,6 +210,18 @@ struct Parser {
       if (*s < '0' || *s > '3') bad("bad ac index");
       return node(Expr::AC, nullptr, nullptr, uint32_t(*s++ - '0'));
     }
+    if (*s == 't' && s[1] == '@') {                            // P33-B (ir 6): arena twin t@<block>.<k>
+      s += 2; char* end; unsigned long blk = strtoul(s, &end, 16);
+      if (end == s || *end != '.') bad("twin name must be t@<hex block>.<k>");
+      s = end + 1; unsigned long k = strtoul(s, &end, 10);
+      if (end == s || k == 0) bad("twin name must be t@<hex block>.<k>");
+      s = end;
+      if (isalnum(uchar(*s)) || *s == '_') bad("bad twin name");
+      if (!strings::Arena::loaded()) bad("t@ twin named but QUEST_ARENA is not set");
+      const strings::ArenaTemp* a = strings::Arena::find(uint32_t(blk), uint32_t(k));
+      if (!a) bad("twin not in quest.arena");
+      return node(Expr::CONST, nullptr, nullptr, a->addr);   // its word address
+    }
     if (*s == 't' && s[1] >= '1' && s[1] <= '9') {            // t-place t1..t255
       s++; char* end; unsigned long v = strtoul(s, &end, 10);
       if (v < 1 || v > 255) bad("t-place index must be 1..255");
@@ -376,9 +389,9 @@ void IRExec::load(const std::string& path) {
     std::string body = line.substr(b0);
 
     if (!got_header) {
-      if (body != "ir 5")
-        refuse("missing/unknown version header (want 'ir 5'; ir 4 files predate the "
-               "located-string statements (P31) — regenerate with tools/lower.py)");
+      if (body != "ir 6")
+        refuse("missing/unknown version header (want 'ir 6'; ir 5 files predate the "
+               "arena twins t@<block>.<k>, claim and release (P33-B) — regenerate with tools/lower.py)");
       got_header = true;
       continue;
     }
@@ -396,7 +409,8 @@ void IRExec::load(const std::string& path) {
     std::istringstream is(body);
     std::string tok; is >> tok;
 
-    if (tok == "source" || tok == "blocks" || tok == "pushmap" || tok == "argmap" || tok == "strings" || tok == "strings32") {
+    if (tok == "source" || tok == "blocks" || tok == "pushmap" || tok == "argmap" || tok == "strings" || tok == "strings32" ||
+        tok == "strings33" || tok == "arena") {
       std::string fpath, sha;
       is >> fpath >> sha;
       if (tok == "blocks" && sha.empty() && fpath.find("sha256=") == std::string::npos) {
@@ -413,6 +427,12 @@ void IRExec::load(const std::string& path) {
         if (got != sha)
           refuse("blocks provenance mismatch vs QUEST_BLOCKS=" + std::string(blocks_env));
         saw_blocks_sha = true;
+      } else if (tok == "arena") {
+        // P33-B: the twins this file names live in quest.arena; the loaded
+        // layout (QUEST_ARENA) must be the one the emitter laid out.
+        if (!strings::Arena::loaded()) refuse("ir 6 file carries an arena line but QUEST_ARENA is not set");
+        std::string got = sha256_file(strings::Arena::path());
+        if (got != sha) refuse("arena provenance mismatch vs QUEST_ARENA=" + strings::Arena::path());
       } else {
         std::string got = sha256_file(fpath);
         if (!got.empty() && got != sha)
@@ -572,6 +592,40 @@ void IRExec::load(const std::string& path) {
         st.labels.push_back(L);
         st.rhs = std::make_shared<Expr>(); st.rhs->kind = Expr::CONST; st.rhs->value = 0;
       }
+    } else if (tok == "claim" || tok == "release") {
+      // P33-B (ir 6): `claim t@<b>.<k>, acN` — the master's WMSP: no wsp
+      // move on the clone (its temps live in the arena), the twin's
+      // capacity checked against the master's own claim size acN;
+      // `release t@<b>, acN` — the master's STASP N: the frame slot holds
+      // t@b.1 (the clone's LDASP/WADI pair lowered to the twin's address),
+      // so acN == t@b.1 − 2 proves the slot arithmetic agreed, and acN
+      // takes the value the master's WSBI/STASP left (its restored wsp).
+      std::string rest = body.substr(tok.size());
+      Parser p(rest.c_str(), cur->start);
+      p.ws();
+      if (p.s[0] != 't' || p.s[1] != '@') refuse(tok + " needs a twin name t@<block>[.<k>]: " + body);
+      const char* q = p.s + 2; char* end; unsigned long blk = strtoul(q, &end, 16);
+      if (end == q) refuse(tok + ": bad twin name: " + body);
+      unsigned long k = 1;
+      if (tok == "claim") {
+        if (*end != '.') refuse("claim needs t@<block>.<k>: " + body);
+        q = end + 1; k = strtoul(q, &end, 10);
+        if (end == q || k == 0) refuse("claim: bad claim ordinal: " + body);
+      } else if (*end == '.') refuse("release names the block only (t@<block>): " + body);
+      p.s = end;
+      if (!strings::Arena::loaded()) refuse(tok + ": QUEST_ARENA is not set");
+      const strings::ArenaTemp* a = strings::Arena::find(uint32_t(blk), uint32_t(k));
+      if (!a) refuse(tok + ": twin not in quest.arena: " + body);
+      st.target = a->addr;
+      st.text = body;
+      st.kind = tok == "claim" ? Stmt::CLAIM : Stmt::RELEASE;
+      if (st.kind == Stmt::CLAIM) st.args = int32_t(a->capacity);
+      if (!p.lit(",")) refuse(tok + " needs ', acN': " + body);
+      p.ws();
+      if (p.s[0] != 'a' || p.s[1] != 'c' || p.s[2] < '0' || p.s[2] > '3') refuse(tok + " needs ', acN': " + body);
+      st.marker = uint32_t(p.s[2] - '0');
+      p.s += 3;
+      p.end();
     } else if (tok == "save") {
       refuse("'save' is reserved but not implemented this tranche");
     } else if (body.rfind("words(@", 0) == 0 || body.rfind("[@", 0) == 0 || body.rfind("ac1 = cmp(", 0) == 0) {
@@ -1015,6 +1069,30 @@ uint32_t IRExec::run_block(Machine& machine, uint32_t pc) {
           throw std::runtime_error("IR assert failed (clone detached)");
         }
         throw std::runtime_error(rep);   // non-lockstep: loud, METHOD S8
+      }
+      case Stmt::CLAIM: {
+        // the clone never claims stack (Δ_clone stays 0 — StringsDesign §6.3);
+        // the master's claim size, computed identically here, must fit the twin
+        int32_t wides = int32_t(cx.ac[st.marker]);
+        if (wides < 0 || uint32_t(4) * uint32_t(wides) > uint32_t(st.args)) {
+          char buf[200];
+          snprintf(buf, sizeof buf, "IRExec: FAULT %s: claim of %d wides (%d bytes) exceeds the twin's capacity %d [block %08X stmt %zu] — quest.arena undersized",
+                   st.text.c_str(), wides, 4 * wides, st.args, blk->start, i);
+          throw std::runtime_error(buf);
+        }
+        break;
+      }
+      case Stmt::RELEASE: {
+        uint32_t want = st.target - 2u;
+        if (cx.ac[st.marker] != want) {
+          char buf[200];
+          snprintf(buf, sizeof buf, "IRExec: FAULT %s: ac%u is %08X, not the twin's base - 2 (%08X) [block %08X stmt %zu]",
+                   st.text.c_str(), st.marker, cx.ac[st.marker], want, blk->start, i);
+          throw std::runtime_error(buf);
+        }
+        cx.ac[st.marker] = uint32_t(machine.wsp);   // the master's residue: its restored wsp (= this engine's, unmoved)
+        machine.ac[st.marker] = machine.wsp;
+        break;
       }
       case Stmt::STMT: {
         if (dbg)

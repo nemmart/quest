@@ -1,5 +1,6 @@
 #include "OSProcess.hpp"
 #include "../hw/AddressBook.hpp"
+#include "../hw/strings/Arena.hpp"
 #include "../hw/RTStubs.hpp"
 #include "MirrorPage.hpp"
 #include "ArrayPage.hpp"
@@ -126,6 +127,11 @@ void OSProcess::launch(FSStreamIO* terminal) {
     hw::AddressBook::instance->map_pages(*memory);
     mapper_book = hw::AddressBook::instance;   // this process's machines redirect
   }
+  // P33-B: the string arena (quest.arena twins) — mapped like the book's
+  // areas, on the clone (or a non-lockstep QUEST client running ir 6).
+  if(hw::strings::Arena::loaded() &&
+     (lockstep_role == hw::Lockstep::CLONE || (!hw::Lockstep::enabled && program == "QUEST")))
+    hw::strings::Arena::map_pages(*memory);
   // Fault injector arming: QUEST clients only (both lockstep roles and
   // single-machine runs; never QUEST_SERVER). One shot per process.
   {

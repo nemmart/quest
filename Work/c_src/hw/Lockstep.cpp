@@ -346,11 +346,11 @@ void Lockstep::compare_pair(QueueEntry* master, QueueEntry* clone) {
           printf("  ac%d: clone value %08X is an ARENA address in NO row (word %08X)\n", i,
                  static_cast<uint32_t>(clone->machine->ac[i]), v.clone_word);
         else if(row->master_addr == 0)
-          printf("  ac%d: clone value %08X hits UNMAPPED arena row block=%08X arena=%08X — no master temp for p@%08X\n", i,
-                 static_cast<uint32_t>(clone->machine->ac[i]), row->block, row->arena_addr, row->block);
+          printf("  ac%d: clone value %08X hits UNMAPPED arena row t@%08X.%u arena=%08X — no master temp for it now\n", i,
+                 static_cast<uint32_t>(clone->machine->ac[i]), row->block, row->claim, row->arena_addr);
         else
-          printf("  ac%d: clone value %08X hits mapped arena row block=%08X arena=%08X master=%08X wfp=%08X, maps to %08X != master %08X\n", i,
-                 static_cast<uint32_t>(clone->machine->ac[i]), row->block, row->arena_addr, row->master_addr,
+          printf("  ac%d: clone value %08X hits mapped arena row t@%08X.%u arena=%08X master=%08X wfp=%08X, maps to %08X != master %08X\n", i,
+                 static_cast<uint32_t>(clone->machine->ac[i]), row->block, row->claim, row->arena_addr, row->master_addr,
                  static_cast<uint32_t>(row->wfp), v.mapped, static_cast<uint32_t>(master->machine->ac[i]));
       }
     }
