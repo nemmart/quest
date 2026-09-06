@@ -13,6 +13,7 @@
 // Any other cause of wsp divergence breaks the equality, which is the
 // point. P30 ships it dark: not wired into compare_pair.
 #pragma once
+#include <cstddef>
 #include <cstdint>
 #include <map>
 
