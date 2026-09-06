@@ -102,3 +102,18 @@ artifacts above except for the `ir 5` header (P31 regression check, Sep
       --sites ../../docs/Project31/sites.txt --strings /tmp/quest.strings \
       --census ../../docs/Project31/census_raw.txt \
       --p31 ../../docs/Project31/p31.ledger --p31-tsv ../../docs/Project31/p31.tsv
+
+## Sep 6 2026 — Follow.java LJSR-I.GOTO edge fix (Tools, user)
+
+Follow tagged every `LJSR I.GOTO` (26 sites) with a `pc+3` return edge;
+I.GOTO never returns (StartStop already excluded it). Regenerated:
+
+| file | sha256 (first 16) | note |
+|---|---|---|
+| Disassembled/quest.tags   | 010ae3eabc0706d6 | 26 lines lose the pc+3 successor |
+| Disassembled/quest.blocks | 65b15fc15b1381df | 26 successor lines; block census unchanged (13,494) |
+| c_src/quest.blocks.split  | ba30a84139a7d2f4 | 26 successor lines; synclist.split byte-identical |
+| targets / dis / addrs / argmap / synclist.p27 | — | unchanged |
+
+The IR artifacts' `blocks` provenance line must be regenerated (P32's
+correction commit does it, together with the 17-statement fix).
