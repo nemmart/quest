@@ -574,8 +574,18 @@ def instr_mnemonic(text):
     return text.split()[0].rstrip(";") if text.split() else "?"
 
 
+# DECLARED BELIEF: the compiler's runtime helpers reached by LJSR return
+# with ac3 == fp (the code after I.PROLOG / O.ON / O.REVERT / I.EPILOG uses
+# ac3 as the frame pointer with no LDAFP in between — LOGON 70175EA8..70175F10).
+FP_PRESERVING_LJSR = {"I.PROLOG", "I.EPILOG", "O.ON", "O.REVERT"}
+
+
 def instr_writes(text):
     m = instr_mnemonic(text)
+    if m == "LJSR":
+        t = re.match(r"LJSR \[0x([0-9A-Fa-f]+)\]", text)
+        if t and SYMS_FOR_EDGES.get(int(t.group(1), 16)) in FP_PRESERVING_LJSR:
+            return {"ac0", "ac1", "ac2", "c", "ovr"}
     if m in INSTR_WRITES:
         return set(INSTR_WRITES[m]) | {"c", "ovr"}
     return set(REGS) | {"*"}
@@ -1895,7 +1905,7 @@ class Renderer:
         via = (" /*via %s*/" % ",".join(r.via)) if r.via else ""
         if r.extra:
             # base pointer plus a term that is neither i*stride nor a constant
-            self.rep.hit("record.unknown_term", "%08X %s + %s" % (self.ctx.block.pc, base, " ".join(
+            self.rep.hit("record.unknown_term", "%08X %s %s" % (self.ctx.block.pc, base, " ".join(
                 ("+" if sg == 1 else "-") + " " + self.expr(t) for sg, t in r.extra)))
             t = self.w.tables[(r.base, "?")]
             t["fields"][r.K][kind + ":" + (width or "?")] += 1
@@ -1962,6 +1972,17 @@ class Renderer:
             bl = byte_local(i, ctx)
             if bl is not None:
                 return "%s.b%d" % (self.frame_name(bl[0]), bl[1])
+        # frame through a register that holds &local_d (in-block env)
+        if self.sw.frame and i[0] == "call" and i[1] == "wp" and ctx.fp_in:
+            b, d = i[2]
+            bb = unparen(b)
+            if bb[0] == "reg" and bb[1] in ctx.env and is_num(d):
+                v = unparen(ctx.env[bb[1]])
+                if v[0] == "call" and v[1] == "wp" and is_num(v[2][1]):
+                    vb = unparen(v[2][0])
+                    if vb[0] == "regin" and vb[1] == "ac3":
+                        self.rep.hit("frame.via_register")
+                        return "%s.%s /*via %s*/" % (self.frame_name(signed(num_val(v[2][1])) + signed(num_val(d)), width), suf, bb[1])
         # static
         if i[0] == "num":
             a = i[1]
@@ -2459,6 +2480,10 @@ def main():
                 w("%-36s %6d" % (k, all_rep.counts[k]))
                 for ex in all_rep.examples.get(k, []):
                     w("    e.g. " + ex)
+            w()
+            w("## declared beliefs used (alias decisions that rested on a switch)")
+            for k in sorted(world.report.counts):
+                w("%-36s %6d" % (k, world.report.counts[k]))
             w()
             w("## registers left live at the terminator (blocks by count)")
             w("  live = defined in the block, reaching its exit explicitly, and read by some successor before being written")

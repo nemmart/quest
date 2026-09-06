@@ -1,0 +1,128 @@
+; readable.py (Project 34 prototype) — rendering, not an artifact anything executes
+; book quest.ir2.book sha256=281fd5010ad4e8b35502646d4d8759dd7db53274a92f3e91792eeb2f9409051c (ir 5)
+; branch p34-readable (from main 4837d5c); book read from origin/p31-located-strings @ b4384b177bed8229c50b43235b2c08d62a954fd8
+; addrbook sha256=e6fde2c246630e0e  symbols sha256=7fc5e4f715d9022b  blocks sha256=1d3baaf6487a8e3f
+; switches: +frame +static +callargs +record +literal +regfold +simplify +sketch +heapdisjoint +argdisjoint +envinherit
+; naming: local_<d> = frame word d (ac3+d); arg_<N> = by-reference argument N (R[ac3-10-2N]);
+;   .w/.h/.b = 32/16/8-bit access; &x = address of x; p->w = *p; X_rec<s>[i].f<K> = record i (1-based),
+;   stride s words, field at word offset K from X (K is the raw displacement — see Census.md for origins);
+;   r#in = the value register r had at block entry; vstr(p, n) = CHAR(n) VARYING at p; str(p, n) = CHAR(n).
+
+; routine PICK_X_Y @701761E7  argc 2  frame 0x05 (10 local words)  variant WSAVS  flags -  blocks 18
+;   local_4 is reused: defs of shape ('other',) | ('scaled', 9) (record naming applies where one shape reaches)
+;   local_6 is reused: defs of shape ('elemptr', 1879048722, 9, 0) | ('other',) (record naming applies where one shape reaches)
+
+PICK_X_Y(arg_1, arg_2):
+L_701761E7:
+  @701761E7 WSAVS 0x0005
+
+L_701761E9:
+  local_4.w = 1
+  local_6.w = OBJ_PTR->f11502.w
+  ?RANDOM_NUMBER(&local_4, &local_6, &SD_PTR->f40)        ; site 701761FD
+
+L_70176201:
+  local_2.w = ac0
+  bounds_check !(ac0 >u 0x000186A0) && (ac0 >s 0)   ; DERR 17 @70176207
+  ; fall through to L_70176208
+
+L_70176208:
+  ac0 = mul(ac0, 9)
+  local_4.w = ac0
+  ac0 = add(ac0, OBJ_PTR.w)
+  ac2 = sx16(OBJ_PTR_rec9[ac0#in].f11495.h /*via ac0*/)
+  local_6.w = ac0
+  if ((ac2 & 65535) != 0) goto L_70176217 else goto L_70176216
+
+L_70176216:
+  goto L_701761E9        ; loop back
+
+L_70176217:
+  if (add(cvwn(div(sx16(OBJ_PTR_rec9[local_4.w/9].f11497.h), 100)), 1) == 3) goto L_70176226 else goto L_70176225
+
+L_70176225:
+  goto L_701761E9        ; loop back
+
+L_70176226:
+  ac2 = local_6.w
+  ac0 = add(sx16(local_6->f11495.h /*via ac2*/), -20)
+  local_6.w = ac0
+  local_8.w = add(sx16(M16[wp(ac2, 11495)]), 20)
+  ?RANDOM_NUMBER(&local_6, &local_8, &SD_PTR->f40)        ; site 7017623D
+
+L_70176241:
+  arg_1->h = trunc16(cvwn(ac0))
+  ac2 = add(local_4.w, OBJ_PTR.w)
+  ac0 = add(sx16(OBJ_PTR_rec9[local_4.w/9].f11496.h /*via ac2*/), -20)
+  ac1 = add(sx16(OBJ_PTR_rec9[local_4.w/9].f11496.h /*via ac2*/), 20)
+  local_4.w = ac0
+  local_6.w = ac1
+  ?RANDOM_NUMBER(&local_4, &local_6, &SD_PTR->f40)        ; site 7017625E
+
+L_70176262:
+  arg_2->h = trunc16(cvwn(ac0))
+  ac0 = sx16(arg_1->h)
+  if (ac0 >s 15349) goto L_7017626A else goto L_70176269
+  ; live at exit: ac0
+
+L_70176269:
+  goto L_70176275
+
+L_7017626A:
+  if (ac0 <=s 16300) goto L_7017626D else goto L_7017626C
+
+L_7017626C:
+  goto L_70176275
+
+L_7017626D:
+  ac0 = sx16(arg_2->h)
+  if (ac0 >s 15219) goto L_70176272 else goto L_70176271
+  ; live at exit: ac0
+
+L_70176271:
+  goto L_70176275
+
+L_70176272:
+  if (ac0 >s 16350) goto L_70176275 else goto L_70176274
+
+L_70176274:
+  return
+
+L_70176275:
+  goto L_701761E9        ; loop back
+
+; ---- this routine's rewrite report ----
+; env.inherited_blocks                11
+; frame.arg                            4
+; frame.local                         17
+; instr.kept                           1
+;     e.g. 701761E7 WSAVS 0x0005
+; live.explicit_defs_at_exit.0        13
+; live.explicit_defs_at_exit.1         2
+; live.explicit_defs_at_exit.2         2
+; live.explicit_defs_at_exit.3         1
+; live.hist.0                         16
+; live.hist.1                          2
+; mem.unresolved                       1
+;     e.g. 70176226 M16[wp(ac2, 11495)]
+; record.direct                        4
+; record.indexed                       4
+; record.local_reused                  2
+;     e.g. PICK_X_Y local_4
+;     e.g. PICK_X_Y local_6
+; record.via_local                     1
+; regfold.blocked                      4
+;     e.g. 70176208 ac2 = … : memory read cannot cross a possibly-aliasing store
+;     e.g. 70176226 ac0 = … : effectful op cannot cross a flag reader/writer
+;     e.g. 70176241 ac0 = … : effectful op cannot cross a flag reader/writer
+;     e.g. 70176241 ac1 = … : memory read cannot cross a possibly-aliasing store
+; regfold.effop_nested                 6
+; regfold.folded                      24
+; regfold.kept_live_at_exit            2
+; regfold.multi_use                    4
+;     e.g. 70176208 ac0 (2 uses)
+;     e.g. 70176208 ac0 (2 uses)
+;     e.g. 70176226 ac2 (2 uses)
+;     e.g. 70176241 ac2 (2 uses)
+; simplify.nova16                      1
+; static.named                         2

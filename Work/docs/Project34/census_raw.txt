@@ -1,0 +1,718 @@
+# readable.py machine census
+# book sha256=281fd5010ad4e8b35502646d4d8759dd7db53274a92f3e91792eeb2f9409051c  blocks=13507  routines=130  unreached-blocks(fallback attribution)=24
+# provenance: branch p34-readable (from main 4837d5c); book read from origin/p31-located-strings @ b4384b177bed8229c50b43235b2c08d62a954fd8
+# switches: +frame +static +callargs +record +literal +regfold +simplify +sketch +heapdisjoint +argdisjoint +envinherit
+
+## rewrite counts (whole book)
+callargs.folded                         558
+callargs.slot_unfolded                   28
+    e.g. 70161AFB slot 7400991C
+    e.g. 70161AFB slot 7400991E
+    e.g. 70161AFB slot 74009920
+    e.g. 70161AFB slot 74009922
+    e.g. 70161AFB slot 74009924
+    e.g. 70161AFB slot 74009926
+    e.g. 70161AFB slot 74009928
+    e.g. 70161AFB slot 7400992A
+    e.g. 70161AFB slot 7400992C
+    e.g. 70161D69 slot 74003EEC
+    e.g. 70161D69 slot 74003EEE
+    e.g. 70161D69 slot 74003EF0
+callargs.unfolded                         7
+    e.g. 70161AFB TERRAIN: value not stable to the call
+    e.g. 70161D69 FIND_OBJECT: value not stable to the call
+    e.g. 70169B77 RETURN_MESSAGE: slots [1, 2, 3] of 6
+    e.g. 70174760 OP_EDIT.8@70175897: value not stable to the call
+    e.g. 70174788 OP_EDIT.6@701757A8: value not stable to the call
+    e.g. 701747AE OP_EDIT.6@701757A8: value not stable to the call
+    e.g. 701747D4 OP_EDIT.6@701757A8: value not stable to the call
+env.inherited_blocks                   9696
+frame.ac3_not_fp                        356
+    e.g. 7015C2F5 wp(ac3, -630)
+    e.g. 7015C8EA wp(ac3, -267057217)
+    e.g. 7015C99E wp(ac3, 2)
+    e.g. 7015C99E wp(ac3, 2)
+    e.g. 7015C9A7 wp(ac3, 50)
+    e.g. 7015C9A7 wp(ac3, 52)
+    e.g. 7015C9B4 wp(ac3, 7)
+    e.g. 7015C9B4 wp(ac3, 7)
+    e.g. 7015C9BC wp(ac3, 2)
+    e.g. 7015C9C5 wp(ac3, 7)
+    e.g. 7015C9CF wp(ac3, 68)
+    e.g. 7015C9CF wp(ac3, 70)
+frame.ac3_not_fp_at_exit                461
+    e.g. 7015C2CD -> 7015C2F5
+    e.g. 7015C2F5 -> 7015C30C,7015C30D
+    e.g. 7015C30C -> 7015C30D
+    e.g. 7015C30D -> 7015C318
+    e.g. 7015C99E -> 7015C9A3,7015CA21
+    e.g. 7015C9A3 -> 7015C9A7
+    e.g. 7015C9A7 -> 7015C9B3,7015C9B4
+    e.g. 7015C9B3 -> 7015C9E7
+    e.g. 7015C9B4 -> 7015C9BC
+    e.g. 7015C9BC -> 7015C9C5
+    e.g. 7015C9C5 -> 7015C9CF
+    e.g. 7015C9CF -> 7015C9E7
+frame.arg                               976
+frame.array                              13
+frame.beyond_argc                         1
+    e.g. WRITE_OBJECT d=-24 argc=6
+frame.beyond_frame                        2
+    e.g. REPOSITION d=3 frame=1 (70176FC1)
+    e.g. REPOSITION d=3 frame=1 (70176FCB)
+frame.image_word                        819
+frame.local                           13130
+frame.odd_offset                         53
+    e.g. AUTO_MOVE d=-7
+    e.g. AUTO_MOVE d=-7
+    e.g. BARGAIN.1@70160854 d=-7
+    e.g. BARGAIN.1@70160854 d=-7
+    e.g. BARGAIN.2@70160920 d=-7
+    e.g. BARGAIN.2@70160920 d=-7
+    e.g. BOAT d=-7
+    e.g. BOAT d=-7
+    e.g. BOAT d=-7
+    e.g. BOAT.1@70161AA3 d=-7
+    e.g. BOAT.1@70161AA3 d=-7
+    e.g. BOAT.1@70161AA3 d=-7
+frame.via_register                       35
+instr.kept                             1633
+    e.g. 7015C005 WSAVS 0x0022
+    e.g. 7015C00B LCALL [0x7015BE23],0
+    e.g. 7015C05F LCALL [0x701766ED],0
+    e.g. 7015C068 LJSR [0x7017FCE8]
+    e.g. 7015C0A0 LJSR [0x7017FCE8]
+    e.g. 7015C104 LJSR [0x7017FCE8]
+    e.g. 7015C283 LCALL [0x70175E9F],0
+    e.g. 7015C2C0 LCALL [0x7017381B],0
+    e.g. 7015C337 XCALL [pc+0x2A9] (0x7015
+    e.g. 7015C3B5 LCALL [0x7016B549],0
+    e.g. 7015C400 LCALL [0x7016B549],0
+    e.g. 7015C562 WPSH 0,2
+literal.dst_not_local                    18
+    e.g. 7015CA25 ?
+    e.g. 70163451 ?
+    e.g. 70163474 ?
+    e.g. 7016605B ?
+    e.g. 7016606F ?
+    e.g. 70168099 ?
+    e.g. 701680B1 ?
+    e.g. 701680C9 ?
+    e.g. 701680E0 ?
+    e.g. 7016E020 ?
+    e.g. 7016E020 ?
+    e.g. 7016E425 ?
+literal.dst_not_varying                   6
+literal.folded                           78
+literal.piece                           541
+literal.unproven                        428
+    e.g. 7015C023 "@INPUT\x00": live after: instruction line LCALL (successor 7015C037)
+    e.g. 7015C037 "Welcome to quest!\x0A\x0A": live after: instruction line LCALL (successor 7015C04B)
+    e.g. 7015C04B "What are your initials : ": live after: instruction line LCALL (successor 7015C05F)
+    e.g. 7015C0F0 "Maximum number of players exce": live after: instruction line LJSR (successor 7015C104)
+    e.g. 7015C323 "This player was previously kil": read of the local before the call (7015C323 stmt 3)
+    e.g. 7015C866 "\x0B**** Alchemist home ****\x": live after: instruction line WCMV (successor 7015C88D)
+    e.g. 7015C89E "\x0A\x0BThe alchemists home is": live after: instruction line WCMV (successor 7015C8B2)
+    e.g. 7015C8C8 "\x0A\x0BThe field protecting t": live after: instruction line WCMV (successor 7015C8DF)
+    e.g. 7015C978 "\x0A\x0BYou have entered the h": live after: read (assign) (successor 7015C98C)
+    e.g. 7015D085 "USER_DATA_FILE\x00": live after: instruction line LJSR (successor 7015D098)
+    e.g. 7015D09D "\x0CDo you wish to (L) list, (": live after: instruction line LJSR (successor 7015D0B1)
+    e.g. 7015D0D5 "\x0APlayer alliance table:\x0A": live after: partial overwrite (frame slot reused: M16 store) (successor 7015D0E9)
+literal.unproven_kind: live after: instruction line LCALL     97
+literal.unproven_kind: live after: instruction line LJSR     69
+literal.unproven_kind: live after: instruction line WCMV     22
+literal.unproven_kind: live after: instruction line XCALL     44
+literal.unproven_kind: live after: partial overwrite     87
+literal.unproven_kind: live after: read     45
+literal.unproven_kind: live after: read through an indirect pointer      2
+literal.unproven_kind: live after: string operation reading it     12
+literal.unproven_kind: no consuming rt_call before the block exit     31
+literal.unproven_kind: read of the local before the call     19
+live.explicit_defs_at_exit.0           6732
+live.explicit_defs_at_exit.1           4152
+live.explicit_defs_at_exit.2           1631
+live.explicit_defs_at_exit.3            674
+live.explicit_defs_at_exit.4            284
+live.hist.0                            7372
+live.hist.1                            4551
+live.hist.2                            1130
+live.hist.3                             367
+live.hist.4                              53
+mem.unresolved                         2478
+    e.g. 7015C1B4 M8[add(ac1, 0x70000CCB:1)]
+    e.g. 7015C1C2 M8[add(ac1, 0x70000CCB:1)]
+    e.g. 7015C1D0 M8[add(ac1, 0x70000CCB:1)]
+    e.g. 7015C1E0 M8[add(ac1, 0x70000CCB:1)]
+    e.g. 7015C1EB M8[add(ac0, 0x70000CCB:1)]
+    e.g. 7015C1F9 M8[add(ac0, 0x70000CCB:1)]
+    e.g. 7015C27B M16[0x7015BF38]
+    e.g. 7015C2CD M32[R[&GWB_PTR]]
+    e.g. 7015C2CD M32[R[&GWB_PTR]]
+    e.g. 7015C2F5 M16[wp(ac2, 6)]
+    e.g. 7015C2F5 M16[wp(ac2, 7)]
+    e.g. 7015C2F5 M16[wp(ac2, 8)]
+record.direct                           239
+record.indexed                         1292
+record.local_reused                     193
+    e.g. QUEST local_14
+    e.g. QUEST local_20
+    e.g. QUEST local_32
+    e.g. QUEST local_46
+    e.g. QUEST local_66
+    e.g. ALCHEMIST_HOME local_50
+    e.g. ALLY_PLAYER local_588
+    e.g. ATTACK local_44
+    e.g. ATTACK local_46
+    e.g. ATTACK.1@7015E113 local_20
+    e.g. ATTACK.2@7015E1F1 local_4
+    e.g. ATTACK.2@7015E1F1 local_6
+record.unknown_term                    1152
+    e.g. 7015C0CF SD_PTR + lsh(add(mul(mul(ac0#in, 686), 16), -9456), -4)
+    e.g. 7015C113 SD_PTR + lsh(add(mul(16, mul(sx16(PLAYER_NUM.h), 686)), -9456), -4)
+    e.g. 7015C113 SD_PTR + lsh(add(mul(16, mul(sx16(PLAYER_NUM.h), 686)), -9456), -4)
+    e.g. 7015C113 SD_PTR + lsh(add(local_14.w, -9455), -4)
+    e.g. 7015C113 SD_PTR + lsh(add(local_14.w, -9455), -4)
+    e.g. 7015C291 SD_PTR + lsh(add(mul(mul(sx16(PLAYER_NUM.h), 686), 16), -9456), -4)
+    e.g. 7015C291 SD_PTR + lsh(add(mul(mul(sx16(PLAYER_NUM.h), 686), 16), -9456), -4)
+    e.g. 7015C2A6 SD_PTR + lsh(add(mul(mul(sx16(PLAYER_NUM.h), 686), 16), -9455), -4)
+    e.g. 7015C2A6 SD_PTR + lsh(add(mul(mul(sx16(PLAYER_NUM.h), 686), 16), -9455), -4)
+    e.g. 7015C46C SD_PTR + lsh(add(mul(16, local_14.w), -9450), -4)
+    e.g. 7015C46C SD_PTR + lsh(add(mul(16, local_14.w), -9450), -4)
+    e.g. 7015C48F SD_PTR + lsh(add(mul(mul(ac0#in, 686), 16), -9456), -4)
+record.via_local                        300
+regfold.blocked                        3639
+    e.g. 7015C005 ac0 = … : instruction line reads it
+    e.g. 7015C113 ac2 = … : input register rewritten before the use
+    e.g. 7015C16E ac1 = … : effectful op cannot cross a flag reader/writer
+    e.g. 7015C336 ac1 = … : instruction line reads it
+    e.g. 7015C435 ac2 = … : input register rewritten before the use
+    e.g. 7015C450 ac0 = … : input register rewritten before the use
+    e.g. 7015C4E3 ac0 = … : effectful op cannot cross a flag reader/writer
+    e.g. 7015C558 ac1 = … : instruction line reads it
+    e.g. 7015C558 ac0 = … : instruction line reads it
+    e.g. 7015C558 ac2 = … : instruction line reads it
+    e.g. 7015C558 ac1 = … : instruction line reads it
+    e.g. 7015C8EA ac2 = … : instruction line reads it
+regfold.effop_nested                   3519
+regfold.effop_not_root                  305
+    e.g. 7015C08A ac1
+    e.g. 7015C0CF ac0
+    e.g. 7015C15C ac1
+    e.g. 7015C17F ac1
+    e.g. 7015C2A6 ac0
+    e.g. 7015C48F ac0
+    e.g. 7015CB94 ac1
+    e.g. 7015CBAF ac1
+    e.g. 7015CC2F ac0
+    e.g. 7015CEDF ac0
+    e.g. 7015D228 ac0
+    e.g. 7015D8CF ac1
+regfold.folded                        14397
+regfold.kept_live_at_exit              6792
+regfold.multi_use                      2860
+    e.g. 7015C0B3 ac0 (2 uses)
+    e.g. 7015C0B3 ac1 (2 uses)
+    e.g. 7015C0C5 t1 (3 uses)
+    e.g. 7015C0CF ac2 (3 uses)
+    e.g. 7015C0CF ac0 (2 uses)
+    e.g. 7015C107 ac2 (2 uses)
+    e.g. 7015C113 ac1 (2 uses)
+    e.g. 7015C113 ac2 (3 uses)
+    e.g. 7015C113 ac0 (2 uses)
+    e.g. 7015C113 ac2 (2 uses)
+    e.g. 7015C113 ac2 (3 uses)
+    e.g. 7015C113 ac1 (3 uses)
+regfold.no_use_in_block                 252
+simplify.nova16                         171
+simplify.nova_bit                       666
+simplify.nova_carry                       1
+simplify.nova_com                        32
+static.array                            542
+static.generated                         13
+static.named                           3378
+
+## declared beliefs used (alias decisions that rested on a switch)
+arg.disjoint_used                     24533
+heap.disjoint_used                    76628
+
+## registers left live at the terminator (blocks by count)
+  live = defined in the block, reaching its exit explicitly, and read by some successor before being written
+  0 live: 7372 blocks
+  1 live: 4551 blocks
+  2 live: 1130 blocks
+  3 live: 367 blocks
+  4 live: 53 blocks
+  explicit register defs reaching the exit (live or not):
+  0 defs: 6732 blocks
+  1 defs: 4152 blocks
+  2 defs: 1631 blocks
+  3 defs: 674 blocks
+  4 defs: 284 blocks
+
+## routines by distinct static references
+  OP_EDIT                       29
+  DISPLAY_INVENTORY             19
+  START_TURN                    19
+  CAST.1@7016243F               18
+  MOVE_PLAYER                   17
+  MOVE_IN_CAVE                  16
+  QUEST                         15
+  DISPLAY_SCREEN                15
+  BEING_ATTACK                  14
+  DROP                          14
+  LIST_PLAYERS                  14
+  ATTACK.3@7015E84A             11
+  CREATE_MAP                    11
+  GET_QUEST                     11
+  OBSERVE                       11
+  SIGNAL_TURN                   11
+  STORE                         11
+  TERRITORY_MAP                 11
+  DISPLAY_CAVE                  10
+  INIT_OBJ_TBL                  10
+  TERRITORY                      9
+  ALCHEMIST_HOME                 8
+  DEFEND                         8
+  ATTACK                         7
+  ATTACK.2@7015E1F1              7
+
+## static usage census (addr  name  routines  reads[width]  writes[width]  addr-taken  compared-with)
+  70000210 SD_PTR                   r=73  M32:1039             -                    &=3   cmp=-
+  70000212 OBJ_PTR                  r=49  M32:548              -                    &=44  cmp=-
+  70000214 CAS_PTR                  r=22  M32:121              -                    &=0   cmp=-
+  70000216 PLAYER_NUM               r=40  M16:1451             M16:4                &=111 cmp=-
+  70000218 GLOBAL_PORT_NUM          r=1   M32:3                -                    &=1   cmp=-
+  7000021A OPERATOR                 r=1   M16:2                M16:2                &=0   cmp=-
+  7000021C IN_BUFFER                r=29  M16:54               M16:3                &=53  cmp=-
+  7000021D static_7000021D          r=1   M16:1                -                    &=0   cmp=-
+  70000260 OUT_CHAN                 r=70  M16:1                -                    &=721 cmp=-
+  70000262 IN_CHAN                  r=3   -                    -                    &=3   cmp=-
+  70000266 SH_CHAN2                 r=9   M16[i]:25            -                    &=0   cmp=-
+  7000026A WRITE_INDEX              r=2   M32:12               M32:1                &=0   cmp=-
+  7000026C CITY_NUM                 r=8   M16:18               M16:3                &=0   cmp=-
+  7000026E TERR_NUM                 r=4   M16:14               M16:2                &=0   cmp=-
+  70000270 MOVES_LEFT               r=2   M16:7                M16:15               &=0   cmp=-
+  7000058D static_7000058D          r=5   M16[i]:10            -                    &=0   cmp=-
+  70000642 static_70000642          r=1   M16[i]:2             -                    &=0   cmp=-
+  70000689 static_70000689          r=7   M16[i]:18            -                    &=0   cmp=-
+  7000077A static_7000077A          r=2   M16[i]:2             -                    &=0   cmp=-
+  7000077B static_7000077B          r=2   M16[i]:2             -                    &=0   cmp=-
+  7000077C static_7000077C          r=2   M16[i]:2             -                    &=0   cmp=-
+  7000077D static_7000077D          r=2   M16[i]:2             -                    &=0   cmp=-
+  7000077E static_7000077E          r=2   M16[i]:5             -                    &=0   cmp=-
+  700007A0 GWB_PTR                  r=2   M32:2                M32:1                &=4   cmp=-
+  700007A7 static_700007A7          r=3   M16[i]:3             -                    &=0   cmp=-
+  700007AB static_700007AB          r=1   -                    M16[i]:2             &=0   cmp=-
+  700007AD static_700007AD          r=3   M16:3                -                    &=0   cmp=-
+  700007B1 static_700007B1          r=1   M16:1                -                    &=0   cmp=-
+  70000932 static_70000932          r=4   M16[i]:14            -                    &=0   cmp=-
+  70000A23 static_70000A23          r=2   M16[i]:3             -                    &=0   cmp=-
+  70000A31 static_70000A31          r=1   M16[i]:1             -                    &=0   cmp=-
+  70000A4E CAVE_STR                 r=1   M16:20               M16:8                &=4   cmp=-
+  70000A78 OLD_CAVE_STR             r=2   M16:1                M16:1                &=0   cmp=-
+  70000AA2 OLD_SCREEN_STR           r=1   M16:1                -                    &=0   cmp=-
+  70000C1E OLD_NAME                 r=1   M16:1                -                    &=0   cmp=-
+  70000C34 LAND_MASS_STR            r=2   M16:5                M16:1                &=2   cmp=-
+  70000C44 OLD_LAND_MASS_STR        r=1   M16:1                -                    &=1   cmp=-
+  70000C54 OLD_CITY_NUM             r=1   M16:1                M16:1                &=0   cmp=-
+  70000C66 OLD_LINE                 r=1   M16:1                M16:2                &=0   cmp=-
+  70000C68 HOLY_COLOR               r=1   M16:2                M16:1                &=0   cmp=-
+  70000C6A DISPLAY_COLOR            r=1   M16:3                M16:1                &=0   cmp=-
+  70000C6C LAST_DISPLAY_COLOR       r=1   M16:1                M16:1                &=0   cmp=-
+  70000C6E DIRECTION_MOVED          r=3   M16:1                M16:8                &=0   cmp=-
+  70000C70 N                        r=1   M16:7                M16:1                &=0   cmp=-
+  70000C72 FIRST_TIME               r=1   M16:1                M16:1                &=0   cmp=-
+  70000CBF static_70000CBF          r=1   M32[i]:3             M32[i]:1             &=0   cmp=-
+  70000CCC INITIALS                 r=1   -                    M16:2                &=0   cmp=-
+  70000CD4 static_70000CD4          r=1   M16[i]:1             -                    &=0   cmp=-
+  70000D92 static_70000D92          r=1   M16[i]:2             -                    &=0   cmp=-
+  7001EE8B static_7001EE8B          r=2   M16[i]:8             -                    &=0   cmp=-
+  7001EE8C static_7001EE8C          r=2   M16[i]:6             -                    &=0   cmp=-
+  7001EFB8 static_7001EFB8          r=3   M16[i]:8             M16[i]:3             &=0   cmp=-
+  7001EFB9 static_7001EFB9          r=3   M16[i]:4             M16[i]:1             &=0   cmp=-
+  7001EFBA static_7001EFBA          r=4   M16[i]:7             -                    &=0   cmp=-
+  7001F0E7 static_7001F0E7          r=1   -                    M16[i]:1             &=0   cmp=-
+  7001F0E8 static_7001F0E8          r=1   M16[i]:2             -                    &=0   cmp=-
+  7001F215 static_7001F215          r=2   M16[i]:1             M16[i]:1             &=0   cmp=-
+  7001F216 static_7001F216          r=2   M16[i]:2             -                    &=0   cmp=-
+  7001F343 static_7001F343          r=1   -                    M16[i]:1             &=0   cmp=-
+  7001F471 static_7001F471          r=1   -                    M16[i]:1             &=0   cmp=-
+  7001F59F static_7001F59F          r=1   -                    M16[i]:1             &=0   cmp=-
+  7001F6CE static_7001F6CE          r=5   M16[i]:6             M16[i]:5             &=0   cmp=-
+  7001F6CF static_7001F6CF          r=6   M16[i]:7             M16[i]:6             &=0   cmp=-
+  700DE87A static_700DE87A          r=1   -                    M16[i]:1             &=0   cmp=-
+  700DE87B static_700DE87B          r=1   -                    M16[i]:1             &=0   cmp=-
+  700DE87C static_700DE87C          r=1   -                    M16[i]:1             &=0   cmp=-
+  700DE87D static_700DE87D          r=1   -                    M16[i]:1             &=0   cmp=-
+  700DE87E static_700DE87E          r=1   -                    M16[i]:1             &=0   cmp=-
+  700DE880 static_700DE880          r=1   -                    M16[i]:1             &=0   cmp=-
+  700DE890 static_700DE890          r=19  M16[i]:38            M16[i]:2             &=0   cmp=-
+  700E4267 static_700E4267          r=1   M32[i]:3             -                    &=0   cmp=-
+  700E6977 static_700E6977          r=5   M32[i]:28            -                    &=0   cmp=-
+  700E6979 static_700E6979          r=2   M32[i]:3             -                    &=0   cmp=-
+  700E697B static_700E697B          r=1   M32[i]:1             -                    &=0   cmp=-
+  700E697F static_700E697F          r=1   M32[i]:1             -                    &=0   cmp=-
+  700E6981 static_700E6981          r=1   M32[i]:1             -                    &=0   cmp=-
+  700E6983 static_700E6983          r=1   M32[i]:1             -                    &=0   cmp=-
+  700E6985 static_700E6985          r=2   M32[i]:8             -                    &=0   cmp=-
+  700E6987 static_700E6987          r=1   M32[i]:2             -                    &=0   cmp=-
+  700E6989 static_700E6989          r=1   M32[i]:2             -                    &=0   cmp=-
+  700E698B static_700E698B          r=1   M32[i]:2             -                    &=0   cmp=-
+  700E698D static_700E698D          r=1   M32[i]:2             -                    &=0   cmp=-
+  700E698F static_700E698F          r=1   M32[i]:2             -                    &=0   cmp=-
+  700E6991 static_700E6991          r=1   M32[i]:2             -                    &=0   cmp=-
+  700EB797 static_700EB797          r=1   M32[i]:3             -                    &=0   cmp=-
+  700EDEA7 static_700EDEA7          r=5   M32[i]:24            M32[i]:1             &=0   cmp=-
+  700FC909 static_700FC909          r=1   M16[i]:1             M16[i]:1             &=0   cmp=-
+  700FCBC5 static_700FCBC5          r=2   M16[i]:1             M16[i]:1             &=0   cmp=-
+  700FCBC6 static_700FCBC6          r=4   M16[i]:6             M16[i]:2             &=0   cmp=-
+  700FCC16 static_700FCC16          r=5   M32[i]:14            M32[i]:1             &=0   cmp=-
+  700FCC18 static_700FCC18          r=2   M16[i]:3             -                    &=0   cmp=-
+  700FCC28 static_700FCC28          r=6   M16[i]:11            M16[i]:1             &=0   cmp=-
+  700FCC29 static_700FCC29          r=6   M16[i]:11            M16[i]:1             &=0   cmp=-
+  700FCC2A static_700FCC2A          r=6   M16[i]:11            M16[i]:1             &=0   cmp=-
+  700FCC2B static_700FCC2B          r=6   M16[i]:24            M16[i]:3             &=0   cmp=-
+  7010221C static_7010221C          r=5   M16[i]:11            M16[i]:4             &=0   cmp=-
+  70150400 PORTNAME                 r=1   -                    -                    &=1   cmp=-
+  70150403 static_70150403          r=3   M16[i]:4             -                    &=0   cmp=-
+  70150409 static_70150409          r=1   M16[i]:1             -                    &=0   cmp=-
+  7015040F static_7015040F          r=1   M16[i]:1             -                    &=0   cmp=-
+  70150415 static_70150415          r=1   M16[i]:3             -                    &=0   cmp=-
+  7015041D static_7015041D          r=1   M16:1                -                    &=0   cmp=-
+  70150425 static_70150425          r=2   M16[i]:3             -                    &=0   cmp=-
+  70150439 static_70150439          r=2   M16[i]:3             -                    &=0   cmp=-
+  70150448 static_70150448          r=7   M16[i]:16            -                    &=0   cmp=-
+  70150682 static_70150682          r=4   M16[i]:5             -                    &=0   cmp=-
+  70150765 static_70150765          r=4   M16[i]:5             -                    &=0   cmp=-
+  7015076D static_7015076D          r=1   M16:1                -                    &=0   cmp=-
+  7015076E static_7015076E          r=2   M16:4                -                    &=0   cmp=-
+  7015078B static_7015078B          r=3   M16[i]:24            -                    &=0   cmp=-
+  701507B1 static_701507B1          r=2   M16[i]:6             -                    &=0   cmp=-
+  701507BF static_701507BF          r=1   M16[i]:2             -                    &=0   cmp=-
+  7015088D static_7015088D          r=8   M16[i]:12            -                    &=0   cmp=-
+  7015088E BEING_STRENGTH           r=1   M16:1                -                    &=0   cmp=-
+  70150894 static_70150894          r=1   M16:1                -                    &=0   cmp=-
+  701508D1 static_701508D1          r=7   M16[i]:12            -                    &=0   cmp=-
+  701508D8 static_701508D8          r=1   M16:1                -                    &=0   cmp=-
+  70150959 static_70150959          r=1   M16[i]:1             -                    &=0   cmp=-
+  701509E1 static_701509E1          r=1   M16[i]:1             -                    &=0   cmp=-
+  70150A5A static_70150A5A          r=4   M16[i]:8             -                    &=0   cmp=-
+  70150AED static_70150AED          r=1   M16[i]:3             -                    &=0   cmp=-
+  70150B0C CAN_BOAT                 r=1   M16[i]:2             -                    &=0   cmp=-
+  70150EE9 static_70150EE9          r=1   M16[i]:3             -                    &=0   cmp=-
+  70151505 static_70151505          r=1   M16[i]:3             -                    &=0   cmp=-
+  70151F64 static_70151F64          r=3   M16[i]:6             -                    &=0   cmp=-
+  7015463C static_7015463C          r=1   M16[i]:2             -                    &=0   cmp=-
+  70156CEA static_70156CEA          r=1   M16[i]:1             -                    &=0   cmp=-
+  701591A4 static_701591A4          r=1   M16[i]:4             -                    &=0   cmp=-
+  7015ABBE static_7015ABBE          r=1   M16[i]:2             -                    &=0   cmp=-
+
+## record tables (base, stride) -> fields seen (raw K: access kinds)
+  SD_PTR stride=? sites=1020 routines=66 guarded-index-sites=0 index-forms=-
+    fm625    read:M16:1
+    fm611    read:M32:14, write:M32:1
+    fm599    write:M32:1
+    fm589    addr:?:1, read:M16:2, write:M32:1
+    fm588    addr:?:1, read:M16:4
+    fm577    write:M32:1
+    fm413    write:M32:1
+    fm401    write:M32:1
+    fm390    read:M16:29, write:M16:26
+    fm377    read:M16:10, write:M16:2
+    fm376    read:M16:16, write:M16:16
+    fm370    read:M16:17, write:M16:20
+    fm364    read:M16:1, write:M16:1
+    fm363    read:M16:1, write:M16:1
+    fm361    write:M16:1
+    fm354    read:M16:1, write:M16:1
+    fm352    read:M16:1
+    fm344    read:M16:1, write:M16:1
+    fm343    read:M16:1, write:M16:1
+    fm268    read:M16:1
+    fm267    read:M16:1
+    fm266    read:M16:1
+    fm256    addr:?:3, read:M16:3, write:M16:2
+    fm255    addr:?:3, read:M16:1, write:M16:1
+    fm254    read:M16:3, write:M16:6
+    fm253    read:M16:2, write:M16:4
+    fm170    read:M16:1, write:M16:13
+    fm89     read:M16:5, write:M16:1
+    fm88     read:M16:4, write:M16:1
+    fm87     addr:?:1, write:M16:1
+    f0       read:M16:530, write:M16:216
+    f4       read:M16:13, write:M16:8
+    f16      write:M16:1
+    f17      read:M16:2, write:M16:1
+    f18      read:M16:1, write:M16:1
+    f19      read:M32:1
+    f42      read:M16:3
+    f43      read:M16:1
+    f6898    read:M16:6, write:M16:1
+  SD_PTR stride=None sites=160 routines=46 guarded-index-sites=0 index-forms=-
+    fm589    read:M16:1
+    fm588    read:M16:1
+    fm390    read:M16:1
+    fm377    read:M16:2, write:M16:3
+    fm376    read:M16:1
+    fm370    read:M16:2
+    fm265    read:M16:1
+    fm256    addr:?:2
+    f4       read:M16:1
+    f16      read:M16:2
+    f22      write:M16:1
+    f40      addr:?:111
+    f42      addr:?:1
+    f43      read:M16:13, write:M16:1
+    f6902    addr:?:1
+    f6912    write:M16:2
+    f6914    read:M16:1
+    f6936    write:M16:1
+    f6940    write:M16:1
+    f6941    write:M16:1
+    f6942    write:M16:1
+    f126906  addr:?:1, read:M16:2, write:M16:1
+    f127510  addr:?:1
+    f127812  addr:?:1
+    f128114  addr:?:1
+    f128416  addr:?:1
+  SD_PTR stride=6 sites=34 routines=8 guarded-index-sites=16 index-forms={'expr': 16, 'elemptr local': 12, 'scaled local': 6}
+    min K 6898 -> if the first field seen is field 0, origin = base + 6904 (1-based)
+    f6898    read:M16:12, write:M16:5
+    f6899    read:M16:3, write:M16:2
+    f6900    read:M16:3, write:M16:9
+  SD_PTR stride=686 sites=844 routines=66 guarded-index-sites=581 index-forms={'expr': 595, 'elemptr local': 136, 'scaled local': 113}
+    min K -642 -> if the first field seen is field 0, origin = base + 44 (1-based)
+    fm642    addr:?:2
+    fm640    addr:?:1
+    fm630    read:M16:1, write:M16:1
+    fm629    read:M16:40, write:M16:2
+    fm625    addr:?:4, read:M16:7, write:M16:2
+    fm611    write:M32:2
+    fm608    addr:?:3
+    fm589    addr:?:19, read:M16:47, write:M16:16
+    fm588    addr:?:18, read:M16:44, write:M16:17
+    fm489    read:M32:1
+    fm390    write:M16:1
+    fm379    read:M16:19, write:M16:13
+    fm378    read:M16:19, write:M16:6
+    fm377    read:M16:52, write:M16:17
+    fm376    read:M16:18, write:M16:5
+    fm375    read:M16:7, write:M16:5
+    fm374    read:M16:17, write:M16:10
+    fm373    read:M16:1, write:M16:3
+    fm372    read:M16:28, write:M16:18
+    fm371    read:M16:3, write:M16:2
+    fm370    read:M16:5, write:M16:3
+    fm365    read:M16:6
+    fm362    read:M16:2, write:M16:1
+    fm361    read:M16:7, write:M16:4
+    fm352    read:M16:1
+    fm349    read:M16:1
+    fm344    write:M16:1
+    fm343    write:M16:1
+    fm342    write:M16:1
+    fm341    write:M16:1
+    fm340    write:M16:1
+    fm339    write:M16:1
+    fm338    read:M16:1, write:M16:1
+    fm337    read:M16:1, write:M16:1
+    fm336    read:M16:1, write:M16:1
+    fm335    read:M16:1, write:M16:1
+    fm334    read:M16:1, write:M16:1
+    fm333    read:M16:1, write:M16:1
+    fm269    read:M16:1, write:M16:2
+    fm268    write:M16:2
+    fm267    write:M16:2
+    fm266    write:M16:2
+    fm265    read:M16:10, write:M16:3
+    fm264    read:M16:14, write:M16:8
+    fm256    read:M16:3, write:M16:3
+    fm255    read:M16:5, write:M16:9
+    fm254    read:M16:8, write:M16:3
+    fm253    read:M16:8, write:M16:3
+    fm172    read:M16:1, write:M16:1
+    fm171    read:M16:3, write:M16:5
+    fm170    read:M16:13, write:M16:7
+    fm90     read:M16:4, write:M16:3
+    fm89     read:M16:44, write:M16:2
+    fm88     read:M16:5, write:M16:2
+    fm87     addr:?:7, write:M16:4
+    fm86     addr:?:3
+    fm77     read:M16:1, write:M16:1
+    fm76     read:M16:1, write:M16:1
+    fm75     read:M16:2, write:M16:1
+    fm73     read:M16:1, write:M16:1
+    fm72     read:M16:1, write:M16:1
+    fm71     read:M16:1, write:M16:1
+    fm70     read:M16:1, write:M16:1
+    fm69     read:M16:1, write:M16:1
+    fm68     read:M16:1, write:M16:1
+    fm67     read:M16:1, write:M16:1
+    fm66     read:M16:1, write:M16:1
+    fm65     read:M16:1, write:M16:1
+    fm64     read:M16:1, write:M16:1
+    fm62     addr:?:2
+    f4       read:M16:3, write:M16:1
+    f15      read:M16:5, write:M16:4
+    f16      read:M16:4, write:M16:6
+    f17      read:M16:1, write:M16:7
+    f18      read:M16:1
+    f19      read:M32:10, write:M32:4
+    f21      read:M16:2, write:M16:10
+    f22      read:M16:2, write:M16:1
+    f23      addr:?:1, read:M16:3
+    f39      read:M16:1, write:M16:1
+    f40      write:M16:3
+    f41      read:M16:3, write:M16:1
+    f42      read:M16:23, write:M16:5
+    f43      read:M16:3, write:M16:1
+  OBJ_PTR stride=? sites=55 routines=18 guarded-index-sites=0 index-forms=-
+    fm17     read:M16:1
+    fm15     read:M16:2
+    f0       read:M16:4, write:M16:3
+    f1985    read:M16:1
+    f1986    read:M16:1
+    f11495   read:M16:6, write:M16:8
+    f11496   read:M16:5, write:M16:3
+    f11497   write:M16:4
+    f11498   read:M32:2, write:M32:4
+    f11500   write:M32:4
+    f11502   write:M16:1
+    f11503   read:M16:1, write:M16:1
+    f1035205 addr:?:2
+    f1035206 addr:?:2
+  OBJ_PTR stride=None sites=59 routines=16 guarded-index-sites=0 index-forms=-
+    fm15     read:M16:1
+    f1984    read:M16:1
+    f2001    read:M16:28, write:M16:2
+    f11495   addr:?:1, read:M16:1
+    f11498   write:M32:1
+    f11502   read:M32:18, write:M32:4
+    f944503  addr:?:1
+    f1035307 read:M16:1
+  OBJ_PTR stride=9 sites=520 routines=42 guarded-index-sites=248 index-forms={'expr': 272, 'scaled local': 140, 'elemptr local': 108}
+    min K 11495 -> if the first field seen is field 0, origin = base + 11504 (1-based)
+    f11495   addr:?:14, read:M16:49, write:M16:74
+    f11496   addr:?:14, read:M16:64, write:M16:45
+    f11497   read:M16:56, write:M16:14
+    f11498   addr:?:2, read:M32:68, write:M32:35
+    f11500   read:M32:26, write:M32:15
+    f11502   read:M16:8, write:M16:18
+    f11503   read:M16:7, write:M16:11
+  OBJ_PTR stride=19 sites=25 routines=8 guarded-index-sites=16 index-forms={'expr': 19, 'scaled local': 2, 'elemptr local': 4}
+    min K 1983 -> if the first field seen is field 0, origin = base + 2002 (1-based)
+    f1983    addr:?:1, read:M16:5
+    f1984    addr:?:1, read:M16:4, write:M16:1
+    f1985    read:M16:2, write:M16:1
+    f1986    addr:?:3, read:M16:7
+  OBJ_PTR stride=20 sites=51 routines=4 guarded-index-sites=16 index-forms={'expr': 18, 'elemptr local': 23, 'scaled local': 10}
+    min K -19 -> if the first field seen is field 0, origin = base + 1 (1-based)
+    fm19     read:M16:15
+    fm18     read:M16:14, write:M16:1
+    fm17     read:M16:7
+    fm16     read:M16:8, write:M16:1
+    fm15     addr:?:3, read:M16:2
+  OBJ_PTR stride=22 sites=1 routines=1 guarded-index-sites=0 index-forms={'expr': 1}
+    min K 1035288 -> if the first field seen is field 0, origin = base + 1035310 (1-based)
+    f1035288 addr:?:1
+  CAS_PTR stride=? sites=77 routines=17 guarded-index-sites=0 index-forms=-
+    fm23     addr:?:1, read:M16:3
+    fm22     read:M16:3
+    fm21     read:M16:2
+    fm17     read:M16:1
+    f0       read:M16:20, write:M16:8
+    f22959   read:M16:7, write:M16:15
+    f62999   read:M16:1, write:M16:1
+    f63000   read:M16:4, write:M16:2
+    f63600   read:M16:6, write:M16:3
+  CAS_PTR stride=None sites=18 routines=5 guarded-index-sites=0 index-forms=-
+    fm23     read:M16:1
+    fm22     read:M16:2
+    fm1      addr:?:1
+    f63000   read:M16:7, write:M16:1
+    f63598   addr:?:2, write:M16:2
+    f63599   write:M16:2
+  CAS_PTR stride=23 sites=117 routines=22 guarded-index-sites=49 index-forms={'expr': 70, 'scaled local': 30, 'elemptr local': 17}
+    min K -23 -> if the first field seen is field 0, origin = base + 0 (1-based)
+    fm23     addr:?:11, read:M16:16, write:M16:1
+    fm22     addr:?:11, read:M16:15, write:M16:1
+    fm21     addr:?:2, read:M16:12, write:M16:2
+    fm20     addr:?:2, read:M16:7, write:M16:4
+    fm19     addr:?:2, read:M16:5, write:M16:2
+    fm18     read:M16:4, write:M16:3
+    fm17     addr:?:5, read:M16:11, write:M16:1
+  GWB_PTR stride=None sites=2 routines=2 guarded-index-sites=0 index-forms=-
+    f2       write:M32:1
+    f8       read:M16:1
+
+## local shapes per routine (record recognition through frame locals)
+  QUEST: local_14=mixed; local_20=mixed; local_32=mixed; local_46=mixed; local_66=mixed
+  QUEST.1@7015C5E1: local_6=('elemptr', 1879048720, 686, 0); local_8=('scaled', 686)
+  ALCHEMIST_HOME: local_50=mixed
+  ALLY_PLAYER: local_588=mixed
+  ATTACK: local_44=mixed; local_46=mixed
+  ATTACK.1@7015E113: local_20=mixed
+  ATTACK.2@7015E1F1: local_4=mixed; local_6=mixed; local_8=mixed; local_10=mixed
+  ATTACK.3@7015E84A: local_12=mixed; local_14=mixed; local_72=mixed
+  ATTACK.5@7015F8F6: local_2=mixed
+  BACKPACK: local_36=mixed
+  BARGAIN: local_16=mixed; local_18=mixed
+  BEING_ATTACK: local_34=mixed; local_36=mixed; local_38=mixed; local_40=mixed; local_42=mixed
+  BOAT: local_34=mixed; local_36=mixed; local_38=mixed
+  CATAPULT: local_12=mixed; local_14=mixed; local_16=mixed; local_18=mixed
+  CAST: local_86=mixed
+  CAST.1@7016243F: local_12=mixed; local_14=mixed; local_36=mixed; local_68=mixed; local_70=mixed
+  CAST.4@70163682: local_2=mixed
+  CASTLE_INVENTORY: local_24=mixed; local_26=mixed
+  CAVE_ATTACK: local_38=mixed
+  CAVE_ATTACK.1@701643E0: local_2=mixed; local_22=mixed; local_24=mixed
+  CAVE_ATTACK.2@70164600: local_2=mixed; local_4=mixed
+  CLONE_SUNDAR: local_12=mixed; local_14=mixed; local_16=mixed; local_18=mixed; local_20=('elemptr', 1879048720, 6, 0)
+  CREATE_MAP: local_3104=mixed; local_3116=mixed; local_3118=mixed; local_3120=mixed
+  DEFEND: local_42=mixed; local_44=mixed; local_48=mixed
+  DIED: local_8=mixed; local_10=mixed; local_12=mixed; local_14=mixed
+  DISPLAY_CAVE: local_4=mixed; local_6=mixed
+  DISPLAY_SCREEN: local_1042=mixed; local_1044=mixed; local_1048=mixed; local_1050=mixed
+  DISPLAY_INVENTORY: local_30=mixed; local_32=mixed; local_40=mixed; local_42=mixed
+  DROP: local_20=mixed; local_22=mixed; local_44=mixed; local_46=mixed
+  FAKE_LAND_MASS: local_10=mixed; local_12=mixed; local_14=mixed; local_16=mixed; local_20=mixed; local_22=mixed
+  FAKE_OCEAN: local_8=mixed; local_10=mixed
+  FIRE: local_24=mixed; local_40=mixed; local_42=mixed; local_44=mixed; local_46=mixed
+  FIRE.1@7016A3BD: local_2=mixed
+  FIRE.3@7016A4F8: local_4=mixed; local_6=('elemptr', 1879048722, 9, 0); local_20=mixed
+  FIND_OBJECT: local_8=mixed; local_12=('scaled', 686)
+  GET_QUEST: local_508=mixed; local_510=mixed
+  HELP: local_34=mixed
+  INIT_SCREEN: local_8=mixed; local_10=mixed
+  KILL_PLAYER: local_534=mixed; local_544=mixed; local_562=mixed; local_564=mixed
+  KNIGHT_ATTACK: local_18=mixed; local_20=mixed; local_22=mixed; local_24=('elemptr', 1879048722, 9, 0)
+  LIST_PLAYERS: local_564=mixed; local_566=mixed; local_666=mixed
+  LIST_PLAYERS.3@7016F556: local_6=('scaled', 686)
+  MOVE: local_8=mixed; local_10=mixed; local_12=mixed
+  MOVE_FAMILIAR: local_18=mixed; local_20=mixed; local_22=mixed; local_24=mixed; local_48=mixed
+  MOVE_IN_CAVE: local_22=mixed; local_24=mixed; local_26=mixed
+  MOVE_PLAYER: local_34=mixed; local_36=mixed; local_38=mixed; local_40=mixed
+  MOVE_PLAYER.1@701729E2: local_8=('scaled', 686)
+  OBSERVE: local_96=mixed; local_126=mixed; local_128=mixed; local_152=mixed
+  OP_EDIT: local_12=mixed; local_32=mixed; local_34=mixed; local_36=mixed; local_38=mixed; local_54=mixed
+  OWNS: local_4=('scaled', 686)
+  LOGON: local_32=mixed
+  PICK_X_Y: local_4=mixed; local_6=mixed
+  PLACE_PLAYER: local_8=mixed; local_10=mixed; local_12=mixed; local_14=mixed
+  REGEN_SPELLS: local_8=mixed; local_10=mixed; local_12=mixed
+  REPORT: local_12=mixed; local_24=mixed; local_42=mixed
+  SEIGE: local_30=mixed; local_32=mixed; local_48=mixed
+  SIGNAL_TURN: local_20=mixed; local_22=mixed; local_26=mixed
+  START_TURN: local_32=mixed; local_92=mixed; local_94=mixed
+  SPYGLASS: local_26=mixed
+  STORE: local_46=mixed; local_60=mixed; local_62=mixed; local_186=mixed
+  STORMS_AT_SEA: local_6=mixed
+  TAKE: local_14=mixed; local_16=mixed; local_18=mixed; local_20=mixed; local_22=mixed
+  TERRITORY_MAP: local_6800=mixed; local_6802=mixed; local_6804=mixed; local_6806=mixed; local_6808=mixed; local_6810=mixed; local_6812=mixed; local_6814=mixed; local_6816=mixed; local_6820=mixed
+  TAKE_OVER_CASTLE: local_20=mixed; local_22=mixed; local_24=mixed; local_40=mixed
+  TERRAIN: local_8=mixed
+  TERRITORY: local_12=mixed; local_14=mixed; local_16=mixed; local_18=mixed
+  TOWER_ATTACK: local_14=mixed; local_16=mixed
+  TRANSPORT_TERRAK: local_10=mixed; local_12=mixed; local_14=mixed; local_24=mixed
+  UPDATE_SCREENS: local_6=mixed; local_8=('elemptr', 1879048720, 686, 0)
+  WRITE_OBJECT: local_4=('scaled', 9); local_6=('elemptr', 1879048722, 9, 0)
