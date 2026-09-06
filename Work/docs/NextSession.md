@@ -42,8 +42,10 @@
   **docs/Project29/StringsDesign.md** is the design of record (Sep 5–6).
   Implementation is four projects: **P30 library — MERGED (043 GREEN)**;
   P31 located strings (docs/Project31/PROMPT.md) — Phase A done on
-  branch p31-located-strings @ 61886be, Phase B now unblocked; then P32
-  append chains, P33 p@b + the checker (prompts after P31).
+  branch p31-located-strings @ 61886be, Phase B now unblocked; **P33-A** (the checker half, dark:
+  docs/Project33/PROMPT-A.md — hooks, ClaimDelta wiring, F2-b, the
+  ABORT readout) may run in parallel with P31 Phase B (no shared
+  files); then P32 append chains, P33-B p@b executor half.
 - Later: float + DIVX/WDIVS/WLOB (~80 embeds), F2-b checker item + ABORT
   readout off-by-one, retire borrow-slot allocation from the address
   book, the typing pass (flat-graph world). Frames stay embedded until
