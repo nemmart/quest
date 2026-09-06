@@ -204,8 +204,11 @@ void Lockstep::compare_pair(QueueEntry* master, QueueEntry* clone) {
       // WMSP claims in its current frame; today Δ_m == Δ_c at every pair
       // (both engines claim), after P33-B the clone's Δ is 0 and this is
       // master_wsp − clone_wsp == Δ(frame) verbatim.
-      int32_t dm = master->machine->strhooks ? master->machine->strhooks->delta(master->machine->wfp) : 0;
-      int32_t dc = clone->machine->strhooks ? clone->machine->strhooks->delta(clone->machine->wfp) : 0;
+      // P33-B: the TOTAL over live frames — at a rendezvous inside the
+      // consuming ?WRITE_SCREEN the caller's claims are still on the master's
+      // stack (a callee's Δ(wfp) is 0, its caller's is not).
+      int32_t dm = master->machine->strhooks ? master->machine->strhooks->outstanding() : 0;
+      int32_t dc = clone->machine->strhooks ? clone->machine->strhooks->outstanding() : 0;
       wsp_differs = (master->machine->wsp - dm) != (clone_side - dc);
     } else
       wsp_differs = master->machine->wsp != clone_side;
@@ -244,6 +247,8 @@ void Lockstep::compare_pair(QueueEntry* master, QueueEntry* clone) {
   // divergence.
   if(aborting.load())
     return;
+  if(halting.load())
+    return;              // P33-C: a shutdown-truncated pair is not compared
 
   // One-sided terminal arrival is structural divergence (same-address
   // one-sided arrival is impossible for emulated convergence, but a native
@@ -346,17 +351,17 @@ void Lockstep::compare_pair(QueueEntry* master, QueueEntry* clone) {
           printf("  ac%d: clone value %08X is an ARENA address in NO row (word %08X)\n", i,
                  static_cast<uint32_t>(clone->machine->ac[i]), v.clone_word);
         else if(row->master_addr == 0)
-          printf("  ac%d: clone value %08X hits UNMAPPED arena row block=%08X arena=%08X — no master temp for p@%08X\n", i,
-                 static_cast<uint32_t>(clone->machine->ac[i]), row->block, row->arena_addr, row->block);
+          printf("  ac%d: clone value %08X hits UNMAPPED arena row t@%08X.%u arena=%08X — no master temp for it now\n", i,
+                 static_cast<uint32_t>(clone->machine->ac[i]), row->block, row->claim, row->arena_addr);
         else
-          printf("  ac%d: clone value %08X hits mapped arena row block=%08X arena=%08X master=%08X wfp=%08X, maps to %08X != master %08X\n", i,
-                 static_cast<uint32_t>(clone->machine->ac[i]), row->block, row->arena_addr, row->master_addr,
+          printf("  ac%d: clone value %08X hits mapped arena row t@%08X.%u arena=%08X master=%08X wfp=%08X, maps to %08X != master %08X\n", i,
+                 static_cast<uint32_t>(clone->machine->ac[i]), row->block, row->claim, row->arena_addr, row->master_addr,
                  static_cast<uint32_t>(row->wfp), v.mapped, static_cast<uint32_t>(master->machine->ac[i]));
       }
     }
-    int32_t dm = master->machine->strhooks ? master->machine->strhooks->delta(master->machine->wfp) : 0;
-    int32_t dc = clone->machine->strhooks ? clone->machine->strhooks->delta(clone->machine->wfp) : 0;
-    printf("  strings: delta_master=%d delta_clone=%d (claim-free wsps: master %08X, clone %08X)\n", dm, dc,
+    int32_t dm = master->machine->strhooks ? master->machine->strhooks->outstanding() : 0;
+    int32_t dc = clone->machine->strhooks ? clone->machine->strhooks->outstanding() : 0;
+    printf("  strings: outstanding_master=%d outstanding_clone=%d (claim-free wsps: master %08X, clone %08X)\n", dm, dc,
            static_cast<uint32_t>(master->machine->wsp - dm),
            static_cast<uint32_t>(clone->machine->shadow_wsp() + clone->machine->mapper.checkpoint_offset() - dc));
   }
@@ -388,6 +393,7 @@ bool Lockstep::terminal_abort_pending(QueueEntry* master, std::string* msg) {
   return true;
 }
 std::atomic<bool> Lockstep::aborting{false};
+std::atomic<bool> Lockstep::halting{false};
 std::atomic<bool> Lockstep::suppress_save{false};
 
 void Lockstep::retire_ordinal(Machine* machine) {

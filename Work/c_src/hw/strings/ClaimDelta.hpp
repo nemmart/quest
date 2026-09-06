@@ -36,6 +36,13 @@ public:
   // Mapper::frame_precedes; numeric order is wrong there).
   size_t frame_exit_where(const std::function<bool(int32_t)>& gone, int32_t* bad_wfp, int32_t* bad_delta);
   int32_t delta(int32_t wfp) const;
+  // P33-B: every outstanding claim in EVERY live frame. At a rendezvous
+  // inside a callee (the consuming ?WRITE_SCREEN runs inside the claim
+  // bracket; its blocks are listed) the master's wsp carries the CALLER's
+  // claims, so the wsp compare subtracts the total, not the current
+  // frame's share. Frames above the current one hold no claims (LIFO,
+  // asserted at every ordinary frame exit).
+  int32_t total() const;
   bool check(int32_t wfp, int32_t master_wsp, int32_t clone_wsp) const;
   size_t frames() const { return delta_.size(); }
   void clear() { delta_.clear(); }

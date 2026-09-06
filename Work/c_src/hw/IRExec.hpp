@@ -58,7 +58,9 @@ public:
     bool executed = false;           // first-execution log (coverage)
   };
   struct Stmt {
-    enum Kind { INSTR, STMT, CALL, RET, GOTO, ASSERT, RT_CALL, STRING } kind = STMT;
+    enum Kind { INSTR, STMT, CALL, RET, GOTO, ASSERT, RT_CALL, STRING, CLAIM, RELEASE } kind = STMT;
+                                     // CLAIM/RELEASE (P33-B, ir 6): target = the twin's word address,
+                                     //   args = capacity (CLAIM) ; marker = the size register (CLAIM)
     uint32_t pc = 0;                 // INSTR: address; CALL/RT_CALL: site pc
     uint32_t target = 0;             // CALL: callee
     uint32_t ret = 0;                // CALL: declared return pc (belief)

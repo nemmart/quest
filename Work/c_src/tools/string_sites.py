@@ -382,6 +382,8 @@ def subv(a, b, deps=()):       # a - b
 def shl(a, n, deps=()):
     deps = frozenset(deps)
     if a.kind == 'const':
+        if n == 1 and P33 is not None and p33_twin_of_word(a.k) is not None:
+            return V('bp', a=a, k=0, deps=a.deps | deps)  # P33: a twin's word address -> its byte pointer form
         return const((a.k << n) & 0xFFFFFFFF, a.deps | deps)
     if n == 1:
         return V('bp', a=a, k=0, deps=a.deps | deps)      # word address -> byte pointer
@@ -408,6 +410,57 @@ def parse_ea(text):
     return ind, base, disp, fold, fb
 
 STRING_OPS = ('WCMV', 'WCMP', 'WBLM', 'WMSP', 'STASP')
+
+# ----------------------------------------------------------------------
+# Project 33-B — the WMSP claim groups as arena twins (--p33).  Loaded from
+# quest.strhooks (which WMSPs belong to which block, in order) and
+# quest.arena (t@<block>.<k> -> word address, capacity).  In P33 mode the
+# evaluator lowers the `LDASP r; WADI 2,r` pair before claim k of a table
+# block to the twin's ADDRESS (a constant), so every downstream operand
+# that the master keeps on its stack is a static arena location here and
+# renders through P32's pipeline unchanged.
+# ----------------------------------------------------------------------
+P33 = None      # None = off; else {'blocks': {block: nclaims}, 'twins': {(block,k): (addr, cap)}, 'by_addr': {addr: (block,k,cap)}}
+
+def p33_load(strhooks_path, arena_path):
+    blocks = {}
+    for line in open(strhooks_path):
+        t = line.split()
+        if line.startswith('row '):
+            blocks[int(t[2], 16)] = int([x for x in t if x.startswith('nclaims=')][0].split('=')[1])
+    twins, by_addr = {}, {}
+    for line in open(arena_path):
+        if not line.startswith('temp '):
+            continue
+        t = line.split()
+        name = t[2]                      # t@<block>.<k>
+        blk, k = name[2:].split('.')
+        blk, k = int(blk, 16), int(k)
+        addr = int(t[3].split('=')[1], 16)
+        cap = int(t[4].split('=')[1])
+        twins[(blk, k)] = (addr, cap)
+        by_addr[addr] = (blk, k, cap)
+    return {'blocks': blocks, 'twins': twins, 'by_addr': by_addr}
+
+def p33_twin_of_word(w):
+    """word address inside a twin -> (block, k, word offset) or None"""
+    if P33 is None:
+        return None
+    for addr, (blk, k, cap) in P33['by_addr'].items():
+        if addr <= w <= addr + 1 + (cap + 1) // 2:
+            return blk, k, w - addr
+    return None
+
+def p33_name(blk, k):
+    return 't@%08X.%d' % (blk, k)
+
+def p33_word_text(w):
+    """render an arena word address: t@b.k or wp(t@b.k, off)"""
+    t = p33_twin_of_word(w)
+    if t is None:
+        return None
+    blk, k, off = t
+    return p33_name(blk, k) if off == 0 else 'wp(%s, %d)' % (p33_name(blk, k), off)
 
 class Site:
     def __init__(self, ins, acs, wsp, claims):
@@ -440,6 +493,8 @@ class Evaluator:
         self.ins = ins
         self.syms = syms
         self.chain = []        # predecessor blocks whose state we inherited
+        self.p33_k = 0         # P33: LDASP/WADI pairs seen in this claim block
+        self.p33_pairs = []    # P33: (k, ldasp_idx, wadi_idx, reg)
         if inherit is None:
             self.ac = [V('entry', k=i) for i in range(4)]
             # ac3 at block entry is presumed to be the frame pointer (the
@@ -687,7 +742,22 @@ class Evaluator:
             self.store(ac[int(a[0])], ac[int(a[1])].with_deps([idx]), idx)
         # ---- arithmetic ----
         elif mn == 'WADI':            # WADI imm,ac
-            ac[int(a[1])] = add(ac[int(a[1])], int(a[0]), [idx])
+            r_ = int(a[1])
+            before = ac[r_]
+            ac[r_] = add(ac[r_], int(a[0]), [idx])
+            # P33: `LDASP r; WADI 2,r` in a claim block = the base of claim k
+            # -> the twin's address (the clone keeps its temps in the arena)
+            if P33 is not None and int(a[0]) == 2 and self.block.start in P33['blocks']:
+                d = subv(before, self.wsp)
+                if d.kind == 'const' and d.k == 0 and idx >= 1 and self.ins[idx - 1].mn == 'LDASP' and (idx - 1) in before.deps:
+                    self.p33_k += 1
+                    k = self.p33_k
+                    if k > P33['blocks'][self.block.start]:
+                        raise RuntimeError('P33: block %08X has more LDASP/WADI-2 pairs than claims' % self.block.start)
+                    addr = P33['twins'][(self.block.start, k)][0]
+                    ac[r_] = const(addr, [idx])
+                    ac[r_].tag = ('arena', self.block.start, k)
+                    self.p33_pairs.append((k, idx - 1, idx, r_))
         elif mn == 'WSBI':            # WSBI imm,ac
             ac[int(a[1])] = add(ac[int(a[1])], -int(a[0]), [idx])
         elif mn in ('WNADI', 'NADDI'):           # ac,imm16 sign-extended (EagleCompute.cpp:317)
@@ -920,6 +990,9 @@ def classify_ptr(v, ctx):
         cont = ' [cont after %s@%X]' % (v.tag[0], v.tag[1]) if isinstance(v.tag, tuple) and v.tag[0] == 'cont' else ''
         if base.kind == 'const':
             w, b = bp_to_word(word_to_bp(base.k) + off)
+            tw = p33_twin_of_word(w)
+            if tw is not None:               # P33: before the code test — the arena is above the code range
+                return 'arena', '%s word%+d byte %d%s' % (p33_name(tw[0], tw[1]), tw[2], b, cont), boff
             if is_code_addr(w):
                 return 'literal', '0x%X:%d%s' % (w, b, cont), boff
             if is_data_addr(w):
@@ -1447,6 +1520,10 @@ P31_WCMV_IDIOMS = ('ASSIGN-LIT-VARYING', 'ASSIGN-LIT-VARYING-PAD', 'ASSIGN-STR-V
 
 def ir_const(k):
     k &= 0xFFFFFFFF
+    if P33 is not None:
+        t = p33_word_text(k)
+        if t is not None:
+            return t
     if k >= 0x80000000:
         s = k - 0x100000000
         return str(s) if s > -256 else '-0x%X' % -s
@@ -2064,7 +2141,11 @@ def ir_bp32(v, leaves, ctx):
     base, off, bterm = v.a, v.k, v.b
     if base.kind == 'const':
         w, b = bp_to_word(word_to_bp(base.k) + off)
-        s = '0x%X:%d' % (w, b)
+        tw = p33_twin_of_word(w)
+        if tw is not None:
+            s = 'bp(%s, %d)' % (p33_name(tw[0], tw[1]), 2 * tw[2] + b)
+        else:
+            s = '0x%X:%d' % (w, b)
     else:
         t, c = lin_parts(base)
         rest = _mk(t, 0, frozenset())
@@ -2081,7 +2162,7 @@ def piece32(cnt, ptr, ctx, leaves, role):
         raise Refuse('COMPUTED-OPERAND', '%s pointer is not a byte pointer: %s' % (role, ptr.show()))
     if ptr.a.kind == 'const' and ptr.b is None:
         w, b = bp_to_word(word_to_bp(ptr.a.k) + ptr.k)
-        if is_code_addr(w):
+        if is_code_addr(w) and p33_twin_of_word(w) is None:   # (P33: a twin is not a literal)
             if cnt.kind == 'const':
                 if cnt.k == 0:
                     return '[@0x%X:%d, 0]' % (w, b), 'located-fixed', 'zero-length literal (blanks)'
@@ -2253,7 +2334,7 @@ def p32_render(s, ctx):
                         t, kind, det = piece32(cnt, ptr, ctx, lv, name)
                         d = cnt.deps | ptr.deps
                     elif mode[name]['ptr'] == 'expr':
-                        pt = ir_bp32(ptr, lv, ctx) if not (ptr.a.kind == 'const' and ptr.b is None) else '0x%X:%d' % bp_to_word(word_to_bp(ptr.a.k) + ptr.k)
+                        pt = ir_bp32(ptr, lv, ctx) if not (ptr.a.kind == 'const' and ptr.b is None and p33_twin_of_word(bp_to_word(word_to_bp(ptr.a.k) + ptr.k)[0]) is None) else '0x%X:%d' % bp_to_word(word_to_bp(ptr.a.k) + ptr.k)
                         t, kind, det = '[@%s, ac%d]' % (pt, cr), 'located-fixed', 'count register ac%d (%s)' % (cr, cnt.show())
                         d = set(ptr.deps)
                     elif mode[name]['cnt'] == 'expr':
@@ -2827,9 +2908,18 @@ def main():
     ap.add_argument('--p31-tsv', help='P31: one line per candidate site (pc, verdict) for the battery')
     ap.add_argument('--p32', help='P32: write the append-chain per-site ledger')
     ap.add_argument('--p32-tsv', help='P32: one line per candidate site for lower.py / the battery')
+    ap.add_argument('--strhooks', help='P33-B: quest.strhooks (the claim groups)')
+    ap.add_argument('--arena', help='P33-B: quest.arena (the twins)')
+    ap.add_argument('--p33', help='P33-B: write the claim-group ledger (needs --strhooks --arena)')
+    ap.add_argument('--p33-tsv', help='P33-B: the lower.py artifact (--strings-sites33)')
     args = ap.parse_args()
     t0 = time.time()
 
+    global P33
+    if args.p33:
+        if not (args.strhooks and args.arena):
+            sys.exit('--p33 needs --strhooks and --arena')
+        P33 = p33_load(args.strhooks, args.arena)
     ins = load_dis(args.dis)
     blocks = load_blocks(args.blocks, ins)
     mem, regions = load_mem(args.mem)
@@ -2900,6 +2990,14 @@ def main():
             write_site(f, s, ctx)
     with open(args.census, 'w') as f:
         write_census(f, sites, ctx)
+    if args.p33:
+        shas = [(k, hashlib.sha256(open(p, 'rb').read()).hexdigest()) for k, p in
+                (('dis', args.dis), ('blocks', args.blocks), ('mem', args.mem), ('strhooks', args.strhooks), ('arena', args.arena))]
+        groups = write_p33(args.p33, args.p33_tsv or args.p33 + '.tsv', sites, ctx, shas)
+        print('p33: %d groups, %d EMIT, %d REFUSE' % (len(groups), sum(1 for g in groups if g['reason'] is None), sum(1 for g in groups if g['reason'])))
+        for g in groups:
+            if g['reason']:
+                print('   REFUSE %08X %s: %s: %s' % (g['block'], g['func'], g['reason'][0], g['reason'][1]))
     if args.p31:
         shas = [(k, hashlib.sha256(open(p, 'rb').read()).hexdigest()) for k, p in
                 (('dis', args.dis), ('blocks', args.blocks), ('mem', args.mem))]
@@ -3149,6 +3247,117 @@ def write_census(f, sites, ctx):
     for (w, b), bylen in sorted(ctx.lits.items()):
         if len(bylen) > 1:
             W('%X:%d lengths %s\n' % (w, b, ', '.join('%s(x%d)' % (k, len(v)) for k, v in bylen.items())))
+
+
+# ----------------------------------------------------------------------
+# Project 33-B — write the per-group ledger and the lower.py artifact (--p33)
+# ----------------------------------------------------------------------
+
+def write_p33(path, tsv_path, sites, ctx, shas):
+    """Every claim group of the table: the LDASP/WADI pairs (-> acN = t@b.k),
+    the WMSPs (-> claim), the STASP (-> release), and every WCMV with an
+    arena operand (-> P32's pipeline).  A group whose sites do not all
+    EMIT is refused whole (every row REFUSE): its WMSPs stay embedded and
+    the clone keeps claiming there (expected Δ_clone != 0)."""
+    state = ctx.state
+    groups = []
+    for blk, nclaims in sorted(P33['blocks'].items()):
+        e = state.get(blk)
+        g = {'block': blk, 'nclaims': nclaims, 'func': ctx.by_start[blk].func, 'rows': [], 'reason': None, 'sites': []}
+        groups.append(g)
+        if e is None:
+            g['reason'] = ('P33-EVAL', 'block not evaluated'); continue
+        pairs = e.p33_pairs
+        if len(pairs) != nclaims:
+            g['reason'] = ('P33-PAIRS', '%d LDASP/WADI pairs for %d claims' % (len(pairs), nclaims)); continue
+        for k, li, wi, r in pairs:
+            g['rows'].append({'pc': ctx.ins[wi].pc, 'op': 'WADI', 'block': blk, 'fold': [ctx.ins[li].pc],
+                              'ir': 'ac%d = %s' % (r, p33_name(blk, k)), 'idiom': 'CLAIM-BASE', 'chain': p33_name(blk, k)})
+        wm = [s for s in e.sites if s.ins.mn == 'WMSP']
+        if len(wm) != nclaims:
+            g['reason'] = ('P33-CLAIMS', '%d WMSPs for %d claims' % (len(wm), nclaims)); continue
+        for k, s in enumerate(wm, 1):
+            n = int(s.ins.args)
+            g['rows'].append({'pc': s.ins.pc, 'op': 'WMSP', 'block': blk, 'fold': [],
+                              'ir': 'claim %s, ac%d' % (p33_name(blk, k), n), 'idiom': 'CLAIM', 'chain': p33_name(blk, k)})
+        # the group's blocks and its STASP: every site whose arena operand names this block
+        twin_sites = []
+        stasp = None
+        for s in sites:
+            if hasattr(s, 'pbr'):
+                continue
+            if s.ins.mn == 'STASP' and s.func == g['func']:
+                n = int(s.ins.args)
+                v = s.acs[n]
+                if v.kind == 'const' and (v.k + 2) in P33['by_addr'] and P33['by_addr'][v.k + 2][0] == blk:
+                    if stasp is not None:
+                        g['reason'] = ('P33-RELEASE', 'two STASPs restore from this block')
+                    stasp = (s, n, v)
+            if s.ins.mn == 'WCMV' and s.klass:
+                for i in (2, 3):
+                    if s.klass[i][0] == 'arena' and s.klass[i][1].startswith(p33_name(blk, 0)[:-1]):
+                        twin_sites.append(s); break
+            if s.ins.mn == 'WCMP' and s.klass and any(s.klass[i][0] == 'arena' and s.klass[i][1].startswith(p33_name(blk, 0)[:-1]) for i in (2, 3)):
+                g['reason'] = ('P33-WCMP', 'a WCMP reads a twin (not a WCMV)')
+        if g['reason']:
+            continue
+        if stasp is None:
+            g['reason'] = ('P33-RELEASE', 'no STASP restores wsp from t@%08X.1 - 2' % blk); continue
+        s, n, v = stasp
+        if P33['by_addr'][v.k + 2][1] != 1:
+            g['reason'] = ('P33-RELEASE', 'STASP restores from t@%08X.%d, not claim 1' % (blk, P33['by_addr'][v.k + 2][1])); continue
+        g['rows'].append({'pc': s.ins.pc, 'op': 'STASP', 'block': s.block.start, 'fold': [],
+                          'ir': 'release t@%08X, ac%d' % (blk, n), 'idiom': 'RELEASE', 'chain': p33_name(blk, 1)})
+        for s in sorted(twin_sites, key=lambda s: s.ins.pc):
+            r = p32_render(s, ctx)
+            g['sites'].append(r)
+            if r.verdict != 'EMIT':
+                g['reason'] = ('P33-SITE', '%08X %s: %s' % (s.ins.pc, r.cat, r.reason))
+        if g['reason']:
+            continue
+        for r in g['sites']:
+            fold = [ctx.ins[i].pc for i in sorted(r.fold)]
+            tw = [s_.klass[i][1].split()[0] for s_ in [r.site] for i in (2, 3) if s_.klass[i][0] == 'arena']
+            g['rows'].append({'pc': r.pc, 'op': r.op, 'block': r.block, 'fold': fold, 'ir': r.text,
+                              'idiom': r.idiom, 'chain': ' '.join(tw), 'form': r.form, 'dest': r.dest, 'render': r})
+    nsite = sum(len(g['sites']) for g in groups)
+    emitted = [g for g in groups if g['reason'] is None]
+    with open(path, 'w') as f:
+        W = f.write
+        W('# Project 33-B — WMSP claim groups as arena twins: per-group ledger (tools/string_sites.py --p33)\n')
+        for k, v in shas:
+            W('# %s sha256=%s\n' % (k, v))
+        W('# per group: the LDASP/WADI pairs (acN = t@b.k), the WMSPs (claim), the STASP (release), the WCMVs with a twin operand (P32 pipeline)\n')
+        W('# a group is EMIT only if every row is; else REFUSE whole (embedded, Δ_clone != 0 there is EXPECTED)\n\n')
+        for g in groups:
+            W('== group %08X %s claims %d  %s\n' % (g['block'], g['func'], g['nclaims'], 'EMIT' if g['reason'] is None else 'REFUSE %s: %s' % g['reason']))
+            for row in g['rows']:
+                W('   %08X %-5s block %08X %-28s %s%s\n' % (row['pc'], row['op'], row['block'], row['idiom'], row['ir'],
+                  ('   <- fold ' + ' '.join('%08X' % p_ for p_ in row['fold'])) if row['fold'] else ''))
+            for r in g['sites']:
+                if r.verdict != 'EMIT':
+                    W('   %08X WCMV REFUSE %s: %s\n' % (r.pc, r.cat, r.reason))
+                for nn in r.notes:
+                    W('      note %08X %s\n' % (r.pc, nn))
+            W('\n')
+        W('# groups %d: EMIT %d, REFUSE %d; twin WCMV sites %d; rows %d\n' % (
+            len(groups), len(emitted), len(groups) - len(emitted), nsite, sum(len(g['rows']) for g in groups)))
+        for cat, c in collections.Counter(g['reason'][0] for g in groups if g['reason']).most_common():
+            W('#   refuse %s: %d\n' % (cat, c))
+    with open(tsv_path, 'w') as f:
+        f.write('# p33 sites — machine-readable ledger (tools/string_sites.py --p33-tsv); consumed by lower.py --strings-sites33\n')
+        for k, v in shas:
+            f.write('# %s sha256=%s\n' % (k, v))
+        f.write('# pc\top\tblock\tfunc\tidiom\tdest\tverdict\tcategory\treason\tfold\tir\tform\tslice\tchain\n')
+        for g in groups:
+            for row in g['rows']:
+                ok = g['reason'] is None
+                f.write('%08X\t%s\t%08X\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%d\t%s\n' % (
+                    row['pc'], row['op'], row['block'], g['func'], row['idiom'], row.get('dest', '-'),
+                    'EMIT' if ok else 'REFUSE', '' if ok else g['reason'][0], '' if ok else g['reason'][1],
+                    ' '.join('%08X' % p_ for p_ in row['fold']), row['ir'] if ok else '',
+                    row.get('form', 'stmt'), 7, row['chain']))
+    return groups
 
 if __name__ == '__main__':
     main()

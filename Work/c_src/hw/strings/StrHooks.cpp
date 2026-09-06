@@ -84,20 +84,17 @@ bool StrHooks::load_file(const std::string& path, std::string* err) {
     std::vector<std::string> t;
     for(std::string x; ss >> x;) t.push_back(x);
     if(kind == "row") {
-      if(t.size() < 8) return fail("row: too few fields");
+      if(t.size() < 6) return fail("row: too few fields");
       HookRow r;
       std::string v;
       if(!parse_dec(t[0], r.id) || r.id == 0) return fail("row: bad id");
       if(!parse_hex(t[1], r.block)) return fail("row: bad block");
       r.routine = t[2];
-      if(!kv(t[3], "arena", v) || !parse_hex(v, r.arena_addr)) return fail("row: bad arena=");
-      if(!kv(t[4], "cap", v) || !parse_dec(v, r.capacity)) return fail("row: bad cap=");
-      if(!kv(t[5], "first", v) || !parse_hex(v, r.first)) return fail("row: bad first=");
-      if(!kv(t[6], "last", v) || !parse_hex(v, r.last)) return fail("row: bad last=");
-      if(!kv(t[7], "nclaims", v) || !parse_dec(v, r.nclaims) || r.nclaims == 0) return fail("row: bad nclaims=");
+      if(!kv(t[3], "first", v) || !parse_hex(v, r.first)) return fail("row: bad first=");
+      if(!kv(t[4], "last", v) || !parse_hex(v, r.last)) return fail("row: bad last=");
+      if(!kv(t[5], "nclaims", v) || !parse_dec(v, r.nclaims) || r.nclaims == 0) return fail("row: bad nclaims=");
       if(r.id != rows_.size() + 1) return fail("row: ids must be 1..n in order");
       if(!blocks.insert(r.block).second) return fail("row: duplicate block " + hex(r.block));
-      if(!Mapper::is_arena(r.arena_addr)) return fail("row: arena address outside the segment");
       rows_.push_back(r);
     }
     else if(kind == "wmsp" || kind == "stasp") {
@@ -165,18 +162,33 @@ bool StrHooks::load_from_env() {
     fprintf(stderr, "StrHooks: %s — refusing to launch\n", err.c_str());
     return false;
   }
+  // P33-B: the arena layout is a second artifact (quest.arena); every WMSP
+  // of the table must have its twin and every twin its WMSP.
+  if(!Arena::loaded()) {
+    fprintf(stderr, "StrHooks: QUEST_STRINGS_CHECK=1 needs QUEST_ARENA=<quest.arena> (one twin per claim) — refusing to launch\n");
+    return false;
+  }
+  size_t nw = 0;
+  for(const auto& kv : pcs_) {
+    if(kv.second.kind != HookKind::Wmsp) continue;
+    nw++;
+    const ArenaTemp* a = Arena::by_wmsp(kv.first);
+    if(!a || a->block != rows_[kv.second.row - 1].block || a->claim != kv.second.n) {
+      fprintf(stderr, "StrHooks: wmsp %08X (block %08X claim %u) has no matching twin in %s — refusing to launch\n",
+              kv.first, rows_[kv.second.row - 1].block, kv.second.n, Arena::path().c_str());
+      return false;
+    }
+  }
+  if(nw != Arena::temps().size()) {
+    fprintf(stderr, "StrHooks: %zu wmsp hooks but %zu twins in %s — refusing to launch\n", nw, Arena::temps().size(), Arena::path().c_str());
+    return false;
+  }
   active = true;
-  fprintf(stderr, "StrHooks: %s — %zu rows, %zu hooked pcs (onpop %08X); QUEST_STRINGS_CHECK armed\n",
-          path, rows_.size(), pcs_.size(), onpop_pc_);
+  fprintf(stderr, "StrHooks: %s — %zu rows, %zu hooked pcs (onpop %08X), %zu twins; QUEST_STRINGS_CHECK armed\n",
+          path, rows_.size(), pcs_.size(), onpop_pc_, Arena::temps().size());
   return true;
 }
 
-std::vector<Mapper::ArenaLayout> StrHooks::layout() {
-  std::vector<Mapper::ArenaLayout> l;
-  for(const HookRow& r : rows_)
-    l.push_back(Mapper::ArenaLayout{r.block, r.arena_addr, r.capacity});
-  return l;
-}
 
 void StrHooks::attach(Machine& m) {
   if(!active) return;
@@ -204,7 +216,7 @@ void StrHooks::attach(Machine& m) {
     m.strhooks = new MachineHooks(m);
     all_.push_back(m.strhooks);
     if(m.mapper.arena_rows() == 0)
-      m.mapper.configure_arena(layout());
+      m.mapper.configure_arena(Arena::layout());
   }
   if(m.lockstep_role == Lockstep::CLONE)
     drain(m);
@@ -226,22 +238,30 @@ void StrHooks::drain(Machine& clone) {
   std::vector<ArenaEvent> ev;
   ev.swap(events_[o]);
   for(const ArenaEvent& e : ev) {
-    if(e.kind == ArenaEvent::Bind)
-      clone.mapper.arena_bind(e.arena_addr, e.wfp, e.master_addr);
-    else
-      clone.mapper.arena_unmap_frame(e.wfp);
+    switch(e.kind) {
+      case ArenaEvent::Bind:     clone.mapper.arena_bind(e.arena_addr, e.wfp, e.master_addr); break;
+      case ArenaEvent::Unmap:    clone.mapper.arena_unmap_frame(e.wfp); clone.mapper.claim_release(e.wfp); break;
+      case ArenaEvent::ClaimIns: clone.mapper.claim_insert(e.wfp, static_cast<int32_t>(e.master_addr), static_cast<int32_t>(e.arena_addr), e.pc); break;
+      case ArenaEvent::ClaimRel: clone.mapper.claim_release(e.wfp); break;
+    }
   }
 }
 
 void StrHooks::report() {
   if(!active) return;
+  for(MachineHooks* h : all_) {
+    for(const auto& kv : h->max_claim_)
+      fprintf(stderr, "StrHooks: %s max_claim t@%08X.%u = %u bytes (cap %u)\n", h->label().c_str(),
+              Arena::temps()[kv.first - 1].block, Arena::temps()[kv.first - 1].claim, kv.second,
+              Arena::temps()[kv.first - 1].capacity);
+  }
   for(MachineHooks* h : all_)
-    fprintf(stderr, "StrHooks: %s bind=%llu rebind=%llu unmap=%llu claim=%llu release=%llu frame_exit=%llu unwind=%llu onpop=%llu discarded_claims=%llu max_delta=%d\n",
+    fprintf(stderr, "StrHooks: %s bind=%llu rebind=%llu unmap=%llu claim=%llu release=%llu frame_exit=%llu unwind=%llu onpop=%llu discarded_claims=%llu cancelled=%llu max_delta=%d\n",
             h->label().c_str(),
             (unsigned long long)h->n_bind, (unsigned long long)h->n_rebind, (unsigned long long)h->n_unmap,
             (unsigned long long)h->n_claim, (unsigned long long)h->n_release,
             (unsigned long long)h->n_frame_exit, (unsigned long long)h->n_unwind, (unsigned long long)h->n_onpop,
-            (unsigned long long)h->n_discarded_claims, h->max_delta);
+            (unsigned long long)h->n_discarded_claims, (unsigned long long)h->n_cancelled, h->max_delta);
 }
 
 void StrHooks::reset_for_tests() {
@@ -286,16 +306,22 @@ void MachineHooks::wmsp(uint32_t pc, int32_t ac, int32_t wsp_before, int32_t wsp
              pc, wsp_after - wsp_before, ac, row.block);
     hook_abort(&m_, buf);
   }
+  int32_t total_before = delta_.total();
   delta_.claim(wfp, ac);
   n_claim++;
+  // P33-B: the claim as a stack insertion for the clone's stack leg (master
+  // no-claim coordinates: wsp_before minus the claims outstanding below it)
+  emit(ArenaEvent{ArenaEvent::ClaimIns, static_cast<uint32_t>(2 * ac), wfp, static_cast<uint32_t>(wsp_before - total_before), pc});
+  // the clone claiming here itself: the master's insertion is no difference
+  if(m_.lockstep_role == Lockstep::CLONE) { if(m_.mapper.claim_cancel(pc)) n_cancelled++; }
   int32_t d = delta_.delta(wfp);
   if(d > max_delta) max_delta = d;
-  uint32_t master_addr = static_cast<uint32_t>(wsp_before + 2);   // LDASP r; WADI 2,r before every WMSP (19/19)
+  uint32_t master_addr = static_cast<uint32_t>(wsp_before + 2);   // LDASP r; WADI 2,r before every WMSP (57/57)
   auto it = live_.find(h->row);
   if(h->n == 1) {
-    // Block entry (`p@b = ""`): (re)bind. A previous binding of this row in
-    // any frame is superseded (a loop re-executing the block, §6.5, or a
-    // fresh call of the routine after an exit that never reached WRTN).
+    // Block entry: the group opens. A previous binding of this block in any
+    // frame is superseded (a loop re-executing the block, §6.5, or a fresh
+    // call of the routine after an exit that never reached WRTN).
     if(it != live_.end()) { n_rebind++; live_.erase(it); } else n_bind++;
     live_[h->row] = Live{wfp, wsp_before, 1};
   } else {
@@ -307,15 +333,26 @@ void MachineHooks::wmsp(uint32_t pc, int32_t ac, int32_t wsp_before, int32_t wsp
       hook_abort(&m_, buf);
     }
     it->second.claims_seen = h->n;
-    n_rebind++;
   }
-  // Every claim re-points the row at ITS temp; the last one is the address
-  // the group pushes / copies from (plan-gate ruling: record, not compute).
-  emit(ArenaEvent{ArenaEvent::Bind, row.arena_addr, wfp, master_addr});
+  // P33-B: claim k binds ITS twin t@b.k (one Mapper row per claim): the
+  // master temp k's base <-> the twin's arena address. No rebind between
+  // claims; every residue pointer into any temp of the group maps.
+  const ArenaTemp* twin = Arena::by_wmsp(pc);
+  if(twin == nullptr) hook_abort(&m_, "WMSP " + hex(pc) + " has no arena twin (loader should have refused)");
+  // the twin's capacity vs the master's actual claim (the clone's `claim`
+  // statement makes the same check on its side; here it is the master's)
+  if(static_cast<uint32_t>(4 * ac) > twin->capacity) {
+    char buf[200];
+    snprintf(buf, sizeof buf, "WMSP %08X claims %d wides (%d bytes) but t@%08X.%u has capacity %u — quest.arena undersized",
+             pc, ac, 4 * ac, twin->block, twin->claim, twin->capacity);
+    hook_abort(&m_, buf);
+  }
+  if(static_cast<uint32_t>(4 * ac) > max_claim_[twin->id]) max_claim_[twin->id] = static_cast<uint32_t>(4 * ac);
+  emit(ArenaEvent{ArenaEvent::Bind, twin->addr, wfp, master_addr});
   if(os::Trace::enabled("strings")) {
     char buf[200];
-    snprintf(buf, sizeof buf, "claim pc=%08X block=%08X n=%u/%u ac=%d wfp=%08X master_addr=%08X delta=%d",
-             pc, row.block, h->n, row.nclaims, ac, static_cast<uint32_t>(wfp), master_addr, d);
+    snprintf(buf, sizeof buf, "claim pc=%08X block=%08X n=%u/%u ac=%d wfp=%08X master_addr=%08X twin=%08X delta=%d",
+             pc, row.block, h->n, row.nclaims, ac, static_cast<uint32_t>(wfp), master_addr, twin->addr, d);
     trace(m_, buf);
   }
 }
@@ -348,6 +385,7 @@ void MachineHooks::stasp(uint32_t pc, int32_t old_wsp, int32_t new_wsp) {
   }
   delta_.release(wfp, old_wsp, new_wsp);
   n_release++;
+  emit(ArenaEvent{ArenaEvent::ClaimRel, 0, wfp, 0});
   if(delta_.delta(wfp) != 0) {                  // every claim of the group was hooked and sized right
     char buf[200];
     snprintf(buf, sizeof buf, "STASP %08X (block %08X): delta after release is %d, not 0 — a claim of this group is unhooked or mis-sized",

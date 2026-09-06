@@ -165,3 +165,40 @@ the P31 table plus `--p32 ../../docs/Project32/p32.ledger --p32-tsv
 ../../docs/Project32/p32.tsv`. K=1 gates (local, Sep 6): slice 4 book
 0 div / 309,780 pairs; slice 5 book 0 div / 323,555; slice 6 book 0 div
 / 296,585, stock 0 div / 298,650; all clean.
+
+## Sep 6 2026 — after P33-B (arena twins, ir 6; branch p33b-arena-temps)
+
+| file | sha256 (first 16) | note |
+|---|---|---|
+| c_src/quest.ir2.book        | e2f18f144c195da4 | ir 6 slice 7: 1,822 string statements (649 P31 + 944 P32 + 229 P33-B), embeds 557, WCMV/WMSP/STASP embeds 0/0/0, 987 rt_call, 2,273 assert, 11,442 goto |
+| c_src/quest.ir2.stock       | c4340b497ea16eda | ir 6 slice 7: embeds 2,436 |
+| c_src/quest.arena           | 64ab09d44e343c36 | NEW: the arena layout — 57 twins t@<block>.<k>, 0x2000-word stride from 0x75000000, 8192 B provisional (5 exact); tools/arena.py from quest.strhooks |
+| c_src/quest.strhooks        | 9cc8c96cbad2fd28 | regenerated: the provisional arena=/cap= columns removed (layout in quest.arena); pcs unchanged |
+| docs/Project33/p33.tsv      | a9fb1bbb24784e8c | NEW: the P33-B per-site artifact (string_sites.py --p33-tsv): 229 rows (57 bases, 57 claims, 19 releases, 96 twin WCMVs), 19/19 groups EMIT — lower.py's `--strings-sites33` input; header carries strhooks/arena sha256 |
+| docs/Project33/p33.ledger, censusB_raw.txt | — | NEW: the per-group ledger; the mechanised census (tools/p33_census.py) |
+| docs/Project31/strings.ledger | — | lower.py's ledger at slice 7: 1,822 emitted, 0 refused |
+| c_src/quest.synclist.p27    | af1be42f5831fb2c | UNCHANGED (no block added or removed) |
+| Disassembled/*, blocks.split, pushmap, addrbook, tags, p31.tsv, p32.tsv | — | as the P32 table |
+
+Regeneration (from Work/c_src; `--strings-slice 7` is the artifact of record):
+
+    python3 tools/strhooks.py --census ../docs/Project33/inputs/census_raw.p31.txt --blocks quest.blocks.split \
+      --dis ../../Disassembled/quest.dis --out quest.strhooks
+    python3 tools/arena.py --strhooks quest.strhooks --out quest.arena
+    (cd tools && python3 string_sites.py --dis ../../../Disassembled/quest.dis --blocks ../quest.blocks.split \
+      --mem ../../../Disassembled/quest.mem --symbols ../../../Disassembled/quest.symbols \
+      --sites /tmp/p33sites.txt --strings /tmp/p33strings --census /tmp/p33census_raw.txt \
+      --strhooks ../quest.strhooks --arena ../quest.arena \
+      --p33 ../../docs/Project33/p33.ledger --p33-tsv ../../docs/Project33/p33.tsv)
+    python3 tools/lower.py --dis ../../Disassembled/quest.dis --blocks quest.blocks.split \
+      --pushmap quest.pushmap.M4 --argmap ../../Disassembled/quest.argmap --all [--book] \
+      --assumed-foldable ../docs/Project27/assumed-foldable.txt --tags ../../Disassembled/quest.tags \
+      --rt-slice 3 --leftovers --strings-sites ../docs/Project31/p31.tsv \
+      --strings-sites32 ../docs/Project32/p32.tsv --strings-sites33 ../docs/Project33/p33.tsv \
+      --arena quest.arena --strings-slice 7 --strings-census ../docs/Project31/strings.ledger --out quest.ir2.<book|stock>
+
+The --p33 run of string_sites.py must NOT be given --p31/--p32 (in P33 mode
+the temp operands are arena constants and would be counted as P32
+candidates); the P31/P32 artifacts are frozen at the P32 table. K=1 gates
+(local, Sep 6, checker ON): book k1fo 0 div / 311,581 pairs; stock 0 div /
+306,900; derr, derr-emu, forced as the P33-B report §5.

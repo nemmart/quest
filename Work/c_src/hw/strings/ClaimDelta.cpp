@@ -41,6 +41,12 @@ size_t ClaimDelta::frame_exit_where(const std::function<bool(int32_t)>& gone, in
   return n;
 }
 
+int32_t ClaimDelta::total() const {
+  int32_t t = 0;
+  for(const auto& kv : delta_) t += kv.second;
+  return t;
+}
+
 int32_t ClaimDelta::delta(int32_t wfp) const {
   auto it = delta_.find(wfp);
   return it == delta_.end() ? 0 : it->second;

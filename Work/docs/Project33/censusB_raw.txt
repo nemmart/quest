@@ -1,0 +1,401 @@
+# P33-B census (tools/p33_census.py) — 19 groups from quest.strhooks
+# per block: WMSP claims, WCMV pieces (dst/src operand classes; temp[claim k]), consumer, STASP;
+# then the registers at the block END (= the next listed entry, a rendezvous at K=1)
+
+== group row 1 block 70166144 DIED: claims 70166152 7016616F 7016618A stasp 701661AA; blocks 70166144 70166192 70166193 701661A7
+   claim 1 @70166152 size(wides)=>>2((N[W[(fp-12)]]+6)) base=sp@70166144
+   claim 2 @7016616F size(wides)=>>2((N[W[(fp-12)]]+29)) base=(sp@70166144+2*>>2((N[W[(fp-12)]]+6)))
+   claim 3 @7016618A size(wides)=>>2((N[W[(fp-12)]]+31)) base=(sp@70166144+2*>>2((N[W[(fp-12)]]+6))+2*>>2((N[W[(fp-12)]]+29)))
+ block 70166144
+   WCMV @7016615D  dst=temp[claim 1 70166152 word+2]  dcnt=const:3  src=literal:0x70165FC1:0  scnt=const:3
+   WCMV @70166166  dst=temp[claim 1 70166152 word+2]  dcnt=computed:deref: N[*(fp-12)] (length word of a string reached through a frame pointer slot)  src=computed:deref: pointer in frame word fp-12, byte +2  scnt=computed:deref: N[*(fp-12)] (length word of a string reached through a frame pointer slot)
+   WCMV @7016617A  dst=temp[claim 2 7016616F word+2]  dcnt=computed:deref: N[*(fp-12)] (length word of a string reached through a frame pointer slot) +3 (computed length word plus constant)  src=temp[claim 1 70166152 word+2]  scnt=computed:deref: N[*(fp-12)] (length word of a string reached through a frame pointer slot) +3 (computed length word plus constant)
+   WCMV @70166180  dst=temp[claim 2 7016616F word+2 +(N[W[(fp-12)]]+3)]  dcnt=const:23  src=literal:0x70165FB5:0  scnt=const:23
+   END: ac0=computed:deref: N[*(fp-12)] (length word of a string reached through a frame pointer slot) +26 (computed length word plus constant)  ac1=computed:deref: N[*(fp-12)] (length word of a string reached through a frame pointer slot) +26 (computed length word plus constant)  ac2=computed:>>2((N[W[(fp-12)]]+31))  ac3=computed:fp itself (word value)
+ block 70166192
+   END: ac0=computed:deref: N[*(fp-12)] (length word of a string reached through a frame pointer slot) +26 (computed length word plus constant)  ac1=computed:deref: N[*(fp-12)] (length word of a string reached through a frame pointer slot) +26 (computed length word plus constant)  ac2=computed:>>2((N[W[(fp-12)]]+31))  ac3=computed:fp itself (word value)
+ block 70166193
+   WCMV @7016619C  dst=temp[claim 3 7016618A word+2]  dcnt=computed:deref: N[*(fp-12)] (length word of a string reached through a frame pointer slot) +26 (computed length word plus constant)  src=temp[claim 2 7016616F word+2]  scnt=computed:deref: N[*(fp-12)] (length word of a string reached through a frame pointer slot) +26 (computed length word plus constant)
+   LCALL @701661A3 [0x7017E27A],2
+   END: ac0=computed:unk(LCALL:?WRITE_SCREEN@701661A3)  ac1=computed:unk(LCALL:?WRITE_SCREEN@701661A3)  ac2=computed:unknown (LCALL:?WRITE_SCREEN@701661A3)  ac3=computed:fp itself (word value)
+ block 701661A7
+   STASP @701661AA  wsp := sp@70166144
+
+== group row 2 block 701661AE DIED: claims 701661BC 701661DA 701661F5 stasp 70166215; blocks 701661AE 701661FD 701661FE 70166212
+   claim 1 @701661BC size(wides)=>>2((N[W[(fp-12)]]+6)) base=sp@7016603D
+   claim 2 @701661DA size(wides)=>>2((N[W[(fp-12)]]+82)) base=(sp@7016603D+2*>>2((N[W[(fp-12)]]+6)))
+   claim 3 @701661F5 size(wides)=>>2((N[W[(fp-12)]]+84)) base=(sp@7016603D+2*>>2((N[W[(fp-12)]]+6))+2*>>2((N[W[(fp-12)]]+82)))
+ block 701661AE
+   WCMV @701661C8  dst=temp[claim 1 701661BC word+2]  dcnt=const:3  src=literal:0x70165FC1:0  scnt=const:3
+   WCMV @701661D1  dst=temp[claim 1 701661BC word+2]  dcnt=computed:deref: N[*(fp-12)] (length word of a string reached through a frame pointer slot)  src=computed:deref: pointer in frame word fp-12, byte +2  scnt=computed:deref: N[*(fp-12)] (length word of a string reached through a frame pointer slot)
+   WCMV @701661E5  dst=temp[claim 2 701661DA word+2]  dcnt=computed:deref: N[*(fp-12)] (length word of a string reached through a frame pointer slot) +3 (computed length word plus constant)  src=temp[claim 1 701661BC word+2]  scnt=computed:deref: N[*(fp-12)] (length word of a string reached through a frame pointer slot) +3 (computed length word plus constant)
+   WCMV @701661EB  dst=temp[claim 2 701661DA word+2 +(N[W[(fp-12)]]+3)]  dcnt=const:76  src=literal:0x70165F8F:0  scnt=const:76
+   END: ac0=computed:deref: N[*(fp-12)] (length word of a string reached through a frame pointer slot) +79 (computed length word plus constant)  ac1=computed:deref: N[*(fp-12)] (length word of a string reached through a frame pointer slot) +79 (computed length word plus constant)  ac2=computed:>>2((N[W[(fp-12)]]+84))  ac3=computed:fp itself (word value)
+ block 701661FD
+   END: ac0=computed:deref: N[*(fp-12)] (length word of a string reached through a frame pointer slot) +79 (computed length word plus constant)  ac1=computed:deref: N[*(fp-12)] (length word of a string reached through a frame pointer slot) +79 (computed length word plus constant)  ac2=computed:>>2((N[W[(fp-12)]]+84))  ac3=computed:fp itself (word value)
+ block 701661FE
+   WCMV @70166207  dst=temp[claim 3 701661F5 word+2]  dcnt=computed:deref: N[*(fp-12)] (length word of a string reached through a frame pointer slot) +79 (computed length word plus constant)  src=temp[claim 2 701661DA word+2]  scnt=computed:deref: N[*(fp-12)] (length word of a string reached through a frame pointer slot) +79 (computed length word plus constant)
+   LCALL @7016620E [0x7017E27A],2
+   END: ac0=computed:unk(LCALL:?WRITE_SCREEN@7016620E)  ac1=computed:unk(LCALL:?WRITE_SCREEN@7016620E)  ac2=computed:unknown (LCALL:?WRITE_SCREEN@7016620E)  ac3=computed:fp itself (word value)
+ block 70166212
+   STASP @70166215  wsp := sp@7016603D
+
+== group row 3 block 70166564 DISPLAY_MAGIC: claims 70166578 7016659A 701665B4 701665D0 stasp 701665F0; blocks 70166564 701665D8 701665D9 701665ED
+   claim 1 @70166578 size(wides)=8 base=sp@70166550
+   claim 2 @7016659A size(wides)=8 base=(sp@70166550+16)
+   claim 3 @701665B4 size(wides)=>>2((N[(fp+6)]+35)) base=(sp@70166550+32)
+   claim 4 @701665D0 size(wides)=>>2((N[(fp+6)]+37)) base=(sp@70166550+2*>>2((N[(fp+6)]+35))+32)
+ block 70166564
+   WCMV @70166589  dst=temp[claim 1 70166578 word+2]  dcnt=computed:load N[(+16*N[(fp+2)]-0XFEAFBB8)]  src=computed:bp((+16*N[(fp+2)]+0X70150449)) byte +0  scnt=computed:load N[(+16*N[(fp+2)]-0XFEAFBB8)]
+   WCMV @70166591  dst=temp[claim 1 70166578 word+2 +N[(+16*N[(fp+2)]-0XFEAFBB8)]]  dcnt=computed:(-N[(+16*N[(fp+2)]-0XFEAFBB8)]+30)  src=literal:0x7015155A:0  scnt=computed:(-N[(+16*N[(fp+2)]-0XFEAFBB8)]+30)
+   WCMV @701665A5  dst=temp[claim 1 70166578 word+18]  dcnt=const:30  src=temp[claim 1 70166578 word+2]  scnt=const:30
+   WCMV @701665AB  dst=temp[claim 1 70166578 word+18]  dcnt=const:2  src=literal:0x701663BC:0  scnt=const:2
+   WCMV @701665BF  dst=temp[claim 1 70166578 word+34]  dcnt=const:32  src=temp[claim 1 70166578 word+18]  scnt=const:32
+   WCMV @701665C6  dst=temp[claim 1 70166578 word+34]  dcnt=frame:N[fp+6]  src=frame:frame byte +14 (word fp+7)  scnt=frame:N[fp+6]
+   END: ac0=computed:N[fp+6] +32 (frame length word plus constant)  ac1=computed:N[fp+6] +32 (frame length word plus constant)  ac2=computed:>>2((N[(fp+6)]+37))  ac3=computed:fp itself (word value)
+ block 701665D8
+   END: ac0=computed:N[fp+6] +32 (frame length word plus constant)  ac1=computed:N[fp+6] +32 (frame length word plus constant)  ac2=computed:>>2((N[(fp+6)]+37))  ac3=computed:fp itself (word value)
+ block 701665D9
+   WCMV @701665E2  dst=temp[claim 4 701665D0 word+2]  dcnt=computed:N[fp+6] +32 (frame length word plus constant)  src=temp[claim 1 70166578 word+34]  scnt=computed:N[fp+6] +32 (frame length word plus constant)
+   LCALL @701665E9 [0x7017E27A],2
+   END: ac0=computed:unk(LCALL:?WRITE_SCREEN@701665E9)  ac1=computed:unk(LCALL:?WRITE_SCREEN@701665E9)  ac2=computed:unknown (LCALL:?WRITE_SCREEN@701665E9)  ac3=computed:fp itself (word value)
+ block 701665ED
+   STASP @701665F0  wsp := sp@70166550
+
+== group row 4 block 7016693C DISPLAY_CAVE: claims 70166967 stasp 70166990; blocks 7016693C 70166981 70166982
+   claim 1 @70166967 size(wides)=>>2((N[(W[0x70000210]+0X1EFB9)]+phi(80, (phi(80, (phi(80, 7)+7))+7))+6)) base=sp@701666A3
+ block 7016693C
+   WCMV @7016694D  dst=frame:frame byte +16 (word fp+8)  dcnt=computed:phi(80, (phi(80, (phi(80, 7)+7))+7))  src=static:0x70000A4F:0 (CAVE_STR+0x1)  scnt=computed:phi(80, (phi(80, (phi(80, 7)+7))+7))
+   WCMV @70166953  dst=frame:frame byte +16 (word fp+8) [cont after cont@7016694D]  dcnt=const:3  src=literal:0x7016661F:0  scnt=const:3
+   WCMV @70166973  dst=temp[claim 1 70166967 word+2]  dcnt=computed:(phi(80, (phi(80, (phi(80, 7)+7))+7))+3)  src=frame:frame byte +16 (word fp+8)  scnt=computed:(phi(80, (phi(80, (phi(80, 7)+7))+7))+3)
+   WCMV @7016697A  dst=temp[claim 1 70166967 word+2 +(phi(80, (phi(80, (phi(80, 7)+7))+7))+3)]  dcnt=computed:load N[(W[0x70000210]+0X1EFB9)]  src=computed:deref: pointer in static 0x70000210 (SD_PTR), byte +1  scnt=computed:load N[(W[0x70000210]+0X1EFB9)]
+   END: ac0=const:80  ac1=computed:(N[(W[0x70000210]+0X1EFB9)]+phi(80, (phi(80, (phi(80, 7)+7))+7))+3)  ac2=temp[claim 1 70166967 word+2 +(phi(80, (phi(80, (phi(80, 7)+7))+7))+N[(W[0x70000210]+0X1EFB9)]+3)]  ac3=computed:fp itself (word value)
+ block 70166981
+   END: ac0=computed:(N[(W[0x70000210]+0X1EFB9)]+phi(80, (phi(80, (phi(80, 7)+7))+7))+3)  ac1=computed:(N[(W[0x70000210]+0X1EFB9)]+phi(80, (phi(80, (phi(80, 7)+7))+7))+3)  ac2=temp[claim 1 70166967 word+2 +(phi(80, (phi(80, (phi(80, 7)+7))+7))+N[(W[0x70000210]+0X1EFB9)]+3)]  ac3=computed:fp itself (word value)
+ block 70166982
+   WCMV @7016698B  dst=static:0x70000A4F:0 (CAVE_STR+0x1)  dcnt=computed:phi(80, (N[(W[0x70000210]+0X1EFB9)]+phi(80, (phi(80, (phi(80, 7)+7))+7))+3))  src=temp[claim 1 70166967 word+2]  scnt=computed:(N[(W[0x70000210]+0X1EFB9)]+phi(80, (phi(80, (phi(80, 7)+7))+7))+3)
+   STASP @70166990  wsp := sp@701666A3
+
+== group row 5 block 70166E7C DISPLAY_SCREEN: claims 70166E91 70166EAC 70166ECA stasp 70166EFB; blocks 70166E7C 70166EE8 70166EE9 70166EF0 70166EF1
+   claim 1 @70166E91 size(wides)=>>2((N[(fp+238)]+4)) base=sp@70166E42
+   claim 2 @70166EAC size(wides)=>>2((N[(fp+238)]+5)) base=(sp@70166E42+2*>>2((N[(fp+238)]+4)))
+   claim 3 @70166ECA size(wides)=>>2((N[(fp+238)]+6)) base=(sp@70166E42+2*>>2((N[(fp+238)]+4))+2*>>2((N[(fp+238)]+5)))
+ block 70166E7C
+   WCMV @70166E9A  dst=temp[claim 1 70166E91 word+2]  dcnt=frame:N[fp+238]  src=frame:frame byte +478 (word fp+239)  scnt=frame:N[fp+238]
+   WCMV @70166EB9  dst=temp[claim 2 70166EAC word+2]  dcnt=computed:N[fp+238] +1 (frame length word plus constant)  src=temp[claim 1 70166E91 word+2]  scnt=computed:N[fp+238] +1 (frame length word plus constant)
+   WCMV @70166ED9  dst=temp[claim 3 70166ECA word+2]  dcnt=computed:N[fp+238] +2 (frame length word plus constant)  src=temp[claim 2 70166EAC word+2]  scnt=computed:N[fp+238] +2 (frame length word plus constant)
+   END: ac0=computed:N[fp+238] +3 (frame length word plus constant)  ac1=const:756  ac2=frame:frame byte +478 (word fp+239)  ac3=temp[claim 3 70166ECA word+2]
+ block 70166EE8
+   END: ac0=const:756  ac1=const:756  ac2=frame:frame byte +478 (word fp+239)  ac3=temp[claim 3 70166ECA word+2]
+ block 70166EE9
+   WCMV @70166EE9  dst=frame:frame byte +478 (word fp+239)  dcnt=computed:phi((N[(fp+238)]+3), 0x2F4)  src=temp[claim 3 70166ECA word+2]  scnt=const:756
+   END: ac0=frame:N[fp+10]  ac1=computed:residue of wcmv@70166EE9 (src_left)  ac2=frame:frame byte +478 (word fp+239) [cont after cont@70166EE9]  ac3=frame:frame byte +22 (word fp+11)
+ block 70166EF0
+   END: ac0=computed:residue of wcmv@70166EE9 (src_left)  ac1=computed:residue of wcmv@70166EE9 (src_left)  ac2=frame:frame byte +478 (word fp+239) [cont after cont@70166EE9]  ac3=frame:frame byte +22 (word fp+11)
+ block 70166EF1
+   WCMV @70166EF1  dst=frame:frame byte +478 (word fp+239) [cont after cont@70166EE9]  dcnt=computed:phi(N[(fp+10)], wcmv.src_left@70166EE9)  src=frame:frame byte +22 (word fp+11)  scnt=computed:residue of wcmv@70166EE9 (src_left)
+   STASP @70166EFB  wsp := sp@70166E42
+
+== group row 6 block 70166F4F DISPLAY_SCREEN: claims 70166F64 70166F7F 70166F9D stasp 70166FCE; blocks 70166F4F 70166FBB 70166FBC 70166FC3 70166FC4
+   claim 1 @70166F64 size(wides)=>>2((N[(fp+238)]+4)) base=sp@70166E42
+   claim 2 @70166F7F size(wides)=>>2((N[(fp+238)]+5)) base=(sp@70166E42+2*>>2((N[(fp+238)]+4)))
+   claim 3 @70166F9D size(wides)=>>2((N[(fp+238)]+6)) base=(sp@70166E42+2*>>2((N[(fp+238)]+4))+2*>>2((N[(fp+238)]+5)))
+ block 70166F4F
+   WCMV @70166F6D  dst=temp[claim 1 70166F64 word+2]  dcnt=frame:N[fp+238]  src=frame:frame byte +478 (word fp+239)  scnt=frame:N[fp+238]
+   WCMV @70166F8C  dst=temp[claim 2 70166F7F word+2]  dcnt=computed:N[fp+238] +1 (frame length word plus constant)  src=temp[claim 1 70166F64 word+2]  scnt=computed:N[fp+238] +1 (frame length word plus constant)
+   WCMV @70166FAC  dst=temp[claim 3 70166F9D word+2]  dcnt=computed:N[fp+238] +2 (frame length word plus constant)  src=temp[claim 2 70166F7F word+2]  scnt=computed:N[fp+238] +2 (frame length word plus constant)
+   END: ac0=computed:N[fp+238] +3 (frame length word plus constant)  ac1=const:756  ac2=frame:frame byte +478 (word fp+239)  ac3=temp[claim 3 70166F9D word+2]
+ block 70166FBB
+   END: ac0=const:756  ac1=const:756  ac2=frame:frame byte +478 (word fp+239)  ac3=temp[claim 3 70166F9D word+2]
+ block 70166FBC
+   WCMV @70166FBC  dst=frame:frame byte +478 (word fp+239)  dcnt=computed:phi((N[(fp+238)]+3), 0x2F4)  src=temp[claim 3 70166F9D word+2]  scnt=const:756
+   END: ac0=frame:N[fp+10]  ac1=computed:residue of wcmv@70166FBC (src_left)  ac2=frame:frame byte +478 (word fp+239) [cont after cont@70166FBC]  ac3=frame:frame byte +22 (word fp+11)
+ block 70166FC3
+   END: ac0=computed:residue of wcmv@70166FBC (src_left)  ac1=computed:residue of wcmv@70166FBC (src_left)  ac2=frame:frame byte +478 (word fp+239) [cont after cont@70166FBC]  ac3=frame:frame byte +22 (word fp+11)
+ block 70166FC4
+   WCMV @70166FC4  dst=frame:frame byte +478 (word fp+239) [cont after cont@70166FBC]  dcnt=computed:phi(N[(fp+10)], wcmv.src_left@70166FBC)  src=frame:frame byte +22 (word fp+11)  scnt=computed:residue of wcmv@70166FBC (src_left)
+   STASP @70166FCE  wsp := sp@70166E42
+
+== group row 7 block 70166FE9 DISPLAY_SCREEN: claims 70166FFE 70167017 7016702E stasp 70167059; blocks 70166FE9 70167048 70167049 7016704D 7016704E 70167050
+   claim 1 @70166FFE size(wides)=>>2((N[(fp+0X26A)]+N[(fp+0X3E6)]+phi((-N[(fp+0X3E6)]+84), N[(fp+10)])+3)) base=sp@70166E42
+   claim 2 @70167017 size(wides)=>>2((N[(fp+0X26A)]+N[(fp+0X3E6)]+phi((-N[(fp+0X3E6)]+84), N[(fp+10)])+4)) base=(sp@70166E42+2*>>2((N[(fp+0X26A)]+N[(fp+0X3E6)]+phi((-N[(fp+0X3E6)]+84), N[(fp+10)])+3)))
+   claim 3 @7016702E size(wides)=>>2((N[(fp+0X26A)]+N[(fp+0X3E6)]+phi((-N[(fp+0X3E6)]+84), N[(fp+10)])+5)) base=(sp@70166E42+2*>>2((N[(fp+0X26A)]+N[(fp+0X3E6)]+phi((-N[(fp+0X3E6)]+84), N[(fp+10)])+3))+2*>>2((N[(fp+0X26A)]+N[(fp+0X3E6)]+phi((-N[(fp+0X3E6)]+84), N[(fp+10)])+4)))
+ block 70166FE9
+   WCMV @70167007  dst=temp[claim 1 70166FFE word+2]  dcnt=frame:N[fp+618]  src=frame:frame byte +1238 (word fp+619)  scnt=frame:N[fp+618]
+   WCMV @7016700E  dst=temp[claim 1 70166FFE word+2 +N[(fp+0X26A)]]  dcnt=computed:(N[(fp+0X3E6)]+phi((-N[(fp+0X3E6)]+84), N[(fp+10)]))  src=frame:frame byte +1998 (word fp+999)  scnt=computed:(N[(fp+0X3E6)]+phi((-N[(fp+0X3E6)]+84), N[(fp+10)]))
+   WCMV @70167022  dst=temp[claim 2 70167017 word+2]  dcnt=computed:(N[(fp+0X26A)]+N[(fp+0X3E6)]+phi((-N[(fp+0X3E6)]+84), N[(fp+10)]))  src=temp[claim 1 70166FFE word+2]  scnt=computed:(N[(fp+0X26A)]+N[(fp+0X3E6)]+phi((-N[(fp+0X3E6)]+84), N[(fp+10)]))
+   WCMV @70167039  dst=temp[claim 3 7016702E word+2]  dcnt=computed:(N[(fp+0X26A)]+N[(fp+0X3E6)]+phi((-N[(fp+0X3E6)]+84), N[(fp+10)])+1)  src=temp[claim 2 70167017 word+2]  scnt=computed:(N[(fp+0X26A)]+N[(fp+0X3E6)]+phi((-N[(fp+0X3E6)]+84), N[(fp+10)])+1)
+   END: ac0=computed:(N[(fp+0X26A)]+N[(fp+0X3E6)]+phi((-N[(fp+0X3E6)]+84), N[(fp+10)])+2)  ac1=const:756  ac2=frame:frame byte +1238 (word fp+619)  ac3=temp[claim 3 7016702E word+2]
+ block 70167048
+   END: ac0=const:756  ac1=const:756  ac2=frame:frame byte +1238 (word fp+619)  ac3=temp[claim 3 7016702E word+2]
+ block 70167049
+   WCMV @70167049  dst=frame:frame byte +1238 (word fp+619)  dcnt=computed:phi((N[(fp+0X26A)]+N[(fp+0X3E6)]+phi((-N[(fp+0X3E6)]+84), N[(fp+10)])+2), 0x2F4)  src=temp[claim 3 7016702E word+2]  scnt=const:756
+   END: ac0=const:24  ac1=computed:residue of wcmv@70167049 (src_left)  ac2=frame:frame byte +1238 (word fp+619) [cont after cont@70167049]  ac3=temp[claim 3 7016702E word+2]
+ block 7016704D
+   END: ac0=const:24  ac1=computed:residue of wcmv@70167049 (src_left)  ac2=frame:frame byte +1238 (word fp+619) [cont after cont@70167049]  ac3=temp[claim 3 7016702E word+2]
+ block 7016704E
+   END: ac0=const:24  ac1=computed:(wcmv.src_left@70167049-1)  ac2=frame:frame byte +1238 (word fp+619) [cont after cont@70167049]  ac3=temp[claim 3 7016702E word+2]
+ block 70167050
+   STASP @70167059  wsp := sp@70166E42
+
+== group row 8 block 70167744 DISPLAY_INVENTORY: claims 7016774C 70167769 stasp 70167797; blocks 70167744 70167771 70167772 70167794
+   claim 1 @7016774C size(wides)=5 base=sp@70167664
+   claim 2 @70167769 size(wides)=6 base=(sp@70167664+10)
+ block 70167744
+   WCMV @70167757  dst=temp[claim 1 7016774C word+2]  dcnt=frame:N[fp+6]  src=frame:frame byte +14 (word fp+7)  scnt=frame:N[fp+6]
+   WCMV @7016775F  dst=temp[claim 1 7016774C word+2 +N[(fp+6)]]  dcnt=computed:(-N[(fp+6)]+19)  src=literal:0x7015155A:0  scnt=computed:(-N[(fp+6)]+19)
+   END: ac0=const:19  ac1=const:19  ac2=computed:raw constant 6  ac3=computed:fp itself (word value)
+ block 70167771
+   END: ac0=const:19  ac1=const:19  ac2=computed:raw constant 6  ac3=computed:fp itself (word value)
+ block 70167772
+   WCMV @7016777B  dst=temp[claim 1 7016774C word+12]  dcnt=const:19  src=temp[claim 1 7016774C word+2]  scnt=const:19
+   LCALL @70167790 [0x7017E27A],5
+   END: ac0=computed:unk(LCALL:?WRITE_SCREEN@70167790)  ac1=computed:unk(LCALL:?WRITE_SCREEN@70167790)  ac2=computed:unknown (LCALL:?WRITE_SCREEN@70167790)  ac3=computed:fp itself (word value)
+ block 70167794
+   STASP @70167797  wsp := sp@70167664
+
+== group row 9 block 7016B860 GET_QUEST: claims 7016B8A4 7016B8BF 7016B8DA stasp 7016B8FA; blocks 7016B860 7016B8E2 7016B8E3 7016B8F7
+   claim 1 @7016B8A4 size(wides)=>>2((N[(+16*unk(NADI@7016B85B)-0XFEAF5A6)]+N[0x7000021C]+189)) base=sp@7016B832
+   claim 2 @7016B8BF size(wides)=>>2((N[(+16*unk(NADI@7016B85B)-0XFEAF5A6)]+N[0x7000021C]+191)) base=(sp@7016B832+2*>>2((N[(+16*unk(NADI@7016B85B)-0XFEAF5A6)]+N[0x7000021C]+189)))
+   claim 3 @7016B8DA size(wides)=>>2((N[(+16*unk(NADI@7016B85B)-0XFEAF5A6)]+N[0x7000021C]+193)) base=(sp@7016B832+2*>>2((N[(+16*unk(NADI@7016B85B)-0XFEAF5A6)]+N[0x7000021C]+189))+2*>>2((N[(+16*unk(NADI@7016B85B)-0XFEAF5A6)]+N[0x7000021C]+191)))
+ block 7016B860
+   WCMV @7016B881  dst=frame:frame byte +1256 (word fp+628)  dcnt=const:23  src=literal:0x7016B0D1:0  scnt=const:23
+   WCMV @7016B88C  dst=frame:frame byte +1279 (word fp+639 +1 byte) [cont after cont@7016  dcnt=computed:load N[(+16*unk(NADI@7016B85B)-0XFEAF5A6)]  src=computed:unknown base: (+16*unk(NADI@7016B85B)+0X70150A5B), byte +0  scnt=computed:load N[(+16*unk(NADI@7016B85B)-0XFEAF5A6)]
+   WCMV @7016B895  dst=frame:frame byte +1504 (word fp+752)  dcnt=computed:load N[(+16*unk(NADI@7016B85B)-0XFEAF5A6)] +23 (computed length word plus constant)  src=frame:frame byte +1256 (word fp+628)  scnt=computed:load N[(+16*unk(NADI@7016B85B)-0XFEAF5A6)] +23 (computed length word plus constant)
+   WCMV @7016B89B  dst=frame:frame byte +1504 (word fp+752) [cont after cont@7016B895]  dcnt=const:163  src=literal:0x7016B07F:0  scnt=const:163
+   WCMV @7016B8AE  dst=temp[claim 1 7016B8A4 word+2]  dcnt=computed:load N[(+16*unk(NADI@7016B85B)-0XFEAF5A6)] +186 (computed length word plus constant)  src=frame:frame byte +1504 (word fp+752)  scnt=computed:load N[(+16*unk(NADI@7016B85B)-0XFEAF5A6)] +186 (computed length word plus constant)
+   WCMV @7016B8B6  dst=temp[claim 1 7016B8A4 word+2 +(N[(+16*unk(NADI@7016B85B)-0XFEAF5A6)]+186)]  dcnt=static:N[0x7000021C] (IN_BUFFER)  src=static:0x7000021D:0 (IN_BUFFER+0x1)  scnt=static:N[0x7000021C] (IN_BUFFER)
+   WCMV @7016B8CA  dst=temp[claim 2 7016B8BF word+2]  dcnt=computed:(N[(+16*unk(NADI@7016B85B)-0XFEAF5A6)]+N[0x7000021C]+186)  src=temp[claim 1 7016B8A4 word+2]  scnt=computed:(N[(+16*unk(NADI@7016B85B)-0XFEAF5A6)]+N[0x7000021C]+186)
+   WCMV @7016B8D0  dst=temp[claim 2 7016B8BF word+2 +(N[(+16*unk(NADI@7016B85B)-0XFEAF5A6)]+N[0x7000021C]+186)]  dcnt=const:2  src=literal:0x7016B07E:0  scnt=const:2
+   END: ac0=computed:(N[(+16*unk(NADI@7016B85B)-0XFEAF5A6)]+N[0x7000021C]+188)  ac1=computed:(N[(+16*unk(NADI@7016B85B)-0XFEAF5A6)]+N[0x7000021C]+188)  ac2=computed:>>2((N[(+16*unk(NADI@7016B85B)-0XFEAF5A6)]+N[0x7000021C]+193  ac3=computed:fp itself (word value)
+ block 7016B8E2
+   END: ac0=computed:(N[(+16*unk(NADI@7016B85B)-0XFEAF5A6)]+N[0x7000021C]+188)  ac1=computed:(N[(+16*unk(NADI@7016B85B)-0XFEAF5A6)]+N[0x7000021C]+188)  ac2=computed:>>2((N[(+16*unk(NADI@7016B85B)-0XFEAF5A6)]+N[0x7000021C]+193  ac3=computed:fp itself (word value)
+ block 7016B8E3
+   WCMV @7016B8EC  dst=temp[claim 3 7016B8DA word+2]  dcnt=computed:(N[(+16*unk(NADI@7016B85B)-0XFEAF5A6)]+N[0x7000021C]+188)  src=temp[claim 2 7016B8BF word+2]  scnt=computed:(N[(+16*unk(NADI@7016B85B)-0XFEAF5A6)]+N[0x7000021C]+188)
+   LCALL @7016B8F3 [0x7017E27A],2
+   END: ac0=computed:unk(LCALL:?WRITE_SCREEN@7016B8F3)  ac1=computed:unk(LCALL:?WRITE_SCREEN@7016B8F3)  ac2=computed:unknown (LCALL:?WRITE_SCREEN@7016B8F3)  ac3=computed:fp itself (word value)
+ block 7016B8F7
+   STASP @7016B8FA  wsp := sp@7016B832
+
+== group row 10 block 7016BBE3 GET_QUEST: claims 7016BC2D 7016BC47 stasp 7016BC67; blocks 7016BBE3 7016BC4F 7016BC50 7016BC64
+   claim 1 @7016BC2D size(wides)=>>2((N[(+19*N[(+686*N[0x70000216]+W[0x70000210]+43)]+W[0x70000212]+0X7C2)]+0X11C)) base=sp@7016BBCD
+   claim 2 @7016BC47 size(wides)=>>2((N[(+19*N[(+686*N[0x70000216]+W[0x70000210]+43)]+W[0x70000212]+0X7C2)]+0X11E)) base=(sp@7016BBCD+2*>>2((N[(+19*N[(+686*N[0x70000216]+W[0x70000210]+43)]+W[0x70000212]+0X7C2)]+0X11C)))
+ block 7016BBE3
+   WCMV @7016BC09  dst=frame:frame byte +1504 (word fp+752)  dcnt=const:26  src=literal:0x7016AB0B:0  scnt=const:26
+   WCMV @7016BC15  dst=frame:frame byte +1530 (word fp+765) [cont after cont@7016BC09]  dcnt=computed:load N[(+19*N[(+686*N[0x70000216]+W[0x70000210]+43)]+W[0x70000212]+0X7C2)]  src=computed:record via static pointer W[0x70000212 (OBJ_PTR)] + (+19*N[(  scnt=computed:load N[(+19*N[(+686*N[0x70000216]+W[0x70000210]+43)]+W[0x70000212]+0X7C2)]
+   WCMV @7016BC1E  dst=frame:frame byte +1256 (word fp+628)  dcnt=computed:load N[(+19*N[(+686*N[0x70000216]+W[0x70000210]+43)]+W[0x70000212]+0X7C2)] +26 (computed length word plus constant)  src=frame:frame byte +1504 (word fp+752)  scnt=computed:load N[(+19*N[(+686*N[0x70000216]+W[0x70000210]+43)]+W[0x70000212]+0X7C2)] +26 (computed length word plus constant)
+   WCMV @7016BC24  dst=frame:frame byte +1256 (word fp+628) [cont after cont@7016BC1E]  dcnt=const:114  src=literal:0x7016AAD1:0  scnt=const:114
+   WCMV @7016BC37  dst=temp[claim 1 7016BC2D word+2]  dcnt=computed:load N[(+19*N[(+686*N[0x70000216]+W[0x70000210]+43)]+W[0x70000212]+0X7C2)] +140 (computed length word plus constant)  src=frame:frame byte +1256 (word fp+628)  scnt=computed:load N[(+19*N[(+686*N[0x70000216]+W[0x70000210]+43)]+W[0x70000212]+0X7C2)] +140 (computed length word plus constant)
+   WCMV @7016BC3D  dst=temp[claim 1 7016BC2D word+2 +(N[(+19*N[(+686*N[0x70000216]+W[0x70000210]+43)]+W[0x70000212]+0X7C2)]+140)]  dcnt=const:141  src=literal:0x7016AA89:0  scnt=const:141
+   END: ac0=computed:load N[(+19*N[(+686*N[0x70000216]+W[0x70000210]+43)]+W[0x70000212]+0X7C2)] +281 (computed length word plus constant)  ac1=computed:load N[(+19*N[(+686*N[0x70000216]+W[0x70000210]+43)]+W[0x70000212]+0X7C2)] +281 (computed length word plus constant)  ac2=computed:>>2((N[(+19*N[(+686*N[0x70000216]+W[0x70000210]+43)]+W[0x700  ac3=computed:fp itself (word value)
+ block 7016BC4F
+   END: ac0=computed:load N[(+19*N[(+686*N[0x70000216]+W[0x70000210]+43)]+W[0x70000212]+0X7C2)] +281 (computed length word plus constant)  ac1=computed:load N[(+19*N[(+686*N[0x70000216]+W[0x70000210]+43)]+W[0x70000212]+0X7C2)] +281 (computed length word plus constant)  ac2=computed:>>2((N[(+19*N[(+686*N[0x70000216]+W[0x70000210]+43)]+W[0x700  ac3=computed:fp itself (word value)
+ block 7016BC50
+   WCMV @7016BC59  dst=temp[claim 2 7016BC47 word+2]  dcnt=computed:load N[(+19*N[(+686*N[0x70000216]+W[0x70000210]+43)]+W[0x70000212]+0X7C2)] +281 (computed length word plus constant)  src=temp[claim 1 7016BC2D word+2]  scnt=computed:load N[(+19*N[(+686*N[0x70000216]+W[0x70000210]+43)]+W[0x70000212]+0X7C2)] +281 (computed length word plus constant)
+   LCALL @7016BC60 [0x7017E27A],2
+   END: ac0=computed:unk(LCALL:?WRITE_SCREEN@7016BC60)  ac1=computed:unk(LCALL:?WRITE_SCREEN@7016BC60)  ac2=computed:unknown (LCALL:?WRITE_SCREEN@7016BC60)  ac3=computed:fp itself (word value)
+ block 7016BC64
+   STASP @7016BC67  wsp := sp@7016BBCD
+
+== group row 11 block 7016DBFC HELP: claims 7016DC06 stasp 7016DC2E; blocks 7016DBFC
+   claim 1 @7016DC06 size(wides)=8 base=sp@7016DBB9
+ block 7016DBFC
+   WCMV @7016DC16  dst=temp[claim 1 7016DC06 word+2]  dcnt=computed:load N[(+12*N[(fp+16)]-0XFFFFD9A)]  src=computed:static table 0x70000267 (SH_CHAN2+0x1) indexed by (+12*N[(fp  scnt=computed:load N[(+12*N[(fp+16)]-0XFFFFD9A)]
+   WCMV @7016DC1E  dst=temp[claim 1 7016DC06 word+2 +N[(+12*N[(fp+16)]-0XFFFFD9A)]]  dcnt=computed:(-N[(+12*N[(fp+16)]-0XFFFFD9A)]+30)  src=literal:0x7015155A:0  scnt=computed:(-N[(+12*N[(fp+16)]-0XFFFFD9A)]+30)
+   WCMV @7016DC29  dst=frame:frame byte +36 (word fp+18)  dcnt=const:30  src=temp[claim 1 7016DC06 word+2]  scnt=const:30
+   STASP @7016DC2E  wsp := sp@7016DBB9
+
+== group row 12 block 7016DF68 INIT_OBJ_TBL: claims 7016DF7F 7016DF9E stasp 7016DFDB; blocks 7016DF68 7016DFB6(unlisted) 7016DFB7 7016DFC2(unlisted) 7016DFC3(unlisted) 7016DFC4
+   claim 1 @7016DF7F size(wides)=>>2((W[(W[(fp-14)]+1)]+4)) base=sp@7016DF39
+   claim 2 @7016DF9E size(wides)=>>2((W[(W[(fp-14)]+1)]+5)) base=(sp@7016DF39+2*>>2((W[(W[(fp-14)]+1)]+4)))
+ block 7016DF68
+   WCMV @7016DF95  dst=temp[claim 1 7016DF7F word+2]  dcnt=computed:load W[(W[(fp-14)]+1)]  src=computed:loaded pointer W[(fp-12)]  scnt=computed:load W[(W[(fp-14)]+1)]
+   WCMV @7016DFA9  dst=temp[claim 2 7016DF9E word+2]  dcnt=computed:load W[(W[(fp-14)]+1)] +1 (computed length word plus constant)  src=temp[claim 1 7016DF7F word+2]  scnt=computed:load W[(W[(fp-14)]+1)] +1 (computed length word plus constant)
+   END: ac0=computed:load N[(W[0x70000210]+0X1EFBA)]  ac1=const:21  ac2=computed:raw constant 4  ac3=temp[claim 1 7016DF7F word+2 +(W[(W[(fp-14)]+1)]+1)]
+ block 7016DFB6 (UNLISTED)
+   END: ac0=computed:load N[(W[0x70000210]+0X1EFBA)]  ac1=const:21  ac2=computed:raw constant 4  ac3=temp[claim 1 7016DF7F word+2 +(W[(W[(fp-14)]+1)]+1)]
+ block 7016DFB7
+   END: ac0=computed:load N[(W[0x70000210]+0X1EFBA)] -3 (computed length word plus constant)  ac1=const:1  ac2=computed:raw constant 4  ac3=computed:(+4*N[0x70000216]-3)
+ block 7016DFC2 (UNLISTED)
+   END: ac0=computed:load N[(W[0x70000210]+0X1EFBA)] -3 (computed length word plus constant)  ac1=const:1  ac2=computed:raw constant 4  ac3=computed:(+4*N[0x70000216]-3)
+ block 7016DFC3 (UNLISTED)
+   END: ac0=computed:load N[(W[0x70000210]+0X1EFBA)] -3 (computed length word plus constant)  ac1=const:1  ac2=computed:raw constant 4  ac3=computed:(+4*N[0x70000216]-3)
+ block 7016DFC4
+   WCMV @7016DFD6  dst=computed:deref: pointer in static 0x70000210 (SD_PTR), byte +1  dcnt=const:4  src=temp[claim 2 7016DF9E word+2]  scnt=computed:load W[(W[(fp-14)]+1)] +2 (computed length word plus constant)
+   STASP @7016DFDB  wsp := sp@7016DF39
+
+== group row 13 block 7016ED93 LIST_PLAYERS: claims 7016EDB2 7016EDC7 7016EDE2 7016EDFD 7016EE18 stasp 7016EE38; blocks 7016ED93 7016EE20 7016EE21 7016EE35
+   claim 1 @7016EDB2 size(wides)=>>2((N[(W[0x70000210]+0X1EFB9)]+4)) base=sp@7016ED6E
+   claim 2 @7016EDC7 size(wides)=>>2((N[(W[0x70000210]+0X1EFB9)]+16)) base=(sp@7016ED6E+2*>>2((N[(W[0x70000210]+0X1EFB9)]+4)))
+   claim 3 @7016EDE2 size(wides)=>>2((N[(W[0x70000210]+0X1EFB9)]+20)) base=(sp@7016ED6E+2*>>2((N[(W[0x70000210]+0X1EFB9)]+4))+2*>>2((N[(W[0x70000210]+0X1EFB9)]+16)))
+   claim 4 @7016EDFD size(wides)=>>2((N[(W[0x70000210]+0X1EFB9)]+22)) base=(sp@7016ED6E+2*>>2((N[(W[0x70000210]+0X1EFB9)]+4))+2*>>2((N[(W[0x70000210]+0X1EFB9)]+16))+2*>>2((N[(W[0x70000210]+0X1EFB9)]+20)))
+   claim 5 @7016EE18 size(wides)=>>2((N[(W[0x70000210]+0X1EFB9)]+24)) base=(sp@7016ED6E+2*>>2((N[(W[0x70000210]+0X1EFB9)]+4))+2*>>2((N[(W[0x70000210]+0X1EFB9)]+16))+2*>>2((N[(W[0x70000210]+0X1EFB9)]+20))+2*>>2((N[(W[0x70000210]+0X1EFB9)]+22)))
+ block 7016ED93
+   WCMV @7016EDBB  dst=temp[claim 1 7016EDB2 word+2]  dcnt=computed:load N[(W[0x70000210]+0X1EFB9)]  src=computed:deref: pointer in static 0x70000210 (SD_PTR), byte +1  scnt=computed:load N[(W[0x70000210]+0X1EFB9)]
+   WCMV @7016EDD2  dst=temp[claim 2 7016EDC7 word+2]  dcnt=computed:load N[(W[0x70000210]+0X1EFB9)] +1 (computed length word plus constant)  src=temp[claim 1 7016EDB2 word+2]  scnt=computed:load N[(W[0x70000210]+0X1EFB9)] +1 (computed length word plus constant)
+   WCMV @7016EDD9  dst=temp[claim 2 7016EDC7 word+2 +(N[(W[0x70000210]+0X1EFB9)]+1)]  dcnt=const:12  src=frame:frame byte +48 (word fp+24)  scnt=const:12
+   WCMV @7016EDED  dst=temp[claim 3 7016EDE2 word+2]  dcnt=computed:load N[(W[0x70000210]+0X1EFB9)] +13 (computed length word plus constant)  src=temp[claim 2 7016EDC7 word+2]  scnt=computed:load N[(W[0x70000210]+0X1EFB9)] +13 (computed length word plus constant)
+   WCMV @7016EDF4  dst=temp[claim 3 7016EDE2 word+2 +(N[(W[0x70000210]+0X1EFB9)]+13)]  dcnt=const:4  src=frame:frame byte +60 (word fp+30)  scnt=const:4
+   WCMV @7016EE08  dst=temp[claim 4 7016EDFD word+2]  dcnt=computed:load N[(W[0x70000210]+0X1EFB9)] +17 (computed length word plus constant)  src=temp[claim 3 7016EDE2 word+2]  scnt=computed:load N[(W[0x70000210]+0X1EFB9)] +17 (computed length word plus constant)
+   WCMV @7016EE0E  dst=temp[claim 4 7016EDFD word+2 +(N[(W[0x70000210]+0X1EFB9)]+17)]  dcnt=const:2  src=literal:0x7016EA5F:0  scnt=const:2
+   END: ac0=computed:load N[(W[0x70000210]+0X1EFB9)] +19 (computed length word plus constant)  ac1=computed:load N[(W[0x70000210]+0X1EFB9)] +19 (computed length word plus constant)  ac2=computed:>>2((N[(W[0x70000210]+0X1EFB9)]+24))  ac3=computed:fp itself (word value)
+ block 7016EE20
+   END: ac0=computed:load N[(W[0x70000210]+0X1EFB9)] +19 (computed length word plus constant)  ac1=computed:load N[(W[0x70000210]+0X1EFB9)] +19 (computed length word plus constant)  ac2=computed:>>2((N[(W[0x70000210]+0X1EFB9)]+24))  ac3=computed:fp itself (word value)
+ block 7016EE21
+   WCMV @7016EE2A  dst=temp[claim 5 7016EE18 word+2]  dcnt=computed:load N[(W[0x70000210]+0X1EFB9)] +19 (computed length word plus constant)  src=temp[claim 4 7016EDFD word+2]  scnt=computed:load N[(W[0x70000210]+0X1EFB9)] +19 (computed length word plus constant)
+   LCALL @7016EE31 [0x7017E27A],2
+   END: ac0=computed:unk(LCALL:?WRITE_SCREEN@7016EE31)  ac1=computed:unk(LCALL:?WRITE_SCREEN@7016EE31)  ac2=computed:unknown (LCALL:?WRITE_SCREEN@7016EE31)  ac3=computed:fp itself (word value)
+ block 7016EE35
+   STASP @7016EE38  wsp := sp@7016ED6E
+
+== group row 14 block 70172DDE OBSERVE: claims 70172E30 stasp 70172E5F; blocks 70172DDE 70172E4D 70172E4E 70172E54 70172E55
+   claim 1 @70172E30 size(wides)=>>2((N[(fp+134)]+N[(+51*N[(+686*N[W[(fp-12)]]+N[(fp+12)]+W[0x70000210]-0X186)]-0XFEB0503)]+N[((9 XWMUL (fp+96))-0XFFFF977)]+33)) base=sp@70172DDA
+ block 70172DDE
+   WCMV @70172DED  dst=frame:frame byte +312 (word fp+156)  dcnt=const:12  src=frame:frame byte +38 (word fp+19)  scnt=const:12
+   WCMV @70172DF8  dst=frame:frame byte +324 (word fp+162) [cont after cont@70172DED]  dcnt=computed:load N[(+51*N[(+686*N[W[(fp-12)]]+N[(fp+12)]+W[0x70000210]-0X186)]-0XFEB0503)]  src=computed:bp((+51*N[(+686*N[W[(fp-12)]]+N[(fp+12)]+W[0x70000210]-0X186  scnt=computed:load N[(+51*N[(+686*N[W[(fp-12)]]+N[(fp+12)]+W[0x70000210]-0X186)]-0XFEB0503)]
+   WCMV @70172E01  dst=frame:frame byte +564 (word fp+282)  dcnt=computed:load N[(+51*N[(+686*N[W[(fp-12)]]+N[(fp+12)]+W[0x70000210]-0X186)]-0XFEB0503)] +12 (computed length word plus constant)  src=frame:frame byte +312 (word fp+156)  scnt=computed:load N[(+51*N[(+686*N[W[(fp-12)]]+N[(fp+12)]+W[0x70000210]-0X186)]-0XFEB0503)] +12 (computed length word plus constant)
+   WCMV @70172E0D  dst=frame:frame byte +816 (word fp+408)  dcnt=computed:load N[(+51*N[(+686*N[W[(fp-12)]]+N[(fp+12)]+W[0x70000210]-0X186)]-0XFEB0503)] +13 (computed length word plus constant)  src=frame:frame byte +564 (word fp+282)  scnt=computed:load N[(+51*N[(+686*N[W[(fp-12)]]+N[(fp+12)]+W[0x70000210]-0X186)]-0XFEB0503)] +13 (computed length word plus constant)
+   WCMV @70172E18  dst=frame:frame byte +816 (word fp+408) [cont after cont@70172E0D]  dcnt=computed:load N[((9 XWMUL (fp+96))-0XFFFF977)]  src=computed:static table 0x7000068A (TREASURE_NAMES+0x40) indexed by (9   scnt=computed:load N[((9 XWMUL (fp+96))-0XFFFF977)]
+   WCMV @70172E21  dst=frame:frame byte +1084 (word fp+542)  dcnt=computed:(N[(+51*N[(+686*N[W[(fp-12)]]+N[(fp+12)]+W[0x70000210]-0X186)]-0XFEB0503)]+N[((9 XWMUL (fp+96))-0XFFFF977)]+13)  src=frame:frame byte +816 (word fp+408)  scnt=computed:(N[(+51*N[(+686*N[W[(fp-12)]]+N[(fp+12)]+W[0x70000210]-0X186)]-0XFEB0503)]+N[((9 XWMUL (fp+96))-0XFFFF977)]+13)
+   WCMV @70172E27  dst=frame:frame byte +1084 (word fp+542) [cont after cont@70172E21]  dcnt=const:17  src=literal:0x70172C37:0  scnt=const:17
+   WCMV @70172E3A  dst=temp[claim 1 70172E30 word+2]  dcnt=computed:(N[(+51*N[(+686*N[W[(fp-12)]]+N[(fp+12)]+W[0x70000210]-0X186)]-0XFEB0503)]+N[((9 XWMUL (fp+96))-0XFFFF977)]+30)  src=frame:frame byte +1084 (word fp+542)  scnt=computed:(N[(+51*N[(+686*N[W[(fp-12)]]+N[(fp+12)]+W[0x70000210]-0X186)]-0XFEB0503)]+N[((9 XWMUL (fp+96))-0XFFFF977)]+30)
+   WCMV @70172E41  dst=temp[claim 1 70172E30 word+2 +(N[(+51*N[(+686*N[W[(fp-12)]]+N[(fp+12)]+W[0x70000210]-0X186)]-0XFEB0503)]+N[((9 XWMUL (fp+96))-0XFFFF977)]+30)]  dcnt=frame:N[fp+134]  src=frame:frame byte +270 (word fp+135)  scnt=frame:N[fp+134]
+   END: ac0=computed:(N[(fp+134)]+N[(+51*N[(+686*N[W[(fp-12)]]+N[(fp+12)]+W[0x70000210]-0X186)]-0XFEB0503)]+N[((9 XWMUL (fp+96))-0XFFFF977)]+30)  ac1=const:150  ac2=frame:frame byte +38 (word fp+19)  ac3=temp[claim 1 70172E30 word+2]
+ block 70172E4D
+   END: ac0=const:150  ac1=const:150  ac2=frame:frame byte +38 (word fp+19)  ac3=temp[claim 1 70172E30 word+2]
+ block 70172E4E
+   WCMV @70172E4E  dst=frame:frame byte +38 (word fp+19)  dcnt=computed:phi((N[(fp+134)]+N[(+51*N[(+686*N[W[(fp-12)]]+N[(fp+12)]+W[0x70000210]-0X186)]-0XFEB0503)]+N[((9 XWMUL (fp+96))-0XFFFF977)]+30), 150)  src=temp[claim 1 70172E30 word+2]  scnt=const:150
+   END: ac0=const:15  ac1=computed:residue of wcmv@70172E4E (src_left)  ac2=frame:frame byte +38 (word fp+19) [cont after cont@70172E4E]  ac3=literal:0x70172C2F:0
+ block 70172E54
+   END: ac0=computed:residue of wcmv@70172E4E (src_left)  ac1=computed:residue of wcmv@70172E4E (src_left)  ac2=frame:frame byte +38 (word fp+19) [cont after cont@70172E4E]  ac3=literal:0x70172C2F:0
+ block 70172E55
+   WCMV @70172E55  dst=frame:frame byte +38 (word fp+19) [cont after cont@70172E4E]  dcnt=computed:phi(15, wcmv.src_left@70172E4E)  src=literal:0x70172C2F:0  scnt=computed:residue of wcmv@70172E4E (src_left)
+   STASP @70172E5F  wsp := sp@70172DDA
+
+== group row 15 block 70172EB0 OBSERVE: claims 70172F01 stasp 70172F30; blocks 70172EB0 70172F1E 70172F1F 70172F25 70172F26
+   claim 1 @70172F01 size(wides)=>>2((unk(LCALL:?UNSIGNED_TO_CHAR@70172EAC)+N[(fp+134)]+3)) base=sp@70172EAC
+ block 70172EB0
+   WCMV @70172EBE  dst=frame:frame byte +312 (word fp+156)  dcnt=const:12  src=frame:frame byte +38 (word fp+19)  scnt=const:12
+   WCMV @70172EC9  dst=frame:frame byte +324 (word fp+162) [cont after cont@70172EBE]  dcnt=computed:load N[(+51*N[(+686*N[W[(fp-12)]]+N[(fp+12)]+W[0x70000210]-0X186)]-0XFEAF513)]  src=computed:bp((+51*N[(+686*N[W[(fp-12)]]+N[(fp+12)]+W[0x70000210]-0X186  scnt=computed:load N[(+51*N[(+686*N[W[(fp-12)]]+N[(fp+12)]+W[0x70000210]-0X186)]-0XFEAF513)]
+   WCMV @70172ED2  dst=frame:frame byte +564 (word fp+282)  dcnt=computed:load N[(+51*N[(+686*N[W[(fp-12)]]+N[(fp+12)]+W[0x70000210]-0X186)]-0XFEAF513)] +12 (computed length word plus constant)  src=frame:frame byte +312 (word fp+156)  scnt=computed:load N[(+51*N[(+686*N[W[(fp-12)]]+N[(fp+12)]+W[0x70000210]-0X186)]-0XFEAF513)] +12 (computed length word plus constant)
+   WCMV @70172EDE  dst=frame:frame byte +816 (word fp+408)  dcnt=computed:load N[(+51*N[(+686*N[W[(fp-12)]]+N[(fp+12)]+W[0x70000210]-0X186)]-0XFEAF513)] +13 (computed length word plus constant)  src=frame:frame byte +564 (word fp+282)  scnt=computed:load N[(+51*N[(+686*N[W[(fp-12)]]+N[(fp+12)]+W[0x70000210]-0X186)]-0XFEAF513)] +13 (computed length word plus constant)
+   WCMV @70172EE9  dst=frame:frame byte +816 (word fp+408) [cont after cont@70172EDE]  dcnt=computed:load N[(+9*N[(+686*N[W[(fp-12)]]+N[(fp+12)]+W[0x70000210]-0X186)]-0XFFFFA73)]  src=computed:static table 0x7000058E (BEING_NAMES+0x31C) indexed by (+9*N  scnt=computed:load N[(+9*N[(+686*N[W[(fp-12)]]+N[(fp+12)]+W[0x70000210]-0X186)]-0XFFFFA73)]
+   WCMV @70172EF2  dst=frame:frame byte +1084 (word fp+542)  dcnt=computed:(N[(+51*N[(+686*N[W[(fp-12)]]+N[(fp+12)]+W[0x70000210]-0X186)]-0XFEAF513)]+N[(+9*N[(+686*N[W[(fp-12)]]+N[(fp+12)]+W[0x70000210]-0X186)]-0XFFFFA73)]+13)  src=frame:frame byte +816 (word fp+408)  scnt=computed:(N[(+51*N[(+686*N[W[(fp-12)]]+N[(fp+12)]+W[0x70000210]-0X186)]-0XFEAF513)]+N[(+9*N[(+686*N[W[(fp-12)]]+N[(fp+12)]+W[0x70000210]-0X186)]-0XFFFFA73)]+13)
+   WCMV @70172EF8  dst=frame:frame byte +1084 (word fp+542) [cont after cont@70172EF2]  dcnt=const:17  src=literal:0x70172C37:0  scnt=const:17
+   WCMV @70172F0B  dst=temp[claim 1 70172F01 word+2]  dcnt=computed:(N[(+51*N[(+686*N[W[(fp-12)]]+N[(fp+12)]+W[0x70000210]-0X186)]-0XFEAF513)]+N[(+9*N[(+686*N[W[(fp-12)]]+N[(fp+12)]+W[0x70000210]-0X186)]-0XFFFFA73)]+30)  src=frame:frame byte +1084 (word fp+542)  scnt=computed:(N[(+51*N[(+686*N[W[(fp-12)]]+N[(fp+12)]+W[0x70000210]-0X186)]-0XFEAF513)]+N[(+9*N[(+686*N[W[(fp-12)]]+N[(fp+12)]+W[0x70000210]-0X186)]-0XFFFFA73)]+30)
+   WCMV @70172F12  dst=temp[claim 1 70172F01 word+2 +(N[(+51*N[(+686*N[W[(fp-12)]]+N[(fp+12)]+W[0x70000210]-0X186)]-0XFEAF513)]+N[(+9*N[(+686*N[W[(fp-12)]]+N[(fp+12)]+W[0x70000210]-0X186)]-0XFFFFA73)]+30)]  dcnt=frame:N[fp+134]  src=frame:frame byte +270 (word fp+135)  scnt=frame:N[fp+134]
+   END: ac0=computed:(unk(LCALL:?UNSIGNED_TO_CHAR@70172EAC)+N[(fp+134)])  ac1=const:150  ac2=frame:frame byte +38 (word fp+19)  ac3=temp[claim 1 70172F01 word+2]
+ block 70172F1E
+   END: ac0=const:150  ac1=const:150  ac2=frame:frame byte +38 (word fp+19)  ac3=temp[claim 1 70172F01 word+2]
+ block 70172F1F
+   WCMV @70172F1F  dst=frame:frame byte +38 (word fp+19)  dcnt=computed:phi((unk(LCALL:?UNSIGNED_TO_CHAR@70172EAC)+N[(fp+134)]), 150)  src=temp[claim 1 70172F01 word+2]  scnt=const:150
+   END: ac0=const:15  ac1=computed:residue of wcmv@70172F1F (src_left)  ac2=frame:frame byte +38 (word fp+19) [cont after cont@70172F1F]  ac3=literal:0x70172C2F:0
+ block 70172F25
+   END: ac0=computed:residue of wcmv@70172F1F (src_left)  ac1=computed:residue of wcmv@70172F1F (src_left)  ac2=frame:frame byte +38 (word fp+19) [cont after cont@70172F1F]  ac3=literal:0x70172C2F:0
+ block 70172F26
+   WCMV @70172F26  dst=frame:frame byte +38 (word fp+19) [cont after cont@70172F1F]  dcnt=computed:phi(15, wcmv.src_left@70172F1F)  src=literal:0x70172C2F:0  scnt=computed:residue of wcmv@70172F1F (src_left)
+   STASP @70172F30  wsp := sp@70172EAC
+
+== group row 16 block 70175694 OP_EDIT: claims 701756A9 701756C3 701756DD 701756F8 70175713 stasp 70175743; blocks 70175694 7017571B 7017571C 70175740
+   claim 1 @701756A9 size(wides)=>>2((N[W[(fp-12)]]+4)) base=sp@7017567B
+   claim 2 @701756C3 size(wides)=>>2((N[W[(fp-12)]]+6)) base=(sp@7017567B+2*>>2((N[W[(fp-12)]]+4)))
+   claim 3 @701756DD size(wides)=>>2((N[W[(fp-12)]]+N[(fp+12)]+6)) base=(sp@7017567B+2*>>2((N[W[(fp-12)]]+4))+2*>>2((N[W[(fp-12)]]+6)))
+   claim 4 @701756F8 size(wides)=>>2((N[W[(fp-12)]]+N[(fp+12)]+10)) base=(sp@7017567B+2*>>2((N[W[(fp-12)]]+4))+2*>>2((N[W[(fp-12)]]+6))+2*>>2((N[W[(fp-12)]]+N[(fp+12)]+6)))
+   claim 5 @70175713 size(wides)=>>2((N[W[(fp-12)]]+N[(fp+12)]+12)) base=(sp@7017567B+2*>>2((N[W[(fp-12)]]+4))+2*>>2((N[W[(fp-12)]]+6))+2*>>2((N[W[(fp-12)]]+N[(fp+12)]+6))+2*>>2((N[W[(fp-12)]]+N[(fp+12)]+10)))
+ block 70175694
+   WCMV @701756BA  dst=temp[claim 1 701756A9 word+2]  dcnt=computed:deref: N[*(fp-12)] (length word of a string reached through a frame pointer slot)  src=computed:deref: pointer in frame word fp-12, byte +2  scnt=computed:deref: N[*(fp-12)] (length word of a string reached through a frame pointer slot)
+   WCMV @701756CE  dst=temp[claim 2 701756C3 word+2]  dcnt=computed:deref: N[*(fp-12)] (length word of a string reached through a frame pointer slot) +1 (computed length word plus constant)  src=temp[claim 1 701756A9 word+2]  scnt=computed:deref: N[*(fp-12)] (length word of a string reached through a frame pointer slot) +1 (computed length word plus constant)
+   WCMV @701756D4  dst=temp[claim 2 701756C3 word+2 +(N[W[(fp-12)]]+1)]  dcnt=const:2  src=literal:0x701735CD:0  scnt=const:2
+   WCMV @701756E8  dst=temp[claim 3 701756DD word+2]  dcnt=computed:deref: N[*(fp-12)] (length word of a string reached through a frame pointer slot) +3 (computed length word plus constant)  src=temp[claim 2 701756C3 word+2]  scnt=computed:deref: N[*(fp-12)] (length word of a string reached through a frame pointer slot) +3 (computed length word plus constant)
+   WCMV @701756EF  dst=temp[claim 3 701756DD word+2 +(N[W[(fp-12)]]+3)]  dcnt=frame:N[fp+12]  src=frame:frame byte +26 (word fp+13)  scnt=frame:N[fp+12]
+   WCMV @70175703  dst=temp[claim 4 701756F8 word+2]  dcnt=computed:(N[W[(fp-12)]]+N[(fp+12)]+3)  src=temp[claim 3 701756DD word+2]  scnt=computed:(N[W[(fp-12)]]+N[(fp+12)]+3)
+   WCMV @70175709  dst=temp[claim 4 701756F8 word+2 +(N[W[(fp-12)]]+N[(fp+12)]+3)]  dcnt=const:4  src=literal:0x701735CB:0  scnt=const:4
+   END: ac0=computed:(N[W[(fp-12)]]+N[(fp+12)]+7)  ac1=computed:(N[W[(fp-12)]]+N[(fp+12)]+7)  ac2=computed:>>2((N[W[(fp-12)]]+N[(fp+12)]+12))  ac3=computed:fp itself (word value)
+ block 7017571B
+   END: ac0=computed:(N[W[(fp-12)]]+N[(fp+12)]+7)  ac1=computed:(N[W[(fp-12)]]+N[(fp+12)]+7)  ac2=computed:>>2((N[W[(fp-12)]]+N[(fp+12)]+12))  ac3=computed:fp itself (word value)
+ block 7017571C
+   WCMV @70175725  dst=temp[claim 5 70175713 word+2]  dcnt=computed:(N[W[(fp-12)]]+N[(fp+12)]+7)  src=temp[claim 4 701756F8 word+2]  scnt=computed:(N[W[(fp-12)]]+N[(fp+12)]+7)
+   LCALL @7017573C [0x7017E27A],5
+   END: ac0=computed:unk(LCALL:?WRITE_SCREEN@7017573C)  ac1=computed:unk(LCALL:?WRITE_SCREEN@7017573C)  ac2=computed:unknown (LCALL:?WRITE_SCREEN@7017573C)  ac3=computed:fp itself (word value)
+ block 70175740
+   STASP @70175743  wsp := sp@7017567B
+
+== group row 17 block 701757C5 OP_EDIT: claims 701757D2 701757EC 70175806 70175821 7017583C stasp 7017586C; blocks 701757C5 70175844 70175845 70175869
+   claim 1 @701757D2 size(wides)=>>2((N[W[(fp-12)]]+4)) base=sp@701757C1
+   claim 2 @701757EC size(wides)=>>2((N[W[(fp-12)]]+6)) base=(sp@701757C1+2*>>2((N[W[(fp-12)]]+4)))
+   claim 3 @70175806 size(wides)=>>2((unk(LCALL:?UNSIGNED_TO_CHAR@701757C1)+N[(fp+14)]+3)) base=(sp@701757C1+2*>>2((N[W[(fp-12)]]+4))+2*>>2((N[W[(fp-12)]]+6)))
+   claim 4 @70175821 size(wides)=>>2((unk(LCALL:?UNSIGNED_TO_CHAR@701757C1)+N[(fp+14)]+7)) base=(sp@701757C1+2*>>2((N[W[(fp-12)]]+4))+2*>>2((N[W[(fp-12)]]+6))+2*>>2((unk(LCALL:?UNSIGNED_TO_CHAR@701757C1)+N[(fp+14)]+3)))
+   claim 5 @7017583C size(wides)=>>2((unk(LCALL:?UNSIGNED_TO_CHAR@701757C1)+N[(fp+14)]+9)) base=(sp@701757C1+2*>>2((N[W[(fp-12)]]+4))+2*>>2((N[W[(fp-12)]]+6))+2*>>2((unk(LCALL:?UNSIGNED_TO_CHAR@701757C1)+N[(fp+14)]+3))+2*>>2((unk(LCALL:?UNSIGNED_TO_CHAR@701757C1)+N[(fp+14)]+7)))
+ block 701757C5
+   WCMV @701757E3  dst=temp[claim 1 701757D2 word+2]  dcnt=computed:deref: N[*(fp-12)] (length word of a string reached through a frame pointer slot)  src=computed:deref: pointer in frame word fp-12, byte +2  scnt=computed:deref: N[*(fp-12)] (length word of a string reached through a frame pointer slot)
+   WCMV @701757F7  dst=temp[claim 2 701757EC word+2]  dcnt=computed:deref: N[*(fp-12)] (length word of a string reached through a frame pointer slot) +1 (computed length word plus constant)  src=temp[claim 1 701757D2 word+2]  scnt=computed:deref: N[*(fp-12)] (length word of a string reached through a frame pointer slot) +1 (computed length word plus constant)
+   WCMV @701757FD  dst=temp[claim 2 701757EC word+2 +(N[W[(fp-12)]]+1)]  dcnt=const:2  src=literal:0x701735CD:0  scnt=const:2
+   WCMV @70175811  dst=temp[claim 3 70175806 word+2]  dcnt=computed:deref: N[*(fp-12)] (length word of a string reached through a frame pointer slot) +3 (computed length word plus constant)  src=temp[claim 2 701757EC word+2]  scnt=computed:deref: N[*(fp-12)] (length word of a string reached through a frame pointer slot) +3 (computed length word plus constant)
+   WCMV @70175818  dst=temp[claim 3 70175806 word+2 +(N[W[(fp-12)]]+3)]  dcnt=frame:N[fp+14]  src=frame:frame byte +30 (word fp+15)  scnt=frame:N[fp+14]
+   WCMV @7017582C  dst=temp[claim 4 70175821 word+2]  dcnt=computed:(unk(LCALL:?UNSIGNED_TO_CHAR@701757C1)+N[(fp+14)])  src=temp[claim 3 70175806 word+2]  scnt=computed:(unk(LCALL:?UNSIGNED_TO_CHAR@701757C1)+N[(fp+14)])
+   WCMV @70175832  dst=temp[claim 4 70175821 word+2 +(unk(LCALL:?UNSIGNED_TO_CHAR@701757C1)+N[(fp+14)])]  dcnt=const:4  src=literal:0x701735CB:0  scnt=const:4
+   END: ac0=computed:(unk(LCALL:?UNSIGNED_TO_CHAR@701757C1)+N[(fp+14)]+4)  ac1=computed:(unk(LCALL:?UNSIGNED_TO_CHAR@701757C1)+N[(fp+14)]+4)  ac2=computed:>>2((unk(LCALL:?UNSIGNED_TO_CHAR@701757C1)+N[(fp+14)]+9))  ac3=computed:fp itself (word value)
+ block 70175844
+   END: ac0=computed:(unk(LCALL:?UNSIGNED_TO_CHAR@701757C1)+N[(fp+14)]+4)  ac1=computed:(unk(LCALL:?UNSIGNED_TO_CHAR@701757C1)+N[(fp+14)]+4)  ac2=computed:>>2((unk(LCALL:?UNSIGNED_TO_CHAR@701757C1)+N[(fp+14)]+9))  ac3=computed:fp itself (word value)
+ block 70175845
+   WCMV @7017584E  dst=temp[claim 5 7017583C word+2]  dcnt=computed:(unk(LCALL:?UNSIGNED_TO_CHAR@701757C1)+N[(fp+14)]+4)  src=temp[claim 4 70175821 word+2]  scnt=computed:(unk(LCALL:?UNSIGNED_TO_CHAR@701757C1)+N[(fp+14)]+4)
+   LCALL @70175865 [0x7017E27A],5
+   END: ac0=computed:unk(LCALL:?WRITE_SCREEN@70175865)  ac1=computed:unk(LCALL:?WRITE_SCREEN@70175865)  ac2=computed:unknown (LCALL:?WRITE_SCREEN@70175865)  ac3=computed:fp itself (word value)
+ block 70175869
+   STASP @7017586C  wsp := sp@701757C1
+
+== group row 18 block 701758A0 OP_EDIT: claims 701758B5 701758CF 701758E9 70175906 70175921 stasp 70175951; blocks 701758A0 70175929 7017592A 7017594E
+   claim 1 @701758B5 size(wides)=>>2((N[W[(fp-12)]]+4)) base=sp@701758A0
+   claim 2 @701758CF size(wides)=>>2((N[W[(fp-12)]]+6)) base=(sp@701758A0+2*>>2((N[W[(fp-12)]]+4)))
+   claim 3 @701758E9 size(wides)=>>2((N[W[(fp-12)]]+N[W[(fp-14)]]+6)) base=(sp@701758A0+2*>>2((N[W[(fp-12)]]+4))+2*>>2((N[W[(fp-12)]]+6)))
+   claim 4 @70175906 size(wides)=>>2((N[W[(fp-12)]]+N[W[(fp-14)]]+10)) base=(sp@701758A0+2*>>2((N[W[(fp-12)]]+4))+2*>>2((N[W[(fp-12)]]+6))+2*>>2((N[W[(fp-12)]]+N[W[(fp-14)]]+6)))
+   claim 5 @70175921 size(wides)=>>2((N[W[(fp-12)]]+N[W[(fp-14)]]+12)) base=(sp@701758A0+2*>>2((N[W[(fp-12)]]+4))+2*>>2((N[W[(fp-12)]]+6))+2*>>2((N[W[(fp-12)]]+N[W[(fp-14)]]+6))+2*>>2((N[W[(fp-12)]]+N[W[(fp-14)]]+10)))
+ block 701758A0
+   WCMV @701758C6  dst=temp[claim 1 701758B5 word+2]  dcnt=computed:deref: N[*(fp-12)] (length word of a string reached through a frame pointer slot)  src=computed:deref: pointer in frame word fp-12, byte +2  scnt=computed:deref: N[*(fp-12)] (length word of a string reached through a frame pointer slot)
+   WCMV @701758DA  dst=temp[claim 2 701758CF word+2]  dcnt=computed:deref: N[*(fp-12)] (length word of a string reached through a frame pointer slot) +1 (computed length word plus constant)  src=temp[claim 1 701758B5 word+2]  scnt=computed:deref: N[*(fp-12)] (length word of a string reached through a frame pointer slot) +1 (computed length word plus constant)
+   WCMV @701758E0  dst=temp[claim 2 701758CF word+2 +(N[W[(fp-12)]]+1)]  dcnt=const:2  src=literal:0x701735CD:0  scnt=const:2
+   WCMV @701758F4  dst=temp[claim 3 701758E9 word+2]  dcnt=computed:deref: N[*(fp-12)] (length word of a string reached through a frame pointer slot) +3 (computed length word plus constant)  src=temp[claim 2 701758CF word+2]  scnt=computed:deref: N[*(fp-12)] (length word of a string reached through a frame pointer slot) +3 (computed length word plus constant)
+   WCMV @701758FD  dst=temp[claim 3 701758E9 word+2 +(N[W[(fp-12)]]+3)]  dcnt=computed:deref: N[*(fp-14)] (length word of a string reached through a frame pointer slot)  src=computed:deref: pointer in frame word fp-14, byte +2  scnt=computed:deref: N[*(fp-14)] (length word of a string reached through a frame pointer slot)
+   WCMV @70175911  dst=temp[claim 4 70175906 word+2]  dcnt=computed:(N[W[(fp-12)]]+N[W[(fp-14)]]+3)  src=temp[claim 3 701758E9 word+2]  scnt=computed:(N[W[(fp-12)]]+N[W[(fp-14)]]+3)
+   WCMV @70175917  dst=temp[claim 4 70175906 word+2 +(N[W[(fp-12)]]+N[W[(fp-14)]]+3)]  dcnt=const:4  src=literal:0x701735CB:0  scnt=const:4
+   END: ac0=computed:(N[W[(fp-12)]]+N[W[(fp-14)]]+7)  ac1=computed:(N[W[(fp-12)]]+N[W[(fp-14)]]+7)  ac2=computed:>>2((N[W[(fp-12)]]+N[W[(fp-14)]]+12))  ac3=computed:fp itself (word value)
+ block 70175929
+   END: ac0=computed:(N[W[(fp-12)]]+N[W[(fp-14)]]+7)  ac1=computed:(N[W[(fp-12)]]+N[W[(fp-14)]]+7)  ac2=computed:>>2((N[W[(fp-12)]]+N[W[(fp-14)]]+12))  ac3=computed:fp itself (word value)
+ block 7017592A
+   WCMV @70175933  dst=temp[claim 5 70175921 word+2]  dcnt=computed:(N[W[(fp-12)]]+N[W[(fp-14)]]+7)  src=temp[claim 4 70175906 word+2]  scnt=computed:(N[W[(fp-12)]]+N[W[(fp-14)]]+7)
+   LCALL @7017594A [0x7017E27A],5
+   END: ac0=computed:unk(LCALL:?WRITE_SCREEN@7017594A)  ac1=computed:unk(LCALL:?WRITE_SCREEN@7017594A)  ac2=computed:unknown (LCALL:?WRITE_SCREEN@7017594A)  ac3=computed:fp itself (word value)
+ block 7017594E
+   STASP @70175951  wsp := sp@701758A0
+
+== group row 19 block 7017A116 STORE: claims 7017A149 7017A164 7017A17F 7017A19A 7017A1B2 stasp 7017A1D1; blocks 7017A116 7017A1B9 7017A1BA 7017A1CE
+   claim 1 @7017A149 size(wides)=>>2((N[(fp+64)]+21)) base=sp@7017A112
+   claim 2 @7017A164 size(wides)=>>2((N[(fp+64)]+N[(fp+22)]+21)) base=(sp@7017A112+2*>>2((N[(fp+64)]+21)))
+   claim 3 @7017A17F size(wides)=>>2((N[(fp+116)]+N[(fp+64)]+N[(fp+22)]+21)) base=(sp@7017A112+2*>>2((N[(fp+64)]+21))+2*>>2((N[(fp+64)]+N[(fp+22)]+21)))
+   claim 4 @7017A19A size(wides)=>>2((N[(fp+116)]+N[(fp+64)]+N[(fp+22)]+22)) base=(sp@7017A112+2*>>2((N[(fp+64)]+21))+2*>>2((N[(fp+64)]+N[(fp+22)]+21))+2*>>2((N[(fp+116)]+N[(fp+64)]+N[(fp+22)]+21)))
+   claim 5 @7017A1B2 size(wides)=>>2((N[(fp+116)]+N[(fp+64)]+N[(fp+22)]+24)) base=(sp@7017A112+2*>>2((N[(fp+64)]+21))+2*>>2((N[(fp+64)]+N[(fp+22)]+21))+2*>>2((N[(fp+116)]+N[(fp+64)]+N[(fp+22)]+21))+2*>>2((N[(fp+116)]+N[(fp+64)]+N[(fp+22)]+22)))
+ block 7017A116
+   WCMV @7017A126  dst=frame:frame byte +456 (word fp+228)  dcnt=frame:N[fp+64]  src=frame:frame byte +130 (word fp+65)  scnt=frame:N[fp+64]
+   WCMV @7017A12C  dst=frame:frame byte +456 (word fp+228) [cont after cont@7017A126]  dcnt=const:2  src=literal:0x70179A68:0  scnt=const:2
+   WCMV @7017A135  dst=frame:frame byte +728 (word fp+364)  dcnt=computed:N[fp+64] +2 (frame length word plus constant)  src=frame:frame byte +456 (word fp+228)  scnt=computed:N[fp+64] +2 (frame length word plus constant)
+   WCMV @7017A140  dst=frame:frame byte +728 (word fp+364) [cont after cont@7017A135]  dcnt=computed:load N[(+9*N[(+16*N[(fp+17)]+N[(fp+14)]-0XFEAEAFB)]-0XFFFFA73)]  src=computed:static table 0x7000058E (BEING_NAMES+0x31C) indexed by (+9*N  scnt=computed:load N[(+9*N[(+16*N[(fp+17)]+N[(fp+14)]-0XFEAEAFB)]-0XFFFFA73)]
+   WCMV @7017A153  dst=temp[claim 1 7017A149 word+2]  dcnt=computed:(N[(fp+64)]+N[(+9*N[(+16*N[(fp+17)]+N[(fp+14)]-0XFEAEAFB)]-0XFFFFA73)]+2)  src=frame:frame byte +728 (word fp+364)  scnt=computed:(N[(fp+64)]+N[(+9*N[(+16*N[(fp+17)]+N[(fp+14)]-0XFEAEAFB)]-0XFFFFA73)]+2)
+   WCMV @7017A15B  dst=temp[claim 1 7017A149 word+2 +(N[(fp+64)]+N[(+9*N[(+16*N[(fp+17)]+N[(fp+14)]-0XFEAEAFB)]-0XFFFFA73)]+2)]  dcnt=computed:(-N[(+9*N[(+16*N[(fp+17)]+N[(fp+14)]-0XFEAEAFB)]-0XFFFFA73)]+16)  src=literal:0x7015155A:0  scnt=computed:(-N[(+9*N[(+16*N[(fp+17)]+N[(fp+14)]-0XFEAEAFB)]-0XFFFFA73)]+16)
+   WCMV @7017A16F  dst=temp[claim 2 7017A164 word+2]  dcnt=computed:N[fp+64] +18 (frame length word plus constant)  src=temp[claim 1 7017A149 word+2]  scnt=computed:N[fp+64] +18 (frame length word plus constant)
+   WCMV @7017A176  dst=temp[claim 2 7017A164 word+2 +(N[(fp+64)]+18)]  dcnt=frame:N[fp+22]  src=frame:frame byte +46 (word fp+23)  scnt=frame:N[fp+22]
+   WCMV @7017A18A  dst=temp[claim 3 7017A17F word+2]  dcnt=computed:(N[(fp+64)]+N[(fp+22)]+18)  src=temp[claim 2 7017A164 word+2]  scnt=computed:(N[(fp+64)]+N[(fp+22)]+18)
+   WCMV @7017A191  dst=temp[claim 3 7017A17F word+2 +(N[(fp+64)]+N[(fp+22)]+18)]  dcnt=frame:N[fp+116]  src=frame:frame byte +234 (word fp+117)  scnt=frame:N[fp+116]
+   WCMV @7017A1A5  dst=temp[claim 4 7017A19A word+2]  dcnt=computed:(N[(fp+116)]+N[(fp+64)]+N[(fp+22)]+18)  src=temp[claim 3 7017A17F word+2]  scnt=computed:(N[(fp+116)]+N[(fp+64)]+N[(fp+22)]+18)
+   END: ac0=computed:(N[(fp+116)]+N[(fp+64)]+N[(fp+22)]+19)  ac1=computed:(N[(fp+116)]+N[(fp+64)]+N[(fp+22)]+19)  ac2=temp[claim 5 7017A1B2 word+2]  ac3=computed:fp itself (word value)
+ block 7017A1B9
+   END: ac0=computed:(N[(fp+116)]+N[(fp+64)]+N[(fp+22)]+19)  ac1=computed:(N[(fp+116)]+N[(fp+64)]+N[(fp+22)]+19)  ac2=temp[claim 5 7017A1B2 word+2]  ac3=computed:fp itself (word value)
+ block 7017A1BA
+   WCMV @7017A1C3  dst=temp[claim 5 7017A1B2 word+2]  dcnt=computed:(N[(fp+116)]+N[(fp+64)]+N[(fp+22)]+19)  src=temp[claim 4 7017A19A word+2]  scnt=computed:(N[(fp+116)]+N[(fp+64)]+N[(fp+22)]+19)
+   LCALL @7017A1CA [0x7017E27A],2
+   END: ac0=computed:unk(LCALL:?WRITE_SCREEN@7017A1CA)  ac1=computed:unk(LCALL:?WRITE_SCREEN@7017A1CA)  ac2=computed:unknown (LCALL:?WRITE_SCREEN@7017A1CA)  ac3=computed:fp itself (word value)
+ block 7017A1CE
+   STASP @7017A1D1  wsp := sp@7017A112
+
+# intermediate-temp pointers at a block end (rendezvous): 2
+#   row 12 block 7016DF68: at end of 7016DF68 ac3 = temp[claim 1 7016DF7F word+2 +(W[(W[(fp-14)]+1)]+1)]
+#   row 12 block 7016DF68: at end of 7016DFB6 ac3 = temp[claim 1 7016DF7F word+2 +(W[(W[(fp-14)]+1)]+1)]

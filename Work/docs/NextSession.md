@@ -1,5 +1,27 @@
 # Next session
 
+## P33-B ON BRANCH (Sep 6 2026) — arena twins, the string family retired
+- Branch p33b-arena-temps: hw/strings/Arena, StrHooks per-claim + claim
+  insertions, Mapper claim-insertion layer, IRExec ir 6, tools/{arena,
+  p33_census}.py, string_sites.py --p33, lower.py --strings-sites33, the ir 6
+  artifacts + quest.arena + quest.strhooks, docs/Project33/{CensusB,REPORT-B,
+  REPORT_worklog-B,p33.ledger,p33.tsv,censusB_raw.txt}. **Task 047** on
+  main: check results/047-p33b-arena-temps before merging (bar: 16/16, 0 div
+  on 15, embeds 0/0/0, clone claim=0 on the IR legs).
+- Integrator: Mapper.md §1.4 (claim-insertion layer; master temp → bound
+  twin, unique while outstanding), StringsDesign §6.3 (TOTAL outstanding
+  claims), §2.1 ("ground: t@b.k; readable: p@b ≡ t@b.last"), §5.2 (twins,
+  claim, release) — REPORT-B §6 has the text.
+- OWED: the play driver (docs/Project13/drive.py, drive_patient.py): the
+  post-auto-move keys O/D/L/H never reach the command prompt (046's HELP
+  fail was the first observation; P33-B's play run confirms — only
+  DISPLAY_SCREEN / DISPLAY_INVENTORY / INIT_OBJ_TBL groups execute). Read
+  the session log at the O step and re-place the keys; then DIED (the `m`
+  driver), DISPLAY_MAGIC, LIST_PLAYERS, OBSERVE, HELP, GET_QUEST, OP_EDIT,
+  STORE become live gates. Then set quest.arena's `cap=` column from 047's
+  max-claim lines (regenerate p33.tsv + ir 6; the provenance chain enforces
+  it). §5.3's LOCK_FILE constants remain the P33 tail item.
+
 ## P32 IMPLEMENTED (Sep 6 2026) — read this first
 - Branch p32-append-chains: the P31 correction commit (17 wrong
   statements — docs/Project31/Census.md §11; p31 649/127; artifacts

@@ -3,6 +3,7 @@
 #include "Machine.hpp"
 #include "Lockstep.hpp"
 #include "strings/StrHooks.hpp"
+#include "strings/Arena.hpp"
 #include "../debug/SymbolTable.hpp"
 #include "../os/OSProcess.hpp"
 #include "../debug/CallStack.hpp"
@@ -528,6 +529,10 @@ void RTStubs::initialize(SymbolTable& symbols, const std::string& program) {
   // P33-A string checker (QUEST_STRINGS_CHECK=1 + QUEST_STRHOOKS=<file>):
   // the hook table loads here, with the other per-process knobs; a set
   // flag without a usable table refuses to launch (INJECT discipline).
+  // P33-B: the arena layout (QUEST_ARENA=<quest.arena>) — the twins the IR
+  // names and the checker's rows; loaded before the hook table cross-checks it.
+  if(!strings::Arena::load_from_env())
+    exit(2);
   if(!strings::StrHooks::load_from_env())
     exit(2);
   start=range_start;

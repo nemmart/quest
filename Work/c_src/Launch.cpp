@@ -371,11 +371,13 @@ int main(int argc, char* argv[]) {
   }
 
   signal(SIGINT, sigint_handler);
+  signal(SIGTERM, sigint_handler);   // P33-B: the battery ends clean legs with SIGTERM — take the same graceful path (verdict lines at shutdown)
 
   // Wait until all processes have terminated
   bool shutdown_sent = false;
   while(OS::global.has_processes()) {
     if(sigint_count > 0 && !shutdown_sent) {
+      hw::Lockstep::halting.store(true);   // P33-C: batches cut by the halt below are not compared
       OS::global.shutdown_all();
       os::LockstepMediator::release_all();  // wake mediator-parked tasks (the ctrl-C wedge)
       shutdown_sent = true;

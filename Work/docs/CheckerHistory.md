@@ -389,3 +389,33 @@ Behind `QUEST_STRINGS_CHECK=1` only (docs/Project33/REPORT.md):
   frame-restoring path reachable from it (never observed live; its
   live shape is the plain-WRTN branch). The checker treats that WRTN as
   an unwind cut (table row), as it does I.GOTO's two.
+
+## Generation 6.1 addendum — a shutdown-truncated pair is not a divergence (P33-C, Sep 6 2026)
+
+- **Finding.** Task 047's two play divergences (FIND_OBJECT, ordinals 28
+  apart, `clone_insns=0`) were the pair comparison of two batches CUT BY
+  THE GRACEFUL SHUTDOWN: the battery ends the play legs with SIGTERM (the
+  driver's post-auto-move keys never reach the prompt, so the legs never
+  reach I.STOP), P33-B made SIGTERM take the graceful path so the verdict
+  lines print (Launch.cpp:374), `OS::shutdown_all` halts every task,
+  `Machine::run` breaks mid-batch on the halt flag (Machine.cpp:257), and
+  `MachineThread` submitted the truncated master half and the halted clone
+  half (0 instructions) to `compare_pair` unguarded (MachineThread.cpp:209).
+  Whether the cut pair compared equal was a race with the kill. Before
+  P33-B the same kill was an instant death, so every earlier play leg read
+  `end=clean` — a killed leg, not a passed one (044b, 046). The game state
+  was verified identical on both engines by the Capture memory oracle (the
+  whole shared-data region and the object pages at every SIGNAL_TURN), and
+  the signature reproduced with 0 twins in the IR. docs/Project33/REPORT-C.md.
+- **Rule (Gen 6.1).** `Lockstep::halting` is set by the graceful shutdown
+  before `shutdown_all`; `compare_pair` returns before any comparison when
+  it is set (next to the `aborting` early-out). A halt-truncated pair is
+  not compared. This is a correctness fix to the shutdown path; the pairing
+  rules are unchanged.
+- **Gen 6.2 design item (next weekend).** The deterministic form: defer
+  the halt to the next pair boundary — the batch completes, the pair is
+  compared, then both halves halt — so a kill never truncates a batch at
+  all. And the two leg-level items: play/play-st verdicts must require
+  `I.STOP`, and the driver must reach the prompt after the auto-move; until
+  then the play legs verify their 2–3.8M pairs and are killed (coverage
+  caveat: the O/D/L/H screens after the auto-move are not exercised).

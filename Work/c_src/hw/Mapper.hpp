@@ -183,9 +183,11 @@ public:
     uint32_t block;               // the claim-group block address (identity of p@b)
     uint32_t arena_addr;          // word address of the varying image (length word)
     uint32_t capacity;            // data bytes
+    uint32_t claim = 0;           // P33-B: k of t@<block>.<k> (one row per WMSP claim twin); 0 = P30 fixture
   };
   struct ArenaRow {
     uint32_t block, arena_addr, capacity;   // static
+    uint32_t claim;               // P33-B twin ordinal within the block
     int32_t  length;              // current value length (bytes)
     int32_t  wfp;                 // master's wfp at bind
     uint32_t master_addr;         // the master's address for this value; 0 ⇒ unmapped
@@ -196,6 +198,27 @@ public:
   void arena_bind(uint32_t arena_addr, int32_t wfp, uint32_t master_addr);
   void arena_set_length(uint32_t arena_addr, int32_t length);
   void arena_unmap_frame(int32_t wfp);
+  // ---- P33-B: the master's WMSP claims as STACK INSERTIONS ----
+  // With the clone's temps in the arena, the master's stack holds extra
+  // words the clone's does not: each outstanding claim is a block of `w`
+  // words inserted at `p` (in master no-claim coordinates — the master's
+  // wsp_before minus the claims already outstanding below it). Every real-
+  // stack address above an insertion is shifted by it in the master —
+  // the callee's frame, wfp, pushed args, the pointers into them — so the
+  // stack leg adds the shift ToMaster and removes it ToClone (an address
+  // INSIDE an insertion has no clone counterpart: refused). Insertions
+  // are keyed by the claiming frame (master wfp) and released at its
+  // STASP / frame exit, from the master's hooks through the event queue.
+  struct ClaimIns { int32_t frame; int32_t p; int32_t w; uint32_t pc; };
+  void claim_insert(int32_t frame, int32_t p, int32_t w, uint32_t pc);
+  void claim_release(int32_t frame);
+  // The clone executed the SAME WMSP itself (all-emulated run, or a group
+  // the emitter refused): its stack has the words too — the master's
+  // insertion is not a difference. Removes the (innermost) insertion with
+  // that pc; false if none.
+  bool claim_cancel(uint32_t pc);
+  int32_t claim_total() const;
+  size_t claim_count() const { return claims_.size(); }
   // The hot-path lookup: binary search over the rows by arena address,
   // closed-end containment. nullptr when no row contains `word`.
   const ArenaRow* arena_row(uint32_t word) const;
@@ -274,6 +297,8 @@ private:
   bool main_task_ = false;                    // set at configure; asserted at every push
   int32_t latched_diff_ = 0;                  // I2: wsl − heap_break, latched at first push
   std::vector<LiveRecord> records_;
+  std::vector<ClaimIns> claims_;    // sorted by p
+  uint32_t map_word_book(uint32_t u, Dir dir, const LiveRecord** rec) const;
   std::vector<ArenaRow>   arena_;             // P30: sorted by arena_addr; static after configure_arena
 };
 
