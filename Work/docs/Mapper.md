@@ -186,10 +186,28 @@ Mutation (traced like `redirect`), exactly these, keyed by wfp:
 
 The STASP does NOT touch the arena form (rows stay translatable until
 frame exit because the compiler leaves dead pointers in ac0/ac2/ac3
-after the release); it feeds the separate per-frame claim accumulator
-`ClaimDelta`, kept by EACH engine on its own wfp, with the wsp compare
-`master_wsp − Δ_master == clone_wsp − Δ_clone` ("claim-free wsps agree",
-P33-A S1) — not part of A. Ordinary WRTN asserts Δ == 0 for the frames
+after the release); it feeds the separate claim accumulator
+`ClaimDelta`, kept by EACH engine, with the wsp compare "claim-free
+wsps agree" — and (P33-B, Sep 6) the term is the TOTAL outstanding
+claims, not Δ(current wfp): the consuming ?WRITE_SCREEN runs inside the
+bracket and its blocks are listed, so a callee rendezvous carries the
+caller's claims.
+
+**Claim-insertion layer (P33-B, Sep 6)** — a fourth leg of A. Each
+outstanding master claim is a STACK INSERTION the clone lacks: every
+real-stack address ABOVE it (the callee's frame, wfp, pushed args,
+pointers into the packet) is shifted, in book and stock mode alike. The
+stack leg therefore composes `master = book(u) + shift` where shift is
+the sum of outstanding claims below u, with an exact inverse; the
+master's WMSP/STASP hooks feed it through the event queue, and a clone
+that executes the same WMSP itself (all-emulated, or a refused group)
+CANCELS the insertion by pc. Within a claim, a master address maps to
+its bound twin — the mediated READ verification of the ?WRITE buffer
+needs that reverse lookup, unambiguous while the claim is outstanding:
+the dereference case §1.3 permits, not a comparison direction.
+Rows are per-claim twins `t@<block>.<k>` (57), bound at each claim's
+WMSP hook, no rebind (P33-B ruling; the single-p@b design of Sep 6
+morning is the READABLE rendering: p@b ≡ t@b.last). Ordinary WRTN asserts Δ == 0 for the frames
 it erases; unwind cuts (I.GOTO, the ON-pop, R?SIGNAL's frame walk)
 discard outstanding claims silently and count them. P30 ships the form dark (no rows bound → an arena value still
 yields MISMATCH + probe, verdict unchanged); P33 wires the hooks.

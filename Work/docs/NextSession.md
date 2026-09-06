@@ -42,61 +42,42 @@
 - Next: P33-B (docs/Project33/PROMPT-B.md) — the 19 `p@b` groups; its
   population (96 sites / 37 blocks) is the tail of p32.ledger.
 
-## PAUSE NOTE — Sep 6 2026 evening (weekend end; read this first)
+## PAUSE NOTE — Sep 6 2026, weekend close (read this first)
 
-State of main (`4493ed0`+): ir 5 with P31 + P32 merged — string family
-down to the 19 WMSP claim groups; embeds 729 book / 2,608 stock; 1,593
-string statements; P33-A string checker merged (dark); P34 readable
-prototype merged. All batteries through 046 green on the legs.
+**The string family is retired.** main = P33-B merged (047b: 16/16 legs
+OK, 0 div; the 3 verdict fails were inherited P32 expectations). ir 6.
+Embeds 557 book / 2,436 stock — no WCMV/WCMP/WBLM/WMSP/STASP left. What
+remains: LCALL 159, WSAVS 130, LJSR 130, XCALL 37, WSAVR 1 (call/frame
+machinery — milestone 5b's edges), float 59, DIVX/WDIVS/WLOB 21,
+SYSCALL 10, WPSH 8 (5 non-`?` pushes + 3 LOCK_FILE), the 2 LDSP DERR
+sinks. 1,822 string statements, 57 arena twins, checker ON with the
+arena in every leg.
 
-**P33-B (the last string session) is DONE on branch p33b-arena-temps
-but NOT merged** — task 047 (results/047-p33b-arena-temps): 14/16 legs
-OK and every P33-B number exact (ir 6; embeds 557/2,436; WCMV/WMSP/
-STASP 0/0/0; 57 twins; clone claim=0 everywhere; derr/derr-emu/forced
-as wanted), but BOTH play legs DIVERGED at FIND_OBJECT+0xAA
-(7016A939) inside BEING_ATTACK, ~2M pairs in, block ordinals 28 apart
-(a loop ran a different number of times), differing registers look like
-game state (an X coordinate off by 32; a shared-data pointer off by
-54); outstanding claims 0 on both sides. 046's play leg (same driver,
-P32 tree) passed this point, so it is P33-B's. HYPOTHESIS: one of the 8
-twin copy-outs into game state wrote different bytes — INIT_OBJ_TBL's
-record copy-out (row 12; runs on every login; k1fo does not search
-objects) is the prime suspect; a wrong object-table entry changes
-FIND_OBJECT's search loop length.
+Landed this weekend: P26 (grammar), P27 (DERR folds), P28 (rt_call),
+P29 (strings research + design), P30 (library), P31 (located strings),
+P32 (append chains), P33-A/B/C (checker, twins, the shutdown fix), P34
+(readable prototype); hw fixes from the manual review; two Tools fixes
+(XJMP, LJSR I.GOTO); the runner's staging leak fixed.
 
-First thing next weekend (integrator or a short P33-C session):
-1. QUEST_CAPTURE the object table (and the other 7 copy-out targets)
-   after INIT_OBJ_TBL on both engines under the play driver; diff.
-2. Fix the copy-out (or the twin's length word / residue at the tail
-   cut) — the memory oracle StringsDesign §6 lists as optional is the
-   tool that would have caught this at the site; consider landing it.
-3. Re-run 047 (as 047b on main). Then merge P33-B, fold its two checker
-   findings into Mapper.md §1.4 / StringsDesign §6 (wsp term subtracts
-   TOTAL outstanding claims — a callee rendezvous carries the caller's;
-   claims are STACK INSERTIONS shifting every real-stack address above
-   them → the Mapper's claim-insertion layer on the stack leg, with the
-   master-temp→bound-twin reverse for mediated READ verification — the
-   one master→clone case Mapper.md permits), IR.md §5.9, Provenance,
-   and the "ground: t@b.k; readable: p@b ≡ t@b.last" note. Then strings
-   are retired at ≈557 embeds.
+First items next weekend:
+1. **Play driver**: the post-auto-move keys never reach the prompt, so
+   every play leg since 034 has ended by SIGTERM and HELP/OBSERVE/
+   DISPLAY_MAGIC/LIST_PLAYERS are never exercised. Fix the driver,
+   require I.STOP for play verdicts (Gen 6.2 items in CheckerHistory),
+   add a standing "statements never executed by any leg" line.
+2. Gen 6.2 checker design item: defer a halt to the next pair boundary
+   (deterministic form of the P33-C fix).
+3. Float + divides (80 embeds): small same-helpers project.
+4. Milestone 5b design: calls as edges, on-error edges (LOGON.1/.2,
+   ALLY_PLAYER.1 ON-units — P34), discharge Project27/assumed-foldable.
+5. P35 idea (recompilation via a C-subset translator).
+Owed to the user's Tools: Follow/StartStop shared successor function.
 
-Also owed: the play driver's post-auto-move keys (O/D/L/H) never reach
-the command prompt (HELP/OBSERVE/DISPLAY_MAGIC/LIST_PLAYERS groups are
-not exercised by any leg) — a pre-existing driver defect, worth fixing
-before trusting coverage numbers; the "statements never executed by any
-leg" count should become a standing verdict line.
+Operational reminders: task files on MAIN; kills consume attempts —
+re-queue under a new name; self-test link scripts list hw/strings/*.o;
+regenerate assumed-foldable.txt when Disassembled changes; inherited
+verdict lines carry stale wants — read the legs.
 
-Then: the small float + divides project; milestone 5b (flat graph,
-on-error edges, discharge Project27/assumed-foldable.txt); P35 idea
-(recompilation via a C-subset translator) — see the queue block.
-
-Operational reminders: task files go on MAIN; a task's three attempts
-are consumed by kills — re-queue under a new name; self-test link
-scripts must list hw/strings/*.o; lower.py refuses a stale
-assumed-foldable.txt header whenever Disassembled changes (regenerate
-with derr_clusters.py); the Follow.java I.GOTO edge fix is on main
-(09f6593) — Follow and StartStop should share one successor function
-(refactor owed, user's Tools).
 
 ## P31 IMPLEMENTED (Sep 6 2026) — read this first
 - Located strings (ir 5) on branch p31-located-strings: 652/776 sites

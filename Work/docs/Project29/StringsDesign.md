@@ -592,6 +592,25 @@ dereference by ruling.
 
 ## 13. Corrections log
 
+- Sep 6 (P33-B landing): GROUND vs READABLE. The IR of record uses
+  per-claim arena twins `t@<block>.<k>` (57), `claim t@b.k, acN`,
+  `release t@b, acN`, and `LDASP r; WADI 2,r` → `acr = t@b.k`, because
+  an intermediate temp's pointer survives to a listed entry in
+  INIT_OBJ_TBL (a P27 DERR-cluster continuation inside the group — §1.3's
+  "straight-line" was measured before P27's folds made those
+  continuations listed). The single `p@b` of §2.1/§5.2 is the readable
+  layer's rendering: `p@b ≡ t@b.last`. Two checker corrections landed
+  with it (Mapper.md §1.4): the wsp term is the TOTAL outstanding claims
+  (a callee rendezvous carries the caller's), and claims are stack
+  insertions shifting every real-stack address above them — the
+  Mapper's claim-insertion layer, with master-temp→bound-twin for
+  mediated READ verification (the dereference case).
+- Sep 6 (P33-C): the 047 play divergence was NOT a string defect — the
+  play driver never reaches the prompt, every play leg since 034 ended
+  by SIGTERM, and P33-B's graceful shutdown let a halt-truncated pair be
+  compared. Fixed: `Lockstep::halting` guards compare_pair (Gen 6.1
+  addendum). Driver fix and I.STOP-required play verdicts are owed.
+
 - Sep 6 (P32 gate): `?UNSIGNED_TO_CHAR` writes a varying at the ac2 word
   address and returns ac0–ac2 unchanged; it does not return the length in
   ac0 (§1.4, §1.8, §2.2, §7 corrected). Consequence found by P32: the
