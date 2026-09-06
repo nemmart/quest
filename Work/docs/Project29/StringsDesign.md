@@ -81,8 +81,9 @@ census tool (`tools/string_sites.py`) is what says so.
    consuming `?WRITE_SCREEN` rt_call — 2–5 listed entries; HELP's group
    is entirely one block.
 4. **No group is split by a call.** The only call inside any group is
-   the consuming `?WRITE_SCREEN` (12 of 19; the other 7 copy out to a
-   located target). Every `CHAR(n)` conversion (`?UNSIGNED_TO_CHAR`) is
+   the consuming `?WRITE_SCREEN` (11 of 19; the other 8 copy out to a
+   located target — HELP's write is after its STASP; corrected by P31's
+   re-check on the regenerated census). Every `CHAR(n)` conversion (`?UNSIGNED_TO_CHAR`) is
    executed BEFORE the first claim — the compiler needs the length to
    size the claim — writing its digits to a frame scratch word buffer at
    the address passed in ac2 and returning the length in ac0 (112
@@ -163,6 +164,10 @@ residues are overwritten before any rendezvous.
 ```
 <piece> := "literal"                       ; from quest.strings; address + length recorded
          | [@a, n] | [@a, n varying]       ; a located string read
+         | [@a, varying]                    ; capacity-less varying READ (P31 O1):
+                                           ;   length from the length word
+         | [@a:b, "text"]                   ; a literal: located, contents known
+                                           ;   (quest.strings; verified lazily vs memory)
          | substr(<piece>, i, n)           ; PL/I SUBSTR; i, n are word expressions
          | char(x)                         ; ONE BYTE from a word expression (the WSTB idiom)
          | p@b                             ; the block's arena variable (as a value)
@@ -183,8 +188,9 @@ p@b = p@b + <piece>               ; append; one per WCMV/WSTB piece; residues §
 append([@a, n], <piece>)          ; a piece WCMV'd into a located scratch buffer at its
                                   ;     current end (frame scratch chains, §5.1)
 words(@dst, k) = words(@src, k)   ; WBLM, sequential word order
-fill(@dst, k, v)                  ; the 6 self-overlapping WBLMs (Census F6): same helper,
-                                  ;     rendered as the fill it is
+                                  ; NOTE (P31): all 12 WBLMs are self-overlapping fills;
+                                  ;     ir 5 renders them as words() with the overlap noted,
+                                  ;     fill() is the readable layer's rewrite
 release                           ; the STASP: on the clone, assert(wsp == ac1) (§6.3)
 rt_call ?X(p@b, …)                ; pushes p@b's arena address (§5.2)
 rt_call ?X([@a, n varying], …)    ; pushes the located string's address, as today
@@ -294,8 +300,9 @@ rt_call ?WRITE_SCREEN(p@70166144, OUT_CHAN) site=701661A3
 ```
 
 — no claim, no release-of-storage, no metadata (RULED, Sep 5/6). `p@b`
-lives in the **arena**: a heap in the otherwise unused emulated segment
-0x75000000, laid out STATICALLY at lowering time (block → address,
+lives in the **arena**: the otherwise unused emulated segment
+[0x75000000, 0x75800000) — sized to one byte-prefix per Mapper form
+(P30) — laid out STATICALLY at lowering time (block → address,
 capacity; capacity from the census's declared-length bounds; overflow of
 a capacity is a loud fault). Because it is emulated memory, the runtime
 reads a temp through a plain pointer — no materialisation at the call.
@@ -435,8 +442,8 @@ From Census §3 (counts are WCMV sites unless noted):
 | tail split (ac1 as next count) | 17 | `append(…)` with the count from the residue |
 | ASSIGN-FROM-TEMP | 11 | `[@v, n varying] = p@b` |
 | WSTB const / computed | 86 / 13 | `… + char(0x0A)` / `… + char(x)` |
-| WCMP equality | 40 | `if (a == b) …` |
-| WBLM copy / fill | 6 / 6 | `words()` / `fill()` |
+| WCMP equality | 40 | `ac1 = cmp(a, b)` root statement + the existing `goto [..] (ac1 == 0)` (P31 ruling) |
+| WBLM (all 12 are fills — P31) | 12 | `words()` (fill() in the readable layer) |
 | WMSP / STASP | 57 / 19 | `p@b = ""` (hooks) / `release` |
 | LOCK_FILE by-ref constants | 3 | plan-gate choice |
 

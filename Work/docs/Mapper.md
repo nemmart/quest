@@ -136,6 +136,47 @@ reference to extent, never a data location).
   equivalent()/frame_precedes() callers). No per-site variants. No
   ordered guessing.
 
+### 1.4 The ARENA form (added Sep 6 2026, P30; design of record
+### Project29/StringsDesign.md §6)
+
+A third leg of A, for the string family: the clone keeps each dynamic
+string temporary `p@b` (one per WMSP claim-group block, 19 in Quest) as
+a varying image at a FIXED address in the otherwise unused segment
+[0x75000000, 0x75800000) — sized to one byte-prefix per form: codec rows
+0x75 (word) / 0xEA (byte) / 0xF5 (indirect), I3-separable from the six
+existing prefixes by static_assert. Row per `p@b`: `(block, arena_addr,
+capacity, length, wfp, master_addr)`; `master_addr == 0` ⇒ unmapped.
+Leg: closed-end containment `arena_addr ≤ w ≤ arena_addr + capacity`
+maps to `master_addr + (w − arena_addr)` — the same closed-right-end
+principle as the area legs (the WCMV end cursor belongs to the string).
+
+Direction, forced as in §1.3: **clone→master ONLY.** master→clone is
+ambiguous by construction (two groups in one routine claim at the same
+stack base at different times; a released region is reused by ordinary
+frames), so `equivalent()` handles arena rows forward, `frame_precedes`
+asserts neither operand is an arena address, and `clone_location()` on
+an arena address ABORTS — the runtime only reads temps, so a mediated
+write into one is a finding, not a lookup. There is no fourth call.
+
+Mutation (traced like `redirect`), exactly these, keyed by wfp:
+- `configure_arena(layout)` — the static 19 rows, from an artifact at
+  launch (P33; a fixture in P30's self-test). Immutable afterwards.
+- `arena_bind(arena_addr, wfp, master_addr)` — at the master's
+  first-WMSP hook of the block (block entry, `p@b = ""`); asserts the
+  row exists, ranges disjoint and inside the segment, `wfp` is the
+  owner's current wfp; length = 0.
+- `arena_set_length(arena_addr, len)` — per append; `len ≤ capacity`
+  or abort (capacity overflow is the loud fault).
+- `arena_unmap_frame(wfp)` — the frame's WRTN or the ON system popping
+  it; every row with that wfp → `master_addr = 0`.
+
+The STASP does NOT touch the arena form (rows stay translatable until
+frame exit because the compiler leaves dead pointers in ac0/ac2/ac3
+after the release); it feeds the separate per-frame claim accumulator
+`ClaimDelta` (`master_wsp − clone_wsp == Δ(frame)`), which is not part
+of A. P30 ships the form dark (no rows bound → an arena value still
+yields MISMATCH + probe, verdict unchanged); P33 wires the hooks.
+
 ## 2. The invariants
 
 - **I1 — disjointness.** Domain intervals of A are pairwise disjoint,
@@ -175,8 +216,10 @@ reference to extent, never a data location).
 
 ## 3. State and mutation
 
-The mapper's ONLY mutable state is the live-record list. Mutation
-sites, exactly three, all clone-role, all traced (`redirect`):
+The mapper's mutable state is the live-record list and (since P30) the
+arena rows of §1.4. Record-list mutation sites, exactly three, all
+clone-role, all traced (`redirect`) — the arena mutations are listed in
+§1.4:
 
 1. Redirected WSAVS/WSAVR — push record.
 2. Redirected WRTN (incl. frames.cpp::wrtn, the I.EPILOG path) — pop

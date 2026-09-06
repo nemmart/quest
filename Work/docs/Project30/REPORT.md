@@ -149,7 +149,12 @@ goes RED. All eleven RED on the final test.
   preconditions (the strings one requires "teeth confirmed"), then k1fo
   + play-st via `bin/task_source.sh`, JOBS=3, vs the 042 lines. Bar: 0
   div, same endpoints (clean / clean), pairs in band. Result:
-  results/043-p30-string-library — *fill in at landing*.
+  results/043-p30-string-library — **TASK 043 GREEN** (integrator, Sep 6):
+  helpers self-test GREEN; strings self-test GREEN (18,370 cases) and
+  the broken build RED (1,326) — teeth confirmed; k1fo book K=1 0 div,
+  clean, pairs 298,566; play-st stock K=50 0 div, clean, pairs
+  4,249,241. Both endpoints as 042. (First queueing failed ×3 on a
+  missing `#include <cstddef>` — fixed in ee90247.)
 
 ## 6. Design-vs-reality, recorded
 
