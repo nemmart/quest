@@ -36,9 +36,14 @@ Also: the manual-review hardware fixes (HWFindings_Sep5.md,
 EmulatorDivergences.md), two Tools fixes (Follow: XJMP pc+2, LJSR I.GOTO
 pc+3), the runner's staging leak (bin/task_source.sh).
 
-**First items next weekend, in order** (plain-language summary of what
-P33-B/C found and what is open: docs/Project33/FINDINGS_SUMMARY.md)
-1. **Play driver + play verdicts** (P33-C finding): the driver's
+**TODO — MUST BE FIXED FIRST next weekend: docs/Project33/FINDINGS_SUMMARY.md
+§2 (the play driver; play verdicts requiring I.STOP; the "never executed"
+verdict line). Until it is fixed, every play leg ends by SIGTERM and four
+screens are never exercised by any battery — treat the play legs'
+coverage as partial.**
+
+**First items next weekend, in order**
+1. **Play driver + play verdicts** (FINDINGS_SUMMARY §2): the driver's
    post-auto-move keys never reach the command prompt, so every play
    leg since task 034 has ended by SIGTERM (`end=clean` was a silent
    kill) and HELP / OBSERVE / DISPLAY_MAGIC / LIST_PLAYERS are never

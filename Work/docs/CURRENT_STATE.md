@@ -21,10 +21,12 @@ Each has docs/ProjectNN/REPORT*.md; the per-project ★ blocks below are
 that history in landing order (newest first) — read NextSession's brief
 first, these second.
 
-Known gaps carried forward (NextSession brief, items 1–2): the play
-driver never reaches the command prompt (play legs end by SIGTERM; HELP/
-OBSERVE/DISPLAY_MAGIC/LIST_PLAYERS unexercised); the deterministic
-deferred-halt form of the P33-C fix.
+**TODO (must be fixed first next weekend) — docs/Project33/FINDINGS_SUMMARY.md §2:**
+the play driver never reaches the command prompt (play legs end by
+SIGTERM; HELP/OBSERVE/DISPLAY_MAGIC/LIST_PLAYERS unexercised); play
+verdicts must require I.STOP; add the "statements never executed by any
+leg" line. §3: the deterministic deferred-halt form of the P33-C fix
+(optional). §1 explains what P33-B/C found and that it is already fixed.
 
 ---
 
