@@ -1,0 +1,40 @@
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=70001CE2
+dispatchSystemCall: 700010E8
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010AE
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E00037DE
+   (fs wt) byte count = 0026
+1
+WRITE EXTENSION
+   location = F0001D12
+   options = 0800
+   rel pos = 0000
+   init pos = 320D
+Wind from West - Rainy               
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+frame  1 -- 7017ED1C     guessing: DERR.TRP+0x0
+frame  0 -- 7017EA51     guessing: I.INIT+0x23
+Thread halt
+1060327 instructions run
+frame  1 -- QUEST+0x486   [7015C48B]
+frame  0 -- 7017EA51     guessing: I.INIT+0x23
+16068 instructions run
+frame  2 -- 7017FDED     guessing: .UKIL+0x8
+frame  1 -- C_A_LISTENER+0x2   [70165715]
+frame  0 -- 7017E7C1     guessing: T.INIT+0x3B
+68 instructions run
+frame  2 -- 7017FDED     guessing: .UKIL+0x8
+frame  1 -- C_A_LISTENER+0x2   [70165715]
+frame  0 -- 7017E7C1     guessing: T.INIT+0x3B
+68 instructions run
