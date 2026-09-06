@@ -12,9 +12,16 @@ In flight when we stopped:
   wanted; its one verdict FAIL was a grep counting the quoted assert
   text twice — fixed in the task for the record).
 - **044b** — GREEN (15/15, same pc set=yes): P31's record is clean.
-- **P34** (readable-layer research) — running; branch p34-readable,
-  reads the ir 5 book from p31-located-strings @ b4384b1 (= main's book
-  now). Docs + tools/readable.py only; merge when it reports.
+- **P34** (readable-layer research) — DONE and MERGED (a9ed5bd):
+  tools/readable.py + docs/Project34/{Census,readable/*}. PICK_X_Y
+  renders as the hand reading. Findings for 5b/6x: frame slots are
+  reused (per-use reaching shapes, not per-routine tables); undecorated
+  game→game calls are the wall for cross-call proofs; ON-unit bodies
+  (LOGON.1/.2, ALLY_PLAYER.1) are separate WSAVS frames inlined in the
+  parent, registered via O.ON, exited by I.GOTO. **Tools fix owed
+  (user)**: Follow.java tags `LJSR I.GOTO` with a pc+3 return edge —
+  I.GOTO never returns; add it to the I.EPILOG/I.STOP non-returning
+  list (4,312 blocks mis-owned in reachability until cut).
 
 Next, in order: (1) P32
 (docs/Project32/PROMPT.md; Work.tgz from main after P33-A merges) —
