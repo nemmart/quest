@@ -1,0 +1,27 @@
+helpers selftest RED
+/usr/bin/ld: hw/Machine.o: warning: relocation against `_ZN2hw7strings8StrHooks6activeE' in read-only section `.text'
+/usr/bin/ld: hw/EagleStack.o: in function `hw::EagleStack::execute(hw::Machine&, unsigned int, unsigned int)':
+EagleStack.cpp:(.text+0x1346): undefined reference to `hw::strings::MachineHooks::frame_exit(int, bool)'
+/usr/bin/ld: EagleStack.cpp:(.text+0x13d7): undefined reference to `hw::strings::MachineHooks::stasp(unsigned int, int, int)'
+/usr/bin/ld: EagleStack.cpp:(.text+0x1445): undefined reference to `hw::strings::MachineHooks::wmsp(unsigned int, int, int, int)'
+/usr/bin/ld: hw/Lockstep.o: in function `hw::Lockstep::compare_pair(hw::QueueEntry*, hw::QueueEntry*)':
+Lockstep.cpp:(.text+0x19d2): undefined reference to `hw::strings::StrHooks::active'
+/usr/bin/ld: Lockstep.cpp:(.text+0x19ff): undefined reference to `hw::strings::ClaimDelta::delta(int) const'
+/usr/bin/ld: Lockstep.cpp:(.text+0x1a2d): undefined reference to `hw::strings::ClaimDelta::delta(int) const'
+/usr/bin/ld: Lockstep.cpp:(.text+0x1c0c): undefined reference to `hw::strings::StrHooks::active'
+/usr/bin/ld: Lockstep.cpp:(.text+0x1c9a): undefined reference to `hw::strings::ClaimDelta::delta(int) const'
+/usr/bin/ld: Lockstep.cpp:(.text+0x1cbe): undefined reference to `hw::strings::ClaimDelta::delta(int) const'
+/usr/bin/ld: hw/Machine.o: in function `hw::Machine::run_steps(unsigned int, int)':
+Machine.cpp:(.text+0xe5e): undefined reference to `hw::strings::StrHooks::active'
+/usr/bin/ld: Machine.cpp:(.text+0x131a): undefined reference to `hw::strings::StrHooks::active'
+/usr/bin/ld: Machine.cpp:(.text+0x1329): undefined reference to `hw::strings::StrHooks::attach(hw::Machine&)'
+/usr/bin/ld: hw/RTStubs.o: in function `hw::RTStubs::dump_coverage()':
+RTStubs.cpp:(.text+0x2893): undefined reference to `hw::strings::StrHooks::report()'
+/usr/bin/ld: hw/RTStubs.o: in function `hw::RTStubs::initialize(debug::SymbolTable&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)':
+RTStubs.cpp:(.text+0x3174): undefined reference to `hw::strings::StrHooks::load_from_env()'
+/usr/bin/ld: runtime/frames.o: in function `(anonymous namespace)::wrtn(hw::Machine&, bool)':
+frames.cpp:(.text+0x168): undefined reference to `hw::strings::MachineHooks::frame_exit(int, bool)'
+/usr/bin/ld: runtime/frames.o: in function `emu_rt::i_goto(hw::Machine&)':
+frames.cpp:(.text+0x6f4): undefined reference to `hw::strings::MachineHooks::onpop(int)'
+/usr/bin/ld: warning: creating DT_TEXTREL in a PIE
+collect2: error: ld returned 1 exit status
