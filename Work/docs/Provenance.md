@@ -127,10 +127,12 @@ correction commit does it, together with the 17-statement fix).
 | docs/Project31/p31.tsv      | d09a7063ead0455f | regenerated under the call-aware evaluator (649 EMIT / 127 REFUSE) |
 | docs/Project31/p31.ledger, sites.txt, census_raw.txt, strings.ledger | — | regenerated (idiom totals unchanged) |
 | docs/Project27/assumed-foldable.txt | 0f442cd5b33178ad | regenerated: content identical (2,271 clusters), tags/blocks sha header follows 09f6593 |
+| docs/Project32/p32.tsv      | aac780cb1d1ee10a | NEW: the P32 per-site artifact (string_sites.py --p32-tsv; 944 sites, 944 EMIT) — lower.py's input in Part 2 |
 | c_src/quest.synclist.p27    | af1be42f5831fb2c | UNCHANGED |
 | Disassembled/*, blocks.split, pushmap, addrbook | — | as the 09f6593 table |
 
 Regeneration: the P31 commands above with the current inputs (the
-string_sites.py unchanged in its P31 arguments). K=1 gate on the regenerated
+string_sites.py command gains `--p32 ../../docs/Project32/p32.ledger
+--p32-tsv ../../docs/Project32/p32.tsv`). K=1 gate on the regenerated
 artifacts: book k1fo 0 div / 308,923 pairs / clean; stock k1fo-st 0 div
 / 299,387 pairs / clean (local, Sep 6).
