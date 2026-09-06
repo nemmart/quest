@@ -20,51 +20,61 @@
 - Next: P33-B (docs/Project33/PROMPT-B.md) — the 19 `p@b` groups; its
   population (96 sites / 37 blocks) is the tail of p32.ledger.
 
-## PAUSE NOTE — Sep 6 2026 (weekend end; read this first next time)
+## PAUSE NOTE — Sep 6 2026 evening (weekend end; read this first)
 
-State of main (post-P31): ir 5, embeds 1,670 book / 3,549 stock,
-synclist.p27 (13,510), string library (P30) linked, 652 located-string
-statements live. Provenance.md has the post-P31 table.
+State of main (`4493ed0`+): ir 5 with P31 + P32 merged — string family
+down to the 19 WMSP claim groups; embeds 729 book / 2,608 stock; 1,593
+string statements; P33-A string checker merged (dark); P34 readable
+prototype merged. All batteries through 046 green on the legs.
 
-In flight when we stopped:
-- **P33-A** (checker half of strings) — **MERGED** (045b: 32/32 legs
-  green, 0 div; F2-b, readout, forced mismatch, dark flag-off all as
-  wanted; its one verdict FAIL was a grep counting the quoted assert
-  text twice — fixed in the task for the record).
-- **044b** — GREEN (15/15, same pc set=yes): P31's record is clean.
-- **P34** (readable-layer research) — DONE and MERGED (a9ed5bd):
-  tools/readable.py + docs/Project34/{Census,readable/*}. PICK_X_Y
-  renders as the hand reading. Findings for 5b/6x: frame slots are
-  reused (per-use reaching shapes, not per-routine tables); undecorated
-  game→game calls are the wall for cross-call proofs; ON-unit bodies
-  (LOGON.1/.2, ALLY_PLAYER.1) are separate WSAVS frames inlined in the
-  parent, registered via O.ON, exited by I.GOTO. **Tools fix owed
-  (user)**: Follow.java tags `LJSR I.GOTO` with a pc+3 return edge —
-  I.GOTO never returns; add it to the I.EPILOG/I.STOP non-returning
-  list (4,312 blocks mis-owned in reachability until cut).
+**P33-B (the last string session) is DONE on branch p33b-arena-temps
+but NOT merged** — task 047 (results/047-p33b-arena-temps): 14/16 legs
+OK and every P33-B number exact (ir 6; embeds 557/2,436; WCMV/WMSP/
+STASP 0/0/0; 57 twins; clone claim=0 everywhere; derr/derr-emu/forced
+as wanted), but BOTH play legs DIVERGED at FIND_OBJECT+0xAA
+(7016A939) inside BEING_ATTACK, ~2M pairs in, block ordinals 28 apart
+(a loop ran a different number of times), differing registers look like
+game state (an X coordinate off by 32; a shared-data pointer off by
+54); outstanding claims 0 on both sides. 046's play leg (same driver,
+P32 tree) passed this point, so it is P33-B's. HYPOTHESIS: one of the 8
+twin copy-outs into game state wrote different bytes — INIT_OBJ_TBL's
+record copy-out (row 12; runs on every login; k1fo does not search
+objects) is the prime suspect; a wrong object-table entry changes
+FIND_OBJECT's search loop length.
 
-Next, in order: P32 MERGED (046: 13/15 legs OK, 0 div everywhere, all
-P32 numbers exact; 4 fails are driver/verdict — see Project32/REPORT.md
-integrator note; task 047 inherits the fixes). (1) P33-B
-(docs/Project32/PROMPT.md; Work.tgz from main after P33-A merges) —
-append chains, ≈1,670 → ≈700; (3) P33-B (docs/Project33/PROMPT-B.md)
-after P32 — the 19 p@b groups; strings retired at ≈600 embeds; (4) then
-the small float + divides project, the milestone-5b work, and an idea
-to weigh (user, Sep 6): **P35 — recompilation as decompilation**: a
-translator from a restricted C subset (a small runtime header for the
-PL/I-isms: varying<n>, assign_padded, pad_equal, 1-based arrays, ON
-units) to our IR, via libclang; pilot PICK_X_Y then DIED against the
-P34 register-folded book; `translate(S) == IR` textually makes S a
-proven source with no soundness argument, and the same S compiles with
-gcc into native Quest — the bridge from milestone 5 to 6. Research
-prompt in the P34 shape, (flat
-graph: calls as edges, on-error edges, discharge Project27/
-assumed-foldable.txt).
+First thing next weekend (integrator or a short P33-C session):
+1. QUEST_CAPTURE the object table (and the other 7 copy-out targets)
+   after INIT_OBJ_TBL on both engines under the play driver; diff.
+2. Fix the copy-out (or the twin's length word / residue at the tail
+   cut) — the memory oracle StringsDesign §6 lists as optional is the
+   tool that would have caught this at the site; consider landing it.
+3. Re-run 047 (as 047b on main). Then merge P33-B, fold its two checker
+   findings into Mapper.md §1.4 / StringsDesign §6 (wsp term subtracts
+   TOTAL outstanding claims — a callee rendezvous carries the caller's;
+   claims are STACK INSERTIONS shifting every real-stack address above
+   them → the Mapper's claim-insertion layer on the stack leg, with the
+   master-temp→bound-twin reverse for mediated READ verification — the
+   one master→clone case Mapper.md permits), IR.md §5.9, Provenance,
+   and the "ground: t@b.k; readable: p@b ≡ t@b.last" note. Then strings
+   are retired at ≈557 embeds.
 
-Operational reminders: task files go on MAIN (the runner polls main's
-tasks/); a task's three attempts are consumed by kills too — re-queue
-under a new name (044b/045b precedent); self-test link scripts must
-list hw/strings/*.o.
+Also owed: the play driver's post-auto-move keys (O/D/L/H) never reach
+the command prompt (HELP/OBSERVE/DISPLAY_MAGIC/LIST_PLAYERS groups are
+not exercised by any leg) — a pre-existing driver defect, worth fixing
+before trusting coverage numbers; the "statements never executed by any
+leg" count should become a standing verdict line.
+
+Then: the small float + divides project; milestone 5b (flat graph,
+on-error edges, discharge Project27/assumed-foldable.txt); P35 idea
+(recompilation via a C-subset translator) — see the queue block.
+
+Operational reminders: task files go on MAIN; a task's three attempts
+are consumed by kills — re-queue under a new name; self-test link
+scripts must list hw/strings/*.o; lower.py refuses a stale
+assumed-foldable.txt header whenever Disassembled changes (regenerate
+with derr_clusters.py); the Follow.java I.GOTO edge fix is on main
+(09f6593) — Follow and StartStop should share one successor function
+(refactor owed, user's Tools).
 
 ## P31 IMPLEMENTED (Sep 6 2026) — read this first
 - Located strings (ir 5) on branch p31-located-strings: 652/776 sites
