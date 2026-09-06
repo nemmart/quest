@@ -3,7 +3,7 @@
 
 # Where things stand
 
-## ★ P33-B IMPLEMENTED ON BRANCH — THE STRING FAMILY IS GONE FROM THE IR: the 19 WMSP claim groups as arena twins `t@<block>.<k>` (57), ir 6 (`acN = t@b.k`, `claim`, `release`), quest.arena; WCMV/WMSP/STASP embeds **0/0/0**, embeds **557 book / 2,436 stock** (from 729 / 2,608), 1,822 string statements; checker ON on every gate, Δ_clone ≡ 0; task 047 on main (Sep 6 2026; awaiting review + integration)
+## ★ P33-B MERGED (8b6f294; 047b 16/16 legs, P33-C shutdown fix included) — THE STRING FAMILY IS GONE FROM THE IR: the 19 WMSP claim groups as arena twins `t@<block>.<k>` (57), ir 6 (`acN = t@b.k`, `claim`, `release`), quest.arena; WCMV/WMSP/STASP embeds **0/0/0**, embeds **557 book / 2,436 stock** (from 729 / 2,608), 1,822 string statements; checker ON on every gate, Δ_clone ≡ 0 (Sep 6 2026; INTEGRATED — main is the tree of record)
 
 Branch p33b-arena-temps (based on main fa5b180, P32 + P33-A merged).
 Rulings (user, Sep 6): per-claim twins (INIT_OBJ_TBL's intermediate residue
@@ -28,7 +28,7 @@ docs/Project33/{CensusB,REPORT-B,REPORT_worklog-B}.md, IR.md §5.9,
 Provenance. Integrator: Mapper.md §1.4 + StringsDesign §2/§5.2/§6 with
 REPORT-B §6's text.
 
-## ★ P32 IMPLEMENTED ON BRANCH — append chains (ir 5 slices 4–6): 944 more WCMV/WCMP sites are located-string statements; embeds 1,673 → 729 (book), 3,552 → 2,608 (stock); 1,593 string statements. Plus the P31 CORRECTION (17 wrong statements; 652 → 649).
+## ★ P32 MERGED (2085231) — append chains (ir 5 slices 4–6): 944 more WCMV/WCMP sites are located-string statements; embeds 1,673 → 729 (book), 3,552 → 2,608 (stock); 1,593 string statements. Plus the P31 CORRECTION (17 wrong statements; 652 → 649).
 
 Branch p32-append-chains (on main c88c0ff). Two things landed, as two
 commits: (1) the P31 correction — string_sites.py's evaluator kept
@@ -60,7 +60,7 @@ REPORT_worklog}.md, p32.ledger, p32.tsv. P33-B next: its 96 temp sites /
 37 blocks are listed at the end of p32.ledger; the chain machinery
 applies to the `p@b` groups unchanged.
 
-## ★ P33-A IMPLEMENTED ON BRANCH — the checker half of the string design, DARK behind QUEST_STRINGS_CHECK=1: hook table quest.strhooks (19 rows / 57 WMSP / 19 STASP / onpop 7017EC9F / 3 unwind WRTNs), instruction-arm hooks (WMSP/STASP/WRTN + frames.cpp twins), arena bind/rebind/unmap from the master into the clone's mapper, SYMMETRIC ClaimDelta in the wsp compare, unmapped-row naming in the divergence dump; + F2-b (folded DERR → TERMINAL-ABORT with both pcs) + the ABORT readout (`w`/`w−2`: 00000011 7015C48E); self-test 64 GREEN + teeth RED; task 045 queued (Sep 6 2026; awaiting review + integration)
+## ★ P33-A MERGED (cde5b40; 045b 32/32) — the checker half of the string design, DARK behind QUEST_STRINGS_CHECK=1: hook table quest.strhooks (19 rows / 57 WMSP / 19 STASP / onpop 7017EC9F / 3 unwind WRTNs), instruction-arm hooks (WMSP/STASP/WRTN + frames.cpp twins), arena bind/rebind/unmap from the master into the clone's mapper, SYMMETRIC ClaimDelta in the wsp compare, unmapped-row naming in the divergence dump; + F2-b (folded DERR → TERMINAL-ABORT with both pcs) + the ABORT readout (`w`/`w−2`: 00000011 7015C48E); self-test 64 GREEN + teeth RED (Sep 6 2026; INTEGRATED)
 
 Branch p33a-checker-strings (based on main 8738975, P30 merged). Rulings
 (user, Sep 6): S1 symmetric Δ — each engine subtracts its own outstanding
