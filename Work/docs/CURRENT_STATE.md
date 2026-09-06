@@ -1,7 +1,34 @@
 > Emulator↔hardware divergence register: docs/EmulatorDivergences.md (fixed / benign / guard; add to it whenever a manual page is read).
-> Artifact checksums of record: docs/Provenance.md (Sep 5 2026).
+> Artifact checksums of record: docs/Provenance.md (post-P33-B table, Sep 6 2026).
+> Re-entry brief and next-weekend order: docs/NextSession.md (top).
 
-# Where things stand
+# Where things stand — Sep 6 2026 (project asleep until next weekend)
+
+**main is the tree of record.** ir 6. Embeds **557 book / 2,436 stock**
+(from 27,600 on Aug 29): the string family is gone (WCMV/WCMP/WBLM/
+WMSP/STASP = 0); what remains is the call/frame machinery (457), float
+(59), divides (21), SYSCALL (10), 8 pushes, 2 LDSP DERR sinks. 1,822
+string statements, 987 rt_call, 2,273 assert, 11,442 goto, 57 arena
+twins; sync list quest.synclist.p27 (13,510). String checker
+(QUEST_STRINGS_CHECK=1, quest.strhooks, quest.arena) on in every battery
+leg; last battery 047b: 16/16 legs, 0 div. A human play session under
+lockstep on this tree: clean.
+
+Landed Sep 5–6, in order: P26 · P27 · P28 · P29 (research + design) ·
+P30 · P31 · P32 · P33-A/B/C · P34, plus HWFindings_Sep5 hardware fixes,
+two Tools fixes (Follow XJMP / LJSR I.GOTO), the runner's staging leak.
+Each has docs/ProjectNN/REPORT*.md; the per-project ★ blocks below are
+that history in landing order (newest first) — read NextSession's brief
+first, these second.
+
+Known gaps carried forward (NextSession brief, items 1–2): the play
+driver never reaches the command prompt (play legs end by SIGTERM; HELP/
+OBSERVE/DISPLAY_MAGIC/LIST_PLAYERS unexercised); the deterministic
+deferred-halt form of the P33-C fix.
+
+---
+
+# Landing history (newest first)
 
 ## ★ P33-B MERGED (8b6f294; 047b 16/16 legs, P33-C shutdown fix included) — THE STRING FAMILY IS GONE FROM THE IR: the 19 WMSP claim groups as arena twins `t@<block>.<k>` (57), ir 6 (`acN = t@b.k`, `claim`, `release`), quest.arena; WCMV/WMSP/STASP embeds **0/0/0**, embeds **557 book / 2,436 stock** (from 729 / 2,608), 1,822 string statements; checker ON on every gate, Δ_clone ≡ 0 (Sep 6 2026; INTEGRATED — main is the tree of record)
 

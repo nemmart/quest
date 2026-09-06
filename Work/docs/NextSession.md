@@ -1,6 +1,80 @@
 # Next session
 
-## P33-B ON BRANCH (Sep 6 2026) — arena twins, the string family retired
+## ★ RE-ENTRY BRIEF (written Sep 6 2026 — project asleep until next weekend)
+
+**Tree of record: `main`.** Verify against docs/Provenance.md (post-P33-B
+table). Build: `cd Work/c_src && make`; self-tests:
+`tests/run_helpers_selftest.sh`, `tests/run_strings_selftest.sh`,
+`tests/run_strhooks_selftest.sh` (all GREEN with teeth RED). Launch
+recipe: docs/Run.md ("Lockstep play session") with
+`QUEST_BLOCKS=quest.blocks.split QUEST_SYNC_LIST=quest.synclist.p27
+QUEST_IR=quest.ir2.book QUEST_ADDRESS_BOOK=quest.addrbook
+QUEST_PUSH_MAP=quest.pushmap.M4` (book) or `QUEST_IR=quest.ir2.stock`
+(stock); the string checker is `QUEST_STRINGS_CHECK=1` with
+`QUEST_STRHOOKS=quest.strhooks QUEST_ARENA=quest.arena` (task 047b's
+env is the reference). Batteries: `tasks/047b-p33b-arena-temps.sh` is
+the current 16-leg template (JOBS=3, `bin/task_source.sh`); task files
+go on MAIN.
+
+**Where the IR stands (ir 6).** Embeds 557 book / 2,436 stock — from
+27,600 on Aug 29. Nothing of the string family remains
+(WCMV/WCMP/WBLM/WMSP/STASP 0). Left: call/frame machinery (LCALL 159,
+WSAVS 130, LJSR 130, XCALL 37, WSAVR 1 — milestone 5b's edges), float
+59, DIVX/WDIVS/WLOB 21, SYSCALL 10, WPSH 8, the 2 LDSP DERR sinks.
+Statements: 1,822 string, 987 rt_call, 2,273 assert, 11,442 goto, 57
+arena twins. Designs of record: docs/IR.md (ir 6), Project26/MathDesign,
+Project29/StringsDesign (+ corrections log), Mapper.md §1.4, Project22/
+BlockSyncDesign, EmulatorDivergences.md, Provenance.md.
+
+**Done Sep 5–6** (each with a REPORT in its docs/ProjectNN/): P26
+grammar package · P27 DERR-cluster folds (assumed-foldable.txt is the
+debt 5b discharges) · P28 rt_call · P29 strings research + design · P30
+string library · P31 located strings · P32 append chains · P33-A/B/C
+string checker, arena twins, the shutdown fix · P34 readable-layer
+prototype (tools/readable.py; PICK_X_Y renders as the hand reading).
+Also: the manual-review hardware fixes (HWFindings_Sep5.md,
+EmulatorDivergences.md), two Tools fixes (Follow: XJMP pc+2, LJSR I.GOTO
+pc+3), the runner's staging leak (bin/task_source.sh).
+
+**First items next weekend, in order**
+1. **Play driver + play verdicts** (P33-C finding): the driver's
+   post-auto-move keys never reach the command prompt, so every play
+   leg since task 034 has ended by SIGTERM (`end=clean` was a silent
+   kill) and HELP / OBSERVE / DISPLAY_MAGIC / LIST_PLAYERS are never
+   exercised by a scripted leg. Fix the driver (validate the FULL play
+   sequence, foreground), require `I.STOP` for play verdicts, add a
+   standing "statements never executed by any leg" verdict line
+   (CheckerHistory Gen 6.2 items). Re-run the 16-leg battery.
+2. **Gen 6.2 checker item**: the deterministic form of the P33-C fix —
+   defer a halt to the next pair boundary (today `Lockstep::halting`
+   just guards compare_pair).
+3. **Float + divides** (80 embeds): same-helpers `f*()` family over the
+   FPACs + DIVX/WDIVS/WLOB; small; manual pages owed
+   (EmulatorDivergences §5).
+4. **Milestone 5b design**: calls as edges, on-error edges (ON-unit
+   bodies LOGON.1/.2, ALLY_PLAYER.1 are separate WSAVS frames — P34),
+   discharge Project27/assumed-foldable.txt, frames → functions.
+5. **P35 idea** (user): recompilation as decompilation — a translator
+   from a restricted C subset (runtime header for the PL/I-isms) to our
+   IR via libclang; pilot PICK_X_Y then DIED against the P34
+   register-folded book; a textual match makes the C a proven source
+   and gcc makes it native Quest.
+6. Tools (user): Follow and StartStop should share one successor
+   function; Java↔C++ helper diff (EmulatorDivergences §5).
+
+**Operational reminders**: task files on MAIN; a task's three attempts
+are consumed by kills — re-queue under a new name; inherited verdict
+lines carry stale wants — read the legs, then fix the wants; self-test
+link scripts must list hw/strings/*.o; lower.py refuses a stale
+assumed-foldable.txt header whenever Disassembled changes (regenerate
+with derr_clusters.py); the ?UNSIGNED_TO_CHAR convention is "writes a
+varying at ac2, returns ACs unchanged" (RTConventions.md was right).
+
+---
+
+## History — Sep 5–6 per-project hand-off blocks (all merged; superseded by the brief above)
+
+## [merged] P33-B (Sep 6 2026) — arena twins, the string family retired
 - Branch p33b-arena-temps: hw/strings/Arena, StrHooks per-claim + claim
   insertions, Mapper claim-insertion layer, IRExec ir 6, tools/{arena,
   p33_census}.py, string_sites.py --p33, lower.py --strings-sites33, the ir 6
@@ -22,7 +96,8 @@
   max-claim lines (regenerate p33.tsv + ir 6; the provenance chain enforces
   it). §5.3's LOCK_FILE constants remain the P33 tail item.
 
-## P32 IMPLEMENTED (Sep 6 2026) — read this first
+
+## [merged] P32 (Sep 6 2026)
 - Branch p32-append-chains: the P31 correction commit (17 wrong
   statements — docs/Project31/Census.md §11; p31 649/127; artifacts
   649 / 1,673 / 3,552) then P32 (944 sites, 0 refused; 1,593 string
@@ -42,44 +117,8 @@
 - Next: P33-B (docs/Project33/PROMPT-B.md) — the 19 `p@b` groups; its
   population (96 sites / 37 blocks) is the tail of p32.ledger.
 
-## PAUSE NOTE — Sep 6 2026, weekend close (read this first)
 
-**The string family is retired.** main = P33-B merged (047b: 16/16 legs
-OK, 0 div; the 3 verdict fails were inherited P32 expectations). ir 6.
-Embeds 557 book / 2,436 stock — no WCMV/WCMP/WBLM/WMSP/STASP left. What
-remains: LCALL 159, WSAVS 130, LJSR 130, XCALL 37, WSAVR 1 (call/frame
-machinery — milestone 5b's edges), float 59, DIVX/WDIVS/WLOB 21,
-SYSCALL 10, WPSH 8 (5 non-`?` pushes + 3 LOCK_FILE), the 2 LDSP DERR
-sinks. 1,822 string statements, 57 arena twins, checker ON with the
-arena in every leg.
-
-Landed this weekend: P26 (grammar), P27 (DERR folds), P28 (rt_call),
-P29 (strings research + design), P30 (library), P31 (located strings),
-P32 (append chains), P33-A/B/C (checker, twins, the shutdown fix), P34
-(readable prototype); hw fixes from the manual review; two Tools fixes
-(XJMP, LJSR I.GOTO); the runner's staging leak fixed.
-
-First items next weekend:
-1. **Play driver**: the post-auto-move keys never reach the prompt, so
-   every play leg since 034 has ended by SIGTERM and HELP/OBSERVE/
-   DISPLAY_MAGIC/LIST_PLAYERS are never exercised. Fix the driver,
-   require I.STOP for play verdicts (Gen 6.2 items in CheckerHistory),
-   add a standing "statements never executed by any leg" line.
-2. Gen 6.2 checker design item: defer a halt to the next pair boundary
-   (deterministic form of the P33-C fix).
-3. Float + divides (80 embeds): small same-helpers project.
-4. Milestone 5b design: calls as edges, on-error edges (LOGON.1/.2,
-   ALLY_PLAYER.1 ON-units — P34), discharge Project27/assumed-foldable.
-5. P35 idea (recompilation via a C-subset translator).
-Owed to the user's Tools: Follow/StartStop shared successor function.
-
-Operational reminders: task files on MAIN; kills consume attempts —
-re-queue under a new name; self-test link scripts list hw/strings/*.o;
-regenerate assumed-foldable.txt when Disassembled changes; inherited
-verdict lines carry stale wants — read the legs.
-
-
-## P31 IMPLEMENTED (Sep 6 2026) — read this first
+## [merged] P31 (Sep 6 2026)
 - Located strings (ir 5) on branch p31-located-strings: 652/776 sites
   lowered (528 `v = 'lit'`, 74 `v = t`, 7 `fixed = 'lit'`, 31 cmp, 12
   word fills); embeds 2,322 → 1,670 (book), 4,201 → 3,549 (stock); sync
@@ -98,7 +137,8 @@ verdict lines carry stale wants — read the legs.
   substr, 9 chain capacities, 6 t-place-form sites); P33 reads claim
   sizes from docs/Project31/census_raw.txt (T2-clean).
 
-## P33-A ON BRANCH (Sep 6 2026) — the string checker, dark
+
+## [merged] P33-A (Sep 6 2026) — the string checker, dark
 - Branch p33a-checker-strings: hw/strings/StrHooks.{hpp,cpp}, quest.strhooks +
   tools/strhooks.py, hook lines in EagleStack.cpp (WMSP/STASP/WRTN) and
   frames.cpp, Mapper arena_bind assert (S2), Lockstep (symmetric-Δ wsp term,
@@ -115,7 +155,8 @@ verdict lines carry stale wants — read the legs.
   case). P27 REPORT §3's `w−2/w−4` is corrected by P33-A REPORT §3.5.
 - P33-B inherits: docs/Project33/REPORT.md §7.
 
-## P30 ON BRANCH (Sep 6 2026) — string library, dark
+
+## [merged] P30 (Sep 6 2026) — string library, dark
 - Branch p30-string-library: hw/strings/{EagleString,ClaimDelta}.{hpp,cpp},
   the Mapper arena form (Mapper.{hpp,cpp}), tests/strings_selftest.cpp +
   run_strings_selftest.sh (GREEN; -DP30_BROKEN_RESIDUE build RED),
@@ -130,7 +171,8 @@ verdict lines carry stale wants — read the legs.
   reads the length word at construction — build the piece after the
   master's XNSTA, or use `assign_varying`).
 
-## P28 MERGED to main (Sep 5 2026) — read this first
+
+## [merged] P28 (Sep 5 2026)
 - rt_call decoration is IMPLEMENTED on branch p28-rt-call (ir 4):
   987/987 runtime call sites, LNDO, the LDSP pair, the 67 Nova loads;
   embeds 6,258 → 2,322 (book) / 8,137 → 4,201 (stock); sync list
@@ -151,7 +193,8 @@ verdict lines carry stale wants — read the legs.
   1,637 dominates — string ops; then the 159 + 130 + 37 undecorated
   calls/LJSR/XCALL and 130 WSAVS frames).
 
-## Queue (Sep 5, post-P27 merge)
+
+## [historical] Queue (Sep 5, post-P27 merge)
 - P28 rt_call — DONE, merged (042 15/15 GREEN).
 - P29 strings — research DONE (Census.md) and design DONE:
   **docs/Project29/StringsDesign.md** is the design of record (Sep 5–6).
@@ -169,7 +212,8 @@ verdict lines carry stale wants — read the legs.
   book, the typing pass (flat-graph world). Frames stay embedded until
   the flat-graph world makes them function boundaries.
 
-## P27 IMPLEMENTED (Sep 5 2026) — read this first
+
+## [merged] P27 (Sep 5 2026)
 - Roadmap item 2 (DERR cluster compression) is IMPLEMENTED on branch
   p27-derr-clusters: 2,271/2,273 DERR embeds gone (the 2 LDSP sinks →
   P28), embeds 8,529 → 6,258, shipped sync list quest.synclist.p27 =
@@ -195,7 +239,8 @@ verdict lines carry stale wants — read the legs.
   visible), the 67 Nova loads (HWFindings §3: high half undefined,
   match the emulator's zero-fill).
 
-## Sep 5 2026 planning session — integrator notes (read after the P26 block)
+
+## [historical] Sep 5 2026 planning session — integrator notes
 - **Branch hw-findings-sep5** (on top of p26-math-grammar) carries:
   (1) the seven emulator helper fixes from the manual review —
   docs/HWFindings_Sep5.md (WHLV rounds toward 0; narrow_add/sub/mul
@@ -226,7 +271,8 @@ verdict lines carry stale wants — read the legs.
   DERR code).  Small follow-ons: LNDO lowering (register now visible;
   mirror XNDO with pc+4), the 67 Nova loads.
 
-## P26 IMPLEMENTED (Sep 5 2026) — read this first, then the brief below
+
+## [merged] P26 (Sep 5 2026)
 - Roadmap item 1 (the P26 grammar package) is IMPLEMENTED on branch
   p26-math-grammar: IR.md is now ir 3; embeds 27,600 → 8,529 (bar
   8,600); local K=1 gates 3/3 green; battery 037 13/13 GREEN on the
@@ -244,7 +290,8 @@ verdict lines carry stale wants — read the legs.
 - Integrator note: ir 3 is NOT a superset of ir 2 (`#` family gone,
   plain-goto dump form gone); binaries and artifacts move together.
 
-## ★ RE-ENTRY BRIEF (written Aug 29 2026 — project going to sleep for a week+)
+
+## RE-ENTRY BRIEF (written Aug 29 2026 — HISTORICAL; superseded by the Sep 6 brief at the top)
 
 **Where we are in one paragraph.** The 1986 PL/I game Quest runs under
 a C++ emulator with a master/clone lockstep harness (METHOD.md is the
@@ -328,6 +375,7 @@ whether it reached the UPDATE_SCREENS borrow blocks or the
 KNIGHT_ATTACK cluster wasn't checked — coverage remains
 census-carried.
 
+
 ## P25 LANDED — battery GREEN, reviewed + integrated (Aug 29 2026)
 - Battery 035: attempt 1 12/13 (inj-emu endpoint-reach flake, user
   ruling, evidence in REPORT §5); attempt 3 **13/13 GREEN DONE**.
@@ -363,10 +411,12 @@ census-carried.
   casing, user ruling Aug 29) +
   conditional exits.
 
+
 ## Battery template (Aug 29 2026)
 - tasks/034-parallel-battery.sh is the battery template of record
   (parallel, JOBS=6, 13 legs incl. the emu isolation pair); hold/031's
   serial shape is superseded. Copy 034, not 031/032.
+
 
 ## P24 handoff (Aug 29 2026)
 - P24 (wide-carry) is LANDED on branch p24-wide-carry; battery = task
@@ -414,6 +464,7 @@ to reconstructed C++17, keeping running code faithful. The user has
 been away for weeks and will have forgotten details — THIS DOCUMENT IS
 THE RE-ENTRY PATH. Trust the docs over anyone's memory, including his.
 
+
 ## State of the world (end of the Aug 13 2026 sessions)
 
 1. **Milestones 1–2 done.** Dual-emulation lockstep harness: master
@@ -451,6 +502,7 @@ THE RE-ENTRY PATH. Trust the docs over anyone's memory, including his.
    Project6/REPORT.md is resolved; H6's rendezvous is built and
    waiting for its Phase-2 native tail handling.
 
+
 ## Read order
 
 1. docs/METHOD.md — how to work here. Binding, unchanged.
@@ -462,6 +514,7 @@ THE RE-ENTRY PATH. Trust the docs over anyone's memory, including his.
    contract and the Phase-2 design + hazards.
 5. docs/TerminalDetach.md, docs/SharedProtocol.md — the machinery.
 6. docs/README.md — index of everything else.
+
 
 ## UPDATE — Aug 15 2026 planning session (supersedes "Next work" below)
 
@@ -479,6 +532,7 @@ parents + callable children together), play-driver growth toward the
 19 armed-but-unexercised routines, landing roll-call + CheckerHistory
 Gen-4 append (include the stride-masking near-miss sentence).
 Note: the Tools/ tarball is now named Disassembled/.
+
 
 ## Next work, in order (HISTORICAL — see UPDATE above)
 
@@ -503,6 +557,7 @@ Note: the Tools/ tarball is now named Disassembled/.
    the wsp reset; checker premise = shadow stack accounting,
    CheckerHistory.md Generation 3 placeholder).
 
+
 ## Open questions (parked deliberately)
 
 - Defensive-raise → abort: CLOSED, subsumed by DERR ruling 7; the
@@ -511,6 +566,7 @@ Note: the Tools/ tarball is now named Disassembled/.
 - The L0? census rows resolve lazily on demand.
 - The natural "Forced exit" stimulus remains unidentified (mid-session
   hard disconnect just waits for terminal reconnection).
+
 
 ## Environment gotchas (believe them; they cost hours once)
 
@@ -543,6 +599,7 @@ Note: the Tools/ tarball is now named Disassembled/.
   edge). QUEST_TERMINAL at the same pc as QUEST_CAPTURE suppresses the
   ENTRY snapshot (Project2 §4.4).
 
+
 ## Working agreements
 
 Plan before code; explicit go-ahead; short replies over long
@@ -551,6 +608,7 @@ disassembly wins, and for L2 the NATIVE SOURCE is the analysis
 medium. Every translation validated under lockstep before the next.
 Expect the docs to be wrong somewhere; that is the method — lockstep
 turns conceptual mistakes into divergences.
+
 
 ## Setup
 
