@@ -25,8 +25,10 @@ docs/Project32/Census.md (P32's disjoint population; its `p@b` list is
 your site list), tools/string_sites.py, docs/IR.md ir 5 (+P32's
 additions), docs/Project30/REPORT.md (the library: pieces as spans; the
 arena image is emulated memory so `p@b` is a span too), docs/Provenance.md
-(verify FIRST). TREE VINTAGE: main after P32 and P33-A — state the
-commit.
+(verify FIRST). TREE VINTAGE: main 2085231 (P32 and P33-A merged) — state the
+commit. Note: P32's census counts 96 `p@b`-block WCMV sites in 37
+blocks — reconcile with the 19 groups / 57 claims (the extra blocks are
+the tail cuts: min-skip and post-call blocks carrying copy-out pieces).
 
 ## Part 1 — plan gate
 
@@ -66,7 +68,13 @@ commit.
    by the clone too (same lowered statement), so the assert holds.
 7. **Liveness + battery**: which groups the standing legs execute (DIED
    is driver-reached; HELP, DISPLAY_INVENTORY, LIST_PLAYERS?); task
-   047 = 040's 15 legs + P33-A's forced-mismatch leg, flag ON; verdict
+   047 = 046's 15 legs + P33-A's forced-mismatch leg, flag ON — and
+   carry two fixes 046 showed (Project32/REPORT.md integrator note):
+   the `derr` leg's want is WORLD-ABORT via TERMINAL-ABORT since P33-A's
+   F2-b (and count the assert line anchored, `^IR ASSERT FAILED`), and
+   the play driver's HELP step (H,1,0) must be placed where the game
+   accepts it — appended after L/ESC it did not reach HELP; validate
+   the FULL play sequence locally, not a standalone login→H; verdict
    lines: groups lowered, WCMV remaining, arena rows bound/unmapped
    counts, max live Δ_master with Δ_clone = 0, `release` asserts
    passed, memory-oracle result if enabled. Landing bar: 15/15 (+1), 0
