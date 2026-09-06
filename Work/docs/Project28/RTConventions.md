@@ -1,10 +1,8 @@
-> CORRECTION (Sep 6, P32 gate): `?UNSIGNED_TO_CHAR` does NOT return the
-> length in ac0. It writes a CHAR VARYING (length word + digits) at the
-> frame word address passed in ac2 (runtime/unsigned_to_char.cpp:141–146)
-> and returns ac0–ac2 = entry values like every LCALL routine
-> (RTBridge::native_return / WRTN restore). The "results in ac0" row
-> below is wrong for this callee; the four true ac0-returners are
-> ?RANDOM_NUMBER, ?CHAR_TO_UNSIGNED, ?LIB_ERROR_CODE, ?CURRENT_PID.
+> NOTE (Sep 6, P32 gate): this table was RIGHT about `?UNSIGNED_TO_CHAR`
+> (it writes a CHAR VARYING at the ac2 word address and returns ac0–ac2
+> unchanged; "returns in" blank). The "length in ac0" error lived in
+> StringsDesign (§1.4/§1.8/§2.2/§7) and the P32 prompt, corrected Sep 6;
+> this banner records that the convention table was not the source.
 
 # Project 28 — runtime call conventions, per callee (the 18 `?` routines the game LCALLs)
 
