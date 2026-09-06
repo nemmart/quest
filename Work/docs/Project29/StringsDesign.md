@@ -183,6 +183,15 @@ not offer it. The memory oracle iterates rows (each names its master
 range); diagnostics may list candidate rows for a master address but
 never resolve one.
 
+This is the SAME ruling docs/Mapper.md made on Aug 15 for the book-mode
+stack map (comparison clone→master only; master→clone exists solely as
+`clone_location()` for mediated dereference, a function BY RULING).
+Therefore (RULED, Sep 6): the string map is a new FORM inside the
+existing Mapper module — `equivalent()` handles arena rows like any
+other form — not a separate table class; and `clone_location()` on an
+arena address REFUSES loudly: the runtime only reads temps, so a
+mediated write into one is a finding, not a lookup.
+
 Known edge (recorded, not designed around): a loop re-executing a pN
 block rebinds its row while a dead register may still hold the previous
 iteration's pointer; if the stack depth differs between iterations the
@@ -213,10 +222,11 @@ listed, embedded.
   EagleString (value type; construct from literal/located/char; concat;
   assign-to-located with pad/truncate and the varying length word;
   blank-padded equality; residue computation for each replaced
-  instruction), TripleTable (§6), and unit tests in the
+  instruction), the ARENA FORM in the Mapper module (§6; equivalent()
+  over arena rows, clone_location() refusing), and unit tests in the
   tests/helpers_selftest.cpp style: residues checked against
   EagleSpecial's WCMV/WCMP/WBLM on random operands; assignment/compare
-  against a reference; table invariants. One K=1 stock gate to prove the
+  against a reference; Mapper form invariants. One K=1 stock gate to prove the
   library's presence changes nothing.
 - **P31 — located slice**: ir 5 grammar for §1; IRExec on the library;
   `s = 'lit'` and `s = t` into fixed/varying targets (≈720 sites);
