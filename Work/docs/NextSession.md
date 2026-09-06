@@ -43,7 +43,9 @@ In flight when we stopped:
   I.GOTO never returns; add it to the I.EPILOG/I.STOP non-returning
   list (4,312 blocks mis-owned in reachability until cut).
 
-Next, in order: (1) P32
+Next, in order: P32 MERGED (046: 13/15 legs OK, 0 div everywhere, all
+P32 numbers exact; 4 fails are driver/verdict — see Project32/REPORT.md
+integrator note; task 047 inherits the fixes). (1) P33-B
 (docs/Project32/PROMPT.md; Work.tgz from main after P33-A merges) —
 append chains, ≈1,670 → ≈700; (3) P33-B (docs/Project33/PROMPT-B.md)
 after P32 — the 19 p@b groups; strings retired at ≈600 embeds; (4) then

@@ -114,3 +114,21 @@ heartbeats, timing-dependent on this 1-core box).
   with the cursor in the arena.
 - The evaluator's `precall` snapshot and `Src` provenance are available
   for any renderer.
+
+
+## Integrator note — task 046 (Sep 6)
+
+results/046-p32-append-chains: 13/15 legs OK, 0 div on all 15; every
+P32 verdict value exact (1,593/1,593 statements; 857/40/12; embeds 729 /
+2,608; ledger == p31 ∪ p32 by pc set and text; slices 4/5/6 live; 0
+literal mismatches; sync list 13,510). The four FAILs are outside the
+IR: (1)(2) `derr` want=IR-ASSERT and `clone_assert=2` — the task was
+cloned from 044 before P33-A's F2-b landed; WORLD-ABORT via
+TERMINAL-ABORT is now the correct end (045b) and the grep counts the
+quoted assert text; (3) HELP block 7016D5E3 not live in play/play-st —
+the H,1,0 steps appended after L/ESC do not reach HELP in the full play
+sequence (validated only standalone); (4) `inj-emu` end=I.STOP —
+all-emulated, no IR; the injection at 7016A896 was not reached in that
+run (inj, same driver, book, reached it). Merged on the leg evidence;
+the driver placement and the F2-b expectations are P33-B's task 047 to
+carry.
