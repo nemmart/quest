@@ -175,9 +175,13 @@ What the STASP does affect is kept OUTSIDE the map:
 
 compare_pair: a clone AC in the arena segment translates through the
 mapped row that contains it; a hit on an unmapped row, or no row, is a
-MISMATCH. Everything else compares raw. Never translate master→clone in
-the compare path; the reverse direction serves only the memory oracle
-and diagnostics.
+MISMATCH. Everything else compares raw. **The map is ONE-DIRECTIONAL:
+clone→master only** (RULED, Sep 6). master→clone is ambiguous — two
+groups in one routine claim at the same stack base at different times,
+and a released region is reused by ordinary frames — so the class does
+not offer it. The memory oracle iterates rows (each names its master
+range); diagnostics may list candidate rows for a master address but
+never resolve one.
 
 Known edge (recorded, not designed around): a loop re-executing a pN
 block rebinds its row while a dead register may still hold the previous
