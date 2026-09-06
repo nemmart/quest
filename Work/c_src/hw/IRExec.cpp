@@ -997,6 +997,12 @@ uint32_t IRExec::run_block(Machine& machine, uint32_t pc) {
     blk->executed = true;
     fprintf(stderr, "IRExec: first execution of block %08X\n", pc);
   }
+  if (machine.rtcov) {
+    // P33-C: the derivation capture (QUEST_CAPTURE) sees the clone's
+    // block entries too — a routine entry / a call return is a block start
+    machine.pc = int32_t(pc);
+    debug::Capture::check(machine);
+  }
   Ctx cx{machine, blk->seg, blk->start, {uint32_t(machine.ac[0]), uint32_t(machine.ac[1]),
                              uint32_t(machine.ac[2]), uint32_t(machine.ac[3])}, {}};
   const size_t n = blk->stmts.size();

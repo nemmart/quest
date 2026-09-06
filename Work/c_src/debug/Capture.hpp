@@ -44,6 +44,9 @@ public:
 private:
   static void snapshot(hw::Machine& machine, const char* tag,
                        uint32_t base, uint32_t dest);
+  // P33-C: the dest window's base — QUEST_CAPTURE_DEST=<addr> (fixed),
+  // =@<addr>+<off> (M32[addr] + off, e.g. a shared-data table), or entry ac2
+  static uint32_t dest_of(hw::Machine& machine);
 };
 
 } // namespace debug
