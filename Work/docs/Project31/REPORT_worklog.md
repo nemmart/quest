@@ -31,3 +31,7 @@
   Liveness: 63/652 EMIT blocks live in 042's legs, every statement kind.
 - Tool runtime 2.1–3.1 s.
 - STOP: plan gate (Census.md §7 open questions O1–O5, defaults stated).
+- Gate rulings received (O1–O5, buckets, bar). Re-ran StringsDesign
+  §1.3–1.5 on the regenerated census: all hold (19/19, 19/19, 57/57);
+  count correction 11 ?WRITE_SCREEN groups + 8 copy-outs (not 12 + 7).
+  Census.md §1.5, §9 added. Waiting for P30 on main (043 re-run).

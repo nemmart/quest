@@ -115,6 +115,34 @@ P32-COPYOUT). Every EMIT with a length-word store has `value ==
 dst_count` (the `same` flag; a mismatch would refuse as
 LENSTORE-MISMATCH — 0 such).
 
+### 1.5 StringsDesign §1.3–§1.5 re-checked on the regenerated census (T2 changed the claim sizes)
+
+Script over the regenerated census_raw.txt claim/release tables +
+quest.dis + blocks.split (19 groups, 57 claims):
+
+- **§1.3 straight-line claims — HOLDS, 19/19.** Between a group's first
+  WMSP and its last append into a temp there is no listed block
+  boundary in any group. Every boundary inside the [first WMSP, STASP]
+  bracket is a TAIL cut, of exactly four kinds: the min skip of the
+  copy-out into the varying-result temp (`WSGE/WSLE + WMOV`, the 11
+  ?WRITE_SCREEN groups: 2 entries each), the consumer's return block
+  (11), the two P27 DERR-cluster continuations K inside INIT_OBJ_TBL's
+  tail (the SUBSTR bounds checks before its record copy-out), and the
+  tail-split conditional byte after DISPLAY_SCREEN's third copy-out
+  (70167049: `WSGE 1,1 / WBR / WSTB 2,0 / WSBI 1,1` — a conditional
+  piece on the LOCATED chain, as ddf4187 says). HELP is one block.
+- **§1.4 no call inside a group but the consumer — HOLDS, 19/19.** The
+  only calls inside any bracket are `?WRITE_SCREEN` (11 groups). Minor
+  correction to the design's count: it is **11 consumed by
+  ?WRITE_SCREEN and 8 copied out to a located target** (DISPLAY_CAVE,
+  DISPLAY_SCREEN ×3, HELP, INIT_OBJ_TBL, OBSERVE ×2), not 12 + 7 — HELP's
+  ?WRITE_SCREEN is after its STASP and its copy-out (7016DC29) before.
+- **§1.5 every claim released — HOLDS, 57/57.** Each STASP is in the
+  claiming routine and restores `sp@<block>`, the wsp at entry of the
+  group's block, i.e. before the FIRST claim; groups never nest; the
+  claim sizes are now the clean `⌈(len + k)/4⌉` forms (k ∈ {3, 4, 5, 6,
+  16, 20, 21, 22, 24, 35, 37, …}) F4 described.
+
 ---
 
 ## 2. Site list (Phase A.1) — docs/Project31/p31.ledger
@@ -460,3 +488,37 @@ and words (12). Slice 0 = the P28 artifacts byte-for-byte (regression
 check, as `--rt-slice 0` was). `--strings-census` writes lower.py's
 per-site ledger in p31.tsv's columns for the byte compare. Each slice
 behind K=1 book + stock gates locally (k1fo, k1play), then 044.
+
+---
+
+## 9. Rulings at the gate (user, Sep 6) and the StringsDesign wording they imply
+
+O1 yes (`[@a, varying]` is the capacity-less READ form; capacity stays
+mandatory on the write side); O2 yes (12 fills as `words()` + comment;
+`fill()` is the readable layer's rewrite); O3 noted (no `substr` in
+P31); O4 emit the register form (§2.1 of the design: an address is any
+expression the IR has, and a register is one); O5 keep 32 K as a refuse
+threshold. Refusal buckets and the 1,670 / 3,549 bar accepted.
+
+Proposed StringsDesign edits (for the integrator to fold in):
+
+- **§2.1** add after the two located forms: "`[@a, varying]` — a located
+  varying READ whose declared capacity the site does not reveal (length
+  from the length word); read side only, never an lvalue. An address
+  `a` may be a register holding the pointer (`[@ac2, 13]`) when the
+  setup is kept rather than folded."
+- **§2.3** replace `words(@dst, k) = words(@src, k)` / `fill(...)` lines
+  with: "`words(@dst, k) = words(@src, k)` — WBLM, k words in sequential
+  ascending order (the semantics the 12 self-overlapping sites rely on);
+  the emitter notes `src = dst − 1` / `− 2` in the comment. `fill(@dst,
+  k, v)` is the readable layer's rewrite of that shape, not an IR
+  statement." Add: "`ac1 = cmp(<piece>, <piece>)` — WCMP as a root
+  statement: −1/0/+1 in ac1, the §3 residues in ac0/ac2/ac3 (B-4
+  reproduced). The pure `<piece> == <piece>` of the expressions list is
+  the readable layer's rewrite of `cmp(...) == 0`."
+- **§7** `WBLM copy / fill | 6 / 6` → `WBLM fill | 12 (6 wide smears, 6
+  word smears; none is a record copy — P31 Census §1.3)`;
+  `WCMP equality | 40 | if (a == b)` → `ac1 = cmp(a, b); goto … (ac1 ==
+  0)`.
+- **§1.3/§1.4** counts: 11 groups consumed by ?WRITE_SCREEN, 8 copied
+  out (§1.5 above).
