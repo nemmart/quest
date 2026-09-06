@@ -1,5 +1,25 @@
 # Next session
 
+## P32 IMPLEMENTED (Sep 6 2026) — read this first
+- Branch p32-append-chains: the P31 correction commit (17 wrong
+  statements — docs/Project31/Census.md §11; p31 649/127; artifacts
+  649 / 1,673 / 3,552) then P32 (944 sites, 0 refused; 1,593 string
+  statements; embeds 729 book / 2,608 stock; sync list 13,510
+  unchanged). Task 046 queued on main — the landing bar is in its
+  header. Local K=1 gates per slice: docs/Project32/REPORT.md §3.
+- Read docs/Project32/Census.md §1 before touching strings again:
+  pairwise concatenation (chains are 1–2 pieces, never cross a block),
+  `?UNSIGNED_TO_CHAR` returns nothing, tail splits carry the room in
+  src_count, and the evaluator now refuses to render any tracked value
+  reloaded across a call (the P31 defect class).
+- Integration: regenerate artifacts + binaries together (Provenance.md:
+  string_sites.py --p31 --p32, then lower.py --strings-sites32
+  --strings-slice 6). lower.py refuses assumed-foldable.txt whose
+  tags/blocks sha header is stale — regenerate it with derr_clusters.py
+  whenever Disassembled changes (09f6593 needed that; content identical).
+- Next: P33-B (docs/Project33/PROMPT-B.md) — the 19 `p@b` groups; its
+  population (96 sites / 37 blocks) is the tail of p32.ledger.
+
 ## PAUSE NOTE — Sep 6 2026 (weekend end; read this first next time)
 
 State of main (post-P31): ir 5, embeds 1,670 book / 3,549 stock,

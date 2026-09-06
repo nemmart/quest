@@ -35,6 +35,9 @@ wait_turn_done(420)
 send("O", 8); send("\x1b", 8)                    # OBSERVE inventory
 send("D", 8); send("\x1b", 8)                    # DISPLAY_MAGIC
 send("L", 8); send("\x1b", 8)                    # LIST_PLAYERS
+# P32: HELP topic 1 (Terrain): the two-stage 164 || 150 -> 314 scratch chain
+# (7016D5E3..7016D602) and its ?WRITE_SCREEN; 0 leaves HELP
+send("H", 8); send("1\r", 10); send("0\r", 8)
 send("\x1b", 8)
 drain(15)
 try: s.close()

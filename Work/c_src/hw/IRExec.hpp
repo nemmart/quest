@@ -43,7 +43,10 @@ public:
   struct Piece {
     enum Kind { LIT, FIXED, VARYING, VARYING_NOCAP } kind = FIXED;
     std::shared_ptr<Expr> addr;      // FIXED: byte-pointer value; VARYING*: word address (wrapped)
-    int32_t n = 0;                   // LIT: byte count; FIXED: n; VARYING: capacity
+    int32_t n = 0;                   // LIT: byte count; FIXED/VARYING: n when constant
+    std::shared_ptr<Expr> n_expr;    // FIXED/VARYING (P32, ir 5): the count as a pure
+                                     //   expression (a register, a length-word read, a sum);
+                                     //   null when n is the constant above
     uint32_t lit_bp = 0;             // LIT: byte pointer in the image
     std::string bytes;               // LIT: the text (unescaped)
     bool verified = false;           // LIT: bytes checked against memory (once)

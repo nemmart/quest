@@ -31,3 +31,23 @@
   (src_count = room); ?UNSIGNED_TO_CHAR returns nothing (design error,
   corrected on main); no len() in ir 5.
 - Tool runtime 3.4 s (was 2.1–2.7).
+
+## Sep 6 2026 — Part 2
+
+- IRExec: `Piece::n_expr` (count = pure expr, `p.expr()`), `count_of`
+  at execution, `check_treads` on counts, `strings32` provenance line.
+  lower.py: `--strings-sites32`, 14-column rows, slices 4..6, header line.
+- Slice 3 with --strings-sites32 given: book + stock byte-identical to the
+  correction commit's artifacts. Slices: 4 → 1,326 statements / 996
+  embeds; 5 → 1,460 / 862; 6 → 1,593 / 729 (book), 2,608 (stock). 0 fold
+  re-validation dies; ledger 1,593 emitted / 0 refused, text byte-equal to
+  p31.tsv ∪ p32.tsv (words() fill comments stripped).
+- Gates (local, sequential): s4 book 0 div 309,780; s5 book 0 div
+  323,555; s6 book 0 div 296,585 (112 string first-execs); s6 stock 0 div
+  298,650 (107). HELP check (book K=50, a /tmp driver: login, H, 1, 0,
+  ESC): 0 div, block 7016D5E3 live with its 3 statements, Terrain screen
+  rendered. Two container restarts during the session cost reruns (the
+  detached-leg pattern: setsid nohup, never pkill by broad pattern).
+- Drivers grown (play: H, 1, 0), IR.md, REPORT, CURRENT_STATE,
+  NextSession, Provenance; task 046 written from 044's template
+  (ledger/tsv text compare strips the `; fill:` comments).

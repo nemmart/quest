@@ -396,7 +396,7 @@ void IRExec::load(const std::string& path) {
     std::istringstream is(body);
     std::string tok; is >> tok;
 
-    if (tok == "source" || tok == "blocks" || tok == "pushmap" || tok == "argmap" || tok == "strings") {
+    if (tok == "source" || tok == "blocks" || tok == "pushmap" || tok == "argmap" || tok == "strings" || tok == "strings32") {
       std::string fpath, sha;
       is >> fpath >> sha;
       if (tok == "blocks" && sha.empty() && fpath.find("sha256=") == std::string::npos) {
@@ -619,14 +619,23 @@ void IRExec::load(const std::string& path) {
           if (!p.lit("]")) p.bad("expected ]");
           return;
         }
-        P nn = p.primary();
-        if (nn->kind != Expr::CONST) p.bad("string capacity must be a constant");
-        if (int32_t(nn->value) < 0 || nn->value >= 32768) p.bad("string capacity must be 0..32767");
-        pc.n = int32_t(nn->value);
+        // P32 (ir 5, docs/Project32/Census.md §3): the count is any pure expr —
+        // a constant (P31: 0..32767), a register (ac0/ac1 — the master's own
+        // count), a length-word read, a sum, a wide read.  Evaluated at
+        // execution; no range check on a runtime value (F-B1: the master
+        // does not fault).
+        P nn = p.expr();
+        if (nn->kind == Expr::CONST) {
+          if (int32_t(nn->value) < 0 || nn->value >= 32768) p.bad("string capacity must be 0..32767");
+          pc.n = int32_t(nn->value);
+        } else {
+          pc.n_expr = nn;
+        }
         if (p.kw("varying")) pc.kind = Piece::VARYING;
         else pc.kind = Piece::FIXED;
         if (!p.lit("]")) p.bad("expected ]");
       };
+
       if (body.rfind("words(@", 0) == 0) {
         so.kind = StrOp::WORDS;
         p.s += 7;
@@ -653,6 +662,8 @@ void IRExec::load(const std::string& path) {
         if (!p.lit(")")) p.bad("cmp: expected )");
         p.end();
         check_treads(so.src.addr, body); check_treads(so.dst.addr, body);
+        if (so.dst.n_expr) check_treads(so.dst.n_expr, body);
+        if (so.src.n_expr) check_treads(so.src.n_expr, body);
       } else {
         piece(so.dst, true);
         so.kind = (so.dst.kind == Piece::VARYING) ? StrOp::ASSIGN_VARYING : StrOp::ASSIGN_FIXED;
@@ -660,6 +671,8 @@ void IRExec::load(const std::string& path) {
         piece(so.src, false);
         p.end();
         check_treads(so.dst.addr, body); check_treads(so.src.addr, body);
+        if (so.dst.n_expr) check_treads(so.dst.n_expr, body);
+        if (so.src.n_expr) check_treads(so.src.n_expr, body);
       }
     } else if (body.rfind("assert(", 0) == 0) {
       // P25: assert(expr) | assert(expr, "message").  Statement, never a
@@ -1061,6 +1074,12 @@ uint32_t IRExec::run_block(Machine& machine, uint32_t pc) {
                   names[so.kind], blk->start, i);
         }
         for (int r = 0; r < 4; r++) machine.ac[r] = int32_t(cx.ac[r]);
+        // P32: a count may be an expression (a register holding the master's
+        // own count, a length-word read, a sum); evaluated here, before the
+        // library call, in the statement's own context
+        auto count_of = [&](Piece& pc) -> int32_t {
+          return pc.n_expr ? int32_t(cx.eval(pc.n_expr)) : pc.n;
+        };
         auto piece_of = [&](Piece& pc) -> strings::EagleString {
           switch (pc.kind) {
             case Piece::LIT: {
@@ -1079,7 +1098,7 @@ uint32_t IRExec::run_block(Machine& machine, uint32_t pc) {
               return strings::EagleString::literal(pc.lit_bp, pc.n);
             }
             case Piece::FIXED:
-              return strings::EagleString::fixed(cx.eval(pc.addr), pc.n);   // byte pointer VALUE, raw
+              return strings::EagleString::fixed(cx.eval(pc.addr), count_of(pc));   // byte pointer VALUE, raw
             default:
               // The length word is read as XNLDA reads it (sign-extended by
               // the library): a value with bit 15 set is a NEGATIVE count —
@@ -1095,12 +1114,12 @@ uint32_t IRExec::run_block(Machine& machine, uint32_t pc) {
         switch (so.kind) {
           case StrOp::ASSIGN_FIXED: {
             strings::EagleString src = piece_of(so.src);          // the piece FIRST (source length)
-            strings::assign_fixed(machine, site, cx.eval(so.dst.addr), so.dst.n, src);
+            strings::assign_fixed(machine, site, cx.eval(so.dst.addr), count_of(so.dst), src);
             break;
           }
           case StrOp::ASSIGN_VARYING: {
             strings::EagleString src = piece_of(so.src);
-            strings::assign_varying(machine, site, cx.wrap(cx.eval(so.dst.addr)), so.dst.n, src);
+            strings::assign_varying(machine, site, cx.wrap(cx.eval(so.dst.addr)), count_of(so.dst), src);
             break;
           }
           case StrOp::CMP: {

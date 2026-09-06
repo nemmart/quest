@@ -136,3 +136,32 @@ string_sites.py command gains `--p32 ../../docs/Project32/p32.ledger
 --p32-tsv ../../docs/Project32/p32.tsv`). K=1 gate on the regenerated
 artifacts: book k1fo 0 div / 308,923 pairs / clean; stock k1fo-st 0 div
 / 299,387 pairs / clean (local, Sep 6).
+
+## Sep 6 2026 — after P32 (append chains, ir 5 slices 4–6; branch p32-append-chains)
+
+| file | sha256 (first 16) | note |
+|---|---|---|
+| c_src/quest.ir2.book        | 90089ef497ff644a | ir 5 slice 6: 1,593 string statements (649 P31 + 944 P32), embeds 729, 987 rt_call, 2,273 assert, 11,442 goto |
+| c_src/quest.ir2.stock       | 638281f6c0b43d61 | ir 5 slice 6: 1,593 string statements, embeds 2,608 |
+| docs/Project32/p32.tsv      | aac780cb1d1ee10a | the P32 per-site artifact (string_sites.py --p32-tsv): 944 sites, 944 EMIT — lower.py's `--strings-sites32` input |
+| docs/Project31/p31.tsv      | d09a7063ead0455f | unchanged from the correction commit |
+| docs/Project31/strings.ledger | — | lower.py's ledger at slice 6: 1,593 emitted, 0 refused |
+| c_src/quest.synclist.p27    | af1be42f5831fb2c | UNCHANGED (no block added or removed) |
+| Disassembled/*, blocks.split, pushmap, addrbook, tags | — | as the 09f6593 table |
+
+Regeneration command (from Work/c_src; `--strings-slice 6` is the
+artifact of record; `--strings-slice 3` reproduces the correction
+commit's artifacts byte for byte):
+
+    python3 tools/lower.py --dis ../../Disassembled/quest.dis --blocks quest.blocks.split \
+      --pushmap quest.pushmap.M4 --argmap ../../Disassembled/quest.argmap --all [--book] \
+      --assumed-foldable ../docs/Project27/assumed-foldable.txt --tags ../../Disassembled/quest.tags \
+      --rt-slice 3 --leftovers --strings-sites ../docs/Project31/p31.tsv \
+      --strings-sites32 ../docs/Project32/p32.tsv --strings-slice 6 \
+      --strings-census ../docs/Project31/strings.ledger --out quest.ir2.<book|stock>
+
+The per-site artifacts regenerate with the string_sites.py command of
+the P31 table plus `--p32 ../../docs/Project32/p32.ledger --p32-tsv
+../../docs/Project32/p32.tsv`. K=1 gates (local, Sep 6): slice 4 book
+0 div / 309,780 pairs; slice 5 book 0 div / 323,555; slice 6 book 0 div
+/ 296,585, stock 0 div / 298,650; all clean.
