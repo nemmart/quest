@@ -3,6 +3,31 @@
 
 # Where things stand
 
+## ★ P33-B IMPLEMENTED ON BRANCH — THE STRING FAMILY IS GONE FROM THE IR: the 19 WMSP claim groups as arena twins `t@<block>.<k>` (57), ir 6 (`acN = t@b.k`, `claim`, `release`), quest.arena; WCMV/WMSP/STASP embeds **0/0/0**, embeds **557 book / 2,436 stock** (from 729 / 2,608), 1,822 string statements; checker ON on every gate, Δ_clone ≡ 0; task 047 on main (Sep 6 2026; awaiting review + integration)
+
+Branch p33b-arena-temps (based on main fa5b180, P32 + P33-A merged).
+Rulings (user, Sep 6): per-claim twins (INIT_OBJ_TBL's intermediate residue
+survives to a rendezvous — CensusB §3), `p@b ≡ t@b.last` is the readable
+layer; the `LDASP;WADI` pair → the twin's address so every access path
+hits the arena; `claim` = the runtime capacity fault; `release t@b, acN`
+asserts the slot arithmetic and takes the master's residue; quest.arena
+(0x2000-word stride, 8192 B provisional, 5 exact; 047's max-claim lines
+size the final column — datum 692 B); the checker's rows are per claim.
+Two checker corrections found live and accepted (REPORT-B §3): the wsp
+term subtracts the TOTAL outstanding claims (the consumer runs inside the
+bracket), and a claim is a STACK INSERTION the clone lacks — the Mapper's
+stack leg gained the insertion layer (compression with the sign reversed;
+a master temp maps to its bound twin for the mediated ?WRITE read
+verification — the memory oracle for free; a claiming clone cancels the
+insertion by pc). Local: k1fo book K=1 0 div / 311,581 pairs; stock 0 div /
+306,900; play book K=50 0 div; derr / derr-emu / forced / wrong-capacity as
+REPORT-B §5. Groups live in the standing legs: DISPLAY_SCREEN (screen-sized
+twins), DISPLAY_INVENTORY, INIT_OBJ_TBL; the play driver's post-auto-move
+keys do not reach the prompt (driver fix owed). Records:
+docs/Project33/{CensusB,REPORT-B,REPORT_worklog-B}.md, IR.md §5.9,
+Provenance. Integrator: Mapper.md §1.4 + StringsDesign §2/§5.2/§6 with
+REPORT-B §6's text.
+
 ## ★ P32 IMPLEMENTED ON BRANCH — append chains (ir 5 slices 4–6): 944 more WCMV/WCMP sites are located-string statements; embeds 1,673 → 729 (book), 3,552 → 2,608 (stock); 1,593 string statements. Plus the P31 CORRECTION (17 wrong statements; 652 → 649).
 
 Branch p32-append-chains (on main c88c0ff). Two things landed, as two
