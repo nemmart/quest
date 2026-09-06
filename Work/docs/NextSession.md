@@ -45,7 +45,10 @@
   branch p31-located-strings @ 61886be, Phase B now unblocked; **P33-A** (the checker half, dark:
   docs/Project33/PROMPT-A.md — hooks, ClaimDelta wiring, F2-b, the
   ABORT readout) may run in parallel with P31 Phase B (no shared
-  files); then P32 append chains, P33-B p@b executor half.
+  files); then **P32 append chains (docs/Project32/PROMPT.md — after P31 merges)**,
+  P33-B p@b executor half. **P34 readable-layer prototype**
+  (docs/Project34/RESEARCH.md — research, Python only, no shared files)
+  may run any time.
 - Later: float + DIVX/WDIVS/WLOB (~80 embeds), F2-b checker item + ABORT
   readout off-by-one, retire borrow-slot allocation from the address
   book, the typing pass (flat-graph world). Frames stay embedded until
