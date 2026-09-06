@@ -131,37 +131,56 @@ EmulatorDivergences.md). No deadness argument is needed anywhere.
   The same arena + translation later serves the frames project when the
   stack itself becomes virtual.
 
-## 6. Verification — the translated compare — RULED (shape); OPEN (details)
+## 6. Verification — the translated compare — RULED (Sep 6)
 
+The strict surface (ac0–ac3, c, ovr, wsp, block ordinal) is compared at
+every listed block entry as always; the only change is a FORWARD-ONLY
+address translation for clone values in the arena segment, driven by a
+**map** of one row per pN:
 
-A **triple table** `(clone_addr, master_addr, length)`, one row per pN:
-- the clone half is STATIC (the arena layout artifact: pN → address,
-  capacity, from the census bounds); the master half is dynamic;
-- clone→master by binary search (hot path: every AC compare);
-  master→clone by scan (memory oracle, diagnostics only);
-- `master_addr == 0` = not currently bound.
-- **Binding**: ONE hook per group at its FIRST WMSP pc (19 hooks) records
-  `base = wsp_before`; the group is live iff `base < master_wsp`, its
-  total claim is `master_wsp − base` while live, and the pushed temp's
-  master address is the last claim's `wsp_before+2` (recorded by the same
-  hook when the group's last WMSP fires, or computed from base and the
-  census claim sizes — plan-gate choice). A group whose base is no longer
-  below wsp is unbound (STASP, WRTN, or an unwind — all the same to the
-  rule). No release hooks exist.
-- **compare_pair** (after re-evaluating group liveness against wsp): an AC value inside the arena segment
-  translates through the table before comparing; anything else compares
-  raw. wsp: `master_wsp − clone_wsp` must equal EXACTLY `Σ over live groups of
-  (master_wsp − base)` — normally one term or none; any other divergence
-  breaks the equality. A value hitting an
-  unbound triple, or a master hook with no unbound clone variable, is a
-  MISMATCH (catches emitter ordering bugs).
-- **Memory oracle**: at rendezvous, each live pN's arena bytes are compared
-  with its master range (footprint-capture shape).
+    row = (arena_addr, length, wfp, master_addr)      ; master_addr == 0 ⇒ unmapped
 
-OPEN: whether the memory oracle runs at every rendezvous or K-gated;
-whether the frame slots where the master stores temp base pointers
-(not compared today) get a translated compare too (LEAN: no — dead
-after release; the arena oracle covers the bytes).
+Rows have three states and four events (RULED, Sep 6):
+
+1. **Block entry** (`p@b = ""`): the row is (re)bound — the master's
+   first-WMSP hook in that block records the temp's stack address as
+   `master_addr` and the master's `wfp`; length 0. (19 hooks: the
+   block's first WMSP pc; the pushed temp's address is the last claim's
+   `wsp_before+2`, recorded by the same hook when the group's last WMSP
+   fires, or computed from the census claim sizes — plan-gate choice.)
+2. **Append**: `length` updated; the arena image extended in place
+   (static capacity from the census bounds; overflow = loud fault).
+3. **STASP** in the owning frame: the frame's rows become RELEASED —
+   they stop counting toward the wsp equality and drop out of the
+   memory oracle — but they REMAIN TRANSLATABLE with their final
+   length. Reason: after the release the compiler reloads only ac1;
+   ac0/ac2/ac3 may carry the last piece's pointers (master: stack;
+   clone: arena) through many blocks as dead registers, and those must
+   keep comparing equal through the row. (19 STASP hooks.)
+4. **Frame exit** — WRTN of the frame, or the ON system popping it
+   (hook at the dispatcher's frame-restore point, ERROR_LIFT_SCOPE.md):
+   every row with that `wfp` is UNMAPPED (`master_addr = 0`). The arena
+   memory is never freed (static per block).
+
+compare_pair: a clone AC in the arena segment translates through the
+(mapped or released) row that contains it; a hit on an unmapped row, or
+no row, is a MISMATCH. Everything else compares raw. wsp:
+`master_wsp − clone_wsp` must equal exactly the sum of the claim
+totals of the frame's MAPPED (not released) rows. Never translate
+master→clone in the compare path; the reverse direction serves only the
+memory oracle (mapped rows: arena bytes[0..length) vs master range) and
+diagnostics.
+
+Known edge (recorded, not designed around): a loop re-executing a pN
+block rebinds its row while a dead register may still hold the previous
+iteration's pointer; if the stack depth differs between iterations the
+dead register mismatches. If it ever shows, it is a censused armed-pc
+drop at that entry — the existing escape hatch — not a change to the
+rules.
+
+Static input: the arena layout artifact (block → arena_addr, capacity)
+and the hook table (block → first-WMSP pc, STASP pcs), both with
+provenance headers, in the pushmap tradition.
 
 ## 7. Idioms the emitter recognises (from Census §3) — RULED as the target set
 
