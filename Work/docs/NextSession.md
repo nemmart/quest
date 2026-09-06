@@ -1,5 +1,24 @@
 # Next session
 
+## P31 IMPLEMENTED (Sep 6 2026) — read this first
+- Located strings (ir 5) on branch p31-located-strings: 652/776 sites
+  lowered (528 `v = 'lit'`, 74 `v = t`, 7 `fixed = 'lit'`, 31 cmp, 12
+  word fills); embeds 2,322 → 1,670 (book), 4,201 → 3,549 (stock); sync
+  list unchanged (13,510). Local K=1 gates 0 div (slice 0/1/2/3 k1fo
+  book+stock, k1play book 8.8M pairs). Task 044 queued (042's 15 legs +
+  the P31 verdict lines). Records: docs/Project31/{Census,REPORT,
+  REPORT_worklog}.md, p31.tsv (the emitter's artifact), strings.ledger;
+  IR.md ir 5 §5.8; Provenance.md.
+- Integration notes: ir 5 loader refuses ir 4 files — regenerate
+  artifacts + binaries together (Provenance.md has both commands: the
+  tsv from string_sites.py --p31, then lower.py --strings-slice 3).
+  Library fix F-B1 (EagleString::varying sign-extends; erratum in
+  docs/Project30/REPORT.md) → StringsDesign §2.4 wording; Census §9
+  wording for §2.1/§2.3/§7.
+- Follow-ups: P32 takes the 124 refusals' shapes (86 copy-outs, 15
+  substr, 9 chain capacities, 6 t-place-form sites); P33 reads claim
+  sizes from docs/Project31/census_raw.txt (T2-clean).
+
 ## P30 ON BRANCH (Sep 6 2026) — string library, dark
 - Branch p30-string-library: hw/strings/{EagleString,ClaimDelta}.{hpp,cpp},
   the Mapper arena form (Mapper.{hpp,cpp}), tests/strings_selftest.cpp +

@@ -522,3 +522,29 @@ Proposed StringsDesign edits (for the integrator to fold in):
   0)`.
 - **§1.3/§1.4** counts: 11 groups consumed by ?WRITE_SCREEN, 8 copied
   out (§1.5 above).
+
+---
+
+## 10. Phase B findings (Sep 6)
+
+- **F-B1 — the library read length words zero-extended; the compiler
+  reads them sign-extended.** First slice-3 K=1 leg diverged at
+  DISPLAY_INVENTORY's `ac1 = cmp([@record − 62, varying], [@IN_BUFFER,
+  varying])` (7016816B, block 70168150): the record field holds 0xFFFF on
+  the login path; the master's `XNLDA 1,[ac2+0x7FC2]` yields −1 and WCMP
+  runs a one-byte DESCENDING string 1 (result +1); `EagleString::varying`
+  gave 65535 and my executor faulted on it. Fixed in
+  hw/strings/EagleString.cpp (`int16_t` cast, citing EagleGeneral.cpp:
+  51–52); self-test case 1c′ added (RED on P30's line, GREEN after; the
+  teeth build still RED). **O5 reversed**: no length-range fault in the
+  executor — the master does not fault, so the clone may not; 32 K stays
+  a grammar check on constants only. Erratum in docs/Project30/REPORT.md.
+- **Indirect EAs render as `R[...]`.** The census modelled `XNLDA
+  1,@[ac3-12]` as a plain `W[fp-12]` load; the IR must spell the
+  hardware's bit-31 chain resolution (`M16[R[wp(ac3, -12)]]`, exactly as
+  lower.py renders the instruction). 7 sites, all through by-reference
+  argument pointers. Census tool fixed (tag 'ind' on the load).
+- Emitted line counts: slice 1 → 535 statements / 1,787 embeds; slice 2
+  → 609 / 1,713; slice 3 → 652 / 1,670 (book), 3,549 (stock) — on the
+  prediction. Book and stock carry the same 652 string lines; lower.py's
+  strings.ledger and p31.tsv agree pc-for-pc and text-for-text.

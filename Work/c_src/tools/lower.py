@@ -1256,9 +1256,9 @@ def main():
             sum(1 for r in a.str_rows.values() if r["verdict"] == "EMIT")))
         if a.strings_census:
             with open(a.strings_census, "w", newline="\n") as f:
-                f.write("# P31 string ledger: site op emitted reason | ir  (lower.py --strings-slice %d)\n" % a.strings_slice)
+                f.write("# P31 string ledger: site op emitted reason <TAB> ir  (lower.py --strings-slice %d)\n" % a.strings_slice)
                 for site, op, ok, why, ir in sorted(sts):
-                    f.write("%08X %s %s %s | %s\n" % (site, op, "emitted" if ok else "REFUSED", why or "-", ir))
+                    f.write("%08X %s %s %s\t%s\n" % (site, op, "emitted" if ok else "REFUSED", why or "-", ir))
     for reason, lst in sorted(skipped.items()):
         print("  skipped %4d  %s  (e.g. %08X)" % (len(lst), reason, lst[0]))
     if folds:

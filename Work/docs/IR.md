@@ -1,6 +1,10 @@
 # quest.ir — THE IR SPECIFICATION (consolidated, standalone)
 
-Version: **ir 4** (Project 28, Sep 5 2026 — the `rt_call` terminator:
+Version: **ir 5** (Project 31, Sep 6 2026 — located strings: the
+`[@a, n] = piece` / `[@a, n varying] = piece` assignments, `ac1 =
+cmp(piece, piece)` and `words(@d, k) = words(@s, k)`, executed on the
+P30 string library; docs/Project31/{Census,REPORT}.md, §5.8). ir 4
+(Project 28, Sep 5 2026) was the `rt_call` terminator:
 the 987 game→runtime LCALL sites with their argument pushes folded into
 PL/I-order argument expressions, real stack in both modes; plus LNDO,
 the LDSP pair and the Nova LOAD forms; docs/Project28/{Census,
@@ -35,12 +39,14 @@ decode/execute path for instructions, calls, and rets).
 
 ## 2. File structure
 
-    ir 4
+    ir 5
     mode <stock|book>
     source  <path> sha256=<hex>
     blocks  <path> sha256=<hex>
     pushmap <path> sha256=<hex>
     argmap  <path> sha256=<hex>
+    strings <path> sha256=<hex>     <- ir 5, present when string statements were emitted
+                                       (docs/Project31/p31.tsv, the per-site artifact)
 
     block <hex8> seg <hex8>
     <block lines...>
@@ -76,6 +82,9 @@ addresses; blocks are single-entry, so statements need no identities.
                                    with all hooks. <text> is audit
                                    trail only — never parsed.
     <lvalue> = <expr>              STATEMENT (addressless). §5.
+    <located> = <piece>            STRING STATEMENT (P31, ir 5). §5.8.
+    ac1 = cmp(<piece>, <piece>)    STRING STATEMENT: WCMP. §5.8.
+    words(@e, k) = words(@e, k)    STRING STATEMENT: WBLM. §5.8.
     call <tgt> args=<n> marker=<hex8> site=<hex8> ret=<hex8>
                                    Decorated call. TERMINATOR. §6.
     rt_call <callee>(<expr>, ...) site=<hex8>
@@ -394,6 +403,106 @@ NOT wrapped in trunc16 (ruling R6). The result conventions listed
 not judged — see Project26/Census.md §2d and REPORT §3 for the open
 manual question.
 
+### 5.8 Located strings (Project 31, ir 5 — docs/Project29/StringsDesign.md §2–§4, docs/Project31/Census.md)
+
+    located := [@<addr>, <n>]              ; fixed CHAR(n): n bytes at the BYTE address <addr>
+             | [@<addr>, <n> varying]      ; CHAR(n) VARYING: length word at the WORD address
+                                           ;   <addr>, data at <addr>+1; capacity n
+             | [@<addr>, varying]          ; a varying READ whose declared capacity the site
+                                           ;   does not reveal (length from the length word);
+                                           ;   sources only — never an lvalue
+    piece   := [@0xW:b, "<text>"]          ; a literal: located, contents known (quest.strings);
+                                           ;   0xW:b its byte address in the image; length =
+                                           ;   the byte count of <text>
+             | located
+    <addr>  := any pure expr.  For a FIXED string a byte-pointer VALUE (bp(...), 0xW:b, a
+               register holding one, or such a value + a byte count) used RAW, as M8 is.
+               For a VARYING string a word address, wrapped into the block's segment
+               exactly like an M16 index.  A register is a legal address ([@ac2, 13]:
+               the setup was kept rather than folded — P31 ruling O4).
+    <n>     := a constant 0..32767.
+
+    stmt   += <located> = <piece>          ; PL/I assignment
+            | ac1 = cmp(<piece>, <piece>)  ; WCMP: cmp(string 1, string 2) = -1/0/+1 in ac1
+            | words(@<addr>, <k>) = words(@<addr>, <k>)   ; WBLM: k words, sequential
+                                           ;   ascending; <k> a constant or a pure expr
+
+Literal escaping: printable 0x20..0x7E except `"` `\` `;` are literal;
+everything else is `\xHH` (two upper-case hex digits); `;` MUST be
+escaped (comments strip first, §2). The loader unescapes.
+
+SEMANTICS — the statement IS the instruction sequence it replaces (the
+WCMV / WCMP / WBLM plus the contiguous run of pure operand producers
+before it: NLDAI/WLDAI/WMOV/XNLDA/XWLDA/LNLDA/LWLDA/XLEF/LLEF/XLEFB/
+LLEFB/XLDB/LLDB/WLDB/ZEX/SEX and, for a varying destination, the
+compiler's XNSTA length-word store), and the executor calls the P30
+library (hw/strings/EagleString.hpp), which mirrors EagleSpecial's arms
+byte for byte and writes the residues (StringsDesign §3) itself:
+
+- `[@a, n] = piece`: `assign_fixed` — exactly n bytes written: the first
+  min(n, len) from the piece, the rest 0x20 (source exhausted); the
+  source truncated when longer.  Residues: ac0 = 0, ac1 = len − min(n,
+  len), ac2 = a + n, ac3 = src + min(n, len), c = (len > n); ovr
+  untouched (B-1).
+- `[@a, n varying] = piece`: `assign_varying` — the piece is evaluated
+  FIRST (its length word read), then the length word at `a` := min(len,
+  n), then a copy of min(len, n) bytes to `a`+1 (never pads: the
+  transferred count never exceeds the source).  Residues as above with
+  the transferred count.  The compiler's min shape (`WSGE/WSLE + WMOV`
+  diamond) stays in the CFG; the statement in the join computes the min
+  itself and the residues make ac0..ac3 agree (P31 Census §5).
+- `ac1 = cmp(s1, s2)`: `compare` — string 1 = the master's ac3/ac1, string
+  2 = ac2/ac0; both read until both counts are exhausted, the shorter
+  padded with blanks, stop at the first unequal pair; ac1 = −1/0/+1; ac0
+  = string-2 count at the stop; ac2/ac3 = pointers at the stop, ONE PAST
+  the failing byte on a mismatch (B-4 reproduced); c untouched.
+- `words(@d, k) = words(@s, k)`: `block_move` — k words one at a time,
+  addresses stepped after each store, which is what makes the 12
+  self-overlapping fills of Quest (src = dst − 1 or − 2) well-defined;
+  ac1 = 0, ac2 = s + k, ac3 = d + k; ac0, c untouched.
+- A varying's length word is read as XNLDA reads it — SIGN-EXTENDED
+  (EagleGeneral.cpp:51–52): 0xFFFF is the count −1, a one-byte DESCENDING
+  string, and the master runs it (DISPLAY_INVENTORY 7016816B on the login
+  path).  No length-range fault (P31 finding F-B1).
+
+LOADER REFUSES: an `ir 4` file; `n` not a constant or ≥ 32768; a
+literal without a `0xW:b` constant address, outside the block's segment,
+≥ 32 K, with an escape other than `\xHH`, or containing a raw `;`;
+`[@a, varying]` as an lvalue; a varying destination without a capacity;
+a `cmp` whose lvalue is not `ac1`; `words()` whose two counts differ
+textually; t-place reads before write anywhere in the operands.
+
+EXECUTOR FAULTS (loud): a literal whose bytes differ from the image —
+checked LAZILY, at the FIRST execution of each literal-bearing statement,
+through `Memory::read_byte` (the normal path; a pre-scan would change
+demand-page timing — user ruling): `IR literal mismatch [block, stmt] at
+byte j of 0xW:b`; a negative `words()` count; every fault the library
+throws (segment crossing per byte, G-3; WBLM indirect bit, G-2), with
+`[IR block, stmt]` appended.
+
+Execution model: registers are materialised to machine.ac before the
+library call and re-read after (the library writes ac0–ac3 and c
+directly, like an instruction's arm); statements do not advance
+instruction_count and do not fire the Capture hook (as every statement);
+the first execution of each string statement logs
+`IRExec: first execution of string statement <kind> in block <pc> stmt <i>`
+(coverage evidence, the battery's verdict lines).
+
+Emitter (tools/lower.py `--strings-sites docs/Project31/p31.tsv
+--strings-slice {0..3} --strings-census`): the per-site artifact is
+produced by tools/string_sites.py `--p31` (the census tool's symbolic
+evaluator renders the four operands and decides EMIT/REFUSE); lower.py
+CONSUMES it — provenance (dis/blocks/mem sha256) checked against its own
+inputs, every fold pc re-validated (in the site's block, before the site,
+a pure producer or the absorbed XNSTA, nothing but LDAFP between the
+first folded pc and the site) — and echoes the folded instructions after
+`<-` in the statement's comment.  Slice 1 = the 535 literal assignments,
+2 = + the other located assignments (74), 3 = + cmp (31) and words (12);
+652 sites in all, 124 refused with the reason in the artifact (P32's
+copy-outs / substr / chain capacities, P33's temps, 6 needing the
+t-place form).  Slice 0 reproduces the ir 4 artifacts byte for byte
+except the version line.
+
 ### 5.6 Class cap — what lower.py emits
 
 Everything in Project26/Census.md buckets (a), (b) and the ruled-in
@@ -422,8 +531,10 @@ L-form EA and pc+4 fall-through, EagleGeneral.cpp:225–236), the LDSP
 pair (§6), and the 987 runtime call sites as `rt_call` (§6).
 Everything else stays an instruction — in particular indirect XJMP,
 DIVX/WDIVS, the two LDSP-fed `DERR 17` sinks (terminal, verified
-pairs), the string/WMSP/stack-write family, calls (undecorated),
-frames, floats. The cap widens by extraction, never by assumption.
+pairs), the string/WMSP/stack-write family (since ir 5: minus the 652
+located-string sites of §5.8; the append chains, WSTB, tail splits and
+CALLRESULT pieces are P32, the WMSP temps and STASP P33), calls
+(undecorated), frames, floats. The cap widens by extraction, never by assumption.
 
 ### 5.7 Worked example (an emitted block, ir 3 grammar — unchanged in ir 4)
 
@@ -616,6 +727,19 @@ Flag-conversion (add→+ where flags are provably dead) is parked with
 direction ruled: MathDesign §5.
 
 ## 9. Version history
+
+ir 5 (Project 31, Sep 6 2026 — docs/Project31/{Census,REPORT}.md,
+docs/Project29/StringsDesign.md): located strings — `[@a, n]`, `[@a, n
+varying]`, `[@a, varying]` (read), the literal `[@0xW:b, "text"]`; the
+statements `<located> = <piece>`, `ac1 = cmp(<piece>, <piece>)`,
+`words(@d, k) = words(@s, k)` executed on the P30 library
+(hw/strings/EagleString) with the §3 residues; the `strings` provenance
+line; lazy literal verification.  652 WCMV/WCMP/WBLM sites lowered (528
+`v = 'lit'`, 74 `v = t` in every pad/truncate form incl. the 10 min-shape
+joins, 7 `fixed = 'lit'`, 31 compares, 12 word fills); embeds 2,322 →
+1,670 (book), 4,201 → 3,549 (stock); sync list unchanged.  Superset of
+ir 4; the loader refuses `ir 4` files (regenerate artifacts and binaries
+together, as always).
 
 ir 1 (Project 23 phase 1): @pc-prefixed statements, `embed` keyword,
 `end` / `end fall`, per-statement pcs. Superseded; loaders refuse it.

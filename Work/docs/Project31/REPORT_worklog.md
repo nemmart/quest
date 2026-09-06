@@ -35,3 +35,23 @@
   §1.3–1.5 on the regenerated census: all hold (19/19, 19/19, 57/57);
   count correction 11 ?WRITE_SCREEN groups + 8 copy-outs (not 12 + 7).
   Census.md §1.5, §9 added. Waiting for P30 on main (043 re-run).
+
+## Sep 6 2026 — Phase B
+
+- Rebased onto main @ 64f0cc3 (P30 merged). Literal form switched to the
+  merged design's `[@0xW:b, "text"]`; p31.tsv became the emitter's
+  provenance-headed artifact (fold pcs + IR text).
+- lower.py --strings-sites/--strings-slice/--strings-census; slice 0
+  byte-identical to P28 (header aside); slices 1/2/3 → 1,787 / 1,713 /
+  1,670 embeds. IRExec ir 5 parser + executor on the library, lazy
+  literal check, coverage line.
+- K=1 gates: slice 0 stock, slice 1 book+stock, slice 2 book: 0 div.
+  Slice 3 diverged at DISPLAY_INVENTORY 7016816B: (a) indirect EAs must
+  render as R[] (census fix, 7 sites); (b) F-B1 — the library
+  zero-extended the length word, the master's XNLDA gives −1 (a
+  descending compare). Library fixed with citation, self-test 1c′ (RED
+  before, GREEN after), O5 runtime fault removed. Slice 3 book/stock
+  k1fo and book k1play: 0 div.
+- Artifacts regenerated (slice 3); strings.ledger == p31.tsv; IR.md ir 5
+  §5.8; Provenance; P30 erratum; Census §10; task 044 (values produced
+  by the exact commands); REPORT.

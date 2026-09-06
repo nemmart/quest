@@ -199,3 +199,15 @@ listed.
   after each append; `arena_unmap_frame(wfp)` at WRTN and at the ON-pop
   restore point. `ClaimDelta` hooks at the 57 WMSP / 19 STASP pcs and
   the same two frame exits; `check()` at the pair compare.
+
+## Erratum (P31, Sep 6 2026)
+
+`EagleString::varying()` zero-extended the length word; the compiler
+loads a length word with XNLDA, which SIGN-extends (EagleGeneral.cpp:
+51–52), so 0xFFFF is the count −1 (a one-byte descending string).
+DISPLAY_INVENTORY's compare at 7016816B reads a record field holding
+0xFFFF on the login path and the master runs WCMP with ac1 = −1. Fixed
+in P31 (one line, cited in the source); tests/strings_selftest.cpp gained
+case 1c′ (raw 0xFFFF/0xFFFE/0x8000/0x7FFF/0 through `varying()` for a
+copy and a compare), RED on the P30 line, GREEN after. See
+docs/Project31/Census.md §10 (F-B1).
