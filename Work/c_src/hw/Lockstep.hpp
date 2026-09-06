@@ -152,6 +152,11 @@ public:
   // hang). Idempotent; either role may arrive first.
   static void retire_ordinal(Machine* machine);
   static std::atomic<bool> aborting;
+  // P33-C: set by the graceful shutdown (Launch's SIGINT/SIGTERM path)
+  // before OS::shutdown_all halts the tasks. A halt cuts a batch mid-way
+  // (Machine::run breaks on halt_ptr); the pair a cut batch forms is not
+  // a divergence and is never compared. docs/Project33/REPORT-C.md §2.4.
+  static std::atomic<bool> halting;
   static std::atomic<bool> suppress_save;
 
 private:

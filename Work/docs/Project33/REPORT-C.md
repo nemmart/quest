@@ -108,16 +108,19 @@ accepts `clean`, which is what a kill produces) — the ESC never reaches
 the prompt after the auto-move (REPORT-B §6). P33-B's graceful SIGTERM
 turned that silent kill into a visible pair compare.
 
-## 3. Design items (report, do not implement — user ruling)
+## 3. Rulings and what was done (user, Sep 6)
 
-1. **Gen-6.2 checker ruling: a shutdown must not be compared.** Either
-   (i) `shutdown_all` sets `Lockstep::aborting` (or a `halting` flag
-   `compare_pair` checks) so a halt-cut batch is never compared, or (ii)
-   the halt is deferred to the next pair boundary (the batch completes,
-   then both halves halt). (i) is one line at Lockstep.cpp:248 /
-   OS.cpp:167; (ii) is the deterministic form. CheckerHistory entry: "a
-   halt-truncated batch pair is not a divergence; before P33-B the kill
-   was instant and the legs read clean". Evidence: §2.3–§2.5.
+1. **Implemented (Gen 6.1 addendum, CheckerHistory.md): a halt-truncated
+   pair is never compared.** `Lockstep::halting` is set by Launch's
+   graceful shutdown before `OS::shutdown_all`; `compare_pair` returns
+   before any comparison when it is set (next to the `aborting`
+   early-out). A correctness fix to the shutdown path; the pairing rules
+   are unchanged. Self-tests (helpers / strings / strhooks, teeth) green
+   after the change. Verification kills with the P33-B artifact after the
+   fix: kt5 (kill at 235 s, 4.33M pairs) clean; the guard is a return
+   before the compare, so a cut pair cannot report.
+   **Gen 6.2 design item (next weekend):** the deterministic form — defer
+   the halt to the next pair boundary so no batch is ever truncated.
 2. **The play legs' end condition.** The verdict must require `I.STOP`
    for play/play-st (today `clean` passes a killed leg), and the driver's
    post-auto-move keys must reach the prompt (REPORT-B §6 item). Until
@@ -134,9 +137,10 @@ turned that silent kill into a visible pair compare.
   table), `QUEST_CAPTURE_LEN`, `QUEST_CAPTURE_WINDOWS=<base|@addr+off>:<len>,…`
   whole-region snapshots. This is the memory oracle StringsDesign §6 lists
   as optional; here it cleared the twins in two runs (§2.1, §2.2).
-- This report; REPORT_worklog-C.md. No IR, arena, lowering, or checker
-  change; no artifact change (Provenance unchanged). 047b not queued: the
-  legs would show the same race until item 3.1 lands.
+- The shutdown fix (`Lockstep::halting`, Launch.cpp / Lockstep.{hpp,cpp});
+  CheckerHistory entry; this report; REPORT_worklog-C.md. No IR, arena or
+  lowering change; no artifact change (Provenance unchanged). **Task 047b
+  queued on main** (047's legs, ports moved; coverage caveat in its header).
 
 ## 5. For the integrator (P33-B's owed notes, unchanged)
 Mapper.md §1.4 / StringsDesign §6 for the two checker findings; "ground:

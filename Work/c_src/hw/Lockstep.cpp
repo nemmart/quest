@@ -247,6 +247,8 @@ void Lockstep::compare_pair(QueueEntry* master, QueueEntry* clone) {
   // divergence.
   if(aborting.load())
     return;
+  if(halting.load())
+    return;              // P33-C: a shutdown-truncated pair is not compared
 
   // One-sided terminal arrival is structural divergence (same-address
   // one-sided arrival is impossible for emulated convergence, but a native
@@ -391,6 +393,7 @@ bool Lockstep::terminal_abort_pending(QueueEntry* master, std::string* msg) {
   return true;
 }
 std::atomic<bool> Lockstep::aborting{false};
+std::atomic<bool> Lockstep::halting{false};
 std::atomic<bool> Lockstep::suppress_save{false};
 
 void Lockstep::retire_ordinal(Machine* machine) {

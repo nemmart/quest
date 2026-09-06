@@ -25,3 +25,8 @@
 - User correction taken: C_A_LISTENER is dead code (ctrl-C/ctrl-A
   listener); its INTWT poll only throws at the kill. Report written;
   no mediator/shutdown change implemented (design items §3).
+- Ruling: implement the one-line form. Lockstep::halting (set in Launch
+  before shutdown_all; compare_pair early-out); rebuilt; self-tests green
+  (strhooks teeth confirmed). CheckerHistory Gen 6.1 addendum. kt5 (P33-B
+  artifact, SIGTERM at 235 s, 4.33M pairs): clean. Task 047b written
+  (047's legs, ports 8891-8907) — queued on main.
