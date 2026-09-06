@@ -371,6 +371,7 @@ int main(int argc, char* argv[]) {
   }
 
   signal(SIGINT, sigint_handler);
+  signal(SIGTERM, sigint_handler);   // P33-B: the battery ends clean legs with SIGTERM — take the same graceful path (verdict lines at shutdown)
 
   // Wait until all processes have terminated
   bool shutdown_sent = false;

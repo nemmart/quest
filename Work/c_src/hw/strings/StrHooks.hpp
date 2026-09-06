@@ -68,10 +68,10 @@ struct HookPc {
 };
 
 struct ArenaEvent {
-  enum Kind : uint8_t { Bind, Unmap } kind;
-  uint32_t arena_addr;    // Bind
-  int32_t  wfp;           // Bind: the master's wfp; Unmap: the frame
-  uint32_t master_addr;   // Bind
+  enum Kind : uint8_t { Bind, Unmap, ClaimIns, ClaimRel } kind;
+  uint32_t arena_addr;    // Bind; ClaimIns: the claim's words (w)
+  int32_t  wfp;           // Bind: the master's wfp; Unmap/ClaimRel: the frame; ClaimIns: the claiming frame
+  uint32_t master_addr;   // Bind; ClaimIns: the insertion point p (master no-claim coordinates)
 };
 
 class MachineHooks;
@@ -129,6 +129,7 @@ public:
   void frame_exit(int32_t pre_wfp, bool unwind = false);
   void onpop(int32_t restored_wfp);            // I.GOTO landing: every frame with wfp >= restored
   int32_t delta(int32_t wfp) const { return delta_.delta(wfp); }
+  int32_t outstanding() const { return delta_.total(); }   // all live frames (P33-B: the wsp term)
   const ClaimDelta& claims() const { return delta_; }
 
   // Counters (verdict lines).

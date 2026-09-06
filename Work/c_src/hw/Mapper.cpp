@@ -116,6 +116,54 @@ uint32_t Mapper::encode(Form f, uint32_t word, uint32_t low_bit) {
 // ---- A: the piecewise-affine map, one walk, direction-flagged ----
 
 uint32_t Mapper::map_word(uint32_t u, Dir dir, const LiveRecord** rec) const {
+  // P33-B: the claim-insertion layer sits OUTSIDE the book/compression leg:
+  // master = book(u) + shift(book(u)); clone = book^-1(m - shift^-1(m)).
+  if(claims_.empty())
+    return map_word_book(u, dir, rec);
+  if(dir == Dir::ToMaster) {
+    if(is_arena(u)) {                 // a twin word (the inverse of the temp lookup above): its bound row
+      const ArenaRow* r = arena_row(u);
+      if(r && r->master_addr != 0) { if(rec) *rec = nullptr; return r->master_addr + (u - r->arena_addr); }
+      return u;
+    }
+    uint32_t m0 = map_word_book(u, dir, rec);
+    int32_t s0 = static_cast<int32_t>(m0);
+    if(s0 > stack_bound() || is_arena(m0) || (book_ && book_->in_range(m0)))
+      return m0;
+    int32_t S = 0;
+    for(const ClaimIns& c : claims_)              // p and s0 are both no-claim coordinates
+      if(c.p < s0) S += c.w; else break;
+    return static_cast<uint32_t>(s0 + S);
+  }
+  int32_t s = static_cast<int32_t>(u);
+  if(s <= stack_bound() && !is_arena(u) && !(book_ && book_->in_range(u))) {
+    int32_t S = 0;
+    for(const ClaimIns& c : claims_) {
+      if(c.p + S + c.w < s) S += c.w;
+      else if(c.p + S < s) {
+        // Inside an outstanding claim: the master's TEMP. Its clone counterpart
+        // is the twin bound for exactly this claim (base = wsp_before + 2 =
+        // p + S + 2) — unambiguous while the claim is outstanding, which is
+        // what the design's one-directional rule guarded against. Mediated
+        // READ verification (the ?WRITE buffer IS the temp) needs it.
+        uint32_t base = static_cast<uint32_t>(c.p + S + 2);
+        for(const ArenaRow& r : arena_)
+          if(r.master_addr == base && static_cast<uint32_t>(s) < base + static_cast<uint32_t>(c.w) - 1) {
+            if(rec) *rec = nullptr;
+            return r.arena_addr + (static_cast<uint32_t>(s) - base);
+          }
+        char buf[160];
+        snprintf(buf, sizeof(buf), "MAPPER CLAIMS: master address %08X lies inside an outstanding WMSP claim (frame %08X, %d words at %08X) with no bound twin — no clone counterpart",
+                 u, static_cast<uint32_t>(c.frame), c.w, static_cast<uint32_t>(c.p + S));
+        mapper_abort(owner_, buf);
+      } else break;
+    }
+    u = static_cast<uint32_t>(s - S);
+  }
+  return map_word_book(u, dir, rec);
+}
+
+uint32_t Mapper::map_word_book(uint32_t u, Dir dir, const LiveRecord** rec) const {
   if(rec) *rec = nullptr;
   if(records_.empty())
     return u;
@@ -351,7 +399,7 @@ uint32_t Mapper::clone_location(uint32_t master_addr) const {
     snprintf(buf, sizeof(buf), "MAPPER: clone_location on an arena address %08X (arena form is clone->master only)", master_addr);
     mapper_abort(owner_, buf);
   }
-  if(records_.empty())
+  if(records_.empty() && claims_.empty())   // P33-B: claim insertions shift stock addresses too
     return master_addr;
   if(f == Form::None) {
     probe(master_addr);
@@ -502,6 +550,27 @@ int32_t Mapper::shadow_wsp(int32_t clone_wsp) const {
     if(clone_wsp >= it->W)
       return clone_wsp + it->shift_after;
   return clone_wsp;
+}
+
+// ---- P33-B: claim insertions ----
+
+void Mapper::claim_insert(int32_t frame, int32_t p, int32_t w) {
+  if(w <= 0) { char buf[96]; snprintf(buf, sizeof(buf), "MAPPER CLAIMS: claim of %d words at %08X", w, static_cast<uint32_t>(p)); mapper_abort(owner_, buf); }
+  ClaimIns c{frame, p, w};
+  auto it = claims_.begin();
+  while(it != claims_.end() && it->p <= p) ++it;
+  claims_.insert(it, c);
+}
+
+void Mapper::claim_release(int32_t frame) {
+  for(auto it = claims_.begin(); it != claims_.end();)
+    if(it->frame == frame) it = claims_.erase(it); else ++it;
+}
+
+int32_t Mapper::claim_total() const {
+  int32_t t = 0;
+  for(const ClaimIns& c : claims_) t += c.w;
+  return t;
 }
 
 // ---- the three mutations ----

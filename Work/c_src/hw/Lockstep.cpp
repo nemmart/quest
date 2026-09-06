@@ -204,8 +204,11 @@ void Lockstep::compare_pair(QueueEntry* master, QueueEntry* clone) {
       // WMSP claims in its current frame; today Δ_m == Δ_c at every pair
       // (both engines claim), after P33-B the clone's Δ is 0 and this is
       // master_wsp − clone_wsp == Δ(frame) verbatim.
-      int32_t dm = master->machine->strhooks ? master->machine->strhooks->delta(master->machine->wfp) : 0;
-      int32_t dc = clone->machine->strhooks ? clone->machine->strhooks->delta(clone->machine->wfp) : 0;
+      // P33-B: the TOTAL over live frames — at a rendezvous inside the
+      // consuming ?WRITE_SCREEN the caller's claims are still on the master's
+      // stack (a callee's Δ(wfp) is 0, its caller's is not).
+      int32_t dm = master->machine->strhooks ? master->machine->strhooks->outstanding() : 0;
+      int32_t dc = clone->machine->strhooks ? clone->machine->strhooks->outstanding() : 0;
       wsp_differs = (master->machine->wsp - dm) != (clone_side - dc);
     } else
       wsp_differs = master->machine->wsp != clone_side;
@@ -354,9 +357,9 @@ void Lockstep::compare_pair(QueueEntry* master, QueueEntry* clone) {
                  static_cast<uint32_t>(row->wfp), v.mapped, static_cast<uint32_t>(master->machine->ac[i]));
       }
     }
-    int32_t dm = master->machine->strhooks ? master->machine->strhooks->delta(master->machine->wfp) : 0;
-    int32_t dc = clone->machine->strhooks ? clone->machine->strhooks->delta(clone->machine->wfp) : 0;
-    printf("  strings: delta_master=%d delta_clone=%d (claim-free wsps: master %08X, clone %08X)\n", dm, dc,
+    int32_t dm = master->machine->strhooks ? master->machine->strhooks->outstanding() : 0;
+    int32_t dc = clone->machine->strhooks ? clone->machine->strhooks->outstanding() : 0;
+    printf("  strings: outstanding_master=%d outstanding_clone=%d (claim-free wsps: master %08X, clone %08X)\n", dm, dc,
            static_cast<uint32_t>(master->machine->wsp - dm),
            static_cast<uint32_t>(clone->machine->shadow_wsp() + clone->machine->mapper.checkpoint_offset() - dc));
   }

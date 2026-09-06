@@ -164,7 +164,7 @@ static bool load(const char* body, std::string* err) {
 
 // the compare_pair identity (symmetric Δ): claim-free wsps agree
 static bool wsp_agrees(Rig& m, Rig& c) {
-  int32_t dm = m.H().delta(m.machine.wfp), dc = c.H().delta(c.machine.wfp);
+  int32_t dm = m.H().outstanding(), dc = c.H().outstanding();
   return (m.machine.wsp - dm) == (c.machine.shadow_wsp() + c.machine.mapper.checkpoint_offset() - dc);
 }
 
@@ -223,15 +223,15 @@ static int run() {
   M.machine.ac[0] = 3;  M.exec(A1);       // claim 1: 3 wides
   expect(M.machine.wsp == S0 + 6, "group.wsp after claim 1");
   expect(M.H().delta(F1) == 6, "group.delta 6");
-  expect(StrHooks::queued(0) == 1, "group.bind queued");
+  expect(StrHooks::queued(0) == 2, "group.bind + claim-insertion queued");
   M.machine.ac[2] = 5;  M.exec(A2);       // claim 2: 5 wides
   M.machine.ac[2] = 4;  M.exec(A3);       // claim 3: 4 wides (the result temp)
   expect(M.H().delta(F1) == 24, "group.delta 24");
   expect(M.H().max_delta == 24, "group.max_delta");
-  expect(StrHooks::queued(0) == 3 && M.H().n_bind == 1 && M.H().n_rebind == 0, "group.one bind event per claim, no rebind");
+  expect(StrHooks::queued(0) == 6 && M.H().n_bind == 1 && M.H().n_rebind == 0, "group.two events per claim (bind, insertion), no rebind");
   // the clone claims too (today): same instructions, same Δ
   C.machine.ac[0] = 3; C.exec(A1); C.machine.ac[2] = 5; C.exec(A2); C.machine.ac[2] = 4; C.exec(A3);
-  expect(C.H().delta(F1) == 24 && StrHooks::queued(0) == 3, "group.clone claims, no events from the clone");
+  expect(C.H().delta(F1) == 24 && StrHooks::queued(0) == 6, "group.clone claims, no events from the clone");
   expect(wsp_agrees(M, C), "group.compare identity mid-group (both claim)");
   // drain: the row maps to the LAST claim's base (wsp_before + 2)
   StrHooks::attach(C.machine);

@@ -198,6 +198,22 @@ public:
   void arena_bind(uint32_t arena_addr, int32_t wfp, uint32_t master_addr);
   void arena_set_length(uint32_t arena_addr, int32_t length);
   void arena_unmap_frame(int32_t wfp);
+  // ---- P33-B: the master's WMSP claims as STACK INSERTIONS ----
+  // With the clone's temps in the arena, the master's stack holds extra
+  // words the clone's does not: each outstanding claim is a block of `w`
+  // words inserted at `p` (in master no-claim coordinates — the master's
+  // wsp_before minus the claims already outstanding below it). Every real-
+  // stack address above an insertion is shifted by it in the master —
+  // the callee's frame, wfp, pushed args, the pointers into them — so the
+  // stack leg adds the shift ToMaster and removes it ToClone (an address
+  // INSIDE an insertion has no clone counterpart: refused). Insertions
+  // are keyed by the claiming frame (master wfp) and released at its
+  // STASP / frame exit, from the master's hooks through the event queue.
+  struct ClaimIns { int32_t frame; int32_t p; int32_t w; };
+  void claim_insert(int32_t frame, int32_t p, int32_t w);
+  void claim_release(int32_t frame);
+  int32_t claim_total() const;
+  size_t claim_count() const { return claims_.size(); }
   // The hot-path lookup: binary search over the rows by arena address,
   // closed-end containment. nullptr when no row contains `word`.
   const ArenaRow* arena_row(uint32_t word) const;
@@ -276,6 +292,8 @@ private:
   bool main_task_ = false;                    // set at configure; asserted at every push
   int32_t latched_diff_ = 0;                  // I2: wsl − heap_break, latched at first push
   std::vector<LiveRecord> records_;
+  std::vector<ClaimIns> claims_;    // sorted by p
+  uint32_t map_word_book(uint32_t u, Dir dir, const LiveRecord** rec) const;
   std::vector<ArenaRow>   arena_;             // P30: sorted by arena_addr; static after configure_arena
 };
 

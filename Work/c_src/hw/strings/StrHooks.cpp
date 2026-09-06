@@ -238,10 +238,12 @@ void StrHooks::drain(Machine& clone) {
   std::vector<ArenaEvent> ev;
   ev.swap(events_[o]);
   for(const ArenaEvent& e : ev) {
-    if(e.kind == ArenaEvent::Bind)
-      clone.mapper.arena_bind(e.arena_addr, e.wfp, e.master_addr);
-    else
-      clone.mapper.arena_unmap_frame(e.wfp);
+    switch(e.kind) {
+      case ArenaEvent::Bind:     clone.mapper.arena_bind(e.arena_addr, e.wfp, e.master_addr); break;
+      case ArenaEvent::Unmap:    clone.mapper.arena_unmap_frame(e.wfp); clone.mapper.claim_release(e.wfp); break;
+      case ArenaEvent::ClaimIns: clone.mapper.claim_insert(e.wfp, static_cast<int32_t>(e.master_addr), static_cast<int32_t>(e.arena_addr)); break;
+      case ArenaEvent::ClaimRel: clone.mapper.claim_release(e.wfp); break;
+    }
   }
 }
 
@@ -304,8 +306,12 @@ void MachineHooks::wmsp(uint32_t pc, int32_t ac, int32_t wsp_before, int32_t wsp
              pc, wsp_after - wsp_before, ac, row.block);
     hook_abort(&m_, buf);
   }
+  int32_t total_before = delta_.total();
   delta_.claim(wfp, ac);
   n_claim++;
+  // P33-B: the claim as a stack insertion for the clone's stack leg (master
+  // no-claim coordinates: wsp_before minus the claims outstanding below it)
+  emit(ArenaEvent{ArenaEvent::ClaimIns, static_cast<uint32_t>(2 * ac), wfp, static_cast<uint32_t>(wsp_before - total_before)});
   int32_t d = delta_.delta(wfp);
   if(d > max_delta) max_delta = d;
   uint32_t master_addr = static_cast<uint32_t>(wsp_before + 2);   // LDASP r; WADI 2,r before every WMSP (57/57)
@@ -377,6 +383,7 @@ void MachineHooks::stasp(uint32_t pc, int32_t old_wsp, int32_t new_wsp) {
   }
   delta_.release(wfp, old_wsp, new_wsp);
   n_release++;
+  emit(ArenaEvent{ArenaEvent::ClaimRel, 0, wfp, 0});
   if(delta_.delta(wfp) != 0) {                  // every claim of the group was hooked and sized right
     char buf[200];
     snprintf(buf, sizeof buf, "STASP %08X (block %08X): delta after release is %d, not 0 — a claim of this group is unhooked or mis-sized",

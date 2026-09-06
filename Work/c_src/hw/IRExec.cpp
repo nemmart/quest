@@ -313,6 +313,11 @@ IRExec* IRExec::load_from_env() {
   const char* path = getenv("QUEST_IR");
   if (!path)
     return nullptr;
+  // P33-B: the twins an ir 6 file names come from quest.arena; it must be
+  // loaded BEFORE the IR (Launch loads the IR before any process exists —
+  // RTStubs::initialize asks again, idempotently).
+  if (!strings::Arena::load_from_env())
+    refuse("QUEST_ARENA could not be loaded");
   if (!Lockstep::enabled)
     refuse("QUEST_IR requires -lockstep (only the clone dispatches IR; "
            "a non-lockstep run would silently ignore it)");
