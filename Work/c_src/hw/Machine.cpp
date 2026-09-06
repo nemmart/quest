@@ -1,4 +1,5 @@
 #include "Machine.hpp"
+#include "strings/StrHooks.hpp"
 #include "IRExec.hpp"
 #include "AddressBook.hpp"
 #include "../os/OSProcess.hpp"
@@ -245,6 +246,12 @@ uint32_t Machine::run_steps(uint32_t address, int32_t count) {
   // batch"; the counter is batch-local by construction.
   uint32_t blocks_since_sync = 0;
 
+  // P33-A string checker: attach the per-machine hook state (arena rows
+  // configured once) and, on the clone, drain the master's queued arena
+  // events before this batch runs anything (StrHooks.hpp item 3).
+  if(strings::StrHooks::active)
+    strings::StrHooks::attach(*this);
+
   pc = address;
   while(count > 0) {
     if(halt_ptr && *halt_ptr) break;
@@ -375,7 +382,8 @@ uint32_t Machine::run_steps(uint32_t address, int32_t count) {
     // AC on both roles before anything at pc runs (the clone's IR block
     // for pc has not started; it reads machine.ac on entry). One shot.
     if(process->poke_armed &&
-       static_cast<uint32_t>(pc) == RTStubs::poke_pc) {
+       static_cast<uint32_t>(pc) == RTStubs::poke_pc &&
+       (RTStubs::poke_role == 0 || RTStubs::poke_role == lockstep_role)) {   // P33-A :CLONE/:MASTER suffix
       process->poke_armed = false;
       fprintf(stderr, "RTStubs: POKE firing at %08X: ac%d %08X -> %08X\n",
               static_cast<uint32_t>(pc), RTStubs::poke_ac,

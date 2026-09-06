@@ -14,6 +14,7 @@ namespace os { class OSProcess; class OSTask; }
 namespace hw {
 using namespace debug;
 using namespace os;
+namespace strings { class MachineHooks; }
 
 class MachineThread;
 
@@ -87,6 +88,12 @@ public:
   // forwarders, never the Mapper itself. The translation surface is the
   // three purpose-named calls; there is no direction-flagged public map.
   Mapper mapper;
+  // P33-A (docs/Project33/REPORT.md): the string-family checker hooks —
+  // nullptr unless QUEST_STRINGS_CHECK=1 (attached by strings::StrHooks at
+  // the first run_steps). The three instruction arms (EagleStack WMSP /
+  // STASP / WRTN) and frames.cpp's clone twins test this pointer and call
+  // in; with the flag off that null test is the only trace of the checker.
+  strings::MachineHooks* strhooks = nullptr;
   Mapper::Verdict equivalent(uint32_t master_v, uint32_t clone_v) const {
     return mapper.equivalent(master_v, clone_v);
   }

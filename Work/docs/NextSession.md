@@ -7,25 +7,16 @@ synclist.p27 (13,510), string library (P30) linked, 652 located-string
 statements live. Provenance.md has the post-P31 table.
 
 In flight when we stopped:
-- **P33-A** (checker half of strings) — DONE on branch
-  p33a-checker-strings @ a05ad0f (84841c2 + a one-line self-test link
-  fix). Battery: 045 exhausted its 3 attempts on a link error in the
-  helpers self-test script (hw/strings/*.o missing) — fixed; **045b**
-  re-queued on main. If 045b is GREEN: merge the branch, fold its
-  integrator notes (NextSession block) into Mapper.md §1.4 and
-  StringsDesign §6.3 (rows keyed on master wfp; ≥ rule in MASTER
-  coordinates via frame_precedes; ON-pop STASP is 7017EC9F; Δ == 0
-  tooth is ordinary-WRTN-only, unwinds count discarded claims), add the
-  CheckerHistory entries (F2-b, readout w/w−2, R?SIGNAL + DEF?ON-is-L2
-  correction).
-- **044b** — P31's battery re-run purely for a clean record (044's
-  legs were 15/15 green; its one FAIL was a verdict-grep defect, fixed;
-  P31 is ALREADY MERGED on the leg evidence).
+- **P33-A** (checker half of strings) — **MERGED** (045b: 32/32 legs
+  green, 0 div; F2-b, readout, forced mismatch, dark flag-off all as
+  wanted; its one verdict FAIL was a grep counting the quoted assert
+  text twice — fixed in the task for the record).
+- **044b** — GREEN (15/15, same pc set=yes): P31's record is clean.
 - **P34** (readable-layer research) — running; branch p34-readable,
   reads the ir 5 book from p31-located-strings @ b4384b1 (= main's book
   now). Docs + tools/readable.py only; merge when it reports.
 
-Next weekend, in order: (1) read 045b, merge P33-A as above; (2) P32
+Next, in order: (1) P32
 (docs/Project32/PROMPT.md; Work.tgz from main after P33-A merges) —
 append chains, ≈1,670 → ≈700; (3) P33-B (docs/Project33/PROMPT-B.md)
 after P32 — the 19 p@b groups; strings retired at ≈600 embeds; (4) then
@@ -56,6 +47,23 @@ list hw/strings/*.o.
 - Follow-ups: P32 takes the 124 refusals' shapes (86 copy-outs, 15
   substr, 9 chain capacities, 6 t-place-form sites); P33 reads claim
   sizes from docs/Project31/census_raw.txt (T2-clean).
+
+## P33-A ON BRANCH (Sep 6 2026) — the string checker, dark
+- Branch p33a-checker-strings: hw/strings/StrHooks.{hpp,cpp}, quest.strhooks +
+  tools/strhooks.py, hook lines in EagleStack.cpp (WMSP/STASP/WRTN) and
+  frames.cpp, Mapper arena_bind assert (S2), Lockstep (symmetric-Δ wsp term,
+  F2-b via `terminal_abort_pending`, readout `w/w−2`, arena-row naming),
+  RTStubs (`QUEST_POKE …:CLONE|:MASTER`, loader call, verdict lines),
+  ClaimDelta range/predicate exits, Trace types `arena`/`strings`,
+  tests/strhooks_selftest (+ teeth), tests/strings_selftest wfp case.
+  **Task 045** (committed on main): 040's 15 legs with the checker ON +
+  k1fo-off + forced; check results/045-p33a-checker-strings before merging.
+- Integrator: Mapper.md §1.4 — annotate the bind's wfp rule (rows keyed on
+  the master's wfp; the mapper checks "real-stack address"), and that
+  frame exit is in master coordinates. StringsDesign §6.3 — the wsp
+  equality is now the symmetric form (§6.3's line is its P33-B special
+  case). P27 REPORT §3's `w−2/w−4` is corrected by P33-A REPORT §3.5.
+- P33-B inherits: docs/Project33/REPORT.md §7.
 
 ## P30 ON BRANCH (Sep 6 2026) — string library, dark
 - Branch p30-string-library: hw/strings/{EagleString,ClaimDelta}.{hpp,cpp},

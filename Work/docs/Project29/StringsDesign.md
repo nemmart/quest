@@ -387,10 +387,13 @@ row = (arena_addr, length, wfp, master_addr)     ; master_addr == 0 ⇒ unmapped
    top of its next batch, before any statement of the block runs.
    Appends update `length` and extend the arena image in place.
 2. **Frame exit** — WRTN (hook keyed on `pre_wfp`, unmapping every row
-   with `wfp ≥ pre_wfp` — the ≥ rule also covers the emulated I.GOTO's
+   whose frame is at or above `pre_wfp` IN MASTER COORDINATES via
+   `frame_precedes` — never numerically (P33-A: book-mode area wfps are
+   numerically above every real frame); the hooks run before the
+   area fixups — the ≥ rule also covers the emulated I.GOTO's
    single WRTN after `STAFP 2`, and the R?SIGNAL/?ERROR frame walk),
    and the ON-system pop (the I.GOTO landing stub's `STASP 0` at
-   7017EC9E restoring the target's wsp: unmap and frame-exit every row
+   7017EC9F restoring the target's wsp: unmap and frame-exit every row
    with `wfp ≥ machine.wfp`). Every row so hit is UNMAPPED
    (`master_addr = 0`); Δ for those frames asserts 0 and is erased.
    Arena memory is never freed. (P33-A survey of frame-restoring paths:

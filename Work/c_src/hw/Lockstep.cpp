@@ -8,6 +8,7 @@
 #include "MachineThread.hpp"
 #include "RTStubs.hpp"
 #include "Memory.hpp"
+#include "strings/StrHooks.hpp"
 #include "../os/OSTask.hpp"
 #include "../os/Trace.hpp"
 #include "../debug/SymbolTable.hpp"
@@ -144,6 +145,21 @@ void Lockstep::compare_pair(QueueEntry* master, QueueEntry* clone) {
   if(!master || !clone)
     return;
 
+  // P33-A F2-b: the clone detached at an IR assert inside THIS batch and
+  // the master arrived at a kind-2 (ABORT) terminal — the folded DERR's
+  // guard on one side, DERR.TRP on the other. That is the game's own
+  // fatal flaw seen by both engines: report it as the final verified
+  // pair (both pcs) and stop the world, instead of the silent early-out
+  // below (P27 F2). Consumed one-shot; a clone assert paired with a
+  // non-terminal master keeps today's detach (+ the START_TURN tripwire).
+  {
+    std::string msg;
+    if(terminal_abort_pending(master, &msg)) {
+      abort_world(msg.c_str(), master->machine, /*save=*/false);
+      return;
+    }
+  }
+
   // Detached before the compare (P25 assert_detach mid-batch, or a
   // straddling batch of a secondary ordinal after a process-wide
   // detach — the latent race detach() documents): the clone half is
@@ -181,8 +197,18 @@ void Lockstep::compare_pair(QueueEntry* master, QueueEntry* clone) {
     // the master's wsp legitimately leads the shadow by the elided arg wides.
     // The top record's stack_offset carries exactly that lead (0 whenever no
     // window is open, recovering the closed form).
-    wsp_differs = master->machine->wsp !=
-                  clone->machine->shadow_wsp() + clone->machine->mapper.checkpoint_offset();
+    int32_t clone_side = clone->machine->shadow_wsp() + clone->machine->mapper.checkpoint_offset();
+    if(hw::strings::StrHooks::active) {
+      // P33-A (StringsDesign §6.3, symmetric form — ruling S1): the
+      // claim-free wsps agree. Each engine subtracts its own outstanding
+      // WMSP claims in its current frame; today Δ_m == Δ_c at every pair
+      // (both engines claim), after P33-B the clone's Δ is 0 and this is
+      // master_wsp − clone_wsp == Δ(frame) verbatim.
+      int32_t dm = master->machine->strhooks ? master->machine->strhooks->delta(master->machine->wfp) : 0;
+      int32_t dc = clone->machine->strhooks ? clone->machine->strhooks->delta(clone->machine->wfp) : 0;
+      wsp_differs = (master->machine->wsp - dm) != (clone_side - dc);
+    } else
+      wsp_differs = master->machine->wsp != clone_side;
   }
 
   // Gen-6 (docs/Project22/BlockSyncDesign.md): the per-client block ordinal —
@@ -283,11 +309,16 @@ void Lockstep::compare_pair(QueueEntry* master, QueueEntry* clone) {
         // ABORT kind (DERR.TRP or a :ABORT test point): both engines
         // verifiably agreed the game's own fatal flaw fired here.
         // For DERR the top two stack wides are (number, address) —
-        // pushed by the DERR instruction before vectoring.
+        // pushed by the DERR instruction before vectoring. P33-A (P27's
+        // readout finding, corrected): wide_push is `wsp += 2; write at
+        // wsp`, DERR pushes address THEN code, so the code wide is AT w
+        // and the address at w−2 — exactly what DERR.TRP's own reads
+        // (`XWLDA 3,[wsp'−2]` / `[wsp'−4]` after its WPSH) take. P27's
+        // note said w−2/w−4; that was one wide too deep.
         char buf[200];
         uint32_t w=static_cast<uint32_t>(master->machine->wsp);
-        uint32_t derr_no=master->machine->memory->read_wide(w-1);
-        uint32_t derr_at=master->machine->memory->read_wide(w-3);
+        uint32_t derr_no=master->machine->memory->read_wide(w);
+        uint32_t derr_at=master->machine->memory->read_wide(w-2);
         snprintf(buf, sizeof(buf),
                  "TERMINAL-ABORT at %08X, verified on both engines "
                  "(top stack wides: %08X %08X — for DERR.TRP: number, faulting pc)",
@@ -305,6 +336,30 @@ void Lockstep::compare_pair(QueueEntry* master, QueueEntry* clone) {
   printf("\n================ LOCKSTEP DIVERGENCE ================\n");
   describe("master", master, master);
   describe("clone ", clone, master);
+  if(hw::strings::StrHooks::active) {   // P33-A: name the arena row behind an arena-valued clone AC
+    for(int i = 0; i < 4; i++) {
+      hw::Mapper::Verdict v = clone->machine->equivalent(static_cast<uint32_t>(master->machine->ac[i]),
+                                                        static_cast<uint32_t>(clone->machine->ac[i]));
+      if(v.kind == hw::Mapper::Kind::MISMATCH && hw::Mapper::is_arena(v.clone_word)) {
+        const hw::Mapper::ArenaRow* row = clone->machine->mapper.arena_row(v.clone_word);
+        if(row == nullptr)
+          printf("  ac%d: clone value %08X is an ARENA address in NO row (word %08X)\n", i,
+                 static_cast<uint32_t>(clone->machine->ac[i]), v.clone_word);
+        else if(row->master_addr == 0)
+          printf("  ac%d: clone value %08X hits UNMAPPED arena row block=%08X arena=%08X — no master temp for p@%08X\n", i,
+                 static_cast<uint32_t>(clone->machine->ac[i]), row->block, row->arena_addr, row->block);
+        else
+          printf("  ac%d: clone value %08X hits mapped arena row block=%08X arena=%08X master=%08X wfp=%08X, maps to %08X != master %08X\n", i,
+                 static_cast<uint32_t>(clone->machine->ac[i]), row->block, row->arena_addr, row->master_addr,
+                 static_cast<uint32_t>(row->wfp), v.mapped, static_cast<uint32_t>(master->machine->ac[i]));
+      }
+    }
+    int32_t dm = master->machine->strhooks ? master->machine->strhooks->delta(master->machine->wfp) : 0;
+    int32_t dc = clone->machine->strhooks ? clone->machine->strhooks->delta(clone->machine->wfp) : 0;
+    printf("  strings: delta_master=%d delta_clone=%d (claim-free wsps: master %08X, clone %08X)\n", dm, dc,
+           static_cast<uint32_t>(master->machine->wsp - dm),
+           static_cast<uint32_t>(clone->machine->shadow_wsp() + clone->machine->mapper.checkpoint_offset() - dc));
+  }
   printf("master backtrace:\n");
   master->machine->backtrace();
   printf("clone backtrace:\n");
@@ -315,6 +370,23 @@ void Lockstep::compare_pair(QueueEntry* master, QueueEntry* clone) {
 }
 
 std::atomic<bool> Lockstep::detached[64] = {};
+Lockstep::PendingAssert Lockstep::pending_assert[64];
+
+bool Lockstep::terminal_abort_pending(QueueEntry* master, std::string* msg) {
+  int32_t ord = master->machine->lockstep_ordinal;
+  if(ord < 0 || ord >= 64 || !pending_assert[ord].set)
+    return false;
+  PendingAssert pa = pending_assert[ord];
+  pending_assert[ord] = PendingAssert();
+  if(!(master->terminal && RTStubs::terminal_kind(master->address) == 2))
+    return false;
+  char b1[24], b2[24];
+  snprintf(b1, sizeof b1, "%08X", master->address);
+  snprintf(b2, sizeof b2, "%08X", pa.pc);
+  *msg = std::string("TERMINAL-ABORT at ") + b1 + ", verified on both engines: master at the kind-2 terminal, "
+         "clone IR assert at " + b2 + " (" + pa.report + ")";
+  return true;
+}
 std::atomic<bool> Lockstep::aborting{false};
 std::atomic<bool> Lockstep::suppress_save{false};
 
@@ -433,6 +505,11 @@ void Lockstep::assert_detach(Machine* m, const char* report) {
     return;                                  // idempotent
   fflush(stdout);
   fprintf(stderr, "%s\n", report);
+  if(ordinal >= 0 && ordinal < 64) {   // P33-A F2-b: one-shot for the next compare_pair
+    pending_assert[ordinal].set = true;
+    pending_assert[ordinal].pc = static_cast<uint32_t>(m->pc);
+    pending_assert[ordinal].report = report;
+  }
   os::OSProcess* clone_process = m->process;
   if(clone_process) {
     std::lock_guard<std::recursive_mutex> lock(clone_process->task_mutex);

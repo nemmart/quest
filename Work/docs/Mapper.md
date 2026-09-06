@@ -162,19 +162,36 @@ Mutation (traced like `redirect`), exactly these, keyed by wfp:
 - `configure_arena(layout)` — the static 19 rows, from an artifact at
   launch (P33; a fixture in P30's self-test). Immutable afterwards.
 - `arena_bind(arena_addr, wfp, master_addr)` — at the master's
-  first-WMSP hook of the block (block entry, `p@b = ""`); asserts the
-  row exists, ranges disjoint and inside the segment, `wfp` is the
-  owner's current wfp; length = 0.
+  first-WMSP hook of the block (block entry, `p@b = ""`), and REBOUND at
+  every later WMSP of the block to its own `wsp_before+2` (P33-A: the
+  address the group pushes is the last claim's; no rendezvous lies
+  between a group's claims). Rows are keyed on the MASTER's wfp — the
+  hook asserts `wfp == master->wfp`; the mapper asserts only that `wfp`
+  is a real-stack address (not area, not arena), because in book mode
+  the clone's wfp is an area address (P33-A S2). The rows live in the
+  CLONE's mapper (compare_pair calls clone->equivalent); the master
+  queues bind/rebind/unmap events per ordinal and the clone drains them
+  at the top of its next batch. Asserts the row exists, ranges disjoint
+  and inside the segment; length = 0.
 - `arena_set_length(arena_addr, len)` — per append; `len ≤ capacity`
   or abort (capacity overflow is the loud fault).
 - `arena_unmap_frame(wfp)` — the frame's WRTN or the ON system popping
-  it; every row with that wfp → `master_addr = 0`.
+  it (the I.GOTO landing stub's `STASP 0` at 7017EC9F); every row whose
+  frame is at or above the popped one → `master_addr = 0`. "At or
+  above" is evaluated in MASTER coordinates through `frame_precedes`
+  — never numerically: in book mode area addresses are numerically
+  above every real-stack frame (P33-A, found by the first live run) —
+  and the hooks run BEFORE `area_wrtn_fixup`/`area_unwind_to` so the
+  records the ordering needs still exist.
 
 The STASP does NOT touch the arena form (rows stay translatable until
 frame exit because the compiler leaves dead pointers in ac0/ac2/ac3
 after the release); it feeds the separate per-frame claim accumulator
-`ClaimDelta` (`master_wsp − clone_wsp == Δ(frame)`), which is not part
-of A. P30 ships the form dark (no rows bound → an arena value still
+`ClaimDelta`, kept by EACH engine on its own wfp, with the wsp compare
+`master_wsp − Δ_master == clone_wsp − Δ_clone` ("claim-free wsps agree",
+P33-A S1) — not part of A. Ordinary WRTN asserts Δ == 0 for the frames
+it erases; unwind cuts (I.GOTO, the ON-pop, R?SIGNAL's frame walk)
+discard outstanding claims silently and count them. P30 ships the form dark (no rows bound → an arena value still
 yields MISMATCH + probe, verdict unchanged); P33 wires the hooks.
 
 ## 2. The invariants

@@ -158,7 +158,7 @@ echo "k1fo-off: StrHooks lines=$OFF (want 0: the checker is dark with the flag o
 [ "$OFF" = "0" ] || FAILS=$((FAILS+1))
 # F2-b: the derr leg's final verified pair names both pcs.
 TA=$(grep -c 'TERMINAL-ABORT at 7017ED1C, verified on both engines: master at the kind-2 terminal, clone IR assert at 7015C48B' $RES/derr.err || true)
-CA=$(grep -c 'IR ASSERT FAILED \[block 7015C48B stmt 0\]: .*"DERR 17 @7015C48E"' $RES/derr.err || true)
+CA=$(grep -c '^IR ASSERT FAILED \[block 7015C48B stmt 0\]: .*"DERR 17 @7015C48E"' $RES/derr.err || true)
 PK=$(grep -c 'POKE firing at 7015C48B' $RES/derr.err || true)
 echo "derr (F2-b): poke_fired=$PK (want 2)  clone_assert=$CA (want 1)  terminal_abort_both_pcs=$TA (want 1)" | tee -a $RES/verdicts.txt
 grep -m1 'TERMINAL-ABORT' $RES/derr.err | tee -a $RES/verdicts.txt

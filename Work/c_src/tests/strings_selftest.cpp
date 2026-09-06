@@ -417,7 +417,16 @@ int main() {
     throws("clone_location(arena @)", [&] { mp.clone_location((base + 2) | 0x80000000u); });
     throws("frame_precedes(arena)", [&] { mp.frame_precedes(base, 0x70001000u); });
     throws("bind unknown row", [&] { mp.arena_bind(base + 1, R.machine.wfp, master); });
-    throws("bind wrong wfp", [&] { mp.arena_bind(base, R.machine.wfp + 2, master); });
+    // P33-A (ruling S2): rows are keyed on the MASTER's wfp, bound into the
+    // clone's mapper by the master's hooks, so "wfp == owner's wfp" was the
+    // wrong check; a bind with a different real-stack wfp is legal, an
+    // arena / area / non-positive wfp is refused.
+    mp.arena_bind(base, R.machine.wfp + 2, master);
+    expect(mp.equivalent(master, base).kind == Mapper::Kind::MAPPED, "arena.bound", "bind with a wfp other than the owner's");
+    mp.arena_unmap_frame(R.machine.wfp + 2);
+    mp.arena_bind(base, R.machine.wfp, master);
+    throws("bind wfp in arena", [&] { mp.arena_bind(base, (int32_t)Mapper::ARENA_BASE + 4, master); });
+    throws("bind wfp 0", [&] { mp.arena_bind(base, 0, master); });
     throws("bind master 0", [&] { mp.arena_bind(base, R.machine.wfp, 0); });
     throws("bind master in arena", [&] { mp.arena_bind(base, R.machine.wfp, layout[0].arena_addr); });
     throws("length overflow", [&] { mp.arena_set_length(base, (int32_t)row5.capacity + 1); });
