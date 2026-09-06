@@ -49,7 +49,15 @@ integrator note; task 047 inherits the fixes). (1) P33-B
 (docs/Project32/PROMPT.md; Work.tgz from main after P33-A merges) —
 append chains, ≈1,670 → ≈700; (3) P33-B (docs/Project33/PROMPT-B.md)
 after P32 — the 19 p@b groups; strings retired at ≈600 embeds; (4) then
-the small float + divides project, and the milestone-5b work (flat
+the small float + divides project, the milestone-5b work, and an idea
+to weigh (user, Sep 6): **P35 — recompilation as decompilation**: a
+translator from a restricted C subset (a small runtime header for the
+PL/I-isms: varying<n>, assign_padded, pad_equal, 1-based arrays, ON
+units) to our IR, via libclang; pilot PICK_X_Y then DIED against the
+P34 register-folded book; `translate(S) == IR` textually makes S a
+proven source with no soundness argument, and the same S compiles with
+gcc into native Quest — the bridge from milestone 5 to 6. Research
+prompt in the P34 shape, (flat
 graph: calls as edges, on-error edges, discharge Project27/
 assumed-foldable.txt).
 
