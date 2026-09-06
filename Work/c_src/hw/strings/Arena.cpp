@@ -64,6 +64,11 @@ bool Arena::load_file(const std::string& path, std::string* err) {
     if(!kv(t[6], "routine", v)) return fail("temp: expected routine=");
     a.routine = v;
     a.size_expr = t.size() > 7 && t[7].compare(0, 5, "size=") == 0 ? t[7].substr(5) : "";
+    if(a.bounded) {                              // an exact bound must be honoured by the capacity
+      unsigned long wides = strtoul(a.size_expr.c_str(), &e, 10);
+      if(*e || a.size_expr.empty()) return fail("temp: bound=exact needs a constant size=");
+      if(4 * wides > a.capacity) return fail("temp: capacity " + std::to_string(a.capacity) + " below the exact claim of " + std::to_string(4 * wides) + " bytes");
+    }
     if(!Mapper::is_arena(a.addr)) return fail("temp: arena address outside the segment");
     uint32_t end = a.addr + 1 + (a.capacity + 1) / 2;
     if(!Mapper::is_arena(end)) return fail("temp: capacity runs past the segment");

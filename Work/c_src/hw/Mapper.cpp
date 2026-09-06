@@ -554,12 +554,18 @@ int32_t Mapper::shadow_wsp(int32_t clone_wsp) const {
 
 // ---- P33-B: claim insertions ----
 
-void Mapper::claim_insert(int32_t frame, int32_t p, int32_t w) {
+void Mapper::claim_insert(int32_t frame, int32_t p, int32_t w, uint32_t pc) {
   if(w <= 0) { char buf[96]; snprintf(buf, sizeof(buf), "MAPPER CLAIMS: claim of %d words at %08X", w, static_cast<uint32_t>(p)); mapper_abort(owner_, buf); }
-  ClaimIns c{frame, p, w};
+  ClaimIns c{frame, p, w, pc};
   auto it = claims_.begin();
   while(it != claims_.end() && it->p <= p) ++it;
   claims_.insert(it, c);
+}
+
+bool Mapper::claim_cancel(uint32_t pc) {
+  for(auto it = claims_.rbegin(); it != claims_.rend(); ++it)
+    if(it->pc == pc) { claims_.erase(std::next(it).base()); return true; }
+  return false;
 }
 
 void Mapper::claim_release(int32_t frame) {

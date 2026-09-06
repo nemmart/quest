@@ -72,6 +72,7 @@ struct ArenaEvent {
   uint32_t arena_addr;    // Bind; ClaimIns: the claim's words (w)
   int32_t  wfp;           // Bind: the master's wfp; Unmap/ClaimRel: the frame; ClaimIns: the claiming frame
   uint32_t master_addr;   // Bind; ClaimIns: the insertion point p (master no-claim coordinates)
+  uint32_t pc = 0;        // ClaimIns: the WMSP (the clone cancels it if it claims there itself)
 };
 
 class MachineHooks;
@@ -134,7 +135,7 @@ public:
 
   // Counters (verdict lines).
   uint64_t n_bind = 0, n_rebind = 0, n_unmap = 0, n_claim = 0, n_release = 0,
-           n_frame_exit = 0, n_onpop = 0, n_unwind = 0, n_discarded_claims = 0;
+           n_frame_exit = 0, n_onpop = 0, n_unwind = 0, n_discarded_claims = 0, n_cancelled = 0;
   int32_t  max_delta = 0;
   std::string label() const;
 

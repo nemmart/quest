@@ -367,6 +367,13 @@ static int run() {
     expect(m.find("after 2 of 3 claims") != std::string::npos, "loud.stasp incomplete group", m.c_str());
   }
 
+  // ---- 7b. the twin's capacity (P33-B) --------------------------------------------
+  {
+    RIG(L, Lockstep::MASTER, 11); StrHooks::attach(L.machine); L.frame(F1, S0);
+    std::string m = throws("cap.claim over capacity", [&] { L.machine.ac[0] = 1030; L.exec(A1); });   // 4120 bytes > 4096
+    expect(m.find("quest.arena undersized") != std::string::npos, "cap.message", m.c_str());
+  }
+
   // ---- 8. F2-b -----------------------------------------------------------------
   {
     RIG(T, Lockstep::MASTER, 10);

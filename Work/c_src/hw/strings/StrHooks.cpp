@@ -241,7 +241,7 @@ void StrHooks::drain(Machine& clone) {
     switch(e.kind) {
       case ArenaEvent::Bind:     clone.mapper.arena_bind(e.arena_addr, e.wfp, e.master_addr); break;
       case ArenaEvent::Unmap:    clone.mapper.arena_unmap_frame(e.wfp); clone.mapper.claim_release(e.wfp); break;
-      case ArenaEvent::ClaimIns: clone.mapper.claim_insert(e.wfp, static_cast<int32_t>(e.master_addr), static_cast<int32_t>(e.arena_addr)); break;
+      case ArenaEvent::ClaimIns: clone.mapper.claim_insert(e.wfp, static_cast<int32_t>(e.master_addr), static_cast<int32_t>(e.arena_addr), e.pc); break;
       case ArenaEvent::ClaimRel: clone.mapper.claim_release(e.wfp); break;
     }
   }
@@ -256,12 +256,12 @@ void StrHooks::report() {
               Arena::temps()[kv.first - 1].capacity);
   }
   for(MachineHooks* h : all_)
-    fprintf(stderr, "StrHooks: %s bind=%llu rebind=%llu unmap=%llu claim=%llu release=%llu frame_exit=%llu unwind=%llu onpop=%llu discarded_claims=%llu max_delta=%d\n",
+    fprintf(stderr, "StrHooks: %s bind=%llu rebind=%llu unmap=%llu claim=%llu release=%llu frame_exit=%llu unwind=%llu onpop=%llu discarded_claims=%llu cancelled=%llu max_delta=%d\n",
             h->label().c_str(),
             (unsigned long long)h->n_bind, (unsigned long long)h->n_rebind, (unsigned long long)h->n_unmap,
             (unsigned long long)h->n_claim, (unsigned long long)h->n_release,
             (unsigned long long)h->n_frame_exit, (unsigned long long)h->n_unwind, (unsigned long long)h->n_onpop,
-            (unsigned long long)h->n_discarded_claims, h->max_delta);
+            (unsigned long long)h->n_discarded_claims, (unsigned long long)h->n_cancelled, h->max_delta);
 }
 
 void StrHooks::reset_for_tests() {
@@ -311,7 +311,9 @@ void MachineHooks::wmsp(uint32_t pc, int32_t ac, int32_t wsp_before, int32_t wsp
   n_claim++;
   // P33-B: the claim as a stack insertion for the clone's stack leg (master
   // no-claim coordinates: wsp_before minus the claims outstanding below it)
-  emit(ArenaEvent{ArenaEvent::ClaimIns, static_cast<uint32_t>(2 * ac), wfp, static_cast<uint32_t>(wsp_before - total_before)});
+  emit(ArenaEvent{ArenaEvent::ClaimIns, static_cast<uint32_t>(2 * ac), wfp, static_cast<uint32_t>(wsp_before - total_before), pc});
+  // the clone claiming here itself: the master's insertion is no difference
+  if(m_.lockstep_role == Lockstep::CLONE) { if(m_.mapper.claim_cancel(pc)) n_cancelled++; }
   int32_t d = delta_.delta(wfp);
   if(d > max_delta) max_delta = d;
   uint32_t master_addr = static_cast<uint32_t>(wsp_before + 2);   // LDASP r; WADI 2,r before every WMSP (57/57)

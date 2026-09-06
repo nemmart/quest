@@ -209,9 +209,14 @@ public:
   // INSIDE an insertion has no clone counterpart: refused). Insertions
   // are keyed by the claiming frame (master wfp) and released at its
   // STASP / frame exit, from the master's hooks through the event queue.
-  struct ClaimIns { int32_t frame; int32_t p; int32_t w; };
-  void claim_insert(int32_t frame, int32_t p, int32_t w);
+  struct ClaimIns { int32_t frame; int32_t p; int32_t w; uint32_t pc; };
+  void claim_insert(int32_t frame, int32_t p, int32_t w, uint32_t pc);
   void claim_release(int32_t frame);
+  // The clone executed the SAME WMSP itself (all-emulated run, or a group
+  // the emitter refused): its stack has the words too — the master's
+  // insertion is not a difference. Removes the (innermost) insertion with
+  // that pc; false if none.
+  bool claim_cancel(uint32_t pc);
   int32_t claim_total() const;
   size_t claim_count() const { return claims_.size(); }
   // The hot-path lookup: binary search over the rows by arena address,
