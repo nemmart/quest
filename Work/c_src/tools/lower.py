@@ -1040,6 +1040,55 @@ def fold_condition(guard, guard_block, f, dis, succs, dis_pcs, dis_index):
         die("fold %08X: degenerate condition %r" % (guard, r))
     return r
 
+
+# ---------------------------------------------------------------------------
+# P31 (ir 5): located strings.  The per-site artifact is docs/Project31/p31.tsv
+# (tools/string_sites.py --p31-tsv): for every WCMV in the P31 idioms, every
+# WCMP and every WBLM it records the verdict, the FOLD set (the contiguous
+# run of pure operand producers the statement absorbs) and the exact IR
+# line.  lower.py CONSUMES it as an artifact (assumed-foldable.txt
+# precedent): provenance (dis/blocks sha256) checked against its own
+# inputs, and every structural claim re-validated against the dis before
+# a line is emitted — the fold pcs lie in the site's block, precede the
+# site, are pure loads/moves (or the absorbed length-word store), and
+# nothing but an LDAFP sits between the first folded pc and the site.
+STR_FOLDABLE = ("NLDAI", "WLDAI", "WMOV", "XNLDA", "XWLDA", "LNLDA", "LWLDA", "XLEF", "LLEF",
+                "XLEFB", "LLEFB", "XLDB", "LLDB", "WLDB", "ZEX", "SEX", "XNSTA", "LNSTA")
+
+def parse_strings_sites(path, dis_path, blocks_path):
+    """-> {site pc: {"op","block","idiom","verdict","fold":[pcs],"ir":text}}"""
+    rows, shas = {}, {}
+    for line in open(path, encoding="utf-8"):
+        line = line.rstrip("\r\n")
+        if line.startswith("#"):
+            m = re.match(r"# (dis|blocks|mem) sha256=([0-9a-f]{64})", line)
+            if m:
+                shas[m.group(1)] = m.group(2)
+            continue
+        if not line:
+            continue
+        f = line.split("\t")
+        if len(f) != 11:
+            die("--strings-sites: bad row (%d fields): %s" % (len(f), line[:60]))
+        pc = int(f[0], 16)
+        rows[pc] = {"op": f[1], "block": int(f[2], 16), "idiom": f[4], "verdict": f[6],
+                    "fold": [int(p, 16) for p in f[9].split()] if f[9] else [], "ir": f[10]}
+    for k, p in (("dis", dis_path), ("blocks", blocks_path)):
+        if shas.get(k) != sha256(p):
+            die("--strings-sites provenance: %s sha256 %s != %s (%s)" % (k, shas.get(k), sha256(p), p))
+    if "mem" not in shas:
+        die("--strings-sites: no mem sha256 in the header")
+    return rows, shas
+
+def strings_slice_ok(row, slice_):
+    """1 = literal assignments (ASSIGN-LIT-*), 2 = + every other WCMV,
+    3 = + cmp (WCMP) and words (WBLM)."""
+    if row["op"] == "WCMV":
+        if row["idiom"].startswith("ASSIGN-LIT"):
+            return slice_ >= 1
+        return slice_ >= 2
+    return slice_ >= 3
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dis", required=True)
@@ -1067,6 +1116,11 @@ def main():
                     help="P28 leftovers: lower LNDO, the LDSP pair (assert + goto table) and the "
                          "Nova LOAD forms (pure; high half as the emulator leaves it)")
     ap.add_argument("--rt-census", help="write the per-site rt_call ledger (emitted / refused + reason)")
+    ap.add_argument("--strings-sites", help="P31 artifact: docs/Project31/p31.tsv (string_sites.py --p31-tsv)")
+    ap.add_argument("--strings-slice", type=int, default=0,
+                    help="P31 (ir 5): 0 = no string statements (ir 5 header only); 1 = literal assignments; "
+                         "2 = + the other located assignments; 3 = + cmp and words")
+    ap.add_argument("--strings-census", help="write the per-site string ledger (emitted / refused + reason)")
     a = ap.parse_args()
     global LDSP_TABLES
     LDSP_TABLES = parse_ldsp_tables(a.dis)
@@ -1101,15 +1155,24 @@ def main():
     else:
         die("need --pilot or --all")
 
-    out = ["ir 4",
+    a.str_rows = {}
+    if a.strings_slice > 0:
+        if not a.strings_sites:
+            die("--strings-slice needs --strings-sites")
+        a.str_rows, _ = parse_strings_sites(a.strings_sites, a.dis, a.blocks)
+    out = ["ir 5",
            "mode %s" % ("book" if a.book else "stock"),
            "source  %s sha256=%s" % (a.dis, sha256(a.dis)),
            "blocks  %s sha256=%s" % (a.blocks, sha256(a.blocks)),
            "pushmap %s sha256=%s" % (a.pushmap, sha256(a.pushmap)),
-           "argmap  %s sha256=%s" % (a.argmap, sha256(a.argmap)), ""]
+           "argmap  %s sha256=%s" % (a.argmap, sha256(a.argmap))]
+    if a.strings_slice > 0:
+        out.append("strings %s sha256=%s" % (a.strings_sites, sha256(a.strings_sites)))
+    out.append("")
     census = {"expr": 0, "embed": 0, "argpush": 0, "call": 0, "ret": 0,
               "goto": 0, "assert": 0, "rt_call": 0, "last": None,
-              "rt_sites": []}               # P28 ledger: (site, callee, argc, emitted, reason)
+              "rt_sites": [],               # P28 ledger: (site, callee, argc, emitted, reason)
+              "strings": 0, "str_sites": []}   # P31 ledger: (site, op, emitted, reason, ir)
 
     # P27: a guard block is lowered with its fold; its interiors are held
     # back and emitted only if the guard REFUSES (totality: never a half
@@ -1165,10 +1228,10 @@ def main():
     with open(a.out, "w", newline="\n") as f:
         f.write("\n".join(out) + "\n")
     print("wrote %s: %d blocks, %d expr, %d instr, %d argpush, %d call, "
-          "%d ret, %d goto, %d assert, %d rt_call, %d skipped"
+          "%d ret, %d goto, %d assert, %d rt_call, %d string, %d skipped"
           % (a.out, nblocks, census["expr"], census["embed"], census["argpush"],
              census["call"], census["ret"], census["goto"], census["assert"],
-             census["rt_call"], sum(len(v) for v in skipped.values())))
+             census["rt_call"], census["strings"], sum(len(v) for v in skipped.values())))
     rts = census["rt_sites"]
     if rts:
         emitted = [r for r in rts if r[3]]
@@ -1184,6 +1247,18 @@ def main():
                 f.write("# P28 rt_call ledger: site callee argc emitted reason  (lower.py --rt-slice %d)\n" % a.rt_slice)
                 for site, callee, argc, ok, why in sorted(rts):
                     f.write("%08X %s %d %s %s\n" % (site, callee, argc, "emitted" if ok else "REFUSED", why or "-"))
+    sts = census["str_sites"]
+    if a.strings_slice > 0:
+        emitted = [r for r in sts if r[2]]
+        refused = [r for r in sts if not r[2]]
+        print("  strings: emitted=%d refused=%d (slice %d; artifact EMIT rows %d)" % (
+            len(emitted), len(refused), a.strings_slice,
+            sum(1 for r in a.str_rows.values() if r["verdict"] == "EMIT")))
+        if a.strings_census:
+            with open(a.strings_census, "w", newline="\n") as f:
+                f.write("# P31 string ledger: site op emitted reason <TAB> ir  (lower.py --strings-slice %d)\n" % a.strings_slice)
+                for site, op, ok, why, ir in sorted(sts):
+                    f.write("%08X %s %s %s\t%s\n" % (site, op, "emitted" if ok else "REFUSED", why or "-", ir))
     for reason, lst in sorted(skipped.items()):
         print("  skipped %4d  %s  (e.g. %08X)" % (len(lst), reason, lst[0]))
     if folds:
@@ -1273,6 +1348,44 @@ def emit_block(start, blocks, succs, dis, dis_pcs, dis_index,
                     rt_push_pcs = {p[0] for p in rt_site.pushes}
                 else:
                     rt_site = None
+        # P31 (ir 5): string sites of this block, from the artifact.  Each
+        # site's claims are re-validated against the dis here; a failure is
+        # a die() (the artifact and the tree disagree — METHOD §10), not a
+        # refusal.  The only soft refusal is the slice gate.
+        str_emit, str_fold_pcs, str_fold_text = {}, set(), {}
+        for spc, row in a.str_rows.items():
+            if row["block"] != start:
+                continue
+            if row["verdict"] != "EMIT":
+                continue
+            if spc not in body_pcs:
+                die("strings: site %08X claims block %08X but is not in it" % (spc, start))
+            if dis[spc].split()[0].rstrip(";") != row["op"]:
+                die("strings: site %08X is %s in the dis, %s in the artifact" % (spc, dis[spc].split()[0], row["op"]))
+            if not strings_slice_ok(row, a.strings_slice):
+                census["str_sites"].append((spc, row["op"], False, "outside --strings-slice %d" % a.strings_slice, ""))
+                continue
+            sfold = row["fold"]
+            for fp_ in sfold:
+                if fp_ not in body_pcs or fp_ >= spc:
+                    die("strings: site %08X fold pc %08X is not in its block before the site" % (spc, fp_))
+                mn = dis[fp_].split()[0].rstrip(";")
+                if mn not in STR_FOLDABLE:
+                    die("strings: site %08X folds a non-foldable %s at %08X" % (spc, mn, fp_))
+                if fp_ in str_fold_pcs:
+                    die("strings: fold pc %08X claimed by two sites" % fp_)
+            if sfold:
+                lo = min(sfold)
+                for q in block_pcs[block_pcs.index(lo):block_pcs.index(spc)]:
+                    if q not in sfold and dis[q].split()[0] != "LDAFP":
+                        die("strings: site %08X: %s at %08X inside the fold run is neither folded nor LDAFP"
+                            % (spc, dis[q].split()[0], q))
+            if not row["ir"]:
+                die("strings: site %08X has EMIT but no IR text" % spc)
+            str_emit[spc] = row
+            str_fold_pcs |= set(sfold)
+            for fp_ in sfold:
+                str_fold_text[fp_] = dis[fp_]
         for k, expected in enumerate(body_text):
             if i0 + k >= len(dis_pcs):
                 die("disassembly ends inside block %08X" % start)
@@ -1287,7 +1400,21 @@ def emit_block(start, blocks, succs, dis, dis_pcs, dis_index,
                 die("terminator emitted before the last instruction in block %08X (at %08X)"
                     % (start, pc))
             handled = False
-            if pc in rt_push_pcs:
+            if pc in str_fold_pcs:
+                handled = True            # folded into a string statement (echoed there)
+            elif pc in str_emit:
+                row = str_emit[pc]
+                ir = row["ir"]
+                comment = ir.split(" ; ", 1)[1] if " ; " in ir else ""
+                ir = ir.split(" ; ", 1)[0]
+                echo = " ".join(str_fold_text[p].split(";")[0].strip() + ";" for p in sorted(row["fold"]))
+                out.append("  %s ; %s%s%s" % (ir, text, ("  <- " + echo) if echo else "",
+                                              ("  " + comment) if comment else ""))
+                census["strings"] += 1
+                census["str_sites"].append((pc, row["op"], True, "", ir))
+                census["last"] = "stmt"
+                handled = True
+            elif pc in rt_push_pcs:
                 handled = True            # folded into the rt_call terminator (echoed there)
             elif rt_site is not None and pc == rt_site.pc:
                 out.append("  %s ; %s  <- %s" % (rt_site.line(), text,

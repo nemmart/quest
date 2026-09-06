@@ -26,6 +26,7 @@
 #include "../debug/SymbolTable.hpp"
 #include "../debug/Disassembler.hpp"
 #include "Mapper.hpp"
+#include "strings/EagleString.hpp"
 #include <algorithm>
 #include <cstdio>
 #include <cstring>
@@ -375,9 +376,9 @@ void IRExec::load(const std::string& path) {
     std::string body = line.substr(b0);
 
     if (!got_header) {
-      if (body != "ir 4")
-        refuse("missing/unknown version header (want 'ir 4'; ir 3 files predate rt_call "
-               "and the P28 leftovers — regenerate with tools/lower.py)");
+      if (body != "ir 5")
+        refuse("missing/unknown version header (want 'ir 5'; ir 4 files predate the "
+               "located-string statements (P31) — regenerate with tools/lower.py)");
       got_header = true;
       continue;
     }
@@ -395,7 +396,7 @@ void IRExec::load(const std::string& path) {
     std::istringstream is(body);
     std::string tok; is >> tok;
 
-    if (tok == "source" || tok == "blocks" || tok == "pushmap" || tok == "argmap") {
+    if (tok == "source" || tok == "blocks" || tok == "pushmap" || tok == "argmap" || tok == "strings") {
       std::string fpath, sha;
       is >> fpath >> sha;
       if (tok == "blocks" && sha.empty() && fpath.find("sha256=") == std::string::npos) {
@@ -573,6 +574,93 @@ void IRExec::load(const std::string& path) {
       }
     } else if (tok == "save") {
       refuse("'save' is reserved but not implemented this tranche");
+    } else if (body.rfind("words(@", 0) == 0 || body.rfind("[@", 0) == 0 || body.rfind("ac1 = cmp(", 0) == 0) {
+      // P31 (ir 5): located-string statements (docs/IR.md §5.8).
+      st.kind = Stmt::STRING;
+      st.text = body;
+      st.str = std::make_shared<StrOp>();
+      StrOp& so = *st.str;
+      Parser p(body.c_str(), cur->start);
+      // a piece: [@<expr>, <n>] | [@<expr>, <n> varying] | [@<expr>, varying] | [@0xW:b, "text"]
+      auto piece = [&](Piece& pc, bool lvalue) {
+        if (!p.lit("[@")) p.bad("expected a located string or literal [@...]");
+        pc.addr = p.expr();
+        if (!p.lit(",")) p.bad("located string: expected , after the address");
+        p.ws();
+        if (*p.s == '"') {
+          if (lvalue) p.bad("a literal cannot be assigned to");
+          if (pc.addr->kind != Expr::CONST) p.bad("literal address must be a 0xW:b constant");
+          pc.kind = Piece::LIT;
+          pc.lit_bp = pc.addr->value;
+          if (((pc.lit_bp >> 1) & 0xF0000000u) != (cur->start & 0xF0000000u))
+            p.bad("literal address is outside the block's segment");
+          p.s++;
+          std::string out;
+          while (*p.s && *p.s != '"') {
+            if (*p.s == '\\') {
+              if (p.s[1] == 'x' && isxdigit(Parser::uchar(p.s[2])) && isxdigit(Parser::uchar(p.s[3]))) {
+                char hx[3] = {p.s[2], p.s[3], 0};
+                out.push_back(char(strtoul(hx, nullptr, 16)));
+                p.s += 4;
+              } else p.bad("literal: only \\xHH escapes are allowed");
+            } else if (*p.s == ';') p.bad("literal: ';' must be escaped as \\x3B");
+            else out.push_back(*p.s++);
+          }
+          if (*p.s != '"') p.bad("literal missing closing quote");
+          p.s++;
+          if (!p.lit("]")) p.bad("literal missing ]");
+          if (out.size() >= 32768) p.bad("literal longer than 32K");
+          pc.bytes = out; pc.n = int32_t(out.size());
+          return;
+        }
+        if (p.kw("varying")) {
+          if (lvalue) p.bad("[@a, varying] is a read form; a varying destination needs its capacity");
+          pc.kind = Piece::VARYING_NOCAP;
+          if (!p.lit("]")) p.bad("expected ]");
+          return;
+        }
+        P nn = p.primary();
+        if (nn->kind != Expr::CONST) p.bad("string capacity must be a constant");
+        if (int32_t(nn->value) < 0 || nn->value >= 32768) p.bad("string capacity must be 0..32767");
+        pc.n = int32_t(nn->value);
+        if (p.kw("varying")) pc.kind = Piece::VARYING;
+        else pc.kind = Piece::FIXED;
+        if (!p.lit("]")) p.bad("expected ]");
+      };
+      if (body.rfind("words(@", 0) == 0) {
+        so.kind = StrOp::WORDS;
+        p.s += 7;
+        so.dst.kind = Piece::FIXED; so.dst.addr = p.expr();
+        if (!p.lit(",")) p.bad("words: expected ,");
+        const char* k1 = p.s; so.k = p.expr(); std::string kt1(k1, p.s - k1);
+        if (!p.lit(")")) p.bad("words: expected )");
+        if (!p.lit("=")) p.bad("words: expected =");
+        if (!p.lit("words(@")) p.bad("words: expected words(@ on the right");
+        so.src.kind = Piece::FIXED; so.src.addr = p.expr();
+        if (!p.lit(",")) p.bad("words: expected ,");
+        const char* k2 = p.s; P kk = p.expr(); std::string kt2(k2, p.s - k2);
+        if (!p.lit(")")) p.bad("words: expected )");
+        p.end();
+        auto strip = [](std::string t) { t.erase(std::remove(t.begin(), t.end(), ' '), t.end()); return t; };
+        if (strip(kt1) != strip(kt2)) refuse("words(): the two counts differ: " + body);
+        check_treads(so.dst.addr, body); check_treads(so.src.addr, body); check_treads(so.k, body);
+      } else if (body.rfind("ac1 = cmp(", 0) == 0) {
+        so.kind = StrOp::CMP;
+        p.s += 10;
+        piece(so.src, false);            // string 1 (ac3/ac1)
+        if (!p.lit(",")) p.bad("cmp: expected ,");
+        piece(so.dst, false);            // string 2 (ac2/ac0)
+        if (!p.lit(")")) p.bad("cmp: expected )");
+        p.end();
+        check_treads(so.src.addr, body); check_treads(so.dst.addr, body);
+      } else {
+        piece(so.dst, true);
+        so.kind = (so.dst.kind == Piece::VARYING) ? StrOp::ASSIGN_VARYING : StrOp::ASSIGN_FIXED;
+        if (!p.lit("=")) p.bad("located assignment: expected =");
+        piece(so.src, false);
+        p.end();
+        check_treads(so.dst.addr, body); check_treads(so.src.addr, body);
+      }
     } else if (body.rfind("assert(", 0) == 0) {
       // P25: assert(expr) | assert(expr, "message").  Statement, never a
       // terminator.  The message may not contain '"' (grammar rule) and
@@ -955,6 +1043,85 @@ uint32_t IRExec::run_block(Machine& machine, uint32_t pc) {
           snprintf(buf, sizeof buf, "Overflow occurred in block %08X", blk->start);
           throw std::runtime_error(buf);  // attribution: block (IR2.md §6)
         }
+        break;
+      }
+      case Stmt::STRING: {
+        // P31 (ir 5): the statement replaces WCMV / WCMP / WBLM and its
+        // operand producers.  Registers are materialised, the P30 library
+        // performs the operation AND writes the residues (StringsDesign
+        // §3) into machine.ac / machine.c exactly as the instruction's arm
+        // would, and the locals are re-read.  No string semantics live
+        // here.  `site` for the library's per-byte segment check is the
+        // block start (the replaced instruction's segment).
+        StrOp& so = *st.str;
+        if (!so.executed) {
+          so.executed = true;
+          static const char* names[] = {"assign_fixed", "assign_varying", "cmp", "words"};
+          fprintf(stderr, "IRExec: first execution of string statement %s in block %08X stmt %zu\n",
+                  names[so.kind], blk->start, i);
+        }
+        for (int r = 0; r < 4; r++) machine.ac[r] = int32_t(cx.ac[r]);
+        auto piece_of = [&](Piece& pc) -> strings::EagleString {
+          switch (pc.kind) {
+            case Piece::LIT: {
+              if (!pc.verified) {              // lazily, through the normal read path (ruling)
+                for (int32_t j = 0; j < pc.n; j++) {
+                  uint32_t got = machine.memory->read_byte(pc.lit_bp + uint32_t(j)) & 0xFF;
+                  if (got != (uint8_t(pc.bytes[j]) & 0xFF)) {
+                    char buf[160];
+                    snprintf(buf, sizeof buf, "IR literal mismatch [block %08X, stmt %zu] at byte %d of 0x%X:%d (image %02X, IR %02X)",
+                             blk->start, i, j, pc.lit_bp >> 1, pc.lit_bp & 1, got, uint8_t(pc.bytes[j]) & 0xFF);
+                    throw std::runtime_error(buf);
+                  }
+                }
+                pc.verified = true;
+              }
+              return strings::EagleString::literal(pc.lit_bp, pc.n);
+            }
+            case Piece::FIXED:
+              return strings::EagleString::fixed(cx.eval(pc.addr), pc.n);   // byte pointer VALUE, raw
+            default:
+              // The length word is read as XNLDA reads it (sign-extended by
+              // the library): a value with bit 15 set is a NEGATIVE count —
+              // a descending string — and the master runs it, so no fault
+              // here (DISPLAY_INVENTORY 7016816B compares a 0xFFFF field on
+              // the login path). The 32 K limit is a grammar check on
+              // constants only.
+              return strings::EagleString::varying(*machine.memory, cx.wrap(cx.eval(pc.addr)));
+          }
+        };
+        const uint32_t site = blk->start;
+        try {
+        switch (so.kind) {
+          case StrOp::ASSIGN_FIXED: {
+            strings::EagleString src = piece_of(so.src);          // the piece FIRST (source length)
+            strings::assign_fixed(machine, site, cx.eval(so.dst.addr), so.dst.n, src);
+            break;
+          }
+          case StrOp::ASSIGN_VARYING: {
+            strings::EagleString src = piece_of(so.src);
+            strings::assign_varying(machine, site, cx.wrap(cx.eval(so.dst.addr)), so.dst.n, src);
+            break;
+          }
+          case StrOp::CMP: {
+            strings::EagleString s1 = piece_of(so.src), s2 = piece_of(so.dst);
+            strings::compare(machine, site, s2.bp, s2.len, s1.bp, s1.len);
+            break;
+          }
+          case StrOp::WORDS: {
+            uint32_t d = cx.wrap(cx.eval(so.dst.addr)), s = cx.wrap(cx.eval(so.src.addr));
+            int32_t k = int32_t(cx.eval(so.k));
+            if (k < 0) throw std::runtime_error("IRExec: FAULT words() with a negative count");
+            strings::block_move(machine, site, d, s, k);
+            break;
+          }
+        }
+        } catch (std::runtime_error& ex) {
+          char buf[200];
+          snprintf(buf, sizeof buf, "%s [IR block %08X stmt %zu]", ex.what(), blk->start, i);
+          throw std::runtime_error(buf);
+        }
+        for (int r = 0; r < 4; r++) cx.ac[r] = uint32_t(machine.ac[r]);
         break;
       }
       case Stmt::CALL: {
