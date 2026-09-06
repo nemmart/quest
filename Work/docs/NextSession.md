@@ -36,7 +36,8 @@ Also: the manual-review hardware fixes (HWFindings_Sep5.md,
 EmulatorDivergences.md), two Tools fixes (Follow: XJMP pc+2, LJSR I.GOTO
 pc+3), the runner's staging leak (bin/task_source.sh).
 
-**First items next weekend, in order**
+**First items next weekend, in order** (plain-language summary of what
+P33-B/C found and what is open: docs/Project33/FINDINGS_SUMMARY.md)
 1. **Play driver + play verdicts** (P33-C finding): the driver's
    post-auto-move keys never reach the command prompt, so every play
    leg since task 034 has ended by SIGTERM (`end=clean` was a silent
