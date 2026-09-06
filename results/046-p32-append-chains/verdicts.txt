@@ -1,18 +1,18 @@
-fo        cfg=book  K=50  div=0   guard=0  liberr_native=1  pairs=6894 blk_equal=6894 blk_mismatch=0 k_heartbeats=6255 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
-m         cfg=book  K=50  div=0   guard=0  liberr_native=1  pairs=6319 blk_equal=6319 blk_mismatch=0 k_heartbeats=5840 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=I.STOP leg=OK
-inj       cfg=book  K=50  div=0   guard=0  liberr_native=0  pairs=6662 blk_equal=6662 blk_mismatch=0 k_heartbeats=6198 gaps_over_k=0 max_gap=50 floor=1000 OK end=FATAL want=FATAL leg=OK
-abort     cfg=book  K=50  div=0   guard=0  liberr_native=0  pairs=5454 blk_equal=5454 blk_mismatch=0 k_heartbeats=5248 gaps_over_k=0 max_gap=50 floor=10 OK end=WORLD-ABORT want=WORLD-ABORT leg=OK
-play      cfg=book  K=50  div=0   guard=0  liberr_native=0  pairs=2057650 blk_equal=2057650 blk_mismatch=0 k_heartbeats=2056710 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
-inj3      cfg=book  K=50  div=0   guard=0  liberr_native=1  pairs=6782 blk_equal=6782 blk_mismatch=0 k_heartbeats=6301 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=clean,I.STOP leg=OK
-k1fo      cfg=book  K=1   div=0   guard=0  liberr_native=1  pairs=328949 blk_equal=328949 blk_mismatch=0 k_heartbeats=328345 gaps_over_k=0 max_gap=1 floor=1000 OK end=clean want=clean,I.STOP leg=OK
-derr      cfg=book  K=1   div=0   guard=0  liberr_native=0  pairs=282293 blk_equal=282293 blk_mismatch=0 k_heartbeats=281977 gaps_over_k=0 max_gap=1 floor=1000 OK end=WORLD-ABORT want=IR-ASSERT leg=FAIL
-derr-emu  cfg=emu   K=1   div=0   guard=0  liberr_native=0  pairs=285945 blk_equal=285945 blk_mismatch=0 k_heartbeats=285628 gaps_over_k=0 max_gap=1 floor=1000 OK end=WORLD-ABORT want=WORLD-ABORT leg=OK
-fo-st     cfg=stock K=50  div=0   guard=0  liberr_native=1  pairs=6610 blk_equal=6610 blk_mismatch=0 k_heartbeats=5971 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
-play-st   cfg=stock K=50  div=0   guard=0  liberr_native=0  pairs=3532240 blk_equal=3532240 blk_mismatch=0 k_heartbeats=3531202 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
-fo-emu    cfg=emu   K=50  div=0   guard=0  liberr_native=1  pairs=6581 blk_equal=6581 blk_mismatch=0 k_heartbeats=5942 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
-m-emu     cfg=emu   K=50  div=0   guard=0  liberr_native=1  pairs=6669 blk_equal=6669 blk_mismatch=0 k_heartbeats=6190 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=I.STOP leg=OK
-inj-emu   cfg=emu   K=50  div=0   guard=0  liberr_native=0  pairs=6642 blk_equal=6642 blk_mismatch=0 k_heartbeats=6178 gaps_over_k=0 max_gap=50 floor=1000 OK end=FATAL want=FATAL leg=OK
-abort-emu cfg=emu   K=50  div=0   guard=0  liberr_native=0  pairs=4937 blk_equal=4937 blk_mismatch=0 k_heartbeats=4731 gaps_over_k=0 max_gap=50 floor=10 OK end=WORLD-ABORT want=WORLD-ABORT leg=OK
+fo        cfg=book  K=50  div=0   guard=0  liberr_native=1  pairs=6821 blk_equal=6821 blk_mismatch=0 k_heartbeats=6182 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+m         cfg=book  K=50  div=0   guard=0  liberr_native=1  pairs=6749 blk_equal=6749 blk_mismatch=0 k_heartbeats=6266 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=I.STOP leg=OK
+inj       cfg=book  K=50  div=0   guard=0  liberr_native=0  pairs=6221 blk_equal=6221 blk_mismatch=0 k_heartbeats=5757 gaps_over_k=0 max_gap=50 floor=1000 OK end=FATAL want=FATAL leg=OK
+abort     cfg=book  K=50  div=0   guard=0  liberr_native=0  pairs=5474 blk_equal=5474 blk_mismatch=0 k_heartbeats=5268 gaps_over_k=0 max_gap=50 floor=10 OK end=WORLD-ABORT want=WORLD-ABORT leg=OK
+play      cfg=book  K=50  div=0   guard=0  liberr_native=0  pairs=2158841 blk_equal=2158841 blk_mismatch=0 k_heartbeats=2157919 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+inj3      cfg=book  K=50  div=0   guard=0  liberr_native=1  pairs=6097 blk_equal=6097 blk_mismatch=0 k_heartbeats=5616 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=clean,I.STOP leg=OK
+k1fo      cfg=book  K=1   div=0   guard=0  liberr_native=1  pairs=325161 blk_equal=325161 blk_mismatch=0 k_heartbeats=324557 gaps_over_k=0 max_gap=1 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+derr      cfg=book  K=1   div=0   guard=0  liberr_native=0  pairs=278654 blk_equal=278654 blk_mismatch=0 k_heartbeats=278338 gaps_over_k=0 max_gap=1 floor=1000 OK end=WORLD-ABORT want=IR-ASSERT leg=FAIL
+derr-emu  cfg=emu   K=1   div=0   guard=0  liberr_native=0  pairs=272653 blk_equal=272653 blk_mismatch=0 k_heartbeats=272336 gaps_over_k=0 max_gap=1 floor=1000 OK end=WORLD-ABORT want=WORLD-ABORT leg=OK
+fo-st     cfg=stock K=50  div=0   guard=0  liberr_native=1  pairs=6573 blk_equal=6573 blk_mismatch=0 k_heartbeats=5934 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+play-st   cfg=stock K=50  div=0   guard=0  liberr_native=0  pairs=3694632 blk_equal=3694632 blk_mismatch=0 k_heartbeats=3693600 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+fo-emu    cfg=emu   K=50  div=0   guard=0  liberr_native=1  pairs=6575 blk_equal=6575 blk_mismatch=0 k_heartbeats=5936 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+m-emu     cfg=emu   K=50  div=0   guard=0  liberr_native=1  pairs=6581 blk_equal=6581 blk_mismatch=0 k_heartbeats=6102 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=I.STOP leg=OK
+inj-emu   cfg=emu   K=50  div=0   guard=0  liberr_native=0  pairs=6702 blk_equal=6702 blk_mismatch=0 k_heartbeats=6143 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=FATAL leg=FAIL
+abort-emu cfg=emu   K=50  div=0   guard=0  liberr_native=0  pairs=5446 blk_equal=5446 blk_mismatch=0 k_heartbeats=5240 gaps_over_k=0 max_gap=50 floor=10 OK end=WORLD-ABORT want=WORLD-ABORT leg=OK
 == Task 046 P32 append chains battery (JOBS=3) ==
 inj: armed-pc block drops=1 (want 1)
 abort: armed-pc block drops=1 (want 1)
@@ -28,21 +28,21 @@ synclist_delisted=4499 (want 4499)  synclist_entries=13510 (want 13510)
 embeds_book=729 (want 729 = 1673 - 944)  embeds_stock=2608 (want 2608 = 3552 - 944)  rt_call_book=987 rt_call_stock=987 (want 987/987)
 rt_sites ledger: emitted=987 refused=0 (want 987/0)
 leftover_embeds_book (LNDO/LDSP/RT pushes/Nova loads) = 0 (want 0)
-rt_call coverage (all IR legs): 91/987 sites executed; by callee: ?WRITE_SCREEN 60/723  ?RANDOM_NUMBER 6/111  ?UNSIGNED_TO_CHAR 7/89  ?DELAY 0/18  ?READ 1/11  ?CHAR_TO_UNSIGNED 1/10  ?OPEN_FILE 3/6  ?CLOSE_FILE 1/4  ?OPEN_SHARED_IO_FILE 3/3  ?GET_SHARED_PAGE 3/3  ?WRITE 0/2  ?CREATE_TASK 1/1  ?AWAIT_CONSOLE_INTERRUPT 1/1  ?LOOKUP_PORT 1/1  ?LIB_ERROR_CODE 0/1  ?CONNECT 1/1  ?CURRENT_PID 1/1  ?READ_SCREEN 1/1
-rt_call live: WRITE_SCREEN=60 RANDOM_NUMBER=6 (want both > 0) OK
+rt_call coverage (all IR legs): 93/987 sites executed; by callee: ?WRITE_SCREEN 61/723  ?RANDOM_NUMBER 6/111  ?UNSIGNED_TO_CHAR 8/89  ?DELAY 0/18  ?READ 1/11  ?CHAR_TO_UNSIGNED 1/10  ?OPEN_FILE 3/6  ?CLOSE_FILE 1/4  ?OPEN_SHARED_IO_FILE 3/3  ?GET_SHARED_PAGE 3/3  ?WRITE 0/2  ?CREATE_TASK 1/1  ?AWAIT_CONSOLE_INTERRUPT 1/1  ?LOOKUP_PORT 1/1  ?LIB_ERROR_CODE 0/1  ?CONNECT 1/1  ?CURRENT_PID 1/1  ?READ_SCREEN 1/1
+rt_call live: WRITE_SCREEN=61 RANDOM_NUMBER=6 (want both > 0) OK
 -- P31 located strings + P32 append chains (docs/Project31/Census.md §11 correction; docs/Project32/Census.md) --
 string_statements: book=1593 stock=1593 (want 1593/1593 = 649 P31 + 944 P32); literal assignments=857 (want 857 = 534 + 323) cmp=40 (want 40 = 31 + 9) words=12 (want 12)
 strings ledger: lower.py emitted=1593 refused=0; census EMIT p31=649/127 p32=944/0 (want 1593/0; 649/127; 944/0); same pc set=yes same text=yes
 synclist_entries=13510 (want 13510: unchanged by P31/P32)
 literal_mismatches=0 (want 0)
-string statement coverage (distinct statements, all IR legs): total 130; assign_fixed 57  assign_varying 56  cmp 12  words 5
-  play     assign_varying=52 assign_fixed=54 cmp=12 words=4
-  play-st  assign_varying=52 assign_fixed=54 cmp=12 words=4
-  k1fo     assign_varying=45 assign_fixed=50 cmp=11 words=5
-  fo       assign_varying=47 assign_fixed=51 cmp=11 words=5
-  fo-st    assign_varying=47 assign_fixed=50 cmp=10 words=5
+string statement coverage (distinct statements, all IR legs): total 135; assign_fixed 61  assign_varying 57  cmp 12  words 5
+  play     assign_varying=51 assign_fixed=54 cmp=12 words=4
+  play-st  assign_varying=51 assign_fixed=54 cmp=12 words=4
+  k1fo     assign_varying=46 assign_fixed=47 cmp=10 words=5
+  fo       assign_varying=46 assign_fixed=51 cmp=11 words=5
+  fo-st    assign_varying=46 assign_fixed=47 cmp=9 words=5
 string statements live in play/play-st: assign_varying, cmp, words all > 0: OK
-P32 site coverage (block first-executed in any IR leg): by slice 4: 34/677  5: 18/134  6: 15/133; by form expr 32/448  mixed 29/415  register 6/81
+P32 site coverage (block first-executed in any IR leg): by slice 4: 38/677  5: 19/134  6: 15/133; by form expr 35/448  mixed 31/415  register 6/81
 P32: slices 4/5/6 live (want all > 0): True; HELP chain block 7016D5E3 live in play/play-st: {'play': False, 'play-st': False} -> FAIL
 -- P28 leftover block coverage (LNDO 7015C0C5; LDSP 701604C4 7016D702; Nova SKP 7015BE37 7015BE59 70175F31 7017609C 70176102 7017D7BC) --
 7015C0C5:0 701604C4:0 7016D702:0 7015BE37:0 7015BE59:0 70175F31:0 7017609C:0 70176102:0 7017D7BC:0 
@@ -50,7 +50,7 @@ derr: poke_fired=2 (want 2: both roles)  clone_assert_at_7015C48E=2 (want 1)  ma
 derr: master_end=
 derr-emu: poke_fired=2 (want 2)  terminal_abort_at_DERR.TRP=1 (want 1)  (top stack wides: 00000011 7015C48E — for DERR.TRP: number, faulting pc)
 -- P26 newly-lowered mnemonic coverage (book+stock legs; regression reference) --
-P26 newly-lowered mnemonic coverage (blocks live/blocks carrying, 2101 live blocks):
-  WMUL 277/1805  LWADD 236/1528  XJMP 125/1160  LDAFP 112/1053  WNADI 151/735  MOV.L# 130/669  WADC 78/646  WSEQI 105/615  WSNEI 88/415  WSZB 106/361  CVWN 25/216  WSEQ 66/202  WCOM 37/200  WSGE 58/185  XNDO 44/176  MOV.# 39/172  WINC 26/164  WSLE 39/149  XWADD 14/143  WBTO 21/140  WSNE 15/115  WBTZ 20/106  WSLEI 25/97  WSGTI 30/96  WDIV 12/87  NADI 5/85  ADD.O# 23/81  XNSUB 9/81  WIOR 23/78  WAND 17/72  WADI 14/72  XNADI 8/69  XNADD 3/69  NSBI 13/65  NADDI 6/58  WSGT 10/58  XWMUL 2/45  WLSI 6/43  WPSH 10/39  COM.# 2/32  XWDO 3/30  WSLT 10/28  XNSBI 2/26  NSUB 6/26  NNEG 0/25  SEX 2/23  LDASP 5/22  NMUL 6/21  ADD.# 0/19  WMOVR 4/19  WXOR 4/18  WNEG 5/16  NADD 1/16  WHLV 1/15  WPOP 4/14  WANDI 2/10  LNADI 0/8  WXCH 3/7  LNADD 1/5  ANDI 4/4  LNSBI 1/3  ZEX 3/3  WLSHI 2/2  XWADI 0/2  XWSUB 1/2  MOV.R# 1/2  WIORI 0/2  NEG.L# 1/1  WULEI 1/1  WSKBO 0/1  XNISZ 0/1  LNSUB 0/1  CRYTO 1/1  XNMUL 0/1  XWSBI 0/1
+P26 newly-lowered mnemonic coverage (blocks live/blocks carrying, 2112 live blocks):
+  WMUL 274/1805  LWADD 235/1528  XJMP 126/1160  LDAFP 113/1053  WNADI 153/735  MOV.L# 131/669  WADC 78/646  WSEQI 103/615  WSNEI 87/415  WSZB 106/361  CVWN 24/216  WSEQ 65/202  WCOM 37/200  WSGE 59/185  XNDO 44/176  MOV.# 39/172  WINC 26/164  WSLE 39/149  XWADD 14/143  WBTO 21/140  WSNE 15/115  WBTZ 20/106  WSLEI 25/97  WSGTI 30/96  WDIV 11/87  NADI 5/85  ADD.O# 25/81  XNSUB 9/81  WIOR 23/78  WAND 17/72  WADI 14/72  XNADI 8/69  XNADD 3/69  NSBI 12/65  NADDI 5/58  WSGT 12/58  XWMUL 2/45  WLSI 6/43  WPSH 10/39  COM.# 2/32  XWDO 3/30  WSLT 10/28  XNSBI 2/26  NSUB 7/26  NNEG 0/25  SEX 2/23  LDASP 5/22  NMUL 6/21  ADD.# 0/19  WMOVR 4/19  WXOR 4/18  WNEG 5/16  NADD 2/16  WHLV 1/15  WPOP 4/14  WANDI 2/10  LNADI 0/8  WXCH 3/7  LNADD 1/5  ANDI 4/4  LNSBI 1/3  ZEX 3/3  WLSHI 2/2  XWADI 0/2  XWSUB 1/2  MOV.R# 1/2  WIORI 0/2  NEG.L# 1/1  WULEI 1/1  WSKBO 0/1  XNISZ 0/1  LNSUB 0/1  CRYTO 1/1  XNMUL 0/1  XWSBI 0/1
   classes live: 65/75; unreached: ADD.# LNADI LNSUB NNEG WIORI WSKBO XNISZ XNMUL XWADI XWSBI
-wall_clock_seconds=931
+wall_clock_seconds=875

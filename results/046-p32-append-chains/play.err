@@ -1308,8 +1308,6 @@ IREC RETURN:
 *** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 547 (addr 0x7018024F)
 *** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 547 (addr 0x7018024F)
 *** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 547 (addr 0x7018024F)
-*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 547 (addr 0x7018024F)
-*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 547 (addr 0x7018024F)
 *** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 548 (addr 0x70180250)
 *** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 548 (addr 0x70180250)
 *** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 548 (addr 0x70180250)
@@ -1374,6 +1372,8 @@ IREC RETURN:
 *** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 548 (addr 0x70180250)
 *** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 548 (addr 0x70180250)
 *** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 549 (addr 0x70180251)
 *** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 549 (addr 0x70180251)
 *** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 549 (addr 0x70180251)
 *** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 549 (addr 0x70180251)
@@ -1560,10 +1560,10 @@ Unregistering process 100
 message to 101
 OPEN Channel 1, path :QUEST_SERVER.PR modified: 0
 OPEN Channel 2, path :SHARED_DATA_FILE modified: 1
-ISR RECEIVED MESSAGE
 OPEN Channel 3, path :WORLD_DATA_FILE modified: 1
 OPEN Channel 4, path :CASTLE_DATA_FILE modified: 1
 OPEN Channel 5, path :USER_DATA_FILE modified: 1
+ISR RECEIVED MESSAGE
 IRExec: first execution of block 70176103
 IRExec: first execution of block 70176104
 IRExec: first execution of block 70176107
@@ -1671,15 +1671,6 @@ IRExec: first execution of block 701697DA
 IRExec: first execution of block 701697F1
 IRExec: first execution of block 701697FC
 IRExec: first execution of block 70169801
-IRExec: first execution of block 7016982F
-IRExec: first execution of block 70169832
-IRExec: first execution of block 70169843
-IRExec: first execution of block 70169852
-IRExec: first execution of block 70169864
-IRExec: first execution of block 70169865
-IRExec: first execution of block 7016986F
-IRExec: first execution of block 70169870
-IRExec: first execution of block 70169878
 IRExec: first execution of block 701697DB
 IRExec: first execution of block 70169939
 IRExec: first execution of block 7016E1D6
@@ -1708,12 +1699,12 @@ IRExec: first execution of block 7016B57A
 IRExec: first execution of block 7016B581
 IRExec: first execution of block 7016B592
 IRExec: first execution of string statement assign_varying in block 7016B592 stmt 0
+IRExec: first execution of block 70165713
+IRExec: first execution of block 70165715
 IRExec: first execution of block 7016B5A6
 IRExec: first execution of block 7016BCA0
 IRExec: first execution of block 7016DE91
 IRExec: first execution of string statement assign_varying in block 7016DE91 stmt 1
-IRExec: first execution of block 70165713
-IRExec: first execution of block 70165715
 IRExec: first execution of block 7016DEA7
 IRExec: first execution of block 7016DEAD
 IRExec: first execution of block 7016DEBB
@@ -1840,23 +1831,16 @@ IRExec: first execution of block 70166CD8
 IRExec: first execution of block 70166CE8
 IRExec: first execution of block 70166CE9
 IRExec: first execution of block 70166CF4
+IRExec: first execution of block 70166D04
 IRExec: first execution of block 70166D05
 IRExec: first execution of block 70166D13
 IRExec: first execution of block 70166D18
 IRExec: first execution of block 70166D1F
 IRExec: first execution of block 70166D2B
 IRExec: first execution of block 70166D30
-IRExec: first execution of block 70166D12
-IRExec: first execution of block 70166D04
 IRExec: first execution of block 70166D17
 IRExec: first execution of block 70166CF3
-IRExec: first execution of block 70166CAC
-IRExec: first execution of block 70166CD1
-IRExec: first execution of block 70166CD7
-IRExec: first execution of block 70166D3A
-IRExec: first execution of block 70166D41
-IRExec: first execution of block 70166D4B
-IRExec: first execution of block 70166D50
+IRExec: first execution of block 70166D12
 IRExec: first execution of block 7016705C
 IRExec: first execution of block 70167062
 IRExec: first execution of block 7016706F
@@ -1886,17 +1870,18 @@ IRExec: first execution of block 7017CDC3
 IRExec: first execution of block 7017CDC7
 IRExec: first execution of block 7017CDCA
 IRExec: first execution of block 7017CDCE
-IRExec: first execution of block 7017CE16
-IRExec: first execution of string statement assign_varying in block 7017CE16 stmt 0
+IRExec: first execution of block 7017CE15
+IRExec: first execution of block 7017CE22
+IRExec: first execution of block 7017CE2B
+IRExec: first execution of block 7017CE30
+IRExec: first execution of string statement assign_varying in block 7017CE30 stmt 0
 IRExec: first execution of block 7017CE3B
-IRExec: first execution of block 7017CE45
-IRExec: first execution of block 7017CE73
-IRExec: first execution of block 7017CE7D
-IRExec: first execution of string statement cmp in block 7017CE7D stmt 1
-IRExec: first execution of block 7017CE87
-IRExec: first execution of block 7017CE91
-IRExec: first execution of block 7017CE9B
-IRExec: first execution of string statement assign_fixed in block 7017CE9B stmt 7
+IRExec: first execution of block 7017CE46
+IRExec: first execution of string statement cmp in block 7017CE46 stmt 1
+IRExec: first execution of block 7017CE50
+IRExec: first execution of block 7017CE5A
+IRExec: first execution of block 7017CE64
+IRExec: first execution of string statement assign_fixed in block 7017CE64 stmt 7
 IRExec: first execution of block 7017CEA9
 IRExec: first execution of string statement cmp in block 7017CEA9 stmt 1
 IRExec: first execution of block 7017CEB3
@@ -1915,9 +1900,9 @@ IRExec: first execution of block 7017CF78
 IRExec: first execution of block 7017CF83
 IRExec: first execution of block 7017CF47
 IRExec: first execution of block 7015BD3C
-IRExec: first execution of block 7015BD3F
 IRExec: first execution of block 7015BD3E
 IRExec: first execution of block 7015BD47
+IRExec: first execution of block 7015BD3F
 IRExec: first execution of block 7017CF82
 IRExec: first execution of block 7017CF87
 IRExec: first execution of block 7017CF91
@@ -1933,8 +1918,6 @@ IRExec: first execution of block 7017CFA9
 IRExec: first execution of block 7017CFC2
 IRExec: first execution of block 7017CFC8
 IRExec: first execution of block 7017CFD7
-IRExec: first execution of block 7017CFD8
-IRExec: first execution of block 7017CFE3
 IRExec: first execution of block 7017CFAF
 IRExec: first execution of block 701670F2
 IRExec: first execution of block 701670FF
@@ -2363,10 +2346,7 @@ IRExec: first execution of block 70168446
 IRExec: first execution of block 70168456
 IRExec: first execution of block 70168471
 IRExec: first execution of block 7016847E
-IRExec: first execution of block 70168480
-IRExec: first execution of block 7016848A
-IRExec: first execution of block 7016848D
-IRExec: first execution of string statement assign_varying in block 7016848D stmt 0
+IRExec: first execution of block 70168481
 IRExec: first execution of block 701684A1
 IRExec: first execution of string statement assign_fixed in block 701684A1 stmt 8
 IRExec: first execution of string statement assign_fixed in block 701684A1 stmt 10
@@ -2989,8 +2969,6 @@ IRExec: first execution of block 7017D166
 IRExec: first execution of block 7017D174
 IRExec: first execution of block 7017D3E8
 IRExec: first execution of block 7017D148
-IRExec: first execution of block 7017D3EA
-IRExec: first execution of block 7017D13E
 IRExec: first execution of block 7017D173
 IRExec: first execution of block 7017D176
 IRExec: first execution of block 7017D182
@@ -2999,10 +2977,12 @@ IRExec: first execution of block 7017D187
 IRExec: first execution of block 7017D18C
 IRExec: first execution of block 7017D1AC
 IRExec: first execution of block 7017D281
+IRExec: first execution of block 7017D284
+IRExec: first execution of block 7017D3EA
+IRExec: first execution of block 7017D13E
 IRExec: first execution of block 7017D283
 IRExec: first execution of block 7017D286
 IRExec: first execution of block 7017D28B
-IRExec: first execution of block 7017D284
 IRExec: first execution of block 7017D3EC
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 473 (addr 0x70180205)
 *** RESERVED ACCESS [QUEST]: WRITE player[0] rec 473 (addr 0x70180205)
@@ -3123,12 +3103,12 @@ IRExec: first execution of block 701658C3
 IRExec: first execution of block 701658D1
 IRExec: first execution of block 70165D63
 IRExec: first execution of block 701658A4
+IRExec: first execution of block 70165D65
+IRExec: first execution of block 7016589A
 IRExec: first execution of block 701658D0
 IRExec: first execution of block 701658D3
 IRExec: first execution of block 701658D8
 IRExec: first execution of block 701658F8
-IRExec: first execution of block 70165D65
-IRExec: first execution of block 7016589A
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 555 (addr 0x70180257)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 556 (addr 0x70180258)
 IRExec: first execution of block 70165D67
@@ -3715,12 +3695,21 @@ IRExec: first execution of block 7016A923
 IRExec: first execution of block 7016A93A
 IRExec: first execution of block 7016A941
 IRExec: first execution of block 7016A94D
-IRExec: first execution of block 7016A94E
+IRExec: first execution of block 7016A954
+IRExec: first execution of block 7016A960
+IRExec: first execution of block 7016A968
+IRExec: first execution of block 7016A96C
+IRExec: first execution of block 7016A979
+IRExec: first execution of block 7016A9B1
+IRExec: first execution of block 7016A961
+IRExec: first execution of block 7016A97A
+IRExec: first execution of block 7016A980
+IRExec: first execution of block 7016A98F
+IRExec: first execution of block 7016A967
+IRExec: first execution of block 7016A9B4
+IRExec: first execution of block 7016A9B7
 IRExec: first execution of block 70172343
-IRExec: first execution of block 70172346
-IRExec: first execution of block 70172349
-IRExec: first execution of block 7017234E
-IRExec: first execution of block 7017236F
+IRExec: first execution of block 70172347
 IRExec: first execution of block 701724FA
 IRExec: first execution of block 701724FF
 IRExec: first execution of block 70172502
@@ -3746,8 +3735,7 @@ IRExec: first execution of block 70172566
 IRExec: first execution of block 7017256D
 IRExec: first execution of block 7017257F
 IRExec: first execution of block 70172591
-IRExec: first execution of block 7017259E
-IRExec: first execution of block 701725A3
+IRExec: first execution of block 7017259D
 IRExec: first execution of block 701725AD
 IRExec: first execution of block 701725BB
 IRExec: first execution of block 701725C3
@@ -3782,6 +3770,9 @@ IRExec: first execution of block 7016F8AD
 IRExec: first execution of block 7016F8BB
 IRExec: first execution of block 7016F8BD
 IRExec: first execution of block 7016F8BA
+IRExec: first execution of block 7016F8BE
+IRExec: first execution of block 7016F8C4
+IRExec: first execution of block 7016F8D2
 IRExec: first execution of block 7016F8DD
 IRExec: first execution of block 7016FBB5
 IRExec: first execution of block 7016FBBB
@@ -3803,9 +3794,7 @@ IRExec: first execution of block 7017262E
 IRExec: first execution of block 7017263C
 IRExec: first execution of block 70172642
 IRExec: first execution of block 70172662
-IRExec: first execution of block 70172667
-IRExec: first execution of block 7017266D
-IRExec: first execution of block 70172677
+IRExec: first execution of block 70172666
 IRExec: first execution of block 70172681
 IRExec: first execution of block 70172686
 IRExec: first execution of block 7017277F
@@ -3874,12 +3863,6 @@ IRExec: first execution of block 7017AFCE
 IRExec: first execution of block 7017AFD3
 IRExec: first execution of block 7017B2B8
 IRExec: first execution of block 7017B2BF
-IRExec: first execution of block 7017AFD2
-IRExec: first execution of block 7017AFD5
-IRExec: first execution of block 7017AFDC
-IRExec: first execution of block 7017AFEE
-IRExec: first execution of block 7017B0DD
-IRExec: first execution of block 7017B0E2
 IRExec: first execution of block 7017A97A
 IRExec: first execution of block 7017B2CC
 IRExec: first execution of block 701795DB
@@ -3915,12 +3898,12 @@ IRExec: first execution of block 7017967E
 IRExec: first execution of block 70179684
 IRExec: first execution of block 7017968F
 IRExec: first execution of block 70179695
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 545 (addr 0x7018024D)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 545 (addr 0x7018024D)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 545 (addr 0x7018024D)
 IRExec: first execution of block 701796F2
 IRExec: first execution of block 701796F5
 IRExec: first execution of block 7017972C
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 545 (addr 0x7018024D)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 545 (addr 0x7018024D)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 545 (addr 0x7018024D)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 545 (addr 0x7018024D)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 545 (addr 0x7018024D)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 545 (addr 0x7018024D)
@@ -4000,7 +3983,7 @@ IRExec: first execution of block 70160E50
 IRExec: first execution of block 70160E56
 IRExec: first execution of block 70160E65
 IRExec: first execution of block 70160E66
-IRExec: first execution of block 70160E74
+IRExec: first execution of block 70160E73
 IRExec: first execution of block 70160E75
 IRExec: first execution of block 70160E7E
 IRExec: first execution of block 70160E8E
@@ -4046,19 +4029,6 @@ IRExec: first execution of block 70160F8A
 IRExec: first execution of block 70160F8B
 IRExec: first execution of block 70160F8D
 IRExec: first execution of block 70160F90
-IRExec: first execution of block 7016A954
-IRExec: first execution of block 7016A960
-IRExec: first execution of block 7016A968
-IRExec: first execution of block 7016A96C
-IRExec: first execution of block 7016A979
-IRExec: first execution of block 7016A9B1
-IRExec: first execution of block 7016A961
-IRExec: first execution of block 7016A97A
-IRExec: first execution of block 7016A980
-IRExec: first execution of block 7016A98F
-IRExec: first execution of block 7016A967
-IRExec: first execution of block 7016A9B4
-IRExec: first execution of block 7016A9B7
 IRExec: first execution of block 70160F9A
 IRExec: first execution of block 70160F9F
 IRExec: first execution of block 70160FA0
@@ -4088,13 +4058,9 @@ IRExec: first execution of block 70160E02
 IRExec: first execution of block 70160E03
 IRExec: first execution of block 70160E17
 IRExec: first execution of block 70160E1E
-IRExec: first execution of block 70160E73
-IRExec: first execution of block 7017CE46
-IRExec: first execution of string statement cmp in block 7017CE46 stmt 1
-IRExec: first execution of block 7017CE50
-IRExec: first execution of block 7017CE5A
-IRExec: first execution of block 7017CE64
-IRExec: first execution of string statement assign_fixed in block 7017CE64 stmt 7
+IRExec: first execution of block 7017CE16
+IRExec: first execution of string statement assign_varying in block 7017CE16 stmt 0
+IRExec: first execution of block 7016A94E
 IRExec: first execution of block 70160F9E
 IRExec: first execution of block 70161061
 IRExec: first execution of block 70161064
@@ -4130,20 +4096,24 @@ IRExec: first execution of block 70161177
 IRExec: first execution of block 7016117E
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 545 (addr 0x7018024D)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 545 (addr 0x7018024D)
-IRExec: first execution of block 70160DED
 IRExec: first execution of block 70160E64
-IRExec: first execution of block 7017CE15
-IRExec: first execution of block 7017CE22
-IRExec: first execution of block 7017CE2B
-IRExec: first execution of block 7017CE30
-IRExec: first execution of string statement assign_varying in block 7017CE30 stmt 0
+IRExec: first execution of block 7017CE45
+IRExec: first execution of block 7017CE73
+IRExec: first execution of block 7017CE7D
+IRExec: first execution of string statement cmp in block 7017CE7D stmt 1
+IRExec: first execution of block 7017CE87
+IRExec: first execution of block 7017CE91
+IRExec: first execution of block 7017CE9B
+IRExec: first execution of string statement assign_fixed in block 7017CE9B stmt 7
 IRExec: first execution of block 70161000
 IRExec: first execution of block 70161006
 IRExec: first execution of block 70161012
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 545 (addr 0x7018024D)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 545 (addr 0x7018024D)
+IRExec: first execution of block 70160E74
 IRExec: first execution of block 7017CE2C
 IRExec: first execution of block 7017CE51
+IRExec: first execution of block 7017CFD8
 IRExec: first execution of block 7017CFE4
 IRExec: first execution of block 7017CFED
 IRExec: first execution of block 7016A990
@@ -4151,6 +4121,11 @@ IRExec: first execution of block 7016A99C
 IRExec: first execution of block 7016A9A5
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 545 (addr 0x7018024D)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 545 (addr 0x7018024D)
+IRExec: first execution of block 70161086
+IRExec: first execution of block 70161089
+IRExec: first execution of block 7016108C
+IRExec: first execution of block 701610A1
+IRExec: first execution of block 701610BD
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 545 (addr 0x7018024D)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 545 (addr 0x7018024D)
 IRExec: first execution of block 70160F74
@@ -4160,6 +4135,7 @@ IRExec: first execution of block 70160BDD
 IRExec: first execution of block 70160BE1
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
+IRExec: first execution of block 7017CFE3
 IRExec: first execution of block 7016A99B
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
@@ -4193,8 +4169,6 @@ IRExec: first execution of string statement assign_fixed in block 7017CECC stmt 
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
-IRExec: first execution of block 7017D674
-IRExec: first execution of block 7017D679
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
@@ -4229,6 +4203,7 @@ IRExec: first execution of block 7017CE88
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
+IRExec: first execution of block 70160DED
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
@@ -4237,11 +4212,6 @@ IRExec: first execution of block 7017CE88
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
-IRExec: first execution of block 70161086
-IRExec: first execution of block 70161089
-IRExec: first execution of block 7016108C
-IRExec: first execution of block 701610A1
-IRExec: first execution of block 701610BD
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
@@ -4302,11 +4272,6 @@ IRExec: first execution of block 70161154
 IRExec: first execution of block 7016116E
 IRExec: first execution of block 70160F2B
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
-IRExec: first execution of block 70160DD7
-IRExec: first execution of block 70160DDA
-IRExec: first execution of block 70160DE0
-IRExec: first execution of block 70160DE4
-IRExec: first execution of block 70160DE7
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
@@ -4319,6 +4284,10 @@ IRExec: first execution of block 70160DE7
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+IRExec: first execution of block 70176668
+IRExec: first execution of block 7017666D
+IRExec: first execution of block 70160E04
+IRExec: first execution of block 70160E0B
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
@@ -4431,6 +4400,8 @@ IRExec: first execution of block 70161088
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
+IRExec: first execution of block 7017D674
+IRExec: first execution of block 7017D679
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
@@ -4511,6 +4482,7 @@ IRExec: first execution of block 70161088
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
 IRExec: first execution of block 70160F66
@@ -4520,7 +4492,11 @@ IRExec: first execution of block 70160F66
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
+IRExec: first execution of block 70160DD7
+IRExec: first execution of block 70160DDA
+IRExec: first execution of block 70160DE0
+IRExec: first execution of block 70160DE4
+IRExec: first execution of block 70160DE7
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
@@ -4616,95 +4592,17 @@ IRExec: first execution of block 7016108B
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
@@ -4713,6 +4611,10 @@ IRExec: first execution of block 7016108B
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
@@ -4723,6 +4625,80 @@ IRExec: first execution of block 7016108B
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
@@ -4732,8 +4708,8 @@ IRExec: first execution of block 7016108B
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
-*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
@@ -5017,10 +4993,6 @@ IRExec: first execution of block 70160F8E
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
-IRExec: first execution of block 70176668
-IRExec: first execution of block 7017666D
-IRExec: first execution of block 70160E04
-IRExec: first execution of block 70160E0B
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
@@ -5372,3 +5344,45 @@ IRExec: first execution of block 70160EEB
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
 *** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST]: READ player[0] rec 548 (addr 0x70180250)

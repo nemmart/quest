@@ -13,28 +13,28 @@ WRITE (fs wt):
    (fs wt) options = C001
    (fs wt) record number = 0
    (fs wt) buffer pointer = E00037DE
-   (fs wt) byte count = 0027
+   (fs wt) byte count = 0026
 1
 WRITE EXTENSION
    location = F0001D12
    options = 0800
    rel pos = 0000
    init pos = 320D
-Wind from North - Rainy               
+Wind from West - Rainy               
 RETURNING AC1=00000000
 RETURNING AC1=00000000
 frame  1 -- 7017ED1C     guessing: DERR.TRP+0x0
 frame  0 -- 7017EA51     guessing: I.INIT+0x23
 Thread halt
-1089104 instructions run
+1082199 instructions run
 frame  1 -- QUEST+0x486   [7015C48B]
 frame  0 -- 7017EA51     guessing: I.INIT+0x23
-17621 instructions run
+17100 instructions run
+frame  2 -- 7017FDED     guessing: .UKIL+0x8
+frame  1 -- C_A_LISTENER+0x2   [70165715]
 frame  2 -- 7017FDED     guessing: .UKIL+0x8
 frame  1 -- C_A_LISTENER+0x2   [70165715]
 frame  0 -- 7017E7C1     guessing: T.INIT+0x3B
 68 instructions run
-frame  2 -- 7017FDED     guessing: .UKIL+0x8
-frame  1 -- C_A_LISTENER+0x2   [70165715]
 frame  0 -- 7017E7C1     guessing: T.INIT+0x3B
 68 instructions run
