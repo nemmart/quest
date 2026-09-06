@@ -140,3 +140,16 @@ temps, any checker change.
   appended length (from the residues), the 15 substr sites the byte
   offset form, 6 sites the t-place form.
 - P33: claim sizes from docs/Project31/census_raw.txt (T2-clean).
+
+
+## Integrator note — task 044 (Sep 6)
+
+results/044-p31-located-strings: all 15 legs OK, 0 div, every P31
+verdict value on target (652/652 statements; 534 literal / 31 cmp / 12
+words; embeds 1,670 / 3,549; synclist 13,510; literal mismatches 0;
+assign_varying/cmp/words live in play and play-st). The battery's
+single FAIL was the `same pc set=NO` verdict line: the ledger's header
+comment contains the word "emitted", so the unanchored grep counted it
+as a 653rd pc; the two 652-entry pc sets are identical (verified
+offline). Verdict-script defect, same class as 041; the grep is anchored
+in tasks/044 on main for any re-run. Merged on the leg evidence.

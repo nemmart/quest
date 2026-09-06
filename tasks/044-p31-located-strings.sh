@@ -208,7 +208,7 @@ echo "string_statements: book=$STRB stock=$STRS (want 652/652); literal assignme
 SLED=$W/docs/Project31/strings.ledger; STSV=$W/docs/Project31/p31.tsv
 SE=$(grep -c '^[0-9A-F]\{8\} [A-Z]* emitted ' $SLED || true); SR=$(grep -c '^[0-9A-F]\{8\} [A-Z]* REFUSED ' $SLED || true)
 TE=$(awk -F'\t' '$7=="EMIT"' $STSV | wc -l); TR=$(awk -F'\t' '$7=="REFUSE"' $STSV | wc -l)
-SAME=$(diff <(grep ' emitted ' $SLED | cut -d' ' -f1 | sort) <(awk -F'\t' '$7=="EMIT"{print $1}' $STSV | sort) >/dev/null && echo yes || echo NO)
+SAME=$(diff <(grep '^[0-9A-F]\{8\} [A-Z]* emitted ' $SLED | cut -d' ' -f1 | sort) <(awk -F'\t' '$7=="EMIT"{print $1}' $STSV | sort) >/dev/null && echo yes || echo NO)
 echo "strings ledger: lower.py emitted=$SE refused=$SR; census EMIT=$TE REFUSE=$TR (want 652/0 and 652/124); same pc set=$SAME" | tee -a $RES/verdicts.txt
 [ "$SE" = "652" ] && [ "$SR" = "0" ] && [ "$TE" = "652" ] && [ "$TR" = "124" ] && [ "$SAME" = "yes" ] || FAILS=$((FAILS+1))
 SYN2=$(grep -c '^[0-9A-F]' $SYN || true)
