@@ -222,6 +222,13 @@ len(<piece>)                      ; the length word of a varying, or n of a fixe
   copy (`XNSTA 0,[fp+w]`) with `min(len(src), capacity)` (the `WSLE/WMOV`
   or `WSGE/WMOV` min shape when the capacity can be exceeded; a plain
   constant when the source is a literal). The IR statement does both.
+- **Length words are SIGNED**: the compiler loads a varying length with
+  XNLDA (sign-extending, EagleGeneral.cpp:51–52), so a length word of
+  0xFFFF is the count −1 and the instruction runs one byte BACKWARDS
+  (P31 F-B1: DISPLAY_INVENTORY's compare at 7016816B reads such a field
+  on the login path and the master runs it). The library and the
+  statements read length words sign-extended; there is no ≥32K fault —
+  the master does not fault, so neither may the clone.
 - **Segments**: a copy never crosses a 32-bit segment (the emulator
   throws; no site does).
 
