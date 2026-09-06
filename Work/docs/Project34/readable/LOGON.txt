@@ -1,0 +1,520 @@
+; readable.py (Project 34 prototype) — rendering, not an artifact anything executes
+; book quest.ir2.book sha256=281fd5010ad4e8b35502646d4d8759dd7db53274a92f3e91792eeb2f9409051c (ir 5)
+; branch p34-readable (from main 4837d5c); book read from origin/p31-located-strings @ b4384b177bed8229c50b43235b2c08d62a954fd8
+; addrbook sha256=e6fde2c246630e0e  symbols sha256=7fc5e4f715d9022b  blocks sha256=1d3baaf6487a8e3f
+; switches: +frame +static +callargs +record +literal +regfold +simplify +sketch +heapdisjoint +argdisjoint +envinherit
+; naming: local_<d> = frame word d (ac3+d); arg_<N> = by-reference argument N (R[ac3-10-2N]);
+;   .w/.h/.b = 32/16/8-bit access; &x = address of x; p->w = *p; X_rec<s>[i].f<K> = record i (1-based),
+;   stride s words, field at word offset K from X (K is the raw displacement — see Census.md for origins);
+;   r#in = the value register r had at block entry; vstr(p, n) = CHAR(n) VARYING at p; str(p, n) = CHAR(n).
+
+; routine LOGON @70175E9F  argc 0  frame 0x28 (80 local words)  variant WSAVS  flags -  blocks 82
+;   local_32 is reused: defs of shape ('elemptr', 1879048720, 686, 0) | ('other',) (record naming applies where one shape reaches)
+
+LOGON():
+L_70175E9F:
+  @70175E9F WSAVS 0x0028
+  @70175EA1 LJSR [0x7017E733]
+
+L_70175EA8:
+  ac1 = sub(ac1, ac1)
+  ac0 = add(ac0, ~ac0)
+  ac2 = 0x70175EB0
+  @70175EAC LJSR [0x7017ED9B]
+  ; live at exit: ac0, ac1, ac2
+
+L_70175EAF:
+  ; fall through to L_70175ECD
+
+L_70175ECD:
+  ?LOOKUP_PORT(&PORTNAME, &GLOBAL_PORT_NUM, 0x70175DAD)        ; site 70175ED5
+
+L_70175ED9:
+  @70175ED9 LJSR [0x7017EDCB]
+
+L_70175EDC:
+  ac2 = 0x70175EE2
+  @70175EDE LJSR [0x7017ED9B]
+  ; live at exit: ac2
+
+L_70175EE1:
+  ; fall through to L_70175F04
+
+L_70175F04:
+  ac2 = SD_PTR.w
+  ?CONNECT(&SD_PTR->f42 /*via ac2*/)        ; site 70175F09
+  ; live at exit: ac2
+
+L_70175F0D:
+  @70175F0D LJSR [0x7017EDCB]
+
+L_70175F10:
+  ac2 = &local_16
+  local_16.w /*via ac2*/ = ac1
+  ac1 = 10
+  local_32.w = ac2
+  words(&local_18, 10) = words(&local_16, 10)
+  ac1 = 9
+  ac3 = wfp        ; fp restored
+  local_17.h = trunc16(ac1)
+  local_20.h = trunc16(1)
+  local_18.w = GLOBAL_PORT_NUM.w
+  ac0 = local_28.w
+  ac1 = sub(ac1, ac1)
+  ac2 = local_32.w
+  @70175F2E SYSCALL 0142
+  ; live at exit: ac0, ac1, ac2, ac3
+
+L_70175F31:
+  t1 = (((ac1 & 65535) | lsh(c, 16)) ^ 65535) + (ac1 & 65535)
+  c = lsh(t1, -16) & 1
+  ac1 = t1 & 65535
+  goto L_70175F33
+  ; live at exit: ac1
+
+L_70175F32:
+  ac1 = sub(ac1, ac1)
+  ; fall through to L_70175F33
+  ; live at exit: ac1
+
+L_70175F33:
+  local_28.w = ac0
+  if ((lsh(ac1, -15) & 1) == 1) goto L_70175F37 else goto L_70175F36
+
+L_70175F36:
+  goto L_70175F3D
+
+L_70175F37:
+  ac0 = sub(ac0, ac0)
+  fpword_-7.h = trunc16(ac0)
+  @70175F3A LJSR [0x7017E77D]
+  ; live at exit: ac0
+
+L_70175F3D:
+  PLAYER_NUM.h = trunc16(cvwn(local_22.w))
+  ?CURRENT_PID()        ; site 70175F43
+
+L_70175F47:
+  ac1 = sx16(PLAYER_NUM.h)
+  bounds_check !(ac1 >s 10) && (ac1 >s 0)   ; DERR 17 @70175F4D
+  ; fall through to L_70175F4E
+  ; live at exit: ac1
+
+L_70175F4E:
+  SD_PTR_rec686[sx16(PLAYER_NUM.h)].fm630.h /*via ac1*/ = trunc16(ac0)
+  vstr(&local_34, 14) = "Player name ? "
+  ac3 = wfp        ; fp restored
+  ?WRITE_SCREEN(&OUT_CHAN, &local_34)        ; site 70175F67
+  ; live at exit: ac3
+
+L_70175F6B:
+  @70175F6B LCALL [0x701766ED],0
+
+L_70175F6F:
+  ac1 = sx16(IN_BUFFER.h)
+  if (ac1 == 0) goto L_70175F74 else goto L_70175F73
+  ; live at exit: ac1
+
+L_70175F73:
+  goto L_70175F77
+
+L_70175F74:
+  @70175F74 LJSR [0x7017FCE8]
+
+L_70175F77:
+  if (ac1 >s 32) goto L_70175F7A else goto L_70175F79
+
+L_70175F79:
+  goto L_70175F9E
+
+L_70175F7A:
+  ac2 = sx16(PLAYER_NUM.h)
+  bounds_check !(ac2 >s 10) && (ac2 >s 0)   ; DERR 17 @70175F80
+  ; fall through to L_70175F81
+  ; live at exit: ac2
+
+L_70175F81:
+  ac2 = add(mul(ac2, 686), SD_PTR.w)
+  bounds_check 32 <=s ac1   ; DERR 16 @70175F8A
+  ; fall through to L_70175F8B
+
+L_70175F8B:
+  bounds_check 1 <=s add(ac1, -31)   ; DERR 16 @70175F90
+  ; fall through to L_70175F91
+
+L_70175F91:
+  vstr(&SD_PTR_rec686[sx16(PLAYER_NUM.h)].fm625, 32) = str(0x7000021D:0, 32)
+  ac3 = wfp        ; fp restored
+  goto L_70175FBF
+  ; live at exit: ac3
+
+L_70175F9E:
+  ac1 = sx16(PLAYER_NUM.h)
+  bounds_check !(ac1 >s 10) && (ac1 >s 0)   ; DERR 17 @70175FA4
+  ; fall through to L_70175FA5
+  ; live at exit: ac1
+
+L_70175FA5:
+  local_32.w = add(mul(ac1, 686), SD_PTR.w)
+  ac1 = sx16(IN_BUFFER.h)
+  if (ac1 >=s 32) goto L_70175FB4 else goto L_70175FB3
+  ; live at exit: ac1
+
+L_70175FB3:
+  ac0 = ac1
+  ; fall through to L_70175FB4
+
+L_70175FB4:
+  vstr(&SD_PTR_rec686[sx16(PLAYER_NUM.h)].fm625, 32) = vstr(&IN_BUFFER)
+  ac3 = wfp        ; fp restored
+  ; fall through to L_70175FBF
+  ; live at exit: ac3
+
+L_70175FBF:
+  vstr(&local_34, 11) = "Password ? "
+  ac3 = wfp        ; fp restored
+  ?WRITE_SCREEN(&OUT_CHAN, &local_34)        ; site 70175FCF
+  ; live at exit: ac3
+
+L_70175FD3:
+  @70175FD3 LCALL [0x701766ED],0
+
+L_70175FD7:
+  if (sx16(IN_BUFFER.h) == 0) goto L_70175FDC else goto L_70175FDB
+
+L_70175FDB:
+  goto L_7017600C
+
+L_70175FDC:
+  ac1 = sx16(PLAYER_NUM.h)
+  bounds_check !(ac1 >s 10) && (ac1 >s 0)   ; DERR 17 @70175FE2
+  ; fall through to L_70175FE3
+  ; live at exit: ac1
+
+L_70175FE3:
+  ac0 = 32
+  local_32.w = add(mul(ac1, 686), SD_PTR.w)
+  vstr(&SD_PTR_rec686[sx16(PLAYER_NUM.h)].fm625, 32) = "                                "
+  ac1 = sx16(PLAYER_NUM.h)
+  bounds_check !(ac1 >s 10) && (ac1 >s 0)   ; DERR 17 @70175FFE
+  ; fall through to L_70175FFF
+  ; live at exit: ac0, ac1
+
+L_70175FFF:        ; ac3 is not fp on entry (predecessor left it repurposed)
+  ac1 = mul(ac1, 686)
+  ac3 = wfp        ; fp restored
+  ac1 = add(ac1, SD_PTR.w)
+  ac2 = ac1
+  SD_PTR_rec686[ac1#in].fm625.h /*via ac2*/ = trunc16(ac0)
+  @70176009 LJSR [0x7017FCE8]
+  ; live at exit: ac1, ac2, ac3
+
+L_7017600C:
+  ac2 = bp(ac3, 64)
+  M8[ac2] = zx8(23)
+  M8[add(ac2, 1)] = zx8(11)
+  local_34.h = trunc16(2)
+  local_35.h = trunc16(sx16(local_32.h))
+  ?WRITE_SCREEN(&OUT_CHAN, &local_34)        ; site 70176022
+
+L_70176026:
+  if (sx16(IN_BUFFER.h) >s 32) goto L_7017602C else goto L_7017602B
+
+L_7017602B:
+  goto L_70176057
+
+L_7017602C:
+  ac0 = sx16(PLAYER_NUM.h)
+  bounds_check !(ac0 >s 10) && (ac0 >s 0)   ; DERR 17 @70176032
+  ; fall through to L_70176033
+  ; live at exit: ac0
+
+L_70176033:
+  ac0 = add(mul(ac0, 686), SD_PTR.w)
+  ac1 = sx16(IN_BUFFER.h)
+  bounds_check 32 <=s ac1   ; DERR 16 @7017603F
+  ; fall through to L_70176040
+  ; live at exit: ac0, ac1
+
+L_70176040:
+  bounds_check 1 <=s add(ac1, -31)   ; DERR 16 @70176045
+  ; fall through to L_70176046
+
+L_70176046:
+  ac1 = 32
+  local_32.w = ac0
+  vstr(&SD_PTR_rec686[sx16(PLAYER_NUM.h)].fm608, 32) = str(0x7000021D:0, 32)
+  ac3 = wfp        ; fp restored
+  goto L_70176078
+  ; live at exit: ac3
+
+L_70176057:
+  ac0 = sx16(PLAYER_NUM.h)
+  bounds_check !(ac0 >s 10) && (ac0 >s 0)   ; DERR 17 @7017605D
+  ; fall through to L_7017605E
+  ; live at exit: ac0
+
+L_7017605E:
+  local_32.w = add(mul(ac0, 686), SD_PTR.w)
+  ac1 = sx16(IN_BUFFER.h)
+  if (ac1 >=s 32) goto L_7017606D else goto L_7017606C
+  ; live at exit: ac1
+
+L_7017606C:
+  ac0 = ac1
+  ; fall through to L_7017606D
+
+L_7017606D:
+  vstr(&SD_PTR_rec686[sx16(PLAYER_NUM.h)].fm608, 32) = vstr(&IN_BUFFER)
+  ac3 = wfp        ; fp restored
+  ; fall through to L_70176078
+  ; live at exit: ac3
+
+L_70176078:
+  ac2 = &local_16
+  local_16.w /*via ac2*/ = ac0
+  ac1 = 10
+  local_32.w = ac2
+  words(&local_18, 10) = words(&local_16, 10)
+  ac1 = 1
+  ac3 = wfp        ; fp restored
+  local_17.h = trunc16(ac1)
+  local_20.h = trunc16(ac1)
+  local_18.w = GLOBAL_PORT_NUM.w
+  local_22.w = sx16(PLAYER_NUM.h)
+  ac0 = local_28.w
+  ac1 = sub(ac1, ac1)
+  ac2 = local_32.w
+  @70176099 SYSCALL 0142
+  ; live at exit: ac0, ac1, ac2, ac3
+
+L_7017609C:
+  t1 = (((ac1 & 65535) | lsh(c, 16)) ^ 65535) + (ac1 & 65535)
+  c = lsh(t1, -16) & 1
+  ac1 = t1 & 65535
+  goto L_7017609E
+  ; live at exit: ac1
+
+L_7017609D:
+  ac1 = sub(ac1, ac1)
+  ; fall through to L_7017609E
+  ; live at exit: ac1
+
+L_7017609E:
+  local_28.w = ac0
+  if ((lsh(ac1, -15) & 1) == 1) goto L_701760A2 else goto L_701760A1
+
+L_701760A1:
+  goto L_701760A8
+
+L_701760A2:
+  ac0 = sub(ac0, ac0)
+  fpword_-7.h = trunc16(ac0)
+  @701760A5 LJSR [0x7017E77D]
+  ; live at exit: ac0
+
+L_701760A8:
+  if (zx16(sx16(local_17.h)) == 6) goto L_701760AE else goto L_701760AD
+
+L_701760AD:
+  goto L_70176115
+
+L_701760AE:
+  vstr(&local_42, 75) = "That USERNAME/PASSWORD does not exist\x0ADo you wish to create this character?"
+  ac3 = wfp        ; fp restored
+  ?WRITE_SCREEN(&OUT_CHAN, &local_42)        ; site 701760BE
+  ; live at exit: ac3
+
+L_701760C2:
+  call GET_INPUT(bp(ac3, 60))        ; site 701760C4
+
+L_701760C8:
+  ac2 = bp(ac3, 64)
+  M8[ac2] = zx8(local_30.b0)
+  ac2 = add(ac2, 1)
+  ac0 = 10
+  M8[ac2] = zx8(ac0)
+  ac1 = 2
+  local_34.h = trunc16(ac1)
+  local_35.h = trunc16(sx16(local_32.h))
+  ?WRITE_SCREEN(&OUT_CHAN, &local_34)        ; site 701760DE
+  ; live at exit: ac0, ac1
+
+L_701760E2:
+  ac2 = local_30.b0
+  if (ac2 != 89) goto L_701760E7 else goto L_701760E6
+  ; live at exit: ac2
+
+L_701760E6:
+  goto L_701760EA
+
+L_701760E7:
+  if (ac2 == 121) goto L_701760EA else goto L_701760E9
+
+L_701760E9:
+  goto L_7017610F
+
+L_701760EA:
+  local_17.h = trunc16(ac1)
+  local_20.h = trunc16(1)
+  local_18.w = GLOBAL_PORT_NUM.w
+  local_22.w = sx16(PLAYER_NUM.h)
+  ac2 = &local_16
+  ac0 = local_28.w
+  ac1 = sub(ac1, ac1)
+  @701760FF SYSCALL 0142
+  ; live at exit: ac0, ac1, ac2
+
+L_70176102:
+  t1 = (((ac1 & 65535) | lsh(c, 16)) ^ 65535) + (ac1 & 65535)
+  c = lsh(t1, -16) & 1
+  ac1 = t1 & 65535
+  goto L_70176104
+  ; live at exit: ac1
+
+L_70176103:
+  ac1 = sub(ac1, ac1)
+  ; fall through to L_70176104
+  ; live at exit: ac1
+
+L_70176104:
+  local_28.w = ac0
+  if ((lsh(ac1, -15) & 1) == 1) goto L_70176108 else goto L_70176107
+
+L_70176107:
+  goto L_70176115
+
+L_70176108:
+  ac0 = sub(ac0, ac0)
+  fpword_-7.h = trunc16(ac0)
+  @7017610B LJSR [0x7017E77D]
+  ; live at exit: ac0
+
+L_7017610F:
+  ac2 = sub(ac2, ac2)
+  fpword_-7.h = trunc16(ac2)
+  @70176112 LJSR [0x7017E77D]
+  ; live at exit: ac2
+
+L_70176115:
+  if (zx16(sx16(local_17.h)) == 7) goto L_7017611B else goto L_7017611A
+
+L_7017611A:
+  goto L_70176134
+
+L_7017611B:
+  vstr(&local_42, 27) = "\x0AThat character is in use. "
+  ac3 = wfp        ; fp restored
+  ?WRITE_SCREEN(&OUT_CHAN, &local_42)        ; site 7017612B
+  ; live at exit: ac3
+
+L_7017612F:
+  fpword_-7.h = trunc16(ac0)
+  @70176131 LJSR [0x7017E77D]
+
+L_70176134:
+  if (zx16(sx16(local_17.h)) == 8) goto L_7017613A else goto L_70176139
+
+L_70176139:
+  goto L_70176153
+
+L_7017613A:
+  vstr(&local_42, 36) = "\x0AMaximum number of players exceeded."
+  ac3 = wfp        ; fp restored
+  ?WRITE_SCREEN(&OUT_CHAN, &local_42)        ; site 7017614A
+  ; live at exit: ac3
+
+L_7017614E:
+  fpword_-7.h = trunc16(ac0)
+  @70176150 LJSR [0x7017E77D]
+
+L_70176153:
+  ac0 = sx16(PLAYER_NUM.h)
+  bounds_check !(ac0 >s 10) && (ac0 >s 0)   ; DERR 17 @70176159
+  ; fall through to L_7017615A
+  ; live at exit: ac0
+
+L_7017615A:
+  ac2 = add(mul(ac0, 686), SD_PTR.w)
+  ac1 = cvwn(local_22.w)
+  SD_PTR_rec686[sx16(PLAYER_NUM.h)].fm629.h /*via ac2*/ = trunc16(ac1)
+  ac0 = -32768
+  fpword_-7.h = trunc16(ac0)
+  @7017616A LJSR [0x7017E77D]
+  ; live at exit: ac0, ac1, ac2
+
+; ---- this routine's rewrite report ----
+; callargs.folded                      1
+; env.inherited_blocks                40
+; frame.ac3_not_fp_at_exit             1
+;     e.g. 70175FE3 -> 70175FFF
+; frame.local                         59
+; frame.odd_offset                     7
+;     e.g. LOGON d=-7
+;     e.g. LOGON d=-7
+;     e.g. LOGON d=-7
+;     e.g. LOGON d=-7
+;     e.g. LOGON d=-7
+;     e.g. LOGON d=-7
+; frame.via_register                   2
+; instr.kept                          20
+;     e.g. 70175E9F WSAVS 0x0028
+;     e.g. 70175EA1 LJSR [0x7017E733]
+;     e.g. 70175EAC LJSR [0x7017ED9B]
+;     e.g. 70175ED9 LJSR [0x7017EDCB]
+;     e.g. 70175EDE LJSR [0x7017ED9B]
+;     e.g. 70175F0D LJSR [0x7017EDCB]
+; literal.dst_not_local                1
+;     e.g. 70175FE3 ?
+; literal.piece                        6
+; literal.unproven                     5
+;     e.g. 70175F4E "Player name ? ": live after: instruction line LCALL (successor 70175F6B)
+;     e.g. 70175FBF "Password ? ": live after: instruction line LCALL (successor 70175FD3)
+;     e.g. 701760AE "That USERNAME/PASSWORD does no": live after: partial overwrite (frame slot reused: M8 store) (successor 701760C2)
+;     e.g. 7017611B "\x0AThat character is in use. ": live after: instruction line LJSR (successor 7017612F)
+;     e.g. 7017613A "\x0AMaximum number of players ": live after: instruction line LJSR (successor 7017614E)
+; literal.unproven_kind: live after: instruction line LCALL     2
+; literal.unproven_kind: live after: instruction line LJSR     2
+; literal.unproven_kind: live after: partial overwrite     1
+; live.explicit_defs_at_exit.0        37
+; live.explicit_defs_at_exit.1        35
+; live.explicit_defs_at_exit.2         3
+; live.explicit_defs_at_exit.3         5
+; live.explicit_defs_at_exit.4         2
+; live.hist.0                         41
+; live.hist.1                         32
+; live.hist.2                          3
+; live.hist.3                          4
+; live.hist.4                          2
+; mem.unresolved                       4
+;     e.g. 7017600C M8[ac2]
+;     e.g. 7017600C M8[add(ac2, 1)]
+;     e.g. 701760C8 M8[ac2]
+;     e.g. 701760C8 M8[ac2]
+; record.direct                        1
+; record.indexed                       8
+; record.local_reused                  1
+;     e.g. LOGON local_32
+; regfold.blocked                     23
+;     e.g. 70175EA8 ac2 = … : instruction line reads it
+;     e.g. 70175EA8 ac1 = … : instruction line reads it
+;     e.g. 70175EA8 ac0 = … : instruction line reads it
+;     e.g. 70175EDC ac2 = … : instruction line reads it
+;     e.g. 70175F10 ac0 = … : instruction line reads it
+;     e.g. 70175F10 ac2 = … : instruction line reads it
+; regfold.effop_nested                12
+; regfold.effop_not_root               2
+;     e.g. 70175FFF ac1
+;     e.g. 701760C8 ac2
+; regfold.folded                      57
+; regfold.kept_live_at_exit           23
+; regfold.multi_use                    9
+;     e.g. 70175F10 ac2 (2 uses)
+;     e.g. 70175F10 ac1 (3 uses)
+;     e.g. 70175F31 t1 (2 uses)
+;     e.g. 7017600C ac2 (2 uses)
+;     e.g. 70176078 ac2 (2 uses)
+;     e.g. 70176078 ac1 (4 uses)
+; regfold.no_use_in_block              7
+; simplify.nova_bit                    3
+; static.named                        35

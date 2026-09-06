@@ -1,0 +1,587 @@
+; readable.py (Project 34 prototype) — rendering, not an artifact anything executes
+; book quest.ir2.book sha256=281fd5010ad4e8b35502646d4d8759dd7db53274a92f3e91792eeb2f9409051c (ir 5)
+; branch p34-readable (from main 4837d5c); book read from origin/p31-located-strings @ b4384b177bed8229c50b43235b2c08d62a954fd8
+; addrbook sha256=e6fde2c246630e0e  symbols sha256=7fc5e4f715d9022b  blocks sha256=1d3baaf6487a8e3f
+; switches: +frame +static +callargs +record +literal +regfold +simplify +sketch +heapdisjoint +argdisjoint +envinherit
+; naming: local_<d> = frame word d (ac3+d); arg_<N> = by-reference argument N (R[ac3-10-2N]);
+;   .w/.h/.b = 32/16/8-bit access; &x = address of x; p->w = *p; X_rec<s>[i].f<K> = record i (1-based),
+;   stride s words, field at word offset K from X (K is the raw displacement — see Census.md for origins);
+;   r#in = the value register r had at block entry; vstr(p, n) = CHAR(n) VARYING at p; str(p, n) = CHAR(n).
+
+; routine ALLY_PLAYER @7015D053  argc 0  frame 0x130 (608 local words)  variant WSAVS  flags -  blocks 103
+;   local_588 is reused: defs of shape ('other',) | ('scaled', 686) (record naming applies where one shape reaches)
+
+ALLY_PLAYER():
+L_7015D053:
+  @7015D053 WSAVS 0x0130
+  @7015D055 LJSR [0x7017E733]
+
+L_7015D05C:
+  local_16.w = &local_26
+  ac1 = sub(ac1, ac1)
+  ac0 = add(ac0, ~ac0)
+  ac2 = 0x7015D068
+  @7015D064 LJSR [0x7017ED9B]
+  ; live at exit: ac0, ac1, ac2
+
+L_7015D067:
+  ; fall through to L_7015D085
+
+L_7015D085:
+  vstr(&local_534, 15) = "USER_DATA_FILE\x00"
+  ac3 = wfp        ; fp restored
+  ?OPEN_FILE(&local_13, &local_534)        ; site 7015D094
+  ; live at exit: ac3
+
+L_7015D098:
+  ac1 = ac0
+  ac0 = add(ac0, ~ac0)
+  @7015D09A LJSR [0x7017EDCB]
+  ; live at exit: ac0, ac1
+
+L_7015D09D:
+  vstr(&local_544, 82) = "\x0CDo you wish to (L) list, (A) add, or (D) delete\x0Afrom your player alliance list ? "
+  ac3 = wfp        ; fp restored
+  ?WRITE_SCREEN(&OUT_CHAN, &local_544)        ; site 7015D0AD
+  ; live at exit: ac3
+
+L_7015D0B1:
+  call GET_INPUT(bp(ac3, 48))        ; site 7015D0B3
+
+L_7015D0B7:
+  ac1 = local_24.b0
+  if (ac1 != 76) goto L_7015D0BC else goto L_7015D0BB
+  ; live at exit: ac1
+
+L_7015D0BB:
+  goto L_7015D0CD
+
+L_7015D0BC:
+  if (ac1 != 108) goto L_7015D0BF else goto L_7015D0BE
+
+L_7015D0BE:
+  goto L_7015D0CD
+
+L_7015D0BF:
+  if (ac1 != 65) goto L_7015D0C2 else goto L_7015D0C1
+
+L_7015D0C1:
+  goto L_7015D0CD
+
+L_7015D0C2:
+  if (ac1 != 97) goto L_7015D0C5 else goto L_7015D0C4
+
+L_7015D0C4:
+  goto L_7015D0CD
+
+L_7015D0C5:
+  if (ac1 != 68) goto L_7015D0C8 else goto L_7015D0C7
+
+L_7015D0C7:
+  goto L_7015D0CD
+
+L_7015D0C8:
+  if (ac1 != 100) goto L_7015D0CB else goto L_7015D0CA
+
+L_7015D0CA:
+  goto L_7015D0CD
+
+L_7015D0CB:
+  goto L_7015D2DE
+
+L_7015D0CD:
+  local_22.h = trunc16(ac0)
+  if (ac1 != 76) goto L_7015D0D2 else goto L_7015D0D1
+
+L_7015D0D1:
+  goto L_7015D0D5
+
+L_7015D0D2:
+  if (ac1 == 108) goto L_7015D0D5 else goto L_7015D0D4
+
+L_7015D0D4:
+  goto L_7015D0EE
+
+L_7015D0D5:
+  vstr(&local_544, 25) = "\x0APlayer alliance table:\x0A\x0A"
+  ac3 = wfp        ; fp restored
+  ?WRITE_SCREEN(&OUT_CHAN, &local_544)        ; site 7015D0E5
+  ; live at exit: ac3
+
+L_7015D0E9:
+  ac1 = -32768
+  local_22.h = trunc16(ac1)
+  goto L_7015D150
+  ; live at exit: ac1
+
+L_7015D0EE:
+  ac1 = local_24.b0
+  ac2 = add(ac2, ~ac2)
+  if (ac1 == 65) goto L_7015D0F4 else goto L_7015D0F3
+  ; live at exit: ac1, ac2
+
+L_7015D0F3:
+  ac2 = sub(ac2, ac2)
+  ; fall through to L_7015D0F4
+  ; live at exit: ac2
+
+L_7015D0F4:
+  ac0 = add(ac0, ~ac0)
+  if (ac1 == 97) goto L_7015D0F8 else goto L_7015D0F7
+  ; live at exit: ac0
+
+L_7015D0F7:
+  ac0 = sub(ac0, ac0)
+  ; fall through to L_7015D0F8
+  ; live at exit: ac0
+
+L_7015D0F8:
+  local_21.h = trunc16(ac0 | ac2)
+  vstr(&local_534, 15) = "\x0APlayer name ? "
+  ac3 = wfp        ; fp restored
+  ?WRITE_SCREEN(&OUT_CHAN, &local_534)        ; site 7015D10B
+  ; live at exit: ac3
+
+L_7015D10F:
+  @7015D10F LCALL [0x701766ED],0
+
+L_7015D113:
+  ac1 = sx16(IN_BUFFER.h)
+  ac2 = 32
+  if (ac1 >=s ac2) goto L_7015D11A else goto L_7015D119
+  ; live at exit: ac1, ac2
+
+L_7015D119:
+  ac2 = ac1
+  ; fall through to L_7015D11A
+  ; live at exit: ac2
+
+L_7015D11A:
+  bounds_check 1 <=s add(ac1, 1)   ; DERR 16 @7015D11E
+  ; fall through to L_7015D11F
+
+L_7015D11F:
+  ac1 = sx16(IN_BUFFER.h)
+  bounds_check !(ac1 <s 0) && (ac1 >=u ac2)   ; DERR 16 @7015D124
+  ; fall through to L_7015D125
+
+L_7015D125:
+  ac1 = ac2
+  ac0 = 32
+  if (ac1 >=s ac0) goto L_7015D12A else goto L_7015D129
+  ; live at exit: ac0, ac1
+
+L_7015D129:
+  ac0 = ac1
+  ; fall through to L_7015D12A
+  ; live at exit: ac0
+
+L_7015D12A:
+  local_516.h = trunc16(ac0)
+  ac2 = bp(ac3, 1034)
+  ac3 = 0x7000021D:0
+  @7015D131 WCMV
+  ac3 = wfp        ; fp restored
+  vstr(&local_534, 11) = "Password ? "
+  ac3 = wfp        ; fp restored
+  ?WRITE_SCREEN(&OUT_CHAN, &local_534)        ; site 7015D143
+  ; live at exit: ac2, ac3
+
+L_7015D147:
+  @7015D147 LCALL [0x701766ED],0
+
+L_7015D14B:
+  ac1 = ac0
+  ac0 = add(ac0, ~ac0)
+  @7015D14D LJSR [0x7017EDCB]
+  ; live at exit: ac0, ac1
+
+L_7015D150:
+  local_18.h = trunc16(980)
+  ac1 = sub(ac1, ac1)
+  local_23.h = trunc16(ac1)
+  local_19.h = trunc16(ac1)
+  ac2 = lsh(local_16.w, 1)
+  local_534.w = ac2
+  local_544.h = trunc16(-32768)
+  local_586.h = trunc16(24576)
+  local_588.w = ac1
+  ?READ(&local_13, &local_534, &local_18, &local_23, &local_544, &local_586, &local_588)        ; site 7015D176
+  ; live at exit: ac1, ac2
+
+L_7015D17A:
+  if ((lsh(~sx16(local_23.h), -15) & 1) == 0) goto L_7015D17F else goto L_7015D17E
+
+L_7015D17E:
+  goto L_7015D181
+
+L_7015D17F:
+  goto L_7015D2C0
+
+L_7015D181:
+  ac0 = sx16(local_18.h)
+  if ((ac0 & 65535) == 0) goto L_7015D185 else goto L_7015D184
+  ; live at exit: ac0
+
+L_7015D184:
+  goto L_7015D187
+
+L_7015D185:
+  goto L_7015D2E3
+
+L_7015D187:
+  local_19.h = nadd(local_19.h, 1)
+  if ((lsh(sx16(local_22.h), -15) & 1) == 1) goto L_7015D18D else goto L_7015D18C
+
+L_7015D18C:
+  goto L_7015D1EA
+
+L_7015D18D:
+  ac0 = sx16(PLAYER_NUM.h)
+  bounds_check !(ac0 >s 10) && (ac0 >s 0)   ; DERR 17 @7015D193
+  ; fall through to L_7015D194
+  ; live at exit: ac0
+
+L_7015D194:
+  ac1 = 686
+  ac2 = sx16(SD_PTR_rec686[sx16(PLAYER_NUM.h)].fm629.h /*via ac0,ac1*/)
+  bounds_check !(ac2 >s 100) && (ac2 >s 0)   ; DERR 17 @7015D1A0
+  ; fall through to L_7015D1A1
+  ; live at exit: ac1, ac2
+
+L_7015D1A1:
+  ac0 = add(ac2, 2783)
+  ac2 = local_16.w
+  ac1 = sub(ac1, ac1)
+  if ((lsh(M16[ind(ac2) + lsh(ac0, -4)], 0 - (15 - (ac0 & 15))) & 1) == 0) goto L_7015D1A9 else goto L_7015D1A8
+  ; live at exit: ac0, ac1, ac2
+
+L_7015D1A8:
+  ac1 = add(ac1, ~ac1)
+  ; fall through to L_7015D1A9
+  ; live at exit: ac1
+
+L_7015D1A9:
+  if ((lsh(ac1, -15) & 1) == 1) goto L_7015D1AB else goto L_7015D1AA
+
+L_7015D1AA:
+  goto L_7015D1E7
+
+L_7015D1AB:
+  ac0 = add(sx16(M16[wp(ac2, 0)]), 6)
+  local_586.w = ac0
+  ac2 = bp(ac3, 1088)
+  local_588.w = add(ac0, 1)
+  ac0 = 6
+  ac3 = 0x7015CF71:0
+  ac1 = ac0
+  @7015D1BB WCMV
+  ac3 = wfp        ; fp restored
+  ac0 = sx16(local_16->h)
+  ac3 = local_16.w
+  ac3 = bp(ac3, 2)
+  ac1 = ac0
+  @7015D1C4 WCMV
+  ac3 = wfp        ; fp restored
+  ac2 = bp(ac3, 1180)
+  ac0 = local_586.w
+  ac3 = bp(ac3, 1088)
+  ac1 = ac0
+  @7015D1CD WCMV
+  M8[ac2] = zx8(10)
+  ac3 = wfp        ; fp restored
+  ac0 = local_588.w
+  ac1 = ac0
+  local_544.h = trunc16(ac0)
+  ac2 = bp(ac3, 1090)
+  ac3 = bp(ac3, 1180)
+  @7015D1DB WCMV
+  ac3 = wfp        ; fp restored
+  ?WRITE_SCREEN(&OUT_CHAN, &local_544)        ; site 7015D1E2
+  ; live at exit: ac1, ac2, ac3
+
+L_7015D1E6:
+  goto L_7015D1E8
+
+L_7015D1E7:
+  ac0 = ac0
+  ; fall through to L_7015D1E8
+
+L_7015D1E8:
+  goto L_7015D2AD
+
+L_7015D1EA:
+  ac1 = cmp(vstr(R[&local_16]), vstr(&local_516))
+  ac3 = wfp        ; fp restored
+  if (ac1 != 0) goto L_7015D1F8 else goto L_7015D1F7
+  ; live at exit: ac3
+
+L_7015D1F7:
+  goto L_7015D1FA
+
+L_7015D1F8:
+  goto L_7015D2AD
+
+L_7015D1FA:
+  ac1 = cmp(vstr((local_16.w + 17)), vstr(&IN_BUFFER))
+  ac3 = wfp        ; fp restored
+  if (ac1 != 0) goto L_7015D20B else goto L_7015D20A
+  ; live at exit: ac3
+
+L_7015D20A:
+  goto L_7015D20D
+
+L_7015D20B:
+  goto L_7015D2AD
+
+L_7015D20D:
+  ac0 = sx16(SD_PTR->f43.h)
+  local_586.h = trunc16(ac0)
+  ac1 = 1
+  local_12.h = trunc16(ac1)
+  ac2 = ac1
+  if (ac2 <=s ac0) goto L_7015D21B else goto L_7015D21A
+  ; live at exit: ac2
+
+L_7015D21A:
+  goto L_7015D260
+
+L_7015D21B:
+  ac1 = ac2
+  goto L_7015D222
+
+L_7015D21D:
+  t1 = nadd(local_12.h, 1)
+  local_12.h = t1
+  ac1 = t1
+  if (t1 >s sx16(local_586.h)) goto L_7015D260 else goto L_7015D222
+
+L_7015D222:
+  ac0 = sx16(local_12.h)
+  bounds_check !(ac0 >s 10) && (ac0 >s 0)   ; DERR 17 @7015D227
+  ; fall through to L_7015D228
+  ; live at exit: ac0
+
+L_7015D228:
+  ac0 = mul(ac0, 686)
+  local_588.w = ac0
+  ac0 = add(ac0, SD_PTR.w)
+  ac2 = sx16(local_19.h)
+  if (sx16(SD_PTR_rec686[sx16(local_12.h)].fm629.h /*via ac0*/) == ac2) goto L_7015D237 else goto L_7015D236
+  ; live at exit: ac2
+
+L_7015D236:
+  goto L_7015D21D        ; loop back
+
+L_7015D237:
+  ac0 = add(mul(16, local_588.w), -9456)
+  ac2 = sub(ac2, ac2)
+  if ((lsh((SD_PTR + lsh(add(mul(16, local_588.w), -9456), -4))->f0.h /*via ind,ac0*/, 0 - (15 - (ac0 & 15))) & 1) == 0) goto L_7015D243 else goto L_7015D242
+  ; live at exit: ac2
+
+L_7015D242:
+  ac2 = add(ac2, ~ac2)
+  ; fall through to L_7015D243
+  ; live at exit: ac2
+
+L_7015D243:
+  if ((lsh(ac2, -15) & 1) == 1) goto L_7015D245 else goto L_7015D244
+
+L_7015D244:
+  goto L_7015D21D        ; loop back
+
+L_7015D245:
+  vstr(&local_590, 33) = "That player is currently active!\x0A"
+  ac3 = wfp        ; fp restored
+  ?WRITE_SCREEN(&OUT_CHAN, &local_590)        ; site 7015D255
+  ; live at exit: ac3
+
+L_7015D259:
+  @7015D259 LCALL [0x7016DE91],0
+
+L_7015D25D:
+  goto L_7015D2E3
+
+L_7015D260:
+  ac0 = sx16(PLAYER_NUM.h)
+  bounds_check !(ac0 >s 10) && (ac0 >s 0)   ; DERR 17 @7015D266
+  ; fall through to L_7015D267
+  ; live at exit: ac0
+
+L_7015D267:
+  ac2 = sx16(SD_PTR_rec686[sx16(PLAYER_NUM.h)].fm629.h /*via ac0*/)
+  bounds_check !(ac2 >s 100) && (ac2 >s 0)   ; DERR 17 @7015D273
+  ; fall through to L_7015D274
+  ; live at exit: ac2
+
+L_7015D274:
+  ac0 = sx16(local_21.h)
+  ac2 = add(ac2, 2783)
+  ac1 = local_16.w
+  M16[ind(ac1) + lsh(ac2, -4)] = M16[ind(ac1) + lsh(ac2, -4)] | lsh(32768, 0 - (ac2 & 15))
+  if ((lsh(ac0, -15) & 1) == 1) goto L_7015D27D else goto L_7015D27C
+  ; live at exit: ac1, ac2
+
+L_7015D27C:
+  M16[ind(ac1) + lsh(ac2, -4)] = M16[ind(ac1) + lsh(ac2, -4)] & ~lsh(32768, 0 - (ac2 & 15))
+  ; fall through to L_7015D27D
+
+L_7015D27D:
+  local_586.w = lsh(ac1, 1)
+  call UPDATE_USER_DATA_FILE(&local_13, &local_586, &local_19)        ; site 7015D286
+
+L_7015D28A:
+  ac0 = sx16(PLAYER_NUM.h)
+  bounds_check !(ac0 >s 10) && (ac0 >s 0)   ; DERR 17 @7015D290
+  ; fall through to L_7015D291
+  ; live at exit: ac0
+
+L_7015D291:
+  ac0 = mul(mul(ac0, 686), 16)
+  ac1 = sx16(local_19.h)
+  bounds_check !(ac1 >s 1000) && (ac1 >s 0)   ; DERR 17 @7015D29C
+  ; fall through to L_7015D29D
+  ; live at exit: ac0, ac1
+
+L_7015D29D:
+  local_586.w = add(ac0, ac1)
+  ac0 = sx16(local_21.h)
+  ac1 = add(local_586.w, -2545)
+  ac2 = SD_PTR.w
+  (SD_PTR + lsh(add(local_586.w, -2545), -4))->f0.h /*via ind,ac2,ac1*/ = (SD_PTR + lsh(add(local_586.w, -2545), -4))->f0.h /*via ind,ac2,ac1*/ | lsh(32768, 0 - (ac1 & 15))
+  if ((lsh(ac0, -15) & 1) == 1) goto L_7015D2AC else goto L_7015D2AB
+  ; live at exit: ac0, ac1, ac2
+
+L_7015D2AB:
+  (SD_PTR + lsh(add(local_586.w, -2545), -4))->f0.h /*via ind,ac2,ac1*/ = (SD_PTR + lsh(add(local_586.w, -2545), -4))->f0.h /*via ind,ac2,ac1*/ & ~lsh(32768, 0 - (ac1 & 15))
+  ; fall through to L_7015D2AC
+
+L_7015D2AC:
+  goto L_7015D2E3
+
+L_7015D2AD:
+  local_586.w = lsh(local_16.w, 1)
+  ?READ(&local_13, &local_586, &local_18, &local_23)        ; site 7015D2BA
+
+L_7015D2BE:
+  goto L_7015D17A        ; loop back
+
+L_7015D2C0:
+  ac0 = ~sx16(local_22.h)
+  if ((lsh(ac0, -15) & 1) == 1) goto L_7015D2C5 else goto L_7015D2C4
+  ; live at exit: ac0
+
+L_7015D2C4:
+  goto L_7015D2D9
+
+L_7015D2C5:
+  vstr(&local_590, 36) = "That player/password does not exist\x0A"
+  ac3 = wfp        ; fp restored
+  ?WRITE_SCREEN(&OUT_CHAN, &local_590)        ; site 7015D2D5
+  ; live at exit: ac3
+
+L_7015D2D9:
+  @7015D2D9 LCALL [0x7016DE91],0
+
+L_7015D2DD:
+  goto L_7015D2E3
+
+L_7015D2DE:
+  ac1 = ac0
+  ac0 = add(ac0, ~ac0)
+  @7015D2E0 LJSR [0x7017EDCB]
+  ; live at exit: ac0, ac1
+
+L_7015D2E3:
+  ac1 = sub(ac1, ac1)
+  ac0 = add(ac0, ~ac0)
+  ac2 = 0x7015D2EB
+  @7015D2E7 LJSR [0x7017ED9B]
+  ; live at exit: ac0, ac1, ac2
+
+L_7015D2EA:
+  ; fall through to L_7015D2F3
+
+L_7015D2F3:
+  ?CLOSE_FILE(&local_13)        ; site 7015D2F5
+
+L_7015D2F9:
+  ac1 = sub(ac1, ac1)
+  ac0 = add(ac0, ~ac0)
+  @7015D2FB LJSR [0x7017EDCB]
+  ; live at exit: ac0, ac1
+
+L_7015D2FE:
+  @7015D2FE LJSR [0x7017E77D]
+
+; ---- this routine's rewrite report ----
+; callargs.folded                      2
+; env.inherited_blocks                63
+; frame.local                         93
+; instr.kept                          18
+;     e.g. 7015D053 WSAVS 0x0130
+;     e.g. 7015D055 LJSR [0x7017E733]
+;     e.g. 7015D064 LJSR [0x7017ED9B]
+;     e.g. 7015D09A LJSR [0x7017EDCB]
+;     e.g. 7015D10F LCALL [0x701766ED],0
+;     e.g. 7015D131 WCMV
+; literal.piece                        7
+; literal.unproven                     7
+;     e.g. 7015D085 "USER_DATA_FILE\x00": live after: instruction line LJSR (successor 7015D098)
+;     e.g. 7015D09D "\x0CDo you wish to (L) list, (": live after: instruction line LJSR (successor 7015D0B1)
+;     e.g. 7015D0D5 "\x0APlayer alliance table:\x0A": live after: partial overwrite (frame slot reused: M16 store) (successor 7015D0E9)
+;     e.g. 7015D0F8 "\x0APlayer name ? ": live after: instruction line LCALL (successor 7015D10F)
+;     e.g. 7015D12A "Password ? ": live after: instruction line LCALL (successor 7015D147)
+;     e.g. 7015D245 "That player is currently activ": live after: instruction line LCALL (successor 7015D259)
+; literal.unproven_kind: live after: instruction line LCALL     4
+; literal.unproven_kind: live after: instruction line LJSR     2
+; literal.unproven_kind: live after: partial overwrite     1
+; live.explicit_defs_at_exit.0        55
+; live.explicit_defs_at_exit.1        28
+; live.explicit_defs_at_exit.2        13
+; live.explicit_defs_at_exit.3         6
+; live.explicit_defs_at_exit.4         1
+; live.hist.0                         59
+; live.hist.1                         27
+; live.hist.2                         12
+; live.hist.3                          5
+; mem.unresolved                       7
+;     e.g. 7015D1A1 M16[ind(ac2) + lsh(ac0, -4)]
+;     e.g. 7015D1AB M16[wp(ac2, 0)]
+;     e.g. 7015D1AB M8[ac2]
+;     e.g. 7015D274 M16[ind(ac1) + lsh(ac2, -4)]
+;     e.g. 7015D274 M16[ind(ac1) + lsh(ac2, -4)]
+;     e.g. 7015D27C M16[ind(ac1) + lsh(ac2, -4)]
+; record.direct                        1
+; record.indexed                       3
+; record.local_reused                  1
+;     e.g. ALLY_PLAYER local_588
+; record.unknown_term                  5
+;     e.g. 7015D237 SD_PTR + lsh(add(mul(16, local_588.w), -9456), -4)
+;     e.g. 7015D29D SD_PTR + lsh(add(local_586.w, -2545), -4)
+;     e.g. 7015D29D SD_PTR + lsh(add(local_586.w, -2545), -4)
+;     e.g. 7015D2AB SD_PTR + lsh(add(local_586.w, -2545), -4)
+;     e.g. 7015D2AB SD_PTR + lsh(add(local_586.w, -2545), -4)
+; regfold.blocked                     27
+;     e.g. 7015D05C ac2 = … : instruction line reads it
+;     e.g. 7015D05C ac1 = … : instruction line reads it
+;     e.g. 7015D05C ac0 = … : instruction line reads it
+;     e.g. 7015D098 ac1 = … : instruction line reads it
+;     e.g. 7015D098 ac0 = … : instruction line reads it
+;     e.g. 7015D12A ac2 = … : instruction line reads it
+; regfold.effop_nested                 7
+; regfold.effop_not_root               1
+;     e.g. 7015D228 ac0
+; regfold.folded                      48
+; regfold.kept_live_at_exit           41
+; regfold.multi_use                    7
+;     e.g. 7015D11F ac1 (2 uses)
+;     e.g. 7015D1AB ac0 (2 uses)
+;     e.g. 7015D20D ac0 (2 uses)
+;     e.g. 7015D20D ac1 (2 uses)
+;     e.g. 7015D21D t1 (3 uses)
+;     e.g. 7015D228 ac0 (2 uses)
+; regfold.no_use_in_block              3
+; simplify.nova16                      1
+; simplify.nova_bit                    7
+; static.named                         9

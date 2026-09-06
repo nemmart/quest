@@ -1,0 +1,43 @@
+; readable.py (Project 34 prototype) — rendering, not an artifact anything executes
+; book quest.ir2.book sha256=281fd5010ad4e8b35502646d4d8759dd7db53274a92f3e91792eeb2f9409051c (ir 5)
+; branch p34-readable (from main 4837d5c); book read from origin/p31-located-strings @ b4384b177bed8229c50b43235b2c08d62a954fd8
+; addrbook sha256=e6fde2c246630e0e  symbols sha256=7fc5e4f715d9022b  blocks sha256=1d3baaf6487a8e3f
+; switches: +frame +static +callargs +record +literal +regfold +simplify +sketch +heapdisjoint +argdisjoint +envinherit
+; naming: local_<d> = frame word d (ac3+d); arg_<N> = by-reference argument N (R[ac3-10-2N]);
+;   .w/.h/.b = 32/16/8-bit access; &x = address of x; p->w = *p; X_rec<s>[i].f<K> = record i (1-based),
+;   stride s words, field at word offset K from X (K is the raw displacement — see Census.md for origins);
+;   r#in = the value register r had at block entry; vstr(p, n) = CHAR(n) VARYING at p; str(p, n) = CHAR(n).
+
+; routine LOGON.2@70175EE2 @70175EE2  argc 0  frame 0x06 (12 local words)  variant WSAVS  flags push,slotpatch,nested,nocall  blocks 3
+
+LOGON.2@70175EE2():
+L_70175EE2:
+  @70175EE2 WSAVS 0x0006
+  ?LIB_ERROR_CODE()        ; site 70175EE4
+
+L_70175EE8:
+  ac1 = 18
+  local_12.w = ac0
+  vstr(&local_2, 18) = "Attempting to ?CON"
+  ac3 = wfp        ; fp restored
+  call RETURN_MESSAGE(&local_12, 0x701584C9, &local_2, ac1, ac0, 0x70175DA9)        ; site 70175EFF
+  ; live at exit: ac3
+
+L_70175F03:
+  return
+
+; ---- this routine's rewrite report ----
+; callargs.folded                      1
+; env.inherited_blocks                 0
+; frame.local                          4
+; instr.kept                           1
+;     e.g. 70175EE2 WSAVS 0x0006
+; literal.piece                        1
+; literal.unproven                     1
+;     e.g. 70175EE8 "Attempting to ?CON": read of the local before the call (70175EE8 stmt 7)
+; literal.unproven_kind: read of the local before the call     1
+; live.explicit_defs_at_exit.0         2
+; live.explicit_defs_at_exit.2         1
+; live.hist.0                          2
+; live.hist.1                          1
+; regfold.no_use_in_block              1

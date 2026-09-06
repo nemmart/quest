@@ -1,0 +1,137 @@
+; readable.py (Project 34 prototype) — rendering, not an artifact anything executes
+; book quest.ir2.book sha256=281fd5010ad4e8b35502646d4d8759dd7db53274a92f3e91792eeb2f9409051c (ir 5)
+; branch p34-readable (from main 4837d5c); book read from origin/p31-located-strings @ b4384b177bed8229c50b43235b2c08d62a954fd8
+; addrbook sha256=e6fde2c246630e0e  symbols sha256=7fc5e4f715d9022b  blocks sha256=1d3baaf6487a8e3f
+; switches: +frame +static +callargs +record +literal +regfold +simplify +sketch +heapdisjoint +argdisjoint +envinherit
+; naming: local_<d> = frame word d (ac3+d); arg_<N> = by-reference argument N (R[ac3-10-2N]);
+;   .w/.h/.b = 32/16/8-bit access; &x = address of x; p->w = *p; X_rec<s>[i].f<K> = record i (1-based),
+;   stride s words, field at word offset K from X (K is the raw displacement — see Census.md for origins);
+;   r#in = the value register r had at block entry; vstr(p, n) = CHAR(n) VARYING at p; str(p, n) = CHAR(n).
+
+; routine UPDATE_SCREENS @7017D635  argc 3  frame 0x05 (10 local words)  variant WSAVS  flags -  blocks 18
+;   local_6 is reused: defs of shape ('other',) | ('scaled', 686) (record naming applies where one shape reaches)
+;   local_8 holds an element pointer into SD_PTR_rec686 (+0)
+
+UPDATE_SCREENS(arg_1, arg_2, arg_3):
+L_7017D635:
+  @7017D635 WSAVS 0x0005
+  ac0 = sx16(SD_PTR->f43.h)
+  local_4.h = trunc16(ac0)
+  ac1 = 1
+  local_2.h = trunc16(ac1)
+  if (ac1 <=s ac0) goto L_7017D644 else goto L_7017D643
+  ; live at exit: ac1
+
+L_7017D643:
+  return
+
+L_7017D644:
+  goto L_7017D64A
+
+L_7017D645:
+  t1 = nadd(local_2.h, 1)
+  local_2.h = t1
+  ac1 = t1
+  if (t1 >s sx16(local_4.h)) goto L_7017D6A8 else goto L_7017D64A
+  ; live at exit: ac1
+
+L_7017D64A:
+  bounds_check !(ac1 >s 10) && (ac1 >s 0)   ; DERR 17 @7017D64D
+  ; fall through to L_7017D64E
+
+L_7017D64E:
+  ac2 = sub(sx16(SD_PTR_rec686[ac1].fm589.h), sx16(arg_1->h))
+  if (ac2 >=s 0) goto L_7017D65C else goto L_7017D65B
+  ; live at exit: ac2
+
+L_7017D65B:
+  ac2 = sub(0, ac2)
+  ; fall through to L_7017D65C
+  ; live at exit: ac2
+
+L_7017D65C:
+  if (ac2 <=s 4) goto L_7017D65F else goto L_7017D65E
+
+L_7017D65E:
+  goto L_7017D645        ; loop back
+
+L_7017D65F:
+  ac0 = sx16(local_2.h)
+  bounds_check !(ac0 >s 10) && (ac0 >s 0)   ; DERR 17 @7017D664
+  ; fall through to L_7017D665
+  ; live at exit: ac0
+
+L_7017D665:
+  ac0 = mul(ac0, 686)
+  local_6.w = ac0
+  ac0 = add(ac0, SD_PTR.w)
+  ac1 = sx16(arg_2->h)
+  ac2 = sub(sx16(SD_PTR_rec686[sx16(local_2.h)].fm588.h /*via ac0*/), ac1)
+  if (ac2 >=s 0) goto L_7017D675 else goto L_7017D674
+  ; live at exit: ac0, ac1, ac2
+
+L_7017D674:
+  ac2 = sub(0, ac2)
+  ; fall through to L_7017D675
+  ; live at exit: ac2
+
+L_7017D675:
+  local_8.w = ac0
+  if (ac2 <=s 5) goto L_7017D67A else goto L_7017D679
+
+L_7017D679:
+  goto L_7017D645        ; loop back
+
+L_7017D67A:
+  ac2 = sub(sx16(arg_1->h), add(sx16(SD_PTR_rec686[local_6.w/686].fm589.h), -5))
+  bounds_check !(ac2 >s 9) && (ac2 >s 0)   ; DERR 17 @7017D689
+  ; fall through to L_7017D68A
+  ; live at exit: ac2
+
+L_7017D68A:
+  local_6.w = add(mul(ac2, 22), local_6.w)
+  ac1 = sub(ac1, add(sx16(local_8->fm588.h), -6))
+  bounds_check !(ac1 >s 11) && (ac1 >s 0)   ; DERR 17 @7017D69B
+  ; fall through to L_7017D69C
+  ; live at exit: ac1
+
+L_7017D69C:
+  (SD_PTR + sx16(M16[R[ac3#in@7017D665 + -14]]) - sx16(local_8->fm588.h) + sx16(M16[R[ac3#in@7017D665 + -14]]) - sx16(local_8->fm588.h) + local_6.w)->fm599.w /*via ac1*/ = arg_3->w
+  goto L_7017D645        ; loop back
+
+L_7017D6A8:
+  return
+
+; ---- this routine's rewrite report ----
+; env.inherited_blocks                14
+; frame.arg                            4
+; frame.local                         13
+; instr.kept                           1
+;     e.g. 7017D635 WSAVS 0x0005
+; live.explicit_defs_at_exit.0         9
+; live.explicit_defs_at_exit.1         7
+; live.explicit_defs_at_exit.2         1
+; live.explicit_defs_at_exit.3         1
+; live.hist.0                          9
+; live.hist.1                          8
+; live.hist.3                          1
+; mem.unresolved                       4
+;     e.g. 7017D69C M16[R[ac3#in@7017D665 + -14]]
+;     e.g. 7017D69C M16[R[ac3#in@7017D665 + -14]]
+;     e.g. 7017D69C M16[R[ac3#in@7017D665 + -14]]
+;     e.g. 7017D69C M16[R[ac3#in@7017D665 + -14]]
+; record.direct                        1
+; record.indexed                       3
+; record.local_reused                  1
+;     e.g. UPDATE_SCREENS local_6
+; record.unknown_term                  1
+;     e.g. 7017D69C SD_PTR + sx16(M16[R[ac3#in@7017D665 + -14]]) - sx16(local_8->fm588.h) + sx16(M16[R[ac3#in@7017D665 + -14]]) - sx16(local_8->fm588.h) + local_6.w
+; record.via_local                     5
+; regfold.effop_nested                 9
+; regfold.folded                      28
+; regfold.kept_live_at_exit           11
+; regfold.multi_use                    3
+;     e.g. 7017D635 ac0 (2 uses)
+;     e.g. 7017D645 t1 (3 uses)
+;     e.g. 7017D665 ac0 (2 uses)
+; static.named                         1

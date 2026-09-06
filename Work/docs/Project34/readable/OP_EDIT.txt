@@ -1,0 +1,3955 @@
+; readable.py (Project 34 prototype) — rendering, not an artifact anything executes
+; book quest.ir2.book sha256=281fd5010ad4e8b35502646d4d8759dd7db53274a92f3e91792eeb2f9409051c (ir 5)
+; branch p34-readable (from main 4837d5c); book read from origin/p31-located-strings @ b4384b177bed8229c50b43235b2c08d62a954fd8
+; addrbook sha256=e6fde2c246630e0e  symbols sha256=7fc5e4f715d9022b  blocks sha256=1d3baaf6487a8e3f
+; switches: +frame +static +callargs +record +literal +regfold +simplify +sketch +heapdisjoint +argdisjoint +envinherit
+; naming: local_<d> = frame word d (ac3+d); arg_<N> = by-reference argument N (R[ac3-10-2N]);
+;   .w/.h/.b = 32/16/8-bit access; &x = address of x; p->w = *p; X_rec<s>[i].f<K> = record i (1-based),
+;   stride s words, field at word offset K from X (K is the raw displacement — see Census.md for origins);
+;   r#in = the value register r had at block entry; vstr(p, n) = CHAR(n) VARYING at p; str(p, n) = CHAR(n).
+
+; routine OP_EDIT @7017381B  argc 0  frame 0xF2 (484 local words)  variant WSAVS  flags -  blocks 666
+;   local_12 is reused: defs of shape ('baseptr', 1879048810, 0) | ('other',) (record naming applies where one shape reaches)
+;   local_32 is reused: defs of shape ('baseptr', 1879048722, 0) | ('elemptr', 1879048720, 686, 0) | ('elemptr', 1879048722, 19, 0) | ('elemptr', 1879048722, 20, 0) | ('elemptr', 1879048722, 22, 0) | ('narrow',) | ('other',) | ('scaled', 100) | ('scaled', 19) | ('scaled', 20) | ('scaled', 23) | ('scaled', 686) | ('scaled', 9) (record naming applies where one shape reaches)
+;   local_34 is reused: defs of shape ('elemptr', 1879048720, 686, 0) | ('elemptr', 1879048722, 20, 0) | ('elemptr', 1879048722, 22, 0) | ('narrow',) | ('other',) | ('scaled', 19) | ('scaled', 20) | ('scaled', 23) (record naming applies where one shape reaches)
+;   local_36 is reused: defs of shape ('narrow',) | ('other',) | ('scaled', 302) (record naming applies where one shape reaches)
+;   local_38 is reused: defs of shape ('elemptr', 1879048720, 302, 0) | ('narrow',) | ('other',) (record naming applies where one shape reaches)
+;   local_54 is reused: defs of shape ('baseptr', 1879048724, 0) | ('other',) (record naming applies where one shape reaches)
+
+OP_EDIT():
+L_7017381B:
+  @7017381B WSAVS 0x00F2
+  @7017381D LJSR [0x7017E733]
+
+L_70173824:
+  ac0 = sub(ac0, ac0)
+  local_12.w = ac0
+  local_25.h = trunc16(ac0)
+  ac1 = 1
+  local_30.h = trunc16(ac1)
+  call INIT_SCREEN(&PLAYER_NUM)        ; site 70173830
+  ; live at exit: ac0, ac1
+
+L_70173834:
+  @70173834 LCALL [0x70176A93],0
+
+L_70173838:        ; ac3 is not fp on entry (predecessor left it repurposed)
+  call DISPLAY_SCREEN(&PLAYER_NUM)        ; site 7017383B
+
+L_7017383F:        ; ac3 is not fp on entry (predecessor left it repurposed)
+  M32[wp(ac3, 32)] = 0x00010000
+  ac1 = 5
+  M16[wp(ac3, 34)] = trunc16(ac1)
+  ac2 = 12
+  M16[wp(ac3, 36)] = trunc16(ac2)
+  M16[wp(ac3, 38)] = trunc16(2048)
+  ?WRITE_SCREEN(&OUT_CHAN, wp(ac3, 32), wp(ac3, 34), wp(ac3, 36), wp(ac3, 38))        ; site 7017385B
+  ; live at exit: ac1, ac2
+
+L_7017385F:        ; ac3 is not fp on entry (predecessor left it repurposed)
+  call GET_INPUT(bp(ac3, 62))        ; site 70173861
+
+L_70173865:        ; ac3 is not fp on entry (predecessor left it repurposed)
+  ac0 = M8[bp(ac3, 62)]
+  if (ac0 == 72) goto L_7017386A else goto L_70173869
+  ; live at exit: ac0
+
+L_70173869:        ; ac3 is not fp on entry (predecessor left it repurposed)
+  goto L_70173870
+
+L_7017386A:        ; ac3 is not fp on entry (predecessor left it repurposed)
+  @7017386A LCALL [0x70175BA9],0
+
+L_7017386E:        ; ac3 is not fp on entry (predecessor left it repurposed)
+  goto L_7017563C
+
+L_70173870:        ; ac3 is not fp on entry (predecessor left it repurposed)
+  ac0 = M8[bp(ac3, 62)]
+  if (ac0 == 80) goto L_70173875 else goto L_70173874
+  ; live at exit: ac0
+
+L_70173874:        ; ac3 is not fp on entry (predecessor left it repurposed)
+  goto L_70173886
+
+L_70173875:        ; ac3 is not fp on entry (predecessor left it repurposed)
+  @70173875 LCALL [0x7016EB87],0
+
+L_70173879:        ; ac3 is not fp on entry (predecessor left it repurposed)
+  @70173879 LCALL [0x70176A93],0
+
+L_7017387D:        ; ac3 is not fp on entry (predecessor left it repurposed)
+  call DISPLAY_SCREEN(&PLAYER_NUM)        ; site 70173880
+
+L_70173884:        ; ac3 is not fp on entry (predecessor left it repurposed)
+  goto L_7017563C
+
+L_70173886:        ; ac3 is not fp on entry (predecessor left it repurposed)
+  ac0 = M8[bp(ac3, 62)]
+  if (ac0 == 75) goto L_7017388B else goto L_7017388A
+  ; live at exit: ac0
+
+L_7017388A:        ; ac3 is not fp on entry (predecessor left it repurposed)
+  goto L_7017389C
+
+L_7017388B:        ; ac3 is not fp on entry (predecessor left it repurposed)
+  @7017388B LCALL [0x7016E2C7],0
+
+L_7017388F:        ; ac3 is not fp on entry (predecessor left it repurposed)
+  @7017388F LCALL [0x70176A93],0
+
+L_70173893:        ; ac3 is not fp on entry (predecessor left it repurposed)
+  call DISPLAY_SCREEN(&PLAYER_NUM)        ; site 70173896
+
+L_7017389A:        ; ac3 is not fp on entry (predecessor left it repurposed)
+  goto L_7017563C
+
+L_7017389C:        ; ac3 is not fp on entry (predecessor left it repurposed)
+  if (M8[bp(ac3, 62)] != 46) goto L_701738A1 else goto L_701738A0
+
+L_701738A0:        ; ac3 is not fp on entry (predecessor left it repurposed)
+  goto L_701738A3
+
+L_701738A1:        ; ac3 is not fp on entry (predecessor left it repurposed)
+  goto L_70173927
+
+L_701738A3:        ; ac3 is not fp on entry (predecessor left it repurposed)
+  vstr(wp(ac3, 40), 25) = "\x0BTerritory name please : "
+  ac3 = wfp        ; fp restored
+  local_32.h = trunc16(21)
+  local_34.h = trunc16(ac0)
+  local_36.h = trunc16(2048)
+  ?WRITE_SCREEN(&OUT_CHAN, &local_40, &local_32, &local_34, &local_36)        ; site 701738C3
+  ; live at exit: ac3
+
+L_701738C7:
+  ac1 = ac0
+  ac0 = add(ac0, ~ac0)
+  ac2 = 0x701738CF
+  @701738CB LJSR [0x7017ED9B]
+  ; live at exit: ac0, ac1, ac2
+
+L_701738CE:
+  ; fall through to L_701738D7
+
+L_701738D7:
+  @701738D7 LCALL [0x701766ED],0
+
+L_701738DB:
+  @701738DB LJSR [0x7017EDCB]
+
+L_701738DE:
+  ac2 = sx16(M16[R[&OBJ_PTR]])
+  local_32.h = trunc16(ac2)
+  ac0 = 1
+  local_17.h = trunc16(ac0)
+  if (ac0 <=s ac2) goto L_701738E9 else goto L_701738E8
+
+L_701738E8:
+  goto L_70173925
+
+L_701738E9:
+  goto L_701738EF
+
+L_701738EA:
+  t1 = nadd(local_17.h, 1)
+  local_17.h = t1
+  ac0 = t1
+  if (t1 >s sx16(local_32.h)) goto L_70173925 else goto L_701738EF
+
+L_701738EF:
+  ac1 = sx16(local_17.h)
+  bounds_check !(ac1 >s 100) && (ac1 >s 0)   ; DERR 17 @701738F4
+  ; fall through to L_701738F5
+  ; live at exit: ac1
+
+L_701738F5:
+  ac1 = mul(ac1, 20)
+  local_34.w = ac1
+  ac1 = add(ac1, OBJ_PTR.w)
+  ac2 = add(local_34.w, OBJ_PTR.w)
+  ac1 = cmp(vstr(&IN_BUFFER), vstr(&OBJ_PTR_rec20[sx16(local_17.h)].fm15))
+  ac3 = wfp        ; fp restored
+  if (ac1 == 0) goto L_70173911 else goto L_70173910
+  ; live at exit: ac1, ac2, ac3
+
+L_70173910:
+  goto L_701738EA        ; loop back
+
+L_70173911:
+  call TERRITORY_MAP(&local_17)        ; site 70173913
+
+L_70173917:
+  @70173917 LCALL [0x70176A93],0
+
+L_7017391B:
+  call DISPLAY_SCREEN(&PLAYER_NUM)        ; site 7017391E
+
+L_70173922:
+  goto L_7017563C
+
+L_70173925:
+  goto L_7017563C
+
+L_70173927:        ; ac3 is not fp on entry (predecessor left it repurposed)
+  ac0 = M8[bp(ac3, 62)]
+  if (ac0 != 73) goto L_7017392C else goto L_7017392B
+  ; live at exit: ac0
+
+L_7017392B:
+  goto L_7017392F
+
+L_7017392C:
+  if (ac0 == 105) goto L_7017392F else goto L_7017392E
+
+L_7017392E:
+  goto L_70173983
+
+L_7017392F:
+  vstr(&local_54, 27) = "\x0BIncrement number please : "
+  ac3 = wfp        ; fp restored
+  local_32.h = trunc16(21)
+  local_34.h = trunc16(ac0)
+  local_36.h = trunc16(2048)
+  ?WRITE_SCREEN(&OUT_CHAN, &local_54, &local_32, &local_34, &local_36)        ; site 7017394F
+  ; live at exit: ac3
+
+L_70173953:
+  ac1 = ac0
+  ac0 = add(ac0, ~ac0)
+  ac2 = 0x7017395B
+  @70173957 LJSR [0x7017ED9B]
+  ; live at exit: ac0, ac1, ac2
+
+L_7017395A:
+  ; fall through to L_70173963
+
+L_70173963:
+  @70173963 LCALL [0x701766ED],0
+
+L_70173967:
+  @70173967 LJSR [0x7017EDCB]
+
+L_7017396A:
+  if (sx16(IN_BUFFER.h) == 0) goto L_7017396F else goto L_7017396E
+
+L_7017396E:
+  goto L_70173971
+
+L_7017396F:
+  goto L_7017563C
+
+L_70173971:
+  ?CHAR_TO_UNSIGNED(&IN_BUFFER)        ; site 70173974
+
+L_70173978:
+  ac0 = cvwn(ac0)
+  local_29.h = trunc16(ac0)
+  t1 = ((ac0 & 65535) | 0x00010000) + (ac0 & 65535)
+  if (((lsh(t1, -16) & 1) == 0) || ((t1 & 65535) == 0)) goto L_7017397D else goto L_7017397C
+  ; live at exit: ac0
+
+L_7017397C:
+  goto L_7017397F
+
+L_7017397D:
+  goto L_7017563C
+
+L_7017397F:
+  local_30.h = trunc16(ac0)
+  goto L_7017563C
+
+L_70173983:
+  if (local_31.b0 == 96) goto L_70173988 else goto L_70173987
+
+L_70173987:
+  goto L_701739F4
+
+L_70173988:
+  N.h = nadd(N.h, 1)
+  ac0 = sx16(N.h)
+  bounds_check !(ac0 >s 10000) && (ac0 >s 0)   ; DERR 17 @70173991
+  ; fall through to L_70173992
+  ; live at exit: ac0
+
+L_70173992:
+  ac1 = static_700E6977[add(add(ac0, ac0), OBJ_PTR.w)].w
+  bounds_check !(ac1 >u 0x000186A0) && (ac1 >s 0)   ; DERR 17 @7017399E
+  ; fall through to L_7017399F
+  ; live at exit: ac1
+
+L_7017399F:
+  ac1 = add(mul(ac1, 9), OBJ_PTR.w)
+  ac2 = sx16(PLAYER_NUM.h)
+  bounds_check !(ac2 >s 10) && (ac2 >s 0)   ; DERR 17 @701739AB
+  ; fall through to L_701739AC
+  ; live at exit: ac1, ac2
+
+L_701739AC:
+  local_32.w = add(mul(ac2, 686), SD_PTR.w)
+  local_32->fm589.h = trunc16(sx16(OBJ_PTR_rec9[static_700E6977[add(add(sx16(N.h), sx16(N.h)), OBJ_PTR.w)].w].f11495.h /*via ac1*/))
+  ac0 = sx16(N.h)
+  bounds_check !(ac0 >s 10000) && (ac0 >s 0)   ; DERR 17 @701739C1
+  ; fall through to L_701739C2
+  ; live at exit: ac0
+
+L_701739C2:
+  ac1 = static_700E6977[add(add(ac0, ac0), OBJ_PTR.w)].w
+  bounds_check !(ac1 >u 0x000186A0) && (ac1 >s 0)   ; DERR 17 @701739CE
+  ; fall through to L_701739CF
+  ; live at exit: ac1
+
+L_701739CF:
+  ac1 = add(mul(ac1, 9), OBJ_PTR.w)
+  ac2 = sx16(PLAYER_NUM.h)
+  bounds_check !(ac2 >s 10) && (ac2 >s 0)   ; DERR 17 @701739DB
+  ; fall through to L_701739DC
+  ; live at exit: ac1, ac2
+
+L_701739DC:
+  local_32.w = add(mul(ac2, 686), SD_PTR.w)
+  local_32->fm588.h = trunc16(sx16(OBJ_PTR_rec9[static_700E6977[add(add(sx16(N.h), sx16(N.h)), OBJ_PTR.w)].w].f11496.h /*via ac1*/))
+  call INIT_SCREEN(&PLAYER_NUM)        ; site 701739EE
+
+L_701739F2:
+  goto L_7017563C
+
+L_701739F4:
+  if (local_31.b0 == 61) goto L_701739F9 else goto L_701739F8
+
+L_701739F8:
+  goto L_70173A18
+
+L_701739F9:
+  ac0 = sx16(PLAYER_NUM.h)
+  bounds_check !(ac0 >s 10) && (ac0 >s 0)   ; DERR 17 @701739FF
+  ; fall through to L_70173A00
+  ; live at exit: ac0
+
+L_70173A00:
+  ac0 = mul(ac0, 686)
+  local_32.w = ac0
+  ac0 = add(ac0, SD_PTR.w)
+  call CREATE_MAP(&SD_PTR_rec686[sx16(PLAYER_NUM.h)].fm589 /*via ac0*/, &SD_PTR_rec686[local_32.w/686].fm588)        ; site 70173A12
+
+L_70173A16:
+  goto L_7017563C
+
+L_70173A18:
+  if (local_31.b0 != 76) goto L_70173A1D else goto L_70173A1C
+
+L_70173A1C:
+  goto L_70173A1F
+
+L_70173A1D:
+  goto L_70173D7C
+
+L_70173A1F:
+  vstr(&local_70, 53) = "Do you wish to list (T) territories, or (C) cities ? "
+  ac1 = 21
+  ac3 = wfp        ; fp restored
+  local_32.h = trunc16(ac1)
+  local_34.h = trunc16(ac0)
+  ac2 = 2048
+  local_36.h = trunc16(ac2)
+  ?WRITE_SCREEN(&OUT_CHAN, &local_70, &local_32, &local_34, &local_36)        ; site 70173A3F
+  ; live at exit: ac1, ac2, ac3
+
+L_70173A43:
+  call GET_INPUT(bp(ac3, 62))        ; site 70173A45
+
+L_70173A49:
+  ac0 = 0x00010B00
+  local_32.w = ac0
+  local_34.h = trunc16(ac1)
+  ac0 = sub(ac0, ac0)
+  local_36.h = trunc16(ac0)
+  local_38.h = trunc16(ac2)
+  ?WRITE_SCREEN(&OUT_CHAN, &local_32, &local_34, &local_36, &local_38)        ; site 70173A60
+  ; live at exit: ac0
+
+L_70173A64:
+  local_28.h = trunc16(ac0)
+  local_26.h = trunc16(ac0)
+  ac0 = local_31.b0
+  if (ac0 == 84) goto L_70173A6D else goto L_70173A6C
+  ; live at exit: ac0
+
+L_70173A6C:
+  goto L_70173A77
+
+L_70173A6D:
+  local_27.h = trunc16(sx16(M16[R[&OBJ_PTR]]))
+  local_26.h = trunc16(-32768)
+  goto L_70173A85
+
+L_70173A77:
+  if (ac0 == 67) goto L_70173A7A else goto L_70173A79
+
+L_70173A79:
+  goto L_70173A82
+
+L_70173A7A:
+  local_27.h = trunc16(sx16(OBJ_PTR->f2001.h))
+  goto L_70173A85
+
+L_70173A82:
+  local_27.h = trunc16(sub(ac0, ac0))
+  ; fall through to L_70173A85
+
+L_70173A85:
+  ac0 = sx16(local_27.h)
+  local_32.h = trunc16(ac0)
+  ac2 = 1
+  local_17.h = trunc16(ac2)
+  if (ac2 >s ac0) goto L_70173A90 else goto L_70173A8F
+
+L_70173A8F:
+  goto L_70173A98
+
+L_70173A90:
+  goto L_70173D7A
+
+L_70173A93:
+  t1 = nadd(local_17.h, 1)
+  local_17.h = t1
+  ac1 = t1
+  if (t1 >s sx16(local_32.h)) goto L_70173D7A else goto L_70173A98
+
+L_70173A98:
+  if (sx16(local_28.h) >s 13) goto L_70173A9D else goto L_70173A9C
+
+L_70173A9C:
+  goto L_70173AF9
+
+L_70173A9D:
+  vstr(&local_40, 22) = "Type any char to cont."
+  ac3 = wfp        ; fp restored
+  local_34.h = trunc16(22)
+  local_36.h = trunc16(40)
+  local_38.h = trunc16(2048)
+  ?WRITE_SCREEN(&OUT_CHAN, &local_40, &local_34, &local_36, &local_38)        ; site 70173ABF
+  ; live at exit: ac3
+
+L_70173AC3:
+  call GET_INPUT(bp(ac3, 62))        ; site 70173AC5
+
+L_70173AC9:
+  ac0 = local_31.b0
+  if (ac0 == 27) goto L_70173ACE else goto L_70173ACD
+  ; live at exit: ac0
+
+L_70173ACD:
+  goto L_70173AD0
+
+L_70173ACE:
+  goto L_7017563C
+
+L_70173AD0:
+  local_18.h = trunc16(sub(ac0, ac0))
+  goto L_70173AD9
+
+L_70173AD4:
+  t1 = nadd(local_18.h, 1)
+  local_18.h = t1
+  ac0 = t1
+  if (t1 >s 22) goto L_70173AF6 else goto L_70173AD9
+  ; live at exit: ac0
+
+L_70173AD9:
+  local_34.w = 0x00010B00
+  local_36.h = trunc16(40)
+  local_38.h = trunc16(2048)
+  ?WRITE_SCREEN(&OUT_CHAN, &local_34, &local_18, &local_36, &local_38)        ; site 70173AF1
+
+L_70173AF5:
+  goto L_70173AD4        ; loop back
+
+L_70173AF6:
+  local_28.h = trunc16(sub(ac0, ac0))
+  ; fall through to L_70173AF9
+
+L_70173AF9:
+  if ((lsh(sx16(local_26.h), -15) & 1) == 0) goto L_70173AFD else goto L_70173AFC
+
+L_70173AFC:
+  goto L_70173AFF
+
+L_70173AFD:
+  goto L_70173C59
+
+L_70173AFF:
+  ac0 = sx16(local_17.h)
+  bounds_check !(ac0 >s 100) && (ac0 >s 0)   ; DERR 17 @70173B04
+  ; fall through to L_70173B05
+  ; live at exit: ac0
+
+L_70173B05:
+  ac0 = mul(ac0, 20)
+  local_34.w = ac0
+  ac0 = add(ac0, OBJ_PTR.w)
+  local_36.w = add(sx16(OBJ_PTR_rec20[sx16(local_17.h)].fm15.h /*via ac0*/), 1)
+  local_34.w = add(local_34.w, OBJ_PTR.w)
+  ac2 = bp(ac3, 108)
+  M8[ac2] = zx8(11)
+  ac2 = add(ac2, 1)
+  ac3 = ac0
+  ac0 = sx16(M16[wp(ac3, -15)])
+  ac3 = wfp        ; fp restored
+  ac3 = local_34.w
+  ac3 = bp(ac3, -28)
+  ac1 = ac0
+  @70173B29 WCMV
+  ac3 = wfp        ; fp restored
+  ac1 = local_36.w
+  ac0 = ac1
+  local_70.h = trunc16(ac0)
+  ac2 = bp(ac3, 142)
+  ac3 = bp(ac3, 108)
+  @70173B34 WCMV
+  ac3 = wfp        ; fp restored
+  local_34.h = trunc16(40)
+  local_38.h = trunc16(2048)
+  ?WRITE_SCREEN(&OUT_CHAN, &local_70, &local_28, &local_34, &local_38)        ; site 70173B49
+  ; live at exit: ac3
+
+L_70173B4D:
+  ac0 = sx16(local_17.h)
+  bounds_check !(ac0 >s 100) && (ac0 >s 0)   ; DERR 17 @70173B52
+  ; fall through to L_70173B53
+  ; live at exit: ac0
+
+L_70173B53:
+  local_34.w = sx16(OBJ_PTR_rec20[sx16(local_17.h)].fm19.h /*via ac0*/)
+  ac2 = &local_70
+  ?UNSIGNED_TO_CHAR(&local_34)        ; site 70173B62
+  ; live at exit: ac2
+
+L_70173B66:
+  ac0 = add(sx16(local_70.h), 1)
+  local_34.w = ac0
+  ac0 = add(ac0, 1)
+  ac1 = sx16(local_17.h)
+  bounds_check !(ac1 >s 100) && (ac1 >s 0)   ; DERR 17 @70173B71
+  ; fall through to L_70173B72
+  ; live at exit: ac0, ac1
+
+L_70173B72:
+  local_36.w = sx16(OBJ_PTR_rec20[sx16(local_17.h)].fm18.h /*via ac1*/)
+  ac2 = &local_98
+  local_40.w = ac0
+  ?UNSIGNED_TO_CHAR(&local_36)        ; site 70173B83
+  ; live at exit: ac2
+
+L_70173B87:
+  ac0 = add(ac0, sx16(local_98.h))
+  local_36.w = ac0
+  ac0 = add(ac0, 4)
+  ac2 = sx16(local_17.h)
+  bounds_check !(ac2 >s 100) && (ac2 >s 0)   ; DERR 17 @70173B92
+  ; fall through to L_70173B93
+  ; live at exit: ac0, ac2
+
+L_70173B93:
+  local_38.w = sx16(OBJ_PTR_rec20[sx16(local_17.h)].fm17.h /*via ac2*/)
+  ac2 = &local_116
+  local_54.w = ac0
+  ?UNSIGNED_TO_CHAR(&local_38)        ; site 70173BA3
+  ; live at exit: ac2
+
+L_70173BA7:
+  ac0 = add(ac0, sx16(local_116.h))
+  local_38.w = ac0
+  ac0 = add(ac0, 1)
+  ac2 = sx16(local_17.h)
+  bounds_check !(ac2 >s 100) && (ac2 >s 0)   ; DERR 17 @70173BB2
+  ; fall through to L_70173BB3
+  ; live at exit: ac0, ac2
+
+L_70173BB3:
+  local_134.w = sx16(OBJ_PTR_rec20[sx16(local_17.h)].fm16.h /*via ac2*/)
+  ac2 = &local_136
+  local_154.w = ac0
+  ?UNSIGNED_TO_CHAR(&local_134)        ; site 70173BC3
+  ; live at exit: ac2
+
+L_70173BC7:
+  ac0 = add(ac0, sx16(local_136.h))
+  ac2 = bp(ac3, 312)
+  M8[ac2] = zx8(11)
+  ac2 = add(ac2, 1)
+  local_134.w = ac0
+  ac0 = sx16(local_70.h)
+  ac3 = bp(ac3, 142)
+  ac1 = ac0
+  @70173BD7 WCMV
+  ac3 = wfp        ; fp restored
+  ac2 = bp(ac3, 140)
+  ac0 = local_34.w
+  ac3 = bp(ac3, 312)
+  ac1 = ac0
+  @70173BE0 WCMV
+  M8[ac2] = zx8(45)
+  ac3 = wfp        ; fp restored
+  ac2 = bp(ac3, 348)
+  ac0 = local_40.w
+  ac3 = bp(ac3, 140)
+  ac1 = ac0
+  @70173BEC WCMV
+  ac3 = wfp        ; fp restored
+  ac0 = sx16(local_98.h)
+  ac3 = bp(ac3, 198)
+  ac1 = ac0
+  @70173BF3 WCMV
+  ac3 = wfp        ; fp restored
+  ac2 = bp(ac3, 416)
+  ac0 = local_36.w
+  ac3 = bp(ac3, 348)
+  ac1 = ac0
+  @70173BFC WCMV
+  ac0 = 4
+  ac3 = 0x7017374D:0
+  ac1 = ac0
+  @70173C02 WCMV
+  ac3 = wfp        ; fp restored
+  ac2 = bp(ac3, 488)
+  ac0 = local_54.w
+  ac3 = bp(ac3, 416)
+  ac1 = ac0
+  @70173C0B WCMV
+  ac3 = wfp        ; fp restored
+  ac0 = sx16(local_116.h)
+  ac3 = bp(ac3, 234)
+  ac1 = ac0
+  @70173C12 WCMV
+  ac3 = wfp        ; fp restored
+  ac2 = bp(ac3, 592)
+  ac0 = local_38.w
+  ac3 = bp(ac3, 488)
+  ac1 = ac0
+  @70173C1B WCMV
+  M8[ac2] = zx8(45)
+  ac3 = wfp        ; fp restored
+  ac2 = bp(ac3, 696)
+  ac0 = local_154.w
+  ac3 = bp(ac3, 592)
+  ac1 = ac0
+  @70173C27 WCMV
+  ac3 = wfp        ; fp restored
+  ac0 = sx16(local_136.h)
+  ac3 = bp(ac3, 274)
+  ac1 = ac0
+  @70173C2E WCMV
+  ac3 = wfp        ; fp restored
+  ac1 = local_134.w
+  ac0 = ac1
+  local_416.h = trunc16(ac0)
+  ac2 = bp(ac3, 834)
+  ac3 = bp(ac3, 696)
+  @70173C39 WCMV
+  ac3 = wfp        ; fp restored
+  local_34.h = trunc16(nadd(sx16(local_28.h), 1))
+  local_36.h = trunc16(40)
+  local_38.h = trunc16(2048)
+  ?WRITE_SCREEN(&OUT_CHAN, &local_416, &local_34, &local_36, &local_38)        ; site 70173C53
+  ; live at exit: ac3
+
+L_70173C57:
+  goto L_70173D76
+
+L_70173C59:
+  ac0 = sx16(local_17.h)
+  bounds_check !(ac0 >s 500) && (ac0 >s 0)   ; DERR 17 @70173C5E
+  ; fall through to L_70173C5F
+  ; live at exit: ac0
+
+L_70173C5F:
+  ac0 = mul(ac0, 19)
+  local_34.w = ac0
+  ac0 = add(ac0, OBJ_PTR.w)
+  local_36.w = add(sx16(OBJ_PTR_rec19[sx16(local_17.h)].f1986.h /*via ac0*/), 1)
+  local_34.w = add(local_34.w, OBJ_PTR.w)
+  ac2 = bp(ac3, 108)
+  M8[ac2] = zx8(11)
+  ac2 = add(ac2, 1)
+  ac3 = ac0
+  ac0 = sx16(M16[wp(ac3, 1986)])
+  ac3 = wfp        ; fp restored
+  ac3 = local_34.w
+  ac3 = bp(ac3, 3974)
+  ac1 = ac0
+  @70173C83 WCMV
+  ac3 = wfp        ; fp restored
+  ac1 = local_36.w
+  ac0 = ac1
+  local_98.h = trunc16(ac0)
+  ac2 = bp(ac3, 198)
+  ac3 = bp(ac3, 108)
+  @70173C8E WCMV
+  ac3 = wfp        ; fp restored
+  local_34.h = trunc16(40)
+  local_38.h = trunc16(2048)
+  ?WRITE_SCREEN(&OUT_CHAN, &local_98, &local_28, &local_34, &local_38)        ; site 70173CA3
+  ; live at exit: ac3
+
+L_70173CA7:
+  ac0 = sx16(local_17.h)
+  bounds_check !(ac0 >s 500) && (ac0 >s 0)   ; DERR 17 @70173CAC
+  ; fall through to L_70173CAD
+  ; live at exit: ac0
+
+L_70173CAD:
+  local_34.w = sx16(OBJ_PTR_rec19[sx16(local_17.h)].f1983.h /*via ac0*/)
+  ac2 = &local_98
+  ?UNSIGNED_TO_CHAR(&local_34)        ; site 70173CBC
+  ; live at exit: ac2
+
+L_70173CC0:
+  ac0 = add(sx16(local_98.h), 1)
+  local_34.w = ac0
+  ac0 = add(ac0, 1)
+  ac1 = sx16(local_17.h)
+  bounds_check !(ac1 >s 500) && (ac1 >s 0)   ; DERR 17 @70173CCB
+  ; fall through to L_70173CCC
+  ; live at exit: ac0, ac1
+
+L_70173CCC:
+  local_36.w = sx16(OBJ_PTR_rec19[sx16(local_17.h)].f1984.h /*via ac1*/)
+  ac2 = &local_116
+  local_134.w = ac0
+  ?UNSIGNED_TO_CHAR(&local_36)        ; site 70173CDD
+  ; live at exit: ac2
+
+L_70173CE1:
+  ac0 = add(ac0, sx16(local_116.h))
+  local_36.w = ac0
+  ac0 = add(ac0, 7)
+  ac2 = sx16(local_17.h)
+  bounds_check !(ac2 >s 500) && (ac2 >s 0)   ; DERR 17 @70173CED
+  ; fall through to L_70173CEE
+  ; live at exit: ac0, ac2
+
+L_70173CEE:
+  local_38.w = sx16(OBJ_PTR_rec19[sx16(local_17.h)].f1985.h /*via ac2*/)
+  ac2 = &local_136
+  local_154.w = ac0
+  ?UNSIGNED_TO_CHAR(&local_38)        ; site 70173CFE
+  ; live at exit: ac2
+
+L_70173D02:
+  ac0 = add(ac0, sx16(local_136.h))
+  ac2 = bp(ac3, 312)
+  M8[ac2] = zx8(11)
+  ac2 = add(ac2, 1)
+  local_38.w = ac0
+  ac0 = sx16(local_98.h)
+  ac3 = bp(ac3, 198)
+  ac1 = ac0
+  @70173D12 WCMV
+  ac3 = wfp        ; fp restored
+  ac2 = bp(ac3, 196)
+  ac0 = local_34.w
+  ac3 = bp(ac3, 312)
+  ac1 = ac0
+  @70173D1B WCMV
+  M8[ac2] = zx8(45)
+  ac3 = wfp        ; fp restored
+  ac2 = bp(ac3, 348)
+  ac0 = local_134.w
+  ac3 = bp(ac3, 196)
+  ac1 = ac0
+  @70173D27 WCMV
+  ac3 = wfp        ; fp restored
+  ac0 = sx16(local_116.h)
+  ac3 = bp(ac3, 234)
+  ac1 = ac0
+  @70173D2E WCMV
+  ac3 = wfp        ; fp restored
+  ac2 = bp(ac3, 488)
+  ac0 = local_36.w
+  ac3 = bp(ac3, 348)
+  ac1 = ac0
+  @70173D37 WCMV
+  ac0 = 7
+  ac3 = 0x70173749:0
+  ac1 = ac0
+  @70173D3D WCMV
+  ac3 = wfp        ; fp restored
+  ac2 = bp(ac3, 696)
+  ac0 = local_154.w
+  ac3 = bp(ac3, 488)
+  ac1 = ac0
+  @70173D46 WCMV
+  ac3 = wfp        ; fp restored
+  ac0 = sx16(local_136.h)
+  ac3 = bp(ac3, 274)
+  ac1 = ac0
+  @70173D4D WCMV
+  ac3 = wfp        ; fp restored
+  ac1 = local_38.w
+  ac0 = ac1
+  local_416.h = trunc16(ac0)
+  ac2 = bp(ac3, 834)
+  ac3 = bp(ac3, 696)
+  @70173D58 WCMV
+  ac3 = wfp        ; fp restored
+  local_34.h = trunc16(nadd(sx16(local_28.h), 1))
+  local_36.h = trunc16(40)
+  local_134.h = trunc16(2048)
+  ?WRITE_SCREEN(&OUT_CHAN, &local_416, &local_34, &local_36, &local_134)        ; site 70173D72
+  ; live at exit: ac3
+
+L_70173D76:
+  local_28.h = nadd(local_28.h, 2)
+  goto L_70173A93        ; loop back
+
+L_70173D7A:
+  goto L_7017563C
+
+L_70173D7C:
+  if (local_31.b0 != 71) goto L_70173D81 else goto L_70173D80
+
+L_70173D80:
+  goto L_70173D83
+
+L_70173D81:
+  goto L_70174028
+
+L_70173D83:
+  vstr(&local_174, 63) = "Do you wish to goto (P) position, (T) territory, or (C) city ? "
+  ac3 = wfp        ; fp restored
+  local_32.h = trunc16(21)
+  local_34.h = trunc16(ac0)
+  local_36.h = trunc16(2048)
+  ?WRITE_SCREEN(&OUT_CHAN, &local_174, &local_32, &local_34, &local_36)        ; site 70173DA3
+  ; live at exit: ac3
+
+L_70173DA7:
+  call GET_INPUT(bp(ac3, 62))        ; site 70173DA9
+
+L_70173DAD:
+  if (local_31.b0 != 80) goto L_70173DB2 else goto L_70173DB1
+
+L_70173DB1:
+  goto L_70173DB4
+
+L_70173DB2:
+  goto L_70173E6B
+
+L_70173DB4:
+  vstr(&local_40, 23) = "\x0BX coordinate please : "
+  ac1 = 21
+  ac3 = wfp        ; fp restored
+  local_32.h = trunc16(ac1)
+  local_34.h = trunc16(ac0)
+  ac2 = 2048
+  local_36.h = trunc16(ac2)
+  ?WRITE_SCREEN(&OUT_CHAN, &local_40, &local_32, &local_34, &local_36)        ; site 70173DD4
+  ; live at exit: ac1, ac2, ac3
+
+L_70173DD8:
+  @70173DD8 LCALL [0x701766ED],0
+
+L_70173DDC:
+  ac1 = ac0
+  ac0 = add(ac0, ~ac0)
+  ac2 = 0x70173DE4
+  @70173DE0 LJSR [0x7017ED9B]
+  ; live at exit: ac0, ac1, ac2
+
+L_70173DE3:
+  ; fall through to L_70173DEC
+
+L_70173DEC:
+  ?CHAR_TO_UNSIGNED(&IN_BUFFER)        ; site 70173DEF
+
+L_70173DF3:
+  ac2 = sx16(PLAYER_NUM.h)
+  bounds_check !(ac2 >s 10) && (ac2 >s 0)   ; DERR 17 @70173DF9
+  ; fall through to L_70173DFA
+  ; live at exit: ac2
+
+L_70173DFA:
+  ac2 = add(mul(ac2, 686), SD_PTR.w)
+  SD_PTR_rec686[sx16(PLAYER_NUM.h)].fm589.h /*via ac2*/ = trunc16(cvwn(ac0))
+  vstr(&local_40, 23) = "\x0BY coordinate please : "
+  ac1 = 21
+  ac3 = wfp        ; fp restored
+  local_32.h = trunc16(ac1)
+  local_34.h = trunc16(ac0)
+  ac2 = 2048
+  local_36.h = trunc16(ac2)
+  ?WRITE_SCREEN(&OUT_CHAN, &local_40, &local_32, &local_34, &local_36)        ; site 70173E23
+  ; live at exit: ac1, ac2, ac3
+
+L_70173E27:
+  @70173E27 LCALL [0x701766ED],0
+
+L_70173E2B:
+  ?CHAR_TO_UNSIGNED(&IN_BUFFER)        ; site 70173E2E
+
+L_70173E32:
+  ac1 = sx16(PLAYER_NUM.h)
+  bounds_check !(ac1 >s 10) && (ac1 >s 0)   ; DERR 17 @70173E38
+  ; fall through to L_70173E39
+  ; live at exit: ac1
+
+L_70173E39:
+  ac2 = add(mul(ac1, 686), SD_PTR.w)
+  SD_PTR_rec686[sx16(PLAYER_NUM.h)].fm588.h /*via ac2*/ = trunc16(cvwn(ac0))
+  local_32.w = 0x00010B00
+  local_34.h = trunc16(21)
+  local_36.h = trunc16(sub(ac2, ac2))
+  local_38.h = trunc16(2048)
+  ?WRITE_SCREEN(&OUT_CHAN, &local_32, &local_34, &local_36, &local_38)        ; site 70173E5E
+
+L_70173E62:
+  call INIT_SCREEN(&PLAYER_NUM)        ; site 70173E65
+
+L_70173E69:
+  goto L_7017563C
+
+L_70173E6B:
+  if (local_31.b0 != 84) goto L_70173E70 else goto L_70173E6F
+
+L_70173E6F:
+  goto L_70173E72
+
+L_70173E70:
+  goto L_70173F52
+
+L_70173E72:
+  vstr(&local_40, 25) = "\x0BTerritory name please : "
+  ac1 = 21
+  ac3 = wfp        ; fp restored
+  local_32.h = trunc16(ac1)
+  local_34.h = trunc16(ac0)
+  ac2 = 2048
+  local_36.h = trunc16(ac2)
+  ?WRITE_SCREEN(&OUT_CHAN, &local_40, &local_32, &local_34, &local_36)        ; site 70173E92
+  ; live at exit: ac1, ac2, ac3
+
+L_70173E96:
+  @70173E96 LCALL [0x701766ED],0
+
+L_70173E9A:
+  ac0 = 0x00010B00
+  local_32.w = ac0
+  local_34.h = trunc16(ac1)
+  local_36.h = trunc16(sub(ac0, ac0))
+  local_38.h = trunc16(ac2)
+  ?WRITE_SCREEN(&OUT_CHAN, &local_32, &local_34, &local_36, &local_38)        ; site 70173EB1
+
+L_70173EB5:
+  local_32.h = trunc16(sx16(M16[R[&OBJ_PTR]]))
+  ac0 = 1
+  local_17.h = trunc16(ac0)
+  if (ac0 <=s sx16(local_32.h)) goto L_70173EC2 else goto L_70173EC1
+
+L_70173EC1:
+  goto L_70173EEA
+
+L_70173EC2:
+  goto L_70173EC8
+
+L_70173EC3:
+  t1 = nadd(local_17.h, 1)
+  local_17.h = t1
+  ac0 = t1
+  if (t1 >s sx16(local_32.h)) goto L_70173EEA else goto L_70173EC8
+
+L_70173EC8:
+  ac1 = sx16(local_17.h)
+  bounds_check !(ac1 >s 100) && (ac1 >s 0)   ; DERR 17 @70173ECD
+  ; fall through to L_70173ECE
+  ; live at exit: ac1
+
+L_70173ECE:
+  ac1 = mul(ac1, 20)
+  local_34.w = ac1
+  ac1 = add(ac1, OBJ_PTR.w)
+  ac2 = add(local_34.w, OBJ_PTR.w)
+  ac1 = cmp(vstr(&IN_BUFFER), vstr(&OBJ_PTR_rec20[sx16(local_17.h)].fm15))
+  ac3 = wfp        ; fp restored
+  if (ac1 == 0) goto L_70173EEA else goto L_70173EE9
+  ; live at exit: ac3
+
+L_70173EE9:
+  goto L_70173EC3        ; loop back
+
+L_70173EEA:
+  ac0 = sx16(local_17.h)
+  if (ac0 >s sx16(M16[R[&OBJ_PTR]])) goto L_70173EF1 else goto L_70173EF0
+  ; live at exit: ac0
+
+L_70173EF0:
+  goto L_70173EF3
+
+L_70173EF1:
+  goto L_7017563C
+
+L_70173EF3:
+  bounds_check !(ac0 >s 100) && (ac0 >s 0)   ; DERR 17 @70173EF6
+  ; fall through to L_70173EF7
+
+L_70173EF7:
+  ac0 = mul(ac0, 20)
+  local_32.w = ac0
+  ac0 = add(ac0, OBJ_PTR.w)
+  local_34.w = add(local_32.w, OBJ_PTR.w)
+  ac1 = sx16(OBJ_PTR_rec20[sx16(local_17.h)].fm17.h /*via ac0*/)
+  ac1 = cvwn(ash(add(ac1, sx16(local_34->fm19.h)), -1))
+  ac0 = sx16(PLAYER_NUM.h)
+  bounds_check !(ac0 >s 10) && (ac0 >s 0)   ; DERR 17 @70173F16
+  ; fall through to L_70173F17
+  ; live at exit: ac0, ac1
+
+L_70173F17:
+  SD_PTR_rec686[sx16(PLAYER_NUM.h)].fm589.h /*via ac0*/ = trunc16(ac1)
+  local_34.w = add(local_32.w, OBJ_PTR.w)
+  local_32.w = add(local_32.w, OBJ_PTR.w)
+  ac0 = cvwn(ash(add(sx16(local_34->fm16.h), sx16(local_32->fm18.h)), -1))
+  ac1 = sx16(PLAYER_NUM.h)
+  bounds_check !(ac1 >s 10) && (ac1 >s 0)   ; DERR 17 @70173F3F
+  ; fall through to L_70173F40
+  ; live at exit: ac0, ac1
+
+L_70173F40:
+  SD_PTR_rec686[sx16(PLAYER_NUM.h)].fm588.h /*via ac1*/ = trunc16(ac0)
+  call INIT_SCREEN(&PLAYER_NUM)        ; site 70173F4C
+
+L_70173F50:
+  goto L_7017563C
+
+L_70173F52:
+  if (local_31.b0 != 67) goto L_70173F57 else goto L_70173F56
+
+L_70173F56:
+  goto L_70173F59
+
+L_70173F57:
+  goto L_70174028
+
+L_70173F59:
+  vstr(&local_40, 20) = "\x0BCity name please : "
+  ac1 = 21
+  ac3 = wfp        ; fp restored
+  local_32.h = trunc16(ac1)
+  local_34.h = trunc16(ac0)
+  ac2 = 2048
+  local_36.h = trunc16(ac2)
+  ?WRITE_SCREEN(&OUT_CHAN, &local_40, &local_32, &local_34, &local_36)        ; site 70173F79
+  ; live at exit: ac1, ac2, ac3
+
+L_70173F7D:
+  @70173F7D LCALL [0x701766ED],0
+
+L_70173F81:
+  ac0 = 0x00010B00
+  local_32.w = ac0
+  local_34.h = trunc16(ac1)
+  local_36.h = trunc16(sub(ac0, ac0))
+  local_38.h = trunc16(ac2)
+  ?WRITE_SCREEN(&OUT_CHAN, &local_32, &local_34, &local_36, &local_38)        ; site 70173F98
+
+L_70173F9C:
+  ac0 = sx16(OBJ_PTR->f2001.h)
+  local_32.h = trunc16(ac0)
+  ac2 = 1
+  local_17.h = trunc16(ac2)
+  if (ac2 <=s ac0) goto L_70173FAA else goto L_70173FA9
+
+L_70173FA9:
+  goto L_70173FD2
+
+L_70173FAA:
+  goto L_70173FB0
+
+L_70173FAB:
+  t1 = nadd(local_17.h, 1)
+  local_17.h = t1
+  ac1 = t1
+  if (t1 >s sx16(local_32.h)) goto L_70173FD2 else goto L_70173FB0
+
+L_70173FB0:
+  ac0 = sx16(local_17.h)
+  bounds_check !(ac0 >s 500) && (ac0 >s 0)   ; DERR 17 @70173FB5
+  ; fall through to L_70173FB6
+  ; live at exit: ac0
+
+L_70173FB6:
+  ac0 = mul(ac0, 19)
+  local_34.w = ac0
+  ac0 = add(ac0, OBJ_PTR.w)
+  ac2 = add(local_34.w, OBJ_PTR.w)
+  ac1 = cmp(vstr(&IN_BUFFER), vstr(&OBJ_PTR_rec19[sx16(local_17.h)].f1986))
+  ac3 = wfp        ; fp restored
+  if (ac1 == 0) goto L_70173FD2 else goto L_70173FD1
+  ; live at exit: ac3
+
+L_70173FD1:
+  goto L_70173FAB        ; loop back
+
+L_70173FD2:
+  ac0 = sx16(local_17.h)
+  ac2 = OBJ_PTR.w
+  if (ac0 >s sx16(OBJ_PTR->f2001.h /*via ac2*/)) goto L_70173FDB else goto L_70173FDA
+  ; live at exit: ac0, ac2
+
+L_70173FDA:
+  goto L_70173FDD
+
+L_70173FDB:
+  goto L_7017563C
+
+L_70173FDD:
+  bounds_check !(ac0 >s 500) && (ac0 >s 0)   ; DERR 17 @70173FE0
+  ; fall through to L_70173FE1
+
+L_70173FE1:
+  ac0 = mul(ac0, 19)
+  local_32.w = ac0
+  ac0 = add(ac0, ac2)
+  ac1 = sx16(PLAYER_NUM.h)
+  bounds_check !(ac1 >s 10) && (ac1 >s 0)   ; DERR 17 @70173FED
+  ; fall through to L_70173FEE
+  ; live at exit: ac0, ac1
+
+L_70173FEE:
+  local_36.w = add(mul(ac1, 686), SD_PTR.w)
+  ac3 = sx16(OBJ_PTR_rec19[sx16(local_17.h)].f1983.h /*via ac0*/)
+  M16[wp(M32[wp(wfp, 36)], -589)] = trunc16(ac3)
+  ac3 = wfp        ; fp restored
+  ac2 = add(local_32.w, OBJ_PTR.w)
+  ac0 = sx16(PLAYER_NUM.h)
+  bounds_check !(ac0 >s 10) && (ac0 >s 0)   ; DERR 17 @7017400B
+  ; fall through to L_7017400C
+  ; live at exit: ac0, ac2, ac3
+
+L_7017400C:
+  local_32.w = ac2
+  local_34.w = add(mul(ac0, 686), SD_PTR.w)
+  local_34->fm588.h = trunc16(sx16(OBJ_PTR->f1984.h /*via local_32*/))
+  call INIT_SCREEN(&PLAYER_NUM)        ; site 70174022
+
+L_70174026:
+  goto L_7017563C
+
+L_70174028:
+  if (local_31.b0 != 63) goto L_7017402D else goto L_7017402C
+
+L_7017402C:
+  goto L_7017402F
+
+L_7017402D:
+  goto L_7017412A
+
+L_7017402F:
+  ac0 = sx16(PLAYER_NUM.h)
+  bounds_check !(ac0 >s 10) && (ac0 >s 0)   ; DERR 17 @70174035
+  ; fall through to L_70174036
+  ; live at exit: ac0
+
+L_70174036:
+  ac1 = 686
+  local_32.w = sx16(SD_PTR_rec686[sx16(PLAYER_NUM.h)].fm589.h /*via ac0,ac1*/)
+  ac2 = &local_98
+  ?UNSIGNED_TO_CHAR(&local_32)        ; site 70174045
+  ; live at exit: ac1, ac2
+
+L_70174049:
+  ac0 = add(sx16(local_98.h), 14)
+  local_32.w = ac0
+  ac0 = add(ac0, 3)
+  ac2 = sx16(PLAYER_NUM.h)
+  bounds_check !(ac2 >s 10) && (ac2 >s 0)   ; DERR 17 @70174056
+  ; fall through to L_70174057
+  ; live at exit: ac0, ac2
+
+L_70174057:
+  local_34.w = sx16((SD_PTR + mul(sx16(PLAYER_NUM.h), ac1))->fm588.h /*via ac2*/)
+  ac2 = &local_116
+  local_36.w = ac0
+  ?UNSIGNED_TO_CHAR(&local_34)        ; site 70174065
+  ; live at exit: ac2
+
+L_70174069:
+  ac2 = bp(ac3, 140)
+  local_34.w = add(ac0, sx16(local_116.h))
+  ac0 = 14
+  ac3 = 0x701736FD:0
+  ac1 = ac0
+  @70174075 WCMV
+  ac3 = wfp        ; fp restored
+  ac0 = sx16(local_98.h)
+  ac3 = bp(ac3, 198)
+  ac1 = ac0
+  @7017407C WCMV
+  ac3 = wfp        ; fp restored
+  ac2 = bp(ac3, 348)
+  ac0 = local_32.w
+  ac3 = bp(ac3, 140)
+  ac1 = ac0
+  @70174085 WCMV
+  ac0 = 3
+  ac3 = 0x701736FB:0
+  ac1 = ac0
+  @7017408B WCMV
+  ac3 = wfp        ; fp restored
+  ac2 = bp(ac3, 488)
+  ac0 = local_36.w
+  ac3 = bp(ac3, 348)
+  ac1 = ac0
+  @70174094 WCMV
+  ac3 = wfp        ; fp restored
+  ac0 = sx16(local_116.h)
+  ac3 = bp(ac3, 234)
+  ac1 = ac0
+  @7017409B WCMV
+  ac3 = wfp        ; fp restored
+  ac1 = local_34.w
+  ac0 = ac1
+  local_296.h = trunc16(ac0)
+  ac2 = bp(ac3, 594)
+  ac3 = bp(ac3, 488)
+  @701740A6 WCMV
+  ac3 = wfp        ; fp restored
+  local_32.h = trunc16(21)
+  local_36.h = trunc16(ac0)
+  local_38.h = trunc16(2048)
+  ?WRITE_SCREEN(&OUT_CHAN, &local_296, &local_32, &local_36, &local_38)        ; site 701740BD
+  ; live at exit: ac3
+
+L_701740C1:
+  ac0 = sx16(PLAYER_NUM.h)
+  bounds_check !(ac0 >s 10) && (ac0 >s 0)   ; DERR 17 @701740C7
+  ; fall through to L_701740C8
+  ; live at exit: ac0
+
+L_701740C8:
+  ac1 = add(mul(686, ac0), SD_PTR.w)
+  ac2 = 686
+  ac0 = add(mul(ac0, ac2), SD_PTR.w)
+  call TERRAIN(&PLAYER_NUM, &SD_PTR_rec686[sx16(PLAYER_NUM.h)].fm589 /*via ac1*/, &SD_PTR_rec686[sx16(PLAYER_NUM.h)].fm588 /*via ac0*/, &IN_BUFFER, &local_17, ac2, ac1, ac0, 0x701735C5)        ; site 701740E5
+
+L_701740E9:
+  ac0 = add(sx16(IN_BUFFER.h), 1)
+  ac2 = bp(ac3, 696)
+  M8[ac2] = zx8(11)
+  ac2 = add(ac2, 1)
+  local_32.w = ac0
+  ac0 = sx16(IN_BUFFER.h)
+  ac3 = 0x7000021D:0
+  ac1 = ac0
+  @701740FC WCMV
+  ac3 = wfp        ; fp restored
+  ac1 = local_32.w
+  ac0 = ac1
+  local_416.h = trunc16(ac0)
+  ac2 = bp(ac3, 834)
+  ac3 = bp(ac3, 696)
+  @70174107 WCMV
+  ac3 = wfp        ; fp restored
+  local_34.h = trunc16(22)
+  local_36.h = trunc16(5)
+  local_38.h = trunc16(2048)
+  ?WRITE_SCREEN(&OUT_CHAN, &local_416, &local_34, &local_36, &local_38)        ; site 70174120
+  ; live at exit: ac3
+
+L_70174124:
+  local_25.h = trunc16(-32768)
+  goto L_7017563C
+
+L_7017412A:
+  ac2 = bp(ac3, 64)
+  M8[ac2] = zx8(11)
+  M8[add(ac2, 1)] = zx8(10)
+  ac2 = bp(ac3, 68)
+  ac0 = 2
+  ac3 = bp(ac3, 64)
+  ac1 = ac0
+  @7017413A WCMV
+  M8[ac2] = zx8(11)
+  ac3 = wfp        ; fp restored
+  local_40.h = trunc16(3)
+  local_41.w = local_34.w
+  ac0 = 21
+  local_32.h = trunc16(ac0)
+  local_34.h = trunc16(sub(ac0, ac0))
+  ac0 = 2048
+  local_36.h = trunc16(ac0)
+  ?WRITE_SCREEN(&OUT_CHAN, &local_40, &local_32, &local_34, &local_36)        ; site 7017415D
+  ; live at exit: ac0, ac3
+
+L_70174161:
+  local_25.h = trunc16(sub(ac0, ac0))
+  ac0 = local_31.b0
+  if (ac0 == 60) goto L_70174169 else goto L_70174168
+  ; live at exit: ac0
+
+L_70174168:
+  goto L_701741B6
+
+L_70174169:
+  ac0 = sx16(PLAYER_NUM.h)
+  bounds_check !(ac0 >s 10) && (ac0 >s 0)   ; DERR 17 @7017416F
+  ; fall through to L_70174170
+  ; live at exit: ac0
+
+L_70174170:
+  ac0 = add(mul(ac0, 686), SD_PTR.w)
+  ac1 = add(sx16(M16[R[&OBJ_PTR]]), 1)
+  bounds_check !(ac1 >s 100) && (ac1 >s 0)   ; DERR 17 @7017417D
+  ; fall through to L_7017417E
+  ; live at exit: ac0, ac1
+
+L_7017417E:
+  local_34.w = add(mul(ac1, 20), OBJ_PTR.w)
+  ac3 = sx16(SD_PTR_rec686[sx16(PLAYER_NUM.h)].fm589.h /*via ac0*/)
+  M16[wp(M32[wp(wfp, 34)], -19)] = trunc16(ac3)
+  ac0 = sx16(PLAYER_NUM.h)
+  bounds_check !(ac0 >s 10) && (ac0 >s 0)   ; DERR 17 @70174195
+  ; fall through to L_70174196
+  ; live at exit: ac0
+
+L_70174196:        ; ac3 is not fp on entry (predecessor left it repurposed)
+  ac0 = mul(ac0, 686)
+  ac3 = wfp        ; fp restored
+  ac0 = add(ac0, SD_PTR.w)
+  ac2 = add(sx16(M16[R[&OBJ_PTR]]), 1)
+  bounds_check !(ac2 >s 100) && (ac2 >s 0)   ; DERR 17 @701741A4
+  ; fall through to L_701741A5
+  ; live at exit: ac0, ac2, ac3
+
+L_701741A5:
+  local_32.w = add(mul(ac2, 20), OBJ_PTR.w)
+  local_32->fm18.h = trunc16(sx16(M16[wp(ac0, -588)]))
+  goto L_7017563C
+
+L_701741B6:
+  if (ac0 == 62) goto L_701741B9 else goto L_701741B8
+
+L_701741B8:
+  goto L_70174206
+
+L_701741B9:
+  ac0 = sx16(PLAYER_NUM.h)
+  bounds_check !(ac0 >s 10) && (ac0 >s 0)   ; DERR 17 @701741BF
+  ; fall through to L_701741C0
+  ; live at exit: ac0
+
+L_701741C0:
+  ac0 = add(mul(ac0, 686), SD_PTR.w)
+  ac1 = add(sx16(M16[R[&OBJ_PTR]]), 1)
+  bounds_check !(ac1 >s 100) && (ac1 >s 0)   ; DERR 17 @701741CD
+  ; fall through to L_701741CE
+  ; live at exit: ac0, ac1
+
+L_701741CE:
+  local_34.w = add(mul(ac1, 20), OBJ_PTR.w)
+  ac3 = sx16(SD_PTR_rec686[sx16(PLAYER_NUM.h)].fm589.h /*via ac0*/)
+  M16[wp(M32[wp(wfp, 34)], -17)] = trunc16(ac3)
+  ac0 = sx16(PLAYER_NUM.h)
+  bounds_check !(ac0 >s 10) && (ac0 >s 0)   ; DERR 17 @701741E5
+  ; fall through to L_701741E6
+  ; live at exit: ac0
+
+L_701741E6:        ; ac3 is not fp on entry (predecessor left it repurposed)
+  ac0 = mul(ac0, 686)
+  ac3 = wfp        ; fp restored
+  ac0 = add(ac0, SD_PTR.w)
+  ac2 = add(sx16(M16[R[&OBJ_PTR]]), 1)
+  bounds_check !(ac2 >s 100) && (ac2 >s 0)   ; DERR 17 @701741F4
+  ; fall through to L_701741F5
+  ; live at exit: ac0, ac2, ac3
+
+L_701741F5:
+  local_32.w = add(mul(ac2, 20), OBJ_PTR.w)
+  local_32->fm16.h = trunc16(sx16(M16[wp(ac0, -588)]))
+  goto L_7017563C
+
+L_70174206:
+  if (ac0 == 42) goto L_70174209 else goto L_70174208
+
+L_70174208:
+  goto L_70174272
+
+L_70174209:
+  M16[R[&OBJ_PTR]] = nadd(M16[R[&OBJ_PTR]], 1)
+  vstr(&local_54, 29) = "What is the territory name : "
+  ac1 = 21
+  ac3 = wfp        ; fp restored
+  local_32.h = trunc16(ac1)
+  local_34.h = trunc16(ac0)
+  ac2 = 2048
+  local_36.h = trunc16(ac2)
+  ?WRITE_SCREEN(&OUT_CHAN, &local_54, &local_32, &local_34, &local_36)        ; site 7017422C
+  ; live at exit: ac1, ac2, ac3
+
+L_70174230:
+  @70174230 LCALL [0x701766ED],0
+
+L_70174234:
+  ac0 = 0x00010B00
+  local_32.w = ac0
+  local_34.h = trunc16(ac1)
+  local_36.h = trunc16(sub(ac0, ac0))
+  local_38.h = trunc16(ac2)
+  ?WRITE_SCREEN(&OUT_CHAN, &local_32, &local_34, &local_36, &local_38)        ; site 7017424B
+
+L_7017424F:
+  ac0 = sx16(M16[R[&OBJ_PTR]])
+  bounds_check !(ac0 >s 100) && (ac0 >s 0)   ; DERR 17 @70174255
+  ; fall through to L_70174256
+  ; live at exit: ac0
+
+L_70174256:
+  local_32.w = add(mul(ac0, 20), OBJ_PTR.w)
+  ac1 = sx16(IN_BUFFER.h)
+  if (ac1 >=s 30) goto L_70174265 else goto L_70174264
+  ; live at exit: ac1
+
+L_70174264:
+  ac0 = ac1
+  ; fall through to L_70174265
+
+L_70174265:
+  vstr(&OBJ_PTR_rec20[sx16(M16[R[&OBJ_PTR]])].fm15, 30) = vstr(&IN_BUFFER)
+  ac3 = wfp        ; fp restored
+  goto L_7017563C
+  ; live at exit: ac3
+
+L_70174272:
+  if (local_31.b0 != 38) goto L_70174277 else goto L_70174276
+
+L_70174276:
+  goto L_70174279
+
+L_70174277:
+  goto L_701744FD
+
+L_70174279:
+  vstr(&local_70, 35) = "What LAND character to fill with : "
+  ac1 = 21
+  ac3 = wfp        ; fp restored
+  local_32.h = trunc16(ac1)
+  local_34.h = trunc16(ac0)
+  ac2 = 2048
+  local_36.h = trunc16(ac2)
+  ?WRITE_SCREEN(&OUT_CHAN, &local_70, &local_32, &local_34, &local_36)        ; site 70174299
+  ; live at exit: ac1, ac2, ac3
+
+L_7017429D:
+  call GET_INPUT(bp(ac3, 62))        ; site 7017429F
+
+L_701742A3:
+  ac0 = 0x00010B00
+  local_32.w = ac0
+  local_34.h = trunc16(ac1)
+  local_36.h = trunc16(sub(ac0, ac0))
+  local_38.h = trunc16(ac2)
+  ?WRITE_SCREEN(&OUT_CHAN, &local_32, &local_34, &local_36, &local_38)        ; site 701742BA
+
+L_701742BE:
+  local_17.h = trunc16(3)
+  ac0 = local_31.b0
+  if (ac0 == 46) goto L_701742C7 else goto L_701742C6
+  ; live at exit: ac0
+
+L_701742C6:
+  goto L_701742CD
+
+L_701742C7:
+  local_16.h = trunc16(260)
+  goto L_7017437E
+
+L_701742CD:
+  if (ac0 == 73) goto L_701742D0 else goto L_701742CF
+
+L_701742CF:
+  goto L_701742D6
+
+L_701742D0:
+  local_16.h = trunc16(261)
+  goto L_7017437E
+
+L_701742D6:
+  ac0 = sx16(local_17.h)
+  bounds_check !(ac0 >s 6) && (ac0 >s 0)   ; DERR 17 @701742DB
+  ; fall through to L_701742DC
+  ; live at exit: ac0
+
+L_701742DC:
+  ac0 = mul(ac0, 302)
+  local_32.w = ac0
+  ac1 = sx16(static_7001EE8C[add(ac0, SD_PTR.w)].h)
+  ac0 = sx16(static_7001EE8B[add(local_32.w, SD_PTR.w)].h)
+  ac1 = add(sub(ac1, ac0), 1)
+  local_32.w = ac1
+  local_34.h = trunc16(ac0)
+  ac2 = 1
+  local_16.h = trunc16(ac2)
+  if (ac2 != ac1) goto L_701742FC else goto L_701742FB
+  ; live at exit: ac0, ac1, ac2
+
+L_701742FB:
+  ac0 = sub(ac0, ac0)
+  ; fall through to L_701742FC
+  ; live at exit: ac0
+
+L_701742FC:
+  if (ac2 <=s ac1) goto L_701742FE else goto L_701742FD
+
+L_701742FD:
+  ac0 = ~ac0
+  ; fall through to L_701742FE
+  ; live at exit: ac0
+
+L_701742FE:
+  if (ac0 <s 0) goto L_70174300 else goto L_701742FF
+
+L_701742FF:
+  goto L_70174302
+
+L_70174300:
+  goto L_7017435B
+
+L_70174302:
+  ac0 = ac2
+  goto L_70174314
+
+L_70174304:
+  ac0 = nadd(ac0, local_34.h)
+  local_16.h = trunc16(ac0)
+  ac1 = local_32.w
+  ac2 = sx16(local_34.h)
+  if (ac0 != ac1) goto L_7017430E else goto L_7017430D
+  ; live at exit: ac0, ac1, ac2
+
+L_7017430D:
+  ac2 = sub(ac2, ac2)
+  ; fall through to L_7017430E
+  ; live at exit: ac2
+
+L_7017430E:
+  if (ac0 <=s ac1) goto L_70174310 else goto L_7017430F
+
+L_7017430F:
+  ac2 = ~ac2
+  ; fall through to L_70174310
+  ; live at exit: ac2
+
+L_70174310:
+  if (ac2 <s 0) goto L_70174312 else goto L_70174311
+
+L_70174311:
+  goto L_70174314
+
+L_70174312:
+  goto L_7017435B
+
+L_70174314:
+  ac2 = sx16(local_17.h)
+  bounds_check !(ac2 >s 6) && (ac2 >s 0)   ; DERR 17 @70174319
+  ; fall through to L_7017431A
+  ; live at exit: ac2
+
+L_7017431A:
+  ac2 = mul(ac2, 302)
+  local_36.w = ac2
+  ac2 = add(ac2, SD_PTR.w)
+  bounds_check 1 <=s sx16(static_7001EE8C[ac2].h)   ; DERR 16 @70174328
+  ; fall through to L_70174329
+  ; live at exit: ac2
+
+L_70174329:
+  ac0 = local_36.w
+  ac0 = add(ac0, ac0)
+  ac1 = sub(sx16(local_16.h), 1)
+  local_38.w = ac2
+  ac2 = add(local_36.w, SD_PTR.w)
+  local_36.w = ac0
+  ac1 = add(ac1, cvwn(ash(sx16(static_7001EE8B[ac2].h), -1)))
+  bounds_check !(ac1 <s 1) && (ac1 <=s sx16(static_7001EE8C[local_38.w].h))   ; DERR 16 @70174347
+  ; fall through to L_70174348
+  ; live at exit: ac1
+
+L_70174348:
+  ac1 = add(add(ac1, local_36.w), SD_PTR.w * 2 + 0x0001EE8C:1)
+  ac0 = M8[ac1]
+  local_36.w = ac1
+  if (ac0 != local_31.b0) goto L_70174358 else goto L_70174357
+
+L_70174357:
+  goto L_7017435D
+
+L_70174358:
+  ac0 = sx16(local_16.h)
+  goto L_70174304        ; loop back
+  ; live at exit: ac0
+
+L_7017435B:
+  goto L_7017563C
+
+L_7017435D:
+  ac0 = mul(sub(sx16(local_17.h), 1), 100)
+  ac2 = sx16(local_17.h)
+  bounds_check !(ac2 >s 6) && (ac2 >s 0)   ; DERR 17 @70174368
+  ; fall through to L_70174369
+  ; live at exit: ac0, ac2
+
+L_70174369:
+  ac2 = add(mul(ac2, 302), SD_PTR.w)
+  local_32.w = ac0
+  local_16.h = trunc16(cvwn(add(add(cvwn(div(sx16(local_16.h), sx16(static_7001EE8B[ac2].h))), local_32.w), 1)))
+  ; fall through to L_7017437E
+
+L_7017437E:
+  vstr(&local_70, 36) = "What do you wish to name the area ? "
+  ac1 = 21
+  ac3 = wfp        ; fp restored
+  local_32.h = trunc16(ac1)
+  local_34.h = trunc16(ac0)
+  ac2 = 2048
+  local_36.h = trunc16(ac2)
+  ?WRITE_SCREEN(&OUT_CHAN, &local_70, &local_32, &local_34, &local_36)        ; site 7017439E
+  ; live at exit: ac1, ac2, ac3
+
+L_701743A2:
+  @701743A2 LCALL [0x701766ED],0
+
+L_701743A6:
+  ac0 = 0x00010B00
+  local_32.w = ac0
+  local_34.h = trunc16(ac1)
+  local_36.h = trunc16(sub(ac0, ac0))
+  local_38.h = trunc16(ac2)
+  ?WRITE_SCREEN(&OUT_CHAN, &local_32, &local_34, &local_36, &local_38)        ; site 701743BD
+
+L_701743C1:
+  static_700FCC2B[OBJ_PTR.w].h = trunc16(nadd(sx16(static_700FCC2B[OBJ_PTR.w].h), 1))
+  call GET_OBJECT_INDEX(&local_14)        ; site 701743D0
+
+L_701743D4:
+  ac0 = local_14.w
+  bounds_check !(ac0 >u 0x000186A0) && (ac0 >s 0)   ; DERR 17 @701743DA
+  ; fall through to L_701743DB
+  ; live at exit: ac0
+
+L_701743DB:
+  ac0 = mul(ac0, 9)
+  local_32.w = ac0
+  ac0 = add(ac0, OBJ_PTR.w)
+  ac1 = add(ac1, ~ac1)
+  OBJ_PTR_rec9[local_14.w].f11495.h /*via ac0*/ = trunc16(ac1)
+  OBJ_PTR_rec9[local_32.w/9].f11496.h = trunc16(ac1)
+  ac2 = add(local_32.w, OBJ_PTR.w)
+  ac0 = sx16(local_16.h)
+  OBJ_PTR_rec9[local_32.w/9].f11497.h /*via ac2*/ = trunc16(ac0)
+  ac2 = add(local_32.w, OBJ_PTR.w)
+  ac0 = sub(ac0, ac0)
+  OBJ_PTR_rec9[local_32.w/9].f11498.w /*via ac2*/ = ac0
+  OBJ_PTR_rec9[local_32.w/9].f11502.h = trunc16(ac0)
+  OBJ_PTR_rec9[local_32.w/9].f11503.h = trunc16(ac0)
+  OBJ_PTR_rec9[local_32.w/9].f11500.w = ac0
+  ac2 = sub(sx16(M16[R[&OBJ_PTR]]), ac1)
+  bounds_check !(ac2 >s 100) && (ac2 >s 0)   ; DERR 17 @7017441B
+  ; fall through to L_7017441C
+  ; live at exit: ac2
+
+L_7017441C:
+  local_32.w = add(mul(ac2, 20), OBJ_PTR.w)
+  ac2 = OBJ_PTR.w
+  ac0 = sx16(static_700FCC2B[ac2].h)
+  bounds_check !(ac0 >s 1000) && (ac0 >s 0)   ; DERR 17 @7017442D
+  ; fall through to L_7017442E
+  ; live at exit: ac0, ac2
+
+L_7017442E:
+  local_34.w = add(mul(ac0, 22), ac2)
+  static_700FCC28[local_34.w].h = trunc16(sx16(local_32->fm19.h))
+  ac0 = add(sx16(M16[R[&OBJ_PTR]]), 1)
+  bounds_check !(ac0 >s 100) && (ac0 >s 0)   ; DERR 17 @70174445
+  ; fall through to L_70174446
+  ; live at exit: ac0
+
+L_70174446:
+  ac0 = add(mul(ac0, 20), OBJ_PTR.w)
+  ac2 = sx16(static_700FCC2B[OBJ_PTR.w].h)
+  bounds_check !(ac2 >s 1000) && (ac2 >s 0)   ; DERR 17 @70174455
+  ; fall through to L_70174456
+  ; live at exit: ac0, ac2
+
+L_70174456:
+  local_32.w = add(mul(ac2, 22), OBJ_PTR.w)
+  static_700FCC29[local_32.w].h = trunc16(sx16(M16[wp(ac0, -18)]))
+  ac0 = add(sx16(M16[R[&OBJ_PTR]]), 1)
+  bounds_check !(ac0 >s 100) && (ac0 >s 0)   ; DERR 17 @7017446D
+  ; fall through to L_7017446E
+  ; live at exit: ac0
+
+L_7017446E:
+  ac0 = add(mul(ac0, 20), OBJ_PTR.w)
+  ac2 = sx16(static_700FCC2B[OBJ_PTR.w].h)
+  bounds_check !(ac2 >s 1000) && (ac2 >s 0)   ; DERR 17 @7017447D
+  ; fall through to L_7017447E
+  ; live at exit: ac0, ac2
+
+L_7017447E:
+  local_32.w = add(mul(ac2, 22), OBJ_PTR.w)
+  static_700FCC2A[local_32.w].h = trunc16(sx16(M16[wp(ac0, -17)]))
+  ac0 = add(sx16(M16[R[&OBJ_PTR]]), 1)
+  bounds_check !(ac0 >s 100) && (ac0 >s 0)   ; DERR 17 @70174495
+  ; fall through to L_70174496
+  ; live at exit: ac0
+
+L_70174496:
+  ac0 = add(mul(ac0, 20), OBJ_PTR.w)
+  ac2 = sx16(static_700FCC2B[OBJ_PTR.w].h)
+  bounds_check !(ac2 >s 1000) && (ac2 >s 0)   ; DERR 17 @701744A5
+  ; fall through to L_701744A6
+  ; live at exit: ac0, ac2
+
+L_701744A6:
+  local_32.w = add(mul(ac2, 22), OBJ_PTR.w)
+  static_700FCC2B[local_32.w].h = trunc16(sx16(M16[wp(ac0, -16)]))
+  ac2 = OBJ_PTR.w
+  ac0 = sx16(static_700FCC2B[ac2].h)
+  bounds_check !(ac0 >s 1000) && (ac0 >s 0)   ; DERR 17 @701744BF
+  ; fall through to L_701744C0
+  ; live at exit: ac0, ac2
+
+L_701744C0:
+  static_700FCC16[add(mul(ac0, 22), ac2)].w = local_14.w
+  ac2 = OBJ_PTR.w
+  ac0 = sx16(static_700FCC2B[ac2].h)
+  bounds_check !(ac0 >s 1000) && (ac0 >s 0)   ; DERR 17 @701744D3
+  ; fall through to L_701744D4
+  ; live at exit: ac0, ac2
+
+L_701744D4:
+  local_32.w = add(mul(ac0, 22), ac2)
+  ac1 = sx16(IN_BUFFER.h)
+  if (ac1 >=s 30) goto L_701744E1 else goto L_701744E0
+  ; live at exit: ac1
+
+L_701744E0:
+  ac0 = ac1
+  ; fall through to L_701744E1
+
+L_701744E1:
+  vstr(&OBJ_PTR_rec22[sx16(OBJ_PTR->f1035307.h)].f1035288, 30) = vstr(&IN_BUFFER)
+  call INIT_SCREEN(&PLAYER_NUM)        ; site 701744F0
+
+L_701744F4:        ; ac3 is not fp on entry (predecessor left it repurposed)
+  call DISPLAY_SCREEN(&PLAYER_NUM)        ; site 701744F7
+
+L_701744FB:        ; ac3 is not fp on entry (predecessor left it repurposed)
+  goto L_7017563C
+
+L_701744FD:
+  if (local_31.b0 != 35) goto L_70174502 else goto L_70174501
+
+L_70174501:
+  goto L_70174504
+
+L_70174502:
+  goto L_7017495C
+
+L_70174504:
+  vstr(&local_244, 77) = "Do you want to backup (T) territory, (C) city,\x0A(L) land mass, or (X) castle ?"
+  ac1 = 21
+  ac3 = wfp        ; fp restored
+  local_32.h = trunc16(ac1)
+  local_34.h = trunc16(ac0)
+  ac2 = 2048
+  local_36.h = trunc16(ac2)
+  ?WRITE_SCREEN(&OUT_CHAN, &local_244, &local_32, &local_34, &local_36)        ; site 70174524
+  ; live at exit: ac1, ac2, ac3
+
+L_70174528:
+  call GET_INPUT(bp(ac3, 62))        ; site 7017452A
+
+L_7017452E:
+  local_40.h = trunc16(3)
+  ac0 = M32[0x70173699]
+  local_41.w = ac0
+  local_32.h = trunc16(ac1)
+  local_34.h = trunc16(sub(ac0, ac0))
+  local_36.h = trunc16(ac2)
+  ?WRITE_SCREEN(&OUT_CHAN, &local_40, &local_32, &local_34, &local_36)        ; site 70174548
+
+L_7017454C:
+  ac0 = local_31.b0
+  local_17.h = trunc16(ac0)
+  if (ac0 != 88) goto L_70174553 else goto L_70174552
+  ; live at exit: ac0
+
+L_70174552:
+  goto L_70174556
+
+L_70174553:
+  if (ac0 == 120) goto L_70174556 else goto L_70174555
+
+L_70174555:
+  goto L_7017457B
+
+L_70174556:
+  vstr(&local_70, 44) = "Press <- or -> , 'home' to stop, 'E' to edit"
+  ac1 = 21
+  ac3 = wfp        ; fp restored
+  local_32.h = trunc16(ac1)
+  local_34.h = trunc16(ac0)
+  ac2 = 2048
+  local_36.h = trunc16(ac2)
+  ?WRITE_SCREEN(&OUT_CHAN, &local_70, &local_32, &local_34, &local_36)        ; site 70174576
+  ; live at exit: ac1, ac2, ac3
+
+L_7017457A:
+  goto L_7017459F
+
+L_7017457B:
+  vstr(&local_98, 31) = "Press <- or -> , 'home' to stop"
+  ac1 = 21
+  ac3 = wfp        ; fp restored
+  local_32.h = trunc16(ac1)
+  local_34.h = trunc16(ac0)
+  ac2 = 2048
+  local_36.h = trunc16(ac2)
+  ?WRITE_SCREEN(&OUT_CHAN, &local_98, &local_32, &local_34, &local_36)        ; site 7017459B
+  ; live at exit: ac1, ac2, ac3
+
+L_7017459F:
+  call GET_INPUT(bp(ac3, 62))        ; site 701745A1
+
+L_701745A5:
+  ac0 = 0x00010B00
+  local_32.w = ac0
+  local_34.h = trunc16(ac1)
+  local_36.h = trunc16(sub(ac0, ac0))
+  local_38.h = trunc16(ac2)
+  ?WRITE_SCREEN(&OUT_CHAN, &local_32, &local_34, &local_36, &local_38)        ; site 701745BC
+
+L_701745C0:
+  ac0 = local_31.b0
+  if (ac0 == 8) goto L_701745C5 else goto L_701745C4
+  ; live at exit: ac0
+
+L_701745C4:
+  goto L_701745C7
+
+L_701745C5:
+  goto L_7017493D
+
+L_701745C7:
+  ac1 = sub(ac1, ac1)
+  local_28.h = trunc16(ac1)
+  if (ac0 == 25) goto L_701745CD else goto L_701745CC
+  ; live at exit: ac1
+
+L_701745CC:
+  goto L_701745D0
+
+L_701745CD:
+  ac2 = add(ac2, ~ac2)
+  local_28.h = trunc16(ac2)
+  ; fall through to L_701745D0
+  ; live at exit: ac2
+
+L_701745D0:
+  if (ac0 == 24) goto L_701745D3 else goto L_701745D2
+
+L_701745D2:
+  goto L_701745D7
+
+L_701745D3:
+  local_28.h = trunc16(1)
+  ; fall through to L_701745D7
+
+L_701745D7:
+  ac0 = sx16(local_17.h)
+  if (ac0 != 84) goto L_701745DC else goto L_701745DB
+  ; live at exit: ac0
+
+L_701745DB:
+  goto L_701745DF
+
+L_701745DC:
+  if (ac0 == 116) goto L_701745DF else goto L_701745DE
+
+L_701745DE:
+  goto L_70174649
+
+L_701745DF:
+  ac0 = sx16(M16[R[&OBJ_PTR]])
+  t1 = ((ac0 & 65535) | 0x00010000) + (ac0 & 65535)
+  if (((lsh(t1, -16) & 1) == 0) || ((t1 & 65535) == 0)) goto L_701745E4 else goto L_701745E3
+  ; live at exit: ac0
+
+L_701745E3:
+  goto L_701745E8
+
+L_701745E4:
+  ac2 = sx16(local_28.h)
+  t1 = ((ac2 & 65535) | 0x00010000) + (ac2 & 65535)
+  if (((lsh(t1, -16) & 1) == 1) && ((t1 & 65535) != 0)) goto L_701745E8 else goto L_701745E7
+  ; live at exit: ac2
+
+L_701745E7:
+  goto L_701745ED
+
+L_701745E8:
+  M16[R[&OBJ_PTR]] = trunc16(nadd(ac0, local_28.h))
+  ; fall through to L_701745ED
+
+L_701745ED:
+  ac0 = sx16(M16[R[&OBJ_PTR]])
+  t1 = ((ac0 & 65535) | 0x00010000) + (ac0 & 65535)
+  if (((lsh(t1, -16) & 1) == 1) && ((t1 & 65535) != 0)) goto L_701745F2 else goto L_701745F1
+  ; live at exit: ac0
+
+L_701745F1:
+  goto L_70174647
+
+L_701745F2:
+  bounds_check !(ac0 >s 100) && (ac0 >s 0)   ; DERR 17 @701745F5
+  ; fall through to L_701745F6
+
+L_701745F6:
+  ac0 = mul(ac0, 20)
+  local_32.w = ac0
+  ac2 = add(ac0, OBJ_PTR.w)
+  ac1 = add(sx16((OBJ_PTR + ac0#in)->fm15.h /*via ac2*/), 19)
+  local_34.w = ac2
+  local_32.w = add(local_32.w, OBJ_PTR.w)
+  ac2 = bp(ac3, 140)
+  ac0 = 19
+  local_36.w = ac1
+  ac3 = 0x70173665:0
+  ac1 = ac0
+  @70174615 WCMV
+  ac3 = wfp        ; fp restored
+  ac3 = local_34.w
+  ac0 = sx16(M16[wp(ac3, -15)])
+  ac3 = wfp        ; fp restored
+  ac3 = local_32.w
+  ac3 = bp(ac3, -28)
+  ac1 = ac0
+  @70174621 WCMV
+  ac3 = wfp        ; fp restored
+  ac1 = local_36.w
+  ac0 = ac1
+  local_174.h = trunc16(ac0)
+  ac2 = bp(ac3, 350)
+  ac3 = bp(ac3, 140)
+  @7017462C WCMV
+  ac1 = 22
+  ac3 = wfp        ; fp restored
+  local_32.h = trunc16(ac1)
+  local_34.h = trunc16(ac0)
+  ac2 = 2048
+  local_38.h = trunc16(ac2)
+  ?WRITE_SCREEN(&OUT_CHAN, &local_174, &local_32, &local_34, &local_38)        ; site 70174643
+  ; live at exit: ac1, ac2, ac3
+
+L_70174647:
+  goto L_70174935
+
+L_70174649:
+  ac0 = sx16(local_17.h)
+  ac2 = add(ac2, ~ac2)
+  if (ac0 == 76) goto L_7017464F else goto L_7017464E
+  ; live at exit: ac0, ac2
+
+L_7017464E:
+  ac2 = sub(ac2, ac2)
+  ; fall through to L_7017464F
+  ; live at exit: ac2
+
+L_7017464F:
+  ac1 = add(ac1, ~ac1)
+  if (ac0 == 108) goto L_70174653 else goto L_70174652
+  ; live at exit: ac1
+
+L_70174652:
+  ac1 = sub(ac1, ac1)
+  ; fall through to L_70174653
+  ; live at exit: ac1
+
+L_70174653:
+  ac1 = ac1 | ac2
+  if ((lsh(ac1, -15) & 1) == 1) goto L_70174656 else goto L_70174655
+  ; live at exit: ac1
+
+L_70174655:
+  goto L_701746C4
+
+L_70174656:
+  ac2 = OBJ_PTR.w
+  ac0 = sx16(static_700FCC2B[ac2].h)
+  t1 = ((ac0 & 65535) | 0x00010000) + (ac0 & 65535)
+  if (((lsh(t1, -16) & 1) == 0) || ((t1 & 65535) == 0)) goto L_7017465E else goto L_7017465D
+  ; live at exit: ac0, ac2
+
+L_7017465D:
+  goto L_70174662
+
+L_7017465E:
+  ac1 = sx16(local_28.h)
+  t1 = ((ac1 & 65535) | 0x00010000) + (ac1 & 65535)
+  if (((lsh(t1, -16) & 1) == 1) && ((t1 & 65535) != 0)) goto L_70174662 else goto L_70174661
+  ; live at exit: ac1
+
+L_70174661:
+  goto L_70174667
+
+L_70174662:
+  static_700FCC2B[ac2].h = trunc16(nadd(ac0, local_28.h))
+  ; fall through to L_70174667
+
+L_70174667:
+  ac0 = sx16(static_700FCC2B[ac2].h)
+  t1 = ((ac0 & 65535) | 0x00010000) + (ac0 & 65535)
+  if (((lsh(t1, -16) & 1) == 1) && ((t1 & 65535) != 0)) goto L_7017466C else goto L_7017466B
+  ; live at exit: ac0
+
+L_7017466B:
+  goto L_701746C2
+
+L_7017466C:
+  bounds_check !(ac0 >s 1000) && (ac0 >s 0)   ; DERR 17 @7017466F
+  ; fall through to L_70174670
+
+L_70174670:
+  ac0 = mul(ac0, 22)
+  local_32.w = ac0
+  ac2 = add(ac0, ac2)
+  ac1 = add(sx16(static_700FCC18[ac2].h), 19)
+  local_34.w = ac2
+  local_32.w = add(local_32.w, OBJ_PTR.w)
+  ac2 = bp(ac3, 140)
+  ac0 = 19
+  local_36.w = ac1
+  ac3 = 0x70173659:0
+  ac1 = ac0
+  @7017468E WCMV
+  ac3 = wfp        ; fp restored
+  ac3 = local_34.w
+  ac0 = sx16(static_700FCC18[ac3].h)
+  ac3 = wfp        ; fp restored
+  ac3 = local_32.w
+  ac3 = ac3 * 2 + 0x000FCC19:0
+  ac1 = ac0
+  @7017469C WCMV
+  ac3 = wfp        ; fp restored
+  ac1 = local_36.w
+  ac0 = ac1
+  local_174.h = trunc16(ac0)
+  ac2 = bp(ac3, 350)
+  ac3 = bp(ac3, 140)
+  @701746A7 WCMV
+  ac1 = 22
+  ac3 = wfp        ; fp restored
+  local_32.h = trunc16(ac1)
+  local_34.h = trunc16(ac0)
+  ac2 = 2048
+  local_38.h = trunc16(ac2)
+  ?WRITE_SCREEN(&OUT_CHAN, &local_174, &local_32, &local_34, &local_38)        ; site 701746BE
+  ; live at exit: ac1, ac2, ac3
+
+L_701746C2:
+  goto L_70174935
+
+L_701746C4:
+  ac0 = sx16(local_17.h)
+  if (ac0 != 67) goto L_701746C9 else goto L_701746C8
+  ; live at exit: ac0
+
+L_701746C8:
+  goto L_701746CE
+
+L_701746C9:
+  if (ac0 != 99) goto L_701746CC else goto L_701746CB
+
+L_701746CB:
+  goto L_701746CE
+
+L_701746CC:
+  goto L_70174738
+
+L_701746CE:
+  ac2 = OBJ_PTR.w
+  ac0 = sx16(OBJ_PTR->f2001.h /*via ac2*/)
+  t1 = ((ac0 & 65535) | 0x00010000) + (ac0 & 65535)
+  if (((lsh(t1, -16) & 1) == 0) || ((t1 & 65535) == 0)) goto L_701746D5 else goto L_701746D4
+  ; live at exit: ac0, ac2
+
+L_701746D4:
+  goto L_701746D9
+
+L_701746D5:
+  ac1 = sx16(local_28.h)
+  t1 = ((ac1 & 65535) | 0x00010000) + (ac1 & 65535)
+  if (((lsh(t1, -16) & 1) == 1) && ((t1 & 65535) != 0)) goto L_701746D9 else goto L_701746D8
+  ; live at exit: ac1
+
+L_701746D8:
+  goto L_701746DD
+
+L_701746D9:
+  OBJ_PTR->f2001.h /*via ac2*/ = trunc16(nadd(ac0, local_28.h))
+  ; fall through to L_701746DD
+
+L_701746DD:
+  ac0 = sx16(OBJ_PTR->f2001.h /*via ac2*/)
+  t1 = ((ac0 & 65535) | 0x00010000) + (ac0 & 65535)
+  if (((lsh(t1, -16) & 1) == 0) || ((t1 & 65535) == 0)) goto L_701746E1 else goto L_701746E0
+  ; live at exit: ac0
+
+L_701746E0:
+  goto L_701746E3
+
+L_701746E1:
+  goto L_70174736
+
+L_701746E3:
+  bounds_check !(ac0 >s 500) && (ac0 >s 0)   ; DERR 17 @701746E6
+  ; fall through to L_701746E7
+
+L_701746E7:
+  ac0 = mul(ac0, 19)
+  local_32.w = ac0
+  ac2 = add(ac0, ac2)
+  ac1 = add(sx16(OBJ_PTR_rec19[sx16(OBJ_PTR->f2001.h)].f1986.h /*via ac2*/), 14)
+  local_34.w = ac2
+  local_32.w = add(local_32.w, OBJ_PTR.w)
+  ac2 = bp(ac3, 140)
+  ac0 = 14
+  local_36.w = ac1
+  ac3 = 0x70173651:0
+  ac1 = ac0
+  @70174704 WCMV
+  ac3 = wfp        ; fp restored
+  ac3 = local_34.w
+  ac0 = sx16(M16[wp(ac3, 1986)])
+  ac3 = wfp        ; fp restored
+  ac3 = local_32.w
+  ac3 = bp(ac3, 3974)
+  ac1 = ac0
+  @70174710 WCMV
+  ac3 = wfp        ; fp restored
+  ac1 = local_36.w
+  ac0 = ac1
+  local_174.h = trunc16(ac0)
+  ac2 = bp(ac3, 350)
+  ac3 = bp(ac3, 140)
+  @7017471B WCMV
+  ac1 = 22
+  ac3 = wfp        ; fp restored
+  local_32.h = trunc16(ac1)
+  local_34.h = trunc16(ac0)
+  ac2 = 2048
+  local_38.h = trunc16(ac2)
+  ?WRITE_SCREEN(&OUT_CHAN, &local_174, &local_32, &local_34, &local_38)        ; site 70174732
+  ; live at exit: ac1, ac2, ac3
+
+L_70174736:
+  goto L_70174935
+
+L_70174738:
+  ac0 = sx16(local_17.h)
+  if (ac0 != 88) goto L_7017473D else goto L_7017473C
+  ; live at exit: ac0
+
+L_7017473C:
+  goto L_70174742
+
+L_7017473D:
+  if (ac0 != 120) goto L_70174740 else goto L_7017473F
+
+L_7017473F:
+  goto L_70174742
+
+L_70174740:
+  goto L_70174935
+
+L_70174742:
+  ac0 = local_31.b0
+  if (ac0 != 69) goto L_70174747 else goto L_70174746
+  ; live at exit: ac0
+
+L_70174746:
+  goto L_7017474C
+
+L_70174747:
+  if (ac0 != 101) goto L_7017474A else goto L_70174749
+
+L_70174749:
+  goto L_7017474C
+
+L_7017474A:
+  goto L_70174844
+
+L_7017474C:
+  vstr(&local_40, 11) = "Castle name"
+  ac1 = sx16(static_700DE890[OBJ_PTR.w].h)
+  bounds_check !(ac1 >s 1000) && (ac1 >s 0)   ; DERR 17 @7017475F
+  ; fall through to L_70174760
+  ; live at exit: ac1
+
+L_70174760:        ; ac3 is not fp on entry (predecessor left it repurposed)
+  ac1 = mul(ac1, 23)
+  ac3 = wfp        ; fp restored
+  ac1 = add(ac1, CAS_PTR.w)
+  OP_EDIT.8@70175897.arg_4.slot = 0x701735BD
+  OP_EDIT.8@70175897.arg_3.slot = 0x701735C1
+  OP_EDIT.8@70175897.arg_2.slot = &CAS_PTR_rec23[ac1#in].fm17 /*via ac1*/
+  OP_EDIT.8@70175897.arg_1.slot = &local_40
+  ac1 = ac3
+  call OP_EDIT.8@70175897 args=4        ; site 70174771 (arg slots not folded)
+  ; live at exit: ac3
+
+L_70174774:
+  vstr(&local_40, 12) = "Castle owner"
+  ac1 = sx16(static_700DE890[OBJ_PTR.w].h)
+  bounds_check !(ac1 >s 1000) && (ac1 >s 0)   ; DERR 17 @70174787
+  ; fall through to L_70174788
+  ; live at exit: ac1
+
+L_70174788:        ; ac3 is not fp on entry (predecessor left it repurposed)
+  ac1 = mul(ac1, 23)
+  ac3 = wfp        ; fp restored
+  ac1 = add(ac1, CAS_PTR.w)
+  OP_EDIT.6@701757A8.arg_3.slot = 0x701735B9
+  OP_EDIT.6@701757A8.arg_2.slot = &CAS_PTR_rec23[ac1#in].fm21 /*via ac1*/
+  OP_EDIT.6@701757A8.arg_1.slot = &local_40
+  ac1 = ac3
+  call OP_EDIT.6@701757A8 args=3        ; site 70174797 (arg slots not folded)
+  ; live at exit: ac3
+
+L_7017479A:
+  vstr(&local_40, 15) = "Castle strength"
+  ac1 = sx16(static_700DE890[OBJ_PTR.w].h)
+  bounds_check !(ac1 >s 1000) && (ac1 >s 0)   ; DERR 17 @701747AD
+  ; fall through to L_701747AE
+  ; live at exit: ac1
+
+L_701747AE:        ; ac3 is not fp on entry (predecessor left it repurposed)
+  ac1 = mul(ac1, 23)
+  ac3 = wfp        ; fp restored
+  ac1 = add(ac1, CAS_PTR.w)
+  OP_EDIT.6@701757A8.arg_3.slot = 0x701735B5
+  OP_EDIT.6@701757A8.arg_2.slot = &CAS_PTR_rec23[ac1#in].fm20 /*via ac1*/
+  OP_EDIT.6@701757A8.arg_1.slot = &local_40
+  ac1 = ac3
+  call OP_EDIT.6@701757A8 args=3        ; site 701747BD (arg slots not folded)
+  ; live at exit: ac3
+
+L_701747C0:
+  vstr(&local_40, 19) = "Castle max strength"
+  ac1 = sx16(static_700DE890[OBJ_PTR.w].h)
+  bounds_check !(ac1 >s 1000) && (ac1 >s 0)   ; DERR 17 @701747D3
+  ; fall through to L_701747D4
+  ; live at exit: ac1
+
+L_701747D4:        ; ac3 is not fp on entry (predecessor left it repurposed)
+  ac1 = mul(ac1, 23)
+  ac3 = wfp        ; fp restored
+  ac1 = add(ac1, CAS_PTR.w)
+  OP_EDIT.6@701757A8.arg_3.slot = 0x701735B1
+  OP_EDIT.6@701757A8.arg_2.slot = &CAS_PTR_rec23[ac1#in].fm19 /*via ac1*/
+  OP_EDIT.6@701757A8.arg_1.slot = &local_40
+  ac1 = ac3
+  call OP_EDIT.6@701757A8 args=3        ; site 701747E3 (arg slots not folded)
+  ; live at exit: ac3
+
+L_701747E6:
+  vstr(&local_40, 10) = "Red guards"
+  ac1 = sx16(static_700DE890[OBJ_PTR.w].h)
+  bounds_check !(ac1 >s 1000) && (ac1 >s 0)   ; DERR 17 @701747F9
+  ; fall through to L_701747FA
+  ; live at exit: ac1
+
+L_701747FA:        ; ac3 is not fp on entry (predecessor left it repurposed)
+  ac1 = mul(ac1, 23)
+  ac3 = 16
+  ac1 = add(mul(ac1, ac3), -12)
+  ac3 = wfp        ; fp restored
+  local_54.w = CAS_PTR.w
+  local_56.w = ac1
+  ac1 = ac3
+  call OP_EDIT.4@70175672(&local_40, &local_54, 0x701735AD)        ; site 70174811
+  ; live at exit: ac3
+
+L_70174814:
+  vstr(&local_40, 12) = "Black guards"
+  ac1 = sx16(static_700DE890[OBJ_PTR.w].h)
+  bounds_check !(ac1 >s 1000) && (ac1 >s 0)   ; DERR 17 @70174827
+  ; fall through to L_70174828
+  ; live at exit: ac1
+
+L_70174828:        ; ac3 is not fp on entry (predecessor left it repurposed)
+  ac2 = 23
+  ac1 = mul(ac1, ac2)
+  ac3 = 16
+  ac1 = add(mul(ac1, ac3), -12)
+  ac3 = wfp        ; fp restored
+  local_54.w = CAS_PTR.w
+  local_56.w = ac1
+  ac1 = ac3
+  call OP_EDIT.4@70175672(&local_40, &local_54, 0x701735B9)        ; site 7017483F
+  ; live at exit: ac1, ac2, ac3
+
+L_70174842:
+  goto L_70174935
+
+L_70174844:
+  ac2 = OBJ_PTR.w
+  ac0 = sx16(static_700DE890[ac2].h)
+  t1 = ((ac0 & 65535) | 0x00010000) + (ac0 & 65535)
+  if (((lsh(t1, -16) & 1) == 0) || ((t1 & 65535) == 0)) goto L_7017484C else goto L_7017484B
+  ; live at exit: ac0, ac2
+
+L_7017484B:
+  goto L_70174850
+
+L_7017484C:
+  ac1 = sx16(local_28.h)
+  t1 = ((ac1 & 65535) | 0x00010000) + (ac1 & 65535)
+  if (((lsh(t1, -16) & 1) == 1) && ((t1 & 65535) != 0)) goto L_70174850 else goto L_7017484F
+  ; live at exit: ac1
+
+L_7017484F:
+  goto L_70174855
+
+L_70174850:
+  static_700DE890[ac2].h = trunc16(nadd(ac0, local_28.h))
+  ; fall through to L_70174855
+
+L_70174855:
+  ac0 = sx16(static_700DE890[ac2].h)
+  t1 = ((ac0 & 65535) | 0x00010000) + (ac0 & 65535)
+  if (((lsh(t1, -16) & 1) == 0) || ((t1 & 65535) == 0)) goto L_7017485A else goto L_70174859
+  ; live at exit: ac0
+
+L_70174859:
+  goto L_7017485C
+
+L_7017485A:
+  goto L_70174935
+
+L_7017485C:
+  bounds_check !(ac0 >s 1000) && (ac0 >s 0)   ; DERR 17 @7017485F
+  ; fall through to L_70174860
+
+L_70174860:
+  ac1 = 23
+  local_32.w = sx16(CAS_PTR_rec23[sx16(static_700DE890[OBJ_PTR.w].h)].fm23.h /*via ac0,ac1*/)
+  ac2 = &local_98
+  ?UNSIGNED_TO_CHAR(&local_32)        ; site 7017486F
+  ; live at exit: ac1, ac2
+
+L_70174873:
+  ac0 = add(sx16(local_98.h), 19)
+  local_32.w = ac0
+  ac0 = add(ac0, 3)
+  ac2 = sx16(static_700DE890[OBJ_PTR.w].h)
+  bounds_check !(ac2 >s 1000) && (ac2 >s 0)   ; DERR 17 @70174883
+  ; fall through to L_70174884
+  ; live at exit: ac0, ac2
+
+L_70174884:
+  local_34.w = sx16((CAS_PTR + mul(sx16(static_700DE890[OBJ_PTR.w].h), ac1))->fm22.h /*via ac2*/)
+  ac2 = &local_116
+  local_36.w = ac0
+  ?UNSIGNED_TO_CHAR(&local_34)        ; site 70174892
+  ; live at exit: ac2
+
+L_70174896:
+  ac0 = add(ac0, sx16(local_116.h))
+  local_34.w = ac0
+  ac0 = add(ac0, 3)
+  ac2 = sx16(static_700DE890[OBJ_PTR.w].h)
+  bounds_check !(ac2 >s 1000) && (ac2 >s 0)   ; DERR 17 @701748A5
+  ; fall through to L_701748A6
+  ; live at exit: ac0, ac2
+
+L_701748A6:
+  ac2 = mul(ac2, 23)
+  local_38.w = ac2
+  ac2 = add(ac2, CAS_PTR.w)
+  ac1 = sx16(CAS_PTR_rec23[sx16(static_700DE890[OBJ_PTR.w].h)].fm17.h /*via ac2*/)
+  local_134.w = ac0
+  local_154.w = ac2
+  ac2 = bp(ac3, 140)
+  local_40.w = add(ac0, ac1)
+  ac0 = 19
+  ac3 = 0x7017361B:0
+  ac1 = ac0
+  @701748BE WCMV
+  ac3 = wfp        ; fp restored
+  ac0 = sx16(local_98.h)
+  ac3 = bp(ac3, 198)
+  ac1 = ac0
+  @701748C5 WCMV
+  ac3 = wfp        ; fp restored
+  ac2 = bp(ac3, 348)
+  ac0 = local_32.w
+  ac3 = bp(ac3, 140)
+  ac1 = ac0
+  @701748CE WCMV
+  ac0 = 3
+  ac3 = 0x701736FB:0
+  ac1 = ac0
+  @701748D4 WCMV
+  ac3 = wfp        ; fp restored
+  ac2 = bp(ac3, 488)
+  ac0 = local_36.w
+  ac3 = bp(ac3, 348)
+  ac1 = ac0
+  @701748DD WCMV
+  ac3 = wfp        ; fp restored
+  ac0 = sx16(local_116.h)
+  ac3 = bp(ac3, 234)
+  ac1 = ac0
+  @701748E4 WCMV
+  ac3 = wfp        ; fp restored
+  ac2 = bp(ac3, 592)
+  ac0 = local_34.w
+  ac3 = bp(ac3, 488)
+  ac1 = ac0
+  @701748ED WCMV
+  ac0 = 3
+  ac3 = 0x70173619:0
+  ac1 = ac0
+  @701748F3 WCMV
+  ac3 = wfp        ; fp restored
+  local_32.w = add(local_38.w, CAS_PTR.w)
+  ac2 = bp(ac3, 696)
+  ac0 = local_134.w
+  ac3 = bp(ac3, 592)
+  ac1 = ac0
+  @70174903 WCMV
+  ac3 = wfp        ; fp restored
+  ac3 = local_154.w
+  ac0 = sx16(M16[wp(ac3, -17)])
+  ac3 = wfp        ; fp restored
+  ac3 = local_32.w
+  ac3 = bp(ac3, -32)
+  ac1 = ac0
+  @7017490F WCMV
+  ac3 = wfp        ; fp restored
+  ac1 = local_40.w
+  ac0 = ac1
+  local_416.h = trunc16(ac0)
+  ac2 = bp(ac3, 834)
+  ac3 = bp(ac3, 696)
+  @7017491A WCMV
+  ac1 = 22
+  ac3 = wfp        ; fp restored
+  local_32.h = trunc16(ac1)
+  local_34.h = trunc16(ac0)
+  ac2 = 2048
+  local_36.h = trunc16(ac2)
+  ?WRITE_SCREEN(&OUT_CHAN, &local_416, &local_32, &local_34, &local_36)        ; site 70174931
+  ; live at exit: ac1, ac2, ac3
+
+L_70174935:
+  call GET_INPUT(bp(ac3, 62))        ; site 70174937
+
+L_7017493B:
+  goto L_701745C0        ; loop back
+
+L_7017493D:
+  local_32.w = 0x00010B00
+  local_34.h = trunc16(22)
+  local_36.h = trunc16(sub(ac2, ac2))
+  local_38.h = trunc16(2048)
+  ?WRITE_SCREEN(&OUT_CHAN, &local_32, &local_34, &local_36, &local_38)        ; site 70174958
+
+L_7017495C:
+  if (local_31.b0 != 64) goto L_70174961 else goto L_70174960
+
+L_70174960:
+  goto L_70174963
+
+L_70174961:
+  goto L_70174AB4
+
+L_70174963:
+  ac2 = OBJ_PTR.w
+  OBJ_PTR->f2001.h /*via ac2*/ = nadd(OBJ_PTR->f2001.h /*via ac2*/, 1)
+  vstr(&local_40, 24) = "What is the city name : "
+  ac1 = 21
+  ac3 = wfp        ; fp restored
+  local_32.h = trunc16(ac1)
+  local_34.h = trunc16(ac0)
+  ac2 = 2048
+  local_36.h = trunc16(ac2)
+  ?WRITE_SCREEN(&OUT_CHAN, &local_40, &local_32, &local_34, &local_36)        ; site 70174988
+  ; live at exit: ac1, ac2, ac3
+
+L_7017498C:
+  @7017498C LCALL [0x701766ED],0
+
+L_70174990:
+  ac0 = sx16(PLAYER_NUM.h)
+  bounds_check !(ac0 >s 10) && (ac0 >s 0)   ; DERR 17 @70174996
+  ; fall through to L_70174997
+  ; live at exit: ac0
+
+L_70174997:
+  ac0 = add(mul(ac0, 686), SD_PTR.w)
+  ac1 = sx16(OBJ_PTR->f2001.h)
+  bounds_check !(ac1 >s 500) && (ac1 >s 0)   ; DERR 17 @701749A5
+  ; fall through to L_701749A6
+  ; live at exit: ac0, ac1
+
+L_701749A6:
+  local_34.w = add(mul(ac1, 19), OBJ_PTR.w)
+  ac3 = sx16(SD_PTR_rec686[sx16(PLAYER_NUM.h)].fm589.h /*via ac0*/)
+  M16[wp(M32[wp(wfp, 34)], 1983)] = trunc16(ac3)
+  ac0 = sx16(PLAYER_NUM.h)
+  bounds_check !(ac0 >s 10) && (ac0 >s 0)   ; DERR 17 @701749BD
+  ; fall through to L_701749BE
+  ; live at exit: ac0
+
+L_701749BE:        ; ac3 is not fp on entry (predecessor left it repurposed)
+  ac0 = mul(ac0, 686)
+  ac3 = wfp        ; fp restored
+  ac0 = add(ac0, SD_PTR.w)
+  ac2 = sx16(OBJ_PTR->f2001.h)
+  bounds_check !(ac2 >s 500) && (ac2 >s 0)   ; DERR 17 @701749CD
+  ; fall through to L_701749CE
+  ; live at exit: ac0, ac2, ac3
+
+L_701749CE:
+  local_32.w = add(mul(ac2, 19), OBJ_PTR.w)
+  local_32->f1984.h = trunc16(sx16(M16[wp(ac0, -588)]))
+  ac2 = OBJ_PTR.w
+  ac0 = sx16(OBJ_PTR->f2001.h /*via ac2*/)
+  bounds_check !(ac0 >s 500) && (ac0 >s 0)   ; DERR 17 @701749E5
+  ; fall through to L_701749E6
+  ; live at exit: ac0, ac2
+
+L_701749E6:
+  local_32.w = add(mul(ac0, 19), ac2)
+  ac1 = sx16(IN_BUFFER.h)
+  if (ac1 >=s 28) goto L_701749F3 else goto L_701749F2
+  ; live at exit: ac1
+
+L_701749F2:
+  ac0 = ac1
+  ; fall through to L_701749F3
+
+L_701749F3:
+  vstr(&OBJ_PTR_rec19[sx16(OBJ_PTR->f2001.h)].f1986, 28) = vstr(&IN_BUFFER)
+  ac3 = wfp        ; fp restored
+  vstr(&local_40, 25) = "\x0BWhat is the city size : "
+  ac1 = 21
+  ac3 = wfp        ; fp restored
+  local_32.h = trunc16(ac1)
+  local_34.h = trunc16(ac0)
+  ac2 = 2048
+  local_36.h = trunc16(ac2)
+  ?WRITE_SCREEN(&OUT_CHAN, &local_40, &local_32, &local_34, &local_36)        ; site 70174A1E
+  ; live at exit: ac1, ac2, ac3
+
+L_70174A22:
+  @70174A22 LCALL [0x701766ED],0
+
+L_70174A26:
+  ac0 = 0x00010B00
+  local_32.w = ac0
+  local_34.h = trunc16(ac1)
+  local_36.h = trunc16(sub(ac0, ac0))
+  local_38.h = trunc16(ac2)
+  ?WRITE_SCREEN(&OUT_CHAN, &local_32, &local_34, &local_36, &local_38)        ; site 70174A3D
+
+L_70174A41:
+  ?CHAR_TO_UNSIGNED(&IN_BUFFER)        ; site 70174A44
+
+L_70174A48:
+  ac0 = cvwn(ac0)
+  ac1 = sx16(OBJ_PTR->f2001.h)
+  bounds_check !(ac1 >s 500) && (ac1 >s 0)   ; DERR 17 @70174A51
+  ; fall through to L_70174A52
+  ; live at exit: ac0, ac1
+
+L_70174A52:
+  OBJ_PTR_rec19[sx16(OBJ_PTR->f2001.h)].f1985.h /*via ac1*/ = trunc16(ac0)
+  vstr(&local_98, 33) = "\x0BIs it surrounded by a barrier ? "
+  ac3 = wfp        ; fp restored
+  local_32.h = trunc16(21)
+  local_34.h = trunc16(ac0)
+  local_36.h = trunc16(2048)
+  ?WRITE_SCREEN(&OUT_CHAN, &local_98, &local_32, &local_34, &local_36)        ; site 70174A7B
+  ; live at exit: ac3
+
+L_70174A7F:
+  call GET_INPUT(bp(ac3, 62))        ; site 70174A81
+
+L_70174A85:
+  ac0 = local_31.b0
+  if (ac0 != 89) goto L_70174A8A else goto L_70174A89
+  ; live at exit: ac0
+
+L_70174A89:
+  goto L_70174A8D
+
+L_70174A8A:
+  if (ac0 == 121) goto L_70174A8D else goto L_70174A8C
+
+L_70174A8C:
+  goto L_70174AA0
+
+L_70174A8D:
+  ac2 = OBJ_PTR.w
+  ac0 = sx16(OBJ_PTR->f2001.h /*via ac2*/)
+  bounds_check !(ac0 >s 500) && (ac0 >s 0)   ; DERR 17 @70174A95
+  ; fall through to L_70174A96
+  ; live at exit: ac0, ac2
+
+L_70174A96:
+  ac0 = add(mul(mul(ac0, 19), 16), 32016)
+  (OBJ_PTR + lsh(add(mul(mul(sx16(OBJ_PTR->f2001.h), 19), 16), 32016), -4))->f0.h /*via ind,ac2,ac0*/ = (OBJ_PTR + lsh(add(mul(mul(sx16(OBJ_PTR->f2001.h), 19), 16), 32016), -4))->f0.h /*via ind,ac2,ac0*/ | lsh(32768, 0 - (ac0 & 15))
+  goto L_70174AB2
+
+L_70174AA0:
+  ac2 = OBJ_PTR.w
+  ac0 = sx16(OBJ_PTR->f2001.h /*via ac2*/)
+  bounds_check !(ac0 >s 500) && (ac0 >s 0)   ; DERR 17 @70174AA8
+  ; fall through to L_70174AA9
+  ; live at exit: ac0, ac2
+
+L_70174AA9:
+  ac0 = add(mul(mul(ac0, 19), 16), 32016)
+  (OBJ_PTR + lsh(add(mul(mul(sx16(OBJ_PTR->f2001.h), 19), 16), 32016), -4))->f0.h /*via ind,ac2,ac0*/ = (OBJ_PTR + lsh(add(mul(mul(sx16(OBJ_PTR->f2001.h), 19), 16), 32016), -4))->f0.h /*via ind,ac2,ac0*/ & ~lsh(32768, 0 - (ac0 & 15))
+  ; fall through to L_70174AB2
+
+L_70174AB2:
+  goto L_7017563C
+
+L_70174AB4:
+  ac0 = local_31.b0
+  if (ac0 == 27) goto L_70174AB9 else goto L_70174AB8
+  ; live at exit: ac0
+
+L_70174AB8:
+  goto L_70174ABB
+
+L_70174AB9:
+  goto L_7017563E
+
+L_70174ABB:
+  if (ac0 != 12) goto L_70174ABE else goto L_70174ABD
+
+L_70174ABD:
+  goto L_70174AC0
+
+L_70174ABE:
+  goto L_70174AD9
+
+L_70174AC0:
+  ac0 = sx16(PLAYER_NUM.h)
+  bounds_check !(ac0 >s 10) && (ac0 >s 0)   ; DERR 17 @70174AC6
+  ; fall through to L_70174AC7
+  ; live at exit: ac0
+
+L_70174AC7:
+  ac0 = mul(ac0, 686)
+  ac2 = 16
+  ac0 = mul(ac0, ac2)
+  local_32.w = ac0
+  ac0 = add(ac0, -9443)
+  ac1 = SD_PTR.w
+  (SD_PTR + lsh(add(mul(mul(sx16(PLAYER_NUM.h), 686), 16), -9443), -4))->f0.h /*via ind,ac1,ac0*/ = (SD_PTR + lsh(add(mul(mul(sx16(PLAYER_NUM.h), 686), 16), -9443), -4))->f0.h /*via ind,ac1,ac0*/ | lsh(32768, 0 - (ac0 & 15))
+  @70174AD5 LCALL [0x70176A93],0
+  ; live at exit: ac0, ac1, ac2
+
+L_70174AD9:
+  ac0 = local_31.b0
+  if (ac0 != 23) goto L_70174ADE else goto L_70174ADD
+  ; live at exit: ac0
+
+L_70174ADD:
+  goto L_70174AE9
+
+L_70174ADE:
+  if (ac0 != 26) goto L_70174AE1 else goto L_70174AE0
+
+L_70174AE0:
+  goto L_70174AE9
+
+L_70174AE1:
+  if (ac0 != 24) goto L_70174AE4 else goto L_70174AE3
+
+L_70174AE3:
+  goto L_70174AE9
+
+L_70174AE4:
+  if (ac0 != 25) goto L_70174AE7 else goto L_70174AE6
+
+L_70174AE6:
+  goto L_70174AE9
+
+L_70174AE7:
+  goto L_70174B69
+
+L_70174AE9:
+  if (sx16(local_30.h) == 1) goto L_70174AEE else goto L_70174AED
+
+L_70174AED:
+  goto L_70174AFA
+
+L_70174AEE:
+  local_32.h = trunc16(ac0)
+  call MOVE(&PLAYER_NUM, &local_32)        ; site 70174AF5
+
+L_70174AF9:
+  goto L_70174B67
+
+L_70174AFA:
+  if (local_31.b0 == 23) goto L_70174AFF else goto L_70174AFE
+
+L_70174AFE:
+  goto L_70174B13
+
+L_70174AFF:
+  ac1 = sx16(PLAYER_NUM.h)
+  bounds_check !(ac1 >s 10) && (ac1 >s 0)   ; DERR 17 @70174B05
+  ; fall through to L_70174B06
+  ; live at exit: ac1
+
+L_70174B06:
+  ac2 = add(mul(ac1, 686), SD_PTR.w)
+  SD_PTR_rec686[sx16(PLAYER_NUM.h)].fm589.h /*via ac2*/ = trunc16(nsub(sx16(SD_PTR_rec686[sx16(PLAYER_NUM.h)].fm589.h /*via ac2*/), local_30.h))
+  ; fall through to L_70174B13
+
+L_70174B13:
+  if (local_31.b0 == 26) goto L_70174B18 else goto L_70174B17
+
+L_70174B17:
+  goto L_70174B2C
+
+L_70174B18:
+  ac1 = sx16(PLAYER_NUM.h)
+  bounds_check !(ac1 >s 10) && (ac1 >s 0)   ; DERR 17 @70174B1E
+  ; fall through to L_70174B1F
+  ; live at exit: ac1
+
+L_70174B1F:
+  ac2 = add(mul(ac1, 686), SD_PTR.w)
+  SD_PTR_rec686[sx16(PLAYER_NUM.h)].fm589.h /*via ac2*/ = trunc16(nadd(sx16(local_30.h), SD_PTR_rec686[sx16(PLAYER_NUM.h)].fm589.h /*via ac2*/))
+  ; fall through to L_70174B2C
+
+L_70174B2C:
+  if (local_31.b0 == 24) goto L_70174B31 else goto L_70174B30
+
+L_70174B30:
+  goto L_70174B45
+
+L_70174B31:
+  ac1 = sx16(PLAYER_NUM.h)
+  bounds_check !(ac1 >s 10) && (ac1 >s 0)   ; DERR 17 @70174B37
+  ; fall through to L_70174B38
+  ; live at exit: ac1
+
+L_70174B38:
+  ac2 = add(mul(ac1, 686), SD_PTR.w)
+  SD_PTR_rec686[sx16(PLAYER_NUM.h)].fm588.h /*via ac2*/ = trunc16(nadd(sx16(local_30.h), SD_PTR_rec686[sx16(PLAYER_NUM.h)].fm588.h /*via ac2*/))
+  ; fall through to L_70174B45
+
+L_70174B45:
+  if (local_31.b0 == 25) goto L_70174B4A else goto L_70174B49
+
+L_70174B49:
+  goto L_70174B60
+
+L_70174B4A:
+  ac0 = sx16(PLAYER_NUM.h)
+  bounds_check !(ac0 >s 10) && (ac0 >s 0)   ; DERR 17 @70174B50
+  ; fall through to L_70174B51
+  ; live at exit: ac0
+
+L_70174B51:
+  ac0 = add(mul(ac0, 686), SD_PTR.w)
+  ac2 = nsub(sx16(SD_PTR_rec686[sx16(PLAYER_NUM.h)].fm588.h /*via ac0*/), local_30.h)
+  ac3 = ac0
+  SD_PTR_rec686[sx16(PLAYER_NUM.h)].fm588.h /*via ac3*/ = trunc16(ac2)
+  ac3 = wfp        ; fp restored
+  ; fall through to L_70174B60
+  ; live at exit: ac3
+
+L_70174B60:
+  call INIT_SCREEN(&PLAYER_NUM)        ; site 70174B63
+
+L_70174B67:
+  goto L_7017563C
+
+L_70174B69:
+  local_17.h = trunc16(3)
+  ac2 = SD_PTR.w
+  local_32.w = add(sub(sx16(static_7001F216[ac2].h), sx16(static_7001F215[ac2].h)), 1)
+  ac0 = sx16(local_17.h)
+  bounds_check !(ac0 >s 6) && (ac0 >s 0)   ; DERR 17 @70174B7F
+  ; fall through to L_70174B80
+  ; live at exit: ac0
+
+L_70174B80:
+  ac1 = sx16(static_7001EE8B[add(mul(ac0, 302), SD_PTR.w)].h)
+  local_34.h = trunc16(ac1)
+  local_16.h = trunc16(1)
+  ac0 = local_32.w
+  ac2 = 1
+  if (ac2 != ac0) goto L_70174B96 else goto L_70174B95
+  ; live at exit: ac0, ac1, ac2
+
+L_70174B95:
+  ac1 = sub(ac1, ac1)
+  ; fall through to L_70174B96
+  ; live at exit: ac1
+
+L_70174B96:
+  if (ac2 <=s ac0) goto L_70174B98 else goto L_70174B97
+
+L_70174B97:
+  ac1 = ~ac1
+  ; fall through to L_70174B98
+  ; live at exit: ac1
+
+L_70174B98:
+  if (ac1 >=s 0) goto L_70174B9A else goto L_70174B99
+
+L_70174B99:
+  goto L_70174BF2
+
+L_70174B9A:
+  ac1 = sx16(local_16.h)
+  goto L_70174BAB
+
+L_70174B9D:
+  ac1 = nadd(ac1, local_34.h)
+  local_16.h = trunc16(ac1)
+  ac0 = local_32.w
+  ac2 = sx16(local_34.h)
+  if (ac1 != ac0) goto L_70174BA7 else goto L_70174BA6
+  ; live at exit: ac0, ac1, ac2
+
+L_70174BA6:
+  ac2 = sub(ac2, ac2)
+  ; fall through to L_70174BA7
+  ; live at exit: ac2
+
+L_70174BA7:
+  if (ac1 <=s ac0) goto L_70174BA9 else goto L_70174BA8
+
+L_70174BA8:
+  ac2 = ~ac2
+  ; fall through to L_70174BA9
+  ; live at exit: ac2
+
+L_70174BA9:
+  if (ac2 >=s 0) goto L_70174BAB else goto L_70174BAA
+
+L_70174BAA:
+  goto L_70174BF2
+
+L_70174BAB:
+  ac2 = sx16(local_17.h)
+  bounds_check !(ac2 >s 6) && (ac2 >s 0)   ; DERR 17 @70174BB0
+  ; fall through to L_70174BB1
+  ; live at exit: ac2
+
+L_70174BB1:
+  ac2 = mul(ac2, 302)
+  local_36.w = ac2
+  ac2 = add(ac2, SD_PTR.w)
+  bounds_check 1 <=s sx16(static_7001EE8C[ac2].h)   ; DERR 16 @70174BBF
+  ; fall through to L_70174BC0
+  ; live at exit: ac2
+
+L_70174BC0:
+  ac0 = local_36.w
+  ac0 = add(ac0, ac0)
+  ac1 = sub(sx16(local_16.h), 1)
+  local_38.w = ac2
+  ac2 = add(local_36.w, SD_PTR.w)
+  local_36.w = ac0
+  ac1 = add(ac1, cvwn(ash(sx16(static_7001EE8B[ac2].h), -1)))
+  bounds_check !(ac1 <s 1) && (ac1 <=s sx16(static_7001EE8C[local_38.w].h))   ; DERR 16 @70174BDE
+  ; fall through to L_70174BDF
+  ; live at exit: ac1
+
+L_70174BDF:
+  if (M8[add(add(ac1, local_36.w), SD_PTR.w * 2 + 0x0001EE8C:1)] == local_31.b0) goto L_70174BED else goto L_70174BEC
+
+L_70174BEC:
+  goto L_70174BEF
+
+L_70174BED:
+  goto L_701755A1
+
+L_70174BEF:
+  ac1 = sx16(local_16.h)
+  goto L_70174B9D        ; loop back
+  ; live at exit: ac1
+
+L_70174BF2:
+  if (local_31.b0 != 67) goto L_70174BF7 else goto L_70174BF6
+
+L_70174BF6:
+  goto L_70174BF9
+
+L_70174BF7:
+  goto L_7017507B
+
+L_70174BF9:
+  ac0 = sx16(PLAYER_NUM.h)
+  bounds_check !(ac0 >s 10) && (ac0 >s 0)   ; DERR 17 @70174BFF
+  ; fall through to L_70174C00
+  ; live at exit: ac0
+
+L_70174C00:
+  ac0 = mul(ac0, 686)
+  local_32.w = ac0
+  local_23.h = trunc16(sx16(SD_PTR_rec686[sx16(PLAYER_NUM.h)].fm589.h /*via ac0*/))
+  local_24.h = trunc16(sx16(SD_PTR_rec686[local_32.w/686].fm588.h))
+  ac2 = OBJ_PTR.w
+  local_17.h = trunc16(nadd(sx16(static_700DE890[ac2].h), 1))
+  static_700DE890[ac2].h = nadd(static_700DE890[ac2].h, 1)
+  vstr(&local_40, 20) = "\x0BIs this a citadel? "
+  ac1 = 16
+  ac3 = wfp        ; fp restored
+  local_32.h = trunc16(ac1)
+  local_34.h = trunc16(ac0)
+  ac2 = 2048
+  local_36.h = trunc16(ac2)
+  ?WRITE_SCREEN(&OUT_CHAN, &local_40, &local_32, &local_34, &local_36)        ; site 70174C42
+  ; live at exit: ac1, ac2, ac3
+
+L_70174C46:
+  call GET_INPUT(bp(ac3, 62))        ; site 70174C48
+
+L_70174C4C:
+  ac0 = 0x00010B00
+  local_32.w = ac0
+  local_34.h = trunc16(ac1)
+  local_36.h = trunc16(sub(ac0, ac0))
+  local_38.h = trunc16(ac2)
+  ?WRITE_SCREEN(&OUT_CHAN, &local_32, &local_34, &local_36, &local_38)        ; site 70174C63
+
+L_70174C67:
+  ac0 = local_31.b0
+  if (ac0 != 89) goto L_70174C6C else goto L_70174C6B
+  ; live at exit: ac0
+
+L_70174C6B:
+  goto L_70174C71
+
+L_70174C6C:
+  if (ac0 != 121) goto L_70174C6F else goto L_70174C6E
+
+L_70174C6E:
+  goto L_70174C71
+
+L_70174C6F:
+  goto L_70174E86
+
+L_70174C71:
+  local_32.w = add(sx16(local_23.h), 3)
+  ac0 = nsub(sx16(local_23.h), 3)
+  local_19.h = trunc16(ac0)
+  if (ac0 <=s local_32.w) goto L_70174C7F else goto L_70174C7E
+
+L_70174C7E:
+  goto L_70174CD4
+
+L_70174C7F:
+  goto L_70174C85
+
+L_70174C80:
+  t1 = nadd(local_19.h, 1)
+  local_19.h = t1
+  ac0 = t1
+  if (t1 >s local_32.w) goto L_70174CD4 else goto L_70174C85
+
+L_70174C85:
+  local_34.h = trunc16(nsub(sx16(local_24.h), 4))
+  call FIND_OBJECT(&local_19, &local_34, &local_14)        ; site 70174C90
+
+L_70174C94:
+  local_34.h = trunc16(nsub(sx16(local_24.h), 4))
+  call WRITE_OBJECT(&local_19, &local_34, 0x70157E31, &local_14, 0x70157E30, 0x70157E30)        ; site 70174CA8
+
+L_70174CAC:
+  local_34.h = trunc16(nadd(sx16(local_24.h), 4))
+  call FIND_OBJECT(&local_19, &local_34, &local_14)        ; site 70174CB7
+
+L_70174CBB:
+  local_34.h = trunc16(nadd(sx16(local_24.h), 4))
+  call WRITE_OBJECT(&local_19, &local_34, 0x70157E32, &local_14, 0x70157E30, 0x70157E30)        ; site 70174CCF
+
+L_70174CD3:
+  goto L_70174C80        ; loop back
+
+L_70174CD4:
+  ac0 = add(sx16(local_24.h), 4)
+  local_32.w = ac0
+  ac1 = nsub(sx16(local_24.h), 4)
+  local_19.h = trunc16(ac1)
+  if (ac1 <=s ac0) goto L_70174CE0 else goto L_70174CDF
+
+L_70174CDF:
+  goto L_70174D35
+
+L_70174CE0:
+  goto L_70174CE6
+
+L_70174CE1:
+  t1 = nadd(local_19.h, 1)
+  local_19.h = t1
+  ac1 = t1
+  if (t1 >s local_32.w) goto L_70174D35 else goto L_70174CE6
+
+L_70174CE6:
+  local_34.h = trunc16(nsub(sx16(local_23.h), 4))
+  call FIND_OBJECT(&local_34, &local_19, &local_14)        ; site 70174CF1
+
+L_70174CF5:
+  local_34.h = trunc16(nsub(sx16(local_23.h), 4))
+  call WRITE_OBJECT(&local_34, &local_19, 0x70157E33, &local_14, 0x70157E30, 0x70157E30)        ; site 70174D09
+
+L_70174D0D:
+  local_34.h = trunc16(nadd(sx16(local_23.h), 4))
+  call FIND_OBJECT(&local_34, &local_19, &local_14)        ; site 70174D18
+
+L_70174D1C:
+  local_34.h = trunc16(nadd(sx16(local_23.h), 4))
+  call WRITE_OBJECT(&local_34, &local_19, 0x70157E33, &local_14, 0x70157E30, 0x70157E30)        ; site 70174D30
+
+L_70174D34:
+  goto L_70174CE1        ; loop back
+
+L_70174D35:
+  ac0 = add(sx16(local_23.h), 7)
+  local_32.w = ac0
+  ac1 = nadd(sx16(local_23.h), 65529)
+  local_19.h = trunc16(ac1)
+  if (ac1 <=s ac0) goto L_70174D43 else goto L_70174D42
+
+L_70174D42:
+  goto L_70174D9C
+
+L_70174D43:
+  goto L_70174D49
+
+L_70174D44:
+  t1 = nadd(local_19.h, 1)
+  local_19.h = t1
+  ac1 = t1
+  if (t1 >s local_32.w) goto L_70174D9C else goto L_70174D49
+
+L_70174D49:
+  local_34.h = trunc16(nadd(sx16(local_24.h), 65528))
+  call FIND_OBJECT(&local_19, &local_34, &local_14)        ; site 70174D55
+
+L_70174D59:
+  local_34.h = trunc16(nadd(sx16(local_24.h), 65528))
+  call WRITE_OBJECT(&local_19, &local_34, 0x70157E34, &local_14, 0x70157E30, 0x70157E30)        ; site 70174D6E
+
+L_70174D72:
+  local_34.h = trunc16(nadd(sx16(local_24.h), 8))
+  call FIND_OBJECT(&local_19, &local_34, &local_14)        ; site 70174D7E
+
+L_70174D82:
+  local_34.h = trunc16(nadd(sx16(local_24.h), 8))
+  call WRITE_OBJECT(&local_19, &local_34, 0x70157E35, &local_14, 0x70157E30, 0x70157E30)        ; site 70174D97
+
+L_70174D9B:
+  goto L_70174D44        ; loop back
+
+L_70174D9C:
+  ac0 = add(sx16(local_24.h), 8)
+  local_32.w = ac0
+  ac1 = nadd(sx16(local_24.h), 65528)
+  local_19.h = trunc16(ac1)
+  if (ac1 <=s ac0) goto L_70174DAA else goto L_70174DA9
+
+L_70174DA9:
+  goto L_70174E03
+
+L_70174DAA:
+  goto L_70174DB0
+
+L_70174DAB:
+  t1 = nadd(local_19.h, 1)
+  local_19.h = t1
+  ac1 = t1
+  if (t1 >s local_32.w) goto L_70174E03 else goto L_70174DB0
+
+L_70174DB0:
+  local_34.h = trunc16(nadd(sx16(local_23.h), 65528))
+  call FIND_OBJECT(&local_34, &local_19, &local_14)        ; site 70174DBC
+
+L_70174DC0:
+  local_34.h = trunc16(nadd(sx16(local_23.h), 65528))
+  call WRITE_OBJECT(&local_34, &local_19, 0x70157E36, &local_14, 0x70157E30, 0x70157E30)        ; site 70174DD5
+
+L_70174DD9:
+  local_34.h = trunc16(nadd(sx16(local_23.h), 8))
+  call FIND_OBJECT(&local_34, &local_19, &local_14)        ; site 70174DE5
+
+L_70174DE9:
+  local_34.h = trunc16(nadd(sx16(local_23.h), 8))
+  call WRITE_OBJECT(&local_34, &local_19, 0x70157E36, &local_14, 0x70157E30, 0x70157E30)        ; site 70174DFE
+
+L_70174E02:
+  goto L_70174DAB        ; loop back
+
+L_70174E03:
+  ac0 = nadd(sx16(local_23.h), 8)
+  ac1 = nadd(sx16(local_24.h), 65528)
+  local_32.h = trunc16(ac0)
+  local_34.h = trunc16(ac1)
+  call FIND_OBJECT(&local_32, &local_34, &local_14)        ; site 70174E15
+
+L_70174E19:
+  ac0 = nadd(sx16(local_23.h), 8)
+  ac1 = nadd(sx16(local_24.h), 65528)
+  local_32.h = trunc16(ac0)
+  local_34.h = trunc16(ac1)
+  call WRITE_OBJECT(&local_32, &local_34, 0x70157E37, &local_14, 0x70157E30, 0x70157E30)        ; site 70174E34
+
+L_70174E38:
+  ac0 = nadd(sx16(local_23.h), 8)
+  ac1 = nadd(sx16(local_24.h), 8)
+  local_32.h = trunc16(ac0)
+  local_34.h = trunc16(ac1)
+  call FIND_OBJECT(&local_32, &local_34, &local_14)        ; site 70174E4A
+
+L_70174E4E:
+  ac0 = nadd(sx16(local_23.h), 8)
+  ac1 = nadd(sx16(local_24.h), 8)
+  local_32.h = trunc16(ac0)
+  local_34.h = trunc16(ac1)
+  call WRITE_OBJECT(&local_32, &local_34, 0x70157E38, &local_14, 0x70157E30, 0x70157E30)        ; site 70174E69
+
+L_70174E6D:
+  ac0 = sx16(local_17.h)
+  bounds_check !(ac0 >s 1000) && (ac0 >s 0)   ; DERR 17 @70174E72
+  ; fall through to L_70174E73
+  ; live at exit: ac0
+
+L_70174E73:
+  ac0 = mul(mul(ac0, 23), 16)
+  ac1 = &CAS_PTR->fm1
+  M16[ind(ac1) + lsh(ac0, -4)] = M16[ind(ac1) + lsh(ac0, -4)] | lsh(32768, 0 - (ac0 & 15))
+  ac0 = add(ac0, 0x00DE8900)
+  ac1 = OBJ_PTR.w
+  (OBJ_PTR + lsh(add(ac0#in, 0x00DE8900), -4))->f0.h /*via ind,ac1,ac0*/ = (OBJ_PTR + lsh(add(ac0#in, 0x00DE8900), -4))->f0.h /*via ind,ac1,ac0*/ | lsh(32768, 0 - (ac0 & 15))
+  ; fall through to L_70174E86
+
+L_70174E86:
+  ac0 = sx16(local_17.h)
+  bounds_check !(ac0 >s 1000) && (ac0 >s 0)   ; DERR 17 @70174E8B
+  ; fall through to L_70174E8C
+  ; live at exit: ac0
+
+L_70174E8C:
+  CAS_PTR_rec23[sx16(local_17.h)].fm23.h /*via ac0*/ = trunc16(sx16(local_23.h))
+  ac0 = sx16(local_17.h)
+  bounds_check !(ac0 >s 1000) && (ac0 >s 0)   ; DERR 17 @70174E9C
+  ; fall through to L_70174E9D
+  ; live at exit: ac0
+
+L_70174E9D:
+  ac0 = mul(ac0, 23)
+  local_32.w = ac0
+  ac0 = add(ac0, CAS_PTR.w)
+  ac1 = sx16(local_24.h)
+  CAS_PTR_rec23[sx16(local_17.h)].fm22.h /*via ac0*/ = trunc16(ac1)
+  ac2 = add(local_32.w, CAS_PTR.w)
+  ac0 = sub(ac0, ac0)
+  CAS_PTR_rec23[local_32.w/23].fm21.h /*via ac2*/ = trunc16(ac0)
+  CAS_PTR_rec23[local_32.w/23].fm17.h = trunc16(ac0)
+  ac2 = add(local_32.w, CAS_PTR.w)
+  ac0 = 1800
+  CAS_PTR_rec23[local_32.w/23].fm19.h /*via ac2*/ = trunc16(ac0)
+  CAS_PTR_rec23[local_32.w/23].fm20.h = trunc16(ac0)
+  ac2 = add(local_32.w, OBJ_PTR.w)
+  ac0 = sx16(local_23.h)
+  static_700DE87A[ac2].h = trunc16(ac0)
+  static_700DE87B[add(local_32.w, OBJ_PTR.w)].h = trunc16(ac1)
+  ac2 = add(local_32.w, OBJ_PTR.w)
+  ac0 = sub(ac0, ac0)
+  static_700DE87C[ac2].h = trunc16(ac0)
+  static_700DE880[add(local_32.w, OBJ_PTR.w)].h = trunc16(ac0)
+  ac2 = add(local_32.w, OBJ_PTR.w)
+  ac1 = 1800
+  static_700DE87E[ac2].h = trunc16(ac1)
+  static_700DE87D[add(local_32.w, OBJ_PTR.w)].h = trunc16(ac1)
+  call FIND_OBJECT(&local_23, &local_24, &local_14)        ; site 70174F04
+
+L_70174F08:
+  call WRITE_OBJECT(&local_23, &local_24, 0x70157E39, &local_14, 0x70157E30, 0x70157E30)        ; site 70174F17
+
+L_70174F1B:
+  ac2 = nsub(sx16(local_23.h), 1)
+  ac0 = nsub(sx16(local_24.h), 1)
+  local_32.h = trunc16(ac2)
+  local_34.h = trunc16(ac0)
+  call FIND_OBJECT(&local_32, &local_34, &local_14)        ; site 70174F2B
+
+L_70174F2F:
+  ac0 = nsub(sx16(local_23.h), 1)
+  ac2 = nsub(sx16(local_24.h), 1)
+  local_32.h = trunc16(ac0)
+  local_34.h = trunc16(ac2)
+  call WRITE_OBJECT(&local_32, &local_34, 0x70157E3A, &local_14, 0x70157E30, 0x70157E30)        ; site 70174F48
+
+L_70174F4C:
+  local_32.h = trunc16(nsub(sx16(local_23.h), 1))
+  call FIND_OBJECT(&local_32, &local_24, &local_14)        ; site 70174F57
+
+L_70174F5B:
+  local_32.h = trunc16(nsub(sx16(local_23.h), 1))
+  call WRITE_OBJECT(&local_32, &local_24, 0x70157E3B, &local_14, 0x70157E30, 0x70157E30)        ; site 70174F6F
+
+L_70174F73:
+  ac0 = nsub(sx16(local_23.h), 1)
+  ac2 = nadd(sx16(local_24.h), 1)
+  local_32.h = trunc16(ac0)
+  local_34.h = trunc16(ac2)
+  call FIND_OBJECT(&local_32, &local_34, &local_14)        ; site 70174F83
+
+L_70174F87:
+  ac0 = nsub(sx16(local_23.h), 1)
+  ac2 = nadd(sx16(local_24.h), 1)
+  local_32.h = trunc16(ac0)
+  local_34.h = trunc16(ac2)
+  call WRITE_OBJECT(&local_32, &local_34, 0x70157E3C, &local_14, 0x70157E30, 0x70157E30)        ; site 70174FA0
+
+L_70174FA4:
+  local_32.h = trunc16(nsub(sx16(local_24.h), 1))
+  call FIND_OBJECT(&local_23, &local_32, &local_14)        ; site 70174FAF
+
+L_70174FB3:
+  local_32.h = trunc16(nsub(sx16(local_24.h), 1))
+  call WRITE_OBJECT(&local_23, &local_32, 0x70157E3D, &local_14, 0x70157E30, 0x70157E30)        ; site 70174FC7
+
+L_70174FCB:
+  local_32.h = trunc16(nadd(sx16(local_24.h), 1))
+  call FIND_OBJECT(&local_23, &local_32, &local_14)        ; site 70174FD6
+
+L_70174FDA:
+  local_32.h = trunc16(nadd(sx16(local_24.h), 1))
+  call WRITE_OBJECT(&local_23, &local_32, 0x70157E3E, &local_14, 0x70157E30, 0x70157E30)        ; site 70174FEE
+
+L_70174FF2:
+  ac0 = nadd(sx16(local_23.h), 1)
+  ac2 = nsub(sx16(local_24.h), 1)
+  local_32.h = trunc16(ac0)
+  local_34.h = trunc16(ac2)
+  call FIND_OBJECT(&local_32, &local_34, &local_14)        ; site 70175002
+
+L_70175006:
+  ac0 = nadd(sx16(local_23.h), 1)
+  ac2 = nsub(sx16(local_24.h), 1)
+  local_32.h = trunc16(ac0)
+  local_34.h = trunc16(ac2)
+  call WRITE_OBJECT(&local_32, &local_34, 0x70157E3F, &local_14, 0x70157E30, 0x70157E30)        ; site 7017501F
+
+L_70175023:
+  local_32.h = trunc16(nadd(sx16(local_23.h), 1))
+  call FIND_OBJECT(&local_32, &local_24, &local_14)        ; site 7017502E
+
+L_70175032:
+  local_32.h = trunc16(nadd(sx16(local_23.h), 1))
+  call WRITE_OBJECT(&local_32, &local_24, 0x70157E3B, &local_14, 0x70157E30, 0x70157E30)        ; site 70175046
+
+L_7017504A:
+  ac0 = nadd(sx16(local_23.h), 1)
+  ac2 = nadd(sx16(local_24.h), 1)
+  local_32.h = trunc16(ac0)
+  local_34.h = trunc16(ac2)
+  call FIND_OBJECT(&local_32, &local_34, &local_14)        ; site 7017505A
+
+L_7017505E:
+  ac0 = nadd(sx16(local_23.h), 1)
+  ac2 = nadd(sx16(local_24.h), 1)
+  local_32.h = trunc16(ac0)
+  local_34.h = trunc16(ac2)
+  call WRITE_OBJECT(&local_32, &local_34, 0x70157E40, &local_14, 0x70157E30, 0x70157E30)        ; site 70175077
+
+L_7017507B:
+  ac0 = local_31.b0
+  if (ac0 != 116) goto L_70175080 else goto L_7017507F
+  ; live at exit: ac0
+
+L_7017507F:
+  goto L_70175085
+
+L_70175080:
+  if (ac0 != 84) goto L_70175083 else goto L_70175082
+
+L_70175082:
+  goto L_70175085
+
+L_70175083:
+  goto L_70175411
+
+L_70175085:
+  ac0 = sx16(PLAYER_NUM.h)
+  bounds_check !(ac0 >s 10) && (ac0 >s 0)   ; DERR 17 @7017508B
+  ; fall through to L_7017508C
+  ; live at exit: ac0
+
+L_7017508C:
+  ac0 = mul(ac0, 686)
+  local_32.w = ac0
+  local_23.h = trunc16(sx16(SD_PTR_rec686[sx16(PLAYER_NUM.h)].fm589.h /*via ac0*/))
+  local_24.h = trunc16(sx16(SD_PTR_rec686[local_32.w/686].fm588.h))
+  vstr(&local_40, 20) = "\x0BIs this a temple ? "
+  ac1 = 19
+  ac3 = wfp        ; fp restored
+  local_32.h = trunc16(ac1)
+  local_34.h = trunc16(ac0)
+  ac2 = 2048
+  local_36.h = trunc16(ac2)
+  ?WRITE_SCREEN(&OUT_CHAN, &local_40, &local_32, &local_34, &local_36)        ; site 701750C2
+  ; live at exit: ac1, ac2, ac3
+
+L_701750C6:
+  call GET_INPUT(bp(ac3, 62))        ; site 701750C8
+
+L_701750CC:
+  ac0 = 0x00010B00
+  local_32.w = ac0
+  local_34.h = trunc16(ac1)
+  local_36.h = trunc16(sub(ac0, ac0))
+  local_38.h = trunc16(ac2)
+  ?WRITE_SCREEN(&OUT_CHAN, &local_32, &local_34, &local_36, &local_38)        ; site 701750E3
+
+L_701750E7:
+  ac0 = local_31.b0
+  if (ac0 != 89) goto L_701750EC else goto L_701750EB
+  ; live at exit: ac0
+
+L_701750EB:
+  goto L_701750F1
+
+L_701750EC:
+  if (ac0 != 121) goto L_701750EF else goto L_701750EE
+
+L_701750EE:
+  goto L_701750F1
+
+L_701750EF:
+  goto L_701752C0
+
+L_701750F1:
+  ac2 = OBJ_PTR.w
+  static_700FCBC6[ac2].h = nadd(static_700FCBC6[ac2].h, 1)
+  ac0 = sx16(static_700FCBC6[ac2].h)
+  bounds_check !(ac0 >s 50) && (ac0 >s 0)   ; DERR 17 @701750FD
+  ; fall through to L_701750FE
+  ; live at exit: ac0
+
+L_701750FE:
+  static_700FCBC5[add(add(ac0, ac0), OBJ_PTR.w)].h = trunc16(sx16(local_23.h))
+  ac2 = OBJ_PTR.w
+  ac0 = sx16(static_700FCBC6[ac2].h)
+  bounds_check !(ac0 >s 50) && (ac0 >s 0)   ; DERR 17 @70175111
+  ; fall through to L_70175112
+  ; live at exit: ac0, ac2
+
+L_70175112:
+  static_700FCBC6[add(add(ac0, ac0), ac2)].h = trunc16(sx16(local_24.h))
+  call FIND_OBJECT(&local_23, &local_24, &local_14)        ; site 70175120
+
+L_70175124:
+  call WRITE_OBJECT(&local_23, &local_24, 0x70157E41, &local_14, 0x70157E30, 0x70157E30)        ; site 70175133
+
+L_70175137:
+  local_32.h = trunc16(nadd(sx16(local_24.h), 1))
+  call FIND_OBJECT(&local_23, &local_32, &local_14)        ; site 70175142
+
+L_70175146:
+  local_32.h = trunc16(nadd(sx16(local_24.h), 1))
+  call WRITE_OBJECT(&local_23, &local_32, 0x70157E41, &local_14, 0x70157E30, 0x70157E30)        ; site 7017515A
+
+L_7017515E:
+  local_32.h = trunc16(nadd(sx16(local_24.h), 2))
+  call FIND_OBJECT(&local_23, &local_32, &local_14)        ; site 70175169
+
+L_7017516D:
+  local_32.h = trunc16(nadd(sx16(local_24.h), 2))
+  call WRITE_OBJECT(&local_23, &local_32, 0x70157E41, &local_14, 0x70157E30, 0x70157E30)        ; site 70175181
+
+L_70175185:
+  local_32.h = trunc16(nadd(sx16(local_24.h), 3))
+  call FIND_OBJECT(&local_23, &local_32, &local_14)        ; site 70175190
+
+L_70175194:
+  local_32.h = trunc16(nadd(sx16(local_24.h), 3))
+  call WRITE_OBJECT(&local_23, &local_32, 0x70157E41, &local_14, 0x70157E30, 0x70157E30)        ; site 701751A8
+
+L_701751AC:
+  local_32.h = trunc16(nadd(sx16(local_23.h), 1))
+  call FIND_OBJECT(&local_32, &local_24, &local_14)        ; site 701751B7
+
+L_701751BB:
+  local_32.h = trunc16(nadd(sx16(local_23.h), 1))
+  call WRITE_OBJECT(&local_32, &local_24, 0x70157E42, &local_14, 0x70157E30, 0x70157E30)        ; site 701751CF
+
+L_701751D3:
+  local_32.h = trunc16(nadd(sx16(local_23.h), 2))
+  call FIND_OBJECT(&local_32, &local_24, &local_14)        ; site 701751DE
+
+L_701751E2:
+  local_32.h = trunc16(nadd(sx16(local_23.h), 2))
+  call WRITE_OBJECT(&local_32, &local_24, 0x70157E43, &local_14, 0x70157E30, 0x70157E30)        ; site 701751F6
+
+L_701751FA:
+  ac0 = nadd(sx16(local_23.h), 1)
+  ac1 = nadd(sx16(local_24.h), 1)
+  local_32.h = trunc16(ac0)
+  local_34.h = trunc16(ac1)
+  call FIND_OBJECT(&local_32, &local_34, &local_14)        ; site 7017520A
+
+L_7017520E:
+  ac0 = nadd(sx16(local_23.h), 1)
+  ac1 = nadd(sx16(local_24.h), 1)
+  local_32.h = trunc16(ac0)
+  local_34.h = trunc16(ac1)
+  call WRITE_OBJECT(&local_32, &local_34, 0x70157E44, &local_14, 0x70157E30, 0x70157E30)        ; site 70175227
+
+L_7017522B:
+  ac0 = nadd(sx16(local_23.h), 1)
+  ac1 = nadd(sx16(local_24.h), 2)
+  local_32.h = trunc16(ac0)
+  local_34.h = trunc16(ac1)
+  call FIND_OBJECT(&local_32, &local_34, &local_14)        ; site 7017523B
+
+L_7017523F:
+  ac0 = nadd(sx16(local_23.h), 1)
+  ac1 = nadd(sx16(local_24.h), 2)
+  local_32.h = trunc16(ac0)
+  local_34.h = trunc16(ac1)
+  call WRITE_OBJECT(&local_32, &local_34, 0x70157E45, &local_14, 0x70157E30, 0x70157E30)        ; site 70175258
+
+L_7017525C:
+  ac0 = nadd(sx16(local_23.h), 1)
+  ac1 = nadd(sx16(local_24.h), 3)
+  local_32.h = trunc16(ac0)
+  local_34.h = trunc16(ac1)
+  call FIND_OBJECT(&local_32, &local_34, &local_14)        ; site 7017526C
+
+L_70175270:
+  ac0 = nadd(sx16(local_23.h), 1)
+  ac1 = nadd(sx16(local_24.h), 3)
+  local_32.h = trunc16(ac0)
+  local_34.h = trunc16(ac1)
+  call WRITE_OBJECT(&local_32, &local_34, 0x70157E46, &local_14, 0x70157E30, 0x70157E30)        ; site 70175289
+
+L_7017528D:
+  ac0 = nadd(sx16(local_23.h), 2)
+  ac1 = nadd(sx16(local_24.h), 3)
+  local_32.h = trunc16(ac0)
+  local_34.h = trunc16(ac1)
+  call FIND_OBJECT(&local_32, &local_34, &local_14)        ; site 7017529D
+
+L_701752A1:
+  ac0 = nadd(sx16(local_23.h), 2)
+  ac1 = nadd(sx16(local_24.h), 3)
+  local_32.h = trunc16(ac0)
+  local_34.h = trunc16(ac1)
+  call WRITE_OBJECT(&local_32, &local_34, 0x70157E47, &local_14, 0x70157E30, 0x70157E30)        ; site 701752BA
+
+L_701752BE:
+  goto L_70175411
+
+L_701752C0:
+  local_18.h = trunc16(sub(ac0, ac0))
+  local_19.h = trunc16(13)
+  ac0 = sx16(static_700DE890[OBJ_PTR.w].h)
+  local_32.h = trunc16(ac0)
+  ac2 = 1
+  local_17.h = trunc16(ac2)
+  if (ac2 <=s ac0) goto L_701752D6 else goto L_701752D5
+
+L_701752D5:
+  goto L_70175309
+
+L_701752D6:
+  goto L_701752DC
+
+L_701752D7:
+  t1 = nadd(local_17.h, 1)
+  local_17.h = t1
+  ac1 = t1
+  if (t1 >s sx16(local_32.h)) goto L_70175309 else goto L_701752DC
+
+L_701752DC:
+  ac0 = sx16(local_17.h)
+  bounds_check !(ac0 >s 1000) && (ac0 >s 0)   ; DERR 17 @701752E1
+  ; fall through to L_701752E2
+  ; live at exit: ac0
+
+L_701752E2:
+  ac0 = mul(ac0, 23)
+  local_34.w = ac0
+  ac0 = add(ac0, CAS_PTR.w)
+  ac2 = add(local_34.w, CAS_PTR.w)
+  call DIST(&CAS_PTR_rec23[sx16(local_17.h)].fm23 /*via ac0*/, &CAS_PTR_rec23[local_34.w/23].fm22 /*via ac2*/, &local_23, &local_24)        ; site 701752F8
+  ; live at exit: ac0
+
+L_701752FC:
+  local_20.h = trunc16(ac0)
+  ac1 = sx16(local_19.h)
+  if (ac0 <s ac1) goto L_70175302 else goto L_70175301
+  ; live at exit: ac1
+
+L_70175301:
+  goto L_701752D7        ; loop back
+
+L_70175302:
+  local_20.h = trunc16(ac1)
+  local_18.h = trunc16(sx16(local_17.h))
+  goto L_701752D7        ; loop back
+
+L_70175309:
+  ac2 = CAS_PTR.w
+  CAS_PTR->f63000.h /*via ac2*/ = nadd(CAS_PTR->f63000.h /*via ac2*/, 1)
+  ac2 = OBJ_PTR.w
+  static_700FC909[ac2].h = nadd(static_700FC909[ac2].h, 1)
+  ac2 = CAS_PTR.w
+  ac0 = sx16(CAS_PTR->f63000.h /*via ac2*/)
+  local_17.h = trunc16(ac0)
+  bounds_check !(ac0 >s 300) && (ac0 >s 0)   ; DERR 17 @70175320
+  ; fall through to L_70175321
+  ; live at exit: ac0, ac2
+
+L_70175321:
+  (CAS_PTR + sx16(CAS_PTR->f63000.h) + sx16(CAS_PTR->f63000.h))->f62999.h /*via ac0,ac2*/ = trunc16(sx16(local_18.h))
+  ac0 = nsub(sx16(local_23.h), 1)
+  ac1 = nsub(sx16(local_24.h), 1)
+  local_32.h = trunc16(ac0)
+  local_34.h = trunc16(ac1)
+  call FIND_OBJECT(&local_32, &local_34, &local_14)        ; site 70175339
+
+L_7017533D:
+  ac0 = nsub(sx16(local_23.h), 1)
+  ac1 = nsub(sx16(local_24.h), 1)
+  local_32.h = trunc16(ac0)
+  local_34.h = trunc16(ac1)
+  call WRITE_OBJECT(&local_32, &local_34, 0x70157E48, &local_14, 0x70157E30, 0x70157E30)        ; site 70175356
+
+L_7017535A:
+  ac0 = WRITE_INDEX.w
+  bounds_check !(ac0 >u 0x000186A0) && (ac0 >s 0)   ; DERR 17 @70175361
+  ; fall through to L_70175362
+  ; live at exit: ac0
+
+L_70175362:
+  OBJ_PTR_rec9[WRITE_INDEX.w].f11500.w /*via ac0*/ = sx16(local_17.h)
+  local_32.h = trunc16(nsub(sx16(local_23.h), 1))
+  call FIND_OBJECT(&local_32, &local_24, &local_14)        ; site 70175378
+
+L_7017537C:
+  local_32.h = trunc16(nsub(sx16(local_23.h), 1))
+  call WRITE_OBJECT(&local_32, &local_24, 0x70157E49, &local_14, 0x70157E30, 0x70157E30)        ; site 70175390
+
+L_70175394:
+  ac0 = WRITE_INDEX.w
+  bounds_check !(ac0 >u 0x000186A0) && (ac0 >s 0)   ; DERR 17 @7017539B
+  ; fall through to L_7017539C
+  ; live at exit: ac0
+
+L_7017539C:
+  OBJ_PTR_rec9[WRITE_INDEX.w].f11500.w /*via ac0*/ = sx16(local_17.h)
+  local_32.h = trunc16(nsub(sx16(local_24.h), 1))
+  call FIND_OBJECT(&local_23, &local_32, &local_14)        ; site 701753B2
+
+L_701753B6:
+  local_32.h = trunc16(nsub(sx16(local_24.h), 1))
+  call WRITE_OBJECT(&local_23, &local_32, 0x70157E4A, &local_14, 0x70157E30, 0x70157E30)        ; site 701753CA
+
+L_701753CE:
+  ac0 = WRITE_INDEX.w
+  bounds_check !(ac0 >u 0x000186A0) && (ac0 >s 0)   ; DERR 17 @701753D5
+  ; fall through to L_701753D6
+  ; live at exit: ac0
+
+L_701753D6:
+  OBJ_PTR_rec9[WRITE_INDEX.w].f11500.w /*via ac0*/ = sx16(local_17.h)
+  call FIND_OBJECT(&local_23, &local_24, &local_14)        ; site 701753E7
+
+L_701753EB:
+  call WRITE_OBJECT(&local_23, &local_24, 0x70157E4B, &local_14, 0x70157E30, 0x70157E30)        ; site 701753FA
+
+L_701753FE:
+  ac0 = WRITE_INDEX.w
+  bounds_check !(ac0 >u 0x000186A0) && (ac0 >s 0)   ; DERR 17 @70175405
+  ; fall through to L_70175406
+  ; live at exit: ac0
+
+L_70175406:
+  OBJ_PTR_rec9[WRITE_INDEX.w].f11500.w /*via ac0*/ = sx16(local_17.h)
+  ; fall through to L_70175411
+
+L_70175411:
+  if (local_31.b0 != 104) goto L_70175416 else goto L_70175415
+
+L_70175415:
+  goto L_70175418
+
+L_70175416:
+  goto L_701754CF
+
+L_70175418:
+  ac0 = sx16(PLAYER_NUM.h)
+  bounds_check !(ac0 >s 10) && (ac0 >s 0)   ; DERR 17 @7017541E
+  ; fall through to L_7017541F
+  ; live at exit: ac0
+
+L_7017541F:
+  ac0 = mul(ac0, 686)
+  local_32.w = ac0
+  local_23.h = trunc16(sx16(SD_PTR_rec686[sx16(PLAYER_NUM.h)].fm589.h /*via ac0*/))
+  ac0 = sx16(SD_PTR_rec686[local_32.w/686].fm588.h)
+  local_24.h = trunc16(ac0)
+  ac2 = nsub(sx16(local_23.h), 1)
+  ac0 = nsub(ac0, 1)
+  local_32.h = trunc16(ac2)
+  local_34.h = trunc16(ac0)
+  call FIND_OBJECT(&local_32, &local_34, &local_14)        ; site 70175443
+
+L_70175447:
+  ac0 = nsub(sx16(local_23.h), 1)
+  ac2 = nsub(sx16(local_24.h), 1)
+  local_32.h = trunc16(ac0)
+  local_34.h = trunc16(ac2)
+  call WRITE_OBJECT(&local_32, &local_34, 0x70157E4C, &local_14, 0x70157E30, 0x70157E30)        ; site 70175460
+
+L_70175464:
+  local_32.h = trunc16(nsub(sx16(local_23.h), 1))
+  call FIND_OBJECT(&local_32, &local_24, &local_14)        ; site 7017546F
+
+L_70175473:
+  local_32.h = trunc16(nsub(sx16(local_23.h), 1))
+  call WRITE_OBJECT(&local_32, &local_24, 0x70157E4D, &local_14, 0x70157E30, 0x70157E30)        ; site 70175487
+
+L_7017548B:
+  local_32.h = trunc16(nsub(sx16(local_24.h), 1))
+  call FIND_OBJECT(&local_23, &local_32, &local_14)        ; site 70175496
+
+L_7017549A:
+  local_32.h = trunc16(nsub(sx16(local_24.h), 1))
+  call WRITE_OBJECT(&local_23, &local_32, 0x70157E4E, &local_14, 0x70157E30, 0x70157E30)        ; site 701754AE
+
+L_701754B2:
+  call FIND_OBJECT(&local_23, &local_24, &local_14)        ; site 701754B8
+
+L_701754BC:
+  call WRITE_OBJECT(&local_23, &local_24, 0x70157E4F, &local_14, 0x70157E30, 0x70157E30)        ; site 701754CB
+
+L_701754CF:
+  ac0 = local_31.b0
+  if (ac0 != 66) goto L_701754D4 else goto L_701754D3
+  ; live at exit: ac0
+
+L_701754D3:
+  goto L_701754D9
+
+L_701754D4:
+  if (ac0 != 83) goto L_701754D7 else goto L_701754D6
+
+L_701754D6:
+  goto L_701754D9
+
+L_701754D7:
+  goto L_7017559F
+
+L_701754D9:
+  ac0 = sx16(PLAYER_NUM.h)
+  bounds_check !(ac0 >s 10) && (ac0 >s 0)   ; DERR 17 @701754DF
+  ; fall through to L_701754E0
+  ; live at exit: ac0
+
+L_701754E0:
+  ac0 = mul(ac0, 686)
+  local_32.w = ac0
+  local_23.h = trunc16(sx16(SD_PTR_rec686[sx16(PLAYER_NUM.h)].fm589.h /*via ac0*/))
+  local_24.h = trunc16(sx16(SD_PTR_rec686[local_32.w/686].fm588.h))
+  call FIND_OBJECT(&local_23, &local_24, &local_14)        ; site 701754FC
+
+L_70175500:
+  if (local_31.b0 == 83) goto L_70175505 else goto L_70175504
+
+L_70175504:
+  goto L_7017550A
+
+L_70175505:
+  local_16.h = trunc16(223)
+  goto L_7017550E
+
+L_7017550A:
+  local_16.h = trunc16(221)
+  ; fall through to L_7017550E
+
+L_7017550E:
+  call WRITE_OBJECT(&local_23, &local_24, &local_16, &local_14, 0x70157E30, 0x70157E30)        ; site 7017551C
+
+L_70175520:
+  local_32.h = trunc16(nsub(sx16(local_23.h), 1))
+  call FIND_OBJECT(&local_32, &local_24, &local_14)        ; site 7017552B
+
+L_7017552F:
+  local_32.h = trunc16(nsub(sx16(local_23.h), 1))
+  call WRITE_OBJECT(&local_32, &local_24, 0x70157E50, &local_14, 0x70157E30, 0x70157E30)        ; site 70175543
+
+L_70175547:
+  ac0 = nsub(sx16(local_23.h), 1)
+  ac2 = nadd(sx16(local_24.h), 1)
+  local_32.h = trunc16(ac0)
+  local_34.h = trunc16(ac2)
+  call FIND_OBJECT(&local_32, &local_34, &local_14)        ; site 70175557
+
+L_7017555B:
+  ac0 = nsub(sx16(local_23.h), 1)
+  ac2 = nadd(sx16(local_24.h), 1)
+  local_32.h = trunc16(ac0)
+  local_34.h = trunc16(ac2)
+  call WRITE_OBJECT(&local_32, &local_34, 0x70157E51, &local_14, 0x70157E30, 0x70157E30)        ; site 70175574
+
+L_70175578:
+  local_32.h = trunc16(nadd(sx16(local_24.h), 1))
+  call FIND_OBJECT(&local_23, &local_32, &local_14)        ; site 70175583
+
+L_70175587:
+  local_32.h = trunc16(nadd(sx16(local_24.h), 1))
+  call WRITE_OBJECT(&local_23, &local_32, 0x70157E52, &local_14, 0x70157E30, 0x70157E30)        ; site 7017559B
+
+L_7017559F:
+  goto L_7017563C
+
+L_701755A1:
+  ac0 = mul(sub(sx16(local_17.h), 1), 100)
+  ac2 = sx16(local_17.h)
+  bounds_check !(ac2 >s 6) && (ac2 >s 0)   ; DERR 17 @701755AC
+  ; fall through to L_701755AD
+  ; live at exit: ac0, ac2
+
+L_701755AD:
+  ac2 = add(mul(ac2, 302), SD_PTR.w)
+  local_32.w = ac0
+  local_16.h = trunc16(cvwn(add(add(cvwn(div(sx16(local_16.h), sx16(static_7001EE8B[ac2].h))), local_32.w), 1)))
+  ac0 = sx16(PLAYER_NUM.h)
+  bounds_check !(ac0 >s 10) && (ac0 >s 0)   ; DERR 17 @701755C8
+  ; fall through to L_701755C9
+  ; live at exit: ac0
+
+L_701755C9:
+  ac1 = 686
+  ac0 = mul(ac0, ac1)
+  local_32.w = ac0
+  ac0 = add(ac0, SD_PTR.w)
+  ac2 = add(local_32.w, SD_PTR.w)
+  call FIND_OBJECT(&SD_PTR_rec686[sx16(PLAYER_NUM.h)].fm589 /*via ac0*/, &SD_PTR_rec686[local_32.w/686].fm588 /*via ac2*/, &local_14)        ; site 701755DD
+  ; live at exit: ac1
+
+L_701755E1:
+  ac0 = sx16(PLAYER_NUM.h)
+  bounds_check !(ac0 >s 10) && (ac0 >s 0)   ; DERR 17 @701755E7
+  ; fall through to L_701755E8
+  ; live at exit: ac0
+
+L_701755E8:
+  ac0 = mul(ac0, ac1)
+  local_32.w = ac0
+  ac0 = add(ac0, SD_PTR.w)
+  ac2 = add(local_32.w, SD_PTR.w)
+  call WRITE_OBJECT(&(SD_PTR + mul(sx16(PLAYER_NUM.h), ac1#in))->fm589 /*via ac0*/, &(SD_PTR + local_32.w)->fm588 /*via ac2*/, &local_16, &local_14, 0x70157E30, 0x70157E30)        ; site 70175602
+
+L_70175606:
+  if (sx16(local_16.h) == 225) goto L_7017560B else goto L_7017560A
+
+L_7017560A:
+  goto L_7017563C
+
+L_7017560B:
+  if (local_12.w == 0) goto L_7017560F else goto L_7017560E
+
+L_7017560E:
+  goto L_70175615
+
+L_7017560F:
+  local_12.w = WRITE_INDEX.w
+  goto L_7017563C
+
+L_70175615:
+  ac0 = WRITE_INDEX.w
+  bounds_check !(ac0 >u 0x000186A0) && (ac0 >s 0)   ; DERR 17 @7017561C
+  ; fall through to L_7017561D
+  ; live at exit: ac0
+
+L_7017561D:
+  ac0 = add(mul(ac0, 9), OBJ_PTR.w)
+  ac1 = local_12.w
+  OBJ_PTR_rec9[WRITE_INDEX.w].f11500.w /*via ac0*/ = ac1
+  bounds_check !(ac1 >u 0x000186A0) && (ac1 >s 0)   ; DERR 17 @7017562C
+  ; fall through to L_7017562D
+  ; live at exit: ac1
+
+L_7017562D:
+  ac1 = add(mul(ac1, 9), OBJ_PTR.w)
+  ac0 = WRITE_INDEX.w
+  OBJ_PTR_rec9[local_12.w].f11500.w /*via ac1*/ = ac0
+  local_12.w = sub(ac0, ac0)
+  ; fall through to L_7017563C
+
+L_7017563C:        ; ac3 is not fp on entry (predecessor left it repurposed)
+  goto L_70173838        ; loop back
+
+L_7017563E:
+  ac0 = sx16(PLAYER_NUM.h)
+  bounds_check !(ac0 >s 10) && (ac0 >s 0)   ; DERR 17 @70175644
+  ; fall through to L_70175645
+  ; live at exit: ac0
+
+L_70175645:
+  ac0 = mul(ac0, 686)
+  ac2 = 16
+  ac0 = add(mul(ac0, ac2), -9456)
+  ac1 = SD_PTR.w
+  (SD_PTR + lsh(add(mul(mul(sx16(PLAYER_NUM.h), 686), 16), -9456), -4))->f0.h /*via ind,ac1,ac0*/ = (SD_PTR + lsh(add(mul(mul(sx16(PLAYER_NUM.h), 686), 16), -9456), -4))->f0.h /*via ind,ac1,ac0*/ & ~lsh(32768, 0 - (ac0 & 15))
+  ac0 = 0x00010000
+  local_32.w = ac0
+  ac1 = 21
+  local_34.h = trunc16(ac1)
+  local_36.h = trunc16(sub(ac0, ac0))
+  ac0 = 2048
+  local_38.h = trunc16(ac0)
+  ?WRITE_SCREEN(&OUT_CHAN, &local_32, &local_34, &local_36, &local_38)        ; site 7017566C
+  ; live at exit: ac0, ac1, ac2
+
+L_70175670:
+  ; fall through to L_70175985
+
+L_70175985:
+  @70175985 LJSR [0x7017E77D]
+
+; ---- this routine's rewrite report ----
+; callargs.folded                    115
+; callargs.slot_unfolded              13
+;     e.g. 70174760 slot 740069BC
+;     e.g. 70174760 slot 740069BE
+;     e.g. 70174760 slot 740069C0
+;     e.g. 70174760 slot 740069C2
+;     e.g. 70174788 slot 7400694C
+;     e.g. 70174788 slot 7400694E
+; callargs.unfolded                    4
+;     e.g. 70174760 OP_EDIT.8@70175897: value not stable to the call
+;     e.g. 70174788 OP_EDIT.6@701757A8: value not stable to the call
+;     e.g. 701747AE OP_EDIT.6@701757A8: value not stable to the call
+;     e.g. 701747D4 OP_EDIT.6@701757A8: value not stable to the call
+; env.inherited_blocks               396
+; frame.ac3_not_fp                    11
+;     e.g. 7017383F wp(ac3, 32)
+;     e.g. 7017383F wp(ac3, 34)
+;     e.g. 7017383F wp(ac3, 36)
+;     e.g. 7017383F wp(ac3, 38)
+;     e.g. 70173B05 wp(ac3, -15)
+;     e.g. 70173C5F wp(ac3, 1986)
+; frame.ac3_not_fp_at_exit            34
+;     e.g. 70173838 -> 7017383F
+;     e.g. 7017383F -> 7017385F
+;     e.g. 7017385F -> 70173865
+;     e.g. 70173865 -> 70173869,7017386A
+;     e.g. 70173869 -> 70173870
+;     e.g. 7017386A -> 7017386E
+; frame.local                       1310
+; instr.kept                          81
+;     e.g. 7017381B WSAVS 0x00F2
+;     e.g. 7017381D LJSR [0x7017E733]
+;     e.g. 70173834 LCALL [0x70176A93],0
+;     e.g. 7017386A LCALL [0x70175BA9],0
+;     e.g. 70173875 LCALL [0x7016EB87],0
+;     e.g. 70173879 LCALL [0x70176A93],0
+; literal.dst_not_local                1
+;     e.g. 701738A3 ?
+; literal.piece                       26
+; literal.unproven                    25
+;     e.g. 7017392F "\x0BIncrement number please : ": live after: instruction line LJSR (successor 70173953)
+;     e.g. 70173A1F "Do you wish to list (T) territ": live after: partial overwrite (frame slot reused: M16 store) (successor 70173A43)
+;     e.g. 70173A9D "Type any char to cont.": live after: partial overwrite (frame slot reused: M32 store) (successor 70173AC3)
+;     e.g. 70173D83 "Do you wish to goto (P) positi": live after: partial overwrite (frame slot reused: M8 store) (successor 70173DA7)
+;     e.g. 70173DB4 "\x0BX coordinate please : ": live after: instruction line LCALL (successor 70173DD8)
+;     e.g. 70173DFA "\x0BY coordinate please : ": live after: instruction line LCALL (successor 70173E27)
+; literal.unproven_kind: live after: instruction line LCALL     8
+; literal.unproven_kind: live after: instruction line LJSR     3
+; literal.unproven_kind: live after: partial overwrite     7
+; literal.unproven_kind: live after: read     1
+; literal.unproven_kind: read of the local before the call     6
+; live.explicit_defs_at_exit.0       368
+; live.explicit_defs_at_exit.1       159
+; live.explicit_defs_at_exit.2        89
+; live.explicit_defs_at_exit.3        37
+; live.explicit_defs_at_exit.4        13
+; live.hist.0                        442
+; live.hist.1                        150
+; live.hist.2                         40
+; live.hist.3                         34
+; mem.unresolved                      67
+;     e.g. 7017383F M32[wp(ac3, 32)]
+;     e.g. 7017383F M16[wp(ac3, 34)]
+;     e.g. 7017383F M16[wp(ac3, 36)]
+;     e.g. 7017383F M16[wp(ac3, 38)]
+;     e.g. 70173865 M8[bp(ac3, 62)]
+;     e.g. 70173870 M8[bp(ac3, 62)]
+; record.direct                       35
+; record.indexed                      82
+; record.local_reused                  6
+;     e.g. OP_EDIT local_12
+;     e.g. OP_EDIT local_32
+;     e.g. OP_EDIT local_34
+;     e.g. OP_EDIT local_36
+;     e.g. OP_EDIT local_38
+;     e.g. OP_EDIT local_54
+; record.unknown_term                 16
+;     e.g. 70174057 SD_PTR + mul(sx16(PLAYER_NUM.h), ac1)
+;     e.g. 701745F6 OBJ_PTR + ac0#in
+;     e.g. 70174884 CAS_PTR + mul(sx16(static_700DE890[OBJ_PTR.w].h), ac1)
+;     e.g. 70174A96 OBJ_PTR + lsh(add(mul(mul(sx16(OBJ_PTR->f2001.h), 19), 16), 32016), -4)
+;     e.g. 70174A96 OBJ_PTR + lsh(add(mul(mul(sx16(OBJ_PTR->f2001.h), 19), 16), 32016), -4)
+;     e.g. 70174AA9 OBJ_PTR + lsh(add(mul(mul(sx16(OBJ_PTR->f2001.h), 19), 16), 32016), -4)
+; record.via_local                    10
+; regfold.blocked                    214
+;     e.g. 701738C7 ac1 = … : instruction line reads it
+;     e.g. 701738C7 ac2 = … : instruction line reads it
+;     e.g. 701738C7 ac0 = … : instruction line reads it
+;     e.g. 70173953 ac1 = … : instruction line reads it
+;     e.g. 70173953 ac2 = … : instruction line reads it
+;     e.g. 70173953 ac0 = … : instruction line reads it
+; regfold.effop_nested               222
+; regfold.effop_not_root              52
+;     e.g. 70174196 ac0
+;     e.g. 701741E6 ac0
+;     e.g. 70174369 ac2
+;     e.g. 701743DB ac2
+;     e.g. 70174760 ac1
+;     e.g. 70174760 ac1
+; regfold.folded                     833
+; regfold.kept_live_at_exit          276
+; regfold.multi_use                  142
+;     e.g. 701738DE ac2 (2 uses)
+;     e.g. 701738DE ac0 (2 uses)
+;     e.g. 701738EA t1 (3 uses)
+;     e.g. 701738F5 ac1 (2 uses)
+;     e.g. 70173978 t1 (2 uses)
+;     e.g. 70173A00 ac0 (2 uses)
+; regfold.no_use_in_block             25
+; simplify.nova_bit                    2
+; static.array                        68
+; static.named                       230
