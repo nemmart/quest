@@ -112,7 +112,7 @@ arena materialisation, `release`) can start on this; REPORT §7 lists what
 it inherits (rows bound before the clone runs the block; `p@b = ""` is
 `arena_set_length(0)`; a refused group keeps claiming and stays exact).
 
-## ★ P30 IMPLEMENTED ON BRANCH — the C++ string library, shipped DARK: hw/strings/EagleString (pieces as spans; copy/assign/compare/block_move mirroring WCMV/WCMP/WBLM/WSTB; §3 residues), the Mapper ARENA FORM (codec 0x75/0xEA/0xF5; 19-row static map, clone→master only, clone_location refuses), ClaimDelta; self-test 18,370 cases GREEN + teeth build RED; task 043 queued (Sep 6 2026; awaiting review + integration)
+## ★ P30 MERGED (043 GREEN) — the C++ string library, shipped DARK: hw/strings/EagleString (pieces as spans; copy/assign/compare/block_move mirroring WCMV/WCMP/WBLM/WSTB; §3 residues), the Mapper ARENA FORM (codec 0x75/0xEA/0xF5; 19-row static map, clone→master only, clone_location refuses), ClaimDelta; self-test 18,370 cases GREEN + teeth build RED; task 043 queued (Sep 6 2026; awaiting review + integration)
 
 Branch p30-string-library (based on main 00f641c, P28 merged). Plan gate
 rulings (user, Sep 6): operations take `site` (G-3 is the instruction's
@@ -129,7 +129,7 @@ library once this merges (`hw/strings/EagleString.hpp`); P33 gets
 `configure_arena / arena_bind / arena_set_length / arena_unmap_frame` and
 `ClaimDelta`. No EmulatorDivergences.md addition (nothing new read).
 
-## ★ P28 IMPLEMENTED ON BRANCH — `rt_call`: 987/987 runtime call sites decorated (ir 4); embeds 6,258 → 2,322 (book), 8,137 → 4,201 (stock); LNDO + LDSP pair + 67 Nova loads lowered (Sep 5 2026; local K=1 gates 9/9 green; battery 042 15/15 GREEN DONE — 041 was 15/15 legs green with two verdict-line bugs; awaiting review + integration)
+## ★ P28 MERGED (042 15/15) — `rt_call`: 987/987 runtime call sites decorated (ir 4); embeds 6,258 → 2,322 (book), 8,137 → 4,201 (stock); LNDO + LDSP pair + 67 Nova loads lowered (Sep 5 2026; local K=1 gates 9/9 green; battery 042 15/15 GREEN DONE — 041 was 15/15 legs green with two verdict-line bugs; awaiting review + integration)
 
 Branch p28-rt-call (based on main 9972b85, P27 merged). Plan gate:
 docs/Project28/Census.md — census reproduced the Sep 5 numbers exactly
@@ -165,7 +165,7 @@ REPORT_worklog}.md. Remaining embeds 2,322 (book) by mnemonic: WCMV
 WCMP 40, XCALL 37, STASP 19, DIVX 19, WBLM 12, SYSCALL 10, floats ~50,
 WPSH 8, DERR 2.
 
-## ★ P27 LANDED ON BRANCH — DERR cluster compression: 2,271 clusters → assert; DERR embeds 2,273 → 2; embeds 8,529 → 6,258; sync list 18,009 → 13,510 (Sep 5 2026; battery 040 15/15 GREEN, awaiting review + integration)
+## ★ P27 MERGED (040 15/15) — DERR cluster compression: 2,271 clusters → assert; DERR embeds 2,273 → 2; embeds 8,529 → 6,258; sync list 18,009 → 13,510 (Sep 5 2026; battery 040 15/15 GREEN, awaiting review + integration)
 
 Branch p27-derr-clusters (based on main 29a1c24). Plan gate: docs/
 Project27/Census.md — census reproduced the prompt's table exactly
@@ -199,7 +199,7 @@ verdict line on prediction. Records: docs/Project27/
 RT-call 2,887 + calls 1,313 + string/WMSP/stack 1,765 + frames/OS/
 float/misc 223 + 67 Nova loads + 1 LNDO + 2 LDSP DERR sinks.
 
-## ★ P26 LANDED ON BRANCH — the math & control grammar (ir 3); embeds 27,600 → 8,529; battery 037 13/13 GREEN (Sep 5 2026; awaiting review + integration)
+## ★ P26 MERGED (037 13/13) — the math & control grammar (ir 3); embeds 27,600 → 8,529; battery 037 13/13 GREEN (Sep 5 2026; awaiting review + integration)
 
 Branch p26-math-grammar (based on main). Plan gate Sep 5: census of
 record docs/Project26/Census.md, rulings R1–R10 all as recommended
