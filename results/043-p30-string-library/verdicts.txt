@@ -1,0 +1,13 @@
+k1fo      cfg=book  K=1   div=0   guard=0  liberr_native=1  pairs=310945 blk_equal=310945 blk_mismatch=0 k_heartbeats=310341 gaps_over_k=0 max_gap=1 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+play-st   cfg=stock K=50  div=0   guard=0  liberr_native=0  pairs=4249241 blk_equal=4249241 blk_mismatch=0 k_heartbeats=4248185 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+== Task 043 P30 string library (dark) battery (JOBS=3) ==
+-- 042 baseline for comparison --
+k1fo      cfg=book  K=1   div=0   guard=0  liberr_native=1  pairs=298566 blk_equal=298566 blk_mismatch=0 k_heartbeats=297962 gaps_over_k=0 max_gap=1 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+play-st   cfg=stock K=50  div=0   guard=0  liberr_native=0  pairs=3397585 blk_equal=3397585 blk_mismatch=0 k_heartbeats=3396597 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+-- helper selftest --
+SELFTEST GREEN (0 failures)
+-- strings selftest --
+STRINGS SELFTEST GREEN (18370 cases, 0 failures)
+broken build: STRINGS SELFTEST RED (18370 cases, 1326 failures)
+STRINGS SELFTEST: library GREEN, broken build RED (teeth confirmed)
+wall_clock_seconds=301
