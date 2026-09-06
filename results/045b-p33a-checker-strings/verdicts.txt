@@ -1,0 +1,62 @@
+fo        cfg=book  K=50  div=0   guard=0  liberr_native=1  pairs=6886 blk_equal=6886 blk_mismatch=0 k_heartbeats=6247 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+m         cfg=book  K=50  div=0   guard=0  liberr_native=1  pairs=6448 blk_equal=6448 blk_mismatch=0 k_heartbeats=5969 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=I.STOP leg=OK
+inj       cfg=book  K=50  div=0   guard=0  liberr_native=0  pairs=6332 blk_equal=6332 blk_mismatch=0 k_heartbeats=5868 gaps_over_k=0 max_gap=50 floor=1000 OK end=FATAL want=FATAL leg=OK
+abort     cfg=book  K=50  div=0   guard=0  liberr_native=0  pairs=4927 blk_equal=4927 blk_mismatch=0 k_heartbeats=4721 gaps_over_k=0 max_gap=50 floor=10 OK end=WORLD-ABORT want=WORLD-ABORT leg=OK
+play      cfg=book  K=50  div=0   guard=0  liberr_native=0  pairs=2066352 blk_equal=2066352 blk_mismatch=0 k_heartbeats=2065436 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+inj3      cfg=book  K=50  div=0   guard=0  liberr_native=1  pairs=6501 blk_equal=6501 blk_mismatch=0 k_heartbeats=6020 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=clean,I.STOP leg=OK
+k1fo      cfg=book  K=1   div=0   guard=0  liberr_native=1  pairs=328785 blk_equal=328785 blk_mismatch=0 k_heartbeats=328181 gaps_over_k=0 max_gap=1 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+derr      cfg=book  K=1   div=0   guard=0  liberr_native=0  pairs=263103 blk_equal=263103 blk_mismatch=0 k_heartbeats=262787 gaps_over_k=0 max_gap=1 floor=1000 OK end=WORLD-ABORT want=WORLD-ABORT leg=OK
+derr-emu  cfg=emu   K=1   div=0   guard=0  liberr_native=0  pairs=269452 blk_equal=269452 blk_mismatch=0 k_heartbeats=269135 gaps_over_k=0 max_gap=1 floor=1000 OK end=WORLD-ABORT want=WORLD-ABORT leg=OK
+fo-st     cfg=stock K=50  div=0   guard=0  liberr_native=1  pairs=7062 blk_equal=7062 blk_mismatch=0 k_heartbeats=6423 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+play-st   cfg=stock K=50  div=0   guard=0  liberr_native=0  pairs=3772192 blk_equal=3772192 blk_mismatch=0 k_heartbeats=3771208 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+fo-emu    cfg=emu   K=50  div=0   guard=0  liberr_native=1  pairs=6680 blk_equal=6680 blk_mismatch=0 k_heartbeats=6041 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+m-emu     cfg=emu   K=50  div=0   guard=0  liberr_native=1  pairs=6539 blk_equal=6539 blk_mismatch=0 k_heartbeats=6060 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=I.STOP leg=OK
+inj-emu   cfg=emu   K=50  div=0   guard=0  liberr_native=0  pairs=5992 blk_equal=5992 blk_mismatch=0 k_heartbeats=5528 gaps_over_k=0 max_gap=50 floor=1000 OK end=FATAL want=FATAL leg=OK
+abort-emu cfg=emu   K=50  div=0   guard=0  liberr_native=0  pairs=5199 blk_equal=5199 blk_mismatch=0 k_heartbeats=4993 gaps_over_k=0 max_gap=50 floor=10 OK end=WORLD-ABORT want=WORLD-ABORT leg=OK
+k1fo-off  cfg=book  K=1   div=0   guard=0  liberr_native=1  pairs=321908 blk_equal=321908 blk_mismatch=0 k_heartbeats=321304 gaps_over_k=0 max_gap=1 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+forced    cfg=book  K=1   div=1   guard=0  liberr_native=0  pairs=278738 blk_equal=278738 blk_mismatch=0 k_heartbeats=278422 gaps_over_k=0 max_gap=1 floor=10 OK end=DIVERGENCE want=DIVERGENCE leg=OK
+== Task 045 P33-A string checker (dark behind QUEST_STRINGS_CHECK; ON for every leg but k1fo-off) (JOBS=3) ==
+-- 040 baseline for comparison --
+fo        cfg=book  K=50  div=0   guard=0  liberr_native=1  pairs=7078 blk_equal=7078 blk_mismatch=0 k_heartbeats=6439 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+m         cfg=book  K=50  div=0   guard=0  liberr_native=1  pairs=6331 blk_equal=6331 blk_mismatch=0 k_heartbeats=5852 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=I.STOP leg=OK
+inj       cfg=book  K=50  div=0   guard=0  liberr_native=0  pairs=6195 blk_equal=6195 blk_mismatch=0 k_heartbeats=5731 gaps_over_k=0 max_gap=50 floor=1000 OK end=FATAL want=FATAL leg=OK
+abort     cfg=book  K=50  div=0   guard=0  liberr_native=0  pairs=5203 blk_equal=5203 blk_mismatch=0 k_heartbeats=4997 gaps_over_k=0 max_gap=50 floor=10 OK end=WORLD-ABORT want=WORLD-ABORT leg=OK
+play      cfg=book  K=50  div=0   guard=0  liberr_native=0  pairs=1803008 blk_equal=1803008 blk_mismatch=0 k_heartbeats=1802108 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+inj3      cfg=book  K=50  div=0   guard=0  liberr_native=1  pairs=6499 blk_equal=6499 blk_mismatch=0 k_heartbeats=6018 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=clean,I.STOP leg=OK
+k1fo      cfg=book  K=1   div=0   guard=0  liberr_native=1  pairs=300615 blk_equal=300615 blk_mismatch=0 k_heartbeats=300011 gaps_over_k=0 max_gap=1 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+derr      cfg=book  K=1   div=0   guard=0  liberr_native=0  pairs=281516 blk_equal=281516 blk_mismatch=0 k_heartbeats=281200 gaps_over_k=0 max_gap=1 floor=1000 OK end=IR-ASSERT want=IR-ASSERT leg=OK
+derr-emu  cfg=emu   K=1   div=0   guard=0  liberr_native=0  pairs=265583 blk_equal=265583 blk_mismatch=0 k_heartbeats=265266 gaps_over_k=0 max_gap=1 floor=1000 OK end=WORLD-ABORT want=WORLD-ABORT leg=OK
+fo-st     cfg=stock K=50  div=0   guard=0  liberr_native=1  pairs=7044 blk_equal=7044 blk_mismatch=0 k_heartbeats=6405 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+play-st   cfg=stock K=50  div=0   guard=0  liberr_native=0  pairs=3493616 blk_equal=3493616 blk_mismatch=0 k_heartbeats=3492638 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+fo-emu    cfg=emu   K=50  div=0   guard=0  liberr_native=1  pairs=6771 blk_equal=6771 blk_mismatch=0 k_heartbeats=6132 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+m-emu     cfg=emu   K=50  div=0   guard=0  liberr_native=1  pairs=6095 blk_equal=6095 blk_mismatch=0 k_heartbeats=5616 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=I.STOP leg=OK
+inj-emu   cfg=emu   K=50  div=0   guard=0  liberr_native=0  pairs=6569 blk_equal=6569 blk_mismatch=0 k_heartbeats=6105 gaps_over_k=0 max_gap=50 floor=1000 OK end=FATAL want=FATAL leg=OK
+abort-emu cfg=emu   K=50  div=0   guard=0  liberr_native=0  pairs=5581 blk_equal=5581 blk_mismatch=0 k_heartbeats=5375 gaps_over_k=0 max_gap=50 floor=10 OK end=WORLD-ABORT want=WORLD-ABORT leg=OK
+-- hooks (per leg, master and clone) --
+m hooks: StrHooks: QUEST1/master bind=5 rebind=354 unmap=4 claim=359 release=121 frame_exit=1740 unwind=1 onpop=1 discarded_claims=0 max_delta=1034
+m hooks: StrHooks: QUEST2/clone bind=5 rebind=354 unmap=4 claim=359 release=121 frame_exit=1494 unwind=1 onpop=1 discarded_claims=0 max_delta=1034
+abort hooks: StrHooks: QUEST1/master bind=1 rebind=1 unmap=1 claim=2 release=1 frame_exit=157 unwind=0 onpop=0 discarded_claims=0 max_delta=4
+abort hooks: StrHooks: QUEST2/clone bind=1 rebind=1 unmap=1 claim=2 release=1 frame_exit=70 unwind=0 onpop=0 discarded_claims=0 max_delta=4
+inj3 hooks: StrHooks: QUEST1/master bind=5 rebind=354 unmap=4 claim=359 release=121 frame_exit=1722 unwind=1 onpop=1 discarded_claims=0 max_delta=1034
+inj3 hooks: StrHooks: QUEST2/clone bind=5 rebind=354 unmap=4 claim=359 release=121 frame_exit=1470 unwind=1 onpop=1 discarded_claims=0 max_delta=1034
+derr hooks: StrHooks: QUEST1/master bind=4 rebind=328 unmap=3 claim=332 release=112 frame_exit=967 unwind=0 onpop=0 discarded_claims=0 max_delta=1034
+derr hooks: StrHooks: QUEST2/clone bind=4 rebind=328 unmap=3 claim=332 release=112 frame_exit=801 unwind=0 onpop=0 discarded_claims=0 max_delta=1034
+derr-emu hooks: StrHooks: QUEST1/master bind=4 rebind=328 unmap=3 claim=332 release=112 frame_exit=946 unwind=0 onpop=0 discarded_claims=0 max_delta=1034
+derr-emu hooks: StrHooks: QUEST2/clone bind=4 rebind=328 unmap=3 claim=332 release=112 frame_exit=780 unwind=0 onpop=0 discarded_claims=0 max_delta=1034
+m-emu hooks: StrHooks: QUEST1/master bind=5 rebind=354 unmap=4 claim=359 release=121 frame_exit=1716 unwind=1 onpop=1 discarded_claims=0 max_delta=1034
+m-emu hooks: StrHooks: QUEST2/clone bind=5 rebind=354 unmap=4 claim=359 release=121 frame_exit=1470 unwind=1 onpop=1 discarded_claims=0 max_delta=1034
+abort-emu hooks: StrHooks: QUEST1/master bind=1 rebind=1 unmap=1 claim=2 release=1 frame_exit=157 unwind=0 onpop=0 discarded_claims=0 max_delta=4
+abort-emu hooks: StrHooks: QUEST2/clone bind=1 rebind=1 unmap=1 claim=2 release=1 frame_exit=70 unwind=0 onpop=0 discarded_claims=0 max_delta=4
+-- table verified against the program (want every checker-ON leg) --
+table_verified_legs=16 (want 16)
+k1fo-off: StrHooks lines=0 (want 0: the checker is dark with the flag off)
+derr (F2-b): poke_fired=2 (want 2)  clone_assert=2 (want 1)  terminal_abort_both_pcs=1 (want 1)
+TERMINAL-ABORT at 7017ED1C, verified on both engines: master at the kind-2 terminal, clone IR assert at 7015C48B (IR ASSERT FAILED [block 7015C48B stmt 0]: assert(!(ac0 >s 0x0000000A) && (ac0 >s 0), "DERR 17 @7015C48E"))
+derr-emu (readout): terminal_abort_with_00000011_7015C48E=1 (want 1)  (top stack wides: 00000011 7015C48E — for DERR.TRP: number, faulting pc)
+forced: poke_fired=1 (want 1: clone only)  divergence_names_unmapped_row_70166144=1 (want 1)
+  ac2: clone value 75000000 hits UNMAPPED arena row block=70166144 arena=75000000 — no master temp for p@70166144
+-- self-tests --
+SELFTEST GREEN (0 failures)
+STRINGS SELFTEST: library GREEN, broken build RED (teeth confirmed)
+STRHOOKS SELFTEST: hooks GREEN, broken build RED (teeth confirmed)
+wall_clock_seconds=937
