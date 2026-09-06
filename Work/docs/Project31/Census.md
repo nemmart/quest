@@ -548,3 +548,46 @@ Proposed StringsDesign edits (for the integrator to fold in):
   → 609 / 1,713; slice 3 → 652 / 1,670 (book), 3,549 (stock) — on the
   prediction. Book and stock carry the same 652 string lines; lower.py's
   strings.ledger and p31.tsv agree pc-for-pc and text-for-text.
+
+---
+
+## 11. CORRECTION (Sep 6 2026, by P32 — METHOD §11/§14): 17 P31 EMITs rendered a frame slot ?UNSIGNED_TO_CHAR had overwritten
+
+The evaluator kept tracked frame-slot values across calls (`clobber_all`
+dropped statics only). `?UNSIGNED_TO_CHAR` writes its CHAR VARYING
+result at the ac2 word address (runtime/unsigned_to_char.cpp:141–146),
+so a constant length word stored in that slot BEFORE the call was still
+"known" after it and 17 EMIT lines carried it as the count: ATTACK
+7015E990 / CAVE_ATTACK 7016437E / DEFEND 70165EF8 (`71 varying = …, 71`
+where the master's count is `N[fp+14] + 41`, the digit count + 41) and
+LIST_PLAYERS 7016EF0D…7016F18C ×14 (`[@bp(ac3, 48), 12] = [@bp(ac3, 1046), 6]`
+where the source count is the digit count reloaded from fp+522). Wrong
+bytes and wrong ac1/ac3 residues when executed; none of the 17 blocks
+runs in any 044/045 leg, so the battery could not see it. §1.4 above
+("every EMIT with a length-word store has value == dst_count") was true
+of the tracked values and therefore vacuous for these.
+
+Fix (tool, P32 commit): a tracked slot whose address is passed to a call
+(XPEF/LPEF/XPEFB/LPEFB, or a word address in ac0..ac2 — the `XLEF 2`
+register argument) is dropped at the call; a tracked value reloaded
+after any call ran between its store and the load is never rendered (the
+P31 renderer refuses it as P32-CALLRESULT; the P32 renderer reads
+memory). Regenerated: **649 EMIT / 127 REFUSE** — the 3 varying
+copy-outs refuse (P32-COPYOUT, the reason names the callee-written slot;
+P32 takes them with the expression count), the 14 LIST_PLAYERS sites
+stay EMIT as the correct `[@bp(ac3, 48), 12] = [@wp(ac3, 522), varying]`
+(the located read of the string the call wrote — user ruling: refusing a
+correct statement would be worse), and OBSERVE 70172DA8/70172E7A move
+from P32-SUBSTR to P32-CALLRESULT (a stale slot in their count).
+Artifacts: 649 statements, embeds 1,673 book / 3,552 stock; task 044's
+verdict constants 652/1670/3549/124 are superseded by 649/1673/3552/127.
+K=1 book + stock gates on the regenerated artifacts: 0 div, 308,923 /
+299,387 pairs, end clean. See docs/Project32/Census.md §1.1.
+
+Related design correction (main 08afd77, c88c0ff): `?UNSIGNED_TO_CHAR`
+does not return the length in ac0 — it writes a varying at ac2 and
+returns ac0–ac2 unchanged like every LCALL; StringsDesign §1.4/§1.8/
+§2.2/§7 and the P32 prompt carried the error, RTConventions.md was
+right. The "CALLRESULT" counts are the caller's running total kept in a
+register across the call plus the reloaded length word
+(docs/Project32/Census.md §1.2).

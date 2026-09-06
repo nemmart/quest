@@ -5339,34 +5339,25 @@
    ultimately (a) via WCMV@7015E97F: via WCMV@7015E990: frame word fp+113 -> ?WRITE_SCREEN
 
 == 7015E976 WCMV  block 7015E95E  func ATTACK
-   window 7015E8FD..7015E975 (61 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
-     7015E8FD NLDAI 30 (0x001E),1;
-     7015E8FF XWSTA 1,[ac3+0xE];
-     ---- block 7015E90E
-     ---- block 7015E91A
-     ---- block 7015E91B
-     ---- block 7015E91C
-     ---- block 7015E920
-     ---- block 7015E921
-     7015E92A WCMV;   .
-     ---- block 7015E935
-     ---- block 7015E937
-     ---- block 7015E93B
-     ---- block 7015E93C
-     7015E945 WCMV;   .
-     ---- block 7015E950
-     ---- block 7015E952
+   window 7015E95A..7015E975 (15 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
      7015E95A LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR
      ---- block 7015E95E
+     7015E95E XNLDA 0,[ac3+0xE];   .
+     7015E960 WNADI 0,16 (0x0010);   .
+     7015E962 XWSTA 0,[ac3+0xC];   .
+     7015E964 WNADI 0,25 (0x0019);   .
      7015E966 XLEFB 2,[ac3+0x54];
+     7015E968 XWSTA 0,[ac3+0x48];   .
      7015E96A NLDAI 16 (0x0010),0;
+     7015E96C XLEFB 3,[pc+0xD8FC] (0x7015D5EB:0);   .
+     7015E96E WMOV 0,1;   .
      7015E96F WCMV;
      7015E970 LDAFP 3;
      7015E971 XNLDA 0,[ac3+0xE];
      7015E973 XLEFB 3,[ac3+0x1E];
      7015E975 WMOV 0,1;
-   ac0 dst_count const    30   [30]
-   ac1 src_count const    30   [30]
+   ac0 dst_count frame    N[fp+14]   [N[(fp+14)]]
+   ac1 src_count frame    N[fp+14]   [N[(fp+14)]]
    ac2 dst       frame    frame byte +100 (word fp+50) [cont after cont@7015E96F]   [bp(fp+100)]
    ac3 src       frame    frame byte +30 (word fp+15)   [bp(fp+30)]
    idiom CONCAT-PIECE   features: dst-cont, counts-equal
@@ -5374,36 +5365,31 @@
    ultimately (a) via WCMV@7015E97F: via WCMV@7015E990: frame word fp+113 -> ?WRITE_SCREEN
 
 == 7015E97F WCMV  block 7015E95E  func ATTACK
-   window 7015E8FD..7015E97E (67 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
-     7015E8FD NLDAI 30 (0x001E),1;
-     7015E8FF XWSTA 1,[ac3+0xE];
-     ---- block 7015E90E
-     ---- block 7015E91A
-     ---- block 7015E91B
-     ---- block 7015E91C
-     ---- block 7015E920
-     ---- block 7015E921
-     7015E92A WCMV;   .
-     ---- block 7015E935
-     ---- block 7015E937
-     ---- block 7015E93B
-     ---- block 7015E93C
-     7015E945 WCMV;   .
-     ---- block 7015E950
-     ---- block 7015E952
+   window 7015E95A..7015E97E (21 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
+     7015E95A LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR
      ---- block 7015E95E
      7015E95E XNLDA 0,[ac3+0xE];
      7015E960 WNADI 0,16 (0x0010);
      7015E962 XWSTA 0,[ac3+0xC];
+     7015E964 WNADI 0,25 (0x0019);   .
+     7015E966 XLEFB 2,[ac3+0x54];   .
+     7015E968 XWSTA 0,[ac3+0x48];   .
+     7015E96A NLDAI 16 (0x0010),0;   .
+     7015E96C XLEFB 3,[pc+0xD8FC] (0x7015D5EB:0);   .
+     7015E96E WMOV 0,1;   .
      7015E96F WCMV;   .
+     7015E970 LDAFP 3;   .
+     7015E971 XNLDA 0,[ac3+0xE];   .
+     7015E973 XLEFB 3,[ac3+0x1E];   .
+     7015E975 WMOV 0,1;   .
      7015E976 WCMV;   .
      7015E977 LDAFP 3;
      7015E978 XLEFB 2,[ac3+0x94];
      7015E97A XWLDA 0,[ac3+0xC];
      7015E97C XLEFB 3,[ac3+0x54];
      7015E97E WMOV 0,1;
-   ac0 dst_count const    46   [46]
-   ac1 src_count const    46   [46]
+   ac0 dst_count computed N[fp+14] +16 (frame length word plus constant)   [(N[(fp+14)]+16)]
+   ac1 src_count computed N[fp+14] +16 (frame length word plus constant)   [(N[(fp+14)]+16)]
    ac2 dst       frame    frame byte +148 (word fp+74)   [bp(fp+148)]
    ac3 src       frame    frame byte +84 (word fp+42)   [bp(fp+84)]
    idiom COPY-STR-EXACT   features: counts-equal
@@ -5411,78 +5397,78 @@
    ultimately (a) via WCMV@7015E990: frame word fp+113 -> ?WRITE_SCREEN
 
 == 7015E985 WCMV  block 7015E95E  func ATTACK
-   window 7015E8FD..7015E984 (71 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
-     7015E8FD NLDAI 30 (0x001E),1;
-     7015E8FF XWSTA 1,[ac3+0xE];
-     ---- block 7015E90E
-     ---- block 7015E91A
-     ---- block 7015E91B
-     ---- block 7015E91C
-     ---- block 7015E920
-     ---- block 7015E921
-     7015E92A WCMV;   .
-     ---- block 7015E935
-     ---- block 7015E937
-     ---- block 7015E93B
-     ---- block 7015E93C
-     7015E945 WCMV;   .
-     ---- block 7015E950
-     ---- block 7015E952
+   window 7015E95A..7015E984 (25 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
+     7015E95A LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR
      ---- block 7015E95E
      7015E95E XNLDA 0,[ac3+0xE];
      7015E960 WNADI 0,16 (0x0010);
      7015E962 XWSTA 0,[ac3+0xC];
+     7015E964 WNADI 0,25 (0x0019);   .
+     7015E966 XLEFB 2,[ac3+0x54];   .
+     7015E968 XWSTA 0,[ac3+0x48];   .
+     7015E96A NLDAI 16 (0x0010),0;   .
+     7015E96C XLEFB 3,[pc+0xD8FC] (0x7015D5EB:0);   .
+     7015E96E WMOV 0,1;   .
      7015E96F WCMV;   .
+     7015E970 LDAFP 3;   .
+     7015E971 XNLDA 0,[ac3+0xE];   .
+     7015E973 XLEFB 3,[ac3+0x1E];   .
+     7015E975 WMOV 0,1;   .
      7015E976 WCMV;   .
      7015E977 LDAFP 3;
      7015E978 XLEFB 2,[ac3+0x94];
      7015E97A XWLDA 0,[ac3+0xC];
+     7015E97C XLEFB 3,[ac3+0x54];   .
+     7015E97E WMOV 0,1;   .
      7015E97F WCMV;
      7015E980 NLDAI 25 (0x0019),0;
      7015E982 XLEFB 3,[pc+0xD8B4] (0x7015D5DD:0);
      7015E984 WMOV 0,1;
    ac0 dst_count const    25   [25]
    ac1 src_count const    25   [25]
-   ac2 dst       frame    frame byte +194 (word fp+97) [cont after cont@7015E97F]   [bp(fp+194)]
+   ac2 dst       frame    frame byte +148 (word fp+74) [cont after cont@7015E97F]  BYTE OFFSET (N[(fp+14)]+16)   [bp(fp bytes (N[(fp+14)]+16)+148)]
    ac3 src       literal  0x7015D5DD:0  ' strength points damage.\x0A'   [bp[0x7015D5DD:0]]
    idiom CONCAT-PIECE   features: dst-cont, counts-equal
    dest (c) frame word fp+74 -> WCMV@7015E990(src)
    ultimately (a) via WCMV@7015E990: frame word fp+113 -> ?WRITE_SCREEN
 
 == 7015E990 WCMV  block 7015E95E  func ATTACK
-   window 7015E8FD..7015E98E (78 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
-     7015E8FD NLDAI 30 (0x001E),1;
-     7015E8FF XWSTA 1,[ac3+0xE];
-     ---- block 7015E90E
-     ---- block 7015E91A
-     ---- block 7015E91B
-     ---- block 7015E91C
-     ---- block 7015E920
-     ---- block 7015E921
-     7015E92A WCMV;   .
-     ---- block 7015E935
-     ---- block 7015E937
-     ---- block 7015E93B
-     ---- block 7015E93C
-     7015E945 WCMV;   .
-     ---- block 7015E950
-     ---- block 7015E952
+   window 7015E95A..7015E98E (32 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
+     7015E95A LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR
      ---- block 7015E95E
      7015E95E XNLDA 0,[ac3+0xE];
      7015E960 WNADI 0,16 (0x0010);
+     7015E962 XWSTA 0,[ac3+0xC];   .
      7015E964 WNADI 0,25 (0x0019);
+     7015E966 XLEFB 2,[ac3+0x54];   .
      7015E968 XWSTA 0,[ac3+0x48];
+     7015E96A NLDAI 16 (0x0010),0;   .
+     7015E96C XLEFB 3,[pc+0xD8FC] (0x7015D5EB:0);   .
+     7015E96E WMOV 0,1;   .
      7015E96F WCMV;   .
+     7015E970 LDAFP 3;   .
+     7015E971 XNLDA 0,[ac3+0xE];   .
+     7015E973 XLEFB 3,[ac3+0x1E];   .
+     7015E975 WMOV 0,1;   .
      7015E976 WCMV;   .
+     7015E977 LDAFP 3;   .
+     7015E978 XLEFB 2,[ac3+0x94];   .
+     7015E97A XWLDA 0,[ac3+0xC];   .
+     7015E97C XLEFB 3,[ac3+0x54];   .
+     7015E97E WMOV 0,1;   .
      7015E97F WCMV;   .
+     7015E980 NLDAI 25 (0x0019),0;   .
+     7015E982 XLEFB 3,[pc+0xD8B4] (0x7015D5DD:0);   .
+     7015E984 WMOV 0,1;   .
      7015E985 WCMV;   .
      7015E986 LDAFP 3;
      7015E987 XWLDA 1,[ac3+0x48];
      7015E989 WMOV 1,0;
+     7015E98A XNSTA 0,[ac3+0x70];   .
      7015E98C XLEFB 2,[ac3+0xE2];
      7015E98E XLEFB 3,[ac3+0x94];
-   ac0 dst_count const    71   [71]
-   ac1 src_count const    71   [71]
+   ac0 dst_count computed N[fp+14] +41 (frame length word plus constant)   [(N[(fp+14)]+41)]
+   ac1 src_count computed N[fp+14] +41 (frame length word plus constant)   [(N[(fp+14)]+41)]
    ac2 dst       frame    frame byte +226 (word fp+113)   [bp(fp+226)]
    ac3 src       frame    frame byte +148 (word fp+74)   [bp(fp+148)]
    idiom ASSIGN-STR-VARYING   features: lenword-store, counts-equal
@@ -6580,32 +6566,25 @@
    ultimately (a) via WCMV@7015EE31: via WCMV@7015EE42: frame word fp+113 -> ?WRITE_SCREEN
 
 == 7015EE28 WCMV  block 7015EE10  func ATTACK
-   window 7015EDD2..7015EE27 (47 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
-     7015EDD2 LNLDA 0,[0x70000216];
-     ---- block 7015EDD7
-     ---- block 7015EDD8
-     ---- block 7015EDD9
-     7015EDD9 NLDAI 686 (0x02AE),1;
-     7015EDDB WMUL 1,0;
-     7015EDDC LWADD 0,[0x70000210];
-     7015EDDF WMOV 0,2;
-     7015EDE0 XNLDA 2,[ac2+0x7E88];
-     7015EDE2 WHLV 2;
-     7015EDE3 WHLV 2;
-     7015EDE4 CVWN 2;
-     7015EDED XNSTA 2,[ac3+0xE];
-     ---- block 7015EDFC
+   window 7015EE0C..7015EE27 (15 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
      7015EE0C LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR
      ---- block 7015EE10
+     7015EE10 XNLDA 0,[ac3+0xE];   .
+     7015EE12 WNADI 0,16 (0x0010);   .
+     7015EE14 XWSTA 0,[ac3+0xC];   .
+     7015EE16 WNADI 0,25 (0x0019);   .
      7015EE18 XLEFB 2,[ac3+0x54];
+     7015EE1A XWSTA 0,[ac3+0x48];   .
      7015EE1C NLDAI 16 (0x0010),0;
+     7015EE1E XLEFB 3,[pc+0xCF98] (0x7015D5EB:0);   .
+     7015EE20 WMOV 0,1;   .
      7015EE21 WCMV;
      7015EE22 LDAFP 3;
      7015EE23 XNLDA 0,[ac3+0xE];
      7015EE25 XLEFB 3,[ac3+0x1E];
      7015EE27 WMOV 0,1;
-   ac0 dst_count computed CVWN(WHLV(WHLV(N[(+686*N[0x70000216]+W[0x70000210]-0X178)])))   [CVWN(WHLV(WHLV(N[(+686*N[0x70000216]+W[0x70000210]-0X178)])))]
-   ac1 src_count computed CVWN(WHLV(WHLV(N[(+686*N[0x70000216]+W[0x70000210]-0X178)])))   [CVWN(WHLV(WHLV(N[(+686*N[0x70000216]+W[0x70000210]-0X178)])))]
+   ac0 dst_count frame    N[fp+14]   [N[(fp+14)]]
+   ac1 src_count frame    N[fp+14]   [N[(fp+14)]]
    ac2 dst       frame    frame byte +100 (word fp+50) [cont after cont@7015EE21]   [bp(fp+100)]
    ac3 src       frame    frame byte +30 (word fp+15)   [bp(fp+30)]
    idiom CONCAT-PIECE   features: dst-cont, counts-equal
@@ -6613,34 +6592,31 @@
    ultimately (a) via WCMV@7015EE31: via WCMV@7015EE42: frame word fp+113 -> ?WRITE_SCREEN
 
 == 7015EE31 WCMV  block 7015EE10  func ATTACK
-   window 7015EDD2..7015EE30 (53 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
-     7015EDD2 LNLDA 0,[0x70000216];
-     ---- block 7015EDD7
-     ---- block 7015EDD8
-     ---- block 7015EDD9
-     7015EDD9 NLDAI 686 (0x02AE),1;
-     7015EDDB WMUL 1,0;
-     7015EDDC LWADD 0,[0x70000210];
-     7015EDDF WMOV 0,2;
-     7015EDE0 XNLDA 2,[ac2+0x7E88];
-     7015EDE2 WHLV 2;
-     7015EDE3 WHLV 2;
-     7015EDE4 CVWN 2;
-     7015EDED XNSTA 2,[ac3+0xE];
-     ---- block 7015EDFC
+   window 7015EE0C..7015EE30 (21 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
+     7015EE0C LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR
      ---- block 7015EE10
      7015EE10 XNLDA 0,[ac3+0xE];
      7015EE12 WNADI 0,16 (0x0010);
      7015EE14 XWSTA 0,[ac3+0xC];
+     7015EE16 WNADI 0,25 (0x0019);   .
+     7015EE18 XLEFB 2,[ac3+0x54];   .
+     7015EE1A XWSTA 0,[ac3+0x48];   .
+     7015EE1C NLDAI 16 (0x0010),0;   .
+     7015EE1E XLEFB 3,[pc+0xCF98] (0x7015D5EB:0);   .
+     7015EE20 WMOV 0,1;   .
      7015EE21 WCMV;   .
+     7015EE22 LDAFP 3;   .
+     7015EE23 XNLDA 0,[ac3+0xE];   .
+     7015EE25 XLEFB 3,[ac3+0x1E];   .
+     7015EE27 WMOV 0,1;   .
      7015EE28 WCMV;   .
      7015EE29 LDAFP 3;
      7015EE2A XLEFB 2,[ac3+0x94];
      7015EE2C XWLDA 0,[ac3+0xC];
      7015EE2E XLEFB 3,[ac3+0x54];
      7015EE30 WMOV 0,1;
-   ac0 dst_count computed (CVWN(WHLV(WHLV(N[(+686*N[0x70000216]+W[0x70000210]-0X178)])))+16)   [(CVWN(WHLV(WHLV(N[(+686*N[0x70000216]+W[0x70000210]-0X178)])))+16)]
-   ac1 src_count computed (CVWN(WHLV(WHLV(N[(+686*N[0x70000216]+W[0x70000210]-0X178)])))+16)   [(CVWN(WHLV(WHLV(N[(+686*N[0x70000216]+W[0x70000210]-0X178)])))+16)]
+   ac0 dst_count computed N[fp+14] +16 (frame length word plus constant)   [(N[(fp+14)]+16)]
+   ac1 src_count computed N[fp+14] +16 (frame length word plus constant)   [(N[(fp+14)]+16)]
    ac2 dst       frame    frame byte +148 (word fp+74)   [bp(fp+148)]
    ac3 src       frame    frame byte +84 (word fp+42)   [bp(fp+84)]
    idiom COPY-STR-EXACT   features: counts-equal
@@ -6648,74 +6624,78 @@
    ultimately (a) via WCMV@7015EE42: frame word fp+113 -> ?WRITE_SCREEN
 
 == 7015EE37 WCMV  block 7015EE10  func ATTACK
-   window 7015EDD2..7015EE36 (57 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
-     7015EDD2 LNLDA 0,[0x70000216];
-     ---- block 7015EDD7
-     ---- block 7015EDD8
-     ---- block 7015EDD9
-     7015EDD9 NLDAI 686 (0x02AE),1;
-     7015EDDB WMUL 1,0;
-     7015EDDC LWADD 0,[0x70000210];
-     7015EDDF WMOV 0,2;
-     7015EDE0 XNLDA 2,[ac2+0x7E88];
-     7015EDE2 WHLV 2;
-     7015EDE3 WHLV 2;
-     7015EDE4 CVWN 2;
-     7015EDED XNSTA 2,[ac3+0xE];
-     ---- block 7015EDFC
+   window 7015EE0C..7015EE36 (25 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
+     7015EE0C LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR
      ---- block 7015EE10
      7015EE10 XNLDA 0,[ac3+0xE];
      7015EE12 WNADI 0,16 (0x0010);
      7015EE14 XWSTA 0,[ac3+0xC];
+     7015EE16 WNADI 0,25 (0x0019);   .
+     7015EE18 XLEFB 2,[ac3+0x54];   .
+     7015EE1A XWSTA 0,[ac3+0x48];   .
+     7015EE1C NLDAI 16 (0x0010),0;   .
+     7015EE1E XLEFB 3,[pc+0xCF98] (0x7015D5EB:0);   .
+     7015EE20 WMOV 0,1;   .
      7015EE21 WCMV;   .
+     7015EE22 LDAFP 3;   .
+     7015EE23 XNLDA 0,[ac3+0xE];   .
+     7015EE25 XLEFB 3,[ac3+0x1E];   .
+     7015EE27 WMOV 0,1;   .
      7015EE28 WCMV;   .
      7015EE29 LDAFP 3;
      7015EE2A XLEFB 2,[ac3+0x94];
      7015EE2C XWLDA 0,[ac3+0xC];
+     7015EE2E XLEFB 3,[ac3+0x54];   .
+     7015EE30 WMOV 0,1;   .
      7015EE31 WCMV;
      7015EE32 NLDAI 25 (0x0019),0;
      7015EE34 XLEFB 3,[pc+0xCF50] (0x7015D5DD:0);
      7015EE36 WMOV 0,1;
    ac0 dst_count const    25   [25]
    ac1 src_count const    25   [25]
-   ac2 dst       frame    frame byte +148 (word fp+74) [cont after cont@7015EE31]  BYTE OFFSET (CVWN(WHLV(WHLV(N[(+686*N[0x70000216]+W[0x70000210]-0X178)])))+16)   [bp(fp bytes (CVWN(WHLV(WHLV(N[(+686*N[0x70000216]+W[0x70000210]-0X178)])))+16)+148)]
+   ac2 dst       frame    frame byte +148 (word fp+74) [cont after cont@7015EE31]  BYTE OFFSET (N[(fp+14)]+16)   [bp(fp bytes (N[(fp+14)]+16)+148)]
    ac3 src       literal  0x7015D5DD:0  ' strength points damage.\x0A'   [bp[0x7015D5DD:0]]
    idiom CONCAT-PIECE   features: dst-cont, counts-equal
    dest (c) frame word fp+74 -> WCMV@7015EE42(src)
    ultimately (a) via WCMV@7015EE42: frame word fp+113 -> ?WRITE_SCREEN
 
 == 7015EE42 WCMV  block 7015EE10  func ATTACK
-   window 7015EDD2..7015EE40 (64 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
-     7015EDD2 LNLDA 0,[0x70000216];
-     ---- block 7015EDD7
-     ---- block 7015EDD8
-     ---- block 7015EDD9
-     7015EDD9 NLDAI 686 (0x02AE),1;
-     7015EDDB WMUL 1,0;
-     7015EDDC LWADD 0,[0x70000210];
-     7015EDDF WMOV 0,2;
-     7015EDE0 XNLDA 2,[ac2+0x7E88];
-     7015EDE2 WHLV 2;
-     7015EDE3 WHLV 2;
-     7015EDE4 CVWN 2;
-     7015EDED XNSTA 2,[ac3+0xE];
-     ---- block 7015EDFC
+   window 7015EE0C..7015EE40 (32 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
+     7015EE0C LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR
      ---- block 7015EE10
      7015EE10 XNLDA 0,[ac3+0xE];
      7015EE12 WNADI 0,16 (0x0010);
+     7015EE14 XWSTA 0,[ac3+0xC];   .
      7015EE16 WNADI 0,25 (0x0019);
+     7015EE18 XLEFB 2,[ac3+0x54];   .
      7015EE1A XWSTA 0,[ac3+0x48];
+     7015EE1C NLDAI 16 (0x0010),0;   .
+     7015EE1E XLEFB 3,[pc+0xCF98] (0x7015D5EB:0);   .
+     7015EE20 WMOV 0,1;   .
      7015EE21 WCMV;   .
+     7015EE22 LDAFP 3;   .
+     7015EE23 XNLDA 0,[ac3+0xE];   .
+     7015EE25 XLEFB 3,[ac3+0x1E];   .
+     7015EE27 WMOV 0,1;   .
      7015EE28 WCMV;   .
+     7015EE29 LDAFP 3;   .
+     7015EE2A XLEFB 2,[ac3+0x94];   .
+     7015EE2C XWLDA 0,[ac3+0xC];   .
+     7015EE2E XLEFB 3,[ac3+0x54];   .
+     7015EE30 WMOV 0,1;   .
      7015EE31 WCMV;   .
+     7015EE32 NLDAI 25 (0x0019),0;   .
+     7015EE34 XLEFB 3,[pc+0xCF50] (0x7015D5DD:0);   .
+     7015EE36 WMOV 0,1;   .
      7015EE37 WCMV;   .
      7015EE38 LDAFP 3;
      7015EE39 XWLDA 1,[ac3+0x48];
      7015EE3B WMOV 1,0;
+     7015EE3C XNSTA 0,[ac3+0x70];   .
      7015EE3E XLEFB 2,[ac3+0xE2];
      7015EE40 XLEFB 3,[ac3+0x94];
-   ac0 dst_count computed (CVWN(WHLV(WHLV(N[(+686*N[0x70000216]+W[0x70000210]-0X178)])))+41)   [(CVWN(WHLV(WHLV(N[(+686*N[0x70000216]+W[0x70000210]-0X178)])))+41)]
-   ac1 src_count computed (CVWN(WHLV(WHLV(N[(+686*N[0x70000216]+W[0x70000210]-0X178)])))+41)   [(CVWN(WHLV(WHLV(N[(+686*N[0x70000216]+W[0x70000210]-0X178)])))+41)]
+   ac0 dst_count computed N[fp+14] +41 (frame length word plus constant)   [(N[(fp+14)]+41)]
+   ac1 src_count computed N[fp+14] +41 (frame length word plus constant)   [(N[(fp+14)]+41)]
    ac2 dst       frame    frame byte +226 (word fp+113)   [bp(fp+226)]
    ac3 src       frame    frame byte +148 (word fp+74)   [bp(fp+148)]
    idiom ASSIGN-STR-VARYING   features: lenword-store, counts-equal
@@ -26839,78 +26819,25 @@
    ultimately (a) via WCMV@7016436D: via WCMV@7016437E: frame word fp+131 -> ?WRITE_SCREEN
 
 == 70164364 WCMV  block 7016434C  func CAVE_ATTACK
-   window 701641DB..70164363 (210 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
-     701641DB NLDAI 9 (0x0009),1;
-     701641DD WMOV 1,0;
-     701641DE XNSTA 0,[ac3+0x2A];
-     701641E4 WCMV;   .
-     ---- block 701641EF
-     ---- block 701641F4
-     ---- block 701641F5
-     ---- block 701641F6
-     ---- block 70164225
-     ---- block 7016422D
-     ---- block 7016422E
-     ---- block 7016422F
-     ---- block 7016425B
-     ---- block 7016425C
-     ---- block 70164266
-     ---- block 70164267
-     ---- block 70164268
-     ---- block 7016427D
-     ---- block 70164285
-     ---- block 7016428F
-     ---- block 70164290
-     ---- block 70164291
-     ---- block 701642A6
-     ---- block 701642AD
-     ---- block 701642B2
-     ---- block 701642B3
-     ---- block 701642B4
-     ---- block 701642CC
-     ---- block 701642CD
-     ---- block 701642CE
-     ---- block 701642D3
-     ---- block 701642D4
-     ---- block 701642D5
-     ---- block 701642DF
-     ---- block 701642E0
-     701642E9 WCMV;   .
-     ---- block 701642F4
-     ---- block 701642F9
-     ---- block 701642FE
-     ---- block 70164303
-     ---- block 70164304
-     ---- block 70164305
-     ---- block 7016430A
-     ---- block 7016430B
-     ---- block 7016430C
-     ---- block 70164315
-     ---- block 70164316
-     ---- block 7016431B
-     ---- block 7016431C
-     ---- block 7016431D
-     ---- block 70164324
-     ---- block 70164325
-     ---- block 70164326
-     ---- block 70164330
-     ---- block 70164334
-     ---- block 70164336
-     ---- block 7016433C
-     ---- block 7016433D
-     ---- block 7016433E
-     ---- block 70164340
+   window 70164348..70164363 (15 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
      70164348 LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR
      ---- block 7016434C
+     7016434C XNLDA 0,[ac3+0x2A];   .
+     7016434E WNADI 0,16 (0x0010);   .
+     70164350 XWSTA 0,[ac3+0x26];   .
+     70164352 WNADI 0,25 (0x0019);   .
      70164354 XLEFB 2,[ac3+0x78];
+     70164356 XWSTA 0,[ac3+0x28];   .
      70164358 NLDAI 16 (0x0010),0;
+     7016435A XLEFB 3,[pc+0xF6C0] (0x70163EBB:0);   .
+     7016435C WMOV 0,1;   .
      7016435D WCMV;
      7016435E LDAFP 3;
      7016435F XNLDA 0,[ac3+0x2A];
      70164361 XLEFB 3,[ac3+0x56];
      70164363 WMOV 0,1;
-   ac0 dst_count const    9   [9]
-   ac1 src_count const    9   [9]
+   ac0 dst_count frame    N[fp+42]   [N[(fp+42)]]
+   ac1 src_count frame    N[fp+42]   [N[(fp+42)]]
    ac2 dst       frame    frame byte +136 (word fp+68) [cont after cont@7016435D]   [bp(fp+136)]
    ac3 src       frame    frame byte +86 (word fp+43)   [bp(fp+86)]
    idiom CONCAT-PIECE   features: dst-cont, counts-equal
@@ -26918,80 +26845,31 @@
    ultimately (a) via WCMV@7016436D: via WCMV@7016437E: frame word fp+131 -> ?WRITE_SCREEN
 
 == 7016436D WCMV  block 7016434C  func CAVE_ATTACK
-   window 701641DB..7016436C (216 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
-     701641DB NLDAI 9 (0x0009),1;
-     701641DD WMOV 1,0;
-     701641DE XNSTA 0,[ac3+0x2A];
-     701641E4 WCMV;   .
-     ---- block 701641EF
-     ---- block 701641F4
-     ---- block 701641F5
-     ---- block 701641F6
-     ---- block 70164225
-     ---- block 7016422D
-     ---- block 7016422E
-     ---- block 7016422F
-     ---- block 7016425B
-     ---- block 7016425C
-     ---- block 70164266
-     ---- block 70164267
-     ---- block 70164268
-     ---- block 7016427D
-     ---- block 70164285
-     ---- block 7016428F
-     ---- block 70164290
-     ---- block 70164291
-     ---- block 701642A6
-     ---- block 701642AD
-     ---- block 701642B2
-     ---- block 701642B3
-     ---- block 701642B4
-     ---- block 701642CC
-     ---- block 701642CD
-     ---- block 701642CE
-     ---- block 701642D3
-     ---- block 701642D4
-     ---- block 701642D5
-     ---- block 701642DF
-     ---- block 701642E0
-     701642E9 WCMV;   .
-     ---- block 701642F4
-     ---- block 701642F9
-     ---- block 701642FE
-     ---- block 70164303
-     ---- block 70164304
-     ---- block 70164305
-     ---- block 7016430A
-     ---- block 7016430B
-     ---- block 7016430C
-     ---- block 70164315
-     ---- block 70164316
-     ---- block 7016431B
-     ---- block 7016431C
-     ---- block 7016431D
-     ---- block 70164324
-     ---- block 70164325
-     ---- block 70164326
-     ---- block 70164330
-     ---- block 70164334
-     ---- block 70164336
-     ---- block 7016433C
-     ---- block 7016433D
-     ---- block 7016433E
-     ---- block 70164340
+   window 70164348..7016436C (21 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
+     70164348 LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR
      ---- block 7016434C
      7016434C XNLDA 0,[ac3+0x2A];
      7016434E WNADI 0,16 (0x0010);
      70164350 XWSTA 0,[ac3+0x26];
+     70164352 WNADI 0,25 (0x0019);   .
+     70164354 XLEFB 2,[ac3+0x78];   .
+     70164356 XWSTA 0,[ac3+0x28];   .
+     70164358 NLDAI 16 (0x0010),0;   .
+     7016435A XLEFB 3,[pc+0xF6C0] (0x70163EBB:0);   .
+     7016435C WMOV 0,1;   .
      7016435D WCMV;   .
+     7016435E LDAFP 3;   .
+     7016435F XNLDA 0,[ac3+0x2A];   .
+     70164361 XLEFB 3,[ac3+0x56];   .
+     70164363 WMOV 0,1;   .
      70164364 WCMV;   .
      70164365 LDAFP 3;
      70164366 XLEFB 2,[ac3+0xB0];
      70164368 XWLDA 0,[ac3+0x26];
      7016436A XLEFB 3,[ac3+0x78];
      7016436C WMOV 0,1;
-   ac0 dst_count const    25   [25]
-   ac1 src_count const    25   [25]
+   ac0 dst_count computed N[fp+42] +16 (frame length word plus constant)   [(N[(fp+42)]+16)]
+   ac1 src_count computed N[fp+42] +16 (frame length word plus constant)   [(N[(fp+42)]+16)]
    ac2 dst       frame    frame byte +176 (word fp+88)   [bp(fp+176)]
    ac3 src       frame    frame byte +120 (word fp+60)   [bp(fp+120)]
    idiom COPY-STR-EXACT   features: counts-equal
@@ -26999,166 +26877,78 @@
    ultimately (a) via WCMV@7016437E: frame word fp+131 -> ?WRITE_SCREEN
 
 == 70164373 WCMV  block 7016434C  func CAVE_ATTACK
-   window 701641DB..70164372 (220 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
-     701641DB NLDAI 9 (0x0009),1;
-     701641DD WMOV 1,0;
-     701641DE XNSTA 0,[ac3+0x2A];
-     701641E4 WCMV;   .
-     ---- block 701641EF
-     ---- block 701641F4
-     ---- block 701641F5
-     ---- block 701641F6
-     ---- block 70164225
-     ---- block 7016422D
-     ---- block 7016422E
-     ---- block 7016422F
-     ---- block 7016425B
-     ---- block 7016425C
-     ---- block 70164266
-     ---- block 70164267
-     ---- block 70164268
-     ---- block 7016427D
-     ---- block 70164285
-     ---- block 7016428F
-     ---- block 70164290
-     ---- block 70164291
-     ---- block 701642A6
-     ---- block 701642AD
-     ---- block 701642B2
-     ---- block 701642B3
-     ---- block 701642B4
-     ---- block 701642CC
-     ---- block 701642CD
-     ---- block 701642CE
-     ---- block 701642D3
-     ---- block 701642D4
-     ---- block 701642D5
-     ---- block 701642DF
-     ---- block 701642E0
-     701642E9 WCMV;   .
-     ---- block 701642F4
-     ---- block 701642F9
-     ---- block 701642FE
-     ---- block 70164303
-     ---- block 70164304
-     ---- block 70164305
-     ---- block 7016430A
-     ---- block 7016430B
-     ---- block 7016430C
-     ---- block 70164315
-     ---- block 70164316
-     ---- block 7016431B
-     ---- block 7016431C
-     ---- block 7016431D
-     ---- block 70164324
-     ---- block 70164325
-     ---- block 70164326
-     ---- block 70164330
-     ---- block 70164334
-     ---- block 70164336
-     ---- block 7016433C
-     ---- block 7016433D
-     ---- block 7016433E
-     ---- block 70164340
+   window 70164348..70164372 (25 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
+     70164348 LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR
      ---- block 7016434C
      7016434C XNLDA 0,[ac3+0x2A];
      7016434E WNADI 0,16 (0x0010);
      70164350 XWSTA 0,[ac3+0x26];
+     70164352 WNADI 0,25 (0x0019);   .
+     70164354 XLEFB 2,[ac3+0x78];   .
+     70164356 XWSTA 0,[ac3+0x28];   .
+     70164358 NLDAI 16 (0x0010),0;   .
+     7016435A XLEFB 3,[pc+0xF6C0] (0x70163EBB:0);   .
+     7016435C WMOV 0,1;   .
      7016435D WCMV;   .
+     7016435E LDAFP 3;   .
+     7016435F XNLDA 0,[ac3+0x2A];   .
+     70164361 XLEFB 3,[ac3+0x56];   .
+     70164363 WMOV 0,1;   .
      70164364 WCMV;   .
      70164365 LDAFP 3;
      70164366 XLEFB 2,[ac3+0xB0];
      70164368 XWLDA 0,[ac3+0x26];
+     7016436A XLEFB 3,[ac3+0x78];   .
+     7016436C WMOV 0,1;   .
      7016436D WCMV;
      7016436E NLDAI 25 (0x0019),0;
      70164370 XLEFB 3,[pc+0xF678] (0x70163EAD:0);
      70164372 WMOV 0,1;
    ac0 dst_count const    25   [25]
    ac1 src_count const    25   [25]
-   ac2 dst       frame    frame byte +201 (word fp+100 +1 byte) [cont after cont@7016436D]   [bp(fp+201)]
+   ac2 dst       frame    frame byte +176 (word fp+88) [cont after cont@7016436D]  BYTE OFFSET (N[(fp+42)]+16)   [bp(fp bytes (N[(fp+42)]+16)+176)]
    ac3 src       literal  0x70163EAD:0  ' strength points damage.\x0A'   [bp[0x70163EAD:0]]
    idiom CONCAT-PIECE   features: dst-cont, counts-equal
    dest (c) frame word fp+88 -> WCMV@7016437E(src)
    ultimately (a) via WCMV@7016437E: frame word fp+131 -> ?WRITE_SCREEN
 
 == 7016437E WCMV  block 7016434C  func CAVE_ATTACK
-   window 701641DB..7016437C (227 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
-     701641DB NLDAI 9 (0x0009),1;
-     701641DD WMOV 1,0;
-     701641DE XNSTA 0,[ac3+0x2A];
-     701641E4 WCMV;   .
-     ---- block 701641EF
-     ---- block 701641F4
-     ---- block 701641F5
-     ---- block 701641F6
-     ---- block 70164225
-     ---- block 7016422D
-     ---- block 7016422E
-     ---- block 7016422F
-     ---- block 7016425B
-     ---- block 7016425C
-     ---- block 70164266
-     ---- block 70164267
-     ---- block 70164268
-     ---- block 7016427D
-     ---- block 70164285
-     ---- block 7016428F
-     ---- block 70164290
-     ---- block 70164291
-     ---- block 701642A6
-     ---- block 701642AD
-     ---- block 701642B2
-     ---- block 701642B3
-     ---- block 701642B4
-     ---- block 701642CC
-     ---- block 701642CD
-     ---- block 701642CE
-     ---- block 701642D3
-     ---- block 701642D4
-     ---- block 701642D5
-     ---- block 701642DF
-     ---- block 701642E0
-     701642E9 WCMV;   .
-     ---- block 701642F4
-     ---- block 701642F9
-     ---- block 701642FE
-     ---- block 70164303
-     ---- block 70164304
-     ---- block 70164305
-     ---- block 7016430A
-     ---- block 7016430B
-     ---- block 7016430C
-     ---- block 70164315
-     ---- block 70164316
-     ---- block 7016431B
-     ---- block 7016431C
-     ---- block 7016431D
-     ---- block 70164324
-     ---- block 70164325
-     ---- block 70164326
-     ---- block 70164330
-     ---- block 70164334
-     ---- block 70164336
-     ---- block 7016433C
-     ---- block 7016433D
-     ---- block 7016433E
-     ---- block 70164340
+   window 70164348..7016437C (32 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
+     70164348 LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR
      ---- block 7016434C
      7016434C XNLDA 0,[ac3+0x2A];
      7016434E WNADI 0,16 (0x0010);
+     70164350 XWSTA 0,[ac3+0x26];   .
      70164352 WNADI 0,25 (0x0019);
+     70164354 XLEFB 2,[ac3+0x78];   .
      70164356 XWSTA 0,[ac3+0x28];
+     70164358 NLDAI 16 (0x0010),0;   .
+     7016435A XLEFB 3,[pc+0xF6C0] (0x70163EBB:0);   .
+     7016435C WMOV 0,1;   .
      7016435D WCMV;   .
+     7016435E LDAFP 3;   .
+     7016435F XNLDA 0,[ac3+0x2A];   .
+     70164361 XLEFB 3,[ac3+0x56];   .
+     70164363 WMOV 0,1;   .
      70164364 WCMV;   .
+     70164365 LDAFP 3;   .
+     70164366 XLEFB 2,[ac3+0xB0];   .
+     70164368 XWLDA 0,[ac3+0x26];   .
+     7016436A XLEFB 3,[ac3+0x78];   .
+     7016436C WMOV 0,1;   .
      7016436D WCMV;   .
+     7016436E NLDAI 25 (0x0019),0;   .
+     70164370 XLEFB 3,[pc+0xF678] (0x70163EAD:0);   .
+     70164372 WMOV 0,1;   .
      70164373 WCMV;   .
      70164374 LDAFP 3;
      70164375 XWLDA 1,[ac3+0x28];
      70164377 WMOV 1,0;
+     70164378 XNSTA 0,[ac3+0x82];   .
      7016437A XLEFB 2,[ac3+0x106];
      7016437C XLEFB 3,[ac3+0xB0];
-   ac0 dst_count const    50   [50]
-   ac1 src_count const    50   [50]
+   ac0 dst_count computed N[fp+42] +41 (frame length word plus constant)   [(N[(fp+42)]+41)]
+   ac1 src_count computed N[fp+42] +41 (frame length word plus constant)   [(N[(fp+42)]+41)]
    ac2 dst       frame    frame byte +262 (word fp+131)   [bp(fp+262)]
    ac3 src       frame    frame byte +176 (word fp+88)   [bp(fp+176)]
    idiom ASSIGN-STR-VARYING   features: lenword-store, counts-equal
@@ -33484,36 +33274,25 @@
    ultimately (d) via WCMV@70165EE7: frame word fp+132 -> passed to DIED; also WCMV@70165EED(dst), WCMV@70165EF8(src)
 
 == 70165EDE WCMV  block 70165EC6  func DEFEND
-   window 70165E20..70165EDD (99 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
-     70165E20 NLDAI 2048 (0x0800),2;
-     70165E22 XNSTA 2,[ac3+0x34];
-     ---- block 70165E33
-     ---- block 70165E38
-     ---- block 70165E39
-     ---- block 70165E3A
-     ---- block 70165E69
-     ---- block 70165E8B
-     ---- block 70165E8C
-     ---- block 70165E8D
-     ---- block 70165EA2
-     ---- block 70165EA9
-     ---- block 70165EAA
-     ---- block 70165EAD
-     ---- block 70165EB6
-     ---- block 70165EB7
-     ---- block 70165EB8
-     ---- block 70165EBA
+   window 70165EC2..70165EDD (15 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
      70165EC2 LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR
      ---- block 70165EC6
+     70165EC6 XNLDA 1,[ac3+0x34];   .
+     70165EC8 WNADI 1,26 (0x001A);   .
+     70165ECA XWSTA 1,[ac3+0x2A];   .
+     70165ECC WNADI 1,18 (0x0012);   .
      70165ECE XLEFB 2,[ac3+0xBC];
      70165ED0 NLDAI 26 (0x001A),0;
+     70165ED2 XWSTA 1,[ac3+0x2C];   .
+     70165ED4 XLEFB 3,[pc+0xF138] (0x70165771:0);   .
+     70165ED6 WMOV 0,1;   .
      70165ED7 WCMV;
      70165ED8 LDAFP 3;
      70165ED9 XNLDA 0,[ac3+0x34];
      70165EDB XLEFB 3,[ac3+0x6A];
      70165EDD WMOV 0,1;
-   ac0 dst_count const    2048   [0x800]
-   ac1 src_count const    2048   [0x800]
+   ac0 dst_count frame    N[fp+52]   [N[(fp+52)]]
+   ac1 src_count frame    N[fp+52]   [N[(fp+52)]]
    ac2 dst       frame    frame byte +214 (word fp+107) [cont after cont@70165ED7]   [bp(fp+214)]
    ac3 src       frame    frame byte +106 (word fp+53)   [bp(fp+106)]
    idiom CONCAT-PIECE   features: dst-cont, counts-equal
@@ -33521,119 +33300,108 @@
    ultimately (d) via WCMV@70165EE7: frame word fp+132 -> passed to DIED; also WCMV@70165EED(dst), WCMV@70165EF8(src)
 
 == 70165EE7 WCMV  block 70165EC6  func DEFEND
-   window 70165E20..70165EE6 (105 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
-     70165E20 NLDAI 2048 (0x0800),2;
-     70165E22 XNSTA 2,[ac3+0x34];
-     ---- block 70165E33
-     ---- block 70165E38
-     ---- block 70165E39
-     ---- block 70165E3A
-     ---- block 70165E69
-     ---- block 70165E8B
-     ---- block 70165E8C
-     ---- block 70165E8D
-     ---- block 70165EA2
-     ---- block 70165EA9
-     ---- block 70165EAA
-     ---- block 70165EAD
-     ---- block 70165EB6
-     ---- block 70165EB7
-     ---- block 70165EB8
-     ---- block 70165EBA
+   window 70165EC2..70165EE6 (21 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
+     70165EC2 LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR
      ---- block 70165EC6
      70165EC6 XNLDA 1,[ac3+0x34];
      70165EC8 WNADI 1,26 (0x001A);
      70165ECA XWSTA 1,[ac3+0x2A];
+     70165ECC WNADI 1,18 (0x0012);   .
+     70165ECE XLEFB 2,[ac3+0xBC];   .
+     70165ED0 NLDAI 26 (0x001A),0;   .
+     70165ED2 XWSTA 1,[ac3+0x2C];   .
+     70165ED4 XLEFB 3,[pc+0xF138] (0x70165771:0);   .
+     70165ED6 WMOV 0,1;   .
      70165ED7 WCMV;   .
+     70165ED8 LDAFP 3;   .
+     70165ED9 XNLDA 0,[ac3+0x34];   .
+     70165EDB XLEFB 3,[ac3+0x6A];   .
+     70165EDD WMOV 0,1;   .
      70165EDE WCMV;   .
      70165EDF LDAFP 3;
      70165EE0 XLEFB 2,[ac3+0x108];
      70165EE2 XWLDA 0,[ac3+0x2A];
      70165EE4 XLEFB 3,[ac3+0xBC];
      70165EE6 WMOV 0,1;
-   ac0 dst_count const    2074   [0x81A]
-   ac1 src_count const    2074   [0x81A]
+   ac0 dst_count computed N[fp+52] +26 (frame length word plus constant)   [(N[(fp+52)]+26)]
+   ac1 src_count computed N[fp+52] +26 (frame length word plus constant)   [(N[(fp+52)]+26)]
    ac2 dst       frame    frame byte +264 (word fp+132)   [bp(fp+264)]
    ac3 src       frame    frame byte +188 (word fp+94)   [bp(fp+188)]
    idiom COPY-STR-EXACT   features: counts-equal
    dest (d) frame word fp+132 -> passed to DIED; also WCMV@70165EED(dst), WCMV@70165EF8(src)
 
 == 70165EED WCMV  block 70165EC6  func DEFEND
-   window 70165E20..70165EEC (109 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
-     70165E20 NLDAI 2048 (0x0800),2;
-     70165E22 XNSTA 2,[ac3+0x34];
-     ---- block 70165E33
-     ---- block 70165E38
-     ---- block 70165E39
-     ---- block 70165E3A
-     ---- block 70165E69
-     ---- block 70165E8B
-     ---- block 70165E8C
-     ---- block 70165E8D
-     ---- block 70165EA2
-     ---- block 70165EA9
-     ---- block 70165EAA
-     ---- block 70165EAD
-     ---- block 70165EB6
-     ---- block 70165EB7
-     ---- block 70165EB8
-     ---- block 70165EBA
+   window 70165EC2..70165EEC (25 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
+     70165EC2 LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR
      ---- block 70165EC6
      70165EC6 XNLDA 1,[ac3+0x34];
      70165EC8 WNADI 1,26 (0x001A);
      70165ECA XWSTA 1,[ac3+0x2A];
+     70165ECC WNADI 1,18 (0x0012);   .
+     70165ECE XLEFB 2,[ac3+0xBC];   .
+     70165ED0 NLDAI 26 (0x001A),0;   .
+     70165ED2 XWSTA 1,[ac3+0x2C];   .
+     70165ED4 XLEFB 3,[pc+0xF138] (0x70165771:0);   .
+     70165ED6 WMOV 0,1;   .
      70165ED7 WCMV;   .
+     70165ED8 LDAFP 3;   .
+     70165ED9 XNLDA 0,[ac3+0x34];   .
+     70165EDB XLEFB 3,[ac3+0x6A];   .
+     70165EDD WMOV 0,1;   .
      70165EDE WCMV;   .
      70165EDF LDAFP 3;
      70165EE0 XLEFB 2,[ac3+0x108];
      70165EE2 XWLDA 0,[ac3+0x2A];
+     70165EE4 XLEFB 3,[ac3+0xBC];   .
+     70165EE6 WMOV 0,1;   .
      70165EE7 WCMV;
      70165EE8 NLDAI 18 (0x0012),0;
      70165EEA XLEFB 3,[pc+0xF0F8] (0x70165767:0);
      70165EEC WMOV 0,1;
    ac0 dst_count const    18   [18]
    ac1 src_count const    18   [18]
-   ac2 dst       frame    frame byte +2338 (word fp+1169) [cont after cont@70165EE7]   [bp(fp+2338)]
+   ac2 dst       frame    frame byte +264 (word fp+132) [cont after cont@70165EE7]  BYTE OFFSET (N[(fp+52)]+26)   [bp(fp bytes (N[(fp+52)]+26)+264)]
    ac3 src       literal  0x70165767:0  ' strength points!\x0A'   [bp[0x70165767:0]]
    idiom CONCAT-PIECE   features: dst-cont, counts-equal
    dest (d) frame word fp+132 -> passed to DIED; also WCMV@70165EF8(src)
 
 == 70165EF8 WCMV  block 70165EC6  func DEFEND
-   window 70165E20..70165EF6 (116 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
-     70165E20 NLDAI 2048 (0x0800),2;
-     70165E22 XNSTA 2,[ac3+0x34];
-     ---- block 70165E33
-     ---- block 70165E38
-     ---- block 70165E39
-     ---- block 70165E3A
-     ---- block 70165E69
-     ---- block 70165E8B
-     ---- block 70165E8C
-     ---- block 70165E8D
-     ---- block 70165EA2
-     ---- block 70165EA9
-     ---- block 70165EAA
-     ---- block 70165EAD
-     ---- block 70165EB6
-     ---- block 70165EB7
-     ---- block 70165EB8
-     ---- block 70165EBA
+   window 70165EC2..70165EF6 (32 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
+     70165EC2 LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR
      ---- block 70165EC6
      70165EC6 XNLDA 1,[ac3+0x34];
      70165EC8 WNADI 1,26 (0x001A);
+     70165ECA XWSTA 1,[ac3+0x2A];   .
      70165ECC WNADI 1,18 (0x0012);
+     70165ECE XLEFB 2,[ac3+0xBC];   .
+     70165ED0 NLDAI 26 (0x001A),0;   .
      70165ED2 XWSTA 1,[ac3+0x2C];
+     70165ED4 XLEFB 3,[pc+0xF138] (0x70165771:0);   .
+     70165ED6 WMOV 0,1;   .
      70165ED7 WCMV;   .
+     70165ED8 LDAFP 3;   .
+     70165ED9 XNLDA 0,[ac3+0x34];   .
+     70165EDB XLEFB 3,[ac3+0x6A];   .
+     70165EDD WMOV 0,1;   .
      70165EDE WCMV;   .
+     70165EDF LDAFP 3;   .
+     70165EE0 XLEFB 2,[ac3+0x108];   .
+     70165EE2 XWLDA 0,[ac3+0x2A];   .
+     70165EE4 XLEFB 3,[ac3+0xBC];   .
+     70165EE6 WMOV 0,1;   .
      70165EE7 WCMV;   .
+     70165EE8 NLDAI 18 (0x0012),0;   .
+     70165EEA XLEFB 3,[pc+0xF0F8] (0x70165767:0);   .
+     70165EEC WMOV 0,1;   .
      70165EED WCMV;   .
      70165EEE LDAFP 3;
      70165EEF XWLDA 1,[ac3+0x2C];
      70165EF1 WMOV 1,0;
+     70165EF2 XNSTA 0,[ac3+0xAC];   .
      70165EF4 XLEFB 2,[ac3+0x15A];
      70165EF6 XLEFB 3,[ac3+0x108];
-   ac0 dst_count const    2092   [0x82C]
-   ac1 src_count const    2092   [0x82C]
+   ac0 dst_count computed N[fp+52] +44 (frame length word plus constant)   [(N[(fp+52)]+44)]
+   ac1 src_count computed N[fp+52] +44 (frame length word plus constant)   [(N[(fp+52)]+44)]
    ac2 dst       frame    frame byte +346 (word fp+173)   [bp(fp+346)]
    ac3 src       frame    frame byte +264 (word fp+132)   [bp(fp+264)]
    idiom ASSIGN-STR-VARYING   features: lenword-store, counts-equal
@@ -51144,86 +50912,25 @@
    ultimately (a) via WCMV@70168C32: via WCMV@70168C40: frame word fp+161 -> ?WRITE_SCREEN
 
 == 70168C29 WCMV  block 70168C12  func DROP
-   window 70168AEE..70168C28 (179 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
-     70168AEE LCALL [0x7016AA35],1; # GET_INPUT
-     ---- block 70168AF2
-     ---- block 70168AF6
-     ---- block 70168AF7
-     ---- block 70168AF9
-     ---- block 70168AFB
-     ---- block 70168AFC
-     ---- block 70168AFE
-     ---- block 70168B03
-     ---- block 70168B04
-     ---- block 70168B07
-     ---- block 70168B08
-     ---- block 70168B0A
-     ---- block 70168B0B
-     ---- block 70168B0D
-     ---- block 70168B0E
-     ---- block 70168B10
-     ---- block 70168B11
-     ---- block 70168B15
-     ---- block 70168B16
-     ---- block 70168B17
-     70168B2B WCMV;   .
-     ---- block 70168B46
-     ---- block 70168B47
-     70168B50 WCMV;   .
-     ---- block 70168B6B
-     ---- block 70168B6F
-     ---- block 70168B70
-     ---- block 70168B71
-     ---- block 70168B78
-     ---- block 70168B79
-     ---- block 70168B7A
-     ---- block 70168B86
-     ---- block 70168B8A
-     ---- block 70168B8B
-     ---- block 70168B8C
-     ---- block 70168B99
-     ---- block 70168B9A
-     ---- block 70168B9B
-     ---- block 70168B9C
-     ---- block 70168B9E
-     ---- block 70168BAC
-     ---- block 70168BAD
-     ---- block 70168BAF
-     ---- block 70168BB1
-     ---- block 70168BB6
-     70168BB6 XNLDA 0,[ac3+0x7];
-     ---- block 70168BBA
-     ---- block 70168BBB
-     ---- block 70168BBC
-     70168BBC NLDAI 23 (0x0017),2;
-     70168BBE WMUL 2,0;
-     70168BBF XWSTA 0,[ac3+0x2C];
-     ---- block 70168BC8
-     ---- block 70168BC9
-     ---- block 70168BCA
-     ---- block 70168BD9
-     ---- block 70168BDA
-     ---- block 70168BDC
-     70168BDC XWLDA 2,[ac3+0x2C];
-     70168BDE LWADD 2,[0x70000214];
-     70168BE1 XWSTA 2,[ac3+0x16];
-     ---- block 70168BF3
-     ---- block 70168BF4
-     ---- block 70168BF6
-     ---- block 70168BFA
-     ---- block 70168BFB
-     ---- block 70168BFD
+   window 70168C0E..70168C28 (15 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
      70168C0E LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR
      ---- block 70168C12
+     70168C12 XNLDA 0,[ac3+0x16];   .
+     70168C14 WNADI 0,51 (0x0033);   .
+     70168C16 XWSTA 0,[ac3+0x2C];   .
+     70168C18 WINC 0,0;   .
      70168C19 XLEFB 2,[ac3+0x98];
+     70168C1B XWSTA 0,[ac3+0x2E];   .
      70168C1D NLDAI 51 (0x0033),0;
+     70168C1F XLEFB 3,[pc+0xFA22] (0x70168931:0);   .
+     70168C21 WMOV 0,1;   .
      70168C22 WCMV;
      70168C23 LDAFP 3;
      70168C24 XNLDA 0,[ac3+0x16];
      70168C26 XLEFB 3,[ac3+0x2E];
      70168C28 WMOV 0,1;
-   ac0 dst_count computed (+23*N[(fp+7)]+W[0x70000214])   [(+23*N[(fp+7)]+W[0x70000214])]
-   ac1 src_count computed (+23*N[(fp+7)]+W[0x70000214])   [(+23*N[(fp+7)]+W[0x70000214])]
+   ac0 dst_count frame    N[fp+22]   [N[(fp+22)]]
+   ac1 src_count frame    N[fp+22]   [N[(fp+22)]]
    ac2 dst       frame    frame byte +203 (word fp+101 +1 byte) [cont after cont@70168C22]   [bp(fp+203)]
    ac3 src       frame    frame byte +46 (word fp+23)   [bp(fp+46)]
    idiom CONCAT-PIECE   features: dst-cont, counts-equal
@@ -51231,88 +50938,31 @@
    ultimately (a) via WCMV@70168C32: via WCMV@70168C40: frame word fp+161 -> ?WRITE_SCREEN
 
 == 70168C32 WCMV  block 70168C12  func DROP
-   window 70168AEE..70168C31 (185 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
-     70168AEE LCALL [0x7016AA35],1; # GET_INPUT
-     ---- block 70168AF2
-     ---- block 70168AF6
-     ---- block 70168AF7
-     ---- block 70168AF9
-     ---- block 70168AFB
-     ---- block 70168AFC
-     ---- block 70168AFE
-     ---- block 70168B03
-     ---- block 70168B04
-     ---- block 70168B07
-     ---- block 70168B08
-     ---- block 70168B0A
-     ---- block 70168B0B
-     ---- block 70168B0D
-     ---- block 70168B0E
-     ---- block 70168B10
-     ---- block 70168B11
-     ---- block 70168B15
-     ---- block 70168B16
-     ---- block 70168B17
-     70168B2B WCMV;   .
-     ---- block 70168B46
-     ---- block 70168B47
-     70168B50 WCMV;   .
-     ---- block 70168B6B
-     ---- block 70168B6F
-     ---- block 70168B70
-     ---- block 70168B71
-     ---- block 70168B78
-     ---- block 70168B79
-     ---- block 70168B7A
-     ---- block 70168B86
-     ---- block 70168B8A
-     ---- block 70168B8B
-     ---- block 70168B8C
-     ---- block 70168B99
-     ---- block 70168B9A
-     ---- block 70168B9B
-     ---- block 70168B9C
-     ---- block 70168B9E
-     ---- block 70168BAC
-     ---- block 70168BAD
-     ---- block 70168BAF
-     ---- block 70168BB1
-     ---- block 70168BB6
-     70168BB6 XNLDA 0,[ac3+0x7];
-     ---- block 70168BBA
-     ---- block 70168BBB
-     ---- block 70168BBC
-     70168BBC NLDAI 23 (0x0017),2;
-     70168BBE WMUL 2,0;
-     70168BBF XWSTA 0,[ac3+0x2C];
-     ---- block 70168BC8
-     ---- block 70168BC9
-     ---- block 70168BCA
-     ---- block 70168BD9
-     ---- block 70168BDA
-     ---- block 70168BDC
-     70168BDC XWLDA 2,[ac3+0x2C];
-     70168BDE LWADD 2,[0x70000214];
-     70168BE1 XWSTA 2,[ac3+0x16];
-     ---- block 70168BF3
-     ---- block 70168BF4
-     ---- block 70168BF6
-     ---- block 70168BFA
-     ---- block 70168BFB
-     ---- block 70168BFD
+   window 70168C0E..70168C31 (21 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
+     70168C0E LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR
      ---- block 70168C12
      70168C12 XNLDA 0,[ac3+0x16];
      70168C14 WNADI 0,51 (0x0033);
      70168C16 XWSTA 0,[ac3+0x2C];
+     70168C18 WINC 0,0;   .
+     70168C19 XLEFB 2,[ac3+0x98];   .
+     70168C1B XWSTA 0,[ac3+0x2E];   .
+     70168C1D NLDAI 51 (0x0033),0;   .
+     70168C1F XLEFB 3,[pc+0xFA22] (0x70168931:0);   .
+     70168C21 WMOV 0,1;   .
      70168C22 WCMV;   .
+     70168C23 LDAFP 3;   .
+     70168C24 XNLDA 0,[ac3+0x16];   .
+     70168C26 XLEFB 3,[ac3+0x2E];   .
+     70168C28 WMOV 0,1;   .
      70168C29 WCMV;   .
      70168C2A LDAFP 3;
      70168C2B XLEFB 2,[ac3+0xEC];
      70168C2D XWLDA 0,[ac3+0x2C];
      70168C2F XLEFB 3,[ac3+0x98];
      70168C31 WMOV 0,1;
-   ac0 dst_count computed (+23*N[(fp+7)]+W[0x70000214]+51)   [(+23*N[(fp+7)]+W[0x70000214]+51)]
-   ac1 src_count computed (+23*N[(fp+7)]+W[0x70000214]+51)   [(+23*N[(fp+7)]+W[0x70000214]+51)]
+   ac0 dst_count computed N[fp+22] +51 (frame length word plus constant)   [(N[(fp+22)]+51)]
+   ac1 src_count computed N[fp+22] +51 (frame length word plus constant)   [(N[(fp+22)]+51)]
    ac2 dst       frame    frame byte +236 (word fp+118)   [bp(fp+236)]
    ac3 src       frame    frame byte +152 (word fp+76)   [bp(fp+152)]
    idiom COPY-STR-EXACT   features: counts-equal
@@ -51320,90 +50970,40 @@
    ultimately (a) via WCMV@70168C40: frame word fp+161 -> ?WRITE_SCREEN
 
 == 70168C40 WCMV  block 70168C12  func DROP
-   window 70168AEE..70168C3E (194 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
-     70168AEE LCALL [0x7016AA35],1; # GET_INPUT
-     ---- block 70168AF2
-     ---- block 70168AF6
-     ---- block 70168AF7
-     ---- block 70168AF9
-     ---- block 70168AFB
-     ---- block 70168AFC
-     ---- block 70168AFE
-     ---- block 70168B03
-     ---- block 70168B04
-     ---- block 70168B07
-     ---- block 70168B08
-     ---- block 70168B0A
-     ---- block 70168B0B
-     ---- block 70168B0D
-     ---- block 70168B0E
-     ---- block 70168B10
-     ---- block 70168B11
-     ---- block 70168B15
-     ---- block 70168B16
-     ---- block 70168B17
-     70168B2B WCMV;   .
-     ---- block 70168B46
-     ---- block 70168B47
-     70168B50 WCMV;   .
-     ---- block 70168B6B
-     ---- block 70168B6F
-     ---- block 70168B70
-     ---- block 70168B71
-     ---- block 70168B78
-     ---- block 70168B79
-     ---- block 70168B7A
-     ---- block 70168B86
-     ---- block 70168B8A
-     ---- block 70168B8B
-     ---- block 70168B8C
-     ---- block 70168B99
-     ---- block 70168B9A
-     ---- block 70168B9B
-     ---- block 70168B9C
-     ---- block 70168B9E
-     ---- block 70168BAC
-     ---- block 70168BAD
-     ---- block 70168BAF
-     ---- block 70168BB1
-     ---- block 70168BB6
-     70168BB6 XNLDA 0,[ac3+0x7];
-     ---- block 70168BBA
-     ---- block 70168BBB
-     ---- block 70168BBC
-     70168BBC NLDAI 23 (0x0017),2;
-     70168BBE WMUL 2,0;
-     70168BBF XWSTA 0,[ac3+0x2C];
-     ---- block 70168BC8
-     ---- block 70168BC9
-     ---- block 70168BCA
-     ---- block 70168BD9
-     ---- block 70168BDA
-     ---- block 70168BDC
-     70168BDC XWLDA 2,[ac3+0x2C];
-     70168BDE LWADD 2,[0x70000214];
-     70168BE1 XWSTA 2,[ac3+0x16];
-     ---- block 70168BF3
-     ---- block 70168BF4
-     ---- block 70168BF6
-     ---- block 70168BFA
-     ---- block 70168BFB
-     ---- block 70168BFD
+   window 70168C0E..70168C3E (30 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
+     70168C0E LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR
      ---- block 70168C12
      70168C12 XNLDA 0,[ac3+0x16];
      70168C14 WNADI 0,51 (0x0033);
+     70168C16 XWSTA 0,[ac3+0x2C];   .
      70168C18 WINC 0,0;
+     70168C19 XLEFB 2,[ac3+0x98];   .
      70168C1B XWSTA 0,[ac3+0x2E];
+     70168C1D NLDAI 51 (0x0033),0;   .
+     70168C1F XLEFB 3,[pc+0xFA22] (0x70168931:0);   .
+     70168C21 WMOV 0,1;   .
      70168C22 WCMV;   .
+     70168C23 LDAFP 3;   .
+     70168C24 XNLDA 0,[ac3+0x16];   .
+     70168C26 XLEFB 3,[ac3+0x2E];   .
+     70168C28 WMOV 0,1;   .
      70168C29 WCMV;   .
+     70168C2A LDAFP 3;   .
+     70168C2B XLEFB 2,[ac3+0xEC];   .
+     70168C2D XWLDA 0,[ac3+0x2C];   .
+     70168C2F XLEFB 3,[ac3+0x98];   .
+     70168C31 WMOV 0,1;   .
      70168C32 WCMV;   .
+     70168C33 NLDAI 37 (0x0025),1;   .
+     70168C35 WSTB 2,1;   .
      70168C36 LDAFP 3;
      70168C37 XWLDA 0,[ac3+0x2E];
      70168C39 WMOV 0,1;
+     70168C3A XNSTA 0,[ac3+0xA0];   .
      70168C3C XLEFB 2,[ac3+0x142];
      70168C3E XLEFB 3,[ac3+0xEC];
-   ac0 dst_count computed (+23*N[(fp+7)]+W[0x70000214]+52)   [(+23*N[(fp+7)]+W[0x70000214]+52)]
-   ac1 src_count computed (+23*N[(fp+7)]+W[0x70000214]+52)   [(+23*N[(fp+7)]+W[0x70000214]+52)]
+   ac0 dst_count computed N[fp+22] +52 (frame length word plus constant)   [(N[(fp+22)]+52)]
+   ac1 src_count computed N[fp+22] +52 (frame length word plus constant)   [(N[(fp+22)]+52)]
    ac2 dst       frame    frame byte +322 (word fp+161)   [bp(fp+322)]
    ac3 src       frame    frame byte +236 (word fp+118)   [bp(fp+236)]
    idiom ASSIGN-STR-VARYING   features: lenword-store, counts-equal
@@ -52849,7 +52449,29 @@
    dest (a) frame word fp+13 -> ?WRITE_SCREEN, ?WRITE_SCREEN
 
 == 701696D7 WCMV  block 701696CE  func DROP
-   window 701696CE..701696D5 (5 instr)
+   window 701696B4..701696D5 (19 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
+     701696B4 LCALL [0x7016AA35],1; # GET_INPUT
+     ---- block 701696B8
+     701696B8 XLDB 0,[ac2+0x26];   .
+     701696BA WSEQI 0,27 (0x001B);   .
+     ---- block 701696BC
+     701696BC WBR 10 (0x701696C6);   .
+     ---- block 701696BD
+     701696BD WSUB 0,0;   .
+     701696BE XNSTA 0,[ac2+0xB];   .
+     701696C0 WMOV 2,0;   .
+     701696C1 XLEF 2,[pc+0x7F97] (0x70169659);   .
+     701696C3 LJSR [0x7017EC7C]; # I.GOTO   .
+     ---- block 701696C6
+     701696C6 XLDB 0,[ac2+0x26];   .
+     701696C8 WSNEI 0,89 (0x0059);   .
+     ---- block 701696CA
+     701696CA WBR 4 (0x701696CE);   .
+     ---- block 701696CB
+     701696CB WSEQI 0,121 (0x0079);   .
+     ---- block 701696CD
+     701696CD WBR 76 (0x70169719);   .
+     ---- block 701696CE
      701696CE NLDAI 12 (0x000C),0;
      701696D0 WMOV 0,1;
      701696D1 XNSTA 0,[ac3+0xC];   .
@@ -68581,42 +68203,7 @@
    dest (a) frame word fp+523 -> ?WRITE_SCREEN, ?WRITE_SCREEN, ?WRITE_SCREEN
 
 == 7016EF0D WCMV  block 7016EF05  func LIST_PLAYERS
-   window 7016EECF..7016EF0B (33 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
-     7016EECF NLDAI 6 (0x0006),1;
-     7016EED1 WMOV 1,0;
-     7016EED2 LDAFP 3;   .
-     7016EED3 XNSTA 0,[ac3+0x20A];
-     7016EED5 XLEFB 2,[ac3+0x416];   .
-     7016EED7 XLEFB 3,[ac3+0x470];   .
-     7016EED9 WCMV;   .
-     7016EEDA LDAFP 3;   .
-     7016EEDB XPEF [ac3+0x20A];   .
-     7016EEDD LPEF [0x70000260];   .
-     7016EEE0 LCALL [0x7017E27A],2; # ?WRITE_SCREEN   .
-     ---- block 7016EEE4
-     7016EEE4 XPEF [ac3+0x13];   .
-     7016EEE6 WMOV 3,1;   .
-     7016EEE7 XCALL [pc+0x66E] (0x7016F556),1; # symbol not found   .
-     ---- block 7016EEEA
-     7016EEEA MOV.L# 0,0,SNC;   .
-     ---- block 7016EEEB
-     7016EEEB WBR 37 (0x7016EF10);   .
-     ---- block 7016EEEC
-     7016EEEC XNLDA 0,[ac3+0x13];   .
-     7016EEEE WSGTI 0,10 (0x000A);   .
-     ---- block 7016EEF0
-     7016EEF0 WSGT 0,0;   .
-     ---- block 7016EEF1
-     7016EEF1 DERR 17;   .
-     ---- block 7016EEF2
-     7016EEF2 NLDAI 686 (0x02AE),1;   .
-     7016EEF4 WMUL 1,0;   .
-     7016EEF5 LWADD 0,[0x70000210];   .
-     7016EEF8 WMOV 0,2;   .
-     7016EEF9 XNLDA 2,[ac2+0x7E85];   .
-     7016EEFB XWSTA 2,[ac3+0x234];   .
-     7016EEFD XPEF [ac3+0x234];   .
-     7016EEFF XLEF 2,[ac3+0x20A];   .
+   window 7016EF01..7016EF0B (5 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
      7016EF01 LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR
      ---- block 7016EF05
      7016EF05 XLEFB 2,[ac3+0x30];
@@ -68624,29 +68211,15 @@
      7016EF09 XNLDA 1,[ac3+0x20A];
      7016EF0B XLEFB 3,[ac3+0x416];
    ac0 dst_count const    12   [12]
-   ac1 src_count const    6   [6]
+   ac1 src_count frame    N[fp+522]   [N[(fp+0X20A)]]
    ac2 dst       frame    frame byte +48 (word fp+24)   [bp(fp+48)]
    ac3 src       frame    frame byte +1046 (word fp+523)   [bp(fp+1046)]
-   idiom ASSIGN-STR-FIXED   features: pad-fill(12<-6)
+   idiom ASSIGN-STR-FIXED   features: -
    dest (c) frame word fp+24 -> WCMV@7016EF2F(src), WCMV@7016EF8D(dst), WCMV@7016EF96(src), WCMV@7016EF74(dst), WCMV@7016EFF4(dst)
    ultimately (a) via WCMV@7016EF2F: via WCMV@7016EF40: frame word fp+523 -> ?WRITE_SCREEN, ?WRITE_SCREEN, ?WRITE_SCREEN
 
 == 7016EF26 WCMV  block 7016EF1E  func LIST_PLAYERS
-   window 7016EECF..7016EF24 (46 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
-     7016EECF NLDAI 6 (0x0006),1;
-     7016EED1 WMOV 1,0;
-     7016EED3 XNSTA 0,[ac3+0x20A];
-     7016EED9 WCMV;   .
-     ---- block 7016EEE4
-     ---- block 7016EEEA
-     ---- block 7016EEEB
-     ---- block 7016EEEC
-     ---- block 7016EEF0
-     ---- block 7016EEF1
-     ---- block 7016EEF2
-     ---- block 7016EF05
-     7016EF0D WCMV;   .
-     ---- block 7016EF10
+   window 7016EF1A..7016EF24 (5 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
      7016EF1A LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR
      ---- block 7016EF1E
      7016EF1E XLEFB 2,[ac3+0x30];
@@ -68654,10 +68227,10 @@
      7016EF22 XNLDA 1,[ac3+0x20A];
      7016EF24 XLEFB 3,[ac3+0x416];
    ac0 dst_count const    12   [12]
-   ac1 src_count const    6   [6]
+   ac1 src_count frame    N[fp+522]   [N[(fp+0X20A)]]
    ac2 dst       frame    frame byte +48 (word fp+24)   [bp(fp+48)]
    ac3 src       frame    frame byte +1046 (word fp+523)   [bp(fp+1046)]
-   idiom ASSIGN-STR-FIXED   features: pad-fill(12<-6)
+   idiom ASSIGN-STR-FIXED   features: -
    dest (c) frame word fp+24 -> WCMV@7016EF2F(src), WCMV@7016EF8D(dst), WCMV@7016EF96(src), WCMV@7016EF74(dst), WCMV@7016EFF4(dst)
    ultimately (a) via WCMV@7016EF2F: via WCMV@7016EF40: frame word fp+523 -> ?WRITE_SCREEN, ?WRITE_SCREEN, ?WRITE_SCREEN
 
@@ -68743,42 +68316,7 @@
    dest (a) frame word fp+523 -> ?WRITE_SCREEN, ?WRITE_SCREEN, ?WRITE_SCREEN
 
 == 7016EF74 WCMV  block 7016EF6C  func LIST_PLAYERS
-   window 7016EF36..7016EF72 (33 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
-     7016EF36 NLDAI 8 (0x0008),1;
-     7016EF38 WMOV 1,0;
-     7016EF39 LDAFP 3;   .
-     7016EF3A XNSTA 0,[ac3+0x20A];
-     7016EF3C XLEFB 2,[ac3+0x416];   .
-     7016EF3E XLEFB 3,[ac3+0x470];   .
-     7016EF40 WCMV;   .
-     7016EF41 LDAFP 3;   .
-     7016EF42 XPEF [ac3+0x20A];   .
-     7016EF44 LPEF [0x70000260];   .
-     7016EF47 LCALL [0x7017E27A],2; # ?WRITE_SCREEN   .
-     ---- block 7016EF4B
-     7016EF4B XPEF [ac3+0x13];   .
-     7016EF4D WMOV 3,1;   .
-     7016EF4E XCALL [pc+0x607] (0x7016F556),1; # symbol not found   .
-     ---- block 7016EF51
-     7016EF51 MOV.L# 0,0,SNC;   .
-     ---- block 7016EF52
-     7016EF52 WBR 37 (0x7016EF77);   .
-     ---- block 7016EF53
-     7016EF53 XNLDA 0,[ac3+0x13];   .
-     7016EF55 WSGTI 0,10 (0x000A);   .
-     ---- block 7016EF57
-     7016EF57 WSGT 0,0;   .
-     ---- block 7016EF58
-     7016EF58 DERR 17;   .
-     ---- block 7016EF59
-     7016EF59 NLDAI 686 (0x02AE),1;   .
-     7016EF5B WMUL 1,0;   .
-     7016EF5C LWADD 0,[0x70000210];   .
-     7016EF5F WMOV 0,2;   .
-     7016EF60 XNLDA 2,[ac2+0x7E86];   .
-     7016EF62 XWSTA 2,[ac3+0x234];   .
-     7016EF64 XPEF [ac3+0x234];   .
-     7016EF66 XLEF 2,[ac3+0x20A];   .
+   window 7016EF68..7016EF72 (5 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
      7016EF68 LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR
      ---- block 7016EF6C
      7016EF6C XLEFB 2,[ac3+0x30];
@@ -68786,29 +68324,15 @@
      7016EF70 XNLDA 1,[ac3+0x20A];
      7016EF72 XLEFB 3,[ac3+0x416];
    ac0 dst_count const    12   [12]
-   ac1 src_count const    8   [8]
+   ac1 src_count frame    N[fp+522]   [N[(fp+0X20A)]]
    ac2 dst       frame    frame byte +48 (word fp+24)   [bp(fp+48)]
    ac3 src       frame    frame byte +1046 (word fp+523)   [bp(fp+1046)]
-   idiom ASSIGN-STR-FIXED   features: pad-fill(12<-8)
+   idiom ASSIGN-STR-FIXED   features: -
    dest (c) frame word fp+24 -> WCMV@7016EF96(src), WCMV@7016EFF4(dst), WCMV@7016EFFD(src), WCMV@7016EFDB(dst), WCMV@7016F05B(dst)
    ultimately (a) via WCMV@7016EF96: via WCMV@7016EFA7: frame word fp+523 -> ?WRITE_SCREEN, ?WRITE_SCREEN, ?WRITE_SCREEN
 
 == 7016EF8D WCMV  block 7016EF85  func LIST_PLAYERS
-   window 7016EF36..7016EF8B (46 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
-     7016EF36 NLDAI 8 (0x0008),1;
-     7016EF38 WMOV 1,0;
-     7016EF3A XNSTA 0,[ac3+0x20A];
-     7016EF40 WCMV;   .
-     ---- block 7016EF4B
-     ---- block 7016EF51
-     ---- block 7016EF52
-     ---- block 7016EF53
-     ---- block 7016EF57
-     ---- block 7016EF58
-     ---- block 7016EF59
-     ---- block 7016EF6C
-     7016EF74 WCMV;   .
-     ---- block 7016EF77
+   window 7016EF81..7016EF8B (5 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
      7016EF81 LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR
      ---- block 7016EF85
      7016EF85 XLEFB 2,[ac3+0x30];
@@ -68816,10 +68340,10 @@
      7016EF89 XNLDA 1,[ac3+0x20A];
      7016EF8B XLEFB 3,[ac3+0x416];
    ac0 dst_count const    12   [12]
-   ac1 src_count const    8   [8]
+   ac1 src_count frame    N[fp+522]   [N[(fp+0X20A)]]
    ac2 dst       frame    frame byte +48 (word fp+24)   [bp(fp+48)]
    ac3 src       frame    frame byte +1046 (word fp+523)   [bp(fp+1046)]
-   idiom ASSIGN-STR-FIXED   features: pad-fill(12<-8)
+   idiom ASSIGN-STR-FIXED   features: -
    dest (c) frame word fp+24 -> WCMV@7016EF96(src), WCMV@7016EFF4(dst), WCMV@7016EFFD(src), WCMV@7016EFDB(dst), WCMV@7016F05B(dst)
    ultimately (a) via WCMV@7016EF96: via WCMV@7016EFA7: frame word fp+523 -> ?WRITE_SCREEN, ?WRITE_SCREEN, ?WRITE_SCREEN
 
@@ -68905,42 +68429,7 @@
    dest (a) frame word fp+523 -> ?WRITE_SCREEN, ?WRITE_SCREEN, ?WRITE_SCREEN
 
 == 7016EFDB WCMV  block 7016EFD3  func LIST_PLAYERS
-   window 7016EF9D..7016EFD9 (33 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
-     7016EF9D NLDAI 8 (0x0008),1;
-     7016EF9F WMOV 1,0;
-     7016EFA0 LDAFP 3;   .
-     7016EFA1 XNSTA 0,[ac3+0x20A];
-     7016EFA3 XLEFB 2,[ac3+0x416];   .
-     7016EFA5 XLEFB 3,[ac3+0x470];   .
-     7016EFA7 WCMV;   .
-     7016EFA8 LDAFP 3;   .
-     7016EFA9 XPEF [ac3+0x20A];   .
-     7016EFAB LPEF [0x70000260];   .
-     7016EFAE LCALL [0x7017E27A],2; # ?WRITE_SCREEN   .
-     ---- block 7016EFB2
-     7016EFB2 XPEF [ac3+0x13];   .
-     7016EFB4 WMOV 3,1;   .
-     7016EFB5 XCALL [pc+0x5A0] (0x7016F556),1; # symbol not found   .
-     ---- block 7016EFB8
-     7016EFB8 MOV.L# 0,0,SNC;   .
-     ---- block 7016EFB9
-     7016EFB9 WBR 37 (0x7016EFDE);   .
-     ---- block 7016EFBA
-     7016EFBA XNLDA 0,[ac3+0x13];   .
-     7016EFBC WSGTI 0,10 (0x000A);   .
-     ---- block 7016EFBE
-     7016EFBE WSGT 0,0;   .
-     ---- block 7016EFBF
-     7016EFBF DERR 17;   .
-     ---- block 7016EFC0
-     7016EFC0 NLDAI 686 (0x02AE),1;   .
-     7016EFC2 WMUL 1,0;   .
-     7016EFC3 LWADD 0,[0x70000210];   .
-     7016EFC6 WMOV 0,2;   .
-     7016EFC7 XNLDA 2,[ac2+0x7E8C];   .
-     7016EFC9 XWSTA 2,[ac3+0x234];   .
-     7016EFCB XPEF [ac3+0x234];   .
-     7016EFCD XLEF 2,[ac3+0x20A];   .
+   window 7016EFCF..7016EFD9 (5 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
      7016EFCF LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR
      ---- block 7016EFD3
      7016EFD3 XLEFB 2,[ac3+0x30];
@@ -68948,29 +68437,15 @@
      7016EFD7 XNLDA 1,[ac3+0x20A];
      7016EFD9 XLEFB 3,[ac3+0x416];
    ac0 dst_count const    12   [12]
-   ac1 src_count const    8   [8]
+   ac1 src_count frame    N[fp+522]   [N[(fp+0X20A)]]
    ac2 dst       frame    frame byte +48 (word fp+24)   [bp(fp+48)]
    ac3 src       frame    frame byte +1046 (word fp+523)   [bp(fp+1046)]
-   idiom ASSIGN-STR-FIXED   features: pad-fill(12<-8)
+   idiom ASSIGN-STR-FIXED   features: -
    dest (c) frame word fp+24 -> WCMV@7016EFFD(src), WCMV@7016F05B(dst), WCMV@7016F042(dst), WCMV@7016F0C0(dst)
    ultimately (a) via WCMV@7016EFFD: via WCMV@7016F00E: frame word fp+523 -> ?WRITE_SCREEN, ?WRITE_SCREEN, ?WRITE_SCREEN
 
 == 7016EFF4 WCMV  block 7016EFEC  func LIST_PLAYERS
-   window 7016EF9D..7016EFF2 (46 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
-     7016EF9D NLDAI 8 (0x0008),1;
-     7016EF9F WMOV 1,0;
-     7016EFA1 XNSTA 0,[ac3+0x20A];
-     7016EFA7 WCMV;   .
-     ---- block 7016EFB2
-     ---- block 7016EFB8
-     ---- block 7016EFB9
-     ---- block 7016EFBA
-     ---- block 7016EFBE
-     ---- block 7016EFBF
-     ---- block 7016EFC0
-     ---- block 7016EFD3
-     7016EFDB WCMV;   .
-     ---- block 7016EFDE
+   window 7016EFE8..7016EFF2 (5 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
      7016EFE8 LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR
      ---- block 7016EFEC
      7016EFEC XLEFB 2,[ac3+0x30];
@@ -68978,10 +68453,10 @@
      7016EFF0 XNLDA 1,[ac3+0x20A];
      7016EFF2 XLEFB 3,[ac3+0x416];
    ac0 dst_count const    12   [12]
-   ac1 src_count const    8   [8]
+   ac1 src_count frame    N[fp+522]   [N[(fp+0X20A)]]
    ac2 dst       frame    frame byte +48 (word fp+24)   [bp(fp+48)]
    ac3 src       frame    frame byte +1046 (word fp+523)   [bp(fp+1046)]
-   idiom ASSIGN-STR-FIXED   features: pad-fill(12<-8)
+   idiom ASSIGN-STR-FIXED   features: -
    dest (c) frame word fp+24 -> WCMV@7016EFFD(src), WCMV@7016F05B(dst), WCMV@7016F042(dst), WCMV@7016F0C0(dst)
    ultimately (a) via WCMV@7016EFFD: via WCMV@7016F00E: frame word fp+523 -> ?WRITE_SCREEN, ?WRITE_SCREEN, ?WRITE_SCREEN
 
@@ -69067,42 +68542,7 @@
    dest (a) frame word fp+523 -> ?WRITE_SCREEN, ?WRITE_SCREEN, ?WRITE_SCREEN
 
 == 7016F042 WCMV  block 7016F03A  func LIST_PLAYERS
-   window 7016F004..7016F040 (33 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
-     7016F004 NLDAI 9 (0x0009),1;
-     7016F006 WMOV 1,0;
-     7016F007 LDAFP 3;   .
-     7016F008 XNSTA 0,[ac3+0x20A];
-     7016F00A XLEFB 2,[ac3+0x416];   .
-     7016F00C XLEFB 3,[ac3+0x470];   .
-     7016F00E WCMV;   .
-     7016F00F LDAFP 3;   .
-     7016F010 XPEF [ac3+0x20A];   .
-     7016F012 LPEF [0x70000260];   .
-     7016F015 LCALL [0x7017E27A],2; # ?WRITE_SCREEN   .
-     ---- block 7016F019
-     7016F019 XPEF [ac3+0x13];   .
-     7016F01B WMOV 3,1;   .
-     7016F01C XCALL [pc+0x539] (0x7016F556),1; # symbol not found   .
-     ---- block 7016F01F
-     7016F01F MOV.L# 0,0,SNC;   .
-     ---- block 7016F020
-     7016F020 WBR 37 (0x7016F045);   .
-     ---- block 7016F021
-     7016F021 XNLDA 0,[ac3+0x13];   .
-     7016F023 WSGTI 0,10 (0x000A);   .
-     ---- block 7016F025
-     7016F025 WSGT 0,0;   .
-     ---- block 7016F026
-     7016F026 DERR 17;   .
-     ---- block 7016F027
-     7016F027 NLDAI 686 (0x02AE),1;   .
-     7016F029 WMUL 1,0;   .
-     7016F02A LWADD 0,[0x70000210];   .
-     7016F02D WMOV 0,2;   .
-     7016F02E XNLDA 2,[ac2+0x7E8A];   .
-     7016F030 XWSTA 2,[ac3+0x234];   .
-     7016F032 XPEF [ac3+0x234];   .
-     7016F034 XLEF 2,[ac3+0x20A];   .
+   window 7016F036..7016F040 (5 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
      7016F036 LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR
      ---- block 7016F03A
      7016F03A XLEFB 2,[ac3+0x30];
@@ -69110,28 +68550,14 @@
      7016F03E XNLDA 1,[ac3+0x20A];
      7016F040 XLEFB 3,[ac3+0x416];
    ac0 dst_count const    12   [12]
-   ac1 src_count const    9   [9]
+   ac1 src_count frame    N[fp+522]   [N[(fp+0X20A)]]
    ac2 dst       frame    frame byte +48 (word fp+24)   [bp(fp+48)]
    ac3 src       frame    frame byte +1046 (word fp+523)   [bp(fp+1046)]
-   idiom ASSIGN-STR-FIXED   features: pad-fill(12<-9)
+   idiom ASSIGN-STR-FIXED   features: -
    dest (c) frame word fp+24 -> WCMV@7016F0C0(dst), WCMV@7016F0A7(dst), WCMV@7016F125(dst)
 
 == 7016F05B WCMV  block 7016F053  func LIST_PLAYERS
-   window 7016F004..7016F059 (46 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
-     7016F004 NLDAI 9 (0x0009),1;
-     7016F006 WMOV 1,0;
-     7016F008 XNSTA 0,[ac3+0x20A];
-     7016F00E WCMV;   .
-     ---- block 7016F019
-     ---- block 7016F01F
-     ---- block 7016F020
-     ---- block 7016F021
-     ---- block 7016F025
-     ---- block 7016F026
-     ---- block 7016F027
-     ---- block 7016F03A
-     7016F042 WCMV;   .
-     ---- block 7016F045
+   window 7016F04F..7016F059 (5 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
      7016F04F LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR
      ---- block 7016F053
      7016F053 XLEFB 2,[ac3+0x30];
@@ -69139,10 +68565,10 @@
      7016F057 XNLDA 1,[ac3+0x20A];
      7016F059 XLEFB 3,[ac3+0x416];
    ac0 dst_count const    12   [12]
-   ac1 src_count const    9   [9]
+   ac1 src_count frame    N[fp+522]   [N[(fp+0X20A)]]
    ac2 dst       frame    frame byte +48 (word fp+24)   [bp(fp+48)]
    ac3 src       frame    frame byte +1046 (word fp+523)   [bp(fp+1046)]
-   idiom ASSIGN-STR-FIXED   features: pad-fill(12<-9)
+   idiom ASSIGN-STR-FIXED   features: -
    dest (c) frame word fp+24 -> WCMV@7016F0C0(dst), WCMV@7016F0A7(dst), WCMV@7016F125(dst)
 
 == 7016F068 WCMV  block 7016F05D  func LIST_PLAYERS
@@ -69195,42 +68621,7 @@
    dest (a) frame word fp+523 -> ?WRITE_SCREEN, ?WRITE_SCREEN, ?WRITE_SCREEN
 
 == 7016F0A7 WCMV  block 7016F09F  func LIST_PLAYERS
-   window 7016F069..7016F0A5 (33 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
-     7016F069 NLDAI 6 (0x0006),1;
-     7016F06B WMOV 1,0;
-     7016F06C LDAFP 3;   .
-     7016F06D XNSTA 0,[ac3+0x20A];
-     7016F06F XLEFB 2,[ac3+0x416];   .
-     7016F071 XLEFB 3,[ac3+0x470];   .
-     7016F073 WCMV;   .
-     7016F074 LDAFP 3;   .
-     7016F075 XPEF [ac3+0x20A];   .
-     7016F077 LPEF [0x70000260];   .
-     7016F07A LCALL [0x7017E27A],2; # ?WRITE_SCREEN   .
-     ---- block 7016F07E
-     7016F07E XPEF [ac3+0x13];   .
-     7016F080 WMOV 3,1;   .
-     7016F081 XCALL [pc+0x4D4] (0x7016F556),1; # symbol not found   .
-     ---- block 7016F084
-     7016F084 MOV.L# 0,0,SNC;   .
-     ---- block 7016F085
-     7016F085 WBR 37 (0x7016F0AA);   .
-     ---- block 7016F086
-     7016F086 XNLDA 0,[ac3+0x13];   .
-     7016F088 WSGTI 0,10 (0x000A);   .
-     ---- block 7016F08A
-     7016F08A WSGT 0,0;   .
-     ---- block 7016F08B
-     7016F08B DERR 17;   .
-     ---- block 7016F08C
-     7016F08C NLDAI 686 (0x02AE),1;   .
-     7016F08E WMUL 1,0;   .
-     7016F08F LWADD 0,[0x70000210];   .
-     7016F092 WMOV 0,2;   .
-     7016F093 XNLDA 2,[ac2+0x7E89];   .
-     7016F095 XWSTA 2,[ac3+0x234];   .
-     7016F097 XPEF [ac3+0x234];   .
-     7016F099 XLEF 2,[ac3+0x20A];   .
+   window 7016F09B..7016F0A5 (5 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
      7016F09B LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR
      ---- block 7016F09F
      7016F09F XLEFB 2,[ac3+0x30];
@@ -69238,29 +68629,15 @@
      7016F0A3 XNLDA 1,[ac3+0x20A];
      7016F0A5 XLEFB 3,[ac3+0x416];
    ac0 dst_count const    12   [12]
-   ac1 src_count const    6   [6]
+   ac1 src_count frame    N[fp+522]   [N[(fp+0X20A)]]
    ac2 dst       frame    frame byte +48 (word fp+24)   [bp(fp+48)]
    ac3 src       frame    frame byte +1046 (word fp+523)   [bp(fp+1046)]
-   idiom ASSIGN-STR-FIXED   features: pad-fill(12<-6)
+   idiom ASSIGN-STR-FIXED   features: -
    dest (c) frame word fp+24 -> WCMV@7016F125(dst), WCMV@7016F12E(src), WCMV@7016F10C(dst), WCMV@7016F18C(dst)
    ultimately (a) via WCMV@7016F12E: via WCMV@7016F13F: frame word fp+523 -> ?WRITE_SCREEN, ?WRITE_SCREEN
 
 == 7016F0C0 WCMV  block 7016F0B8  func LIST_PLAYERS
-   window 7016F069..7016F0BE (46 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
-     7016F069 NLDAI 6 (0x0006),1;
-     7016F06B WMOV 1,0;
-     7016F06D XNSTA 0,[ac3+0x20A];
-     7016F073 WCMV;   .
-     ---- block 7016F07E
-     ---- block 7016F084
-     ---- block 7016F085
-     ---- block 7016F086
-     ---- block 7016F08A
-     ---- block 7016F08B
-     ---- block 7016F08C
-     ---- block 7016F09F
-     7016F0A7 WCMV;   .
-     ---- block 7016F0AA
+   window 7016F0B4..7016F0BE (5 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
      7016F0B4 LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR
      ---- block 7016F0B8
      7016F0B8 XLEFB 2,[ac3+0x30];
@@ -69268,10 +68645,10 @@
      7016F0BC XNLDA 1,[ac3+0x20A];
      7016F0BE XLEFB 3,[ac3+0x416];
    ac0 dst_count const    12   [12]
-   ac1 src_count const    6   [6]
+   ac1 src_count frame    N[fp+522]   [N[(fp+0X20A)]]
    ac2 dst       frame    frame byte +48 (word fp+24)   [bp(fp+48)]
    ac3 src       frame    frame byte +1046 (word fp+523)   [bp(fp+1046)]
-   idiom ASSIGN-STR-FIXED   features: pad-fill(12<-6)
+   idiom ASSIGN-STR-FIXED   features: -
    dest (c) frame word fp+24 -> WCMV@7016F125(dst), WCMV@7016F12E(src), WCMV@7016F10C(dst), WCMV@7016F18C(dst)
    ultimately (a) via WCMV@7016F12E: via WCMV@7016F13F: frame word fp+523 -> ?WRITE_SCREEN, ?WRITE_SCREEN
 
@@ -69325,42 +68702,7 @@
    dest (a) frame word fp+523 -> ?WRITE_SCREEN, ?WRITE_SCREEN, ?WRITE_SCREEN
 
 == 7016F10C WCMV  block 7016F104  func LIST_PLAYERS
-   window 7016F0CE..7016F10A (33 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
-     7016F0CE NLDAI 8 (0x0008),1;
-     7016F0D0 WMOV 1,0;
-     7016F0D1 LDAFP 3;   .
-     7016F0D2 XNSTA 0,[ac3+0x20A];
-     7016F0D4 XLEFB 2,[ac3+0x416];   .
-     7016F0D6 XLEFB 3,[ac3+0x470];   .
-     7016F0D8 WCMV;   .
-     7016F0D9 LDAFP 3;   .
-     7016F0DA XPEF [ac3+0x20A];   .
-     7016F0DC LPEF [0x70000260];   .
-     7016F0DF LCALL [0x7017E27A],2; # ?WRITE_SCREEN   .
-     ---- block 7016F0E3
-     7016F0E3 XPEF [ac3+0x13];   .
-     7016F0E5 WMOV 3,1;   .
-     7016F0E6 XCALL [pc+0x46F] (0x7016F556),1; # symbol not found   .
-     ---- block 7016F0E9
-     7016F0E9 MOV.L# 0,0,SNC;   .
-     ---- block 7016F0EA
-     7016F0EA WBR 37 (0x7016F10F);   .
-     ---- block 7016F0EB
-     7016F0EB XNLDA 0,[ac3+0x13];   .
-     7016F0ED WSGTI 0,10 (0x000A);   .
-     ---- block 7016F0EF
-     7016F0EF WSGT 0,0;   .
-     ---- block 7016F0F0
-     7016F0F0 DERR 17;   .
-     ---- block 7016F0F1
-     7016F0F1 NLDAI 686 (0x02AE),1;   .
-     7016F0F3 WMUL 1,0;   .
-     7016F0F4 LWADD 0,[0x70000210];   .
-     7016F0F7 WMOV 0,2;   .
-     7016F0F8 XNLDA 2,[ac2+0x7FA8];   .
-     7016F0FA XWSTA 2,[ac3+0x234];   .
-     7016F0FC XPEF [ac3+0x234];   .
-     7016F0FE XLEF 2,[ac3+0x20A];   .
+   window 7016F100..7016F10A (5 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
      7016F100 LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR
      ---- block 7016F104
      7016F104 XLEFB 2,[ac3+0x30];
@@ -69368,29 +68710,15 @@
      7016F108 XNLDA 1,[ac3+0x20A];
      7016F10A XLEFB 3,[ac3+0x416];
    ac0 dst_count const    12   [12]
-   ac1 src_count const    8   [8]
+   ac1 src_count frame    N[fp+522]   [N[(fp+0X20A)]]
    ac2 dst       frame    frame byte +48 (word fp+24)   [bp(fp+48)]
    ac3 src       frame    frame byte +1046 (word fp+523)   [bp(fp+1046)]
-   idiom ASSIGN-STR-FIXED   features: pad-fill(12<-8)
+   idiom ASSIGN-STR-FIXED   features: -
    dest (c) frame word fp+24 -> WCMV@7016F12E(src), WCMV@7016F18C(dst), WCMV@7016F195(src), WCMV@7016F173(dst)
    ultimately (a) via WCMV@7016F12E: via WCMV@7016F13F: frame word fp+523 -> ?WRITE_SCREEN, ?WRITE_SCREEN
 
 == 7016F125 WCMV  block 7016F11D  func LIST_PLAYERS
-   window 7016F0CE..7016F123 (46 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
-     7016F0CE NLDAI 8 (0x0008),1;
-     7016F0D0 WMOV 1,0;
-     7016F0D2 XNSTA 0,[ac3+0x20A];
-     7016F0D8 WCMV;   .
-     ---- block 7016F0E3
-     ---- block 7016F0E9
-     ---- block 7016F0EA
-     ---- block 7016F0EB
-     ---- block 7016F0EF
-     ---- block 7016F0F0
-     ---- block 7016F0F1
-     ---- block 7016F104
-     7016F10C WCMV;   .
-     ---- block 7016F10F
+   window 7016F119..7016F123 (5 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
      7016F119 LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR
      ---- block 7016F11D
      7016F11D XLEFB 2,[ac3+0x30];
@@ -69398,10 +68726,10 @@
      7016F121 XNLDA 1,[ac3+0x20A];
      7016F123 XLEFB 3,[ac3+0x416];
    ac0 dst_count const    12   [12]
-   ac1 src_count const    8   [8]
+   ac1 src_count frame    N[fp+522]   [N[(fp+0X20A)]]
    ac2 dst       frame    frame byte +48 (word fp+24)   [bp(fp+48)]
    ac3 src       frame    frame byte +1046 (word fp+523)   [bp(fp+1046)]
-   idiom ASSIGN-STR-FIXED   features: pad-fill(12<-8)
+   idiom ASSIGN-STR-FIXED   features: -
    dest (c) frame word fp+24 -> WCMV@7016F12E(src), WCMV@7016F18C(dst), WCMV@7016F195(src), WCMV@7016F173(dst)
    ultimately (a) via WCMV@7016F12E: via WCMV@7016F13F: frame word fp+523 -> ?WRITE_SCREEN, ?WRITE_SCREEN
 
@@ -69487,42 +68815,7 @@
    dest (a) frame word fp+523 -> ?WRITE_SCREEN, ?WRITE_SCREEN
 
 == 7016F173 WCMV  block 7016F16B  func LIST_PLAYERS
-   window 7016F135..7016F171 (33 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
-     7016F135 NLDAI 9 (0x0009),1;
-     7016F137 WMOV 1,0;
-     7016F138 LDAFP 3;   .
-     7016F139 XNSTA 0,[ac3+0x20A];
-     7016F13B XLEFB 2,[ac3+0x416];   .
-     7016F13D XLEFB 3,[ac3+0x470];   .
-     7016F13F WCMV;   .
-     7016F140 LDAFP 3;   .
-     7016F141 XPEF [ac3+0x20A];   .
-     7016F143 LPEF [0x70000260];   .
-     7016F146 LCALL [0x7017E27A],2; # ?WRITE_SCREEN   .
-     ---- block 7016F14A
-     7016F14A XPEF [ac3+0x13];   .
-     7016F14C WMOV 3,1;   .
-     7016F14D XCALL [pc+0x408] (0x7016F556),1; # symbol not found   .
-     ---- block 7016F150
-     7016F150 MOV.L# 0,0,SNC;   .
-     ---- block 7016F151
-     7016F151 WBR 37 (0x7016F176);   .
-     ---- block 7016F152
-     7016F152 XNLDA 0,[ac3+0x13];   .
-     7016F154 WSGTI 0,10 (0x000A);   .
-     ---- block 7016F156
-     7016F156 WSGT 0,0;   .
-     ---- block 7016F157
-     7016F157 DERR 17;   .
-     ---- block 7016F158
-     7016F158 NLDAI 686 (0x02AE),1;   .
-     7016F15A WMUL 1,0;   .
-     7016F15B LWADD 0,[0x70000210];   .
-     7016F15E WMOV 0,2;   .
-     7016F15F XNLDA 2,[ac2+0x7FA7];   .
-     7016F161 XWSTA 2,[ac3+0x234];   .
-     7016F163 XPEF [ac3+0x234];   .
-     7016F165 XLEF 2,[ac3+0x20A];   .
+   window 7016F167..7016F171 (5 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
      7016F167 LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR
      ---- block 7016F16B
      7016F16B XLEFB 2,[ac3+0x30];
@@ -69530,29 +68823,15 @@
      7016F16F XNLDA 1,[ac3+0x20A];
      7016F171 XLEFB 3,[ac3+0x416];
    ac0 dst_count const    12   [12]
-   ac1 src_count const    9   [9]
+   ac1 src_count frame    N[fp+522]   [N[(fp+0X20A)]]
    ac2 dst       frame    frame byte +48 (word fp+24)   [bp(fp+48)]
    ac3 src       frame    frame byte +1046 (word fp+523)   [bp(fp+1046)]
-   idiom ASSIGN-STR-FIXED   features: pad-fill(12<-9)
+   idiom ASSIGN-STR-FIXED   features: -
    dest (c) frame word fp+24 -> WCMV@7016F195(src), WCMV@7016ED0D(dst)
    ultimately (a) via WCMV@7016F195: via WCMV@7016F1A6: frame word fp+523 -> ?WRITE_SCREEN
 
 == 7016F18C WCMV  block 7016F184  func LIST_PLAYERS
-   window 7016F135..7016F18A (46 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
-     7016F135 NLDAI 9 (0x0009),1;
-     7016F137 WMOV 1,0;
-     7016F139 XNSTA 0,[ac3+0x20A];
-     7016F13F WCMV;   .
-     ---- block 7016F14A
-     ---- block 7016F150
-     ---- block 7016F151
-     ---- block 7016F152
-     ---- block 7016F156
-     ---- block 7016F157
-     ---- block 7016F158
-     ---- block 7016F16B
-     7016F173 WCMV;   .
-     ---- block 7016F176
+   window 7016F180..7016F18A (5 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
      7016F180 LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR
      ---- block 7016F184
      7016F184 XLEFB 2,[ac3+0x30];
@@ -69560,10 +68839,10 @@
      7016F188 XNLDA 1,[ac3+0x20A];
      7016F18A XLEFB 3,[ac3+0x416];
    ac0 dst_count const    12   [12]
-   ac1 src_count const    9   [9]
+   ac1 src_count frame    N[fp+522]   [N[(fp+0X20A)]]
    ac2 dst       frame    frame byte +48 (word fp+24)   [bp(fp+48)]
    ac3 src       frame    frame byte +1046 (word fp+523)   [bp(fp+1046)]
-   idiom ASSIGN-STR-FIXED   features: pad-fill(12<-9)
+   idiom ASSIGN-STR-FIXED   features: -
    dest (c) frame word fp+24 -> WCMV@7016F195(src), WCMV@7016ED0D(dst)
    ultimately (a) via WCMV@7016F195: via WCMV@7016F1A6: frame word fp+523 -> ?WRITE_SCREEN
 
@@ -73645,15 +72924,7 @@
    dest (a) frame word fp+178 -> ?WRITE_SCREEN
 
 == 70170BF0 WCMV  block 70170BCA  func MOVE_IN_CAVE
-   window 70170B15..70170BEF (122 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
-     70170B15 NLDAI 36 (0x0024),0;
-     70170B18 XNSTA 0,[ac3+0x1C];
-     70170B1E WCMV;   .
-     ---- block 70170B39
-     ---- block 70170B3F
-     ---- block 70170B43
-     ---- block 70170B44
-     ---- block 70170B46
+   window 70170B57..70170BEF (90 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
      70170B57 LCALL [0x7017DE33],3; # ?RANDOM_NUMBER
      ---- block 70170B5B
      ---- block 70170B64
@@ -73690,58 +72961,50 @@
      70170BEB XNLDA 0,[ac3+0x1C];
      70170BED XLEFB 3,[ac3+0x3A];
      70170BEF WMOV 0,1;
-   ac0 dst_count const    36   [36]
-   ac1 src_count const    36   [36]
+   ac0 dst_count frame    N[fp+28]   [N[(fp+28)]]
+   ac1 src_count frame    N[fp+28]   [N[(fp+28)]]
    ac2 dst       frame    frame byte +356 (word fp+178) [cont after cont@70170BE9]  BYTE OFFSET (N[(fp+10)]+26)   [bp(fp bytes (N[(fp+10)]+26)+356)]
    ac3 src       frame    frame byte +58 (word fp+29)   [bp(fp+58)]
    idiom CONCAT-PIECE   features: dst-cont, counts-equal
    dest (a) frame word fp+178 -> ?WRITE_SCREEN
 
 == 70170BF9 WCMV  block 70170BCA  func MOVE_IN_CAVE
-   window 70170B15..70170BF8 (128 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
-     70170B15 NLDAI 36 (0x0024),0;
-     70170B18 XNSTA 0,[ac3+0x1C];
-     70170B1E WCMV;   .
-     ---- block 70170B39
-     ---- block 70170B3F
-     ---- block 70170B43
-     ---- block 70170B44
-     ---- block 70170B46
-     ---- block 70170B5B
-     ---- block 70170B64
-     ---- block 70170B65
-     ---- block 70170B66
-     ---- block 70170B75
-     ---- block 70170B76
-     70170B7F WCMV;   .
-     ---- block 70170B82
-     ---- block 70170B83
-     ---- block 70170B84
-     70170B8D WCMV;   .
-     ---- block 70170B8F
-     ---- block 70170B92
-     ---- block 70170B93
-     70170B9C WCMV;   .
-     ---- block 70170BB7
-     ---- block 70170BB8
-     ---- block 70170BBD
-     ---- block 70170BBE
+   window 70170BC6..70170BF8 (32 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
      70170BC6 LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR
      ---- block 70170BCA
      70170BCA XNLDA 0,[ac3+0x1C];
      70170BCC WADD 0,1;
      70170BCD XWSTA 1,[ac3+0x16];
+     70170BCF WINC 1,1;   .
+     70170BD0 XLEFB 2,[ac3+0x74];   .
+     70170BD2 NLDAI 26 (0x001A),0;   .
+     70170BD4 XWSTA 1,[ac3+0x1A];   .
+     70170BD6 XLEFB 3,[pc+0xEA5C] (0x70170105:0);   .
+     70170BD8 WMOV 0,1;   .
      70170BD9 WCMV;   .
+     70170BDA LDAFP 3;   .
+     70170BDB XNLDA 0,[ac3+0xA];   .
+     70170BDD XLEFB 3,[ac3+0x16];   .
+     70170BDF WMOV 0,1;   .
      70170BE0 WCMV;   .
+     70170BE1 LDAFP 3;   .
+     70170BE2 XLEFB 2,[ac3+0x164];   .
+     70170BE4 XWLDA 0,[ac3+0x18];   .
+     70170BE6 XLEFB 3,[ac3+0x74];   .
+     70170BE8 WMOV 0,1;   .
      70170BE9 WCMV;   .
+     70170BEA LDAFP 3;   .
+     70170BEB XNLDA 0,[ac3+0x1C];   .
+     70170BED XLEFB 3,[ac3+0x3A];   .
+     70170BEF WMOV 0,1;   .
      70170BF0 WCMV;   .
      70170BF1 LDAFP 3;
      70170BF2 XLEFB 2,[ac3+0xFC];
      70170BF4 XWLDA 0,[ac3+0x16];
      70170BF6 XLEFB 3,[ac3+0x164];
      70170BF8 WMOV 0,1;
-   ac0 dst_count computed (unk(LCALL:?UNSIGNED_TO_CHAR@70170BC6)+36)   [(unk(LCALL:?UNSIGNED_TO_CHAR@70170BC6)+36)]
-   ac1 src_count computed (unk(LCALL:?UNSIGNED_TO_CHAR@70170BC6)+36)   [(unk(LCALL:?UNSIGNED_TO_CHAR@70170BC6)+36)]
+   ac0 dst_count computed (unk(LCALL:?UNSIGNED_TO_CHAR@70170BC6)+N[(fp+28)])   [(unk(LCALL:?UNSIGNED_TO_CHAR@70170BC6)+N[(fp+28)])]
+   ac1 src_count computed (unk(LCALL:?UNSIGNED_TO_CHAR@70170BC6)+N[(fp+28)])   [(unk(LCALL:?UNSIGNED_TO_CHAR@70170BC6)+N[(fp+28)])]
    ac2 dst       frame    frame byte +252 (word fp+126)   [bp(fp+252)]
    ac3 src       frame    frame byte +356 (word fp+178)   [bp(fp+356)]
    idiom COPY-STR-EXACT+CALLRESULT   features: counts-equal, count-from-call
@@ -73749,34 +73012,7 @@
    ultimately (a) via WCMV@70170C07: frame word fp+179 -> ?WRITE_SCREEN
 
 == 70170C07 WCMV  block 70170BCA  func MOVE_IN_CAVE
-   window 70170B15..70170C05 (137 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
-     70170B15 NLDAI 36 (0x0024),0;
-     70170B18 XNSTA 0,[ac3+0x1C];
-     70170B1E WCMV;   .
-     ---- block 70170B39
-     ---- block 70170B3F
-     ---- block 70170B43
-     ---- block 70170B44
-     ---- block 70170B46
-     ---- block 70170B5B
-     ---- block 70170B64
-     ---- block 70170B65
-     ---- block 70170B66
-     ---- block 70170B75
-     ---- block 70170B76
-     70170B7F WCMV;   .
-     ---- block 70170B82
-     ---- block 70170B83
-     ---- block 70170B84
-     70170B8D WCMV;   .
-     ---- block 70170B8F
-     ---- block 70170B92
-     ---- block 70170B93
-     70170B9C WCMV;   .
-     ---- block 70170BB7
-     ---- block 70170BB8
-     ---- block 70170BBD
-     ---- block 70170BBE
+   window 70170BC6..70170C05 (41 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
      70170BC6 LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR
      ---- block 70170BCA
      70170BCA XNLDA 0,[ac3+0x1C];
@@ -73793,8 +73029,8 @@
      70170C00 WMOV 0,1;
      70170C03 XLEFB 2,[ac3+0x166];
      70170C05 XLEFB 3,[ac3+0xFC];
-   ac0 dst_count computed (unk(LCALL:?UNSIGNED_TO_CHAR@70170BC6)+37)   [(unk(LCALL:?UNSIGNED_TO_CHAR@70170BC6)+37)]
-   ac1 src_count computed (unk(LCALL:?UNSIGNED_TO_CHAR@70170BC6)+37)   [(unk(LCALL:?UNSIGNED_TO_CHAR@70170BC6)+37)]
+   ac0 dst_count computed (unk(LCALL:?UNSIGNED_TO_CHAR@70170BC6)+N[(fp+28)]+1)   [(unk(LCALL:?UNSIGNED_TO_CHAR@70170BC6)+N[(fp+28)]+1)]
+   ac1 src_count computed (unk(LCALL:?UNSIGNED_TO_CHAR@70170BC6)+N[(fp+28)]+1)   [(unk(LCALL:?UNSIGNED_TO_CHAR@70170BC6)+N[(fp+28)]+1)]
    ac2 dst       frame    frame byte +358 (word fp+179)   [bp(fp+358)]
    ac3 src       frame    frame byte +252 (word fp+126)   [bp(fp+252)]
    idiom ASSIGN-STR-VARYING+CALLRESULT   features: lenword-store, counts-equal, count-from-call
@@ -86050,55 +85286,21 @@
    dest (a) frame word fp+71 -> ?WRITE_SCREEN
 
 == 70173BD7 WCMV  block 70173BC7  func OP_EDIT
-   window 70173AF1..70173BD6 (127 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
-     70173AF1 LCALL [0x7017E27A],5; # ?WRITE_SCREEN
-     ---- block 70173AF5
-     ---- block 70173AF6
-     ---- block 70173AF9
-     ---- block 70173AFC
-     ---- block 70173AFD
-     ---- block 70173AFF
-     70173AFF XNLDA 0,[ac3+0x11];
-     ---- block 70173B03
-     ---- block 70173B04
-     ---- block 70173B05
-     70173B05 NLDAI 20 (0x0014),1;
-     70173B07 WMUL 1,0;
-     70173B0A LWADD 0,[0x70000212];
-     70173B0D WMOV 0,2;
-     70173B0E XNLDA 2,[ac2+0x7FF1];
-     70173B10 WINC 2,2;
-     70173B11 XWSTA 2,[ac3+0x24];
-     70173B29 WCMV;   .
-     70173B2B XWLDA 1,[ac3+0x24];
-     70173B2D WMOV 1,0;
-     70173B2E XNSTA 0,[ac3+0x46];
-     70173B34 WCMV;   .
-     ---- block 70173B4D
-     ---- block 70173B51
-     ---- block 70173B52
-     ---- block 70173B53
-     ---- block 70173B66
-     ---- block 70173B70
-     ---- block 70173B71
-     ---- block 70173B72
-     ---- block 70173B87
-     ---- block 70173B91
-     ---- block 70173B92
-     ---- block 70173B93
-     ---- block 70173BA7
-     ---- block 70173BB1
-     ---- block 70173BB2
-     ---- block 70173BB3
+   window 70173BC3..70173BD6 (11 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
      70173BC3 LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR
      ---- block 70173BC7
+     70173BC7 XNLDA 1,[ac3+0x88];   .
+     70173BC9 WADD 1,0;   .
      70173BCA XLEFB 2,[ac3+0x138];
+     70173BCC NLDAI 11 (0x000B),1;   .
+     70173BCE WSTB 2,1;   .
      70173BCF WINC 2,2;
+     70173BD0 XWSTA 0,[ac3+0x86];   .
      70173BD2 XNLDA 0,[ac3+0x46];
      70173BD4 XLEFB 3,[ac3+0x8E];
      70173BD6 WMOV 0,1;
-   ac0 dst_count computed load N[(+20*N[(fp+17)]+W[0x70000212]-15)] +1 (computed length word plus constant)   [(N[(+20*N[(fp+17)]+W[0x70000212]-15)]+1)]
-   ac1 src_count computed load N[(+20*N[(fp+17)]+W[0x70000212]-15)] +1 (computed length word plus constant)   [(N[(+20*N[(fp+17)]+W[0x70000212]-15)]+1)]
+   ac0 dst_count frame    N[fp+70]   [N[(fp+70)]]
+   ac1 src_count frame    N[fp+70]   [N[(fp+70)]]
    ac2 dst       frame    frame byte +313 (word fp+156 +1 byte)   [bp(fp+313)]
    ac3 src       frame    frame byte +142 (word fp+71)   [bp(fp+142)]
    idiom COPY-STR-EXACT   features: counts-equal
@@ -86106,34 +85308,8 @@
    ultimately (a) via WCMV@70173BE0: frame word fp+70 -> ?WRITE_SCREEN
 
 == 70173BE0 WCMV  block 70173BC7  func OP_EDIT
-   window 70173AF1..70173BDF (133 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
-     70173AF1 LCALL [0x7017E27A],5; # ?WRITE_SCREEN
-     ---- block 70173AF5
-     ---- block 70173AF6
-     ---- block 70173AF9
-     ---- block 70173AFC
-     ---- block 70173AFD
-     ---- block 70173AFF
-     70173AFF XNLDA 0,[ac3+0x11];
-     ---- block 70173B03
-     ---- block 70173B04
-     ---- block 70173B05
-     70173B05 NLDAI 20 (0x0014),1;
-     70173B07 WMUL 1,0;
-     70173B0A LWADD 0,[0x70000212];
-     70173B0D WMOV 0,2;
-     70173B0E XNLDA 2,[ac2+0x7FF1];
-     70173B10 WINC 2,2;
-     70173B11 XWSTA 2,[ac3+0x24];
-     70173B29 WCMV;   .
-     70173B2B XWLDA 1,[ac3+0x24];
-     70173B2D WMOV 1,0;
-     70173B2E XNSTA 0,[ac3+0x46];
-     70173B34 WCMV;   .
-     ---- block 70173B4D
-     ---- block 70173B51
-     ---- block 70173B52
-     ---- block 70173B53
+   window 70173B62..70173BDF (69 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
+     70173B62 LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR
      ---- block 70173B66
      70173B66 XNLDA 0,[ac3+0x46];
      70173B68 WINC 0,0;
@@ -86156,42 +85332,16 @@
      70173BDB XWLDA 0,[ac3+0x22];
      70173BDD XLEFB 3,[ac3+0x138];
      70173BDF WMOV 0,1;
-   ac0 dst_count computed load N[(+20*N[(fp+17)]+W[0x70000212]-15)] +2 (computed length word plus constant)   [(N[(+20*N[(fp+17)]+W[0x70000212]-15)]+2)]
-   ac1 src_count computed load N[(+20*N[(fp+17)]+W[0x70000212]-15)] +2 (computed length word plus constant)   [(N[(+20*N[(fp+17)]+W[0x70000212]-15)]+2)]
+   ac0 dst_count computed N[fp+70] +1 (frame length word plus constant)   [(N[(fp+70)]+1)]
+   ac1 src_count computed N[fp+70] +1 (frame length word plus constant)   [(N[(fp+70)]+1)]
    ac2 dst       frame    frame byte +140 (word fp+70)   [bp(fp+140)]
    ac3 src       frame    frame byte +312 (word fp+156)   [bp(fp+312)]
    idiom COPY-STR-EXACT   features: counts-equal
    dest (a) frame word fp+70 -> ?WRITE_SCREEN
 
 == 70173BEC WCMV  block 70173BC7  func OP_EDIT
-   window 70173AF1..70173BEB (141 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
-     70173AF1 LCALL [0x7017E27A],5; # ?WRITE_SCREEN
-     ---- block 70173AF5
-     ---- block 70173AF6
-     ---- block 70173AF9
-     ---- block 70173AFC
-     ---- block 70173AFD
-     ---- block 70173AFF
-     70173AFF XNLDA 0,[ac3+0x11];
-     ---- block 70173B03
-     ---- block 70173B04
-     ---- block 70173B05
-     70173B05 NLDAI 20 (0x0014),1;
-     70173B07 WMUL 1,0;
-     70173B0A LWADD 0,[0x70000212];
-     70173B0D WMOV 0,2;
-     70173B0E XNLDA 2,[ac2+0x7FF1];
-     70173B10 WINC 2,2;
-     70173B11 XWSTA 2,[ac3+0x24];
-     70173B29 WCMV;   .
-     70173B2B XWLDA 1,[ac3+0x24];
-     70173B2D WMOV 1,0;
-     70173B2E XNSTA 0,[ac3+0x46];
-     70173B34 WCMV;   .
-     ---- block 70173B4D
-     ---- block 70173B51
-     ---- block 70173B52
-     ---- block 70173B53
+   window 70173B62..70173BEB (77 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
+     70173B62 LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR
      ---- block 70173B66
      70173B66 XNLDA 0,[ac3+0x46];
      70173B68 WINC 0,0;
@@ -86216,8 +85366,8 @@
      70173BE7 XWLDA 0,[ac3+0x28];
      70173BE9 XLEFB 3,[ac3+0x8C];
      70173BEB WMOV 0,1;
-   ac0 dst_count computed load N[(+20*N[(fp+17)]+W[0x70000212]-15)] +3 (computed length word plus constant)   [(N[(+20*N[(fp+17)]+W[0x70000212]-15)]+3)]
-   ac1 src_count computed load N[(+20*N[(fp+17)]+W[0x70000212]-15)] +3 (computed length word plus constant)   [(N[(+20*N[(fp+17)]+W[0x70000212]-15)]+3)]
+   ac0 dst_count computed N[fp+70] +2 (frame length word plus constant)   [(N[(fp+70)]+2)]
+   ac1 src_count computed N[fp+70] +2 (frame length word plus constant)   [(N[(fp+70)]+2)]
    ac2 dst       frame    frame byte +348 (word fp+174)   [bp(fp+348)]
    ac3 src       frame    frame byte +140 (word fp+70)   [bp(fp+140)]
    idiom COPY-STR-EXACT   features: counts-equal
@@ -86225,34 +85375,8 @@
    ultimately (a) via WCMV@70173BFC: via WCMV@70173C0B: via WCMV@70173C1B: via WCMV@70173C27: via WCMV@70173C39: frame word fp+417 -> ?WRITE_SCREEN
 
 == 70173BF3 WCMV  block 70173BC7  func OP_EDIT
-   window 70173AF1..70173BF2 (146 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
-     70173AF1 LCALL [0x7017E27A],5; # ?WRITE_SCREEN
-     ---- block 70173AF5
-     ---- block 70173AF6
-     ---- block 70173AF9
-     ---- block 70173AFC
-     ---- block 70173AFD
-     ---- block 70173AFF
-     70173AFF XNLDA 0,[ac3+0x11];
-     ---- block 70173B03
-     ---- block 70173B04
-     ---- block 70173B05
-     70173B05 NLDAI 20 (0x0014),1;
-     70173B07 WMUL 1,0;
-     70173B0A LWADD 0,[0x70000212];
-     70173B0D WMOV 0,2;
-     70173B0E XNLDA 2,[ac2+0x7FF1];
-     70173B10 WINC 2,2;
-     70173B11 XWSTA 2,[ac3+0x24];
-     70173B29 WCMV;   .
-     70173B2B XWLDA 1,[ac3+0x24];
-     70173B2D WMOV 1,0;
-     70173B2E XNSTA 0,[ac3+0x46];
-     70173B34 WCMV;   .
-     ---- block 70173B4D
-     ---- block 70173B51
-     ---- block 70173B52
-     ---- block 70173B53
+   window 70173B62..70173BF2 (82 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
+     70173B62 LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR
      ---- block 70173B66
      70173B66 XNLDA 0,[ac3+0x46];
      70173B68 WINC 0,0;
@@ -86282,7 +85406,7 @@
      70173BF2 WMOV 0,1;
    ac0 dst_count frame    N[fp+98]   [N[(fp+98)]]
    ac1 src_count frame    N[fp+98]   [N[(fp+98)]]
-   ac2 dst       frame    frame byte +348 (word fp+174) [cont after cont@70173BEC]  BYTE OFFSET (N[(+20*N[(fp+17)]+W[0x70000212]-15)]+3)   [bp(fp bytes (N[(+20*N[(fp+17)]+W[0x70000212]-15)]+3)+348)]
+   ac2 dst       frame    frame byte +348 (word fp+174) [cont after cont@70173BEC]  BYTE OFFSET (N[(fp+70)]+2)   [bp(fp bytes (N[(fp+70)]+2)+348)]
    ac3 src       frame    frame byte +198 (word fp+99)   [bp(fp+198)]
    idiom CONCAT-PIECE   features: dst-cont, counts-equal
    dest (c) frame word fp+174 -> WCMV@70173BFC(src)
@@ -86701,87 +85825,21 @@
    dest (a) frame word fp+99 -> ?WRITE_SCREEN
 
 == 70173D12 WCMV  block 70173D02  func OP_EDIT
-   window 70173AF1..70173D11 (311 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
-     70173AF1 LCALL [0x7017E27A],5; # ?WRITE_SCREEN
-     ---- block 70173AF5
-     ---- block 70173AF6
-     ---- block 70173AF9
-     ---- block 70173AFC
-     ---- block 70173AFD
-     ---- block 70173AFF
-     ---- block 70173B03
-     ---- block 70173B04
-     ---- block 70173B05
-     70173B29 WCMV;   .
-     70173B34 WCMV;   .
-     ---- block 70173B4D
-     ---- block 70173B51
-     ---- block 70173B52
-     ---- block 70173B53
-     ---- block 70173B66
-     ---- block 70173B70
-     ---- block 70173B71
-     ---- block 70173B72
-     ---- block 70173B87
-     ---- block 70173B91
-     ---- block 70173B92
-     ---- block 70173B93
-     ---- block 70173BA7
-     ---- block 70173BB1
-     ---- block 70173BB2
-     ---- block 70173BB3
-     ---- block 70173BC7
-     70173BD7 WCMV;   .
-     70173BE0 WCMV;   .
-     70173BEC WCMV;   .
-     70173BF3 WCMV;   .
-     70173BFC WCMV;   .
-     70173C02 WCMV;   .
-     70173C0B WCMV;   .
-     70173C12 WCMV;   .
-     70173C1B WCMV;   .
-     70173C27 WCMV;   .
-     70173C2E WCMV;   .
-     70173C39 WCMV;   .
-     ---- block 70173C57
-     ---- block 70173C59
-     70173C59 XNLDA 0,[ac3+0x11];
-     ---- block 70173C5D
-     ---- block 70173C5E
-     ---- block 70173C5F
-     70173C5F NLDAI 19 (0x0013),1;
-     70173C61 WMUL 1,0;
-     70173C64 LWADD 0,[0x70000212];
-     70173C67 WMOV 0,2;
-     70173C68 XNLDA 2,[ac2+0x7C2];
-     70173C6A WINC 2,2;
-     70173C6B XWSTA 2,[ac3+0x24];
-     70173C83 WCMV;   .
-     70173C85 XWLDA 1,[ac3+0x24];
-     70173C87 WMOV 1,0;
-     70173C88 XNSTA 0,[ac3+0x62];
-     70173C8E WCMV;   .
-     ---- block 70173CA7
-     ---- block 70173CAB
-     ---- block 70173CAC
-     ---- block 70173CAD
-     ---- block 70173CC0
-     ---- block 70173CCA
-     ---- block 70173CCB
-     ---- block 70173CCC
-     ---- block 70173CE1
-     ---- block 70173CEC
-     ---- block 70173CED
-     ---- block 70173CEE
+   window 70173CFE..70173D11 (11 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
      70173CFE LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR
      ---- block 70173D02
+     70173D02 XNLDA 1,[ac3+0x88];   .
+     70173D04 WADD 1,0;   .
      70173D05 XLEFB 2,[ac3+0x138];
+     70173D07 NLDAI 11 (0x000B),1;   .
+     70173D09 WSTB 2,1;   .
      70173D0A WINC 2,2;
+     70173D0B XWSTA 0,[ac3+0x26];   .
      70173D0D XNLDA 0,[ac3+0x62];
      70173D0F XLEFB 3,[ac3+0xC6];
      70173D11 WMOV 0,1;
-   ac0 dst_count computed load N[(+19*N[(fp+17)]+W[0x70000212]+0X7C2)] +1 (computed length word plus constant)   [(N[(+19*N[(fp+17)]+W[0x70000212]+0X7C2)]+1)]
-   ac1 src_count computed load N[(+19*N[(fp+17)]+W[0x70000212]+0X7C2)] +1 (computed length word plus constant)   [(N[(+19*N[(fp+17)]+W[0x70000212]+0X7C2)]+1)]
+   ac0 dst_count frame    N[fp+98]   [N[(fp+98)]]
+   ac1 src_count frame    N[fp+98]   [N[(fp+98)]]
    ac2 dst       frame    frame byte +313 (word fp+156 +1 byte)   [bp(fp+313)]
    ac3 src       frame    frame byte +198 (word fp+99)   [bp(fp+198)]
    idiom COPY-STR-EXACT   features: counts-equal
@@ -86789,70 +85847,8 @@
    ultimately (a) via WCMV@70173D1B: frame word fp+98 -> ?WRITE_SCREEN
 
 == 70173D1B WCMV  block 70173D02  func OP_EDIT
-   window 70173AF1..70173D1A (317 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
-     70173AF1 LCALL [0x7017E27A],5; # ?WRITE_SCREEN
-     ---- block 70173AF5
-     ---- block 70173AF6
-     ---- block 70173AF9
-     ---- block 70173AFC
-     ---- block 70173AFD
-     ---- block 70173AFF
-     ---- block 70173B03
-     ---- block 70173B04
-     ---- block 70173B05
-     70173B29 WCMV;   .
-     70173B34 WCMV;   .
-     ---- block 70173B4D
-     ---- block 70173B51
-     ---- block 70173B52
-     ---- block 70173B53
-     ---- block 70173B66
-     ---- block 70173B70
-     ---- block 70173B71
-     ---- block 70173B72
-     ---- block 70173B87
-     ---- block 70173B91
-     ---- block 70173B92
-     ---- block 70173B93
-     ---- block 70173BA7
-     ---- block 70173BB1
-     ---- block 70173BB2
-     ---- block 70173BB3
-     ---- block 70173BC7
-     70173BD7 WCMV;   .
-     70173BE0 WCMV;   .
-     70173BEC WCMV;   .
-     70173BF3 WCMV;   .
-     70173BFC WCMV;   .
-     70173C02 WCMV;   .
-     70173C0B WCMV;   .
-     70173C12 WCMV;   .
-     70173C1B WCMV;   .
-     70173C27 WCMV;   .
-     70173C2E WCMV;   .
-     70173C39 WCMV;   .
-     ---- block 70173C57
-     ---- block 70173C59
-     70173C59 XNLDA 0,[ac3+0x11];
-     ---- block 70173C5D
-     ---- block 70173C5E
-     ---- block 70173C5F
-     70173C5F NLDAI 19 (0x0013),1;
-     70173C61 WMUL 1,0;
-     70173C64 LWADD 0,[0x70000212];
-     70173C67 WMOV 0,2;
-     70173C68 XNLDA 2,[ac2+0x7C2];
-     70173C6A WINC 2,2;
-     70173C6B XWSTA 2,[ac3+0x24];
-     70173C83 WCMV;   .
-     70173C85 XWLDA 1,[ac3+0x24];
-     70173C87 WMOV 1,0;
-     70173C88 XNSTA 0,[ac3+0x62];
-     70173C8E WCMV;   .
-     ---- block 70173CA7
-     ---- block 70173CAB
-     ---- block 70173CAC
-     ---- block 70173CAD
+   window 70173CBC..70173D1A (52 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
+     70173CBC LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR
      ---- block 70173CC0
      70173CC0 XNLDA 0,[ac3+0x62];
      70173CC2 WINC 0,0;
@@ -86871,78 +85867,16 @@
      70173D16 XWLDA 0,[ac3+0x22];
      70173D18 XLEFB 3,[ac3+0x138];
      70173D1A WMOV 0,1;
-   ac0 dst_count computed load N[(+19*N[(fp+17)]+W[0x70000212]+0X7C2)] +2 (computed length word plus constant)   [(N[(+19*N[(fp+17)]+W[0x70000212]+0X7C2)]+2)]
-   ac1 src_count computed load N[(+19*N[(fp+17)]+W[0x70000212]+0X7C2)] +2 (computed length word plus constant)   [(N[(+19*N[(fp+17)]+W[0x70000212]+0X7C2)]+2)]
+   ac0 dst_count computed N[fp+98] +1 (frame length word plus constant)   [(N[(fp+98)]+1)]
+   ac1 src_count computed N[fp+98] +1 (frame length word plus constant)   [(N[(fp+98)]+1)]
    ac2 dst       frame    frame byte +196 (word fp+98)   [bp(fp+196)]
    ac3 src       frame    frame byte +312 (word fp+156)   [bp(fp+312)]
    idiom COPY-STR-EXACT   features: counts-equal
    dest (a) frame word fp+98 -> ?WRITE_SCREEN
 
 == 70173D27 WCMV  block 70173D02  func OP_EDIT
-   window 70173AF1..70173D26 (325 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
-     70173AF1 LCALL [0x7017E27A],5; # ?WRITE_SCREEN
-     ---- block 70173AF5
-     ---- block 70173AF6
-     ---- block 70173AF9
-     ---- block 70173AFC
-     ---- block 70173AFD
-     ---- block 70173AFF
-     ---- block 70173B03
-     ---- block 70173B04
-     ---- block 70173B05
-     70173B29 WCMV;   .
-     70173B34 WCMV;   .
-     ---- block 70173B4D
-     ---- block 70173B51
-     ---- block 70173B52
-     ---- block 70173B53
-     ---- block 70173B66
-     ---- block 70173B70
-     ---- block 70173B71
-     ---- block 70173B72
-     ---- block 70173B87
-     ---- block 70173B91
-     ---- block 70173B92
-     ---- block 70173B93
-     ---- block 70173BA7
-     ---- block 70173BB1
-     ---- block 70173BB2
-     ---- block 70173BB3
-     ---- block 70173BC7
-     70173BD7 WCMV;   .
-     70173BE0 WCMV;   .
-     70173BEC WCMV;   .
-     70173BF3 WCMV;   .
-     70173BFC WCMV;   .
-     70173C02 WCMV;   .
-     70173C0B WCMV;   .
-     70173C12 WCMV;   .
-     70173C1B WCMV;   .
-     70173C27 WCMV;   .
-     70173C2E WCMV;   .
-     70173C39 WCMV;   .
-     ---- block 70173C57
-     ---- block 70173C59
-     70173C59 XNLDA 0,[ac3+0x11];
-     ---- block 70173C5D
-     ---- block 70173C5E
-     ---- block 70173C5F
-     70173C5F NLDAI 19 (0x0013),1;
-     70173C61 WMUL 1,0;
-     70173C64 LWADD 0,[0x70000212];
-     70173C67 WMOV 0,2;
-     70173C68 XNLDA 2,[ac2+0x7C2];
-     70173C6A WINC 2,2;
-     70173C6B XWSTA 2,[ac3+0x24];
-     70173C83 WCMV;   .
-     70173C85 XWLDA 1,[ac3+0x24];
-     70173C87 WMOV 1,0;
-     70173C88 XNSTA 0,[ac3+0x62];
-     70173C8E WCMV;   .
-     ---- block 70173CA7
-     ---- block 70173CAB
-     ---- block 70173CAC
-     ---- block 70173CAD
+   window 70173CBC..70173D26 (60 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
+     70173CBC LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR
      ---- block 70173CC0
      70173CC0 XNLDA 0,[ac3+0x62];
      70173CC2 WINC 0,0;
@@ -86963,8 +85897,8 @@
      70173D22 XWLDA 0,[ac3+0x86];
      70173D24 XLEFB 3,[ac3+0xC4];
      70173D26 WMOV 0,1;
-   ac0 dst_count computed load N[(+19*N[(fp+17)]+W[0x70000212]+0X7C2)] +3 (computed length word plus constant)   [(N[(+19*N[(fp+17)]+W[0x70000212]+0X7C2)]+3)]
-   ac1 src_count computed load N[(+19*N[(fp+17)]+W[0x70000212]+0X7C2)] +3 (computed length word plus constant)   [(N[(+19*N[(fp+17)]+W[0x70000212]+0X7C2)]+3)]
+   ac0 dst_count computed N[fp+98] +2 (frame length word plus constant)   [(N[(fp+98)]+2)]
+   ac1 src_count computed N[fp+98] +2 (frame length word plus constant)   [(N[(fp+98)]+2)]
    ac2 dst       frame    frame byte +348 (word fp+174)   [bp(fp+348)]
    ac3 src       frame    frame byte +196 (word fp+98)   [bp(fp+196)]
    idiom COPY-STR-EXACT   features: counts-equal
@@ -86972,70 +85906,8 @@
    ultimately (a) via WCMV@70173D37: via WCMV@70173D46: via WCMV@70173D58: frame word fp+417 -> ?WRITE_SCREEN
 
 == 70173D2E WCMV  block 70173D02  func OP_EDIT
-   window 70173AF1..70173D2D (330 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
-     70173AF1 LCALL [0x7017E27A],5; # ?WRITE_SCREEN
-     ---- block 70173AF5
-     ---- block 70173AF6
-     ---- block 70173AF9
-     ---- block 70173AFC
-     ---- block 70173AFD
-     ---- block 70173AFF
-     ---- block 70173B03
-     ---- block 70173B04
-     ---- block 70173B05
-     70173B29 WCMV;   .
-     70173B34 WCMV;   .
-     ---- block 70173B4D
-     ---- block 70173B51
-     ---- block 70173B52
-     ---- block 70173B53
-     ---- block 70173B66
-     ---- block 70173B70
-     ---- block 70173B71
-     ---- block 70173B72
-     ---- block 70173B87
-     ---- block 70173B91
-     ---- block 70173B92
-     ---- block 70173B93
-     ---- block 70173BA7
-     ---- block 70173BB1
-     ---- block 70173BB2
-     ---- block 70173BB3
-     ---- block 70173BC7
-     70173BD7 WCMV;   .
-     70173BE0 WCMV;   .
-     70173BEC WCMV;   .
-     70173BF3 WCMV;   .
-     70173BFC WCMV;   .
-     70173C02 WCMV;   .
-     70173C0B WCMV;   .
-     70173C12 WCMV;   .
-     70173C1B WCMV;   .
-     70173C27 WCMV;   .
-     70173C2E WCMV;   .
-     70173C39 WCMV;   .
-     ---- block 70173C57
-     ---- block 70173C59
-     70173C59 XNLDA 0,[ac3+0x11];
-     ---- block 70173C5D
-     ---- block 70173C5E
-     ---- block 70173C5F
-     70173C5F NLDAI 19 (0x0013),1;
-     70173C61 WMUL 1,0;
-     70173C64 LWADD 0,[0x70000212];
-     70173C67 WMOV 0,2;
-     70173C68 XNLDA 2,[ac2+0x7C2];
-     70173C6A WINC 2,2;
-     70173C6B XWSTA 2,[ac3+0x24];
-     70173C83 WCMV;   .
-     70173C85 XWLDA 1,[ac3+0x24];
-     70173C87 WMOV 1,0;
-     70173C88 XNSTA 0,[ac3+0x62];
-     70173C8E WCMV;   .
-     ---- block 70173CA7
-     ---- block 70173CAB
-     ---- block 70173CAC
-     ---- block 70173CAD
+   window 70173CBC..70173D2D (65 instr)  WINDOW CROSSES BLOCK BOUNDARY (unique-predecessor chain)
+     70173CBC LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR
      ---- block 70173CC0
      70173CC0 XNLDA 0,[ac3+0x62];
      70173CC2 WINC 0,0;
@@ -87061,7 +85933,7 @@
      70173D2D WMOV 0,1;
    ac0 dst_count frame    N[fp+116]   [N[(fp+116)]]
    ac1 src_count frame    N[fp+116]   [N[(fp+116)]]
-   ac2 dst       frame    frame byte +348 (word fp+174) [cont after cont@70173D27]  BYTE OFFSET (N[(+19*N[(fp+17)]+W[0x70000212]+0X7C2)]+3)   [bp(fp bytes (N[(+19*N[(fp+17)]+W[0x70000212]+0X7C2)]+3)+348)]
+   ac2 dst       frame    frame byte +348 (word fp+174) [cont after cont@70173D27]  BYTE OFFSET (N[(fp+98)]+2)   [bp(fp bytes (N[(fp+98)]+2)+348)]
    ac3 src       frame    frame byte +234 (word fp+117)   [bp(fp+234)]
    idiom CONCAT-PIECE   features: dst-cont, counts-equal
    dest (c) frame word fp+174 -> WCMV@70173D37(src)

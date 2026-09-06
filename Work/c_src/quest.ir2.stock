@@ -1,10 +1,10 @@
 ir 5
 mode stock
 source  ../../Disassembled/quest.dis sha256=5c1db5fb75c8c26a70eaeab5760213973d1c80e8711b6dacbb9c28376d4118f4
-blocks  quest.blocks.split sha256=1d3baaf6487a8e3faf4c900e49dbcaae6ddbe1e7f996a47b161c74b502b43477
+blocks  quest.blocks.split sha256=ba30a84139a7d2f489cdb6345eddde4dfdf6c77d6d75f2eaa14ab3df58a829d0
 pushmap quest.pushmap.M4 sha256=b89536597005f3045dcf31756d02bc6b315b6b09a7fd5b1b05765be44eb73229
 argmap  ../../Disassembled/quest.argmap sha256=39c42d4c4b749f323cb6193b4fcc52d513e9bf080f159e199569e63c3177e035
-strings ../docs/Project31/p31.tsv sha256=8fb1cb6d59398d1b2d8abdbe7174591d55500cad91d846ae044bdaca3cf7a431
+strings ../docs/Project31/p31.tsv sha256=d09a7063ead0455f68c2fd5157deab2c374bc40714912218784b3ecfaa69f8e7
 
 block 7015BD20 seg 0x70000000
   @7015BD20 WSAVS 0x0000;
@@ -7210,7 +7210,12 @@ block 7015E95E seg 0x70000000
   ac1 = ac0 ; WMOV 0,1;
   @7015E985 WCMV;
   ac3 = wfp ; LDAFP 3;
-  [@wp(ac3, 112), 71 varying] = [@bp(ac3, 148), 71] ; WCMV;  <- XWLDA 1,[ac3+0x48]; WMOV 1,0; XNSTA 0,[ac3+0x70]; XLEFB 2,[ac3+0xE2]; XLEFB 3,[ac3+0x94];
+  ac1 = M32[wp(ac3, 72)] ; XWLDA 1,[ac3+0x48];
+  ac0 = ac1 ; WMOV 1,0;
+  M16[wp(ac3, 112)] = trunc16(ac0) ; XNSTA 0,[ac3+0x70];
+  ac2 = bp(ac3, 226) ; XLEFB 2,[ac3+0xE2];
+  ac3 = bp(ac3, 148) ; XLEFB 3,[ac3+0x94];
+  @7015E990 WCMV;
   ac3 = wfp ; LDAFP 3;
   rt_call ?WRITE_SCREEN(0x70000260, wp(ac3, 112)) site=7015E997 ; LCALL [0x7017E27A],2; # ?WRITE_SCREEN  <- XPEF [ac3+0x70]; LPEF [0x70000260];
 
@@ -22441,7 +22446,12 @@ block 7016434C seg 0x70000000
   ac1 = ac0 ; WMOV 0,1;
   @70164373 WCMV;
   ac3 = wfp ; LDAFP 3;
-  [@wp(ac3, 130), 50 varying] = [@bp(ac3, 176), 50] ; WCMV;  <- XWLDA 1,[ac3+0x28]; WMOV 1,0; XNSTA 0,[ac3+0x82]; XLEFB 2,[ac3+0x106]; XLEFB 3,[ac3+0xB0];
+  ac1 = M32[wp(ac3, 40)] ; XWLDA 1,[ac3+0x28];
+  ac0 = ac1 ; WMOV 1,0;
+  M16[wp(ac3, 130)] = trunc16(ac0) ; XNSTA 0,[ac3+0x82];
+  ac2 = bp(ac3, 262) ; XLEFB 2,[ac3+0x106];
+  ac3 = bp(ac3, 176) ; XLEFB 3,[ac3+0xB0];
+  @7016437E WCMV;
   ac3 = wfp ; LDAFP 3;
   rt_call ?WRITE_SCREEN(0x70000260, wp(ac3, 130)) site=70164385 ; LCALL [0x7017E27A],2; # ?WRITE_SCREEN  <- XPEF [ac3+0x82]; LPEF [0x70000260];
 
@@ -27394,7 +27404,12 @@ block 70165EC6 seg 0x70000000
   ac1 = ac0 ; WMOV 0,1;
   @70165EED WCMV;
   ac3 = wfp ; LDAFP 3;
-  [@wp(ac3, 172), 2092 varying] = [@bp(ac3, 264), 2092] ; WCMV;  <- XWLDA 1,[ac3+0x2C]; WMOV 1,0; XNSTA 0,[ac3+0xAC]; XLEFB 2,[ac3+0x15A]; XLEFB 3,[ac3+0x108];
+  ac1 = M32[wp(ac3, 44)] ; XWLDA 1,[ac3+0x2C];
+  ac0 = ac1 ; WMOV 1,0;
+  M16[wp(ac3, 172)] = trunc16(ac0) ; XNSTA 0,[ac3+0xAC];
+  ac2 = bp(ac3, 346) ; XLEFB 2,[ac3+0x15A];
+  ac3 = bp(ac3, 264) ; XLEFB 3,[ac3+0x108];
+  @70165EF8 WCMV;
   ac3 = wfp ; LDAFP 3;
   rt_call ?WRITE_SCREEN(0x70000260, wp(ac3, 172)) site=70165EFF ; LCALL [0x7017E27A],2; # ?WRITE_SCREEN  <- XPEF [ac3+0xAC]; LPEF [0x70000260];
 
@@ -45642,7 +45657,7 @@ block 7016EEF2 seg 0x70000000
   rt_call ?UNSIGNED_TO_CHAR(wp(ac3, 564)) site=7016EF01 ; LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR  <- XPEF [ac3+0x234];
 
 block 7016EF05 seg 0x70000000
-  [@bp(ac3, 48), 12] = [@bp(ac3, 1046), 6] ; WCMV;  <- XLEFB 2,[ac3+0x30]; NLDAI 12 (0x000C),0; XNLDA 1,[ac3+0x20A]; XLEFB 3,[ac3+0x416];
+  [@bp(ac3, 48), 12] = [@wp(ac3, 522), varying] ; WCMV;  <- XLEFB 2,[ac3+0x30]; NLDAI 12 (0x000C),0; XNLDA 1,[ac3+0x20A]; XLEFB 3,[ac3+0x416];
   ac3 = wfp ; LDAFP 3;
   goto [7016EF28] 0 ; WBR 25 (0x7016EF28);
 
@@ -45654,7 +45669,7 @@ block 7016EF10 seg 0x70000000
   rt_call ?UNSIGNED_TO_CHAR(wp(ac3, 564)) site=7016EF1A ; LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR  <- XPEF [ac3+0x234];
 
 block 7016EF1E seg 0x70000000
-  [@bp(ac3, 48), 12] = [@bp(ac3, 1046), 6] ; WCMV;  <- XLEFB 2,[ac3+0x30]; NLDAI 12 (0x000C),0; XNLDA 1,[ac3+0x20A]; XLEFB 3,[ac3+0x416];
+  [@bp(ac3, 48), 12] = [@wp(ac3, 522), varying] ; WCMV;  <- XLEFB 2,[ac3+0x30]; NLDAI 12 (0x000C),0; XNLDA 1,[ac3+0x20A]; XLEFB 3,[ac3+0x416];
   ac3 = wfp ; LDAFP 3;
   goto [7016EF28] 0 ; fall-through
 
@@ -45701,7 +45716,7 @@ block 7016EF59 seg 0x70000000
   rt_call ?UNSIGNED_TO_CHAR(wp(ac3, 564)) site=7016EF68 ; LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR  <- XPEF [ac3+0x234];
 
 block 7016EF6C seg 0x70000000
-  [@bp(ac3, 48), 12] = [@bp(ac3, 1046), 8] ; WCMV;  <- XLEFB 2,[ac3+0x30]; NLDAI 12 (0x000C),0; XNLDA 1,[ac3+0x20A]; XLEFB 3,[ac3+0x416];
+  [@bp(ac3, 48), 12] = [@wp(ac3, 522), varying] ; WCMV;  <- XLEFB 2,[ac3+0x30]; NLDAI 12 (0x000C),0; XNLDA 1,[ac3+0x20A]; XLEFB 3,[ac3+0x416];
   ac3 = wfp ; LDAFP 3;
   goto [7016EF8F] 0 ; WBR 25 (0x7016EF8F);
 
@@ -45713,7 +45728,7 @@ block 7016EF77 seg 0x70000000
   rt_call ?UNSIGNED_TO_CHAR(wp(ac3, 564)) site=7016EF81 ; LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR  <- XPEF [ac3+0x234];
 
 block 7016EF85 seg 0x70000000
-  [@bp(ac3, 48), 12] = [@bp(ac3, 1046), 8] ; WCMV;  <- XLEFB 2,[ac3+0x30]; NLDAI 12 (0x000C),0; XNLDA 1,[ac3+0x20A]; XLEFB 3,[ac3+0x416];
+  [@bp(ac3, 48), 12] = [@wp(ac3, 522), varying] ; WCMV;  <- XLEFB 2,[ac3+0x30]; NLDAI 12 (0x000C),0; XNLDA 1,[ac3+0x20A]; XLEFB 3,[ac3+0x416];
   ac3 = wfp ; LDAFP 3;
   goto [7016EF8F] 0 ; fall-through
 
@@ -45760,7 +45775,7 @@ block 7016EFC0 seg 0x70000000
   rt_call ?UNSIGNED_TO_CHAR(wp(ac3, 564)) site=7016EFCF ; LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR  <- XPEF [ac3+0x234];
 
 block 7016EFD3 seg 0x70000000
-  [@bp(ac3, 48), 12] = [@bp(ac3, 1046), 8] ; WCMV;  <- XLEFB 2,[ac3+0x30]; NLDAI 12 (0x000C),0; XNLDA 1,[ac3+0x20A]; XLEFB 3,[ac3+0x416];
+  [@bp(ac3, 48), 12] = [@wp(ac3, 522), varying] ; WCMV;  <- XLEFB 2,[ac3+0x30]; NLDAI 12 (0x000C),0; XNLDA 1,[ac3+0x20A]; XLEFB 3,[ac3+0x416];
   ac3 = wfp ; LDAFP 3;
   goto [7016EFF6] 0 ; WBR 25 (0x7016EFF6);
 
@@ -45772,7 +45787,7 @@ block 7016EFDE seg 0x70000000
   rt_call ?UNSIGNED_TO_CHAR(wp(ac3, 564)) site=7016EFE8 ; LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR  <- XPEF [ac3+0x234];
 
 block 7016EFEC seg 0x70000000
-  [@bp(ac3, 48), 12] = [@bp(ac3, 1046), 8] ; WCMV;  <- XLEFB 2,[ac3+0x30]; NLDAI 12 (0x000C),0; XNLDA 1,[ac3+0x20A]; XLEFB 3,[ac3+0x416];
+  [@bp(ac3, 48), 12] = [@wp(ac3, 522), varying] ; WCMV;  <- XLEFB 2,[ac3+0x30]; NLDAI 12 (0x000C),0; XNLDA 1,[ac3+0x20A]; XLEFB 3,[ac3+0x416];
   ac3 = wfp ; LDAFP 3;
   goto [7016EFF6] 0 ; fall-through
 
@@ -45819,7 +45834,7 @@ block 7016F027 seg 0x70000000
   rt_call ?UNSIGNED_TO_CHAR(wp(ac3, 564)) site=7016F036 ; LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR  <- XPEF [ac3+0x234];
 
 block 7016F03A seg 0x70000000
-  [@bp(ac3, 48), 12] = [@bp(ac3, 1046), 9] ; WCMV;  <- XLEFB 2,[ac3+0x30]; NLDAI 12 (0x000C),0; XNLDA 1,[ac3+0x20A]; XLEFB 3,[ac3+0x416];
+  [@bp(ac3, 48), 12] = [@wp(ac3, 522), varying] ; WCMV;  <- XLEFB 2,[ac3+0x30]; NLDAI 12 (0x000C),0; XNLDA 1,[ac3+0x20A]; XLEFB 3,[ac3+0x416];
   ac3 = wfp ; LDAFP 3;
   goto [7016F05D] 0 ; WBR 25 (0x7016F05D);
 
@@ -45831,7 +45846,7 @@ block 7016F045 seg 0x70000000
   rt_call ?UNSIGNED_TO_CHAR(wp(ac3, 564)) site=7016F04F ; LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR  <- XPEF [ac3+0x234];
 
 block 7016F053 seg 0x70000000
-  [@bp(ac3, 48), 12] = [@bp(ac3, 1046), 9] ; WCMV;  <- XLEFB 2,[ac3+0x30]; NLDAI 12 (0x000C),0; XNLDA 1,[ac3+0x20A]; XLEFB 3,[ac3+0x416];
+  [@bp(ac3, 48), 12] = [@wp(ac3, 522), varying] ; WCMV;  <- XLEFB 2,[ac3+0x30]; NLDAI 12 (0x000C),0; XNLDA 1,[ac3+0x20A]; XLEFB 3,[ac3+0x416];
   ac3 = wfp ; LDAFP 3;
   goto [7016F05D] 0 ; fall-through
 
@@ -45877,7 +45892,7 @@ block 7016F08C seg 0x70000000
   rt_call ?UNSIGNED_TO_CHAR(wp(ac3, 564)) site=7016F09B ; LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR  <- XPEF [ac3+0x234];
 
 block 7016F09F seg 0x70000000
-  [@bp(ac3, 48), 12] = [@bp(ac3, 1046), 6] ; WCMV;  <- XLEFB 2,[ac3+0x30]; NLDAI 12 (0x000C),0; XNLDA 1,[ac3+0x20A]; XLEFB 3,[ac3+0x416];
+  [@bp(ac3, 48), 12] = [@wp(ac3, 522), varying] ; WCMV;  <- XLEFB 2,[ac3+0x30]; NLDAI 12 (0x000C),0; XNLDA 1,[ac3+0x20A]; XLEFB 3,[ac3+0x416];
   ac3 = wfp ; LDAFP 3;
   goto [7016F0C2] 0 ; WBR 25 (0x7016F0C2);
 
@@ -45889,7 +45904,7 @@ block 7016F0AA seg 0x70000000
   rt_call ?UNSIGNED_TO_CHAR(wp(ac3, 564)) site=7016F0B4 ; LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR  <- XPEF [ac3+0x234];
 
 block 7016F0B8 seg 0x70000000
-  [@bp(ac3, 48), 12] = [@bp(ac3, 1046), 6] ; WCMV;  <- XLEFB 2,[ac3+0x30]; NLDAI 12 (0x000C),0; XNLDA 1,[ac3+0x20A]; XLEFB 3,[ac3+0x416];
+  [@bp(ac3, 48), 12] = [@wp(ac3, 522), varying] ; WCMV;  <- XLEFB 2,[ac3+0x30]; NLDAI 12 (0x000C),0; XNLDA 1,[ac3+0x20A]; XLEFB 3,[ac3+0x416];
   ac3 = wfp ; LDAFP 3;
   goto [7016F0C2] 0 ; fall-through
 
@@ -45935,7 +45950,7 @@ block 7016F0F1 seg 0x70000000
   rt_call ?UNSIGNED_TO_CHAR(wp(ac3, 564)) site=7016F100 ; LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR  <- XPEF [ac3+0x234];
 
 block 7016F104 seg 0x70000000
-  [@bp(ac3, 48), 12] = [@bp(ac3, 1046), 8] ; WCMV;  <- XLEFB 2,[ac3+0x30]; NLDAI 12 (0x000C),0; XNLDA 1,[ac3+0x20A]; XLEFB 3,[ac3+0x416];
+  [@bp(ac3, 48), 12] = [@wp(ac3, 522), varying] ; WCMV;  <- XLEFB 2,[ac3+0x30]; NLDAI 12 (0x000C),0; XNLDA 1,[ac3+0x20A]; XLEFB 3,[ac3+0x416];
   ac3 = wfp ; LDAFP 3;
   goto [7016F127] 0 ; WBR 25 (0x7016F127);
 
@@ -45947,7 +45962,7 @@ block 7016F10F seg 0x70000000
   rt_call ?UNSIGNED_TO_CHAR(wp(ac3, 564)) site=7016F119 ; LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR  <- XPEF [ac3+0x234];
 
 block 7016F11D seg 0x70000000
-  [@bp(ac3, 48), 12] = [@bp(ac3, 1046), 8] ; WCMV;  <- XLEFB 2,[ac3+0x30]; NLDAI 12 (0x000C),0; XNLDA 1,[ac3+0x20A]; XLEFB 3,[ac3+0x416];
+  [@bp(ac3, 48), 12] = [@wp(ac3, 522), varying] ; WCMV;  <- XLEFB 2,[ac3+0x30]; NLDAI 12 (0x000C),0; XNLDA 1,[ac3+0x20A]; XLEFB 3,[ac3+0x416];
   ac3 = wfp ; LDAFP 3;
   goto [7016F127] 0 ; fall-through
 
@@ -45994,7 +46009,7 @@ block 7016F158 seg 0x70000000
   rt_call ?UNSIGNED_TO_CHAR(wp(ac3, 564)) site=7016F167 ; LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR  <- XPEF [ac3+0x234];
 
 block 7016F16B seg 0x70000000
-  [@bp(ac3, 48), 12] = [@bp(ac3, 1046), 9] ; WCMV;  <- XLEFB 2,[ac3+0x30]; NLDAI 12 (0x000C),0; XNLDA 1,[ac3+0x20A]; XLEFB 3,[ac3+0x416];
+  [@bp(ac3, 48), 12] = [@wp(ac3, 522), varying] ; WCMV;  <- XLEFB 2,[ac3+0x30]; NLDAI 12 (0x000C),0; XNLDA 1,[ac3+0x20A]; XLEFB 3,[ac3+0x416];
   ac3 = wfp ; LDAFP 3;
   goto [7016F18E] 0 ; WBR 25 (0x7016F18E);
 
@@ -46006,7 +46021,7 @@ block 7016F176 seg 0x70000000
   rt_call ?UNSIGNED_TO_CHAR(wp(ac3, 564)) site=7016F180 ; LCALL [0x7017DA75],1; # ?UNSIGNED_TO_CHAR  <- XPEF [ac3+0x234];
 
 block 7016F184 seg 0x70000000
-  [@bp(ac3, 48), 12] = [@bp(ac3, 1046), 9] ; WCMV;  <- XLEFB 2,[ac3+0x30]; NLDAI 12 (0x000C),0; XNLDA 1,[ac3+0x20A]; XLEFB 3,[ac3+0x416];
+  [@bp(ac3, 48), 12] = [@wp(ac3, 522), varying] ; WCMV;  <- XLEFB 2,[ac3+0x30]; NLDAI 12 (0x000C),0; XNLDA 1,[ac3+0x20A]; XLEFB 3,[ac3+0x416];
   ac3 = wfp ; LDAFP 3;
   goto [7016F18E] 0 ; fall-through
 

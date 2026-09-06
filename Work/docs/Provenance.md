@@ -117,3 +117,20 @@ I.GOTO never returns (StartStop already excluded it). Regenerated:
 
 The IR artifacts' `blocks` provenance line must be regenerated (P32's
 correction commit does it, together with the 17-statement fix).
+
+## Sep 6 2026 — P32 correction commit (P31 tool defect, docs/Project32/Census.md §1.1; branch p32-append-chains)
+
+| file | sha256 (first 16) | note |
+|---|---|---|
+| c_src/quest.ir2.book        | 1be3aa29c8b2332a | regenerated ir 5: 649 string statements (17 sites corrected: 3 refuse, 14 re-rendered), embeds 1,673; blocks line = ba30a841… |
+| c_src/quest.ir2.stock       | 497c49b47ee85b83 | regenerated ir 5: 649 string statements, embeds 3,552 |
+| docs/Project31/p31.tsv      | d09a7063ead0455f | regenerated under the call-aware evaluator (649 EMIT / 127 REFUSE) |
+| docs/Project31/p31.ledger, sites.txt, census_raw.txt, strings.ledger | — | regenerated (idiom totals unchanged) |
+| docs/Project27/assumed-foldable.txt | 0f442cd5b33178ad | regenerated: content identical (2,271 clusters), tags/blocks sha header follows 09f6593 |
+| c_src/quest.synclist.p27    | af1be42f5831fb2c | UNCHANGED |
+| Disassembled/*, blocks.split, pushmap, addrbook | — | as the 09f6593 table |
+
+Regeneration: the P31 commands above with the current inputs (the
+string_sites.py unchanged in its P31 arguments). K=1 gate on the regenerated
+artifacts: book k1fo 0 div / 308,923 pairs / clean; stock k1fo-st 0 div
+/ 299,387 pairs / clean (local, Sep 6).

@@ -1,6 +1,6 @@
 # Project 31 — located strings: per-site ledger (tools/string_sites.py --p31)
 # dis sha256=5c1db5fb75c8c26a70eaeab5760213973d1c80e8711b6dacbb9c28376d4118f4
-# blocks sha256=1d3baaf6487a8e3faf4c900e49dbcaae6ddbe1e7f996a47b161c74b502b43477
+# blocks sha256=ba30a84139a7d2f489cdb6345eddde4dfdf6c77d6d75f2eaa14ab3df58a829d0
 # mem sha256=1d44317d0995843e28fd576adffb8be977489975760def777d7e7c2a70803074
 # one record per candidate site: WCMV in the P31 idioms, every WCMP, every WBLM
 # verdict EMIT = lower.py --strings-slice must emit exactly the IR line shown;
@@ -555,14 +555,8 @@
    EMIT
 
 == 7015E990 WCMV  block 7015E95E  func ATTACK  idiom ASSIGN-STR-VARYING  dest (a)
-   window 7015E8FD..7015E98E  (crosses block boundary)
-   fold  7015E987 7015E989 7015E98A 7015E98C 7015E98E
-   keep  7015E986:LDAFP
-   dst  located-varying  [@wp(ac3, 112), 71 varying]   (length word fp+112)
-   src  located-fixed    [@bp(ac3, 148), 71]   (71 bytes)
-   n    both counts constant 71
-   IR   [@wp(ac3, 112), 71 varying] = [@bp(ac3, 148), 71]
-   EMIT
+   window 7015E95A..7015E98E  (crosses block boundary)
+   REFUSE P32-COPYOUT: src count (N[(fp+14)]+41) is not a constant or a length word
 
 == 7015EAE4 WCMV  block 7015EADB  func ATTACK  idiom ASSIGN-LIT-VARYING  dest (a)
    window 7015E997..7015EAE2  (crosses block boundary)
@@ -637,8 +631,8 @@
    EMIT
 
 == 7015EE42 WCMV  block 7015EE10  func ATTACK  idiom ASSIGN-STR-VARYING  dest (a)
-   window 7015EDD2..7015EE40  (crosses block boundary)
-   REFUSE COMPUTED-OPERAND: opaque op CVWN in an operand: CVWN(WHLV(WHLV(N[(+686*N[0x70000216]+W[0x70000210]-0X178)])))
+   window 7015EE0C..7015EE40  (crosses block boundary)
+   REFUSE P32-COPYOUT: src count (N[(fp+14)]+41) is not a constant or a length word
 
 == 7015EF2C WCMV  block 7015EF23  func ATTACK  idiom ASSIGN-LIT-VARYING  dest (a)
    window 7015EF1C..7015EF2A  (crosses block boundary)
@@ -1776,14 +1770,8 @@
    EMIT
 
 == 7016437E WCMV  block 7016434C  func CAVE_ATTACK  idiom ASSIGN-STR-VARYING  dest (a)
-   window 701641DB..7016437C  (crosses block boundary)
-   fold  70164375 70164377 70164378 7016437A 7016437C
-   keep  70164374:LDAFP
-   dst  located-varying  [@wp(ac3, 130), 50 varying]   (length word fp+130)
-   src  located-fixed    [@bp(ac3, 176), 50]   (50 bytes)
-   n    both counts constant 50
-   IR   [@wp(ac3, 130), 50 varying] = [@bp(ac3, 176), 50]
-   EMIT
+   window 70164348..7016437C  (crosses block boundary)
+   REFUSE P32-COPYOUT: src count (N[(fp+42)]+41) is not a constant or a length word
 
 == 701643B2 WCMV  block 701643A9  func CAVE_ATTACK  idiom ASSIGN-LIT-VARYING  dest (a)
    window 70164338..701643B0  (crosses block boundary)
@@ -2004,14 +1992,8 @@
    EMIT
 
 == 70165EF8 WCMV  block 70165EC6  func DEFEND  idiom ASSIGN-STR-VARYING  dest (a)
-   window 70165E20..70165EF6  (crosses block boundary)
-   fold  70165EEF 70165EF1 70165EF2 70165EF4 70165EF6
-   keep  70165EEE:LDAFP
-   dst  located-varying  [@wp(ac3, 172), 2092 varying]   (length word fp+172)
-   src  located-fixed    [@bp(ac3, 264), 2092]   (2092 bytes)
-   n    both counts constant 2092
-   IR   [@wp(ac3, 172), 2092 varying] = [@bp(ac3, 264), 2092]
-   EMIT
+   window 70165EC2..70165EF6  (crosses block boundary)
+   REFUSE P32-COPYOUT: src count (N[(fp+52)]+44) is not a constant or a length word
 
 == 70165F7F WCMV  block 70165F76  func DEFEND  idiom ASSIGN-LIT-VARYING  dest (a)
    window 70165EB2..70165F7D  (crosses block boundary)
@@ -2525,8 +2507,8 @@
    EMIT
 
 == 70168C40 WCMV  block 70168C12  func DROP  idiom ASSIGN-STR-VARYING  dest (a)
-   window 70168AEE..70168C3E  (crosses block boundary)
-   REFUSE P32-COPYOUT: src count (+23*N[(fp+7)]+W[0x70000214]+52) is not a constant or a length word
+   window 70168C0E..70168C3E  (crosses block boundary)
+   REFUSE P32-COPYOUT: src count (N[(fp+22)]+52) is not a constant or a length word
 
 == 70168CBC WCMV  block 70168CB3  func DROP  idiom ASSIGN-LIT-VARYING  dest (a)
    window 70168AEE..70168CBA  (crosses block boundary)
@@ -2682,7 +2664,7 @@
    EMIT
 
 == 701696D7 WCMV  block 701696CE  func DROP  idiom ASSIGN-LIT-VARYING  dest (a)
-   window 701696CE..701696D5
+   window 701696B4..701696D5  (crosses block boundary)
    fold  701696CE 701696D0 701696D1 701696D3 701696D5
    dst  located-varying  [@wp(ac3, 12), 12 varying]   (length word fp+12)
    src  literal          [@0x701687DF:0, "\x0BHow much ? "]   (0x701687DF:0 len 12)
@@ -3755,21 +3737,21 @@
    EMIT
 
 == 7016EF0D WCMV  block 7016EF05  func LIST_PLAYERS  idiom ASSIGN-STR-FIXED  dest (a)
-   window 7016EECF..7016EF0B  (crosses block boundary)
+   window 7016EF01..7016EF0B  (crosses block boundary)
    fold  7016EF05 7016EF07 7016EF09 7016EF0B
    dst  located-fixed    [@bp(ac3, 48), 12]   (12 bytes)
-   src  located-fixed    [@bp(ac3, 1046), 6]   (6 bytes)
-   n    constant dst_count 12 (src 6)
-   IR   [@bp(ac3, 48), 12] = [@bp(ac3, 1046), 6]
+   src  located-varying  [@wp(ac3, 522), varying]   (length word fp+522)
+   n    constant dst_count 12 (src N[(fp+0X20A)])
+   IR   [@bp(ac3, 48), 12] = [@wp(ac3, 522), varying]
    EMIT
 
 == 7016EF26 WCMV  block 7016EF1E  func LIST_PLAYERS  idiom ASSIGN-STR-FIXED  dest (a)
-   window 7016EECF..7016EF24  (crosses block boundary)
+   window 7016EF1A..7016EF24  (crosses block boundary)
    fold  7016EF1E 7016EF20 7016EF22 7016EF24
    dst  located-fixed    [@bp(ac3, 48), 12]   (12 bytes)
-   src  located-fixed    [@bp(ac3, 1046), 6]   (6 bytes)
-   n    constant dst_count 12 (src 6)
-   IR   [@bp(ac3, 48), 12] = [@bp(ac3, 1046), 6]
+   src  located-varying  [@wp(ac3, 522), varying]   (length word fp+522)
+   n    constant dst_count 12 (src N[(fp+0X20A)])
+   IR   [@bp(ac3, 48), 12] = [@wp(ac3, 522), varying]
    EMIT
 
 == 7016EF40 WCMV  block 7016EF28  func LIST_PLAYERS  idiom ASSIGN-STR-VARYING  dest (a)
@@ -3783,21 +3765,21 @@
    EMIT
 
 == 7016EF74 WCMV  block 7016EF6C  func LIST_PLAYERS  idiom ASSIGN-STR-FIXED  dest (a)
-   window 7016EF36..7016EF72  (crosses block boundary)
+   window 7016EF68..7016EF72  (crosses block boundary)
    fold  7016EF6C 7016EF6E 7016EF70 7016EF72
    dst  located-fixed    [@bp(ac3, 48), 12]   (12 bytes)
-   src  located-fixed    [@bp(ac3, 1046), 8]   (8 bytes)
-   n    constant dst_count 12 (src 8)
-   IR   [@bp(ac3, 48), 12] = [@bp(ac3, 1046), 8]
+   src  located-varying  [@wp(ac3, 522), varying]   (length word fp+522)
+   n    constant dst_count 12 (src N[(fp+0X20A)])
+   IR   [@bp(ac3, 48), 12] = [@wp(ac3, 522), varying]
    EMIT
 
 == 7016EF8D WCMV  block 7016EF85  func LIST_PLAYERS  idiom ASSIGN-STR-FIXED  dest (a)
-   window 7016EF36..7016EF8B  (crosses block boundary)
+   window 7016EF81..7016EF8B  (crosses block boundary)
    fold  7016EF85 7016EF87 7016EF89 7016EF8B
    dst  located-fixed    [@bp(ac3, 48), 12]   (12 bytes)
-   src  located-fixed    [@bp(ac3, 1046), 8]   (8 bytes)
-   n    constant dst_count 12 (src 8)
-   IR   [@bp(ac3, 48), 12] = [@bp(ac3, 1046), 8]
+   src  located-varying  [@wp(ac3, 522), varying]   (length word fp+522)
+   n    constant dst_count 12 (src N[(fp+0X20A)])
+   IR   [@bp(ac3, 48), 12] = [@wp(ac3, 522), varying]
    EMIT
 
 == 7016EFA7 WCMV  block 7016EF8F  func LIST_PLAYERS  idiom ASSIGN-STR-VARYING  dest (a)
@@ -3811,21 +3793,21 @@
    EMIT
 
 == 7016EFDB WCMV  block 7016EFD3  func LIST_PLAYERS  idiom ASSIGN-STR-FIXED  dest (a)
-   window 7016EF9D..7016EFD9  (crosses block boundary)
+   window 7016EFCF..7016EFD9  (crosses block boundary)
    fold  7016EFD3 7016EFD5 7016EFD7 7016EFD9
    dst  located-fixed    [@bp(ac3, 48), 12]   (12 bytes)
-   src  located-fixed    [@bp(ac3, 1046), 8]   (8 bytes)
-   n    constant dst_count 12 (src 8)
-   IR   [@bp(ac3, 48), 12] = [@bp(ac3, 1046), 8]
+   src  located-varying  [@wp(ac3, 522), varying]   (length word fp+522)
+   n    constant dst_count 12 (src N[(fp+0X20A)])
+   IR   [@bp(ac3, 48), 12] = [@wp(ac3, 522), varying]
    EMIT
 
 == 7016EFF4 WCMV  block 7016EFEC  func LIST_PLAYERS  idiom ASSIGN-STR-FIXED  dest (a)
-   window 7016EF9D..7016EFF2  (crosses block boundary)
+   window 7016EFE8..7016EFF2  (crosses block boundary)
    fold  7016EFEC 7016EFEE 7016EFF0 7016EFF2
    dst  located-fixed    [@bp(ac3, 48), 12]   (12 bytes)
-   src  located-fixed    [@bp(ac3, 1046), 8]   (8 bytes)
-   n    constant dst_count 12 (src 8)
-   IR   [@bp(ac3, 48), 12] = [@bp(ac3, 1046), 8]
+   src  located-varying  [@wp(ac3, 522), varying]   (length word fp+522)
+   n    constant dst_count 12 (src N[(fp+0X20A)])
+   IR   [@bp(ac3, 48), 12] = [@wp(ac3, 522), varying]
    EMIT
 
 == 7016F00E WCMV  block 7016EFF6  func LIST_PLAYERS  idiom ASSIGN-STR-VARYING  dest (a)
@@ -3839,21 +3821,21 @@
    EMIT
 
 == 7016F042 WCMV  block 7016F03A  func LIST_PLAYERS  idiom ASSIGN-STR-FIXED  dest (c)
-   window 7016F004..7016F040  (crosses block boundary)
+   window 7016F036..7016F040  (crosses block boundary)
    fold  7016F03A 7016F03C 7016F03E 7016F040
    dst  located-fixed    [@bp(ac3, 48), 12]   (12 bytes)
-   src  located-fixed    [@bp(ac3, 1046), 9]   (9 bytes)
-   n    constant dst_count 12 (src 9)
-   IR   [@bp(ac3, 48), 12] = [@bp(ac3, 1046), 9]
+   src  located-varying  [@wp(ac3, 522), varying]   (length word fp+522)
+   n    constant dst_count 12 (src N[(fp+0X20A)])
+   IR   [@bp(ac3, 48), 12] = [@wp(ac3, 522), varying]
    EMIT
 
 == 7016F05B WCMV  block 7016F053  func LIST_PLAYERS  idiom ASSIGN-STR-FIXED  dest (c)
-   window 7016F004..7016F059  (crosses block boundary)
+   window 7016F04F..7016F059  (crosses block boundary)
    fold  7016F053 7016F055 7016F057 7016F059
    dst  located-fixed    [@bp(ac3, 48), 12]   (12 bytes)
-   src  located-fixed    [@bp(ac3, 1046), 9]   (9 bytes)
-   n    constant dst_count 12 (src 9)
-   IR   [@bp(ac3, 48), 12] = [@bp(ac3, 1046), 9]
+   src  located-varying  [@wp(ac3, 522), varying]   (length word fp+522)
+   n    constant dst_count 12 (src N[(fp+0X20A)])
+   IR   [@bp(ac3, 48), 12] = [@wp(ac3, 522), varying]
    EMIT
 
 == 7016F073 WCMV  block 7016F05D  func LIST_PLAYERS  idiom ASSIGN-STR-VARYING  dest (a)
@@ -3867,21 +3849,21 @@
    EMIT
 
 == 7016F0A7 WCMV  block 7016F09F  func LIST_PLAYERS  idiom ASSIGN-STR-FIXED  dest (a)
-   window 7016F069..7016F0A5  (crosses block boundary)
+   window 7016F09B..7016F0A5  (crosses block boundary)
    fold  7016F09F 7016F0A1 7016F0A3 7016F0A5
    dst  located-fixed    [@bp(ac3, 48), 12]   (12 bytes)
-   src  located-fixed    [@bp(ac3, 1046), 6]   (6 bytes)
-   n    constant dst_count 12 (src 6)
-   IR   [@bp(ac3, 48), 12] = [@bp(ac3, 1046), 6]
+   src  located-varying  [@wp(ac3, 522), varying]   (length word fp+522)
+   n    constant dst_count 12 (src N[(fp+0X20A)])
+   IR   [@bp(ac3, 48), 12] = [@wp(ac3, 522), varying]
    EMIT
 
 == 7016F0C0 WCMV  block 7016F0B8  func LIST_PLAYERS  idiom ASSIGN-STR-FIXED  dest (a)
-   window 7016F069..7016F0BE  (crosses block boundary)
+   window 7016F0B4..7016F0BE  (crosses block boundary)
    fold  7016F0B8 7016F0BA 7016F0BC 7016F0BE
    dst  located-fixed    [@bp(ac3, 48), 12]   (12 bytes)
-   src  located-fixed    [@bp(ac3, 1046), 6]   (6 bytes)
-   n    constant dst_count 12 (src 6)
-   IR   [@bp(ac3, 48), 12] = [@bp(ac3, 1046), 6]
+   src  located-varying  [@wp(ac3, 522), varying]   (length word fp+522)
+   n    constant dst_count 12 (src N[(fp+0X20A)])
+   IR   [@bp(ac3, 48), 12] = [@wp(ac3, 522), varying]
    EMIT
 
 == 7016F0D8 WCMV  block 7016F0C2  func LIST_PLAYERS  idiom ASSIGN-STR-VARYING  dest (a)
@@ -3895,21 +3877,21 @@
    EMIT
 
 == 7016F10C WCMV  block 7016F104  func LIST_PLAYERS  idiom ASSIGN-STR-FIXED  dest (a)
-   window 7016F0CE..7016F10A  (crosses block boundary)
+   window 7016F100..7016F10A  (crosses block boundary)
    fold  7016F104 7016F106 7016F108 7016F10A
    dst  located-fixed    [@bp(ac3, 48), 12]   (12 bytes)
-   src  located-fixed    [@bp(ac3, 1046), 8]   (8 bytes)
-   n    constant dst_count 12 (src 8)
-   IR   [@bp(ac3, 48), 12] = [@bp(ac3, 1046), 8]
+   src  located-varying  [@wp(ac3, 522), varying]   (length word fp+522)
+   n    constant dst_count 12 (src N[(fp+0X20A)])
+   IR   [@bp(ac3, 48), 12] = [@wp(ac3, 522), varying]
    EMIT
 
 == 7016F125 WCMV  block 7016F11D  func LIST_PLAYERS  idiom ASSIGN-STR-FIXED  dest (a)
-   window 7016F0CE..7016F123  (crosses block boundary)
+   window 7016F119..7016F123  (crosses block boundary)
    fold  7016F11D 7016F11F 7016F121 7016F123
    dst  located-fixed    [@bp(ac3, 48), 12]   (12 bytes)
-   src  located-fixed    [@bp(ac3, 1046), 8]   (8 bytes)
-   n    constant dst_count 12 (src 8)
-   IR   [@bp(ac3, 48), 12] = [@bp(ac3, 1046), 8]
+   src  located-varying  [@wp(ac3, 522), varying]   (length word fp+522)
+   n    constant dst_count 12 (src N[(fp+0X20A)])
+   IR   [@bp(ac3, 48), 12] = [@wp(ac3, 522), varying]
    EMIT
 
 == 7016F13F WCMV  block 7016F127  func LIST_PLAYERS  idiom ASSIGN-STR-VARYING  dest (a)
@@ -3923,21 +3905,21 @@
    EMIT
 
 == 7016F173 WCMV  block 7016F16B  func LIST_PLAYERS  idiom ASSIGN-STR-FIXED  dest (a)
-   window 7016F135..7016F171  (crosses block boundary)
+   window 7016F167..7016F171  (crosses block boundary)
    fold  7016F16B 7016F16D 7016F16F 7016F171
    dst  located-fixed    [@bp(ac3, 48), 12]   (12 bytes)
-   src  located-fixed    [@bp(ac3, 1046), 9]   (9 bytes)
-   n    constant dst_count 12 (src 9)
-   IR   [@bp(ac3, 48), 12] = [@bp(ac3, 1046), 9]
+   src  located-varying  [@wp(ac3, 522), varying]   (length word fp+522)
+   n    constant dst_count 12 (src N[(fp+0X20A)])
+   IR   [@bp(ac3, 48), 12] = [@wp(ac3, 522), varying]
    EMIT
 
 == 7016F18C WCMV  block 7016F184  func LIST_PLAYERS  idiom ASSIGN-STR-FIXED  dest (a)
-   window 7016F135..7016F18A  (crosses block boundary)
+   window 7016F180..7016F18A  (crosses block boundary)
    fold  7016F184 7016F186 7016F188 7016F18A
    dst  located-fixed    [@bp(ac3, 48), 12]   (12 bytes)
-   src  located-fixed    [@bp(ac3, 1046), 9]   (9 bytes)
-   n    constant dst_count 12 (src 9)
-   IR   [@bp(ac3, 48), 12] = [@bp(ac3, 1046), 9]
+   src  located-varying  [@wp(ac3, 522), varying]   (length word fp+522)
+   n    constant dst_count 12 (src N[(fp+0X20A)])
+   IR   [@bp(ac3, 48), 12] = [@wp(ac3, 522), varying]
    EMIT
 
 == 7016F1A6 WCMV  block 7016F18E  func LIST_PLAYERS  idiom ASSIGN-STR-VARYING  dest (a)
@@ -4628,7 +4610,7 @@
 
 == 70172DA8 WCMP  block 70172D98  func OBSERVE  idiom -  dest (-)
    window 70172D00..70172DA5  (crosses block boundary)
-   REFUSE P32-SUBSTR: str1 count N[(+51*N[(+686*N[W[(fp-12)]]+N[(fp+12)]+W[0x70000210]-0X186)]-0XFEB0503)] is not a constant or a length word
+   REFUSE P32-CALLRESULT: src_count uses a tracked slot value ((fp+13), stored at 70172D16) reloaded at 70172D8B after a call: the renderer must read memory instead (P32 rule (a))
 
 == 70172E4E WCMV  block 70172E4E  func OBSERVE  idiom ASSIGN-FROM-TEMP  dest (a)
    window 70172D00..70172E4D  (crosses block boundary)
@@ -4637,7 +4619,7 @@
 
 == 70172E7A WCMP  block 70172E6A  func OBSERVE  idiom -  dest (-)
    window 70172D00..70172E77  (crosses block boundary)
-   REFUSE P32-SUBSTR: str1 count N[(+51*N[(+686*N[W[(fp-12)]]+N[(fp+12)]+W[0x70000210]-0X186)]-0XFEAF513)] is not a constant or a length word
+   REFUSE P32-CALLRESULT: src_count uses a tracked slot value ((fp+13), stored at 70172D16) reloaded at 70172E64 after a call: the renderer must read memory instead (P32 rule (a))
 
 == 70172F5F WCMV  block 70172F56  func OBSERVE  idiom ASSIGN-LIT-VARYING  dest (a)
    window 70172D66..70172F5D  (crosses block boundary)
@@ -6423,39 +6405,39 @@
 # WCMV   ASSIGN-LIT-VARYING-PAD           1      0      1
 # WCMV   ASSIGN-STR-FIXED                18     16      2
 # WCMV   ASSIGN-STR-MIN                   7      0      7
-# WCMV   ASSIGN-STR-VARYING             136     48     88
+# WCMV   ASSIGN-STR-VARYING             136     45     91
 # WCMV   ASSIGN-STR-VARYING-PAD          21     10     11
-# all                                   776    652    124
+# all                                   776    649    127
 #
 # refuse reasons:
-#     86  P32-COPYOUT
-#     15  P32-SUBSTR
+#     90  P32-COPYOUT
+#     13  P32-SUBSTR
 #      9  P32-CAPACITY
 #      6  P33-TEMP
-#      4  COMPUTED-OPERAND
+#      3  COMPUTED-OPERAND
+#      3  P32-CALLRESULT
 #      2  OPERAND-DEAD
 #      1  P32-RESIDUE
-#      1  P32-CALLRESULT
 #
 # refuse reasons by (category, idiom):
 #      1  COMPUTED-OPERAND   WCMV ASSIGN-STR-FIXED
-#      3  COMPUTED-OPERAND   WCMV ASSIGN-STR-VARYING
+#      2  COMPUTED-OPERAND   WCMV ASSIGN-STR-VARYING
 #      2  OPERAND-DEAD       WCMP -
-#      1  P32-CALLRESULT     WCMP -
+#      3  P32-CALLRESULT     WCMP -
 #      1  P32-CAPACITY       WCMV ASSIGN-LIT-VARYING-PAD
 #      7  P32-CAPACITY       WCMV ASSIGN-STR-MIN
 #      1  P32-CAPACITY       WCMV ASSIGN-STR-VARYING-PAD
-#     85  P32-COPYOUT        WCMV ASSIGN-STR-VARYING
+#     89  P32-COPYOUT        WCMV ASSIGN-STR-VARYING
 #      1  P32-COPYOUT        WCMV ASSIGN-STR-VARYING-PAD
 #      1  P32-RESIDUE        WCMP -
-#      5  P32-SUBSTR         WCMP -
+#      3  P32-SUBSTR         WCMP -
 #      1  P32-SUBSTR         WCMV ASSIGN-STR-FIXED
 #      9  P32-SUBSTR         WCMV ASSIGN-STR-VARYING-PAD
 #      5  P33-TEMP           WCMV ASSIGN-FROM-TEMP
 #      1  P33-TEMP           WCMV ASSIGN-FROM-TEMP-VARYING
 #
 # by ultimate destination class (EMIT):
-#   (-) 31  (?) 12  (a) 543  (b) 28  (c) 9  (d) 23  (p) 6
+#   (-) 31  (?) 12  (a) 540  (b) 28  (c) 9  (d) 23  (p) 6
 #
 # min diamonds (guard -> interior WMOV -> join; the statement lives in the join):
 #   40 diamonds feeding 40 sites; 40 with join preds == {guard, interior}
@@ -6502,5 +6484,5 @@
 #
 # self-assignments (source length read before the length-word store): 0
 #
-# leaf registers read by emitted statements: ac3:617
+# leaf registers read by emitted statements: ac3:614
 # literals referenced by emitted statements: 498 distinct (addr,len)

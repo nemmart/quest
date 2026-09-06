@@ -11,12 +11,13 @@ WSTB       99 (byte stores; 86 with a constant byte)
 
 ## WCMV operand-class signatures (dst_count/src_count/dst/src)
   843  const/const/frame/literal                  e.g. 7015BE68
-  305  computed/computed/frame/frame              e.g. 7015C916
-  114  const/const/frame/frame                    e.g. 7015E976
+  307  computed/computed/frame/frame              e.g. 7015C916
+   93  frame/frame/frame/frame                    e.g. 7015DA15
+   90  const/const/frame/frame                    e.g. 70165154
    86  computed/computed/frame/computed           e.g. 7015C90D
-   85  frame/frame/frame/frame                    e.g. 7015DA15
    35  computed/computed/temp/temp                e.g. 7016617A
    19  computed/computed/frame/literal            e.g. 701664FD
+   16  const/frame/frame/frame                    e.g. 7016EEA6
    14  const/const/temp/literal                   e.g. 7016615D
    11  computed/computed/frame/static             e.g. 7015D131
    11  computed/computed/temp/computed            e.g. 70166166
@@ -38,7 +39,6 @@ WSTB       99 (byte stores; 86 with a constant byte)
     2  computed/const/static/frame                e.g. 7016675A
     2  computed/computed/computed/literal         e.g. 7016DF66
     2  const/const/temp/frame                     e.g. 7016EDD9
-    2  const/frame/frame/frame                    e.g. 7016EEA6
     2  computed/computed/computed/frame           e.g. 7017CA4A
     1  const/const/frame/computed                 e.g. 70165655
     1  computed/computed/static/temp              e.g. 7016698B
@@ -91,33 +91,19 @@ WSTB       99 (byte stores; 86 with a constant byte)
    83  dst_count=min()                          e.g. 7015D131
    25  src_count=phi                            e.g. 7015D131
    17  src_count=residue                        e.g. 7015D94A
-   17  pad-fill                                 e.g. 7016ED0D
    16  dst-byte-offset                          e.g. 7016566D
    10  src-byte-offset                          e.g. 70165655
+    3  pad-fill                                 e.g. 7016ED0D
     2  lenword-store(value differs from dst_count!) e.g. 701678C8
 
 ## pad-fill / truncate sites (dst_count != src_count, both constant)
 7016ED0D pad-fill(12<-1)        LIST_PLAYERS  dst=frame byte +48 (word fp+24)  src=0x7016EA65:0
-7016EF0D pad-fill(12<-6)        LIST_PLAYERS  dst=frame byte +48 (word fp+24)  src=frame byte +1046 (word fp+523)
-7016EF26 pad-fill(12<-6)        LIST_PLAYERS  dst=frame byte +48 (word fp+24)  src=frame byte +1046 (word fp+523)
-7016EF74 pad-fill(12<-8)        LIST_PLAYERS  dst=frame byte +48 (word fp+24)  src=frame byte +1046 (word fp+523)
-7016EF8D pad-fill(12<-8)        LIST_PLAYERS  dst=frame byte +48 (word fp+24)  src=frame byte +1046 (word fp+523)
-7016EFDB pad-fill(12<-8)        LIST_PLAYERS  dst=frame byte +48 (word fp+24)  src=frame byte +1046 (word fp+523)
-7016EFF4 pad-fill(12<-8)        LIST_PLAYERS  dst=frame byte +48 (word fp+24)  src=frame byte +1046 (word fp+523)
-7016F042 pad-fill(12<-9)        LIST_PLAYERS  dst=frame byte +48 (word fp+24)  src=frame byte +1046 (word fp+523)
-7016F05B pad-fill(12<-9)        LIST_PLAYERS  dst=frame byte +48 (word fp+24)  src=frame byte +1046 (word fp+523)
-7016F0A7 pad-fill(12<-6)        LIST_PLAYERS  dst=frame byte +48 (word fp+24)  src=frame byte +1046 (word fp+523)
-7016F0C0 pad-fill(12<-6)        LIST_PLAYERS  dst=frame byte +48 (word fp+24)  src=frame byte +1046 (word fp+523)
-7016F10C pad-fill(12<-8)        LIST_PLAYERS  dst=frame byte +48 (word fp+24)  src=frame byte +1046 (word fp+523)
-7016F125 pad-fill(12<-8)        LIST_PLAYERS  dst=frame byte +48 (word fp+24)  src=frame byte +1046 (word fp+523)
-7016F173 pad-fill(12<-9)        LIST_PLAYERS  dst=frame byte +48 (word fp+24)  src=frame byte +1046 (word fp+523)
-7016F18C pad-fill(12<-9)        LIST_PLAYERS  dst=frame byte +48 (word fp+24)  src=frame byte +1046 (word fp+523)
 70178D66 pad-fill(1<-0)         START_TURN  dst=frame byte +60 (word fp+30)  src=0x7017804D:0
 7017B811 pad-fill(80<-1)        TERRITORY_MAP  dst=frame byte -48 (word fp-24)  src=0x7017B71D:0
 
 ## WCMV per-operand class totals
-dst_count const=1005  computed=528  frame=96  static=8
-src_count const=1022  computed=500  frame=98  static=17
+dst_count const=995  computed=530  frame=104  static=8
+src_count const=998  computed=502  frame=120  static=17
 dst       frame=1499  temp=88  computed=31  static=19
 src       literal=901  frame=548  computed=102  temp=46  static=40
 
@@ -495,7 +481,7 @@ STORE                  WMSP  5  STASP  1
     1  0x3D
 
 ## windows
-crossing a block boundary: 1446 ; depending on unresolved block-entry state: 103
+crossing a block boundary: 1447 ; depending on unresolved block-entry state: 103
 entry-dependent sites: 7015E14C 7015E155 7015E15B 7015E166 7015E7B1 7015E7BA 7015E7C0 7015E7CB 7015F941 7015F94A 7015F95D 7015F969 7015F972 7015F978 7015F983 70162AAF 70162B53 70162D72 70164576 7016457F 70164585 70164590 7016616F 7016617A 70166180 7016618A 7016619C 7016659A 701665A5 701665AB 701665B4 701665BF 701665C6 701665D0 701665E2 70166EAC 70166EB9 70166ECA 70166ED9 70166EE9 70166F7F 70166F8C 70166F9D 70166FAC 70166FBC 70167769 7016777B 7016A524 7016A52D 7016A533 7016A53E 7016A694 7016A69D 7016A6A3 7016A6AE 7016BC47 7016BC59 7016FEFD 7016FF06 7016FF14 701756C3 701756CE 701756D4 701756DD 701756E8 701756EF 701756F8 70175703 70175709 70175713 70175725 701758CF 701758DA 701758E0 701758E9 701758F4 701758FD 70175906 70175911 70175917 70175921 70175933 70175F1A 70176C8B 70176C94 70176C9A 70176CAA 70176CB6 70176CBF 70176CCD 70176D3D 70176D46 70176D4C 70176D5C 70176D68 70176D71 70176D7F 7017AA07 7017AA10 7017AA16 7017AA21 7017B811 7017BF5C
 
 ## literals used with more than one length
