@@ -1,0 +1,10 @@
+In file included from hw/strings/ClaimDelta.cpp:2:
+hw/strings/ClaimDelta.hpp:29:3: error: ‘size_t’ does not name a type
+   29 |   size_t frames() const { return delta_.size(); }
+      |   ^~~~~~
+hw/strings/ClaimDelta.hpp:18:1: note: ‘size_t’ is defined in header ‘<cstddef>’; did you forget to ‘#include <cstddef>’?
+   17 | #include <map>
+  +++ |+#include <cstddef>
+   18 | 
+make: *** [Makefile:95: hw/strings/ClaimDelta.o] Error 1
+make: *** Waiting for unfinished jobs....
