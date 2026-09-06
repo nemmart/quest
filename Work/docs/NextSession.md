@@ -1,5 +1,20 @@
 # Next session
 
+## P30 ON BRANCH (Sep 6 2026) — string library, dark
+- Branch p30-string-library: hw/strings/{EagleString,ClaimDelta}.{hpp,cpp},
+  the Mapper arena form (Mapper.{hpp,cpp}), tests/strings_selftest.cpp +
+  run_strings_selftest.sh (GREEN; -DP30_BROKEN_RESIDUE build RED),
+  Makefile. Task 043 (k1fo + play-st vs 042, both self-tests as
+  preconditions) — check results/043-p30-string-library before merging.
+- Integrator: Mapper.md §1.2 codec table and §3 mutation kinds owe the
+  arena column / the two arena events (design-of-record edit; the
+  Mapper.hpp header already says it). Row struct carries `block` and
+  `capacity` beyond StringsDesign §6.2's four fields.
+- P31 Phase B waits on this merge; docs/Project30/REPORT.md §8 lists the
+  calls P31 and P33 make and the one ordering trap (`EagleString::varying`
+  reads the length word at construction — build the piece after the
+  master's XNSTA, or use `assign_varying`).
+
 ## P28 MERGED to main (Sep 5 2026) — read this first
 - rt_call decoration is IMPLEMENTED on branch p28-rt-call (ir 4):
   987/987 runtime call sites, LNDO, the LDSP pair, the 67 Nova loads;

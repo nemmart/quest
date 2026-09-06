@@ -101,10 +101,10 @@ class Mapper {
 public:
   // The encoding codec E (Mapper.md §1.2) — total over the forms that
   // occur; separable by prefix in every form (I3, base 0x74000000):
-  //   form    | real stack | area
-  //   word    | 0x70       | 0x74
-  //   byte    | 0xE0       | 0xE8   (word = v >> 1, low bit preserved)
-  //   @-word  | 0xF0       | 0xF4   (bit 31 masked / re-encoded)
+  //   form    | real stack | area | arena (P30)
+  //   word    | 0x70       | 0x74 | 0x75
+  //   byte    | 0xE0       | 0xE8 | 0xEA   (word = v >> 1, low bit preserved)
+  //   @-word  | 0xF0       | 0xF4 | 0xF5   (bit 31 masked / re-encoded)
   // Anything else decodes to None (identity; probed — see probe()).
   enum class Form : uint8_t { Word, Byte, AtWord, None };
   enum class Kind : uint8_t { RAW, MAPPED, MISMATCH };
@@ -155,6 +155,51 @@ public:
   bool is_area_address(uint32_t v) const { return book_ && book_->in_range(v); }
   bool has_records() const { return !records_.empty(); }
   size_t depth() const { return records_.size(); }
+
+  // ---- P30: the ARENA FORM (StringsDesign.md §6) ----------------------
+  // The clone's WMSP temporaries (the 19 `p@b` values, P33) live in the
+  // otherwise unused segment below, laid out STATICALLY; the master keeps
+  // its temps on its stack. Rows translate arena addresses to the master's
+  // stack addresses for COMPARISON ONLY — the form is ONE-DIRECTIONAL,
+  // clone→master (ruled Sep 6): master→clone is ambiguous (two groups in
+  // one routine claim at the same base at different times; a released
+  // region is reused by ordinary frames), so no master→clone lookup
+  // exists, EVER, and clone_location() on an arena address REFUSES.
+  // The arena is irrelevant to frame_precedes (asserted).
+  //
+  // The map has TWO states per row and changes at TWO events (§6.3):
+  //   arena_bind(...)          block entry (`p@b = ""`): master_addr, wfp bound; length 0
+  //   arena_unmap_frame(wfp)   frame exit (WRTN / ON-pop): every row of that wfp unmapped
+  // The STASP does not touch it. Appends update length in place.
+  // Containment is CLOSED on the right, like the area legs (a one-past
+  // pointer belongs to the value it walked off); rows are pairwise
+  // disjoint including the closed end (I1's rule), asserted at configure.
+  // Segment sized so the byte form has ONE prefix (0xEA), keeping the
+  // codec table one-prefix-per-form (I3 static_assert in Mapper.cpp).
+  static constexpr uint32_t ARENA_BASE  = 0x75000000u;
+  static constexpr uint32_t ARENA_WORDS = 0x00800000u;            // [BASE, BASE+WORDS)
+  static bool is_arena(uint32_t word) { return word >= ARENA_BASE && word < ARENA_BASE + ARENA_WORDS; }
+  struct ArenaLayout {            // the static artifact (P33's; a fixture in P30)
+    uint32_t block;               // the claim-group block address (identity of p@b)
+    uint32_t arena_addr;          // word address of the varying image (length word)
+    uint32_t capacity;            // data bytes
+  };
+  struct ArenaRow {
+    uint32_t block, arena_addr, capacity;   // static
+    int32_t  length;              // current value length (bytes)
+    int32_t  wfp;                 // master's wfp at bind
+    uint32_t master_addr;         // the master's address for this value; 0 ⇒ unmapped
+    uint32_t extent_words() const { return 1u + (capacity + 1u) / 2u; }   // length word + data
+    uint32_t end() const { return arena_addr + extent_words(); }          // closed right end
+  };
+  void configure_arena(const std::vector<ArenaLayout>& layout);
+  void arena_bind(uint32_t arena_addr, int32_t wfp, uint32_t master_addr);
+  void arena_set_length(uint32_t arena_addr, int32_t length);
+  void arena_unmap_frame(int32_t wfp);
+  // The hot-path lookup: binary search over the rows by arena address,
+  // closed-end containment. nullptr when no row contains `word`.
+  const ArenaRow* arena_row(uint32_t word) const;
+  size_t arena_rows() const { return arena_.size(); }
 
   // ---- the translation surface (three calls; see header comment) ----
   Verdict equivalent(uint32_t master_v, uint32_t clone_v) const;
@@ -229,6 +274,7 @@ private:
   bool main_task_ = false;                    // set at configure; asserted at every push
   int32_t latched_diff_ = 0;                  // I2: wsl − heap_break, latched at first push
   std::vector<LiveRecord> records_;
+  std::vector<ArenaRow>   arena_;             // P30: sorted by arena_addr; static after configure_arena
 };
 
 } // namespace hw

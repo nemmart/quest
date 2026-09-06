@@ -6,6 +6,7 @@
 #include "../os/OSProcess.hpp"
 #include "../os/Trace.hpp"
 #include "../runtime/i_alloc.hpp"   // rt::HEAP_BREAK (I2 diff latch; hw→runtime precedent: RTStubs)
+#include <algorithm>
 #include <atomic>
 #include <cstdio>
 #include <stdexcept>
@@ -30,6 +31,22 @@ static_assert(P_AW != P_RW && P_AW != P_RB && P_AW != P_RA &&
 static_assert(P_RW == 0x70 && P_AW == 0x74 && P_RB == 0xE0 &&
               P_AB == 0xE8 && P_RA == 0xF0 && P_AA == 0xF4,
               "codec table in decode() no longer matches the base");
+// P30 — the arena form's prefixes (Mapper.hpp ARENA_BASE/ARENA_WORDS),
+// separable from all six above in every form, and the segment sized so
+// each form has ONE prefix (the byte form of the last word is still 0xEA).
+static constexpr uint32_t P_NW = Mapper::ARENA_BASE >> 24;                    // arena word
+static constexpr uint32_t P_NB = (Mapper::ARENA_BASE << 1) >> 24;             // arena byte
+static constexpr uint32_t P_NA = (Mapper::ARENA_BASE | 0x80000000u) >> 24;    // arena @-word
+static_assert(P_NW != P_RW && P_NW != P_RB && P_NW != P_RA && P_NW != P_AW && P_NW != P_AB && P_NW != P_AA &&
+              P_NB != P_RW && P_NB != P_RB && P_NB != P_RA && P_NB != P_AW && P_NB != P_AB && P_NB != P_AA &&
+              P_NA != P_RW && P_NA != P_RB && P_NA != P_RA && P_NA != P_AW && P_NA != P_AB && P_NA != P_AA,
+              "I3: arena prefixes not separable from real-stack / area prefixes");
+static_assert(P_NW == 0x75 && P_NB == 0xEA && P_NA == 0xF5,
+              "codec table in decode() no longer matches the arena base");
+static_assert((((Mapper::ARENA_BASE + Mapper::ARENA_WORDS - 1u) << 1) | 1u) >> 24 == P_NB &&
+              ((Mapper::ARENA_BASE + Mapper::ARENA_WORDS - 1u) | 0x80000000u) >> 24 == P_NA &&
+              (Mapper::ARENA_BASE + Mapper::ARENA_WORDS - 1u) >> 24 == P_NW,
+              "arena segment spans more than one prefix in some form");
 
 static std::atomic<uint64_t> probe_fires{0};
 
@@ -76,11 +93,11 @@ void Mapper::configure(Machine* owner, AddressBook* book, bool is_main_task) {
 Mapper::Form Mapper::decode(uint32_t v, uint32_t& word, uint32_t& low_bit) {
   word = 0; low_bit = 0;
   switch(v >> 24) {
-    case 0x70: case 0x74:            // word address (real / area)
+    case 0x70: case 0x74: case 0x75: // word address (real / area / arena)
       word = v; return Form::Word;
-    case 0xE0: case 0xE8:            // byte address (real / area)
+    case 0xE0: case 0xE8: case 0xEA: // byte address (real / area / arena)
       word = v >> 1; low_bit = v & 1u; return Form::Byte;
-    case 0xF0: case 0xF4:            // @-flagged word address (real / area)
+    case 0xF0: case 0xF4: case 0xF5: // @-flagged word address (real / area / arena)
       word = v & 0x7FFFFFFFu; return Form::AtWord;
     default:
       return Form::None;
@@ -230,7 +247,7 @@ uint32_t Mapper::map_checked(uint32_t u, Dir dir, const LiveRecord** rec) const 
 // ---- the probe (Mapper.md §1.2) ----
 
 bool Mapper::probe(uint32_t v) const {
-  if(records_.empty())
+  if(records_.empty() && arena_.empty())
     return false;
   const uint32_t readings[3] = { v >> 1, v & 0x7FFFFFFFu, (v & 0x7FFFFFFFu) >> 1 };
   for(uint32_t w : readings) {
@@ -242,6 +259,10 @@ bool Mapper::probe(uint32_t v) const {
     if(!hit && !records_.empty()) {
       int32_t s = static_cast<int32_t>(w);
       hit = s > records_.front().W && s <= stack_bound();
+    }
+    if(!hit) {                                  // P30: a mapped arena row is a mapped range too
+      const ArenaRow* r = arena_row(w);
+      hit = r && r->master_addr != 0;
     }
     if(hit) {
       probe_fires.fetch_add(1);
@@ -271,6 +292,22 @@ Mapper::Verdict Mapper::equivalent(uint32_t master_v, uint32_t clone_v) const {
   if(f == Form::None) {
     vd.kind = Kind::MISMATCH;
     probe(clone_v);
+    return vd;
+  }
+  // P30 — the arena form (StringsDesign §6.4): a clone value in the arena
+  // segment translates through the MAPPED row that contains it (closed
+  // end); a hit on an unmapped row, or on no row, is a MISMATCH — a
+  // pointer to a temp the master does not currently have. Independent of
+  // the record list (stock mode has none), so it precedes A. No inverse
+  // exists for this form, so I6 does not apply.
+  if(is_arena(cw)) {
+    const ArenaRow* row = arena_row(cw);
+    if(row == nullptr || row->master_addr == 0) {
+      vd.kind = Kind::MISMATCH;
+      return vd;
+    }
+    vd.mapped = encode(f, row->master_addr + (cw - row->arena_addr), cl);
+    vd.kind = vd.mapped == master_v ? Kind::MAPPED : Kind::MISMATCH;
     return vd;
   }
   const LiveRecord* r = nullptr;
@@ -303,10 +340,19 @@ Mapper::Verdict Mapper::equivalent(uint32_t master_v, uint32_t clone_v) const {
 }
 
 uint32_t Mapper::clone_location(uint32_t master_addr) const {
-  if(records_.empty())
-    return master_addr;
   uint32_t w = 0, l = 0;
   Form f = decode(master_addr, w, l);
+  // P30 — the arena form is clone→master ONLY (StringsDesign §6.1): the
+  // runtime only reads temps, so a mediated dereference INTO one is a
+  // finding, not a lookup. Refuse before the empty-records shortcut so
+  // the refusal is unconditional.
+  if(f != Form::None && is_arena(w)) {
+    char buf[112];
+    snprintf(buf, sizeof(buf), "MAPPER: clone_location on an arena address %08X (arena form is clone->master only)", master_addr);
+    mapper_abort(owner_, buf);
+  }
+  if(records_.empty())
+    return master_addr;
   if(f == Form::None) {
     probe(master_addr);
     return master_addr;
@@ -317,9 +363,132 @@ uint32_t Mapper::clone_location(uint32_t master_addr) const {
 bool Mapper::frame_precedes(uint32_t a, uint32_t b) const {
   // Ruling A (Project 12): every comparison the master makes in stack
   // coordinates the clone makes in master coordinates — operands only,
-  // logic untouched. Signed, like the walks this serves.
+  // logic untouched. Signed, like the walks this serves. The arena form
+  // is irrelevant here (P30): an arena address is never a frame address.
+  if(is_arena(a) || is_arena(b)) {
+    char buf[112];
+    snprintf(buf, sizeof(buf), "MAPPER: frame_precedes on an arena address (%08X, %08X)", a, b);
+    mapper_abort(owner_, buf);
+  }
   return static_cast<int32_t>(map_checked(a, Dir::ToMaster)) <
          static_cast<int32_t>(map_checked(b, Dir::ToMaster));
+}
+
+// ---- P30: the arena form's rows and its two events (StringsDesign §6) ----
+
+void Mapper::configure_arena(const std::vector<ArenaLayout>& layout) {
+  arena_.clear();
+  arena_.reserve(layout.size());
+  for(const ArenaLayout& l : layout) {
+    ArenaRow r;
+    r.block = l.block; r.arena_addr = l.arena_addr; r.capacity = l.capacity;
+    r.length = 0; r.wfp = 0; r.master_addr = 0;
+    arena_.push_back(r);
+  }
+  std::sort(arena_.begin(), arena_.end(),
+            [](const ArenaRow& x, const ArenaRow& y) { return x.arena_addr < y.arena_addr; });
+  // Invariants of the static layout: every row inside the segment
+  // (closed end included) and pairwise disjoint INCLUDING the closed
+  // right ends — I1's rule transcribed to the arena.
+  const ArenaRow* prev = nullptr;
+  for(const ArenaRow& r : arena_) {
+    if(!is_arena(r.arena_addr) || !is_arena(r.end())) {
+      char buf[128];
+      snprintf(buf, sizeof(buf), "MAPPER ARENA: row for block %08X at %08X..%08X outside the arena segment",
+               r.block, r.arena_addr, r.end());
+      mapper_abort(owner_, buf);
+    }
+    if(prev && !(prev->end() < r.arena_addr)) {
+      char buf[160];
+      snprintf(buf, sizeof(buf), "MAPPER ARENA: rows not strictly disjoint at closed ends: block %08X end %08X vs block %08X base %08X",
+               prev->block, prev->end(), r.block, r.arena_addr);
+      mapper_abort(owner_, buf);
+    }
+    prev = &r;
+  }
+}
+
+const Mapper::ArenaRow* Mapper::arena_row(uint32_t word) const {
+  // Binary search for the last row with arena_addr <= word, then the
+  // closed-end containment test. Disjointness makes the answer unique.
+  size_t lo = 0, hi = arena_.size();
+  while(lo < hi) {
+    size_t mid = (lo + hi) / 2;
+    if(arena_[mid].arena_addr <= word) lo = mid + 1; else hi = mid;
+  }
+  if(lo == 0) return nullptr;
+  const ArenaRow& r = arena_[lo - 1];
+  return (word >= r.arena_addr && word <= r.end()) ? &r : nullptr;
+}
+
+static Mapper::ArenaRow* arena_row_exact(std::vector<Mapper::ArenaRow>& rows, uint32_t arena_addr) {
+  for(Mapper::ArenaRow& r : rows)
+    if(r.arena_addr == arena_addr) return &r;
+  return nullptr;
+}
+
+void Mapper::arena_bind(uint32_t arena_addr, int32_t wfp, uint32_t master_addr) {
+  // Block entry (`p@b = ""`): (re)bind the row. Invariants (§6.2): the row
+  // exists, the master address is a real address (0 is the unmapped
+  // sentinel and the master's temps never sit in the arena or the area),
+  // and wfp is the master's CURRENT wfp — the row must belong to the
+  // frame that is running.
+  ArenaRow* r = arena_row_exact(arena_, arena_addr);
+  if(r == nullptr) {
+    char buf[96];
+    snprintf(buf, sizeof(buf), "MAPPER ARENA: bind of unknown row %08X", arena_addr);
+    mapper_abort(owner_, buf);
+  }
+  if(master_addr == 0 || is_arena(master_addr) || (book_ && book_->in_range(master_addr))) {
+    char buf[128];
+    snprintf(buf, sizeof(buf), "MAPPER ARENA: bind of row %08X to a non-master address %08X", arena_addr, master_addr);
+    mapper_abort(owner_, buf);
+  }
+  if(owner_ && wfp != owner_->wfp) {
+    char buf[128];
+    snprintf(buf, sizeof(buf), "MAPPER ARENA: bind of row %08X with wfp %08X but the machine's wfp is %08X",
+             arena_addr, static_cast<uint32_t>(wfp), static_cast<uint32_t>(owner_->wfp));
+    mapper_abort(owner_, buf);
+  }
+  r->wfp = wfp; r->master_addr = master_addr; r->length = 0;
+  if(os::Trace::enabled("arena")) {
+    char buf[112];
+    snprintf(buf, sizeof(buf), "bind block=%08X arena=%08X master=%08X wfp=%08X",
+             r->block, arena_addr, master_addr, static_cast<uint32_t>(wfp));
+    os::Trace::line("arena", owner_ && owner_->process ? owner_->process->instance_label : std::string("?"), buf);
+  }
+}
+
+void Mapper::arena_set_length(uint32_t arena_addr, int32_t length) {
+  ArenaRow* r = arena_row_exact(arena_, arena_addr);
+  if(r == nullptr) {
+    char buf[96];
+    snprintf(buf, sizeof(buf), "MAPPER ARENA: set_length of unknown row %08X", arena_addr);
+    mapper_abort(owner_, buf);
+  }
+  if(length < 0 || static_cast<uint32_t>(length) > r->capacity) {   // capacity overflow: the loud fault (§5.2)
+    char buf[128];
+    snprintf(buf, sizeof(buf), "MAPPER ARENA: block %08X value length %d exceeds capacity %u",
+             r->block, length, r->capacity);
+    mapper_abort(owner_, buf);
+  }
+  r->length = length;
+}
+
+void Mapper::arena_unmap_frame(int32_t wfp) {
+  // Frame exit (WRTN / ON-pop): every row of that wfp becomes unmapped.
+  // Arena memory is never freed; length is left as the residue it is.
+  for(ArenaRow& r : arena_) {
+    if(r.master_addr != 0 && r.wfp == wfp) {
+      if(os::Trace::enabled("arena")) {
+        char buf[112];
+        snprintf(buf, sizeof(buf), "unmap block=%08X arena=%08X master=%08X wfp=%08X",
+                 r.block, r.arena_addr, r.master_addr, static_cast<uint32_t>(wfp));
+        os::Trace::line("arena", owner_ && owner_->process ? owner_->process->instance_label : std::string("?"), buf);
+      }
+      r.master_addr = 0;
+    }
+  }
 }
 
 int32_t Mapper::shadow_wsp(int32_t clone_wsp) const {
