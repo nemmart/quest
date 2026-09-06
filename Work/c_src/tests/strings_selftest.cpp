@@ -170,6 +170,22 @@ int main() {
       snprintf(what, sizeof(what), "assign_fixed<-substr cap=%d len=%d i=%d", cap, len, i);
       agree(what, A, B, wcmv, [&] { assign_fixed(B.machine, SITE, dst, cap, EagleString::varying(B.memory, lw).substr(i, msub)); });
     }
+  // 1c'. (P31) a length word with bit 15 set is a NEGATIVE count: XNLDA
+  // sign-extends (EagleGeneral.cpp:51-52). varying() must agree.
+  for(uint32_t raw : {0xFFFFu, 0xFFFEu, 0x8000u, 0x7FFFu, 0x0000u})
+    for(int32_t cap : {-3, 0, 2, 40}) {
+      uint32_t lw = REGION + 100;
+      fresh(0, 0, 0, 0);
+      A.memory.write_word(lw, raw); B.memory.write_word(lw, raw);
+      int32_t len = static_cast<int32_t>(static_cast<int16_t>(raw));
+      uint32_t dst = BASE_BP + 2000;
+      A.regs(cap, len, (int32_t)dst, (int32_t)((lw + 1) * 2), 0, 0); B.copy_from(A);
+      char what[64]; snprintf(what, sizeof(what), "varying-lenword raw=%04X cap=%d", raw, cap);
+      agree(what, A, B, wcmv, [&] { assign_fixed(B.machine, SITE, dst, cap, EagleString::varying(B.memory, lw)); });
+      A.regs(cap, len, (int32_t)dst, (int32_t)((lw + 1) * 2), 0, 0); B.copy_from(A);
+      snprintf(what, sizeof(what), "varying-lenword-cmp raw=%04X cap=%d", raw, cap);
+      agree(what, A, B, wcmp, [&] { EagleString v = EagleString::varying(B.memory, lw); compare(B.machine, SITE, dst, cap, v.bp, v.len); });
+    }
   // 1d. assign_varying: length word = min(len, cap), copy of min(len, cap)
   for(int32_t cap : LENS)
     for(int32_t len : LENS) {

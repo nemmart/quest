@@ -463,7 +463,10 @@ class Evaluator:
                 d = sext15(disp)
             ea = add(self.ac[int(base[2])], d, [idx])
         if ind:
+            # an indirect EA: the hardware follows bit-31 chains
+            # (eagle_resolve_indirect); the IR spells it R[...] (IR.md §5.2)
             ea = self.load(ea, 32, idx)
+            ea = V(ea.kind, ea.a, ea.b, ea.k, ea.deps, tag='ind') if ea.kind == 'load' else ea
         return ea
 
     def byte_ea(self, text, idx, long_form):
@@ -1383,6 +1386,8 @@ def ir_word(v, leaves):
     if k == 'load':
         inner = ir_word(v.a, leaves)
         leaves['mem'].add(v.a.show())
+        if v.tag == 'ind':            # indirect EA: R[e] = resolve the bit-31 chain from the wrapped index
+            return 'R[%s]' % inner
         return ('sx16(M16[%s])' if v.b == 16 else 'M32[%s]') % inner
     if k == 'lin':
         # register-relative word EA: the P25 wp() form (masking in the executor)
@@ -1500,7 +1505,7 @@ def piece_of(cnt, ptr, ctx, leaves, role, rawreg=None):
             bs = read_bytes(ctx.mem, w, b, cnt.k)
             if bs is None or len(bs) != cnt.k:
                 raise Refuse('LITERAL-NOT-IN-IMAGE', '%s literal 0x%X:%d len %d not in the memory dump' % (role, w, b, cnt.k))
-            return '"%s"@0x%X:%d' % (esc_lit(bs), w, b), 'literal', '0x%X:%d len %d' % (w, b, cnt.k)
+            return '[@0x%X:%d, "%s"]' % (w, b, esc_lit(bs)), 'literal', '0x%X:%d len %d' % (w, b, cnt.k)
     # located varying: count == N[A] and ptr == bp(A)+2
     if cnt.kind == 'load' and cnt.b == 16:
         lw = V('bp', a=cnt.a, k=2)
@@ -1822,9 +1827,15 @@ def write_p31(path, tsv_path, sites, ctx, shas):
         W('# literals referenced by emitted statements: %d distinct (addr,len)\n' % len(set(
             r.pieces[k][2] for r in rows if r.verdict == 'EMIT' for k in r.pieces if r.pieces[k][1] == 'literal')))
     with open(tsv_path, 'w') as f:
-        f.write('# pc\top\tblock\tfunc\tidiom\tdest\tverdict\tcategory\treason\n')
+        f.write('# p31 sites — machine-readable ledger (tools/string_sites.py --p31-tsv); consumed by lower.py --strings-sites\n')
+        for k, v in shas:
+            f.write('# %s sha256=%s\n' % (k, v))
+        f.write('# pc\top\tblock\tfunc\tidiom\tdest\tverdict\tcategory\treason\tfold\tir\n')
         for r in rows:
-            f.write('%08X\t%s\t%08X\t%s\t%s\t%s\t%s\t%s\t%s\n' % (r.pc, r.op, r.block, r.func, r.idiom, r.dest, r.verdict, r.cat, r.reason))
+            fold = ' '.join('%08X' % ctx.ins[i].pc for i in sorted(r.fold))
+            f.write('%08X\t%s\t%08X\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n' % (
+                r.pc, r.op, r.block, r.func, r.idiom, r.dest, r.verdict, r.cat, r.reason, fold,
+                r.text if r.verdict == 'EMIT' else ''))
     return rows
 
 

@@ -24,7 +24,12 @@ EagleString EagleString::fixed(uint32_t bp, int32_t n) {
 EagleString EagleString::varying(Memory& memory, uint32_t len_word_addr) {
   EagleString s;
   s.bp = (len_word_addr + 1) * 2;
-  s.len = static_cast<int32_t>(memory.read_word(len_word_addr) & 0xFFFFu);
+  // SIGN-extended: the compiler loads a length word with XNLDA
+  // (EagleGeneral.cpp:51-52, `(src<<16)>>16`), so 0xFFFF is the count -1
+  // (a one-byte DESCENDING string). Found live by P31: DISPLAY_INVENTORY's
+  // compare at 7016816B reads a record field holding 0xFFFF on the login
+  // path; the master runs WCMP with ac1 = -1. (P30 zero-extended.)
+  s.len = static_cast<int32_t>(static_cast<int16_t>(memory.read_word(len_word_addr) & 0xFFFFu));
   return s;
 }
 

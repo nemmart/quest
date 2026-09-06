@@ -1,5 +1,5 @@
 #pragma once
-// P23 (Gen-6.1) — quest.ir loader + block interpreter; P26 = ir 3.
+// P23 (Gen-6.1) — quest.ir loader + block interpreter; P26 = ir 3; P28 = ir 4; P31 = ir 5.
 // Spec: docs/IR.md (normative). Dispatch rule: a block PRESENT in
 // quest.ir (QUEST_IR env) is executed as IR by the CLONE; absent =
 // emulated; the master always emulates. The executor is an interpreter;
@@ -36,8 +36,26 @@ public:
   // shared EagleInstruction helper they call (docs/IR.md §5).
   enum EffOp { EFF_NONE = 0, EFF_ADD, EFF_SUB, EFF_MUL, EFF_DIV, EFF_CVWN,
                EFF_ASH, EFF_NADD, EFF_NSUB, EFF_NMUL };
+  // P31 (ir 5): a string PIECE — literal (contents known, address in the
+  // image, verified lazily against memory at first use), located fixed
+  // [@a, n] (byte address, n bytes), located varying [@a, n varying] /
+  // [@a, varying] (word address of the length word).
+  struct Piece {
+    enum Kind { LIT, FIXED, VARYING, VARYING_NOCAP } kind = FIXED;
+    std::shared_ptr<Expr> addr;      // FIXED: byte-pointer value; VARYING*: word address (wrapped)
+    int32_t n = 0;                   // LIT: byte count; FIXED: n; VARYING: capacity
+    uint32_t lit_bp = 0;             // LIT: byte pointer in the image
+    std::string bytes;               // LIT: the text (unescaped)
+    bool verified = false;           // LIT: bytes checked against memory (once)
+  };
+  struct StrOp {
+    enum Kind { ASSIGN_FIXED, ASSIGN_VARYING, CMP, WORDS } kind = ASSIGN_FIXED;
+    Piece dst, src;                  // ASSIGN: dst/src; CMP: src=string 1 (ac3/ac1), dst=string 2 (ac2/ac0)
+    std::shared_ptr<Expr> k;         // WORDS: word count
+    bool executed = false;           // first-execution log (coverage)
+  };
   struct Stmt {
-    enum Kind { INSTR, STMT, CALL, RET, GOTO, ASSERT, RT_CALL } kind = STMT;
+    enum Kind { INSTR, STMT, CALL, RET, GOTO, ASSERT, RT_CALL, STRING } kind = STMT;
     uint32_t pc = 0;                 // INSTR: address; CALL/RT_CALL: site pc
     uint32_t target = 0;             // CALL: callee
     uint32_t ret = 0;                // CALL: declared return pc (belief)
@@ -51,6 +69,7 @@ public:
     std::string text;                // ASSERT: source text for the failure report;
                                      // RT_CALL: callee symbol (`?NAME`)
     std::vector<std::shared_ptr<Expr>> argv;   // RT_CALL: e1..eN in PL/I order (P28, ir 4)
+    std::shared_ptr<StrOp> str;      // STRING (P31, ir 5): the located-string statement
     bool flags = false;              // STMT: writes c/ovr (effectful) -> ovk/ovr check
   };
   struct Block {
