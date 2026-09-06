@@ -3,6 +3,38 @@
 
 # Where things stand
 
+## ★ P32 IMPLEMENTED ON BRANCH — append chains (ir 5 slices 4–6): 944 more WCMV/WCMP sites are located-string statements; embeds 1,673 → 729 (book), 3,552 → 2,608 (stock); 1,593 string statements. Plus the P31 CORRECTION (17 wrong statements; 652 → 649).
+
+Branch p32-append-chains (on main c88c0ff). Two things landed, as two
+commits: (1) the P31 correction — string_sites.py's evaluator kept
+frame slots across calls that wrote them (`?UNSIGNED_TO_CHAR` writes
+its varying at the ac2 slot); 17 P31 statements carried a pre-call
+constant count. Fixed: passed slots dropped at the call, a value
+reloaded across any call is never rendered (memory is read); p31 649
+EMIT / 127 REFUSE (3 refuse, 14 re-rendered as the located read of the
+call-written string — ruling); artifacts 649 / 1,673 / 3,552; K=1 book
++ stock gates 0 div. Records: docs/Project31/Census.md §11. (2) P32:
+census `string_sites.py --p32` — 944 sites, ALL expressible (448
+expression / 415 mixed / 81 full register form `[@ac2, ac0] = [@ac3,
+ac1]`; ruling: no readability floor, emit the ground form); 211
+scratch buffers, 446 sequences, longest 2 — the compiler concatenates
+PAIRWISE, no sequence crosses a block; 335 copy-out totals verified, 0
+mismatch; `?UNSIGNED_TO_CHAR` returns NOTHING (the "length in ac0" was a
+design error, corrected on main 08afd77/c88c0ff); tail splits are
+bounded concatenation (`src_count` = remaining room). Emitter: lower.py
+`--strings-sites32 docs/Project32/p32.tsv --strings-slice 4..6` (slice
+3 = P31 byte for byte); executor: `<n>` is any pure expr
+(`Piece::n_expr`), `strings32` provenance line; IR.md §5.8 (no version
+bump — `<n>` widened, no production added). Drivers: `play` grew `H`,
+`1⏎`, `0⏎` (HELP's chain is a named check). Local K=1 gates: slice 4
+book 0 div 309,780; slice 5 book 0 div 323,555; slice 6 book + stock —
+docs/Project32/REPORT_worklog.md. Task 046 queued on main (044's 15
+legs + P32 verdict lines; bar 729/2,608, 1,593, 15/15, 0 div, slices
+4/5/6 live, HELP live). Records: docs/Project32/{Census,REPORT,
+REPORT_worklog}.md, p32.ledger, p32.tsv. P33-B next: its 96 temp sites /
+37 blocks are listed at the end of p32.ledger; the chain machinery
+applies to the `p@b` groups unchanged.
+
 ## ★ P33-A IMPLEMENTED ON BRANCH — the checker half of the string design, DARK behind QUEST_STRINGS_CHECK=1: hook table quest.strhooks (19 rows / 57 WMSP / 19 STASP / onpop 7017EC9F / 3 unwind WRTNs), instruction-arm hooks (WMSP/STASP/WRTN + frames.cpp twins), arena bind/rebind/unmap from the master into the clone's mapper, SYMMETRIC ClaimDelta in the wsp compare, unmapped-row naming in the divergence dump; + F2-b (folded DERR → TERMINAL-ABORT with both pcs) + the ABORT readout (`w`/`w−2`: 00000011 7015C48E); self-test 64 GREEN + teeth RED; task 045 queued (Sep 6 2026; awaiting review + integration)
 
 Branch p33a-checker-strings (based on main 8738975, P30 merged). Rulings

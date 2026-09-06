@@ -420,7 +420,12 @@ manual question.
                For a VARYING string a word address, wrapped into the block's segment
                exactly like an M16 index.  A register is a legal address ([@ac2, 13]:
                the setup was kept rather than folded — P31 ruling O4).
-    <n>     := a constant 0..32767.
+    <n>     := a constant 0..32767         ; P31
+             | any pure expr (§5.1)         ; P32 (docs/Project32/Census.md §3): the count the
+                                           ;   instruction uses — a register holding the master's own
+                                           ;   count (ac0, ac1), a length-word read sx16(M16[a]), a
+                                           ;   wide read M32[a] (the compiler's precomputed totals),
+                                           ;   a sum; no 32 K check on a runtime value (F-B1)
 
     stmt   += <located> = <piece>          ; PL/I assignment
             | ac1 = cmp(<piece>, <piece>)  ; WCMP: cmp(string 1, string 2) = -1/0/+1 in ac1
@@ -465,7 +470,28 @@ byte for byte and writes the residues (StringsDesign §3) itself:
   string, and the master runs it (DISPLAY_INVENTORY 7016816B on the login
   path).  No length-range fault (P31 finding F-B1).
 
-LOADER REFUSES: an `ir 4` file; `n` not a constant or ≥ 32768; a
+P32 (append chains; still ir 5 — no production added, `<n>` widened):
+`[@d, n] = [@s, m]` IS `WCMV(dst_count = n, src_count = m, dst = d,
+src = s)` through the library's `copy`; `n` and `m` may now be
+expressions, and either operand may be the register itself
+(`[@ac2, ac0] = [@ac3, ac1]` is the literal instruction, exact by
+construction).  A continuation piece of a scratch chain is written at
+the append cursor, `[@ac2, …] = piece` (StringsDesign §5.1's `append`,
+register spelling).  A varying destination (`[@a, n varying]`, XNSTA
+absorbed) is emitted only where `dst_count == src_count`, so the
+library's `min(len, n)` is the master's stored length; otherwise the
+XNSTA stays a statement and the copy is the fixed form at the data
+address.  `len()`, `append()`, `substr()`, `min()` are NOT IR: `len` is
+the count expression, `append` the `@ac2` spelling, SUBSTR a byte-offset
+address (`(bp(ac3, 40) + ac1)`), a min the register the diamond leaves —
+all readable-layer rewrites (P34).  Negative `bp()` displacements are
+written `-0x…`.  Tail splits are bounded concatenation: `src_count`
+carries the remaining room (`[@ac2, ac0] = [@ac3, ac1]` with ac1 = room).
+The count expressions are evaluated in the statement's own context
+(block-entry registers / memory at the statement) before the library
+call; `check_treads` covers them.
+
+LOADER REFUSES: an `ir 4` file; a constant `n` ≥ 32768; a
 literal without a `0xW:b` constant address, outside the block's segment,
 ≥ 32 K, with an escape other than `\xHH`, or containing a raw `;`;
 `[@a, varying]` as an lvalue; a varying destination without a capacity;
@@ -489,19 +515,25 @@ the first execution of each string statement logs
 (coverage evidence, the battery's verdict lines).
 
 Emitter (tools/lower.py `--strings-sites docs/Project31/p31.tsv
---strings-slice {0..3} --strings-census`): the per-site artifact is
+[--strings-sites32 docs/Project32/p32.tsv] --strings-slice {0..6}
+--strings-census`): the per-site artifact is
 produced by tools/string_sites.py `--p31` (the census tool's symbolic
 evaluator renders the four operands and decides EMIT/REFUSE); lower.py
 CONSUMES it — provenance (dis/blocks/mem sha256) checked against its own
 inputs, every fold pc re-validated (in the site's block, before the site,
 a pure producer or the absorbed XNSTA, nothing but LDAFP between the
 first folded pc and the site) — and echoes the folded instructions after
-`<-` in the statement's comment.  Slice 1 = the 535 literal assignments,
-2 = + the other located assignments (74), 3 = + cmp (31) and words (12);
-652 sites in all, 124 refused with the reason in the artifact (P32's
-copy-outs / substr / chain capacities, P33's temps, 6 needing the
-t-place form).  Slice 0 reproduces the ir 4 artifacts byte for byte
-except the version line.
+`<-` in the statement's comment.  Slice 1 = the literal assignments,
+2 = + the other located assignments, 3 = + cmp and words — 649 sites
+(P32's correction, Sep 6: 652 → 649; docs/Project31/Census.md §11), 127
+refused with the reason in the artifact.  Slices 4–6 (P32, p32.tsv,
+which carries each row's slice and form): 4 = first pieces +
+continuations (677), 5 = + copy-outs / bounded copies / SUBSTR pieces
+(134), 6 = + CALLRESULT counts, residue counts (tail splits) and the 9
+WCMPs P31 refused (133) — 944 sites, 0 refused; 1,593 string statements
+in all, embeds 729 (book) / 2,608 (stock).  Slice 3 reproduces the P31
+artifacts byte for byte; slice 0 the ir 4 artifacts except the version
+line.  The `strings32` provenance line names p32.tsv.
 
 ### 5.6 Class cap — what lower.py emits
 
@@ -740,6 +772,16 @@ joins, 7 `fixed = 'lit'`, 31 compares, 12 word fills); embeds 2,322 →
 1,670 (book), 4,201 → 3,549 (stock); sync list unchanged.  Superset of
 ir 4; the loader refuses `ir 4` files (regenerate artifacts and binaries
 together, as always).
+
+ir 5, P32 amendment (append chains, Sep 6 2026 —
+docs/Project32/{Census,REPORT}.md): `<n>` widened to any pure expr (no
+production added, so no version bump); per-operand expression-or-
+register rendering with the continuation cursor `@ac2`; the `strings32`
+provenance line; 944 more WCMV/WCMP sites lowered (first pieces,
+continuations, copy-outs, bounded copies, SUBSTR pieces, CALLRESULT and
+residue counts, the 9 P31-refused compares) — 1,593 string statements,
+embeds 1,673 → 729 (book), 3,552 → 2,608 (stock).  Also the P31
+correction of the same day (652 → 649: docs/Project31/Census.md §11).
 
 ir 1 (Project 23 phase 1): @pc-prefixed statements, `embed` keyword,
 `end` / `end fall`, per-statement pcs. Superseded; loaders refuse it.

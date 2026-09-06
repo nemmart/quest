@@ -1068,11 +1068,15 @@ def parse_strings_sites(path, dis_path, blocks_path):
         if not line:
             continue
         f = line.split("\t")
-        if len(f) != 11:
+        if len(f) not in (11, 14):
             die("--strings-sites: bad row (%d fields): %s" % (len(f), line[:60]))
         pc = int(f[0], 16)
         rows[pc] = {"op": f[1], "block": int(f[2], 16), "idiom": f[4], "verdict": f[6],
                     "fold": [int(p, 16) for p in f[9].split()] if f[9] else [], "ir": f[10]}
+        if len(f) == 14:
+            # P32 artifact (p32.tsv): form, slice (4..6), chain
+            rows[pc]["slice"] = int(f[12])
+            rows[pc]["form"] = f[11]
     for k, p in (("dis", dis_path), ("blocks", blocks_path)):
         if shas.get(k) != sha256(p):
             die("--strings-sites provenance: %s sha256 %s != %s (%s)" % (k, shas.get(k), sha256(p), p))
@@ -1082,7 +1086,11 @@ def parse_strings_sites(path, dis_path, blocks_path):
 
 def strings_slice_ok(row, slice_):
     """1 = literal assignments (ASSIGN-LIT-*), 2 = + every other WCMV,
-    3 = + cmp (WCMP) and words (WBLM)."""
+    3 = + cmp (WCMP) and words (WBLM); P32 rows carry their own slice:
+    4 = first pieces + continuations, 5 = + copy-outs / bounded / SUBSTR,
+    6 = + CALLRESULT counts, residue counts, the P31-refused WCMPs."""
+    if "slice" in row:
+        return slice_ >= row["slice"]
     if row["op"] == "WCMV":
         if row["idiom"].startswith("ASSIGN-LIT"):
             return slice_ >= 1
@@ -1117,6 +1125,7 @@ def main():
                          "Nova LOAD forms (pure; high half as the emulator leaves it)")
     ap.add_argument("--rt-census", help="write the per-site rt_call ledger (emitted / refused + reason)")
     ap.add_argument("--strings-sites", help="P31 artifact: docs/Project31/p31.tsv (string_sites.py --p31-tsv)")
+    ap.add_argument("--strings-sites32", help="P32 artifact: docs/Project32/p32.tsv (string_sites.py --p32-tsv); slices 4..6")
     ap.add_argument("--strings-slice", type=int, default=0,
                     help="P31 (ir 5): 0 = no string statements (ir 5 header only); 1 = literal assignments; "
                          "2 = + the other located assignments; 3 = + cmp and words")
@@ -1160,6 +1169,14 @@ def main():
         if not a.strings_sites:
             die("--strings-slice needs --strings-sites")
         a.str_rows, _ = parse_strings_sites(a.strings_sites, a.dis, a.blocks)
+        if a.strings_sites32:
+            rows32, _ = parse_strings_sites(a.strings_sites32, a.dis, a.blocks)
+            for pc32, row32 in rows32.items():
+                if pc32 in a.str_rows and a.str_rows[pc32]["verdict"] == "EMIT":
+                    die("strings: site %08X is EMIT in both artifacts" % pc32)
+                a.str_rows[pc32] = row32
+        elif a.strings_slice > 3:
+            die("--strings-slice > 3 needs --strings-sites32")
     out = ["ir 5",
            "mode %s" % ("book" if a.book else "stock"),
            "source  %s sha256=%s" % (a.dis, sha256(a.dis)),
@@ -1168,6 +1185,8 @@ def main():
            "argmap  %s sha256=%s" % (a.argmap, sha256(a.argmap))]
     if a.strings_slice > 0:
         out.append("strings %s sha256=%s" % (a.strings_sites, sha256(a.strings_sites)))
+        if a.strings_sites32 and a.strings_slice > 3:
+            out.append("strings32 %s sha256=%s" % (a.strings_sites32, sha256(a.strings_sites32)))
     out.append("")
     census = {"expr": 0, "embed": 0, "argpush": 0, "call": 0, "ret": 0,
               "goto": 0, "assert": 0, "rt_call": 0, "last": None,

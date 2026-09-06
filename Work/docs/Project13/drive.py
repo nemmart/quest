@@ -46,6 +46,9 @@ elif mode == "play":
     send("O", 5); send("\x1b", 4)                    # OBSERVE inventory
     send("D", 5); send("\x1b", 4)                    # DISPLAY_MAGIC (spell status)
     send("L", 5); send("\x1b", 5)                    # LIST_PLAYERS
+    # P32: HELP topic 1 (Terrain) runs the two-stage 164 || 150 -> 314 scratch
+    # chain (7016D5E3..7016D602) and its ?WRITE_SCREEN; 0 leaves HELP
+    send("H", 5); send("1\r", 8); send("0\r", 6)
 elif mode == "login":
     drain(15)
 send("\x1b", 8)
