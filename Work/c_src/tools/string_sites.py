@@ -411,6 +411,8 @@ class Claim:
         self.top = None
 
 
+WRITES = {}     # instruction idx -> registers it wrote (P31 fold analysis)
+
 class Evaluator:
     """Forward symbolic evaluation of one block."""
 
@@ -436,6 +438,7 @@ class Evaluator:
             self.claims = list(inherit.claims)
             self.pushes = list(inherit.pushes)
             self.chain = inherit.chain + [inherit.block]
+        self.entry_ac = list(self.ac)   # P31: block-entry register state (leaf check)
         self.sites = []
         self.stores = []       # (idx, addrV, valV)
         self.c = None
@@ -480,14 +483,16 @@ class Evaluator:
                 return V('bp', a=const(w), k=b, deps=[idx])
             # acN*2 + raw32: a byte-pointer constant indexed by acN words
             w, b = bp_to_word(raw)
-            return V('bp', a=addv(const(w), self.ac[int(base[2])]), k=b, deps=[idx], tag='indexed')
+            return V('bp', a=addv(const(w), self.ac[int(base[2])]), k=b, deps=self.ac[int(base[2])].deps | {idx}, tag='indexed')
         # X form
         if ind:
             return V('unk', a='xbyte@', k=self.ins[idx].pc, deps=[idx])
         if base is None:
             w, b = bp_to_word(disp)   # ii=0: raw16 as a byte offset in seg (rare)
             return V('bp', a=const(w), k=b, deps=[idx])
-        return V('bp', a=self.ac[int(base[2])], k=sext16(disp), deps=[idx])
+        # P31: carry the base register's producers into the window (was deps=[idx]: the
+        # window of every register-based byte EA stopped one instruction short)
+        return V('bp', a=self.ac[int(base[2])], k=sext16(disp), deps=self.ac[int(base[2])].deps | {idx})
 
     def canon(self, addr):
         return addr.show()
@@ -518,10 +523,12 @@ class Evaluator:
             idx = x.idx
             mn, args = x.mn, x.args
             a = [s.strip() for s in args.split(',', 1)] if args else []
+            before = list(self.ac)
             try:
                 self.step(x, idx, mn, a)
             except Exception as e:  # loud, per METHOD §8
                 raise RuntimeError('at %08X %s: %s' % (x.pc, x.raw, e))
+            WRITES[idx] = frozenset(i for i in range(4) if self.ac[i] is not before[i])
         return self.sites
 
     def acnum(self, s):
@@ -671,7 +678,9 @@ class Evaluator:
                     'WNMUL', 'WNDIV', 'NADD', 'NSUB', 'NMUL', 'NDIV', 'WSBI', 'CVWN', 'WSSVR', 'WSSVS',
                     'SEX', 'ZEX', 'WHLV', 'WNEGI', 'WLDAI', 'WSKBO', 'WSKBZ', 'XNADD', 'XWADD', 'XNSUB',
                     'XWSUB', 'XNMUL', 'XWMUL', 'XNDIV', 'XWDIV', 'LNADD', 'LWADD', 'LNSUB', 'LWSUB',
-                    'LNMUL', 'LWMUL', 'LNDIV', 'LWDIV', 'WMSP', 'WPOPB', 'WUSGT', 'WUSGE', 'WULEI',
+                    'LNMUL', 'LWMUL', 'LNDIV', 'LWDIV', 'WMSP', 'WPOPB',
+                    # P31: WUSGT/WUSGE/WULEI removed — they are skips and write no AC
+                    # (EagleCompute.cpp:203-211, :365); the P29 tool made them op producers
                     'XCT', 'WBTO', 'WBTZ', 'WSZB', 'WSNB', 'WLOB', 'WLSN', 'WNADI'):
             # generic: last AC operand is the destination (Eagle convention)
             regs = [int(t) for t in re.findall(r'(?<![x0-9A-F])([0-3])(?=,|$|\s)', ','.join(a))]
@@ -712,11 +721,16 @@ class Evaluator:
             self.wsp = V('sp', k=pc, tag=('after-wsavs', pc), deps=[idx])
             self.pushes = []
         elif mn == 'SYSCALL':
-            # AOS/VS convention: ac0..ac2 carry results, ac3 is preserved
-            # (the compiler addresses [ac3+d] right after, e.g. 7015BE5B)
-            keep = ac[3]
+            # P31 F7 (verified, Sep 6 2026): `SYSCALL n` is `XJSR @[6]`
+            # into the runtime stub at 7017FDEC (WPSH 3,3; LCALL
+            # [0x30000000]; WBR 2; ISZTS (hidden word C7C9); ISZTS;
+            # LDAFP 3; WPOPJ).  The dispatcher (os/OSTask.cpp:123-178)
+            # rewrites only ac0..ac2; the stub then executes `LDAFP 3`
+            # on BOTH the success and the error path, so after every
+            # syscall ac3 = wfp — stronger than the P29 assumption
+            # "ac3 preserved" (which agreed only when ac3 was already fp).
             self.clobber_all('SYSCALL ' + x.args, idx)
-            ac[3] = keep
+            ac[3] = V('fp', deps=[idx])
         elif mn in ('LCALL', 'XCALL', 'LJSR', 'XJSR', 'WRTN', 'WPOPJ', 'WRSTR'):
             self.clobber_all(mn + (':' + x.comment if x.comment else ''), idx)
             if mn in ('LCALL', 'XCALL', 'LJSR', 'XJSR'):
@@ -1321,6 +1335,499 @@ def evaluate_all(blocks, ins, syms):
             ev(b)
     return state, preds, entries
 
+# ----------------------------------------------------------------------
+# Project 31 — located strings: per-site ledger (--p31)
+# ----------------------------------------------------------------------
+# Renders each candidate site's four operands as ir 5 expressions
+# (docs/Project31/Census.md §3 grammar draft), decides EMIT / REFUSE
+# with a reason, censuses the min diamonds, and writes the ledger the
+# emitter (tools/lower.py --strings-census) is checked against.
+# Rendering rules (docs/Project31/Census.md §2):
+#   fp atom      -> ac3    (valid iff no KEPT window instruction writes ac3
+#                            other than LDAFP, which writes fp)
+#   acN@entry    -> acN    (valid iff no kept window instruction writes acN)
+#   N[a] / W[a]  -> sx16(M16[a]) / M32[a]   (valid iff no kept store to a)
+#   bp(fp+k)+o   -> bp(ac3, 2k+o);  bp const -> 0xW:b;  + symbolic byte term
+#   anything else (sp, unk, end, op other than a const/len phi) -> REFUSE
+
+class Refuse(Exception):
+    """Refuse(category, detail): category is the ledger's bucket (stable
+    across sites), detail the site-specific text."""
+    def __init__(self, cat, detail=''):
+        Exception.__init__(self, cat + (': ' + detail if detail else ''))
+        self.cat, self.detail = cat, detail
+
+P31_WCMV_IDIOMS = ('ASSIGN-LIT-VARYING', 'ASSIGN-LIT-VARYING-PAD', 'ASSIGN-STR-VARYING',
+                   'ASSIGN-STR-VARYING-PAD', 'ASSIGN-STR-FIXED', 'ASSIGN-LIT-FIXED',
+                   'ASSIGN-STR-MIN', 'ASSIGN-FROM-TEMP', 'ASSIGN-FROM-TEMP-VARYING')
+
+def ir_const(k):
+    k &= 0xFFFFFFFF
+    if k >= 0x80000000:
+        s = k - 0x100000000
+        return str(s) if s > -256 else '-0x%X' % -s
+    return str(k) if k < 256 else '0x%X' % k
+
+def ir_word(v, leaves):
+    """IR text of a WORD value; records leaf atoms in `leaves` (a dict
+    kind->set): registers read and memory addresses read."""
+    k = v.kind
+    if k == 'const':
+        return ir_const(v.k)
+    if k == 'fp':
+        leaves['reg'].add(3)
+        return 'ac3'
+    if k == 'entry':
+        leaves['reg'].add(v.k)
+        return 'ac%d' % v.k
+    if k == 'load':
+        inner = ir_word(v.a, leaves)
+        leaves['mem'].add(v.a.show())
+        return ('sx16(M16[%s])' if v.b == 16 else 'M32[%s]') % inner
+    if k == 'lin':
+        # register-relative word EA: the P25 wp() form (masking in the executor)
+        if len(v.a) == 1 and v.a[0][0] == 1 and v.a[0][1].kind in ('fp', 'entry'):
+            base = ir_word(v.a[0][1], leaves)
+            return 'wp(%s, %d)' % (base, v.k)
+        parts = []
+        for c, t in v.a:
+            ts = ir_word(t, leaves)
+            if c == 1:
+                parts.append(('+', ts))
+            elif c == -1:
+                parts.append(('-', ts))
+            elif c > 0:
+                parts.append(('+', '(%s * %d)' % (ts, c)))
+            else:
+                parts.append(('-', '(%s * %d)' % (ts, -c)))
+        s = ''
+        for i, (sg, ts) in enumerate(parts):
+            s += (ts if i == 0 and sg == '+' else (' %s %s' % (sg, ts) if i else '0 - ' + ts))
+        if v.k:
+            s += (' + %s' % ir_const(v.k)) if v.k > 0 else (' - %s' % ir_const(-v.k))
+        return '(' + s + ')' if len(parts) + (1 if v.k else 0) > 1 else s
+    if k == 'bp':
+        raise Refuse('COMPUTED-OPERAND', 'byte pointer used as a word value: %s' % v.show())
+    if k == 'op' and v.a == 'phi':
+        raise Refuse('P32-SUBSTR', 'operand is a phi/min (SUBSTR with a computed length): %s' % v.show())
+    if k == 'op':
+        raise Refuse('COMPUTED-OPERAND', 'opaque op %s in an operand: %s' % (v.a, v.show()))
+    if k == 'end':
+        raise Refuse('P32-RESIDUE', 'residue of %s@%X used as an operand' % (v.a, v.k))
+    if k == 'unk':
+        raise Refuse('P32-CALLRESULT' if v.a.startswith('LCALL') else 'COMPUTED-OPERAND', 'unknown value (%s@%X)' % (v.a, v.k))
+    if k == 'sp':
+        raise Refuse('P33-TEMP', 'stack-relative value %s' % v.show())
+    raise Refuse('COMPUTED-OPERAND', 'unrenderable %s' % v.show())
+
+def ir_bp(v, leaves):
+    """IR text of a BYTE pointer value."""
+    if v.kind != 'bp':
+        raise Refuse('COMPUTED-OPERAND', 'pointer operand is not a byte pointer: %s' % v.show())
+    base, off, bterm = v.a, v.k, v.b
+    if base.kind == 'const':
+        w, b = bp_to_word(word_to_bp(base.k) + off)
+        s = '0x%X:%d' % (w, b)
+    else:
+        t, c = lin_parts(base)
+        # bp(b, d) = b*2 + d: fold the base's constant into the displacement
+        rest = _mk(t, 0, frozenset())
+        s = 'bp(%s, %d)' % (ir_word(rest, leaves), 2 * c + off)
+    if bterm is not None:
+        s = '(%s + %s)' % (s, ir_word(bterm, leaves))
+    return s
+
+def bp_diff_const(a, b):
+    """a - b for two byte pointers as an int, or None if symbolic."""
+    d = subv(a, b)
+    return d.k if d.kind == 'const' else None
+
+def esc_lit(bs):
+    out = []
+    for c in bs:
+        if 0x20 <= c < 0x7F and c not in (0x22, 0x3B, 0x5C):
+            out.append(chr(c))
+        else:
+            out.append('\\x%02X' % c)
+    return ''.join(out)
+
+def min_of_phi(v, other):
+    """dst_count = phi(a, b) -> (n, provenance) when it is a min shape:
+    both constants, or one constant and the other == src_count."""
+    vals = v.tag[1]
+    if len(vals) != 2:
+        raise Refuse('COMPUTED-CAPACITY', 'phi with %d arms: %s' % (len(vals), v.show()))
+    a, b = vals
+    if a.kind == 'const' and b.kind == 'const':
+        return min(a.k, b.k), 'min(%d, %d) const-const min shape' % (a.k, b.k)
+    for c, o in ((a, b), (b, a)):
+        if c.kind == 'const' and o.show() == other.show():
+            return c.k, 'min shape: phi(%d, src length)' % c.k
+    raise Refuse('P32-CAPACITY', 'dst_count is min(chain total, const), not min(const, source length): %s' % v.show())
+
+def count_category(v):
+    if has_kind(v, ('unk',)):
+        return 'P32-CALLRESULT'
+    if has_kind(v, ('end',)):
+        return 'P32-RESIDUE'
+    if v.kind == 'op' and v.a == 'phi':
+        return 'P32-SUBSTR'
+    if v.kind == 'load':
+        return 'P32-SUBSTR'       # the length word of ANOTHER string: SUBSTR(x, 1, len(y))
+    if v.kind == 'lin' and all(t.kind == 'load' for _, t in v.a):
+        return 'P32-COPYOUT'       # length word(s) + constant: a scratch-chain total
+    return 'COMPUTED-COUNT'
+
+class P31Site:
+    pass
+
+def piece_of(cnt, ptr, ctx, leaves, role, rawreg=None):
+    """-> (text, kind, detail) for a (count, pointer) operand pair as a piece.
+    rawreg: render a FIXED located piece as [@acN, m] — the operand register
+    carried into the block (its producers are in predecessor blocks)."""
+    if rawreg is not None and cnt.kind == 'const' and not (ptr.kind == 'bp' and ptr.a.kind == 'const' and ptr.b is None):
+        leaves.setdefault('raw', set()).add(rawreg)
+        return '[@ac%d, %d]' % (rawreg, cnt.k), 'located-fixed', '%d bytes; the pointer register itself (setup kept, nothing folded)' % cnt.k
+    if ptr.kind != 'bp':
+        raise Refuse('COMPUTED-OPERAND', '%s pointer is not a byte pointer: %s' % (role, ptr.show()))
+    if ptr.a.kind == 'const' and ptr.b is None:
+        w, b = bp_to_word(word_to_bp(ptr.a.k) + ptr.k)
+        if is_code_addr(w):
+            if cnt.kind != 'const':
+                raise Refuse('P32-CALLRESULT' if has_kind(cnt, ('unk',)) else 'P32-SUBSTR', '%s literal with a non-constant count %s' % (role, cnt.show()))
+            if cnt.k == 0:
+                return '[@0x%X:%d, 0]' % (w, b), 'located-fixed', 'zero-length literal: blanks (a blank fill, or `s = \'\'` compare)'
+            bs = read_bytes(ctx.mem, w, b, cnt.k)
+            if bs is None or len(bs) != cnt.k:
+                raise Refuse('LITERAL-NOT-IN-IMAGE', '%s literal 0x%X:%d len %d not in the memory dump' % (role, w, b, cnt.k))
+            return '"%s"@0x%X:%d' % (esc_lit(bs), w, b), 'literal', '0x%X:%d len %d' % (w, b, cnt.k)
+    # located varying: count == N[A] and ptr == bp(A)+2
+    if cnt.kind == 'load' and cnt.b == 16:
+        lw = V('bp', a=cnt.a, k=2)
+        if bp_diff_const(ptr, lw) == 0:
+            leaves['mem'].add(cnt.a.show())
+            return '[@%s, varying]' % ir_word(cnt.a, leaves), 'located-varying', 'length word %s' % describe_addr(cnt.a, ctx)
+    if cnt.kind == 'const':
+        return '[@%s, %d]' % (ir_bp(ptr, leaves), cnt.k), 'located-fixed', '%d bytes' % cnt.k
+    # a count expression that is renderable but not a length word: fixed with an expression count
+    ctext = ir_word(cnt, leaves)
+    raise Refuse(count_category(cnt), '%s count %s is not a constant or a length word' % (role, cnt.show()))
+
+REG_WRITERS_LDAFP = ('LDAFP',)
+
+def regs_named(x):
+    return set(int(t) for t in re.findall(r'(?<![x0-9A-F])([0-3])(?=,|$|\s)', x.args or ''))
+
+PURE_FOLDABLE = ('NLDAI', 'WLDAI', 'WMOV', 'XNLDA', 'XWLDA', 'LNLDA', 'LWLDA', 'XLEF', 'LLEF',
+                 'XLEFB', 'LLEFB', 'XLDB', 'LLDB', 'WLDB', 'ZEX', 'SEX', 'XNSTA', 'LNSTA')
+# XNSTA/LNSTA appear only as the absorbed length-word store; every other
+# store, every flag-writing op (add/sub/mul/... write c/ovr, WCMP/WBLM do
+# not overwrite them) and LDAFP (ac3 = wfp: the leaf) are KEPT in place.
+
+def fold_analysis(site, ctx, absorbed_idx, opregs):
+    """The FOLD set is the contiguous run of pure operand producers ending
+    at the op (plus the absorbed length-word store); the emitter drops them
+    and echoes them in the statement's comment.  Everything else stays a
+    statement in program order.  -> (fold_idxs, kept_in_run)"""
+    x = site.ins
+    blk = x.block
+    first = blk.instrs[0].idx
+    deps = set()
+    for r in opregs:
+        deps |= site.acs[r].deps
+    deps.discard(x.idx)
+    deps |= set(absorbed_idx)
+    fold, kept = set(), []
+    i = x.idx - 1
+    while i >= first and i in deps:
+        xi = ctx.ins[i]
+        if xi.mn in PURE_FOLDABLE and (xi.mn not in ('XNSTA', 'LNSTA') or i in absorbed_idx):
+            fold.add(i)
+        elif xi.mn == 'LDAFP':
+            kept.append(xi)
+        else:
+            break            # a non-pure producer ends the run: it and everything before stay statements
+        i -= 1
+    return fold, list(reversed(kept))
+
+def leaf_checks(site, ctx, leaves, fold, absorbed_idx):
+    """Every register leaf must hold its block-entry value at the statement
+    (no non-folded write to it in the block before the op, LDAFP -> fp
+    excepted); every memory leaf must be unwritten between the window
+    start and the op (the absorbed length-word store excepted)."""
+    x = site.ins
+    blk = x.block
+    ev = ctx.state[blk.start]
+    FP_WRITERS = ('LDAFP', 'WSAVS', 'WSAVR', 'SYSCALL')     # leave ac3 = wfp (F7 for SYSCALL)
+    # 'raw' leaves are the operand registers themselves: valid by construction
+    # when nothing is folded (every producer executes as a statement)
+    if leaves.get('raw') and fold:
+        raise Refuse('FOLD-CONFLICT', 'raw register operands with a non-empty fold set')
+    for r in sorted(leaves['reg']):
+        want = 'fp' if r == 3 else 'ac%d@entry' % r
+        ok = ev.entry_ac[r].show() == want
+        last = 'block entry (%s)' % ev.entry_ac[r].show()
+        for xi in blk.instrs:
+            if xi.idx >= x.idx:
+                break
+            if xi.idx in fold:
+                continue
+            if r in WRITES.get(xi.idx, ()):
+                ok = (r == 3 and xi.mn in FP_WRITERS)
+                last = '%s at %08X' % (xi.mn, xi.pc)
+        if not ok:
+            raise Refuse('OPERAND-DEAD', 'leaf register ac%d does not hold %s at the statement (last writer: %s)' % (r, want, last))
+    # kept instructions inside the fold run that read a folded register
+    if fold:
+        lo_run = min(fold)
+        written = set()
+        for i in fold:
+            written |= WRITES.get(i, ())
+        for xi in blk.instrs:
+            if lo_run < xi.idx < x.idx and xi.idx not in fold:
+                if regs_named(xi) & written and xi.mn != 'LDAFP':
+                    raise Refuse('FOLD-CONFLICT', 'kept %s at %08X inside the fold run reads a folded register' % (xi.mn, xi.pc))
+    # memory leaves
+    lo, hi = site.window
+    if lo is None or not leaves['mem']:
+        return
+    chain = list(ev.chain) + [blk]
+    for b in chain:
+        e = ctx.state.get(b.start)
+        if e is None:
+            continue
+        for idx, addr, val in e.stores:
+            if idx < lo or idx >= x.idx or idx in absorbed_idx:
+                continue
+            if addr.show() in leaves['mem']:
+                raise Refuse('OPERAND-DEAD', 'store at %08X to %s, which the statement reads' % (ctx.ins[idx].pc, addr.show()))
+
+def find_diamond(site, ctx):
+    """The min diamond feeding a phi count: (guard_block, interior_block, join_block,
+    skip_instr, wmov_instr, preds_ok, pred_detail) or None."""
+    lo, hi = site.window
+    if lo is None:
+        return None
+    seen = []
+    for i in range(hi, lo - 1, -1):
+        xi = ctx.ins[i]
+        b = xi.block
+        if len(b.succs) == 2 and xi is b.instrs[-1]:
+            fall, skip = b.succs
+            for interior, join in ((fall, skip), (skip, fall)):
+                ib = ctx.by_start.get(interior)
+                if ib is None or len(ib.instrs) != 1 or ib.instrs[0].mn != 'WMOV' or ib.succs != [join]:
+                    continue
+                jb = ctx.by_start.get(join)
+                if jb is None:
+                    continue
+                pj = ctx.preds.get(join, set())
+                pi = ctx.preds.get(interior, set())
+                ok = pj == {b.start, interior} and pi == {b.start}
+                return (b, ib, jb, xi, ib.instrs[0], ok,
+                        'join preds {%s}, interior preds {%s}' % (
+                            ', '.join('%08X' % p for p in sorted(pj)), ', '.join('%08X' % p for p in sorted(pi))))
+    return None
+
+def p31_render(s, ctx, raw=False):
+    r = P31Site()
+    r.raw = raw
+    r.cat = ''
+    r.site = s
+    x = s.ins
+    r.pc, r.op, r.block, r.func = x.pc, x.mn, x.block.start, s.func
+    r.idiom = getattr(s, 'idiom', '-')
+    r.dest = s.udest[0] if getattr(s, 'udest', None) else (s.dest[0] if getattr(s, 'dest', None) else '-')
+    r.dest_detail = s.udest[1] if getattr(s, 'udest', None) else ''
+    r.diamond = None
+    r.n_from = ''
+    r.text = ''
+    r.fold = set()
+    r.keep = []
+    r.pieces = {}
+    r.self_assign = False
+    leaves = {'reg': set(), 'mem': set()}
+    r.leaves = leaves
+    try:
+        if x.mn == 'WCMV':
+            r.diamond = find_diamond(s, ctx) if any(v.kind == 'op' and v.a == 'phi' for v in s.acs[:2]) else None
+            c0, c1, dst, src = s.acs
+            if r.idiom not in P31_WCMV_IDIOMS:
+                raise Refuse('OUT-OF-SCOPE', 'idiom %s' % r.idiom)
+            if s.klass[3][0] == 'temp' or s.klass[2][0] == 'temp':
+                raise Refuse('P33-TEMP', 'WMSP temp operand (%s)' % (s.klass[3][1] if s.klass[3][0] == 'temp' else s.klass[2][1]))
+            lenstore = find_len_store(s, ctx)
+            absorbed = [lenstore[0]] if lenstore else []
+            # source piece
+            r.pieces['src'] = piece_of(c1, src, ctx, leaves, 'src', 3 if raw else None)
+            src_text, src_kind, src_det = r.pieces['src']
+            # capacity n
+            if c0.kind == 'const':
+                n = c0.k
+                if src_kind == 'literal' and c1.kind == 'const' and c1.k == n:
+                    r.n_from = 'literal length %d' % n
+                elif src_kind == 'located-fixed' and c1.kind == 'const' and c1.k == n:
+                    r.n_from = 'both counts constant %d' % n
+                else:
+                    r.n_from = 'constant dst_count %d (src %s)' % (n, c1.show())
+            elif c0.kind == 'op' and c0.a == 'phi':
+                n, r.n_from = min_of_phi(c0, c1)
+                if r.diamond is None:
+                    raise Refuse('COMPUTED-CAPACITY', 'phi dst_count without a recognisable min diamond')
+            else:
+                raise Refuse(count_category(c0), 'dst_count %s is not a constant or a min' % c0.show())
+            if c1.kind == 'op':
+                raise Refuse('P32-SUBSTR', 'src_count is a phi/min: %s' % c1.show())
+            # destination
+            if lenstore:
+                idx_l, addr_l, val_l, same = lenstore
+                if not same:
+                    raise Refuse('LENSTORE-MISMATCH', 'length-word store value %s differs from dst_count %s (F8)' % (val_l.show(), c0.show()))
+                dst_text = '[@%s, %d varying]' % (ir_word(addr_l, leaves), n)
+                r.pieces['dst'] = (dst_text, 'located-varying', 'length word %s' % describe_addr(addr_l, ctx))
+            elif raw:
+                leaves.setdefault('raw', set()).add(2)
+                dst_text = '[@ac2, %d]' % n
+                r.pieces['dst'] = (dst_text, 'located-fixed', '%d bytes; the pointer register itself (setup kept, nothing folded)' % n)
+            else:
+                dst_text = '[@%s, %d]' % (ir_bp(dst, leaves), n)
+                r.pieces['dst'] = (dst_text, 'located-fixed', '%d bytes' % n)
+            r.n = n
+            r.text = '%s = %s' % (dst_text, src_text)
+            r.fold, r.keep = (set(), []) if raw else fold_analysis(s, ctx, absorbed, (0, 1, 2, 3))
+            if raw and lenstore:
+                raise Refuse('OPERAND-DEAD', 'varying destination needs its length-word address; the setup cannot be folded')
+            leaf_checks(s, ctx, leaves, r.fold, absorbed)
+            if lenstore and lenstore[1].show() in leaves['mem']:
+                r.self_assign = True
+        elif x.mn == 'WCMP':
+            c0, c1, dst, src = s.acs
+            # str1 = (ac3, ac1), str2 = (ac2, ac0): cmp(str1, str2) = -1/0/+1 as WCMP leaves ac1
+            r.pieces['str1'] = piece_of(c1, src, ctx, leaves, 'str1', 3 if raw else None)
+            r.pieces['str2'] = piece_of(c0, dst, ctx, leaves, 'str2', 2 if raw else None)
+            r.text = 'ac1 = cmp(%s, %s)' % (r.pieces['str1'][0], r.pieces['str2'][0])
+            r.fold, r.keep = (set(), []) if raw else fold_analysis(s, ctx, [], (0, 1, 2, 3))
+            leaf_checks(s, ctx, leaves, r.fold, [])
+        elif x.mn == 'WBLM' and raw:
+            _, cnt, srcp, dstp = s.acs
+            k = ir_const(cnt.k) if cnt.kind == 'const' else 'ac1'
+            r.n_from = 'constant %d words' % cnt.k if cnt.kind == 'const' else 'count register ac1 (setup kept)'
+            leaves['raw'] = {1, 2, 3}
+            r.text = 'words(@ac3, %s) = words(@ac2, %s)' % (k, k)
+            diff = subv(dstp, srcp)
+            if diff.kind == 'const' and diff.k in (1, 2):
+                r.text += ' ; fill: src = dst - %d (self-overlapping smear, Census F6)' % diff.k
+            r.fold, r.keep = set(), []
+        elif x.mn == 'WBLM':
+            _, cnt, srcp, dstp = s.acs
+            if cnt.kind == 'const':
+                k = ir_const(cnt.k)
+                r.n_from = 'constant %d words' % cnt.k
+            else:
+                k = ir_word(cnt, leaves)
+                r.n_from = 'count expression %s' % cnt.show()
+            d = ir_word(dstp, leaves)
+            sr = ir_word(srcp, leaves)
+            r.text = 'words(@%s, %s) = words(@%s, %s)' % (d, k, sr, k)
+            diff = subv(dstp, srcp)
+            if diff.kind == 'const' and diff.k in (1, 2):
+                r.text += ' ; fill: src = dst - %d (self-overlapping smear, Census F6)' % diff.k
+            r.fold, r.keep = fold_analysis(s, ctx, [], (1, 2, 3))
+            leaf_checks(s, ctx, leaves, r.fold, [])
+        r.verdict, r.reason = 'EMIT', ''
+    except Refuse as e:
+        r.verdict, r.reason, r.cat = 'REFUSE', e.detail, e.cat
+        if e.cat in ('OPERAND-DEAD', 'COMPUTED-OPERAND') and not raw:
+            return p31_render(s, ctx, raw=True)
+    return r
+
+def write_p31(path, tsv_path, sites, ctx, shas):
+    cands = [s for s in sites if not hasattr(s, 'pbr') and s.ins.mn in ('WCMV', 'WCMP', 'WBLM')
+             and (s.ins.mn != 'WCMV' or getattr(s, 'idiom', '') in P31_WCMV_IDIOMS)]
+    rows = [p31_render(s, ctx) for s in cands]
+    with open(path, 'w') as f:
+        W = f.write
+        W('# Project 31 — located strings: per-site ledger (tools/string_sites.py --p31)\n')
+        for k, v in shas:
+            W('# %s sha256=%s\n' % (k, v))
+        W('# one record per candidate site: WCMV in the P31 idioms, every WCMP, every WBLM\n')
+        W('# verdict EMIT = lower.py --strings-slice must emit exactly the IR line shown;\n')
+        W('# verdict REFUSE = stays an embedded instruction, with the reason\n\n')
+        for r in rows:
+            W('== %08X %s  block %08X  func %s  idiom %s  dest (%s)\n' % (r.pc, r.op, r.block, r.func, r.idiom, r.dest))
+            s = r.site
+            lo, hi = s.window
+            if lo is not None:
+                W('   window %08X..%08X%s\n' % (ctx.ins[lo].pc, ctx.ins[hi].pc, '  (crosses block boundary)' if s.crosses else ''))
+            if r.fold:
+                W('   fold  %s\n' % ' '.join('%08X' % ctx.ins[i].pc for i in sorted(r.fold)))
+            if r.keep:
+                W('   keep  %s\n' % ' '.join('%08X:%s' % (k.pc, k.mn) for k in r.keep))
+            for role in ('dst', 'src', 'str1', 'str2'):
+                if role in r.pieces:
+                    t, kind, det = r.pieces[role]
+                    W('   %-4s %-16s %s   (%s)\n' % (role, kind, t, det))
+            if r.n_from:
+                W('   n    %s\n' % r.n_from)
+            if r.diamond:
+                gb, ib, jb, sk, wm, ok, det = r.diamond
+                W('   diamond guard %08X (%s) interior %08X (%s) join %08X  %s  %s\n' % (
+                    gb.start, sk.mn, ib.start, wm.raw.rstrip(';'), jb.start, 'PREDS-OK' if ok else 'PREDS-OUTSIDE', det))
+            if r.self_assign:
+                W('   note self-assignment: the source length is READ before the length word is stored (master order)\n')
+            if r.text:
+                W('   IR   %s\n' % r.text)
+            W('   %s%s\n\n' % (r.verdict, (' %s: %s' % (r.cat, r.reason)) if r.reason else ''))
+        # summary
+        W('#' * 70 + '\n# SUMMARY\n')
+        byid = collections.OrderedDict()
+        for r in rows:
+            key = (r.op, r.idiom)
+            byid.setdefault(key, collections.Counter())[r.verdict] += 1
+        W('# %-6s %-28s %5s %6s %6s\n' % ('op', 'idiom', 'sites', 'EMIT', 'REFUSE'))
+        tot = collections.Counter()
+        for (op, idiom), c in sorted(byid.items()):
+            W('# %-6s %-28s %5d %6d %6d\n' % (op, idiom, sum(c.values()), c['EMIT'], c['REFUSE']))
+            tot += c
+        W('# %-6s %-28s %5d %6d %6d\n' % ('all', '', sum(tot.values()), tot['EMIT'], tot['REFUSE']))
+        W('#\n# refuse reasons:\n')
+        cats = collections.Counter(r.cat for r in rows if r.verdict == 'REFUSE')
+        for cat, c in cats.most_common():
+            W('#   %4d  %s\n' % (c, cat))
+        W('#\n# refuse reasons by (category, idiom):\n')
+        ci = collections.Counter((r.cat, r.op, r.idiom) for r in rows if r.verdict == 'REFUSE')
+        for (cat, op, idiom), c in sorted(ci.items()):
+            W('#   %4d  %-18s %s %s\n' % (c, cat, op, idiom))
+        W('#\n# by ultimate destination class (EMIT):\n')
+        dc = collections.Counter(r.dest for r in rows if r.verdict == 'EMIT')
+        W('#   ' + '  '.join('(%s) %d' % (k, v) for k, v in sorted(dc.items())) + '\n')
+        W('#\n# min diamonds (guard -> interior WMOV -> join; the statement lives in the join):\n')
+        dia = collections.OrderedDict()
+        for r in rows:
+            if r.diamond:
+                gb, ib, jb, sk, wm, ok, det = r.diamond
+                dia.setdefault(gb.start, []).append(r)
+        W('#   %d diamonds feeding %d sites; %d with join preds == {guard, interior}\n' % (
+            len(dia), sum(len(v) for v in dia.values()),
+            sum(1 for v in dia.values() if v[0].diamond[5])))
+        for g, rs in sorted(dia.items()):
+            gb, ib, jb, sk, wm, ok, det = rs[0].diamond
+            W('#   guard %08X %-5s interior %08X %-10s join %08X  sites %s  %s  %s\n' % (
+                gb.start, sk.mn, ib.start, wm.raw.rstrip(';'), jb.start,
+                ','.join('%08X(%s)' % (r.pc, r.verdict) for r in rs), 'PREDS-OK' if ok else 'PREDS-OUTSIDE', det))
+        W('#\n# self-assignments (source length read before the length-word store): %d\n' % sum(1 for r in rows if r.verdict == 'EMIT' and r.self_assign))
+        W('#\n# leaf registers read by emitted statements: ' +
+          ', '.join('ac%d:%d' % (k, v) for k, v in sorted(collections.Counter(
+              rg for r in rows if r.verdict == 'EMIT' for rg in r.leaves['reg']).items())) + '\n')
+        W('# literals referenced by emitted statements: %d distinct (addr,len)\n' % len(set(
+            r.pieces[k][2] for r in rows if r.verdict == 'EMIT' for k in r.pieces if r.pieces[k][1] == 'literal')))
+    with open(tsv_path, 'w') as f:
+        f.write('# pc\top\tblock\tfunc\tidiom\tdest\tverdict\tcategory\treason\n')
+        for r in rows:
+            f.write('%08X\t%s\t%08X\t%s\t%s\t%s\t%s\t%s\t%s\n' % (r.pc, r.op, r.block, r.func, r.idiom, r.dest, r.verdict, r.cat, r.reason))
+    return rows
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--dis', required=True)
@@ -1331,6 +1838,8 @@ def main():
     ap.add_argument('--sites', required=True)
     ap.add_argument('--strings', required=True)
     ap.add_argument('--census', required=True)
+    ap.add_argument('--p31', help='P31: write the located-strings per-site ledger')
+    ap.add_argument('--p31-tsv', help='P31: one line per candidate site (pc, verdict) for the battery')
     args = ap.parse_args()
     t0 = time.time()
 
@@ -1404,6 +1913,12 @@ def main():
             write_site(f, s, ctx)
     with open(args.census, 'w') as f:
         write_census(f, sites, ctx)
+    if args.p31:
+        shas = [(k, hashlib.sha256(open(p, 'rb').read()).hexdigest()) for k, p in
+                (('dis', args.dis), ('blocks', args.blocks), ('mem', args.mem))]
+        rows = write_p31(args.p31, args.p31_tsv or args.p31 + '.tsv', sites, ctx, shas)
+        print('p31: %d candidate sites, %d EMIT, %d REFUSE' % (
+            len(rows), sum(1 for r in rows if r.verdict == 'EMIT'), sum(1 for r in rows if r.verdict == 'REFUSE')))
 
     dt = time.time() - t0
     print('sites: %d  (WCMV %d, WCMP %d, WBLM %d, WMSP %d, STASP %d, pbr-WPSH %d)  runtime %.1fs' % (
