@@ -1,5 +1,43 @@
 # Next session
 
+## PAUSE NOTE — Sep 6 2026 (weekend end; read this first next time)
+
+State of main (post-P31): ir 5, embeds 1,670 book / 3,549 stock,
+synclist.p27 (13,510), string library (P30) linked, 652 located-string
+statements live. Provenance.md has the post-P31 table.
+
+In flight when we stopped:
+- **P33-A** (checker half of strings) — DONE on branch
+  p33a-checker-strings @ a05ad0f (84841c2 + a one-line self-test link
+  fix). Battery: 045 exhausted its 3 attempts on a link error in the
+  helpers self-test script (hw/strings/*.o missing) — fixed; **045b**
+  re-queued on main. If 045b is GREEN: merge the branch, fold its
+  integrator notes (NextSession block) into Mapper.md §1.4 and
+  StringsDesign §6.3 (rows keyed on master wfp; ≥ rule in MASTER
+  coordinates via frame_precedes; ON-pop STASP is 7017EC9F; Δ == 0
+  tooth is ordinary-WRTN-only, unwinds count discarded claims), add the
+  CheckerHistory entries (F2-b, readout w/w−2, R?SIGNAL + DEF?ON-is-L2
+  correction).
+- **044b** — P31's battery re-run purely for a clean record (044's
+  legs were 15/15 green; its one FAIL was a verdict-grep defect, fixed;
+  P31 is ALREADY MERGED on the leg evidence).
+- **P34** (readable-layer research) — running; branch p34-readable,
+  reads the ir 5 book from p31-located-strings @ b4384b1 (= main's book
+  now). Docs + tools/readable.py only; merge when it reports.
+
+Next weekend, in order: (1) read 045b, merge P33-A as above; (2) P32
+(docs/Project32/PROMPT.md; Work.tgz from main after P33-A merges) —
+append chains, ≈1,670 → ≈700; (3) P33-B (docs/Project33/PROMPT-B.md)
+after P32 — the 19 p@b groups; strings retired at ≈600 embeds; (4) then
+the small float + divides project, and the milestone-5b work (flat
+graph: calls as edges, on-error edges, discharge Project27/
+assumed-foldable.txt).
+
+Operational reminders: task files go on MAIN (the runner polls main's
+tasks/); a task's three attempts are consumed by kills too — re-queue
+under a new name (044b/045b precedent); self-test link scripts must
+list hw/strings/*.o.
+
 ## P31 IMPLEMENTED (Sep 6 2026) — read this first
 - Located strings (ir 5) on branch p31-located-strings: 652/776 sites
   lowered (528 `v = 'lit'`, 74 `v = t`, 7 `fixed = 'lit'`, 31 cmp, 12
