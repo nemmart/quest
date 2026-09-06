@@ -1,4 +1,5 @@
 #include "EagleStack.hpp"
+#include "strings/StrHooks.hpp"
 #include "Machine.hpp"
 #include "NativeRegistry.hpp"
 #include "RTStubs.hpp"
@@ -490,6 +491,8 @@ uint32_t EagleStack::execute(Machine& machine, uint32_t address, uint32_t opcode
     frame_size=frame_size & 0x7FFF;
     machine.wsp=machine.wsp-2*frame_size;
     machine.c=static_cast<uint32_t>(value)>>31;
+    if(machine.strhooks)   // P33-A string checker (null unless QUEST_STRINGS_CHECK=1);
+      machine.strhooks->frame_exit(pre_wfp);   // BEFORE the fixup: the frame's record must still live
     machine.area_wrtn_fixup(pre_wfp);
     machine.call_stack->call_return(value & 0x7FFFFFFF);
     return value & 0x7FFFFFFF;
@@ -522,6 +525,8 @@ uint32_t EagleStack::execute(Machine& machine, uint32_t address, uint32_t opcode
     // RE-BASING (I.INIT boot choreography) from this rule.
     if(machine.zero_claims)
       zero_claim(machine, value, machine.wsp);
+    if(machine.strhooks)   // P33-A string checker (null unless QUEST_STRINGS_CHECK=1)
+      machine.strhooks->stasp(address, value, machine.wsp);
     return copy_segment(address, address+1);
 
    case LDAFP:
@@ -573,6 +578,8 @@ uint32_t EagleStack::execute(Machine& machine, uint32_t address, uint32_t opcode
       throw std::runtime_error("Stack fault - lower limit - abort");
     if(machine.zero_claims)   // ruling 8: a positive delta is a claim
       zero_claim(machine, value, machine.wsp);
+    if(machine.strhooks)   // P33-A string checker (null unless QUEST_STRINGS_CHECK=1)
+      machine.strhooks->wmsp(address, machine.ac[AA], value, machine.wsp);
     return copy_segment(address, address+1);
 
    case WPSH:

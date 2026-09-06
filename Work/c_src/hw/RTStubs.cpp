@@ -1,6 +1,8 @@
 // src/hw/RTStubs.cpp
 #include "RTStubs.hpp"
 #include "Machine.hpp"
+#include "Lockstep.hpp"
+#include "strings/StrHooks.hpp"
 #include "../debug/SymbolTable.hpp"
 #include "../os/OSProcess.hpp"
 #include "../debug/CallStack.hpp"
@@ -138,6 +140,7 @@ bool     RTStubs::bad_token_armed=false;
 uint32_t RTStubs::poke_pc=0;
 int      RTStubs::poke_ac=0;
 int32_t  RTStubs::poke_value=0;
+int32_t  RTStubs::poke_role=0;
 
 // Terminal entries: reached only when the game is dying (normal exit or
 // unhandled-condition death). Under -lockstep, arrival is the LAST verified
@@ -480,6 +483,15 @@ void RTStubs::initialize(SymbolTable& symbols, const std::string& program) {
       p=q+1;
     }
     char* endp=nullptr;
+    // P33-A: optional 4th field, the lockstep role the poke fires on
+    // (:CLONE / :MASTER); absent = both roles as before.
+    poke_role=0;
+    if(f.size()==4) {
+      if(f[3]=="CLONE") poke_role=Lockstep::CLONE;
+      else if(f[3]=="MASTER") poke_role=Lockstep::MASTER;
+      else { fprintf(stderr, "RTStubs: QUEST_POKE role must be CLONE or MASTER — refusing to launch\n"); exit(2); }
+      f.pop_back();
+    }
     bool ok=f.size()==3 && !f[0].empty() && !f[1].empty() && !f[2].empty();
     if(ok) { poke_pc=static_cast<uint32_t>(strtoul(f[0].c_str(), &endp, 16)); ok=ok && *endp==0 && poke_pc!=0; }
     if(ok) { long a=strtol(f[1].c_str(), &endp, 10); ok=ok && *endp==0 && a>=0 && a<=3; poke_ac=static_cast<int>(a); }
@@ -488,8 +500,9 @@ void RTStubs::initialize(SymbolTable& symbols, const std::string& program) {
       fprintf(stderr, "RTStubs: QUEST_POKE malformed (want <hexpc>:<ac 0-3>:<value>) — refusing to launch\n");
       exit(2);
     }
-    fprintf(stderr, "RTStubs: POKE armed at %08X: ac%d := %d (0x%08X) (QUEST_POKE, one shot, both roles)\n",
-            poke_pc, poke_ac, poke_value, static_cast<uint32_t>(poke_value));
+    fprintf(stderr, "RTStubs: POKE armed at %08X: ac%d := %d (0x%08X) (QUEST_POKE, one shot, %s)\n",
+            poke_pc, poke_ac, poke_value, static_cast<uint32_t>(poke_value),
+            poke_role==Lockstep::CLONE ? "clone only" : poke_role==Lockstep::MASTER ? "master only" : "both roles");
   }
   if(getenv("QUEST_BAD_TOKEN")) {
     bad_token_armed=true;
@@ -512,6 +525,11 @@ void RTStubs::initialize(SymbolTable& symbols, const std::string& program) {
                     "detached-master tripwire DISARMED\n");
   }
 
+  // P33-A string checker (QUEST_STRINGS_CHECK=1 + QUEST_STRHOOKS=<file>):
+  // the hook table loads here, with the other per-process knobs; a set
+  // flag without a usable table refuses to launch (INJECT discipline).
+  if(!strings::StrHooks::load_from_env())
+    exit(2);
   start=range_start;
   stop=range_stop;
   entry_bits=entry_bit_store.data();
@@ -644,6 +662,7 @@ static const char* attribute(uint32_t addr) {
 }
 
 void RTStubs::dump_coverage() {
+  strings::StrHooks::report();   // P33-A verdict lines (no-op unless armed)
   if(!active)
     return;
   std::lock_guard<std::mutex> lock(coverage_mutex);

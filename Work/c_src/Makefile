@@ -24,6 +24,7 @@ SRCS = Launch.cpp \
        hw/Mapper.cpp \
        hw/strings/EagleString.cpp \
        hw/strings/ClaimDelta.cpp \
+       hw/strings/StrHooks.cpp \
        hw/AddressBook.cpp \
        hw/BlockSync.cpp \
        hw/MachineThread.cpp \

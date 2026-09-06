@@ -33,6 +33,7 @@
 #include "../hw/RTBridge.hpp"
 #include "../hw/RTStubs.hpp"
 #include "../hw/Lockstep.hpp"
+#include "../hw/strings/StrHooks.hpp"
 #include "../debug/Capture.hpp"
 #include "../debug/CallStack.hpp"
 #include <stdexcept>
@@ -88,7 +89,7 @@ void push_wide(hw::Machine& machine, int32_t value) {
 // call-stack entry (CallStack::call_return — including its benign
 // mismatch notice when `ret` is a patched value, exactly as the
 // emulated WRTN produces), and returns the resume pc.
-uint32_t wrtn(hw::Machine& machine) {
+uint32_t wrtn(hw::Machine& machine, bool unwind = false) {
   int32_t value, frame_word;
 
   int32_t pre_wfp = machine.wfp;   // M4a: area frame? fixup after the stock sequence
@@ -104,6 +105,8 @@ uint32_t wrtn(hw::Machine& machine) {
   frame_word = frame_word & 0x7FFF;
   machine.wsp = machine.wsp - 2 * frame_word;
   machine.c = static_cast<int32_t>(static_cast<uint32_t>(value) >> 31);
+  if(machine.strhooks)   // P33-A: the clone twin of EagleStack's WRTN hook (>= rule), before the fixup
+    machine.strhooks->frame_exit(pre_wfp, unwind);
   machine.area_wrtn_fixup(pre_wfp);
   machine.call_stack->call_return(value & 0x7FFFFFFF);
   return static_cast<uint32_t>(value & 0x7FFFFFFF);
@@ -328,7 +331,7 @@ uint32_t i_goto(hw::Machine& machine) {
   machine.wsp -= 2;
   wr_wide(machine, cursor - 0x4, machine.ac[0]);        // patch cursor saved-ac2 -> label
   machine.wfp = cursor;                                 // STAFP 2
-  resume = wrtn(machine);                               // WRTN -> lands on the stub;
+  resume = wrtn(machine, /*unwind=*/true);              // WRTN -> lands on the stub;
   (void)resume;                                         //   (resume == 0x7017EC9D by construction)
   // Landing stub 0x7017EC9D: XWLDA 0,[ac3+2]; STASP 0; fall into
   // 0x7017ECA0 XJMP [ac2+0]. The loaded value is the establishment
@@ -339,6 +342,8 @@ uint32_t i_goto(hw::Machine& machine) {
   machine.wsp = machine.ac[0];                            // STASP 0
   // M4a: every redirected frame above the target is gone with the cut —
   // drop their live records (the target's own record, if any, stays).
+  if(machine.strhooks)   // P33-A: the clone twin of the ON-pop hook (landing-stub STASP on the master);
+    machine.strhooks->onpop(target);   //   before the cut drops the records the frame order needs
   machine.area_unwind_to(target);
   debug::Capture::native_footprint(machine);
   return hw::RTBridge::native_transfer(machine,

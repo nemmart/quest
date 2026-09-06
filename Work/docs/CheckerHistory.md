@@ -354,3 +354,38 @@ runner loops truncated each other's sessions; weak gate); kept as the
 record of why battery gates pin pairs floors and endpoints. Carry
 live-in census for P23's surface ruling: 163/13,495 blocks
 (P22 REPORT §8) — carry STAYS in the surface.
+
+## Generation 6.1 addendum — the string checker, F2-b, the readout (P33-A, Sep 6 2026)
+
+Behind `QUEST_STRINGS_CHECK=1` only (docs/Project33/REPORT.md):
+
+- **The wsp compare gains a claim term, symmetric.** Each engine keeps a
+  per-frame ClaimDelta (+2·ac at each censused WMSP, −(old−new) at its
+  STASP, erased at frame exit) on its own wfp, and the pair compares
+  `master_wsp − Δ_m` against `shadow_wsp + checkpoint − Δ_c`. With both
+  engines claiming (today) it is the old check; with the clone's temps in
+  the arena (P33-B) it is StringsDesign §6.3. Any other wsp drift still
+  mismatches.
+- **Arena rows** (Mapper §1.4) are bound by the MASTER's hooks — first
+  WMSP of a group binds, every later WMSP rebinds to its claim's base, so
+  the row holds the pushed address; frame exit (WRTN `≥` the popped frame,
+  ON-pop `≥` the restored frame, in MASTER coordinates) unmaps — and
+  carried to the CLONE's mapper by a per-ordinal event queue drained at the
+  clone's next batch. A clone AC in the arena on an unmapped row (or no
+  row) is a MISMATCH; the dump names the row and block.
+- **F2-b** (P27 §3/§7): a clone IR assert-detach is a one-shot pending; the
+  next compare_pair consumes it BEFORE the detached early-out and, if the
+  master half is at a kind-2 terminal, prints
+  `TERMINAL-ABORT at <master pc> … clone IR assert at <assert pc> (<report>)`
+  and stops the world — one final verified pair for a folded DERR. A clone
+  assert with a non-terminal master keeps the detach + START_TURN tripwire.
+  Exercised: the `derr` leg.
+- **The ABORT readout** reads `w` (number) and `w−2` (faulting pc) — the
+  emulator's `wide_push` is `wsp += 2; write at wsp`, DERR pushes address
+  then code, DERR.TRP's own reads agree. P27's note said `w−2/w−4`; that was
+  a wide too deep. Exercised: `derr-emu` prints `00000011 7015C48E`.
+- **Correction to a premise:** DEF?ON has been verified L2 since the Aug 12
+  lift, and `R?SIGNAL/?ERROR` 7017EF70–EF88 (`STAFP 2; WRTN`) is a
+  frame-restoring path reachable from it (never observed live; its
+  live shape is the plain-WRTN branch). The checker treats that WRTN as
+  an unwind cut (table row), as it does I.GOTO's two.

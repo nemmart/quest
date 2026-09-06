@@ -88,6 +88,8 @@ public:
   static uint32_t poke_pc;        // 0 = disarmed globally
   static int      poke_ac;        // 0..3
   static int32_t  poke_value;
+  static int32_t  poke_role;      // P33-A: optional 4th field :CLONE / :MASTER — fire on that
+                                  // lockstep role only (Lockstep::CLONE/MASTER); 0 = both roles
 
   static uint32_t terminal_test_pc; // QUEST_TERMINAL=<hex>[:ABORT]: one extra terminal
                                     // address for testing, any pc; 0 = none

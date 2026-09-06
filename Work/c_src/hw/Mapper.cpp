@@ -444,10 +444,16 @@ void Mapper::arena_bind(uint32_t arena_addr, int32_t wfp, uint32_t master_addr) 
     snprintf(buf, sizeof(buf), "MAPPER ARENA: bind of row %08X to a non-master address %08X", arena_addr, master_addr);
     mapper_abort(owner_, buf);
   }
-  if(owner_ && wfp != owner_->wfp) {
+  // P33-A (ruling S2, Sep 6): rows are keyed on the MASTER's wfp and bound
+  // from the master's hooks into the CLONE's mapper (the one compare_pair
+  // consults), so the owner's wfp is the wrong yardstick (every claim
+  // routine is book-redirected; the clone's wfp is an area address). The
+  // hook asserts wfp == master->wfp itself; here: a real-stack address.
+  uint32_t w = static_cast<uint32_t>(wfp);
+  if(wfp <= 0 || is_arena(w) || (book_ && book_->in_range(w))) {
     char buf[128];
-    snprintf(buf, sizeof(buf), "MAPPER ARENA: bind of row %08X with wfp %08X but the machine's wfp is %08X",
-             arena_addr, static_cast<uint32_t>(wfp), static_cast<uint32_t>(owner_->wfp));
+    snprintf(buf, sizeof(buf), "MAPPER ARENA: bind of row %08X with wfp %08X, not a real-stack frame address",
+             arena_addr, w);
     mapper_abort(owner_, buf);
   }
   r->wfp = wfp; r->master_addr = master_addr; r->length = 0;

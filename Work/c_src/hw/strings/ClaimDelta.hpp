@@ -15,6 +15,7 @@
 #pragma once
 #include <cstddef>
 #include <cstdint>
+#include <functional>
 #include <map>
 
 namespace hw {
@@ -25,6 +26,15 @@ public:
   void claim(int32_t wfp, int32_t ac);
   void release(int32_t wfp, int32_t old_wsp, int32_t new_wsp);
   void frame_exit(int32_t wfp);
+  // P33-A: frame exit for every frame at or above `wfp` (the WRTN >= rule;
+  // an I.GOTO cut discards the skipped frames too). Reports the first
+  // erased frame whose Δ was not 0 (bad_wfp/bad_delta; both 0 if none) —
+  // outstanding claims in a discarded frame are the caller's loud fault.
+  size_t frame_exit_at_or_above(int32_t wfp, int32_t* bad_wfp, int32_t* bad_delta);
+  // The same with the caller's frame order (the clone's frames are area
+  // addresses whose order is only defined in master coordinates —
+  // Mapper::frame_precedes; numeric order is wrong there).
+  size_t frame_exit_where(const std::function<bool(int32_t)>& gone, int32_t* bad_wfp, int32_t* bad_delta);
   int32_t delta(int32_t wfp) const;
   bool check(int32_t wfp, int32_t master_wsp, int32_t clone_wsp) const;
   size_t frames() const { return delta_.size(); }

@@ -3,6 +3,31 @@
 
 # Where things stand
 
+## ★ P33-A IMPLEMENTED ON BRANCH — the checker half of the string design, DARK behind QUEST_STRINGS_CHECK=1: hook table quest.strhooks (19 rows / 57 WMSP / 19 STASP / onpop 7017EC9F / 3 unwind WRTNs), instruction-arm hooks (WMSP/STASP/WRTN + frames.cpp twins), arena bind/rebind/unmap from the master into the clone's mapper, SYMMETRIC ClaimDelta in the wsp compare, unmapped-row naming in the divergence dump; + F2-b (folded DERR → TERMINAL-ABORT with both pcs) + the ABORT readout (`w`/`w−2`: 00000011 7015C48E); self-test 64 GREEN + teeth RED; task 045 queued (Sep 6 2026; awaiting review + integration)
+
+Branch p33a-checker-strings (based on main 8738975, P30 merged). Rulings
+(user, Sep 6): S1 symmetric Δ — each engine subtracts its own outstanding
+claims (`master_wsp − Δ_m == shadow_wsp + checkpoint − Δ_c`; 18/19 groups
+have rendezvous inside their claim…release bracket, so "Δ = 0 at every
+rendezvous" was false); S2 rows keyed on the MASTER's wfp, bound into the
+CLONE's mapper via a per-ordinal event queue drained at the clone's next
+run_steps (all 12 claim routines are book-redirected); S3 the `≥` rule at
+frame exit — in MASTER coordinates (Mapper::frame_precedes; the clone's
+frames are area addresses), hooks fire before area_wrtn_fixup /
+area_unwind_to; Δ==0 asserted at ordinary WRTNs only, unwind cuts
+(I.GOTO 7017EC9C/ECBC, R?SIGNAL 7017EF88 — reachable from DEF?ON, which
+is L2 not terminal) discard claims silently and count them. Bind address
+RECORDED (each claim's `wsp_before+2`, rebound per claim; 19/19 verified
+in quest.dis). Flag off: `Machine::strhooks == nullptr`, three null tests
+in the arms, no other path. Local: k1fo ON 0 div 302,845 pairs; k1fo OFF
+0 div 327,506; derr → `TERMINAL-ABORT at 7017ED1C … clone IR assert at
+7015C48B`; derr-emu readout `00000011 7015C48E`; forced poke →
+DIVERGENCE naming `UNMAPPED arena row block=70166144`. Records:
+docs/Project33/{REPORT,REPORT_worklog}.md. P33-B (executor half: `p@b`,
+arena materialisation, `release`) can start on this; REPORT §7 lists what
+it inherits (rows bound before the clone runs the block; `p@b = ""` is
+`arena_set_length(0)`; a refused group keeps claiming and stays exact).
+
 ## ★ P30 IMPLEMENTED ON BRANCH — the C++ string library, shipped DARK: hw/strings/EagleString (pieces as spans; copy/assign/compare/block_move mirroring WCMV/WCMP/WBLM/WSTB; §3 residues), the Mapper ARENA FORM (codec 0x75/0xEA/0xF5; 19-row static map, clone→master only, clone_location refuses), ClaimDelta; self-test 18,370 cases GREEN + teeth build RED; task 043 queued (Sep 6 2026; awaiting review + integration)
 
 Branch p30-string-library (based on main 00f641c, P28 merged). Plan gate

@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <map>
 #include <mutex>
+#include <string>
 
 
 namespace hw {
@@ -113,6 +114,22 @@ public:
   // batch; compare_pair's detached early-out keeps the truncated
   // clone half from reading as a divergence.
   static void assert_detach(Machine* clone_machine, const char* report);
+  // P33-A F2-b (docs/Project27/REPORT.md §3/§7): assert_detach records the
+  // assert (pc + report) as a ONE-SHOT pending per ordinal; the very next
+  // compare_pair — the pair whose clone half raised it (worker order:
+  // master half, clone half, compare) — consumes it BEFORE the detached
+  // early-out and, if the master half arrived at a kind-2 (ABORT)
+  // terminal, reports TERMINAL-ABORT with both pcs and stops the world:
+  // one final verified pair for a folded DERR. Any other master state
+  // keeps today's detach.
+  struct PendingAssert { bool set = false; uint32_t pc = 0; std::string report; };
+  static PendingAssert pending_assert[64];
+  // The F2-b decision, factored so the self-test can drive it: consumes
+  // the ordinal's pending assert (if any) and returns true — with the
+  // TERMINAL-ABORT text in `msg` — iff the master half is at a kind-2
+  // terminal. False (and nothing consumed if nothing was pending)
+  // otherwise.
+  static bool terminal_abort_pending(QueueEntry* master, std::string* msg);
 
   // abort_world — the deliberate stop-the-world path (Layering ruling 6
   // impl note + ruling 7). Used when pairing is impossible or the world

@@ -72,7 +72,11 @@ Nova-complemented); WCMV pad/direction/carry/residues; WCMP equality and
 blank padding; WBLM sequential word order (the 6 overlapping fills
 depend on it and the manual's restartability guarantees it); WMSP
 `wsp += 2·ac`; STASP/STAFP stores; LLEFB displacement is a BYTE
-displacement (manual example `LLEFB 2,DEST*2`).
+displacement (manual example `LLEFB 2,DEST*2`); DERR pushes the faulting
+address then the code, and under the emulator's `wide_push` (`wsp += 2;
+write at wsp`) the code wide is AT wsp and the address at wsp−2 — DERR.TRP's
+own reads (`WPSH 3,3; LDASP 3; XWLDA 3,[ac3−2]` / `[ac3−4]`) confirm it
+(P33-A: the checker readout now reads `w`/`w−2`).
 
 ## 5. Owed
 

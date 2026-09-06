@@ -13,7 +13,8 @@ static std::set<std::string> trace_types;
 static std::mutex trace_mutex;
 static uint64_t trace_seq = 0;
 
-static const char* known_types[] = { "scalls", "shared", "lockstep", "rtcalls", "pagemap", "redirect", "gcalls" };
+static const char* known_types[] = { "scalls", "shared", "lockstep", "rtcalls", "pagemap", "redirect", "gcalls",
+                                     "arena", "strings" };   // P30 arena bind/unmap; P33-A hook events
 
 bool Trace::initialize(const std::string& file, const std::string& types_csv) {
   trace_file = fopen(file.c_str(), "w");

@@ -1,5 +1,22 @@
 # Next session
 
+## P33-A ON BRANCH (Sep 6 2026) — the string checker, dark
+- Branch p33a-checker-strings: hw/strings/StrHooks.{hpp,cpp}, quest.strhooks +
+  tools/strhooks.py, hook lines in EagleStack.cpp (WMSP/STASP/WRTN) and
+  frames.cpp, Mapper arena_bind assert (S2), Lockstep (symmetric-Δ wsp term,
+  F2-b via `terminal_abort_pending`, readout `w/w−2`, arena-row naming),
+  RTStubs (`QUEST_POKE …:CLONE|:MASTER`, loader call, verdict lines),
+  ClaimDelta range/predicate exits, Trace types `arena`/`strings`,
+  tests/strhooks_selftest (+ teeth), tests/strings_selftest wfp case.
+  **Task 045** (committed on main): 040's 15 legs with the checker ON +
+  k1fo-off + forced; check results/045-p33a-checker-strings before merging.
+- Integrator: Mapper.md §1.4 — annotate the bind's wfp rule (rows keyed on
+  the master's wfp; the mapper checks "real-stack address"), and that
+  frame exit is in master coordinates. StringsDesign §6.3 — the wsp
+  equality is now the symmetric form (§6.3's line is its P33-B special
+  case). P27 REPORT §3's `w−2/w−4` is corrected by P33-A REPORT §3.5.
+- P33-B inherits: docs/Project33/REPORT.md §7.
+
 ## P30 ON BRANCH (Sep 6 2026) — string library, dark
 - Branch p30-string-library: hw/strings/{EagleString,ClaimDelta}.{hpp,cpp},
   the Mapper arena form (Mapper.{hpp,cpp}), tests/strings_selftest.cpp +
