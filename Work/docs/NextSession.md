@@ -60,8 +60,11 @@ coverage as partial.**
 4. **Milestone 5b design**: calls as edges, on-error edges (ON-unit
    bodies LOGON.1/.2, ALLY_PLAYER.1 are separate WSAVS frames — P34),
    discharge Project27/assumed-foldable.txt, frames → functions.
-5. **P35** (user): recompilation as decompilation — the C-subset → IR
-   translator. Design decisions of record (Sep 8): compiler/README.md
+5. **P35** (user): recompilation as decompilation — PROMPT WRITTEN:
+   docs/Project35/PROMPT.md (translator + four routines + an IR
+   comparator with slot/temp/label equivalences; primary target the raw
+   book, secondary the register-folded one). Design decisions of record
+   (Sep 8): compiler/README.md
    (pycparser front end; `NAME$N` arity-in-name runtime calls with
    `const` transcribing read/write; one body + leading `int arg_count`
    for two-arity game routines; 1-based indexing folded in the
