@@ -7,7 +7,7 @@ doc-of-record edits. Invocation added to Tools/README.md:
 
 ```
 java -cp tools.jar ArgWindows ../QUEST QUEST quest.addrs quest.targets \
-     ../Work/c_src/quest.addrbook quest.dis quest.argmap quest.callsites
+     ../Work/emulation/quest.addrbook quest.dis quest.argmap quest.callsites
 ```
 
 ## The census answer for M4b (headline)
@@ -59,8 +59,8 @@ the dataflow-ambiguous residual class does not exist in QUEST.
 
 Slots are by DEPTH, not push order: arg N at [wsp−2N] at the call ==
 [wfp−10−2N] in the callee. Settled empirically against
-`c_src/hw/EagleIntegration.cpp` (`arg_addr(n) = read_wide(fp-10-2n)`)
-and `c_src/quest/return_message.hpp` (arg3 = the message): in the
+`emulation/hw/EagleIntegration.cpp` (`arg_addr(n) = read_wide(fp-10-2n)`)
+and `emulation/quest/return_message.hpp` (arg3 = the message): in the
 RETURN_MESSAGE,6 window at 7015BE74, slot 3 is the push of the local the
 caller just WCMV'd the message into. **So arg1 = LAST-pushed wide,
 arg argc = first-pushed (= the window start).** Note the PROMPT.md
@@ -113,7 +113,7 @@ A result this clean demanded proof the disqualifiers can fire:
   (identical WRTN net accounting); non-returning targets (RETURN_MESSAGE
   is [[noreturn]] per its C++ port) would be PROBLEMATIC. Neither case
   occurs in the data.
-- Book = Work/c_src/quest.addrbook, all 130 entries including
+- Book = Work/emulation/quest.addrbook, all 130 entries including
   #-commented ones (they are game routines whether or not migrated).
 
 ## Deliverables

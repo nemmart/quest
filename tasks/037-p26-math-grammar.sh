@@ -30,10 +30,10 @@ cd "$(dirname "$0")/.."
 ROOT=$(pwd); W=$ROOT/Work
 git fetch --quiet origin p26-math-grammar
 git checkout --quiet origin/p26-math-grammar -- Work Disassembled
-cd $W/c_src && make -j"$(nproc)" >/dev/null && cd $ROOT
-EMU=$W/c_src/emulator; BOOK=$W/c_src/quest.addrbook; PMAP=$W/c_src/quest.pushmap.M4
-IRB=$W/c_src/quest.ir2.book; IRS=$W/c_src/quest.ir2.stock
-BLK=$W/c_src/quest.blocks.split; SYN=$W/c_src/quest.synclist.split
+cd $W/emulation && make -j"$(nproc)" >/dev/null && cd $ROOT
+EMU=$W/emulation/emulator; BOOK=$W/emulation/quest.addrbook; PMAP=$W/emulation/quest.pushmap.M4
+IRB=$W/emulation/quest.ir2.book; IRS=$W/emulation/quest.ir2.stock
+BLK=$W/emulation/quest.blocks.split; SYN=$W/emulation/quest.synclist.split
 RES=$ROOT/results/037-p26-math-grammar; mkdir -p $RES
 JOBS=${JOBS:-3}
 T0=$(date +%s)

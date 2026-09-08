@@ -14,11 +14,11 @@ cd "$(dirname "$0")/.."
 ROOT=$(pwd); W=$ROOT/Work
 git fetch --quiet origin hw-findings-sep5
 git checkout --quiet origin/hw-findings-sep5 -- Work Disassembled
-cd $W/c_src && make -j"$(nproc)" >/dev/null && ./tests/run_helpers_selftest.sh | tail -1 | tee /tmp/selftest038 && cd $ROOT
+cd $W/emulation && make -j"$(nproc)" >/dev/null && ./tests/run_helpers_selftest.sh | tail -1 | tee /tmp/selftest038 && cd $ROOT
 grep -q GREEN /tmp/selftest038 || { echo "HELPER SELFTEST RED"; exit 1; }
-EMU=$W/c_src/emulator; BOOK=$W/c_src/quest.addrbook; PMAP=$W/c_src/quest.pushmap.M4
-IRB=$W/c_src/quest.ir2.book; IRS=$W/c_src/quest.ir2.stock
-BLK=$W/c_src/quest.blocks.split; SYN=$W/c_src/quest.synclist.split
+EMU=$W/emulation/emulator; BOOK=$W/emulation/quest.addrbook; PMAP=$W/emulation/quest.pushmap.M4
+IRB=$W/emulation/quest.ir2.book; IRS=$W/emulation/quest.ir2.stock
+BLK=$W/emulation/quest.blocks.split; SYN=$W/emulation/quest.synclist.split
 RES=$ROOT/results/037-hw-findings-sep5; mkdir -p $RES
 JOBS=${JOBS:-3}
 T0=$(date +%s)

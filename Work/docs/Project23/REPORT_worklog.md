@@ -5,14 +5,14 @@ IRDesign.md §8). Status: LANDED — pilot gate green, see §6.
 
 ## 1. What landed
 
-- `c_src/tools/lower.py` — quest.dis + quest.blocks (+ pushmap, argmap)
+- `emulation/tools/lower.py` — quest.dis + quest.blocks (+ pushmap, argmap)
   → provenance-stamped `quest.ir`. Register-faithful 1:1, class-capped;
   everything outside the cap is an embedded statement; TOTAL (an
   all-embed block is valid output). Refuses loudly on: excluded blocks
   (7015BD6B, ENQT/DEQUE text, XCT sites), dis/blocks text mismatch,
   non-monotonic pcs, pc-relative or L-absolute EAs outside the block
   segment, multi-successor fall-through, unparseable operands.
-- `c_src/hw/IRExec.{hpp,cpp}` — loader + block interpreter. Loader
+- `emulation/hw/IRExec.{hpp,cpp}` — loader + block interpreter. Loader
   refuses on: missing/mismatched blocks provenance (sha256 of the file
   QUEST_BLOCKS actually names), unlisted block starts, first-pc /
   monotonicity / seg violations, argstore lines (validation not yet
@@ -142,7 +142,7 @@ exit-return.
 
 ## 7. Deliverables & how to run
 
-- `c_src/tools/lower.py`, `c_src/hw/IRExec.{hpp,cpp}`, dispatch in
+- `emulation/tools/lower.py`, `emulation/hw/IRExec.{hpp,cpp}`, dispatch in
   `Machine.cpp`, checker edits in `Lockstep.cpp`, `quest.ir.pilot`
   (the gate's exact IR), `tools/pilot_driver.py`.
 - Run: emit with lower.py (see §6 pilot list or any listed blocks),

@@ -3,7 +3,7 @@
 ## ★ RE-ENTRY BRIEF (written Sep 6 2026 — project asleep until next weekend)
 
 **Tree of record: `main`.** Verify against docs/Provenance.md (post-P33-B
-table). Build: `cd Work/c_src && make`; self-tests:
+table). Build: `cd Work/emulation && make`; self-tests:
 `tests/run_helpers_selftest.sh`, `tests/run_strings_selftest.sh`,
 `tests/run_strhooks_selftest.sh` (all GREEN with teeth RED). Launch
 recipe: docs/Run.md ("Lockstep play session") with
@@ -31,7 +31,7 @@ grammar package · P27 DERR-cluster folds (assumed-foldable.txt is the
 debt 5b discharges) · P28 rt_call · P29 strings research + design · P30
 string library · P31 located strings · P32 append chains · P33-A/B/C
 string checker, arena twins, the shutdown fix · P34 readable-layer
-prototype (tools/readable.py; PICK_X_Y renders as the hand reading).
+prototype (compiler/readable.py (moved Sep 8; was emulation/tools/); PICK_X_Y renders as the hand reading).
 Also: the manual-review hardware fixes (HWFindings_Sep5.md,
 EmulatorDivergences.md), two Tools fixes (Follow: XJMP pc+2, LJSR I.GOTO
 pc+3), the runner's staging leak (bin/task_source.sh).
@@ -60,11 +60,14 @@ coverage as partial.**
 4. **Milestone 5b design**: calls as edges, on-error edges (ON-unit
    bodies LOGON.1/.2, ALLY_PLAYER.1 are separate WSAVS frames — P34),
    discharge Project27/assumed-foldable.txt, frames → functions.
-5. **P35 idea** (user): recompilation as decompilation — a translator
-   from a restricted C subset (runtime header for the PL/I-isms) to our
-   IR via libclang; pilot PICK_X_Y then DIED against the P34
-   register-folded book; a textual match makes the C a proven source
-   and gcc makes it native Quest.
+5. **P35** (user): recompilation as decompilation — the C-subset → IR
+   translator. Design decisions of record (Sep 8): compiler/README.md
+   (pycparser front end; `NAME$N` arity-in-name runtime calls with
+   `const` transcribing read/write; one body + leading `int arg_count`
+   for two-arity game routines; 1-based indexing folded in the
+   expression generator, `ARRAY1()` objects natively; the C/C++ delta
+   confined to the generated game/declarations.h, seeded from
+   GAME_REFERENCE.md + the P34 record census). Pilot PICK_X_Y, then DIED.
 6. Tools (user): Follow and StartStop should share one successor
    function; Java↔C++ helper diff (EmulatorDivergences §5).
 
@@ -229,7 +232,7 @@ varying at ac2, returns ACs unchanged" (RTConventions.md was right).
   the runner (0 div, 903 s; results/040-p27-derr-clusters) — every P27
   verdict line on prediction. Ready to integrate.
 - Integration notes: task scripts must now point QUEST_SYNC_LIST at
-  c_src/quest.synclist.p27 (the identity .split stays the record of
+  emulation/quest.synclist.p27 (the identity .split stays the record of
   blocks.split, untouched); Provenance.md gains ir2.book/stock (new)
   and synclist.p27; docs/Project27/assumed-foldable.txt is the
   artifact of record (tags sha 90659843…). lower.py without
@@ -251,7 +254,7 @@ varying at ac2, returns ACs unchanged" (RTConventions.md was right).
   (1) the seven emulator helper fixes from the manual review —
   docs/HWFindings_Sep5.md (WHLV rounds toward 0; narrow_add/sub/mul
   overflow bit 15, sign-extended results, ~src+1 carry, sticky ovr) +
-  c_src/tests/helpers_selftest.cpp (red on the old code, green on the
+  emulation/tests/helpers_selftest.cpp (red on the old code, green on the
   fix); task 038 k1fo + play-st GREEN, 0 div, clean endpoints;
   (2) the regenerated Disassembled/ after the user's Tools fixes —
   Follow.java XJMP pc+2 edge dropped (1,160 tag/blocks successor lists;
@@ -618,8 +621,8 @@ turns conceptual mistakes into divergences.
 
 ## Setup
 
-Extract tarballs: Work/ (c_src, docs, DG_Quest), QUEST/, Disassembled/,
-Tools/. Build: `make` in Work/c_src (g++ ≥ 11, C++17, warning-free).
+Extract tarballs: Work/ (emulation, docs, DG_Quest), QUEST/, Disassembled/,
+Tools/. Build: `make` in Work/emulation (g++ ≥ 11, C++17, warning-free).
 Run commands: docs/Run.md. Layering tripwires live in the emulator
 source at EagleFloat.cpp (FP-throw ruling) and EagleStack.cpp
 handle_overflow (wsp==wsl boot-gate — LOAD-BEARING: the game

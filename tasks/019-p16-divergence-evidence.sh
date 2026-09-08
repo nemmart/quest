@@ -16,8 +16,8 @@ for f in /tmp/run018-*/out; do
 done
 ls $RES || true
 # 2) fresh m leg, keep out+err+trace tail
-cd $W/c_src && make -j"$(nproc)" >/dev/null && cd $ROOT
-EMU=$W/c_src/emulator; BOOK=$W/c_src/quest.addrbook; PMAP=$W/c_src/quest.pushmap
+cd $W/emulation && make -j"$(nproc)" >/dev/null && cd $ROOT
+EMU=$W/emulation/emulator; BOOK=$W/emulation/quest.addrbook; PMAP=$W/emulation/quest.pushmap
 R=/tmp/run019-m; rm -rf $R; mkdir -p $R; cp -r $ROOT/QUEST $R/QUEST; cd $R
 pkill -f "[e]mulator .*QUEST" 2>/dev/null||true; sleep 1
 env QUEST_ADDRESS_BOOK=$BOOK QUEST_PUSH_MAP=$PMAP stdbuf -o0 -e0 $EMU -lockstep -silent -trace $R/trace -types lockstep,redirect,gcalls QUEST QUEST_SERVER @QUEST @QUEST >$R/out 2>$R/err &

@@ -18,7 +18,7 @@ stops. Prior sessions proved M4a; do NOT rebuild it.
 3. Work/docs/WPSH_WPOP.md, Work/docs/NORETURN.md — arg/stack behavior.
 4. Work/docs/Mapper.md — the mapper (esp. §3b wave-scoped conditions;
    the call-marker ruling means M4b needs NO mapper change).
-5. Work/c_src/hw/Mapper.{hpp,cpp}, EagleStack.cpp (WSAVS/WRTN redirect),
+5. Work/emulation/hw/Mapper.{hpp,cpp}, EagleStack.cpp (WSAVS/WRTN redirect),
    the address book loader.
 6. Disassembled/quest.argmap + quest.callsites (the census: per-site
    arg→slot map) and Disassembled/quest.wpsh_wpop.

@@ -20,7 +20,7 @@ you do not redesign it). Also: docs/Project30/REPORT.md (the library
 you call: `hw/strings/ClaimDelta`, the Mapper's `configure_arena /
 arena_bind / arena_set_length / arena_unmap_frame`), docs/Project27/
 REPORT.md §3 (F2-b and the readout, with the Lockstep.cpp line
-numbers), docs/ERROR_LIFT_SCOPE.md + c_src/runtime/frames.cpp
+numbers), docs/ERROR_LIFT_SCOPE.md + emulation/runtime/frames.cpp
 (`I.GOTO` is native — the ON system's non-local exit is an event we
 raise, not something to infer), docs/Project29/Census.md and the
 regenerated census in docs/Project31/ (the 19 groups, the 57 WMSP and

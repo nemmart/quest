@@ -59,7 +59,7 @@ M5 (static handler dispatch makes them branch targets, not frames).
 
 **Stage 0 — plan gate.** State the exact tool change (the wave-one
 filter: `wave_one = pure and not nocall` → `wave_one = not nocall` in
-Work/c_src/tools/build_address_book.py, or an explicit `--all-callable`
+Work/emulation/tools/build_address_book.py, or an explicit `--all-callable`
 flag — your call, show it). Regenerate the book locally, report the
 live count and the delta vs the 45-live batch-2 book (should add the
 dyn+push routines, ~56 of them). List the newly-live routines grouped
@@ -110,8 +110,8 @@ sentence still owed, and the dyn/push-are-symmetric result). Then STOP.
 
 ## Deliverables (all in the repo, branch p14-phase-b2)
 
-- Work/c_src/tools/build_address_book.py (filter change) + regenerated
-  Work/c_src/quest.addrbook
+- Work/emulation/tools/build_address_book.py (filter change) + regenerated
+  Work/emulation/quest.addrbook
 - tasks/NNN-*.sh for every validation run (they and their results/ are
   the evidence)
 - Work/docs/Project14/REPORT_B2.md: the tool change, live-count delta,

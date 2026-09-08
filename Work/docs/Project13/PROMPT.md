@@ -57,7 +57,7 @@ wave-one list, in batches, under the oracle.
    hw/Lockstep.cpp compare_pair, os/LockstepMediator.cpp,
    os/OSContext.cpp verify paths, runtime/frames.cpp — know what you
    are exercising.
-5. tools/build_address_book.py, c_src/quest.addrbook,
+5. tools/build_address_book.py, emulation/quest.addrbook,
    docs/Project12/addrbook_report.md, docs/Project12/{run.sh,drive.py}
    (the drivers you inherit).
 6. docs/Run.md, docs/NextSession.md gotchas.
@@ -122,7 +122,7 @@ shape) before M4a-wave-one is called done.
 
 ## Deliverables
 
-- tools/build_address_book.py (nocall flag), c_src/quest.addrbook
+- tools/build_address_book.py (nocall flag), emulation/quest.addrbook
   (final), docs/Project13/addrbook_report.md
 - docs/Project13/{run.sh,drive*.py,evidence/} — every battery run's
   divergence count + hijack line count + detach/abort line

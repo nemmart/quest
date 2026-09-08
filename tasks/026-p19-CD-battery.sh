@@ -21,16 +21,16 @@
 set -eu
 cd "$(dirname "$0")/.."
 ROOT=$(pwd); W=$ROOT/Work
-cd $W/c_src && make -j"$(nproc)" >/dev/null && cd $ROOT
-EMU=$W/c_src/emulator; BOOK=$W/c_src/quest.addrbook
+cd $W/emulation && make -j"$(nproc)" >/dev/null && cd $ROOT
+EMU=$W/emulation/emulator; BOOK=$W/emulation/quest.addrbook
 DRV=$W/docs/Project13/drive.py; PAT=$W/docs/Project14/drive_patient.py
 RES=$ROOT/results/026-p19-CD-battery; mkdir -p $RES
-PM=$W/c_src/quest.pushmap.ABCD
+PM=$W/emulation/quest.pushmap.ABCD
 : > $RES/verdicts.txt
 
 # the 26 decorated XCALL pcs and 5 RETURN_MESSAGE call pcs, from the maps
-awk '$1=="call"{print $2}' $W/c_src/quest.pushmap.C > $RES/c_callpcs
-awk '$1=="call"{print $2}' $W/c_src/quest.pushmap.D > $RES/d_callpcs
+awk '$1=="call"{print $2}' $W/emulation/quest.pushmap.C > $RES/c_callpcs
+awk '$1=="call"{print $2}' $W/emulation/quest.pushmap.D > $RES/d_callpcs
 
 leg(){ # tag mode driver [env...]
   tag=$1; mode=$2; drv=$3; shift 3

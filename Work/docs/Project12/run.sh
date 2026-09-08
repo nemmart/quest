@@ -1,8 +1,8 @@
 #!/bin/bash
 # run.sh <tag> <mode> [env assignments...]   e.g. run.sh base m   or   run.sh fo failopen QUEST_FAIL_OPEN=USER_DATA_FILE
-# Uses emulator in $EMU (default c_src/emulator); scratch-copies QUEST/.
+# Uses emulator in $EMU (default emulation/emulator); scratch-copies QUEST/.
 TAG=$1; MODE=$2; shift 2
-EMU=${EMU:-/home/claude/Work__29_/Work/c_src/emulator}
+EMU=${EMU:-/home/claude/Work__29_/Work/emulation/emulator}
 RUN=/home/claude/runs/$TAG; rm -rf $RUN; mkdir -p $RUN
 cp -r /home/claude/QUEST/QUEST $RUN/QUEST
 cd $RUN

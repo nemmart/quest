@@ -24,7 +24,7 @@ proves the mechanism end to end, then widen under the oracle.
   `[ac3+d]`) — a 0x6xxxxxxx base would silently re-ring to 7. Long
   L-forms do not re-ring. Not worth an emulator adjustment.
 - **Nothing maps at or above 0x78000000 today.** Ring-7 facts from
-  c_src/log (QUEST client): unshared image pages 0–5 (stack base
+  emulation/log (QUEST client): unshared image pages 0–5 (stack base
   0x70000E87), shared image 0x70017C00–0x7017FFFF, and the three
   ?SPAGE windows — SHARED_DATA_FILE at **0x70180000** (126 pages, to
   ~0x7019F800), WORLD_DATA_FILE at 0x70017C00 (1033 pages),

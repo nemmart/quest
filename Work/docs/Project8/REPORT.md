@@ -1,7 +1,7 @@
 # Project 8 — REPORT (Phase 2: the stack-free L2, Stages A+B)
 
 Per SharedProtocol.md REPORT format. Solo implementation session,
-Aug 13–14 2026. Code changes only in c_src/runtime/* (new:
+Aug 13–14 2026. Code changes only in emulation/runtime/* (new:
 error_handler.hpp split into three implementations), Launch.cpp
 (-handler flag), Makefile, hw/RTStubs.* (H7 arming), and mode gates in
 runtime/frames.cpp + runtime/o_signal.cpp. NO checker changes

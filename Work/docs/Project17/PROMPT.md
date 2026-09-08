@@ -21,10 +21,10 @@ the P16 mechanism; do NOT rebuild them.
    - the QUEST-base-record section (empty-records handling)
 3. Work/docs/Project16/REPORT.md — what P16 built and proved, and the
    mid-window finding (verified: shadow off by exactly 2k mid-window).
-4. Work/c_src/hw/Mapper.{hpp,cpp} (LiveRecord, push_record, wrtn_fixup,
+4. Work/emulation/hw/Mapper.{hpp,cpp} (LiveRecord, push_record, wrtn_fixup,
    unwind_to, map_word), EagleStack.cpp (the P16 caller_write hooks at
    XPEF/LPEF/LCALL, the WSAVS consume-and-clear).
-5. Work/c_src/quest.addrbook, quest.pushmap.
+5. Work/emulation/quest.addrbook, quest.pushmap.
 
 ## The finding P16 stopped on (context)
 

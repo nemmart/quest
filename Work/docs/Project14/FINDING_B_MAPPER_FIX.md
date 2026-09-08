@@ -38,7 +38,7 @@ report of what you changed and how to verify it. Do not spend time
 building or running the battery.
 
 Confirm the current tree already has the Finding A fix (`grep 's >= it->W'
-Work/c_src/hw/Mapper.cpp` → present); your I2 change sits alongside it.
+Work/emulation/hw/Mapper.cpp` → present); your I2 change sits alongside it.
 
 ## What godspeed will run to verify (describe expected results in your report)
 

@@ -4,7 +4,7 @@ Branch `p34-readable` from main 4837d5c; a docs + tool branch.  The ir 5
 book was read out of `origin/p31-located-strings` @
 b4384b177bed8229c50b43235b2c08d62a954fd8 (sha256 281fd501…; P31 not yet
 merged when this ran — the header of every rendering names the book it
-read).  Nothing under Work/c_src except tools/readable.py was touched.
+read).  Nothing under Work/emulation except tools/readable.py was touched.
 
 ## Sequence
 

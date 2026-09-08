@@ -70,7 +70,7 @@ out-of-range fault is the only backstop. Checker untouched.
   amount, and register-amount (dynamic) shifts must be expressible.
 - CAUTION carried from the wide-carry episode: the reference
   fragment discussed was Java (`>>>` vs `>>`); the session must diff
-  c_src's shift helpers against it and treat any mismatch as a
+  emulation's shift helpers against it and treat any mismatch as a
   FINDING before the spec cites either (METHOD §5/§10).
 - `ash` has a SIDE EFFECT in the ISA: ovr |= sign-change. Exprs stay
   pure — see §4.

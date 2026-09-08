@@ -22,10 +22,10 @@ cd "$(dirname "$0")/.."
 ROOT=$(pwd); W=$ROOT/Work
 git fetch --quiet origin main
 git checkout --quiet origin/main -- Work Disassembled
-cd $W/c_src && make -j"$(nproc)" >/dev/null && cd $ROOT
-EMU=$W/c_src/emulator; BOOK=$W/c_src/quest.addrbook; PMAP=$W/c_src/quest.pushmap.M4
-IRB=$W/c_src/quest.ir2.book; IRS=$W/c_src/quest.ir2.stock
-BLK=$W/c_src/quest.blocks.split; SYN=$W/c_src/quest.synclist.split
+cd $W/emulation && make -j"$(nproc)" >/dev/null && cd $ROOT
+EMU=$W/emulation/emulator; BOOK=$W/emulation/quest.addrbook; PMAP=$W/emulation/quest.pushmap.M4
+IRB=$W/emulation/quest.ir2.book; IRS=$W/emulation/quest.ir2.stock
+BLK=$W/emulation/quest.blocks.split; SYN=$W/emulation/quest.synclist.split
 RES=$ROOT/results/033-f6-terminal-legs; mkdir -p $RES
 : > $RES/verdicts.txt
 for prt in 8791 8792 8793 8794; do fuser -k -TERM $prt/tcp 2>/dev/null || true; done; sleep 2

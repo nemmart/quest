@@ -179,7 +179,7 @@ cond(DERR)=false, `t ? cond(skip) : cond(fall)` rendered `(t) && …` /
 `!(t) && …`, no other algebra) re-derived through lower_one and
 cross-checked against the artifact text. The cluster's INTERIOR blocks
 (second skip, DERR) are not emitted and are delisted from the shipped
-list `c_src/quest.synclist.p27` (identity minus interiors of the
+list `emulation/quest.synclist.p27` (identity minus interiors of the
 clusters actually folded; lower.py writes it with tags/blocks/artifact
 sha256 provenance). K stays a listed block — the clone ticks its
 ordinal on ARRIVAL at a listed pc (Machine.cpp:306), so a merged K

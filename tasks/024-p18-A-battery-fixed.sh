@@ -10,11 +10,11 @@
 set -eu
 cd "$(dirname "$0")/.."
 ROOT=$(pwd); W=$ROOT/Work
-cd $W/c_src && make -j"$(nproc)" >/dev/null && cd $ROOT
-EMU=$W/c_src/emulator; BOOK=$W/c_src/quest.addrbook
+cd $W/emulation && make -j"$(nproc)" >/dev/null && cd $ROOT
+EMU=$W/emulation/emulator; BOOK=$W/emulation/quest.addrbook
 DRV=$W/docs/Project13/drive.py; PAT=$W/docs/Project14/drive_patient.py
 RES=$ROOT/results/024-p18-A-battery-fixed; mkdir -p $RES
-PA=$W/c_src/quest.pushmap.A
+PA=$W/emulation/quest.pushmap.A
 : > $RES/verdicts.txt
 
 leg(){ # tag mode driver [env...]

@@ -18,11 +18,11 @@ rebuild the mechanism — apply it.
    (stack_offset; QUEST base record) and the write-mode-WSAVS
    subtraction-timing amendment are LAW here.
 3. Work/docs/Project17/REPORT.md — what's proven and how it's verified.
-4. Work/c_src/hw/Mapper.{hpp,cpp}, EagleStack.cpp (caller_write hooks,
+4. Work/emulation/hw/Mapper.{hpp,cpp}, EagleStack.cpp (caller_write hooks,
    note_arg_write, push_record write-mode consume, checkpoint_offset),
    Lockstep.cpp (the checkpoint compare).
 5. Disassembled/quest.argmap, quest.callsites, quest.wpsh_wpop,
-   quest.argpush. Work/c_src/quest.pushmap (the P16/17 one-site map).
+   quest.argpush. Work/emulation/quest.pushmap (the P16/17 one-site map).
 
 ## Scope — tranches A & B (flat LCALL sites only)
 
@@ -55,8 +55,8 @@ independent generators (direct transcription and call-window walking)
 produce IDENTICAL maps — cross-validation that the slots are right.
 
 The coordinator generated + validated the tranche A & B maps:
-`Work/c_src/quest.pushmap.A` (515 sites), `.B` (20 WPSH sites), `.AB`
-(combined). Generator: `Work/c_src/tools/gen_pushmap.py`. Every site's
+`Work/emulation/quest.pushmap.A` (515 sites), `.B` (20 WPSH sites), `.AB`
+(combined). Generator: `Work/emulation/tools/gen_pushmap.py`. Every site's
 arg window resolved to exactly its argc (0 skipped), every push slot
 validated inside the callee's arg region, every marker == wfp−10, and
 the WPSH register→arg ordering verified (above). You should still

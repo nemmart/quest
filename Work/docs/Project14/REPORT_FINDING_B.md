@@ -25,10 +25,10 @@ machine's actual semantics.**
   7017e901 WSGT 2,1       ; collision check vs wsp
   7017e903 STASL 2        ; wsl := wsl - size   <-- the write
   ```
-- **Native mirror:** `c_src/runtime/i_alloc.cpp:191`
+- **Native mirror:** `emulation/runtime/i_alloc.cpp:191`
   `machine.wsl = machine.wsl - size;  // STASL 0x7017E903` — executed
   on the fo path as ?LIB_ERROR's inner allocation
-  (`c_src/runtime/lib_error.cpp:355`, `emu_rt::i_alloc` at staged
+  (`emulation/runtime/lib_error.cpp:355`, `emu_rt::i_alloc` at staged
   state). If ?LIB_ERROR instead falls back whole, the emulated `STASL`
   (hw/EagleStack.cpp:404 `machine.wsl=machine.ac[AA]`) performs the
   identical write. Both engines run it; hence 0 divergences.
@@ -158,12 +158,12 @@ book change is needed.
 - Abort dumps: docs/Project14/evidence/b2/finding_B_failopen_I2.txt
   (+ runs/b2_fo, b2_fo2 tails).
 - Real wsl write: Disassembled/quest-rt.dis @ 0x7017E8FE-E903.
-- Native write: c_src/runtime/i_alloc.cpp:191; inner call
-  c_src/runtime/lib_error.cpp:344-357; size math i_alloc.cpp:42-69
+- Native write: emulation/runtime/i_alloc.cpp:191; inner call
+  emulation/runtime/lib_error.cpp:344-357; size math i_alloc.cpp:42-69
   (heap_class_size) + lib_error.cpp:292-303.
-- fo entry: c_src/os/OSContextFS.cpp:74-78; wrapper ?OPEN_FILE
+- fo entry: emulation/os/OSContextFS.cpp:74-78; wrapper ?OPEN_FILE
   0x7017DD27 (error branch 0x7017DDAA-DDAE, quest-rt.dis).
 - ON handler + goto: quest.dis 0x7016EC53-EC71, label 0x7016F1C4.
-- Detection: c_src/runtime/frames.cpp:237 (i_goto, entry 0x7017EC7C) →
-  c_src/hw/Mapper.cpp:439 (unwind_to) → :328 (i2_assert); latch site
+- Detection: emulation/runtime/frames.cpp:237 (i_goto, entry 0x7017EC7C) →
+  emulation/hw/Mapper.cpp:439 (unwind_to) → :328 (i2_assert); latch site
   :343.

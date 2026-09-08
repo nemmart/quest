@@ -4,8 +4,8 @@
 set -eu
 cd "$(dirname "$0")/.."
 ROOT=$(pwd); W=$ROOT/Work
-cd $W/c_src && make -j"$(nproc)" >/dev/null && cd $ROOT
-EMU=$W/c_src/emulator
+cd $W/emulation && make -j"$(nproc)" >/dev/null && cd $ROOT
+EMU=$W/emulation/emulator
 BOOK=$W/docs/Project14/evidence/quest.addrbook.b1fam
 DRV=$W/docs/Project13/drive.py
 RES=$ROOT/results/008-b1-finish; mkdir -p $RES

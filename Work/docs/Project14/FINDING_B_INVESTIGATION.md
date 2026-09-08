@@ -33,7 +33,7 @@ path → the pre-existing motion trips I2.
 legitimate stack adjustment or an accounting slip?**
 
 Trace, from the disassembly + the native handlers:
-- `Work/c_src/runtime/o_signal.*`, `r_signal.*`, `mv_error_handler.*`,
+- `Work/emulation/runtime/o_signal.*`, `r_signal.*`, `mv_error_handler.*`,
   `native_error_handler.*`, `lib_error.*`, `def_on.*` — whichever runs on
   the ?OPEN fail-open → signal → handler path.
 - Find the wsl write (or the wsp/wsl-coupled op) near the pc region

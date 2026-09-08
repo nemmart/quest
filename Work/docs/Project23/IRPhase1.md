@@ -12,9 +12,9 @@ end-state sketch (temps, folding, intrinsics arrive P24+).*
     quest.dis + quest.blocks (+ quest.tags, quest.argmap,
     quest.pushmap.M4, quest.addrbook)
             |
-       c_src/tools/lower.py        offline, static, per-class rules
+       emulation/tools/lower.py        offline, static, per-class rules
             v
-       c_src/quest.ir              textual, diffable, provenance-
+       emulation/quest.ir              textual, diffable, provenance-
             |                      stamped (sha256 of every input)
             v
        hw/IRExec.{hpp,cpp}         loader + block interpreter in the

@@ -202,8 +202,8 @@ lockstep turns conceptual mistakes into divergences.
 
 ## Setup
 
-Extract tarballs: Work/ (c_src, docs, DG_Quest), QUEST/, Disassembled/,
-Tools/. Build: `make` in Work/c_src (g++ ≥ 11, C++17, warning-free).
+Extract tarballs: Work/ (emulation, docs, DG_Quest), QUEST/, Disassembled/,
+Tools/. Build: `make` in Work/emulation (g++ ≥ 11, C++17, warning-free).
 Run commands: docs/Run.md. Layering tripwires live in the emulator
 source at EagleFloat.cpp (FP-throw ruling) and EagleStack.cpp
 handle_overflow (faithful stack-fault vectoring — LOAD-BEARING: the

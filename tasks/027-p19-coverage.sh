@@ -24,11 +24,11 @@
 set -eu
 cd "$(dirname "$0")/.."
 ROOT=$(pwd); W=$ROOT/Work
-cd $W/c_src && make -j"$(nproc)" >/dev/null && cd $ROOT
-EMU=$W/c_src/emulator; BOOK=$W/c_src/quest.addrbook
+cd $W/emulation && make -j"$(nproc)" >/dev/null && cd $ROOT
+EMU=$W/emulation/emulator; BOOK=$W/emulation/quest.addrbook
 DRV=$W/docs/Project13/drive.py
 RES=$ROOT/results/027-p19-coverage; mkdir -p $RES
-PM=$W/c_src/quest.pushmap.ABCD
+PM=$W/emulation/quest.pushmap.ABCD
 : > $RES/verdicts.txt
 
 leg(){ # tag mode [env...]

@@ -25,15 +25,15 @@ flock -n 9 || { echo "another battery attempt is still running; refusing overlap
 cd "$(dirname "$0")/.."
 ROOT=$(pwd)
 SRC=$(bin/task_source.sh p30-string-library 043-p30-string-library); W=$SRC/Work
-cd $W/c_src && make -j"$(nproc)" >/dev/null
+cd $W/emulation && make -j"$(nproc)" >/dev/null
 ./tests/run_helpers_selftest.sh | tail -1 | tee /tmp/selftest043
 grep -q "SELFTEST GREEN" /tmp/selftest043 || { echo "HELPER SELFTEST RED"; exit 1; }
 ./tests/run_strings_selftest.sh | tee /tmp/strings043
 grep -q "teeth confirmed" /tmp/strings043 || { echo "STRINGS SELFTEST NOT GREEN/RED AS REQUIRED"; exit 1; }
 cd $ROOT
-EMU=$W/c_src/emulator; BOOK=$W/c_src/quest.addrbook; PMAP=$W/c_src/quest.pushmap.M4
-IRB=$W/c_src/quest.ir2.book; IRS=$W/c_src/quest.ir2.stock
-BLK=$W/c_src/quest.blocks.split; SYN=$W/c_src/quest.synclist.p27
+EMU=$W/emulation/emulator; BOOK=$W/emulation/quest.addrbook; PMAP=$W/emulation/quest.pushmap.M4
+IRB=$W/emulation/quest.ir2.book; IRS=$W/emulation/quest.ir2.stock
+BLK=$W/emulation/quest.blocks.split; SYN=$W/emulation/quest.synclist.p27
 RES=$ROOT/results/043-p30-string-library; mkdir -p $RES
 JOBS=${JOBS:-3}
 T0=$(date +%s)

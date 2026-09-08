@@ -1,6 +1,6 @@
 # Emulator ↔ Hardware divergence register
 
-One place for every known way the emulator (C++ `c_src/hw`, and the Java
+One place for every known way the emulator (C++ `emulation/hw`, and the Java
 twin in Tools/) differs from the DG MV/8000 as documented in the manual
 or inferred from it. Lockstep cannot see any of these — both engines
 share the same helpers — so this list is the only defence. Rules:

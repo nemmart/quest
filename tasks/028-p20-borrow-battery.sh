@@ -11,11 +11,11 @@
 set -eu
 cd "$(dirname "$0")/.."
 ROOT=$(pwd); W=$ROOT/Work
-cd $W/c_src && make -j"$(nproc)" >/dev/null && cd $ROOT
-EMU=$W/c_src/emulator; BOOK=$W/c_src/quest.addrbook
+cd $W/emulation && make -j"$(nproc)" >/dev/null && cd $ROOT
+EMU=$W/emulation/emulator; BOOK=$W/emulation/quest.addrbook
 DRV=$W/docs/Project13/drive.py; PAT=$W/docs/Project14/drive_patient.py
 RES=$ROOT/results/028-p20-borrow-battery; mkdir -p $RES
-PM=$W/c_src/quest.pushmap.M4
+PM=$W/emulation/quest.pushmap.M4
 : > $RES/verdicts.txt
 
 # round-trip verifier: pairs ARGWR/ARGRD at borrow slots by value+pc+offset
@@ -65,7 +65,7 @@ leg(){ # tag mode driver [env...]
   argrd=$(grep -c 'ARGRD' $R/trace 2>/dev/null || true)
   wsavsw=$(grep -c 'WSAVS.*mode=W' $R/trace 2>/dev/null || true)
   wrtnw=$(grep -c 'WRTN.*mode=W' $R/trace 2>/dev/null || true)
-  rtv=$(python3 /tmp/rt028.py $R/trace $W/c_src/quest.pushmap.borrows 2>&1 | tail -1) || rtfail=1
+  rtv=$(python3 /tmp/rt028.py $R/trace $W/emulation/quest.pushmap.borrows 2>&1 | tail -1) || rtfail=1
   printf "%-6s div=%-3s i2=%-3s probes=%-3s m4b_ab=%-3s map_ab=%-3s argwr=%-6s argrd=%-5s wWSAVS=%-6s wWRTN=%-6s %s\n" \
     "$tag" "$div" "$i2" "$prb" "$m4ab" "$mab" "$argwr" "$argrd" "$wsavsw" "$wrtnw" "$rtv" | tee -a $RES/verdicts.txt
   cp $R/out $RES/$tag.out; cp $R/err $RES/$tag.err 2>/dev/null || true

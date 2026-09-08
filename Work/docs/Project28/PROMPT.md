@@ -64,7 +64,7 @@ no Java, JOBS=3; tasks use bin/task_source.sh (never `git checkout
   statements they are, in program order; rt_call does not declare them.
   The per-callee table (Part 1) records which registers each runtime
   routine reads on entry and writes on return (result register, e.g.
-  `?RANDOM_NUMBER`), read from the runtime source (c_src/runtime/*.cpp
+  `?RANDOM_NUMBER`), read from the runtime source (emulation/runtime/*.cpp
   native bodies, RTStubs registrations) or the disassembly of the
   emulated routine — cited.  Nothing in the IR asserts them; they are
   documentation and a check that no site depends on an unmodelled one.

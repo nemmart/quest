@@ -6,7 +6,7 @@
 #   legs:   any of  m fo play inj abort   (default: all five)
 # Env:
 #   SERIAL=1        run legs one at a time (default: parallel, one port each)
-#   BOOK=<path>     address book (default: Work/c_src/quest.addrbook)
+#   BOOK=<path>     address book (default: Work/emulation/quest.addrbook)
 #
 # Each leg: fresh scratch copy of QUEST/ (COPY, never symlink — P13 §6.2),
 # own port, own drive.py invocation. Verdicts collated into
@@ -20,11 +20,11 @@ REPO_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 OUT="${1:?usage: battery.sh <outdir> [legs...]}"; shift || true
 LEGS=("${@:-m fo play inj abort}")
 [ $# -gt 0 ] && LEGS=("$@") || LEGS=(m fo play inj abort)
-BOOK="${BOOK:-$REPO_DIR/Work/c_src/quest.addrbook}"
+BOOK="${BOOK:-$REPO_DIR/Work/emulation/quest.addrbook}"
 BASE_PORT=8781
 
 mkdir -p "$OUT"
-cd "$REPO_DIR/Work/c_src"
+cd "$REPO_DIR/Work/emulation"
 make -j"$(nproc)" >/dev/null
 
 run_leg() {

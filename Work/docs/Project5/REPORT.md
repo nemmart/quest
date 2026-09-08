@@ -94,7 +94,7 @@ c. o_qsignal logs "(native)" before signal_dispatch can still fall
 
 ## 6. Validation evidence (exact commands; expected values from these runs)
 
-All from `Work/c_src` builds (warning-free), scratch dirs with fresh
+All from `Work/emulation` builds (warning-free), scratch dirs with fresh
 `cp -r QUEST`, `-lockstep -silent`, driver in the same shell, login
 CL/Claude/quest/Y/space/F.
 

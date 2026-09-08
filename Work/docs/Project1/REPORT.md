@@ -266,7 +266,7 @@ wsb = 0x7000108C (T?AREA capture: RETURN ac0=0x70001063 + 0x29).
 Re-run recipe for the integration pass (exact commands):
 
 ```
-cd Work/c_src && make
+cd Work/emulation && make
 cp -r QUEST QUEST_RUN
 QUEST_CAPTURE=7016EC57 QUEST_CAPTURE_DEST=7000104C \
 QUEST_FAIL_OPEN=USER_DATA_FILE stdbuf -o0 -e0 \

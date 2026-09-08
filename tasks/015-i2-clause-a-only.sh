@@ -7,9 +7,9 @@ set -eu
 cd "$(dirname "$0")/.."
 ROOT=$(pwd); W=$ROOT/Work
 # disable clause (b): comment the clearance abort to a warning-only, in a temp build
-cp -r $W /tmp/Wb; MB=/tmp/Wb/c_src/hw/Mapper.cpp
+cp -r $W /tmp/Wb; MB=/tmp/Wb/emulation/hw/Mapper.cpp
 python3 - <<'PY'
-p='/tmp/Wb/c_src/hw/Mapper.cpp'; s=open(p).read()
+p='/tmp/Wb/emulation/hw/Mapper.cpp'; s=open(p).read()
 # neuter clause (b): turn the "if(wsl_now <= clear){...abort...}" into a no-op guarded block
 import re
 i=s.index('// (b) Stack clearance.')
@@ -20,8 +20,8 @@ k=s.index('}', k)+1
 s=s[:j]+'return; // CLAUSE (b) DISABLED for task 015 isolation\n'+s[k:]
 open(p,'w').write(s); print("clause b disabled")
 PY
-cd /tmp/Wb/c_src && make -j"$(nproc)" >/dev/null 2>&1 && echo "built (a)-only"
-EMU=/tmp/Wb/c_src/emulator; BOOK=$W/c_src/quest.addrbook
+cd /tmp/Wb/emulation && make -j"$(nproc)" >/dev/null 2>&1 && echo "built (a)-only"
+EMU=/tmp/Wb/emulation/emulator; BOOK=$W/emulation/quest.addrbook
 RES=$ROOT/results/015-i2-clause-a-only; mkdir -p $RES
 DRV=$W/docs/Project13/drive.py
 leg(){ local tag=$1 mode=$2; shift 2

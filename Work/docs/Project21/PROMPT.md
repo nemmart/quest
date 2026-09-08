@@ -64,12 +64,12 @@ the raise census will later add its column to.
 
 ## Boundaries — BINDING
 
-1. **Read-only project.** New files: the tool(s) under c_src/tools/,
-   generated data under c_src/, report + notes under docs/Project21/.
+1. **Read-only project.** New files: the tool(s) under emulation/tools/,
+   generated data under emulation/, report + notes under docs/Project21/.
    Nothing else changes. No emulator edits, no doc edits outside
    Project21/ (banner/index updates at landing are fine).
 2. **The disassembly wins** (METHOD §1). Summaries are derived from
-   quest.dis instruction by instruction. The c_src/quest/*.cpp
+   quest.dis instruction by instruction. The emulation/quest/*.cpp
    reconstructions are NOT evidence — user ruling, Aug 28: they are
    untrusted M1-era behavioral guesses (dist.cpp uses std::sqrt where
    the binary goes through SQR31?3 — METHOD §1's own example).
@@ -102,16 +102,16 @@ the raise census will later add its column to.
    quest.dis, quest.symbols, quest.callsites (incl. its census
    footer), quest.addrs, quest.blocks, quest.targets, quest.argmap.
    Understand each format before consuming it.
-5. c_src/quest.addrbook + tools/build_address_book.py — frame-area
+5. emulation/quest.addrbook + tools/build_address_book.py — frame-area
    ranges per routine (region 1 of the criterion).
 6. docs/GAME_REFERENCE.md — known data layouts (player records,
    shared pages) to seed region 2.
-7. c_src/tools/gen_pushmap.py — prior art for walking the dis and
+7. emulation/tools/gen_pushmap.py — prior art for walking the dis and
    recognizing arg-store patterns; reuse its parsing conventions.
 
 ## The tool
 
-`c_src/tools/access_census.py` (split into modules if it wants to be;
+`emulation/tools/access_census.py` (split into modules if it wants to be;
 keep the entry point single). Three passes.
 
 ### Pass 1 — per-routine access extraction
@@ -175,7 +175,7 @@ One row per routine:
   result consumed) / STATE-WRITER / MIXED — plus the site count from
   quest.callsites.
 
-Machine-readable output: `c_src/quest.access` (grammar documented at
+Machine-readable output: `emulation/quest.access` (grammar documented at
 the top of the file, following the pushmap convention of
 comment-annotated lines). Human report: the table in REPORT.md,
 top-16 first, then the rest.
@@ -195,8 +195,8 @@ top-16 first, then the rest.
 
 ## Deliverables
 
-1. c_src/tools/access_census.py (+ modules).
-2. c_src/quest.access.
+1. emulation/tools/access_census.py (+ modules).
+2. emulation/quest.access.
 3. docs/Project21/REPORT.md: method as-built, the summary table,
    region-2 seed list used, UNKNOWN/AMBIGUOUS lists, sanity-gate
    evidence, and a findings section — which of the top 16 proved
@@ -209,7 +209,7 @@ top-16 first, then the rest.
 - The raise census and fatalize ruling (M5Notes) — separate project.
 - Cloning vs. matched-edge for the 2–9-site middle tier — that
   ruling wants this project's data first.
-- Whether any c_src/quest reconstruction is kept — re-validation is
+- Whether any emulation/quest reconstruction is kept — re-validation is
   downstream, against these summaries and the DERIVATIONs.
 - Handler-region (O.ON/O.REVERT) mapping — the ON-handler loose end
   stays open; this census only records where those calls appear.

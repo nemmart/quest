@@ -21,16 +21,16 @@ flock -n 9 || { echo "another battery attempt is still running; refusing overlap
 cd "$(dirname "$0")/.."
 ROOT=$(pwd)
 SRC=$(bin/task_source.sh p33b-arena-temps 047-p33b-arena-temps); W=$SRC/Work
-cd $W/c_src && make -j"$(nproc)" >/dev/null && cd $ROOT
-EMU=$W/c_src/emulator; BOOK=$W/c_src/quest.addrbook; PMAP=$W/c_src/quest.pushmap.M4
-IRB=$W/c_src/quest.ir2.book; IRS=$W/c_src/quest.ir2.stock
-BLK=$W/c_src/quest.blocks.split; SYN=$W/c_src/quest.synclist.p27
+cd $W/emulation && make -j"$(nproc)" >/dev/null && cd $ROOT
+EMU=$W/emulation/emulator; BOOK=$W/emulation/quest.addrbook; PMAP=$W/emulation/quest.pushmap.M4
+IRB=$W/emulation/quest.ir2.book; IRS=$W/emulation/quest.ir2.stock
+BLK=$W/emulation/quest.blocks.split; SYN=$W/emulation/quest.synclist.p27
 RES=$ROOT/results/047-p33b-arena-temps; mkdir -p $RES
-ARENA=$W/c_src/quest.arena; HOOKS=$W/c_src/quest.strhooks
+ARENA=$W/emulation/quest.arena; HOOKS=$W/emulation/quest.strhooks
 STR=(QUEST_STRINGS_CHECK=1 QUEST_STRHOOKS=$HOOKS QUEST_ARENA=$ARENA)
-( cd $W/c_src && bash tests/run_helpers_selftest.sh ) > /tmp/selftest047 2>&1 || { echo "helpers selftest RED"; cat /tmp/selftest047; exit 1; }
-( cd $W/c_src && bash tests/run_strings_selftest.sh ) > /tmp/strings047 2>&1 || { echo "strings selftest RED"; cat /tmp/strings047; exit 1; }
-( cd $W/c_src && bash tests/run_strhooks_selftest.sh ) > /tmp/strhooks047 2>&1 || { echo "strhooks selftest RED"; cat /tmp/strhooks047; exit 1; }
+( cd $W/emulation && bash tests/run_helpers_selftest.sh ) > /tmp/selftest047 2>&1 || { echo "helpers selftest RED"; cat /tmp/selftest047; exit 1; }
+( cd $W/emulation && bash tests/run_strings_selftest.sh ) > /tmp/strings047 2>&1 || { echo "strings selftest RED"; cat /tmp/strings047; exit 1; }
+( cd $W/emulation && bash tests/run_strhooks_selftest.sh ) > /tmp/strhooks047 2>&1 || { echo "strhooks selftest RED"; cat /tmp/strhooks047; exit 1; }
 grep -q "teeth confirmed" /tmp/strhooks047 || { echo "strhooks teeth NOT confirmed"; exit 1; }
 JOBS=${JOBS:-3}
 T0=$(date +%s)
@@ -170,7 +170,7 @@ DERR_EMB=$(grep -c '^  @[0-9A-F]* DERR' $IRB || true)
 ASSERTS=$(grep -c '^  assert(' $IRB || true)
 FOLDED=$(grep -c '^[0-9A-F]' $W/docs/Project27/assumed-foldable.txt || true)
 SYNN=$(grep -c '^[0-9A-F]' $SYN || true)
-SYNI=$(grep -c '^[0-9A-F]' $W/c_src/quest.synclist.split || true)
+SYNI=$(grep -c '^[0-9A-F]' $W/emulation/quest.synclist.split || true)
 echo "derr_embeds_remaining=$DERR_EMB (want 2: the LDSP-fed sinks 701604D4 7016D707, verified terminal pairs — P28 A1)" | tee -a $RES/verdicts.txt
 echo "asserts=$ASSERTS (want 2273 = 2271 P27 folds, artifact lists $FOLDED, + 2 LDSP range asserts)  unfoldable=2" | tee -a $RES/verdicts.txt
 echo "synclist_delisted=$((SYNI-SYNN)) (want 4499)  synclist_entries=$SYNN (want 13510)" | tee -a $RES/verdicts.txt

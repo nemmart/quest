@@ -230,7 +230,7 @@ All runs: fresh scratch QUEST copy, 1-core container, wrapper
 `run_one.sh` (checkpoint tarball) around:
 
 ```
-stdbuf -o0 -e0 ./Work/c_src/emulator <flags> -lockstep -silent \
+stdbuf -o0 -e0 ./Work/emulation/emulator <flags> -lockstep -silent \
     scratch_quest QUEST_SERVER @QUEST @QUEST > run_<tag>.log 2> run_<tag>.err
 # driver: docs/Project1/drive.py (login CL/Claude/quest/Y/any/F + L→P + ESC)
 # FAIL_OPEN runs add: QUEST_FAIL_OPEN=USER_DATA_FILE
@@ -277,7 +277,7 @@ no detach/abort. Nothing new to catalogue; the deeper expedition is
 the user's free-play program. Launch line for it:
 
 ```
-stdbuf -o0 -e0 ./Work/c_src/emulator -handler=check -zero=clone \
+stdbuf -o0 -e0 ./Work/emulation/emulator -handler=check -zero=clone \
     -lockstep -silent <QUEST-copy> QUEST_SERVER @QUEST @QUEST > log
 ```
 
@@ -328,7 +328,7 @@ until something NEW happens, then the summary line at exit.
 The catalogue moved OUT of the binary (user ruling): probe mode loads
 probe_suppressions.txt from the launch cwd — authoritative when
 present, built-in seed as fallback with a stderr note. Line format
-documented in the file itself; canonical copy lives at Work/c_src/probe_suppressions.txt — the
+documented in the file itself; canonical copy lives at Work/emulation/probe_suppressions.txt — the
 launch cwd itself, no copy step (user ruling). Curing
 a new specimen is now: read its forensic record, add one line,
 replay — no rebuild. Tier edits (NOTE→SILENT promotions) likewise.

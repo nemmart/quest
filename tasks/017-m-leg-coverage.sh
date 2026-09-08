@@ -3,10 +3,10 @@
 set -eu
 cd "$(dirname "$0")/.."
 ROOT=$(pwd); W=$ROOT/Work
-cd $W/c_src && make -j"$(nproc)" >/dev/null && cd $ROOT
+cd $W/emulation && make -j"$(nproc)" >/dev/null && cd $ROOT
 R=/tmp/run017; rm -rf $R; mkdir -p $R; cp -r $ROOT/QUEST $R/QUEST; cd $R
 pkill -f "[e]mulator .*QUEST" 2>/dev/null||true; sleep 1
-env QUEST_ADDRESS_BOOK=$W/c_src/quest.addrbook stdbuf -o0 -e0 $W/c_src/emulator \
+env QUEST_ADDRESS_BOOK=$W/emulation/quest.addrbook stdbuf -o0 -e0 $W/emulation/emulator \
   -lockstep -silent -trace $R/trace -types redirect,gcalls \
   QUEST QUEST_SERVER @QUEST @QUEST >$R/out 2>$R/err &
 EP=$!; sleep 6; python3 $W/docs/Project13/drive.py m $R/session.log >/dev/null 2>&1||true

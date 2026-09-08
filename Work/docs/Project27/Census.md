@@ -11,7 +11,7 @@ The upload is byte-identical to repo `main` @ 29a1c24 (diff -rq: only
 the new tool differs). Runner logs used for liveness: results/039
 (k1fo, play-st) and results/037 (13 legs).
 
-Tool: `tools/derr_clusters.py` (run from Work/c_src/tools with
+Tool: `tools/derr_clusters.py` (run from Work/emulation/tools with
 `--dis ../../../Disassembled/quest.dis --tags ../../../Disassembled/quest.tags
 --blocks ../quest.blocks.split --synclist ../quest.synclist.split
 --ir ../quest.ir2.book --out ../../docs/Project27/assumed-foldable.txt`).

@@ -11,7 +11,7 @@ temp-of-claim-k / computed.  A temp pointer of an INTERMEDIATE claim (not
 the last) surviving to a boundary is what StringsDesign §2.1 says cannot
 happen; this script says whether it does.
 
-Usage (from Work/c_src/tools):
+Usage (from Work/emulation/tools):
   python3 p33_census.py --strhooks ../quest.strhooks --dis ../../../Disassembled/quest.dis \
       --blocks ../quest.blocks.split --mem ../../../Disassembled/quest.mem \
       --symbols ../../../Disassembled/quest.symbols --synclist ../quest.synclist.p27 [--out FILE]

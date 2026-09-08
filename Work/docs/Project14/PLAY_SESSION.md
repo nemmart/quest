@@ -6,10 +6,10 @@ the last thing before M4a is "done."
 
 ## Launch (lockstep, traces on)
 
-From Work/c_src (after `make`):
+From Work/emulation (after `make`):
 
 ```
-QUEST_ADDRESS_BOOK=<repo>/Work/c_src/quest.addrbook \
+QUEST_ADDRESS_BOOK=<repo>/Work/emulation/quest.addrbook \
   ./emulator -lockstep -silent \
   -trace /tmp/play.trace -types lockstep,redirect,gcalls \
   QUEST QUEST_SERVER @QUEST @QUEST

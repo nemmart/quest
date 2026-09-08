@@ -26,10 +26,10 @@ Key structural fact: a push_map entry is a pure function of
 push belongs to — a given PC pushes a fixed arg of a fixed callee, whose
 frame sits at a fixed area address. So the argmap already IS the
 push_map. Generated files (committed):
-- `Work/c_src/quest.pushmap.A` — 515 sites
-- `Work/c_src/quest.pushmap.B` — 20 WPSH sites
-- `Work/c_src/quest.pushmap.AB` — combined
-- `Work/c_src/tools/gen_pushmap.py` — generator
+- `Work/emulation/quest.pushmap.A` — 515 sites
+- `Work/emulation/quest.pushmap.B` — 20 WPSH sites
+- `Work/emulation/quest.pushmap.AB` — combined
+- `Work/emulation/tools/gen_pushmap.py` — generator
 
 ## 3. Validation (done at generation time, before the runner)
 

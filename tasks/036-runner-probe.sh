@@ -12,4 +12,4 @@ echo "== make";     make --version | head -1
 echo "== python3";  python3 --version
 echo "== java";     java -version 2>&1 | head -1 || echo "no java"
 echo "== javac";    javac -version 2>&1 | head -1 || echo "no javac"
-echo "== build";    cd Work/c_src && make clean >/dev/null 2>&1; time make -j"$(nproc)" >/dev/null && ls -l emulator
+echo "== build";    cd Work/emulation && make clean >/dev/null 2>&1; time make -j"$(nproc)" >/dev/null && ls -l emulator

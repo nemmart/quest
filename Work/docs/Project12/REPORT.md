@@ -163,7 +163,7 @@ results written to a stale stack cell.
 
 ## 7. Files changed (file:function)
 
-- tools/build_address_book.py (new); c_src/quest.addrbook (new; READ_IN live); docs/Project12/addrbook_report.md
+- tools/build_address_book.py (new); emulation/quest.addrbook (new; READ_IN live); docs/Project12/addrbook_report.md
 - hw/AddressBook.{hpp,cpp} (new): book loader (`QUEST_ADDRESS_BOOK`), `map_pages`, `LiveArea`
 - hw/Machine.{hpp,cpp}: `areas`, `area_hijack_enabled`, `T`, `T_any`, `T_inv`, `shadow_wsp`, `area_wrtn_fixup`, `area_unwind_to`
 - hw/EagleStack.cpp: WSAVS/WSAVR hijack; WRTN `pre_wfp` + fixup

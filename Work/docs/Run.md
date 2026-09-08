@@ -5,7 +5,7 @@
 ./emulator [flags] <program>              (single program, current dir as FS root)
 ```
 
-The emulator is built in `c_src/` with `make`. Programs boot in the order
+The emulator is built in `emulation/` with `make`. Programs boot in the order
 given and run concurrently against one emulated AOS/VS.
 
 ## Positional arguments
@@ -44,10 +44,10 @@ listed twice: the first instance becomes the **master**, the second the
 (Gen-6.0, docs/Project22/), lockstep additionally REQUIRES two envs and
 honors a third — it refuses to launch without the first two:
 `QUEST_BLOCKS=<path>` (ground-truth CFG — since P23 the operative file
-is Work/c_src/quest.blocks.split, the all-skips-split CFG; the
+is Work/emulation/quest.blocks.split, the all-skips-split CFG; the
 pre-split Disassembled/quest.blocks is its regeneration input),
 `QUEST_SYNC_LIST=<path>` (the sync list — since P27 (Sep 5 2026)
-Work/c_src/quest.synclist.p27, the identity list MINUS the 4,499
+Work/emulation/quest.synclist.p27, the identity list MINUS the 4,499
 DERR-cluster interiors the ir 3/ir 4 artifacts fold; unchanged by P28 — it must match the IR
 file's provenance header. quest.synclist.split, the full identity
 list, remains correct for all-emulated runs and for IR files built
@@ -63,7 +63,7 @@ view of the same session. Any divergence halts both engines with a
 report on stdout (one-line notice on stderr).
 
 Since P23 (Gen-6.1, docs/IR.md), lockstep also honors
-`QUEST_IR=<path>` (a quest.ir file — e.g. Work/c_src/quest.ir2.book or
+`QUEST_IR=<path>` (a quest.ir file — e.g. Work/emulation/quest.ir2.book or
 .stock): blocks present in the file execute on the CLONE as IR, absent
 blocks are emulated, the master always emulates. The loader recomputes
 the file's provenance sha256s (refusing on mismatch with QUEST_BLOCKS)

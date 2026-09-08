@@ -8,10 +8,10 @@ echo "== toolchain =="
 g++ --version | head -1
 nproc
 echo "== emulator build =="
-cd Work/c_src && make -j"$(nproc)" 2>&1 | tail -2 && ls -l emulator
+cd Work/emulation && make -j"$(nproc)" 2>&1 | tail -2 && ls -l emulator
 echo "== tools build =="
 cd ../../Tools && javac -nowarn *.java */*.java 2>&1 | head -3 || true
 ls Follow.class ArgWindows.class
 echo "== book sanity =="
-grep -c "^7" ../Work/c_src/quest.addrbook
+grep -c "^7" ../Work/emulation/quest.addrbook
 echo "SMOKE OK"

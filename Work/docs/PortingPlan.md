@@ -30,7 +30,7 @@ work/
   brief.txt      project brief
   DG_Quest/      Java emulator (reference implementation) + tools
   QUEST/         game binaries, symbol tables, and data files
-  c_src/         C++17 emulator (Phase 1 result) + dormant hook machinery
+  emulation/         C++17 emulator (Phase 1 result) + dormant hook machinery
                  + prior-generation translation sources (reference only,
                  not built): rt/, emu_rt/, quest/, emu_quest/, types/,
                  emu_types/, EagleIntegration
@@ -55,7 +55,7 @@ work/
 
 ## Phase 1 — Status and Findings
 
-The C++ emulator in `c_src/` builds warning-free (`-Wall -Wextra`) and runs
+The C++ emulator in `emulation/` builds warning-free (`-Wall -Wextra`) and runs
 Quest end-to-end. Validation performed:
 
 - **Byte-identical scripted sessions** against the Java emulator through
@@ -245,7 +245,7 @@ pairing gate rather than deadlocking silently.
    port, so both listeners just park).
 2. **Systematic fault injection** (step 4 proper): broaden beyond the
    demonstrated cases using the read-triggered flip technique
-   (`c_src/tools/fault_injection_on_read.md`).
+   (`emulation/tools/fault_injection_on_read.md`).
 3. **Deferred harness items**: ?WDELAY joint-release refinement,
    shutdown/respawn pairing. (MirrorPage compare-on-read and the
    pair-boundary page audit are DONE and fault-injection proven —

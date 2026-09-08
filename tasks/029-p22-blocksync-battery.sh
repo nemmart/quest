@@ -19,8 +19,8 @@
 set -eu
 cd "$(dirname "$0")/.."
 ROOT=$(pwd); W=$ROOT/Work
-cd $W/c_src && make -j"$(nproc)" >/dev/null && cd $ROOT
-EMU=$W/c_src/emulator; BOOK=$W/c_src/quest.addrbook; PMAP=$W/c_src/quest.pushmap.M4
+cd $W/emulation && make -j"$(nproc)" >/dev/null && cd $ROOT
+EMU=$W/emulation/emulator; BOOK=$W/emulation/quest.addrbook; PMAP=$W/emulation/quest.pushmap.M4
 RES=$ROOT/results/029-p22-blocksync-battery; mkdir -p $RES
 DRV=$W/docs/Project13/drive.py; PAT=$W/docs/Project14/drive_patient.py
 : > $RES/verdicts.txt
@@ -59,7 +59,7 @@ leg(){ local tag=$1 mode=$2 drv=$3 speed=$4 k=$5; shift 5
   pkill -f "[e]mulator .*QUEST" 2>/dev/null||true; sleep 1
   env QUEST_ADDRESS_BOOK=$BOOK QUEST_PUSH_MAP=$PMAP \
       QUEST_BLOCKS=$ROOT/Disassembled/quest.blocks \
-      QUEST_SYNC_LIST=$W/c_src/quest.synclist QUEST_SYNC_K=$k "$@" \
+      QUEST_SYNC_LIST=$W/emulation/quest.synclist QUEST_SYNC_K=$k "$@" \
       stdbuf -o0 -e0 $EMU -lockstep -silent -trace $R/trace -types lockstep,redirect,gcalls \
       QUEST QUEST_SERVER @QUEST @QUEST >$R/out 2>$R/err &
   local EP=$!; sleep 6; env QUEST_DRIVE_SPEED=$speed python3 $drv $mode $R/session.log >/dev/null 2>&1||true

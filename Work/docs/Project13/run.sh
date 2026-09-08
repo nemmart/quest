@@ -1,12 +1,12 @@
 #!/bin/bash
 # run.sh <tag> <mode> [env assignments...]
 #   e.g. run.sh b1_m m   |  run.sh b1_fo failopen QUEST_FAIL_OPEN=USER_DATA_FILE
-#   Book: $BOOK (default c_src/quest.addrbook). Emulator: $EMU. Scratch-copies QUEST/.
+#   Book: $BOOK (default emulation/quest.addrbook). Emulator: $EMU. Scratch-copies QUEST/.
 #   Prints divergence count, redirect line count (total + per routine), detach/abort lines.
 TAG=$1; MODE=$2; shift 2
 W=/home/claude/work/Work
-EMU=${EMU:-$W/c_src/emulator}
-BOOK=${BOOK:-$W/c_src/quest.addrbook}
+EMU=${EMU:-$W/emulation/emulator}
+BOOK=${BOOK:-$W/emulation/quest.addrbook}
 DRV=${DRV:-$W/docs/Project13/drive.py}
 RUN=/home/claude/runs/$TAG; rm -rf $RUN; mkdir -p $RUN
 cp -r /home/claude/work/QUEST $RUN/QUEST

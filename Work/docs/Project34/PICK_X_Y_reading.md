@@ -2,7 +2,7 @@
 
 Routine 0x701761E7 (96 instructions), read straight off the IR blocks
 in a few minutes with nothing but the block dump. The target for
-tools/readable.py: a renderer that gets most of the way here
+compiler/readable.py (moved Sep 8; was emulation/tools/): a renderer that gets most of the way here
 mechanically, and a census of what it cannot.
 
 ```

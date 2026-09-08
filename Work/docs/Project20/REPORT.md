@@ -104,8 +104,8 @@ on-stack.**
 
 ## Files
 
-Tools/ArgWindows.java; Work/c_src/tools/{build_address_book.py,
-gen_pushmap_borrows.py, rebase_pushmaps.py}; Work/c_src/hw/
+Tools/ArgWindows.java; Work/emulation/tools/{build_address_book.py,
+gen_pushmap_borrows.py, rebase_pushmaps.py}; Work/emulation/hw/
 {AddressBook.cpp,.hpp, Mapper.cpp,.hpp, EagleStack.cpp};
-Work/c_src/{quest.addrbook, quest.pushmap.*, quest.pushmap.M4};
+Work/emulation/{quest.addrbook, quest.pushmap.*, quest.pushmap.M4};
 Disassembled/{quest.argmap, quest.callsites}; tasks/028.

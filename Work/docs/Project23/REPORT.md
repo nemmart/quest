@@ -8,7 +8,7 @@ whole-game emission, both configuration modes, all gates green.
 ## 0. Where this leaves the system
 
 The clone can execute the game as an intermediate representation. In
-the current book-mode artifact (`c_src/quest.ir2.book`): 17,983 of
+the current book-mode artifact (`emulation/quest.ir2.book`): 17,983 of
 18,009 blocks emitted (99.86%), containing 25,426 expression
 statements, 31,145 embedded instructions, 1,039 arg-slot stores, 443
 call operations, 165 rets, 3,242 gotos. Local batteries (full boot →
@@ -20,17 +20,17 @@ against it at every block boundary.
 
 ## 1. What was built
 
-- `c_src/tools/lower.py` — quest.dis + quest.blocks + pushmap + argmap
+- `emulation/tools/lower.py` — quest.dis + quest.blocks + pushmap + argmap
   → provenance-stamped quest.ir. Register-faithful, class-capped,
   TOTAL: any block it cannot express is OMITTED (absent = emulated =
   always safe). `--all` whole-game mode skips-with-census; `--book`
   selects decorated-site lowering (see §5). Refuses loudly on
   malformed inputs — including its own input files (a lesson, §7).
-- `c_src/hw/IRExec.{hpp,cpp}` — loader (validation + provenance +
+- `emulation/hw/IRExec.{hpp,cpp}` — loader (validation + provenance +
   refuse-on-anything) and block interpreter. Dispatch in
   Machine::run_steps: a block present in QUEST_IR runs as IR on the
   CLONE; the master always emulates.
-- `c_src/tools/split_skips.py` — CFG rewrite splitting every skip and
+- `emulation/tools/split_skips.py` — CFG rewrite splitting every skip and
   interior WBR into its own block (§3).
 - Checker: P22's TEMPORARY insn-count delta term removed (the P23
   obligation); `ovr` added to the pair compare surface.
@@ -233,7 +233,7 @@ Independent review verdict: GREEN. Verified: the compare_pair verdict
 (insn-count term gone, ovr present, c retained); 7015BD6B and the
 ENQT/DEQUE skip edges as block boundaries in quest.blocks.split; the
 shipped quest.ir2.book's provenance sha256s against the shipped
-Disassembled/quest.dis and c_src/quest.blocks.split (exact); the
+Disassembled/quest.dis and emulation/quest.blocks.split (exact); the
 wide-carry patch NOT applied to the tree; and a fresh behavioral
 spot-check — K=1 strict book-mode leg (boot → login → creation →
 turns), 2,184 IR blocks executed, 0 divergences, only the benign

@@ -4,8 +4,8 @@
 set -eu
 cd "$(dirname "$0")/.."
 ROOT=$(pwd); W=$ROOT/Work
-cd $W/c_src && make -j"$(nproc)" >/dev/null && cd $ROOT
-EMU=$W/c_src/emulator; BOOK=$W/c_src/quest.addrbook
+cd $W/emulation && make -j"$(nproc)" >/dev/null && cd $ROOT
+EMU=$W/emulation/emulator; BOOK=$W/emulation/quest.addrbook
 RES=$ROOT/results/016-finding-b-final; mkdir -p $RES
 DRV=$W/docs/Project13/drive.py; PAT=$W/docs/Project14/drive_patient.py
 leg(){ local tag=$1 mode=$2 drv=$3; shift 3

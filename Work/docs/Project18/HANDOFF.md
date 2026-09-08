@@ -26,7 +26,7 @@ open item to finish.
 
 ## What's DONE (don't redo)
 - The push_map for tranches A (515 sites) and B (20 WPSH sites) is
-  GENERATED, VALIDATED, and COMMITTED: Work/c_src/quest.pushmap.{A,B,AB},
+  GENERATED, VALIDATED, and COMMITTED: Work/emulation/quest.pushmap.{A,B,AB},
   generator tools/gen_pushmap.py. Two independent generators agree; every
   slot validated inside its callee's arg region; marker == wfp−10. The
   map loads clean on the runner (515/516 decorated calls, 0 rejects).

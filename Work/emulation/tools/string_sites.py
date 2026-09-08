@@ -18,7 +18,7 @@ class for each of the four operands:
 
 Nothing here touches the emulator or any artifact it reads.
 
-Usage (from Work/c_src/tools):
+Usage (from Work/emulation/tools):
   python3 string_sites.py --dis ../../../Disassembled/quest.dis \
       --blocks ../quest.blocks.split --tags ../../../Disassembled/quest.tags \
       --mem ../../../Disassembled/quest.mem \

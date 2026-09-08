@@ -3,7 +3,7 @@
 *Implements docs/Project14/FINDING_B_MAPPER_FIX.md (ruling: M4aDesign
 §12, from REPORT_FINDING_B.md). Code change only, per the task — NOT
 built or run here; godspeed verifies. Files touched:
-c_src/hw/Mapper.{hpp,cpp}. No handler, book, driver, or
+emulation/hw/Mapper.{hpp,cpp}. No handler, book, driver, or
 design-of-record edit.*
 
 ## 1. The change

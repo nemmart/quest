@@ -23,7 +23,7 @@ it is ON-unit #3's body). Decisive facts, independent of driver reach:
   set); child uplevel `[ac2+d]` access throughout .3.
 
 Book: current 45-live + the 5 family entries = **50 live**
-(`c_src/quest.addrbook.b1fam`, also in evidence/). Diff vs the landed batch-2 book
+(`emulation/quest.addrbook.b1fam`, also in evidence/). Diff vs the landed batch-2 book
 is exactly the five family lines plus the header count.
 
 ## 2. Family semantics (decoded from the disassembly)

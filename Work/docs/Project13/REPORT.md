@@ -225,7 +225,7 @@ to make; §8 is the design of record and I have not touched it.
 
 ### 3.6 State left behind
 
-- `c_src/quest.addrbook` restored to the **batch-1-live** book (6
+- `emulation/quest.addrbook` restored to the **batch-1-live** book (6
   routines, all green) so the tree is in a known-good, landable state.
 - The batch-2 book that triggered the finding is reproducible:
   `build_address_book.py … --live <b1>,<39 names>`; the exact list is
@@ -246,7 +246,7 @@ to make; §8 is the design of record and I have not touched it.
 - `docs/Project13/`: `run.sh` (gcalls in `-types`; coverage.py hook),
   `coverage.py` (new), `drive.py` (`play` mode), `explore.{py,sh}`
   (reconnaissance harness), `addrbook_report.md`, `evidence/`.
-- `c_src/quest.addrbook`: batch-1-live (final state of this session).
+- `emulation/quest.addrbook`: batch-1-live (final state of this session).
 - **M4aDesign.md: NOT edited** (boundary 2).
 
 ## 5. Not done / for the next session
@@ -274,7 +274,7 @@ to make; §8 is the design of record and I have not touched it.
 
 - `hw/AddressBook.hpp` BASE, `tools/build_address_book.py` BASE,
   `hw/Memory.cpp` census marker → **0x74000000**. Book FORMAT unchanged;
-  both books regenerated (`c_src/quest.addrbook` = batch-1-live, 6;
+  both books regenerated (`emulation/quest.addrbook` = batch-1-live, 6;
   `evidence/quest.addrbook.batch2` = batch-1 + 39 leaves, 45).
 - `hw/Machine.cpp T_any`: **prefix DISPATCH on the top byte** — 0x70/0x74
   → `T(v)`; 0xE0/0xE8 → `T(v>>1)<<1 | bit0`; 0xF0/0xF4 → `T(v & 0x7FFFFFFF)

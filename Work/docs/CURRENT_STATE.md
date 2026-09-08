@@ -4,7 +4,9 @@
 
 # Where things stand — Sep 6 2026 (project asleep until next weekend)
 
-**main is the tree of record.** ir 6. Embeds **557 book / 2,436 stock**
+**main is the tree of record.** Layout since Sep 8: Work/emulation (was
+c_src), Work/compiler (IR→source tools), Work/game (the reconstructed C
+source). ir 6. Embeds **557 book / 2,436 stock**
 (from 27,600 on Aug 29): the string family is gone (WCMV/WCMP/WBLM/
 WMSP/STASP = 0); what remains is the call/frame machinery (457), float
 (59), divides (21), SYSCALL (10), 8 pushes, 2 LDSP DERR sinks. 1,822
@@ -187,7 +189,7 @@ cluster evidence; the checklist the goto-graph project discharges);
 lower.py `--assumed-foldable/--tags/--synclist-in/--synclist-out`
 (condition re-derived through lower_one and cross-checked against the
 artifact; totality — a refusing guard keeps its interiors emitted AND
-listed); **c_src/quest.synclist.p27** (13,510; provenance header);
+listed); **emulation/quest.synclist.p27** (13,510; provenance header);
 ir2.book/stock regenerated (13,507 blocks, 6,258 / 8,137 instr, 11,400
 goto, 2,271 assert). Local K=1 gates: k1fo book 0 div (322,425 pairs,
 1,350 IR blocks), k1st stock 0 div, **derr leg**: clone `IR ASSERT
@@ -395,12 +397,12 @@ reason (which is exactly when it will pay).
 ## ★ P23 LANDED — GEN-6.1: THE IR (Aug 28–29 2026; reviewed + integrated Aug 29)
 
 The clone executes the game as an intermediate representation. Built:
-`c_src/tools/lower.py` (dis+blocks+pushmap+argmap → provenance-stamped
+`emulation/tools/lower.py` (dis+blocks+pushmap+argmap → provenance-stamped
 quest.ir; TOTAL — any inexpressible block is OMITTED, absent=emulated),
-`c_src/hw/IRExec` (refuse-on-anything loader + block interpreter; clone
-only, master always emulates), `c_src/tools/split_skips.py`. Grammar is
+`emulation/hw/IRExec` (refuse-on-anything loader + block interpreter; clone
+only, master always emulates), `emulation/tools/split_skips.py`. Grammar is
 **rev 2** — consolidated normative spec now lives in **docs/IR.md**
-(IRPhase1/IR2 are history). Shipped artifact `c_src/quest.ir2.book`:
+(IRPhase1/IR2 are history). Shipped artifact `emulation/quest.ir2.book`:
 17,983/18,009 blocks (99.86%) — 443 call / 165 ret / 1,039 arg-slot
 stores / ~3.9k gotos (3,242 lowered WBRs) / ~31.1k embedded
 instructions; the 26 omitted = the 7015BD6B exclusion + 25 @/bit-15
@@ -637,7 +639,7 @@ the authoritative tree is THIS tarball.
   redirect into fixed 0x74000000 areas; the Mapper (hw/Mapper.{hpp,cpp},
   first-principles rewrite — spec in docs/Mapper.md); Checker Gen 4/5.
 - **Live routines: the book is at 101** (all callable game routines;
-  29 nocall excluded → M5). See Work/c_src/quest.addrbook.
+  29 nocall excluded → M5). See Work/emulation/quest.addrbook.
   - Validated under lockstep through batch 2 (45 live) + B1 nested
     family (ATTACK). The jump to 101 (adds dyn/push routines + the
     never-landed pure "batch 3") has passed a BUILD + BOOK-LOAD smoke

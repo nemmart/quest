@@ -9,7 +9,7 @@ TREE VINTAGE: the Aug 29 integrated Work.tgz (Work__72_). quest.ir2.book
 provenance verified against the re-uploaded Disassembled/: dis
 1f9153c0…, argmap 39c42d4c…, blocks.split a5efa05f…, pushmap.M4 b8953659….
 Census source: quest.ir2.book `@addr` lines (27,600). Semantics read from
-c_src/hw (cited file:line) and diffed against DG_Quest/hw (Java).
+emulation/hw (cited file:line) and diffed against DG_Quest/hw (Java).
 Nothing in this doc is implemented; Parts 2–3 wait on the rulings in §4.
 
 ## 1. Census by bucket (27,600 embeds, every mnemonic accounted for)

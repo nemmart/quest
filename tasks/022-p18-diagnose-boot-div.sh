@@ -8,8 +8,8 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 ROOT=$(pwd); W=$ROOT/Work
-cd $W/c_src && make -j"$(nproc)" >/dev/null && cd $ROOT
-EMU=$W/c_src/emulator; BOOK=$W/c_src/quest.addrbook
+cd $W/emulation && make -j"$(nproc)" >/dev/null && cd $ROOT
+EMU=$W/emulation/emulator; BOOK=$W/emulation/quest.addrbook
 RES=$ROOT/results/022-p18-diagnose-boot-div; mkdir -p $RES
 
 run_map(){ # label mapfile
@@ -28,21 +28,21 @@ run_map(){ # label mapfile
 }
 
 # 1. Full map — capture the divergence detail (stdout) this time.
-run_map full $W/c_src/quest.pushmap.A
+run_map full $W/emulation/quest.pushmap.A
 echo "=== FULL-MAP DIVERGENCE DETAIL ==="; head -50 $RES/full.divergence.txt || true
 
 # 2. Bisect: does a map with ONLY the boot-region sites (pc < 7015D000) diverge?
 awk '/^push|^call/{ if (strtonum("0x"$2) < strtonum("0x7015D000")) print; next } {print}' \
-    $W/c_src/quest.pushmap.A > $RES/boot_only.pushmap
+    $W/emulation/quest.pushmap.A > $RES/boot_only.pushmap
 run_map boot_only $RES/boot_only.pushmap
 
 # 3. And a map EXCLUDING boot-region sites (pc >= 7015D000) — expect clean boot.
 awk '/^push|^call/{ if (strtonum("0x"$2) >= strtonum("0x7015D000")) print; next } {print}' \
-    $W/c_src/quest.pushmap.A > $RES/no_boot.pushmap
+    $W/emulation/quest.pushmap.A > $RES/no_boot.pushmap
 run_map no_boot $RES/no_boot.pushmap
 
 # 4. Just INIT_OBJ_TBL's site (first boot decorated call) — isolate it.
-grep -E '^# INIT_OBJ_TBL|7015C2B|7015C2B7' $W/c_src/quest.pushmap.A > $RES/init_obj.pushmap || true
+grep -E '^# INIT_OBJ_TBL|7015C2B|7015C2B7' $W/emulation/quest.pushmap.A > $RES/init_obj.pushmap || true
 head $RES/init_obj.pushmap
 run_map init_obj $RES/init_obj.pushmap
 

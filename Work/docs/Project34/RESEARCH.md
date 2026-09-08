@@ -4,15 +4,15 @@ This is a research session. The deliverable is a prototype renderer and
 a census of what it can and cannot name — input to the design of the
 "flat-graph world" (functions, types, the C++ translation). It changes
 nothing the emulator, lower.py, IRExec or any battery reads. It touches
-only `tools/readable.py` and `docs/Project34/`. No git branch conflicts
+only `compiler/readable.py` and `docs/Project34/`. No git branch conflicts
 with anyone: P31/P32/P33 own lower.py, IRExec, IR.md, string_sites.py,
 the checker; you read their artifacts and write your own.
 
 Hi Claude! Read docs/METHOD.md first. Context: docs/IR.md (ir 5 — the
-grammar you consume), c_src/quest.ir2.book (the artifact of record;
+grammar you consume), emulation/quest.ir2.book (the artifact of record;
 verify its header shas against docs/Provenance.md), docs/Project29/
 StringsDesign.md §9 (the C++ end state the rendering should approach),
-c_src/quest.addrbook (per-routine frame layout: argc, locals, borrow
+emulation/quest.addrbook (per-routine frame layout: argc, locals, borrow
 slots — the address book from P16–P20), Disassembled/quest.symbols
 (routine and static names), docs/Project29/quest.strings, and the Sep 5
 planning-session reading of PICK_X_Y (docs/Project34/PICK_X_Y_reading.md
@@ -30,7 +30,7 @@ expressions. We want to know, BEFORE designing the flat-graph world,
 how much of the distance to readable code is mechanical naming and
 folding — and what the hard residue is.
 
-## The prototype — `tools/readable.py`
+## The prototype — `compiler/readable.py`
 
 A pass over the ir 5 book that produces `docs/Project34/readable/
 <ROUTINE>.txt` for a chosen set of routines, applying these rewrites in
@@ -85,7 +85,7 @@ what the census makes interesting.
 
 ## Deliverables
 
-- `tools/readable.py` (runtime line; flag > 10 s).
+- `compiler/readable.py` (runtime line; flag > 10 s).
 - `docs/Project34/readable/*.txt` — the renderings, with the switches
   used in each file's header.
 - `docs/Project34/Census.md`: per rewrite, what it resolved and what it
@@ -98,7 +98,7 @@ what the census makes interesting.
 
 ## Boundaries — BINDING
 
-- Nothing outside tools/readable.py and docs/Project34/. No emulator,
+- Nothing outside compiler/readable.py (moved Sep 8; was emulation/tools/) and docs/Project34/. No emulator,
   no lower.py, no IRExec, no IR.md, no artifacts the emulator reads, no
   battery, no runner task.
 - Rewrites that cannot be shown meaning-preserving are not applied;

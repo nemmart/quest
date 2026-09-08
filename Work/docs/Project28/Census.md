@@ -1,20 +1,20 @@
 # Project 28 — Phase A: rt_call census, design findings, grammar draft (plan gate)
 
 Session Sep 5 2026, solo. TREE VINTAGE: main @ 9972b85 (P27 merged
-bd3369c; sync list of record c_src/quest.synclist.p27; artifacts
+bd3369c; sync list of record emulation/quest.synclist.p27; artifacts
 verified against docs/Provenance.md — quest.dis 5c1db5fb…,
 blocks.split 1d3baaf6…, ir2.book 1dc6356a… with 6,258 embeds,
 ir2.stock d5e4cb13… with 8,137). Branch p28-rt-call (rebased onto
 main after the P27 merge, per the user). Phase A touches only
 tools/rt_sites.py and docs/Project28/; Phase B has not started.
 
-Tool: `c_src/tools/rt_sites.py` (text-only; imports lower.py's parsers
+Tool: `emulation/tools/rt_sites.py` (text-only; imports lower.py's parsers
 and `pef_value` so the argument expressions here are the ones the
 emitter will render). Runtime 1.1 s. Raw output of record:
 `rt_sites.out`; per-site table: `rt_sites.tsv` (987 lines).
 
-    python3 Work/c_src/tools/rt_sites.py --dis Disassembled/quest.dis \
-      --blocks Work/c_src/quest.blocks.split --rt-dis Disassembled/quest-rt.dis \
+    python3 Work/emulation/tools/rt_sites.py --dis Disassembled/quest.dis \
+      --blocks Work/emulation/quest.blocks.split --rt-dis Disassembled/quest-rt.dis \
       --tags Disassembled/quest.tags --sites-out rt_sites.tsv > rt_sites.out
 
 ## 1. Site census — reproduces the Sep 5 numbers exactly

@@ -12,7 +12,7 @@ Follow.java LJSR-I.GOTO fix 09f6593 — blocks.split ba30a841…, tags
 08afd77/c88c0ff). Provenance verified before starting on 6c3c28c (all
 12 P31 prefixes) and again after 09f6593.
 
-Tool (from Work/c_src/tools; runtime **3.4 s** on this box, was 2.1–2.7):
+Tool (from Work/emulation/tools; runtime **3.4 s** on this box, was 2.1–2.7):
 
     python3 string_sites.py --dis ../../../Disassembled/quest.dis --blocks ../quest.blocks.split \
       --mem ../../../Disassembled/quest.mem --symbols ../../../Disassembled/quest.symbols \

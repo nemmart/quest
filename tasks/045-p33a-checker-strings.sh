@@ -1,7 +1,7 @@
 #!/bin/bash
 # Task 045 — P33-A: the checker half of the string design (docs/Project33/{PROMPT-A,REPORT}.md).
 # 040's 15 legs, ALL with the string checker ON (QUEST_STRINGS_CHECK=1 +
-# QUEST_STRHOOKS=c_src/quest.strhooks), plus:
+# QUEST_STRHOOKS=emulation/quest.strhooks), plus:
 #   - k1fo-off : book K=1 failopen with the flag OFF (byte-identity gate; want 0 div, clean)
 #   - forced   : book K=1 failopen with QUEST_POKE=7015C48B:2:0x75000000:CLONE — the clone's
 #                ac2 becomes an arena address of an UNMAPPED row at a rendezvous; want exactly
@@ -21,16 +21,16 @@ flock -n 9 || { echo "another battery attempt is still running; refusing overlap
 cd "$(dirname "$0")/.."
 ROOT=$(pwd)
 SRC=$(bin/task_source.sh p33a-checker-strings 045-p33a-checker-strings); W=$SRC/Work
-cd $W/c_src && make -j"$(nproc)" >/dev/null && cd $ROOT
-EMU=$W/c_src/emulator; BOOK=$W/c_src/quest.addrbook; PMAP=$W/c_src/quest.pushmap.M4
-IRB=$W/c_src/quest.ir2.book; IRS=$W/c_src/quest.ir2.stock
-BLK=$W/c_src/quest.blocks.split; SYN=$W/c_src/quest.synclist.p27
+cd $W/emulation && make -j"$(nproc)" >/dev/null && cd $ROOT
+EMU=$W/emulation/emulator; BOOK=$W/emulation/quest.addrbook; PMAP=$W/emulation/quest.pushmap.M4
+IRB=$W/emulation/quest.ir2.book; IRS=$W/emulation/quest.ir2.stock
+BLK=$W/emulation/quest.blocks.split; SYN=$W/emulation/quest.synclist.p27
 RES=$ROOT/results/045-p33a-checker-strings; mkdir -p $RES
-STR=(QUEST_STRINGS_CHECK=1 QUEST_STRHOOKS=$W/c_src/quest.strhooks)
+STR=(QUEST_STRINGS_CHECK=1 QUEST_STRHOOKS=$W/emulation/quest.strhooks)
 # preconditions: the three self-tests (each with its teeth build)
-( cd $W/c_src && bash tests/run_helpers_selftest.sh ) > /tmp/selftest045 2>&1 || { echo "helpers selftest RED"; cat /tmp/selftest045; exit 1; }
-( cd $W/c_src && bash tests/run_strings_selftest.sh ) > /tmp/strings045 2>&1 || { echo "strings selftest RED"; cat /tmp/strings045; exit 1; }
-( cd $W/c_src && bash tests/run_strhooks_selftest.sh ) > /tmp/strhooks045 2>&1 || { echo "strhooks selftest RED"; cat /tmp/strhooks045; exit 1; }
+( cd $W/emulation && bash tests/run_helpers_selftest.sh ) > /tmp/selftest045 2>&1 || { echo "helpers selftest RED"; cat /tmp/selftest045; exit 1; }
+( cd $W/emulation && bash tests/run_strings_selftest.sh ) > /tmp/strings045 2>&1 || { echo "strings selftest RED"; cat /tmp/strings045; exit 1; }
+( cd $W/emulation && bash tests/run_strhooks_selftest.sh ) > /tmp/strhooks045 2>&1 || { echo "strhooks selftest RED"; cat /tmp/strhooks045; exit 1; }
 grep -q "teeth confirmed" /tmp/strhooks045 || { echo "strhooks teeth NOT confirmed"; exit 1; }
 JOBS=${JOBS:-3}
 T0=$(date +%s)

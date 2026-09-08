@@ -13,8 +13,8 @@ landed in this tree (docs/Project28/ holds only PROMPT.md; no
 rt_sites.py), so IR.md is ir 3 and the census style follows
 docs/Project27/Census.md + tools/derr_clusters.py.
 
-Tool: `c_src/tools/string_sites.py` (Python only; inputs quest.dis,
-quest.blocks.split, quest.mem, quest.symbols). Run from Work/c_src/tools:
+Tool: `emulation/tools/string_sites.py` (Python only; inputs quest.dis,
+quest.blocks.split, quest.mem, quest.symbols). Run from Work/emulation/tools:
 
     python3 string_sites.py --dis ../../../Disassembled/quest.dis \
       --blocks ../quest.blocks.split --mem ../../../Disassembled/quest.mem \

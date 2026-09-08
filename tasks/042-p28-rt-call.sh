@@ -30,10 +30,10 @@ flock -n 9 || { echo "another battery attempt is still running; refusing overlap
 cd "$(dirname "$0")/.."
 ROOT=$(pwd)
 SRC=$(bin/task_source.sh p28-rt-call 042-p28-rt-call); W=$SRC/Work
-cd $W/c_src && make -j"$(nproc)" >/dev/null && cd $ROOT
-EMU=$W/c_src/emulator; BOOK=$W/c_src/quest.addrbook; PMAP=$W/c_src/quest.pushmap.M4
-IRB=$W/c_src/quest.ir2.book; IRS=$W/c_src/quest.ir2.stock
-BLK=$W/c_src/quest.blocks.split; SYN=$W/c_src/quest.synclist.p27
+cd $W/emulation && make -j"$(nproc)" >/dev/null && cd $ROOT
+EMU=$W/emulation/emulator; BOOK=$W/emulation/quest.addrbook; PMAP=$W/emulation/quest.pushmap.M4
+IRB=$W/emulation/quest.ir2.book; IRS=$W/emulation/quest.ir2.stock
+BLK=$W/emulation/quest.blocks.split; SYN=$W/emulation/quest.synclist.p27
 RES=$ROOT/results/042-p28-rt-call; mkdir -p $RES
 JOBS=${JOBS:-3}
 T0=$(date +%s)
@@ -168,7 +168,7 @@ DERR_EMB=$(grep -c '^  @[0-9A-F]* DERR' $IRB || true)
 ASSERTS=$(grep -c '^  assert(' $IRB || true)
 FOLDED=$(grep -c '^[0-9A-F]' $W/docs/Project27/assumed-foldable.txt || true)
 SYNN=$(grep -c '^[0-9A-F]' $SYN || true)
-SYNI=$(grep -c '^[0-9A-F]' $W/c_src/quest.synclist.split || true)
+SYNI=$(grep -c '^[0-9A-F]' $W/emulation/quest.synclist.split || true)
 echo "derr_embeds_remaining=$DERR_EMB (want 2: the LDSP-fed sinks 701604D4 7016D707, verified terminal pairs — P28 A1)" | tee -a $RES/verdicts.txt
 echo "asserts=$ASSERTS (want 2273 = 2271 P27 folds, artifact lists $FOLDED, + 2 LDSP range asserts)  unfoldable=2" | tee -a $RES/verdicts.txt
 echo "synclist_delisted=$((SYNI-SYNN)) (want 4499)  synclist_entries=$SYNN (want 13510)" | tee -a $RES/verdicts.txt

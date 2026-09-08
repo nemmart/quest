@@ -21,7 +21,7 @@ clone-side strings the strict surface is unchanged (0 div on every leg
 run so far). Bundled: **F2-b** (a folded DERR is a verified terminal
 pair again) and the **ABORT readout** (now prints `00000011 7015C48E`).
 
-- **`c_src/quest.strhooks`** (`tools/strhooks.py`, from the P31
+- **`emulation/quest.strhooks`** (`tools/strhooks.py`, from the P31
   regenerated census — vendored as docs/Project33/inputs/census_raw.p31.txt,
   sha 5bdedab0…, P31 branch 3a230e5 — + blocks.split + quest.dis):
   19 `row` lines (block = the block containing the first WMSP — 19

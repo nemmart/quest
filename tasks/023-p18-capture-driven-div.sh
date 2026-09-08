@@ -6,11 +6,11 @@
 set -eu
 cd "$(dirname "$0")/.."
 ROOT=$(pwd); W=$ROOT/Work
-cd $W/c_src && make -j"$(nproc)" >/dev/null && cd $ROOT
-EMU=$W/c_src/emulator; BOOK=$W/c_src/quest.addrbook
+cd $W/emulation && make -j"$(nproc)" >/dev/null && cd $ROOT
+EMU=$W/emulation/emulator; BOOK=$W/emulation/quest.addrbook
 DRV=$W/docs/Project13/drive.py
 RES=$ROOT/results/023-p18-capture-driven-div; mkdir -p $RES
-PA=$W/c_src/quest.pushmap.A
+PA=$W/emulation/quest.pushmap.A
 
 R=/tmp/run023-m; rm -rf $R; mkdir -p $R; cp -r $ROOT/QUEST $R/QUEST; cd $R
 pkill -f "[e]mulator .*QUEST" 2>/dev/null || true; sleep 1

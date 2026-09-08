@@ -5,8 +5,8 @@
 # when PORT is non-default (concurrent launches are legitimate).
 TAG=$1; MODE=$2; shift 2
 W=/home/claude/work/Work
-EMU=${EMU:-$W/c_src/emulator}
-BOOK=${BOOK:-$W/c_src/quest.addrbook}
+EMU=${EMU:-$W/emulation/emulator}
+BOOK=${BOOK:-$W/emulation/quest.addrbook}
 DRV=${DRV:-$W/docs/Project13/drive.py}
 PORT=${PORT:-8781}
 RUN=/home/claude/runs/$TAG; rm -rf $RUN; mkdir -p $RUN

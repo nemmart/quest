@@ -1,7 +1,7 @@
 # Project 2 REPORT — ?LIB_ERROR / ?LIB_ERROR_CODE / ?DEFAULT_ERROR_HANDLER
 
 Code: `runtime/lib_error.{hpp,cpp}` (compile-checked standalone:
-`g++ -c -std=c++17 -I. runtime/lib_error.cpp` from `c_src/`, zero
+`g++ -c -std=c++17 -I. runtime/lib_error.cpp` from `emulation/`, zero
 warnings with -Wall). Derivation: `docs/Project2/DERIVATION.md`.
 The tree is reverted: `make` output is byte-identical in behavior
 (temporary local registration used for validation was removed).
@@ -178,7 +178,7 @@ walk their own entry gate needs per their correction).
 
 ## 6. Validation evidence
 
-All runs: `Work/c_src` build with the TEMPORARY local registration
+All runs: `Work/emulation` build with the TEMPORARY local registration
 (three rows + Makefile line, since reverted), game data scratch-copied
 to /tmp/QRUN, lockstep + silent, scripted driver (login CL / Claude /
 quest / Y / space / F, then `L`, `P` [, `L`, `P`]), trigger

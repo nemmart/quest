@@ -37,7 +37,7 @@ arg2@70166E14, arg3@70166E10, arg4@70166E0E — two interleaved `XWLDA 2`
 register setups untouched). DIST book entry: area 74003950, wfp
 74003962, max_argc 4, frame 0, WSAVS, slotpatch.
 
-`Work/c_src/quest.pushmap`:
+`Work/emulation/quest.pushmap`:
 ```
 push 70166E0E 74003950   # arg4   push 70166E10 74003952   # arg3
 push 70166E14 74003954   # arg2   push 70166E19 74003956   # arg1

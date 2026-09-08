@@ -2,7 +2,7 @@
 
 ## Sep 6 2026 — plan gate
 
-- Tree verified: uploaded Work/c_src byte-identical to repo main 00f641c
+- Tree verified: uploaded Work/emulation byte-identical to repo main 00f641c
   (P28 merge 309585d + P29 docs); Provenance post-P28 prefixes match.
   Branch p30-string-library. Baseline build clean.
 - Read METHOD, StringsDesign (all), Census §10, Mapper.md,

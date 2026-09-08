@@ -18,7 +18,7 @@ original instructions; rendezvous are now denominated in basic blocks:
   refused (entry not a quest.blocks start), gate delisting refused
   (gates = post-call/post-jump/post-syscall block starts + game-range
   terminal starts; 1,865 computed), K range enforced. Identity list
-  shipped: `Work/c_src/quest.synclist`, all 13,495 block starts.
+  shipped: `Work/emulation/quest.synclist`, all 13,495 block starts.
 - **Machine::block_ordinal** — cumulative count of arrival-transitions
   at listed game-range block entries, ticked in run_steps BEFORE every
   break decision so both roles count identically through spans,

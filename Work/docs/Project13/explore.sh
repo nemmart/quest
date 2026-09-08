@@ -5,7 +5,7 @@ case $CMD in
 start)
   rm -rf $RUN; mkdir -p $RUN; cp -r /home/claude/work/QUEST $RUN/QUEST; cd $RUN
   pkill -f "[e]mulator .*QUEST" 2>/dev/null; sleep 1
-  QUEST_ADDRESS_BOOK=${BOOK:-/tmp/full.addrbook} setsid nohup stdbuf -o0 -e0 $W/c_src/emulator -trace $RUN/trace -types redirect QUEST QUEST_SERVER @QUEST > $RUN/stdout 2> $RUN/stderr < /dev/null &
+  QUEST_ADDRESS_BOOK=${BOOK:-/tmp/full.addrbook} setsid nohup stdbuf -o0 -e0 $W/emulation/emulator -trace $RUN/trace -types redirect QUEST QUEST_SERVER @QUEST > $RUN/stdout 2> $RUN/stderr < /dev/null &
   sleep 5; : > $RUN/cmd
   setsid nohup python3 $W/docs/Project13/explore.py $RUN > $RUN/explore.out 2>&1 < /dev/null &
   sleep 12; cat $RUN/screen.txt ;;

@@ -88,7 +88,7 @@ carry keeps today's behavior (c=1 for x,x), explicitly flagged.
 ## The parked patch
 
 `docs/Project23/wide_carry_fix.patch` — apply with
-`patch -p0 hw/EagleInstruction.cpp` from c_src/ (or `git apply` with
+`patch -p0 hw/EagleInstruction.cpp` from emulation/ (or `git apply` with
 path fixup). Compiles clean against the Aug 28 tree; formula
 sanity-checked (0xFFFFFFFF+1 → c=1; 5−3 → c=1; 3−5 → c=0; x−x → c=1).
 NOT applied to the tree.

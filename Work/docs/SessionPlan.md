@@ -25,8 +25,8 @@ way for de-stackification (Plan.md Step 2).
   to completion; counter semantics preserved for later wiring).
 - `Work/docs/CODE.md` — style guide and rt/emu_rt/types architecture.
 - Opus-era translations (reference ONLY, re-derive everything):
-  `c_src/rt/` (24 routines), `c_src/emu_rt/` (wrappers, syscall,
-  translate), `c_src/types/` (String, PLIError, Context,
+  `emulation/rt/` (24 routines), `emulation/emu_rt/` (wrappers, syscall,
+  translate), `emulation/types/` (String, PLIError, Context,
   OperatingSystem, ...). Known absent from that work: the condition
   system itself — it was never translated.
 
@@ -248,7 +248,7 @@ coverage trace showing an empty set.
 
 ## Task A — Status: BUILT AND SMOKE-TESTED
 
-Implemented (all in `c_src/`, builds warning-free):
+Implemented (all in `emulation/`, builds warning-free):
 
 - `hw/RTStubs.{hpp,cpp}`: 137 log-and-continue stubs (every QUEST.ST
   symbol in [?CHAR_TO_UNSIGNED, ?NTOP), address-deduplicated, plus

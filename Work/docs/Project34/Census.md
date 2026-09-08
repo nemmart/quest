@@ -1,16 +1,16 @@
 # Project 34 — the readable layer: census
 
 Sep 6 2026, branch `p34-readable` (from main 4837d5c).  Book read:
-`Work/c_src/quest.ir2.book` from `origin/p31-located-strings` @
+`Work/emulation/quest.ir2.book` from `origin/p31-located-strings` @
 b4384b177bed8229c50b43235b2c08d62a954fd8, sha256
 281fd5010ad4e8b35502646d4d8759dd7db53274a92f3e91792eeb2f9409051c (ir 5,
 13,507 blocks).  Other inputs unchanged from main: quest.addrbook (e6fde2c2…),
 quest.blocks.split (1d3baaf6…), Disassembled/quest.symbols (7fc5e4f7…).
-Tool: `tools/readable.py`; machine census: `census_raw.txt`; renderings:
+Tool: `compiler/readable.py`; machine census: `census_raw.txt`; renderings:
 `readable/*.txt` (every header carries the provenance and the switch set).
 
 Everything here is a RENDERING census — nothing was executed.  Every count
-below is `tools/readable.py --census` output (whole book, all 130 addrbook
+below is `compiler/readable.py --census` output (whole book, all 130 addrbook
 entries), quoted, not re-derived.
 
 ## 0. What was built

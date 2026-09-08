@@ -19,7 +19,7 @@ you implement; §1 is why. Also: docs/Project29/Census.md §10 (the
 manual review of WCMV/WCMP/WBLM/WMSP/STASP), docs/Mapper.md (the
 mapper's three-call surface you extend — do not add a fourth),
 docs/EmulatorDivergences.md (B-4, G-1..G-3 are residue-class differences
-you must REPRODUCE, not "fix"), c_src/tests/helpers_selftest.cpp + its
+you must REPRODUCE, not "fix"), emulation/tests/helpers_selftest.cpp + its
 run script (the self-test style), docs/Provenance.md (verify your tree
 FIRST). TREE VINTAGE: main after P28 (ir 4) — state the commit.
 

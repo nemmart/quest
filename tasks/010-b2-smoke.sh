@@ -10,10 +10,10 @@ g++ --version | head -1; nproc
 echo "== fetch B2 book from p14-phase-b2 =="
 git fetch --quiet origin p14-phase-b2
 BOOK=/tmp/quest.addrbook.b2-010
-git show FETCH_HEAD:Work/c_src/quest.addrbook > "$BOOK"
+git show FETCH_HEAD:Work/emulation/quest.addrbook > "$BOOK"
 head -2 "$BOOK"
 echo "== emulator build =="
-cd Work/c_src && make -j"$(nproc)" 2>&1 | tail -1 && ls -l emulator
+cd Work/emulation && make -j"$(nproc)" 2>&1 | tail -1 && ls -l emulator
 echo "== book load-parse (101-live B2 book) =="
 set +e
 QUEST_ADDRESS_BOOK="$BOOK" ./emulator 2>/tmp/book_load_010.err

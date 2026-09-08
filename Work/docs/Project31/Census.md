@@ -12,7 +12,7 @@ quest.ir2.stock 1cf12f33…, synclist.p27 af1be42f…. `hw/strings/` is not
 on main (P30 not landed) — Phase B waits, as the prompt says; Phase A
 shares no file with P30.
 
-Tool (from Work/c_src/tools; runtime **2.1–2.7 s** on this box):
+Tool (from Work/emulation/tools; runtime **2.1–2.7 s** on this box):
 
     python3 string_sites.py --dis ../../../Disassembled/quest.dis --blocks ../quest.blocks.split \
       --mem ../../../Disassembled/quest.mem --symbols ../../../Disassembled/quest.symbols \

@@ -210,7 +210,7 @@ Built clean under OpenJDK 21; `tools.jar` in `Tools/`. Pipeline per
 Milestone snapshots live on the user's side in a HISTORY/ tree
 (milestone-1/, milestone-2/, ... plus a Tools archive); docs are
 tracked latest-only in the live tree. At each milestone completion,
-a snapshot of c_src is cut for HISTORY; between milestones, the
+a snapshot of emulation is cut for HISTORY; between milestones, the
 end-of-session Work tarball is the safety copy. Claude's filesystem
 resets between sessions — upload the latest Work state at session
 start.

@@ -4,7 +4,7 @@ Apply-ready change record for a session that does **not** have this in
 its tree. One file, four lines of behaviour plus a helper and a comment
 block.
 
-- **File:** `c_src/hw/EagleFloat.cpp`
+- **File:** `emulation/hw/EagleFloat.cpp`
 - **Date:** Aug 2026
 - **Fixes:** `Exception: Floating point underflow` on the `?LIB_ERROR` /
   `?FATAL` path
@@ -13,8 +13,8 @@ block.
 ## Check whether you already have it
 
 ```
-grep -c shadow_from_single c_src/hw/EagleFloat.cpp     # 3 if applied, 0 if not
-grep -n "quads\[YY\]=quad;" c_src/hw/EagleFloat.cpp    # 3 lines if applied, 1 if not
+grep -c shadow_from_single emulation/hw/EagleFloat.cpp     # 3 if applied, 0 if not
+grep -n "quads\[YY\]=quad;" emulation/hw/EagleFloat.cpp    # 3 lines if applied, 1 if not
 ```
 
 The single pre-existing `quads[YY]=quad;` is in the `FSCAL` block near
@@ -154,8 +154,8 @@ down before someone assumes otherwise.
 ## Unified diff
 
 ```diff
---- a/c_src/hw/EagleFloat.cpp
-+++ b/c_src/hw/EagleFloat.cpp
+--- a/emulation/hw/EagleFloat.cpp
++++ b/emulation/hw/EagleFloat.cpp
 @@ namespace hw {
 +static inline int64_t shadow_from_single(int32_t src) {
 +  return static_cast<int64_t>(static_cast<uint64_t>(

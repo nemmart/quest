@@ -89,7 +89,7 @@ heartbeats, timing-dependent on this 1-core box).
 | docs/Project31/{Census §11, p31.*, sites.txt, census_raw.txt, strings.ledger} | the correction |
 | docs/Project27/assumed-foldable.txt | header regenerated for 09f6593 (content identical) |
 | docs/Project32/* | Census, REPORT, worklog, p32.ledger, p32.tsv |
-| c_src/quest.ir2.{book,stock} | slice 6 artifacts |
+| emulation/quest.ir2.{book,stock} | slice 6 artifacts |
 | tasks/046-p32-append-chains.sh | the gate (on main) |
 
 ## 5. Findings and corrections (METHOD §11) — details in Census.md §1

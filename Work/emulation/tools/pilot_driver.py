@@ -1,7 +1,7 @@
 import socket, subprocess, time, os
 env = dict(os.environ,
   QUEST_BLOCKS="/home/claude/quest.blocks",
-  QUEST_SYNC_LIST="/home/claude/Work/c_src/quest.synclist",
+  QUEST_SYNC_LIST="/home/claude/Work/emulation/quest.synclist",
   QUEST_SYNC_K="1",
   QUEST_IR="/tmp/quest.ir")
 p = subprocess.Popen(["./emulator","-lockstep","-silent",

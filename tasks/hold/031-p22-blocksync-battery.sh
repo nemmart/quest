@@ -20,8 +20,8 @@ exec 9>/tmp/quest-p22-battery.lock
 flock -n 9 || { echo "another battery attempt is still running; refusing overlap"; exit 1; }
 cd "$(dirname "$0")/.."
 ROOT=$(pwd); W=$ROOT/Work
-cd $W/c_src && make -j"$(nproc)" >/dev/null && cd $ROOT
-EMU=$W/c_src/emulator; BOOK=$W/c_src/quest.addrbook; PMAP=$W/c_src/quest.pushmap.M4
+cd $W/emulation && make -j"$(nproc)" >/dev/null && cd $ROOT
+EMU=$W/emulation/emulator; BOOK=$W/emulation/quest.addrbook; PMAP=$W/emulation/quest.pushmap.M4
 RES=$ROOT/results/031-p22-blocksync-battery; mkdir -p $RES
 : > $RES/verdicts.txt
 for prt in 8791 8792 8793 8794 8795 8796 8797 8798; do fuser -k -TERM $prt/tcp 2>/dev/null || true; done; sleep 2
@@ -62,7 +62,7 @@ leg(){ local tag=$1 mode=$2 drv=$3 port=$4 k=$5 floor=$6 want=$7; shift 7
   for i in $(seq 1 20); do ss -ltn 2>/dev/null | grep -q ":$port " || break; sleep 2; done
   env QUEST_ADDRESS_BOOK=$BOOK QUEST_PUSH_MAP=$PMAP QUEST_PORT=$port \
       QUEST_BLOCKS=$ROOT/Disassembled/quest.blocks \
-      QUEST_SYNC_LIST=$W/c_src/quest.synclist QUEST_SYNC_K=$k "$@" \
+      QUEST_SYNC_LIST=$W/emulation/quest.synclist QUEST_SYNC_K=$k "$@" \
       setsid stdbuf -o0 -e0 $EMU -lockstep -silent -trace $R/trace -types lockstep,redirect,gcalls \
       QUEST QUEST_SERVER @QUEST @QUEST >$R/out 2>$R/err 9>&- &
   local EP=$!; sleep 8

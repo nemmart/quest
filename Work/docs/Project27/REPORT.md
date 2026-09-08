@@ -16,7 +16,7 @@ docs/Project27/assumed-foldable.txt.
 7016D707 — P28). **Embeds 8,529 → 6,258** (book), 10,408 → 8,137
 (stock). **2,271 clusters folded** to one `assert(cond, "DERR nn @pc")`
 + `goto [K] 0` each, in the guard block. **IR blocks 18,006 → 13,507;
-shipped sync list 18,009 → 13,510** (`c_src/quest.synclist.p27`,
+shipped sync list 18,009 → 13,510** (`emulation/quest.synclist.p27`,
 identity minus the 4,499 interior starts). gotos 13,628 → 11,400.
 Grammar unchanged (ir 3 note in IR.md §4a / §9; `assert` — a P25
 statement — is now emitted by lower.py). Local K=1 gates 3/3 green
@@ -134,8 +134,8 @@ statement — is now emitted by lower.py). Local K=1 gates 3/3 green
   (Machine.cpp), prints `POKE firing at pc: acN old -> new`, one shot.
   The pc must be a block start for the clone to arrive there (IRExec
   dispatches whole blocks) — documented in RTStubs.hpp.
-- **Artifacts**: c_src/quest.ir2.book, c_src/quest.ir2.stock
-  regenerated (folded); **c_src/quest.synclist.p27** new;
+- **Artifacts**: emulation/quest.ir2.book, emulation/quest.ir2.stock
+  regenerated (folded); **emulation/quest.synclist.p27** new;
   quest.synclist.split and quest.blocks.split UNCHANGED (identity list
   and block census stay the record of the program; the P27 list is the
   translation's).
@@ -250,6 +250,6 @@ banner still reads "P26 math-grammar battery".
 1. Review + integrate p27-derr-clusters (040 GREEN, §5); update
    Provenance.md (ir2.book/stock regenerated, new synclist.p27;
    blocks.split/synclist.split unchanged); future task scripts point
-   QUEST_SYNC_LIST at c_src/quest.synclist.p27.
+   QUEST_SYNC_LIST at emulation/quest.synclist.p27.
 2. F2-b ruling/implementation if wanted.
 3. P28: LDSP jump tables (+ the two DERR sinks), LNDO, Nova loads.
