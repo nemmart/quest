@@ -60,8 +60,15 @@ coverage as partial.**
 4. **Milestone 5b design**: calls as edges, on-error edges (ON-unit
    bodies LOGON.1/.2, ALLY_PLAYER.1 are separate WSAVS frames — P34),
    discharge Project27/assumed-foldable.txt, frames → functions.
-5. **P35** (user): recompilation as decompilation — PROMPT WRITTEN:
-   docs/Project35/PROMPT.md (translator + four routines + an IR
+5. **P35 DONE** (Sep 8): recompilation as decompilation WORKS — three
+   routines (PICK_X_Y, UPDATE_SCREENS, REFRESH_SCREEN) translate to the
+   IR **197/197 statement-for-statement, register-exact** (compiler/
+   translate.py + ircmp.py, reproduced on main; C99+C++17 clean); DIED
+   refuses at the first bit field — the subset's edge. The DG compiler
+   model is compiler/CODEGEN_RULES.md (25 rules). **P36**: extend the
+   subset to what DIED needs — bit fields, ac3-repurposing, record
+   string fields, arena twins, game→game calls — with the translator
+   and comparator now in hand. Original prompt: docs/Project35/PROMPT.md (translator + four routines + an IR
    comparator with slot/temp/label equivalences; primary target the raw
    book, secondary the register-folded one). Design decisions of record
    (Sep 8): compiler/README.md

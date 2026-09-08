@@ -1,0 +1,161 @@
+{
+ "direct": {
+  "OBJ_PTR": {
+   "region_count": {
+    "K": 11502,
+    "comment": "P34 Census \u00a73 / PICK_X_Y_reading: region count (OBJ_PTR->f11502)",
+    "width": 32
+   }
+  },
+  "SD_PTR": {
+   "f42": {
+    "K": 42,
+    "comment": "P34 Census \u00a73",
+    "width": 16
+   },
+   "player_count": {
+    "K": 43,
+    "comment": "UPDATE_SCREENS loop bound (SD_PTR->f43.h)",
+    "width": 16
+   },
+   "seed": {
+    "K": 40,
+    "comment": "P34 Census \u00a73: the ?RANDOM_NUMBER seed (SD_PTR->f40)",
+    "width": 32
+   }
+  }
+ },
+ "statics": {
+  "CAS_PTR": {
+   "addr": 1879048724,
+   "comment": "GAME_REFERENCE: castle data (pointer)",
+   "width": 32
+  },
+  "CITY_NUM": {
+   "addr": 1879048812,
+   "comment": "GAME_REFERENCE",
+   "width": 16
+  },
+  "IN_CHAN": {
+   "addr": 1879048802,
+   "comment": "GAME_REFERENCE: input channel",
+   "width": 32
+  },
+  "MOVES_LEFT": {
+   "addr": 1879048816,
+   "comment": "GAME_REFERENCE",
+   "width": 16
+  },
+  "OBJ_PTR": {
+   "addr": 1879048722,
+   "comment": "GAME_REFERENCE: object/item placement data (pointer)",
+   "width": 32
+  },
+  "OUT_CHAN": {
+   "addr": 1879048800,
+   "comment": "GAME_REFERENCE: output channel (?WRITE_SCREEN arg 1)",
+   "width": 32
+  },
+  "PLAYER_NUM": {
+   "addr": 1879048726,
+   "comment": "GAME_REFERENCE: current player index",
+   "width": 16
+  },
+  "SD_PTR": {
+   "addr": 1879048720,
+   "comment": "GAME_REFERENCE: player records, world state (pointer)",
+   "width": 32
+  },
+  "TERR_NUM": {
+   "addr": 1879048814,
+   "comment": "GAME_REFERENCE",
+   "width": 16
+  }
+ },
+ "tables": {
+  "PLAYER": {
+   "base": "SD_PTR",
+   "bound": 10,
+   "comment": "P34 Census \u00a73 SD_PTR_rec686; bound 10 = the DERR 17 check on PLAYER_NUM; K < 0 in this table are raw displacements (origin unknown: min K seen \u2212642)",
+   "fields": {
+    "f19": {
+     "K": 19,
+     "width": 32
+    },
+    "fm588": {
+     "K": -588,
+     "width": 16
+    },
+    "fm589": {
+     "K": -589,
+     "width": 16
+    },
+    "fm590": {
+     "K": -590,
+     "width": 16
+    },
+    "fm608": {
+     "K": -608,
+     "width": 16
+    },
+    "fm625": {
+     "K": -625,
+     "width": 16
+    },
+    "screen": {
+     "K": -611,
+     "dims": [
+      9,
+      11
+     ],
+     "strides": [
+      22,
+      2
+     ],
+     "width": 32
+    }
+   },
+   "minK": -686,
+   "origin": 0,
+   "stride": 686
+  },
+  "REGION": {
+   "base": "OBJ_PTR",
+   "bound": 100000,
+   "comment": "P34 Census \u00a73 OBJ_PTR_rec9; bound 100000 = PICK_X_Y's DERR 17 check",
+   "fields": {
+    "f11498": {
+     "K": 11498,
+     "width": 32
+    },
+    "f11500": {
+     "K": 11500,
+     "width": 32
+    },
+    "f11502": {
+     "K": 11502,
+     "width": 16
+    },
+    "f11503": {
+     "K": 11503,
+     "width": 16
+    },
+    "type": {
+     "K": 11497,
+     "width": 16
+    },
+    "x": {
+     "K": 11495,
+     "width": 16
+    },
+    "y": {
+     "K": 11496,
+     "width": 16
+    }
+   },
+   "minK": 11495,
+   "origin": 11504,
+   "stride": 9
+  }
+ }
+}

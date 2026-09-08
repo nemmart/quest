@@ -34,6 +34,9 @@ leg" line. §3: the deterministic deferred-halt form of the P33-C fix
 
 # Landing history (newest first)
 
+## ★ P35 DONE (Sep 8 2026) — recompilation as decompilation: a C-subset translator (compiler/translate.py, pycparser) reproduces the ir 6 of PICK_X_Y / UPDATE_SCREENS / REFRESH_SCREEN 197/197 statement-for-statement, register-exact (ircmp.py, seven equivalences, selftest PASS); C99+C++17 clean; DIED refuses at the first bit field. The DG PL/I codegen model: compiler/CODEGEN_RULES.md (25 rules). This is the milestone-5→6 bridge: a textual match makes the C a proven source and gcc makes it native. P36 extends the subset to DIED's constructs.
+
+
 ## ★ P33-B MERGED (8b6f294; 047b 16/16 legs, P33-C shutdown fix included) — THE STRING FAMILY IS GONE FROM THE IR: the 19 WMSP claim groups as arena twins `t@<block>.<k>` (57), ir 6 (`acN = t@b.k`, `claim`, `release`), quest.arena; WCMV/WMSP/STASP embeds **0/0/0**, embeds **557 book / 2,436 stock** (from 729 / 2,608), 1,822 string statements; checker ON on every gate, Δ_clone ≡ 0 (Sep 6 2026; INTEGRATED — main is the tree of record)
 
 Branch p33b-arena-temps (based on main fa5b180, P32 + P33-A merged).
