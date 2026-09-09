@@ -14,7 +14,7 @@ same table for compiler/translate.py, which needs the numbers, not types.
 
     python3 compiler/gen_declarations.py [--out game/]
 """
-import argparse, hashlib, json, os, sys, time
+import argparse, hashlib, json, os, re, sys, time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.normpath(os.path.join(HERE, ".."))
@@ -157,21 +157,38 @@ PARENT_FRAMES = {
 }
 
 
-def _instruction_pcs():
-    """The set of instruction-start PCs in the disassembly, or None if the
-    listing is not available (the generator must still run in a bare tree)."""
+def _instruction_text():
+    """Map instruction-start PC -> the disassembly's text for it, or None if the
+    listing is not available (the generator must still run in a bare tree).
+
+    Only real instruction lines are taken.  The hex-dump lines of the data
+    areas have the same 8-hex-then-space shape, so they are excluded by
+    requiring a mnemonic: text that starts with a letter and is not the
+    `NNNN NNNN ...  [ascii]` form.  That matters, because a witness PC that
+    landed in the data dump would otherwise pass the boundary check."""
     path = os.path.join(ROOT, "..", "Disassembled", "quest.dis")
     if not os.path.exists(path):
         return None
-    pcs = set()
-    with open(path, errors="replace") as f:
-        for line in f:
-            if len(line) > 8 and line[8] == " " and line[7] != " ":
-                try:
-                    pcs.add(int(line[:8], 16))
-                except ValueError:
-                    pass
-    return pcs or None
+    out = {}
+    for line in open(path, errors="replace"):
+        if len(line) <= 8 or line[8] != " " or line[7] == " ":
+            continue
+        try:
+            pc = int(line[:8], 16)
+        except ValueError:
+            continue
+        text = line[8:].strip().rstrip(";").strip()
+        if text[:1].isalpha():
+            out[pc] = text
+    return out or None
+
+
+def _quoted_insn(comment):
+    """The instruction a witness comment quotes: its leading text, up to the
+    first `;` or em-dash.  Every PARENT_FRAMES comment is written in that
+    form (`XWSTA 0,[ac3+0xE] — WRITTEN uplevel...`)."""
+    head = re.split(r";|\u2014", comment or "", 1)[0].strip()
+    return head if head[:1].isalpha() else None
 
 
 def check_frames():
@@ -185,11 +202,18 @@ def check_frames():
     w13 7016F59F were mid-instruction addresses; FIRE w14 7016A3DA named the
     link LOAD rather than the reference its own comment quotes).  A witness
     that cannot be looked up is not a witness, so the PC is now checked
-    against the disassembly.  See docs/Project41/FIRE_MUTUAL_CHECK.md."""
-    bad = []
-    pcs = _instruction_pcs()
+    against the disassembly.  See docs/Project41/FIRE_MUTUAL_CHECK.md.
 
-    def check_witness(label, witness):
+    The boundary check alone catches only two of those three: 7016A3DA IS an
+    instruction boundary — it is the link load `XWLDA 3,[ac3+0x7FFA]`, simply
+    not the `XWSTA 0,[ac3+0xE]` its own comment quotes.  So the PC is also
+    checked to name the instruction the comment cites.  A citation that
+    resolves to the wrong instruction is the same defect as one that resolves
+    to nothing."""
+    bad = []
+    insns = _instruction_text()
+
+    def check_witness(label, witness, comment=None):
         if not witness or "@" not in witness:
             bad.append("%s: no named witness (expected NAME@PC)" % label)
             return
@@ -199,21 +223,31 @@ def check_frames():
         except ValueError:
             bad.append("%s: witness PC %r is not hex" % (label, text))
             return
-        if pcs is not None and pc not in pcs:
+        if insns is None:
+            return
+        if pc not in insns:
             bad.append("%s: witness PC %s is not an instruction boundary "
                        "in Disassembled/quest.dis" % (label, text))
+            return
+        want = _quoted_insn(comment)
+        if want is None:
+            bad.append("%s: comment does not open with the instruction the "
+                       "witness cites" % label)
+        elif " ".join(want.split()) != " ".join(insns[pc].split()):
+            bad.append("%s: witness PC %s is %r, but the comment cites %r"
+                       % (label, text, insns[pc], want))
 
     for pname, p in PARENT_FRAMES.items():
         for fname, spec in p["locals"].items():
             slot, width, witness = spec[0], spec[1], spec[2]
             if width not in (8, 16, 32):
                 bad.append("%s.%s: width %r is not 8/16/32" % (pname, fname, width))
-            check_witness("%s.%s" % (pname, fname), witness)
+            check_witness("%s.%s" % (pname, fname), witness, spec[3])
         for k, spec in p.get("args", {}).items():
             width, witness = spec[0], spec[1]
             if width not in (8, 16, 32):
                 bad.append("%s arg %s: width %r is not 8/16/32" % (pname, k, width))
-            check_witness("%s arg %s" % (pname, k), witness)
+            check_witness("%s arg %s" % (pname, k), witness, spec[2])
             if not 1 <= k <= p["argc"]:
                 bad.append("%s arg %s: outside argc %d" % (pname, k, p["argc"]))
         slots = [s[0] for s in p["locals"].values()]
