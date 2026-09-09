@@ -98,6 +98,20 @@ void BIT_SET(int16_t word, int n);          /* statement    (WBTO)          */
 void BIT_CLR(int16_t word, int n);          /* statement    (WBTZ)          */
 void BIT_PUT(int16_t word, int n, int e);   /* statement: WBTO; test; WBTZ  */
 
+/* PL/I LENGTH() of a CHAR VARYING passed by reference: the length word AT the
+ * argument's address, read sign-extended (XNLDA; IR.md §5.8 -- 0xFFFF is the
+ * count -1 and the master runs it).  `sx16(M16[R[ac3 + -(10+2n)]])`.
+ *
+ * P36 FINDING: the arena twins' claim arithmetic needs NO sizing intrinsic.
+ * A claim count is ceil(bytes/4) -- the compiler's `+3; lsh -1; lsh -1` -- over
+ * the CAT chain's running byte length, with +2 more for the final varying's
+ * length word (`+5; lsh -1; lsh -1`).  Every constant in DIED's two groups
+ * falls out of the literal piece lengths: group 70166144 `+3, +0x17` = 3 and
+ * 23 bytes, group 701661AE `+3, +0x4C` = 3 and 76.  The only thing the C
+ * cannot say without help is the length of a VARYING parameter, which is what
+ * LEN() is for.  NOT yet in the translator's subset -- it REFUSES here. */
+int LEN(const void *varying);
+
 /* PL/I string concatenation a || b (CHAR temporaries; the translator's WSTB/WCMV shapes) */
 const char *CAT(const char *a, const char *b);
 

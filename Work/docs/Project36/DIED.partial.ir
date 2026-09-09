@@ -1,0 +1,47 @@
+ir 6
+mode book
+routine DIED entry 00001000 lo 00001000 hi 00001070
+; translate.py (Project 35) — synthetic block pcs in canonical order; not loadable
+
+block 00001000 seg 0x70000000
+  @7016603D WSAVS 0x0007;
+  ac0 = sx16(M16[0x70000216])
+  assert(!(ac0 >s 0x0000000A) && (ac0 >s 0), "DERR 17 @00001000")
+  goto [00001010] 0
+
+block 00001010 seg 0x70000000
+  ac1 = 0x000002AE
+  ac0 = mul(ac0, ac1)
+  ac2 = 0x00000010
+  ac2 = mul(ac2, ac0)
+  ac1 = ac2
+  ac1 = add(ac1, 0xFFFFDB24)
+  ac2 = M32[0x70000210]
+  M32[wp(ac3, 2)] = ac0
+  ac0 = sub(ac0, ac0)
+  goto [00001020, 00001030] ((lsh(M16[ind(ac2) + lsh(ac1, -4)], 0 - (15 - (ac1 & 15))) & 1) == 0)
+
+block 00001020 seg 0x70000000
+  ac0 = add(ac0, ~ac0)
+  goto [00001030] 0
+
+block 00001030 seg 0x70000000
+  t1 = ((ac0 & 0xFFFF) | lsh(c, 16))
+  goto [00001040, 00001060] ((lsh(t1, -15) & 1) != 1)
+
+block 00001040 seg 0x70000000
+  goto [00001050] 0
+
+block 00001050 seg 0x70000000
+  ret
+
+block 00001060 seg 0x70000000
+  ac2 = add(ac2, M32[wp(ac3, 2)])
+  [@(M32[0x70000210] + (sx16(M16[0x70000216]) * 686) - 0x271), 32 varying] = [@0x7015155A:0, "                                "]
+  ac3 = wfp
+  ac2 = M32[wp(ac3, 2)]
+  ac2 = add(ac2, M32[0x70000210])
+  [@((sx16(M16[0x70000216]) * 686) + M32[0x70000210] - 0x260), 32 varying] = [@0x7015155A:0, "                                "]
+  goto [00001050] 0
+
+blocks 7

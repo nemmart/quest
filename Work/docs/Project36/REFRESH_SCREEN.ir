@@ -1,0 +1,95 @@
+ir 6
+mode book
+routine REFRESH_SCREEN entry 00001000 lo 00001000 hi 000010E0
+; translate.py (Project 35) — synthetic block pcs in canonical order; not loadable
+
+block 00001000 seg 0x70000000
+  @70176A93 WSAVS 0x0017;
+  ac0 = sx16(M16[wp(ac3, -9)])
+  t1 = ((ac0 & 0xFFFF) | lsh(c, 16))
+  goto [00001010, 000010C0] ((t1 & 0xFFFF) == 0)
+
+block 00001010 seg 0x70000000
+  goto [00001020] 0
+
+block 00001020 seg 0x70000000
+  ac0 = sx16(M16[R[ac3 + -12]])
+  t1 = ((ac0 & 0xFFFF) | lsh(c, 16))
+  goto [00001030, 000010B0] ((lsh(t1, -15) & 1) == 1)
+
+block 00001030 seg 0x70000000
+  goto [00001040] 0
+
+block 00001040 seg 0x70000000
+  [@wp(ac3, 6), 22 varying] = [@0x70000E07:0, "______________________"]
+  ac3 = wfp
+  M16[wp(ac3, 4)] = trunc16(ac0)
+  ac1 = 0x00000002
+  M16[wp(ac3, 18)] = trunc16(ac1)
+  ac2 = 0x00000800
+  M16[wp(ac3, 20)] = trunc16(ac2)
+  rt_call ?WRITE_SCREEN(0x70000260, wp(ac3, 6), wp(ac3, 4), wp(ac3, 18), wp(ac3, 20)) site=0000104C
+
+block 00001050 seg 0x70000000
+  [@wp(ac3, 6), 22 varying] = [@0x70000DDF:0, "----------------------"]
+  ac1 = 0x0000000A
+  ac3 = wfp
+  M16[wp(ac3, 4)] = trunc16(ac1)
+  ac2 = 0x00000002
+  M16[wp(ac3, 18)] = trunc16(ac2)
+  ac0 = 0x00000800
+  M16[wp(ac3, 20)] = trunc16(ac0)
+  rt_call ?WRITE_SCREEN(0x70000260, wp(ac3, 6), wp(ac3, 4), wp(ac3, 18), wp(ac3, 20)) site=0000105C
+
+block 00001060 seg 0x70000000
+  ac0 = 0x00000001
+  M16[wp(ac3, 2)] = trunc16(ac0)
+  goto [00001070] 0
+
+block 00001070 seg 0x70000000
+  ac2 = bp(ac3, 12)
+  ac1 = 0x0000007C
+  M8[ac2] = zx8(ac1)
+  ac2 = add(ac2, 1)
+  [@bp(ac3, 13), 22] = [@0x7015155A:0, "                      "]
+  ac3 = wfp
+  [@bp(ac3, 44), 23] = [@bp(ac3, 12), 23]
+  ac1 = 0x0000007C
+  M8[ac2] = zx8(ac1)
+  ac3 = wfp
+  [@wp(ac3, 34), 24 varying] = [@bp(ac3, 44), 24]
+  ac1 = 0x00000001
+  ac3 = wfp
+  M16[wp(ac3, 4)] = trunc16(ac1)
+  ac2 = 0x00000800
+  M16[wp(ac3, 18)] = trunc16(ac2)
+  rt_call ?WRITE_SCREEN(0x70000260, wp(ac3, 34), wp(ac3, 2), wp(ac3, 4), wp(ac3, 18)) site=0000107C
+
+block 00001080 seg 0x70000000
+  goto [00001090] 0
+
+block 00001090 seg 0x70000000
+  ac0 = 0x00000009
+  t1 = nadd(M16[wp(ac3, 2)], 1)
+  M16[wp(ac3, 2)] = t1
+  t2 = (t1 >s ac0)
+  ac0 = t1
+  goto [00001070, 000010A0] t2
+
+block 000010A0 seg 0x70000000
+  ret
+
+block 000010B0 seg 0x70000000
+  ac0 = 0x00010C00
+  M32[wp(ac3, 4)] = ac0
+  rt_call ?WRITE_SCREEN(0x70000260, wp(ac3, 4)) site=0000103C
+
+block 000010C0 seg 0x70000000
+  ac0 = 0x00010C00
+  M32[wp(ac3, 4)] = ac0
+  rt_call ?WRITE_SCREEN(0x70000260, wp(ac3, 4)) site=000010CC
+
+block 000010D0 seg 0x70000000
+  goto [00001040] 0
+
+blocks 14

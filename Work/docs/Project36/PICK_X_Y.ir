@@ -1,0 +1,106 @@
+ir 6
+mode book
+routine PICK_X_Y entry 00001000 lo 00001000 hi 00001120
+; translate.py (Project 35) — synthetic block pcs in canonical order; not loadable
+
+block 00001000 seg 0x70000000
+  @701761E7 WSAVS 0x0005;
+
+block 00001010 seg 0x70000000
+  ac0 = 0x00000001
+  M32[wp(ac3, 4)] = ac0
+  ac2 = M32[0x70000212]
+  ac1 = M32[wp(ac2, 11502)]
+  M32[wp(ac3, 6)] = ac1
+  ac2 = M32[0x70000210]
+  rt_call ?RANDOM_NUMBER(wp(ac3, 4), wp(ac3, 6), wp(ac2, 40)) site=0000101C
+
+block 00001020 seg 0x70000000
+  M32[wp(ac3, 2)] = ac0
+  assert(!(ac0 >u 0x000186A0) && (ac0 >s 0), "DERR 17 @00001020")
+  goto [00001030] 0
+
+block 00001030 seg 0x70000000
+  ac1 = 0x00000009
+  ac0 = mul(ac0, ac1)
+  M32[wp(ac3, 4)] = ac0
+  ac0 = add(ac0, M32[0x70000212])
+  ac2 = ac0
+  ac2 = sx16(M16[wp(ac2, 11495)])
+  M32[wp(ac3, 6)] = ac0
+  t1 = ((ac2 & 0xFFFF) | lsh(c, 16))
+  goto [00001040, 00001050] ((t1 & 0xFFFF) != 0)
+
+block 00001040 seg 0x70000000
+  goto [00001010] 0
+
+block 00001050 seg 0x70000000
+  ac2 = M32[wp(ac3, 4)]
+  ac2 = add(ac2, M32[0x70000212])
+  ac0 = sx16(M16[wp(ac2, 11497)])
+  ac1 = 0x00000064
+  ac0 = div(ac0, ac1)
+  ac0 = cvwn(ac0)
+  ac0 = add(ac0, 1)
+  goto [00001060, 00001070] (ac0 == 0x00000003)
+
+block 00001060 seg 0x70000000
+  goto [00001010] 0
+
+block 00001070 seg 0x70000000
+  ac2 = M32[wp(ac3, 6)]
+  ac0 = sx16(M16[wp(ac2, 11495)])
+  ac0 = add(ac0, 0xFFFFFFEC)
+  ac1 = sx16(M16[wp(ac2, 11495)])
+  ac1 = add(ac1, 0x00000014)
+  M32[wp(ac3, 6)] = ac0
+  M32[wp(ac3, 8)] = ac1
+  ac2 = M32[0x70000210]
+  rt_call ?RANDOM_NUMBER(wp(ac3, 6), wp(ac3, 8), wp(ac2, 40)) site=0000107C
+
+block 00001080 seg 0x70000000
+  ac0 = cvwn(ac0)
+  M16[R[ac3 + -12]] = trunc16(ac0)
+  ac2 = M32[wp(ac3, 4)]
+  ac2 = add(ac2, M32[0x70000212])
+  ac0 = sx16(M16[wp(ac2, 11496)])
+  ac0 = add(ac0, 0xFFFFFFEC)
+  ac1 = sx16(M16[wp(ac2, 11496)])
+  ac1 = add(ac1, 0x00000014)
+  M32[wp(ac3, 4)] = ac0
+  M32[wp(ac3, 6)] = ac1
+  ac2 = M32[0x70000210]
+  rt_call ?RANDOM_NUMBER(wp(ac3, 4), wp(ac3, 6), wp(ac2, 40)) site=0000108C
+
+block 00001090 seg 0x70000000
+  ac0 = cvwn(ac0)
+  M16[R[ac3 + -14]] = trunc16(ac0)
+  ac0 = sx16(M16[R[ac3 + -12]])
+  goto [000010A0, 000010C0] (ac0 >s 0x00003BF5)
+
+block 000010A0 seg 0x70000000
+  goto [000010B0] 0
+
+block 000010B0 seg 0x70000000
+  goto [00001010] 0
+
+block 000010C0 seg 0x70000000
+  goto [000010D0, 000010E0] (ac0 <=s 0x00003FAC)
+
+block 000010D0 seg 0x70000000
+  goto [000010B0] 0
+
+block 000010E0 seg 0x70000000
+  ac0 = sx16(M16[R[ac3 + -14]])
+  goto [000010F0, 00001100] (ac0 >s 0x00003B73)
+
+block 000010F0 seg 0x70000000
+  goto [000010B0] 0
+
+block 00001100 seg 0x70000000
+  goto [00001110, 000010B0] (ac0 >s 0x00003FDE)
+
+block 00001110 seg 0x70000000
+  ret
+
+blocks 18

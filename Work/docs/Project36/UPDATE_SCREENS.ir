@@ -1,0 +1,114 @@
+ir 6
+mode book
+routine UPDATE_SCREENS entry 00001000 lo 00001000 hi 00001120
+; translate.py (Project 35) — synthetic block pcs in canonical order; not loadable
+
+block 00001000 seg 0x70000000
+  @7017D635 WSAVS 0x0005;
+  ac2 = M32[0x70000210]
+  ac0 = sx16(M16[wp(ac2, 43)])
+  M16[wp(ac3, 4)] = trunc16(ac0)
+  ac1 = 0x00000001
+  M16[wp(ac3, 2)] = trunc16(ac1)
+  goto [00001010, 00001020] (ac1 <=s ac0)
+
+block 00001010 seg 0x70000000
+  ret
+
+block 00001020 seg 0x70000000
+  goto [00001030] 0
+
+block 00001030 seg 0x70000000
+  assert(!(ac1 >s 0x0000000A) && (ac1 >s 0), "DERR 17 @00001030")
+  goto [00001040] 0
+
+block 00001040 seg 0x70000000
+  ac0 = 0x000002AE
+  ac1 = mul(ac1, ac0)
+  ac1 = add(ac1, M32[0x70000210])
+  ac2 = ac1
+  ac2 = sx16(M16[wp(ac2, -589)])
+  ac0 = sx16(M16[R[ac3 + -12]])
+  ac2 = sub(ac2, ac0)
+  goto [00001050, 00001060] (ac2 >=s 0)
+
+block 00001050 seg 0x70000000
+  ac2 = sub(0, ac2)
+  goto [00001060] 0
+
+block 00001060 seg 0x70000000
+  goto [00001070, 000010A0] (ac2 <=s 0x00000004)
+
+block 00001070 seg 0x70000000
+  goto [00001080] 0
+
+block 00001080 seg 0x70000000
+  ac1 = sx16(M16[wp(ac3, 4)])
+  t1 = nadd(M16[wp(ac3, 2)], 1)
+  M16[wp(ac3, 2)] = t1
+  t2 = (t1 >s ac1)
+  ac1 = t1
+  goto [00001030, 00001090] t2
+
+block 00001090 seg 0x70000000
+  ret
+
+block 000010A0 seg 0x70000000
+  ac0 = sx16(M16[wp(ac3, 2)])
+  assert(!(ac0 >s 0x0000000A) && (ac0 >s 0), "DERR 17 @000010A0")
+  goto [000010B0] 0
+
+block 000010B0 seg 0x70000000
+  ac1 = 0x000002AE
+  ac0 = mul(ac0, ac1)
+  M32[wp(ac3, 6)] = ac0
+  ac0 = add(ac0, M32[0x70000210])
+  ac2 = ac0
+  ac2 = sx16(M16[wp(ac2, -588)])
+  ac1 = sx16(M16[R[ac3 + -14]])
+  ac2 = sub(ac2, ac1)
+  goto [000010C0, 000010D0] (ac2 >=s 0)
+
+block 000010C0 seg 0x70000000
+  ac2 = sub(0, ac2)
+  goto [000010D0] 0
+
+block 000010D0 seg 0x70000000
+  M32[wp(ac3, 8)] = ac0
+  goto [000010E0, 000010F0] (ac2 <=s 0x00000005)
+
+block 000010E0 seg 0x70000000
+  goto [00001080] 0
+
+block 000010F0 seg 0x70000000
+  ac2 = M32[wp(ac3, 6)]
+  ac2 = add(ac2, M32[0x70000210])
+  ac0 = sx16(M16[wp(ac2, -589)])
+  ac0 = add(ac0, 0xFFFFFFFB)
+  ac2 = sx16(M16[R[ac3 + -12]])
+  ac2 = sub(ac2, ac0)
+  assert(!(ac2 >s 0x00000009) && (ac2 >s 0), "DERR 17 @000010F0")
+  goto [00001100] 0
+
+block 00001100 seg 0x70000000
+  ac0 = 0x00000016
+  ac2 = mul(ac2, ac0)
+  ac2 = add(ac2, M32[wp(ac3, 6)])
+  M32[wp(ac3, 6)] = ac2
+  ac2 = M32[wp(ac3, 8)]
+  ac0 = sx16(M16[wp(ac2, -588)])
+  ac0 = add(ac0, 0xFFFFFFFA)
+  ac1 = sub(ac1, ac0)
+  assert(!(ac1 >s 0x0000000B) && (ac1 >s 0), "DERR 17 @00001100")
+  goto [00001110] 0
+
+block 00001110 seg 0x70000000
+  ac1 = add(ac1, ac1)
+  ac1 = add(ac1, M32[wp(ac3, 6)])
+  ac1 = add(ac1, M32[0x70000210])
+  ac2 = ac1
+  ac0 = M32[R[ac3 + -16]]
+  M32[wp(ac2, -611)] = ac0
+  goto [00001080] 0
+
+blocks 18
