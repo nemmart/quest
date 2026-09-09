@@ -121,7 +121,7 @@ PARENT_FRAMES = {
     "LIST_PLAYERS": dict(
         argc=0, args={},
         locals={
-            "w13": (13, 16, "LIST_PLAYERS.3@7016F59F",
+            "w13": (13, 16, "LIST_PLAYERS.3@7016F5A2",
                     "XNLDA 1,[ac2+0xD] — compared against PLAYER(i).fm629"),
         }),
     "FIRE": dict(
@@ -131,32 +131,71 @@ PARENT_FRAMES = {
         locals={
             "w10": (10, 32, "FIRE.1@7016A3C0",
                     "XWLDA 0,[ac2+0xA]; a REGION subscript (DERR 17 bound 100000)"),
-            "w12": (12, 32, "FIRE.2@7016A483",
+            "w12": (12, 32, "FIRE.2@7016A485",
                     "XWLDA 0,[ac2+0xC]; a PLAYER subscript (DERR 17 bound 10)"),
-            "w14": (14, 32, "FIRE.1@7016A3DA",
+            "w14": (14, 32, "FIRE.1@7016A3DC",
                     "XWSTA 0,[ac3+0xE] — WRITTEN uplevel, and read back at 7016A401"),
         }),
 }
 
 
+def _instruction_pcs():
+    """The set of instruction-start PCs in the disassembly, or None if the
+    listing is not available (the generator must still run in a bare tree)."""
+    path = os.path.join(ROOT, "..", "Disassembled", "quest.dis")
+    if not os.path.exists(path):
+        return None
+    pcs = set()
+    with open(path, errors="replace") as f:
+        for line in f:
+            if len(line) > 8 and line[8] == " " and line[7] != " ":
+                try:
+                    pcs.add(int(line[:8], 16))
+                except ValueError:
+                    pass
+    return pcs or None
+
+
 def check_frames():
     """The user ruling, enforced: width and a named witness, or it does not go
     in.  A missing witness is a HARD ERROR, not a warning — the whole point of
-    the rule is that a slot cannot arrive by convenience."""
+    the rule is that a slot cannot arrive by convenience.
+
+    P41: the rule as first implemented checked only that a witness STRING
+    existed, not that its PC named a real instruction.  Three of the five
+    entries then in the table were wrong (FIRE w12 7016A483 and LIST_PLAYERS
+    w13 7016F59F were mid-instruction addresses; FIRE w14 7016A3DA named the
+    link LOAD rather than the reference its own comment quotes).  A witness
+    that cannot be looked up is not a witness, so the PC is now checked
+    against the disassembly.  See docs/Project41/FIRE_MUTUAL_CHECK.md."""
     bad = []
+    pcs = _instruction_pcs()
+
+    def check_witness(label, witness):
+        if not witness or "@" not in witness:
+            bad.append("%s: no named witness (expected NAME@PC)" % label)
+            return
+        text = witness.rsplit("@", 1)[1]
+        try:
+            pc = int(text, 16)
+        except ValueError:
+            bad.append("%s: witness PC %r is not hex" % (label, text))
+            return
+        if pcs is not None and pc not in pcs:
+            bad.append("%s: witness PC %s is not an instruction boundary "
+                       "in Disassembled/quest.dis" % (label, text))
+
     for pname, p in PARENT_FRAMES.items():
         for fname, spec in p["locals"].items():
             slot, width, witness = spec[0], spec[1], spec[2]
             if width not in (8, 16, 32):
                 bad.append("%s.%s: width %r is not 8/16/32" % (pname, fname, width))
-            if not witness or "@" not in witness:
-                bad.append("%s.%s: no named witness (expected NAME@PC)" % (pname, fname))
+            check_witness("%s.%s" % (pname, fname), witness)
         for k, spec in p.get("args", {}).items():
             width, witness = spec[0], spec[1]
             if width not in (8, 16, 32):
                 bad.append("%s arg %s: width %r is not 8/16/32" % (pname, k, width))
-            if not witness or "@" not in witness:
-                bad.append("%s arg %s: no named witness (expected NAME@PC)" % (pname, k))
+            check_witness("%s arg %s" % (pname, k), witness)
             if not 1 <= k <= p["argc"]:
                 bad.append("%s arg %s: outside argc %d" % (pname, k, p["argc"]))
         slots = [s[0] for s in p["locals"].values()]
