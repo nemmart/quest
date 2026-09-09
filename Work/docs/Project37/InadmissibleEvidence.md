@@ -87,3 +87,76 @@ prove there are no others.  The cheap detector is the one that found this pair:
 its own [entry, next-entry) range, or that is branched into from outside, is a
 candidate.  A future session that finds another such pair should re-run this
 sweep for it before trusting any rule whose only witness lies inside.
+
+---
+
+# The detector, run as a standalone check (`docs/Project37/crossings.py`)
+
+Recommended rather than left as a recipe, and then run: a third hand-assembly
+unit should be found deliberately, not after it has contaminated something.
+The script groups `.N@ADDR` entries into FAMILIES first — the addrbook splits
+one PL/I procedure into several entries and flow between those is normal — and
+reports only cross-family control flow.
+
+Over all 130 addrbook entries there are **four crossing pairs, and they fall
+into two clearly different shapes**:
+
+    UNLOCK_FILE       -> LOCK_FILE           5 edges
+    LOCK_FILE         -> UNLOCK_FILE         1 edge      <-- MUTUAL
+    CREATE_MAP        -> DISPLAY_MAP         1 edge
+    TRANSPORT_TERRAK  -> TRANSPORT_SUNDAR    1 edge
+
+## Shape 1 — MUTUAL crossing = hand-assembly
+
+Only LOCK_FILE/UNLOCK_FILE. **The mutual signature is the diagnostic**, and it
+is the one R39 is about.  No third hand-assembly unit exists in the program.
+That is the answer the standalone run was for, and it is a clean negative.
+
+## Shape 2 — one-way prologue-into-body = PL/I MULTIPLE ENTRY POINTS
+
+The other two are not hand-assembly at all; they are a compiler construct this
+project had not yet seen.  Both have proper `WSAVS` prologues, identical `frame`
+and identical `argc`, and each entry initialises the SAME frame slots with
+DIFFERENT constants before branching into one shared body:
+
+    7017D48F  WSAVS 0x000C                 TRANSPORT_TERRAK
+    7017D491  WBR -> 7017D495              ... slot 8 := 2
+    7017D492  WSAVS 0x000C                 TRANSPORT_SUNDAR
+    7017D494  WBR -> 7017D49A              ... slot 8 := 7
+    7017D495  NLDAI 2 ; XNSTA 0,[ac3+0x8] ; WBR -> 7017D49E
+    7017D49A  NLDAI 7 ; ...
+
+    7016509F  WSAVS 0x06AA                 CREATE_MAP
+    701650A1  slot 8 := 19, slot 9 := 19, slot 12 := 0x8000 ; WBR -> 701650B9
+    701650AC  WSAVS 0x06AA                 DISPLAY_MAP
+    701650AE  slot 8 := 10, slot 9 := 19, slot 12 := 0     ; -> the same body
+
+This is a PL/I procedure with more than one `ENTRY`.  The distinguishing test
+against shape 1 is easy and should be applied before crying assembly:
+**same frame, same argc, a real WSAVS at each entry, and the flow is one-way
+from a prologue into the other entry's body.**
+
+### Consequence for the address book's statement counts
+
+The shared body lands in whichever entry's `[entry, next-entry)` range contains
+it, so the split is lopsided and the counts mislead:
+
+| entry | statements |
+|---|---|
+| TRANSPORT_TERRAK | **2** (a WSAVS and a branch) |
+| TRANSPORT_SUNDAR | 138 (the prologue *and the whole shared body*) |
+| CREATE_MAP | **7** |
+| DISPLAY_MAP | 902 |
+
+### Consequence for P37 routine 6
+
+**The randomly drawn routine, TRANSPORT_SUNDAR, is one of these.**  Its 138
+statements are its own two-instruction prologue plus a body it shares with
+TRANSPORT_TERRAK, whose prologue is outside the slice.  So routine 6 cannot be
+translated as a self-contained procedure: it needs the multiple-entry
+construct, and the honest reconstruction is ONE C function with two entry
+prologues, compared against the union of the two addrbook ranges.
+
+This is the honesty test doing its job.  A hand-picked routine would not have
+produced this; the draw did, and it turned up a construct that the whole
+address book's statement census silently mis-attributes.

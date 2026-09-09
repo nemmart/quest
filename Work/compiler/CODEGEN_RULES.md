@@ -352,3 +352,21 @@ there are no others.
 
 *(A companion entry in `docs/METHOD.md` §16 is recommended at merge time; P37's
 boundaries do not permit editing that file.)*
+
+### 8.11 R40 — multiple ENTRY points into one procedure
+
+| # | rule | evidence | conf |
+|---|------|----------|------|
+| R40 | A PL/I procedure with more than one `ENTRY` compiles to SEVERAL addrbook entries sharing one body.  Each entry has its own real `WSAVS <frame>` prologue with the SAME frame size and argc, initialises the same frame slots with DIFFERENT constants, and branches one-way into the shared body. | TRANSPORT_TERRAK 7017D48F (slot 8 := 2) / TRANSPORT_SUNDAR 7017D492 (slot 8 := 7), both `frame 0x0C argc 2`; CREATE_MAP 7016509F (8:=19, 9:=19, 12:=0x8000) / DISPLAY_MAP 701650AC (8:=10, 9:=19, 12:=0), both `frame 0x6AA argc 2` | A — two independent pairs |
+
+**Do not confuse R40 with R39.**  Both show as cross-family control flow.  The
+discriminators: R39's hand-assembly crossing is **MUTUAL** (each branches into
+the other) and the two sides differ in frame, argc and entry variant; R40's is
+**one-way from a prologue into the other entry's body**, with identical frame,
+identical argc and a real WSAVS at each entry.
+
+**The addrbook's statement counts mis-attribute an R40 pair**: the shared body
+falls into whichever range contains it.  TRANSPORT_TERRAK counts 2 statements
+and TRANSPORT_SUNDAR 138; CREATE_MAP counts 7 and DISPLAY_MAP 902.  Any census
+that treats those as four independent routines is wrong, and any sampling frame
+built on statement counts inherits the error.
