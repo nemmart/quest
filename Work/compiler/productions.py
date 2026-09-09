@@ -41,7 +41,8 @@ class SpanViolation(Exception):
 
 class Production:
     def __init__(self, name, group, root, span=(), inherited=(), choices=(),
-                 rules=(), classes=None, ported=False, note=""):
+                 rules=(), classes=None, ported=False, note="",
+                 paths=("default",), unexercised=None):
         bad = [c for c in choices if c not in CHOICE_KINDS]
         if bad:
             raise ValueError("%s: choice kind(s) %r outside P43's four" % (name, bad))
@@ -55,6 +56,18 @@ class Production:
         self.classes = classes        # legal register set, where a class applies
         self.ported = ported
         self.note = note
+        # P42: a production declares its PATHS and must account for all of
+        # them.  Five times this project has mistaken an uninstrumented path
+        # for a path the corpus does not exercise -- both read as zero.  The
+        # remedy is mechanical: every declared path is either FIRED by the
+        # witness harness or explicitly listed in `unexercised` with a
+        # reason, and check_path_coverage() goes RED otherwise.
+        self.paths = tuple(paths)
+        self.unexercised = dict(unexercised or {})
+        unknown = set(self.unexercised) - set(self.paths)
+        if unknown:
+            raise ValueError("%s: unexercised names undeclared path(s) %r"
+                             % (name, sorted(unknown)))
 
     def __repr__(self):
         return "<production %s>" % self.name
@@ -93,25 +106,35 @@ _p("assign_rt", "stmt", "Assignment whose rvalue is a runtime call",
    span=("rvalue",), rules=("RTConventions",), note="result in ac0")
 _p("assign_uplevel", "stmt", "Assignment to UP()/UPARG()",
    span=("lvalue", "rvalue"), choices=("reg",), rules=("R43", "R44"),
-   classes=BASE_CLASS)
+   classes=BASE_CLASS,
+   unexercised={"default": "NO WITNESS -- FIRE.1 writes wp(link,14) but has "
+                           "no .c; FIRE.2 refuses at the cvwn/divide width "
+                           "question before reaching its uplevel statements. "
+                           "NOT ported."})
 _p("if_oneword", "stmt", "If with a one-instruction consequent",
    span=("iftrue",), choices=("spelling",), rules=("R13", "R13c", "R8a"))
 _p("if_multi", "stmt", "If with a multi-statement or two-armed body",
-   choices=("order",), rules=("R13b", "R19"))
+   choices=("order",), rules=("R13b", "R19"),
+   paths=("no-else", "with-else"))
 _p("do_loop", "stmt", "For -- the XNDO idiom",
    span=("init", "cond", "next"), choices=("reg", "slot"),
    rules=("R21", "R21c'", "R21e'", "R22", "R36"), classes=VALUE_CLASS,
-   note="one instruction, five IR statements")
+   note="one instruction, five IR statements",
+   paths=("const-limit", "variable-limit"))
 _p("goto", "stmt", "Goto")
 _p("return_void", "stmt", "Return with no value", rules=("R13",))
 _p("return_value", "stmt", "Return with a value",
    span=("expr",), choices=("reg",), rules=("R35",))
 _p("rt_call_stmt", "stmt", "A runtime call statement NAME$n(...)",
-   span=("args",), choices=("slot", "order"), rules=("R18",))
+   span=("args",), choices=("slot", "order"), rules=("R18",),
+   paths=("immediate", "deferred"))
 _p("game_call_stmt", "stmt", "A game-routine call",
    span=("args",), choices=("order",), rules=("R40",))
 _p("bit_stmt", "stmt", "BIT_SET / BIT_CLR / BIT_PUT",
-   span=("word", "nbit"), choices=("reg",), rules=("R29",))
+   span=("word", "nbit"), choices=("reg",), rules=("R29",),
+   paths=("BIT_SET", "BIT_CLR", "BIT_PUT"),
+   unexercised={"BIT_PUT": "no available routine calls BIT_PUT; QUEST.1 "
+                           "fires BIT_SET and BIT_CLR only"})
 
 # --- addressing and references (11) ---------------------------------------
 _p("element_address", "addr", "ArrayRef -- the element address base + i*stride",
@@ -120,6 +143,15 @@ _p("element_address", "addr", "ArrayRef -- the element address base + i*stride",
    choices=("reg", "slot", "order", "spelling"),
    rules=("R4", "R5", "R6", "R9", "R9a", "R10", "R11", "R31", "R36", "R36a"),
    classes=BASE_CLASS,
+   paths=("hoisted-temp", "elem-temp", "already-in-ac2", "R31-temp-to-base",
+          "scaled-temp", "computed"),
+   unexercised={"R31-temp-to-base":
+                "INSTRUMENTED but not reached by the harness: R31 needs the "
+                "record base already in ac2 from a bit reference's R28 load "
+                "AND the scaled subscript in a live temp. That is DIED's "
+                "7016605B/7016606F shape; DIED translates only its first "
+                "statements here. Distinct from an uninstrumented path -- "
+                "which is precisely the distinction this check exists to draw."},
    note="SEVEN paths; FIVE never evaluate the subscript at all -- the tile "
         "that settled the per-node question (QUEST.1 7015c611)")
 _p("field_direct", "addr", "StructRef '->'",
@@ -129,7 +161,10 @@ _p("field_element", "addr", "StructRef '.' over an ArrayRef",
    span=("name",), rules=("R4",), note="delegates the address to element_address")
 _p("bit_address", "addr", "the bit address 16*scaled + (16*K + n)",
    span=("subscript", "stride", "disp"), choices=("reg", "slot"),
-   rules=("R26", "R27"))
+   rules=("R26", "R27"),
+   paths=("16scaled-temp", "computed"),
+   note="the path that reported ZERO because it was uninstrumented, not "
+        "because the corpus lacked it -- the fifth instance")
 _p("bit_base", "addr", "the record base of a BIT reference",
    inherited=("avoid",), choices=("reg",), rules=("R28",), classes=ALL_REGS,
    note="DENIES R41'. Plain R7 over all four; the SD_PTR census puts it in "
@@ -141,20 +176,33 @@ _p("link_load", "addr", "the static link",
 _p("uplevel_ref", "addr", "UP() read", span=("link",), choices=("reg",),
    rules=("R43",))
 _p("uplevel_arg_ref", "addr", "UPARG() dereference", span=("link",),
-   choices=("reg",), rules=("R44",))
+   choices=("reg",), rules=("R44",),
+   unexercised={"default": "NO WITNESS -- FIRE.2 is the only routine with an "
+                           "UPARG() and it refuses first. NOT ported."})
 _p("scalar_ref", "addr", "ID / *param -- local, static, argument",
    inherited=("want_reg", "avoid"), choices=("reg",), rules=("R7", "R8"))
 _p("marker_ref", "addr", "the two-arity marker word", rules=("R12",),
    note="fixed wp(ac3,-9); no choice")
 _p("address_of", "addr", "UnaryOp '&'", span=("expr",), choices=("spelling",),
-   rules=("R32",), note="wp vs bp")
+   rules=("R32",), note="wp vs bp",
+   paths=("local-word", "local-byte", "direct-field", "element-field", "static"),
+   unexercised={"local-byte": "INSTRUMENTED, not reached: only HIT_ANY_CHAR "
+                              "has a CHAR(1) local whose address is taken "
+                              "(XPEFB, 7016DEA7) and the harness does not "
+                              "reach that statement",
+                "element-field": "INSTRUMENTED, not reached: `&T[i].f` is "
+                                 "DIED's 70166108/10A shape and DIED "
+                                 "translates only its first statements here"})
 
 # --- expressions (9) -------------------------------------------------------
 _p("binop_reg_reg", "expr", "BinaryOp, both operands in registers",
-   inherited=("avoid",), choices=("reg", "order"), rules=("R20",))
+   inherited=("avoid",), choices=("reg", "order"), rules=("R20",),
+   paths=("lhs-first", "rhs-first"))
 _p("binop_reg_mem", "expr", "BinaryOp with a 32-bit memory right operand",
    inherited=("avoid",), choices=("spelling",), rules=("R15",),
-   note="direct memory operand vs load-first")
+   note="direct memory operand vs load-first",
+   unexercised={"default": "NO WITNESS -- no available routine produces a "
+                           "32-bit memory right operand. NOT ported."})
 _p("binop_const_inc", "expr", "BinaryOp + 1", choices=("spelling",),
    rules=("R15",), note="WINC vs WNADI -- P43's worked example")
 _p("binop_const_addi", "expr", "BinaryOp +/- a 16-bit constant",
@@ -164,6 +212,7 @@ _p("binop_const_scale", "expr", "BinaryOp * or / a constant",
    note="D4 census target: the constant's register")
 _p("const_materialise", "expr", "Constant",
    inherited=("avoid",), choices=("reg", "spelling"), rules=("R37", "R29"),
+   paths=("zero-WSUB", "immediate-NLDAI"),
    note="D4's ACTUAL site -- 686 to ac2 twice, ac1 once. Expected to "
         "accumulate the most choices in P43.")
 _p("convert", "expr", "cvwn / sx16 / trunc16", span=("expr",),
@@ -174,7 +223,8 @@ _p("bit_value", "expr", "BIT() used as a value", choices=("reg",), rules=("R29",
 # --- conditions and plumbing (4) ------------------------------------------
 _p("condition_cmp", "cond", "a comparison in a test",
    span=("left", "right"), choices=("order", "spelling"),
-   rules=("R14", "R14b"))
+   rules=("R14", "R14b"),
+   paths=("immediate", "register"))
 _p("condition_bit", "cond", "a BIT reference in a test", span=("expr",),
    choices=("reg",), rules=("R29",))
 _p("temp_place", "plumb", "a CSE temp store or reload", choices=("slot",),
@@ -197,9 +247,10 @@ def census_targets():
 # --------------------------------------------------------------------------
 
 class Firing:
-    __slots__ = ("prod", "node_id", "shape", "choices", "addr", "stmt")
+    __slots__ = ("prod", "node_id", "shape", "choices", "addr", "stmt", "path")
 
-    def __init__(self, prod, node_id, shape, stmt):
+    def __init__(self, prod, node_id, shape, stmt, path="default"):
+        self.path = path
         self.prod = prod
         self.node_id = node_id
         self.shape = shape
@@ -223,9 +274,10 @@ class Ledger:
         self.seen_roots = set()
         self.violations = []
         self.orphans = []         # emissions belonging to NO production
+        self.paths_fired = set()  # (production, path) actually taken
 
     # -- firing ------------------------------------------------------------
-    def begin(self, name, node_id, shape, stmt):
+    def begin(self, name, node_id, shape, stmt, path="default"):
         prod = TABLE.get(name)
         if prod is None:
             raise SpanViolation("no such production: %s" % name)
@@ -234,7 +286,11 @@ class Ledger:
             self.violations.append(
                 "%s fired on a node already consumed by %s -- a consumed "
                 "descendant must not be separately reduced" % (name, owner))
-        f = Firing(name, node_id, shape, stmt)
+        if path not in prod.paths:
+            self.violations.append("%s fired an undeclared path %r (declared: %s)"
+                                   % (name, path, ", ".join(prod.paths)))
+        self.paths_fired.add((name, path))
+        f = Firing(name, node_id, shape, stmt, path)
         self.stack.append(f)
         return f
 
@@ -318,6 +374,10 @@ class Ledger:
                                key=lambda kv: -len(kv[1])):
             nch = sum(len(f.choices) for f in fs)
             L.append("#   %-24s %4d firings %4d choices" % (name, len(fs), nch))
+        L.append("#")
+        L.append("# paths fired by this routine")
+        for prod, path in sorted(self.paths_fired):
+            L.append("# path %s.%s" % (prod, path))
         if self.orphans:
             L.append("#")
             L.append("# ORPHAN EMISSIONS -- code that belongs to no production")
@@ -362,7 +422,7 @@ def _selftest():
 
     # 1. a consumed descendant separately reduced
     def case1(L):
-        f = L.begin("element_address", 100, "T(i)", 0)
+        f = L.begin("element_address", 100, "T(i)", 0, path="computed")
         L.consume("element_address", [200])
         L.end(f)
         g = L.begin("scalar_ref", 200, "i", 0); L.end(g)
@@ -384,14 +444,14 @@ def _selftest():
 
     # 4. a choice kind outside P43's four
     def case4(L):
-        f = L.begin("element_address", 1, "T(i)", 0)
+        f = L.begin("element_address", 1, "T(i)", 0, path="computed")
         L.choice("width", "32")
         L.end(f)
     expect_reject("a choice kind outside reg/slot/order/spelling", case4)
 
     # 5. a production that began and never completed
     def case5(L):
-        L.begin("element_address", 1, "T(i)", 0)
+        L.begin("element_address", 1, "T(i)", 0, path="computed")
     expect_reject("a production that never completed", case5)
 
     # 6. an unknown production name
@@ -410,7 +470,7 @@ def _selftest():
     # 8. the clean case, and the address is in reduction order
     def case8(L):
         for nid in (1, 2, 3):
-            f = L.begin("const_materialise", nid, "Constant", 0)
+            f = L.begin("const_materialise", nid, "Constant", 0, path="immediate-NLDAI")
             L.choice("reg", "ac0")
             L.end(f)
         got = [f.addr for f in L.firings]
@@ -433,15 +493,13 @@ def _selftest():
             "const_materialise"]):
         fails.append("the D4 census targets moved: %s" % sorted(census_targets()))
 
+    fails.extend(_selftest_paths())
     for f in fails:
         print("FAIL: %s" % f)
-    print("productions selftest %s (%d cases)" % ("FAIL" if fails else "PASS", 9))
+    print("productions selftest %s (%d cases)" % ("FAIL" if fails else "PASS", 12))
     return 1 if fails else 0
 
 
-if __name__ == "__main__":
-    import sys
-    sys.exit(_selftest())
 
 
 # --------------------------------------------------------------------------
@@ -556,5 +614,53 @@ for _n, _t in TEMPLATES.items():
     TABLE[_n].template = _t
 
 
+def check_path_coverage(fired):
+    """Every declared path must be accounted for: FIRED by the harness, or
+    listed in the production's `unexercised` with a reason.  Anything else is
+    a hole in the instrument, and this is what stops a hole from reading as a
+    fact about the corpus.
+
+    `fired` is the set of (production, path) pairs seen across ALL harness
+    routines.  Returns (unaccounted, excused)."""
+    unaccounted, excused = [], []
+    for p in P:
+        for path in p.paths:
+            if (p.name, path) in fired:
+                continue
+            if path in p.unexercised:
+                excused.append((p.name, path, p.unexercised[path]))
+            else:
+                unaccounted.append((p.name, path))
+    return unaccounted, excused
+
+
 def ported_names():
     return sorted(n for n, p in TABLE.items() if p.ported)
+
+
+def _selftest_paths():
+    """Teeth for the path declaration itself."""
+    fails = []
+    # a firing on an undeclared path must be REJECTED
+    L = Ledger()
+    f = L.begin("element_address", 1, "T(i)", 0, path="invented")
+    L.end(f)
+    if not L.check():
+        fails.append("ACCEPTED a firing on an undeclared path")
+    # an `unexercised` entry naming a path the production does not declare
+    try:
+        Production("x", "expr", "X", paths=("a",), unexercised={"b": "why"})
+        fails.append("ACCEPTED an unexercised entry for an undeclared path")
+    except ValueError:
+        pass
+    # coverage: a declared, unfired, unexcused path must come back UNACCOUNTED
+    un, ex = check_path_coverage(set())
+    if not un:
+        fails.append("check_path_coverage found nothing unaccounted from an "
+                     "EMPTY fired set -- it cannot be failing")
+    return fails
+
+
+if __name__ == "__main__":
+    import sys
+    sys.exit(_selftest())

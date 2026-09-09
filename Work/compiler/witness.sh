@@ -53,4 +53,7 @@ for R in $BED; do
 done
 echo "  $T/349 primary, $G/242 folded"
 [ "$T" != 349 ] || [ "$G" != 242 ] && fail=1
+
+echo "-- path coverage (every declared path fired or excused with a reason) --"
+python3 compiler/pathcheck.py "$S" | sed 's/^/  /' || fail=1
 exit $fail

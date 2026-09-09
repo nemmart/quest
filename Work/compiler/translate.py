@@ -651,13 +651,14 @@ class Translator:
         key on exactly these."""
         self.ledger.choice(kind, value, witness)
 
-    def fired(self, name, node=None, shape=None, consumes=(), choices=()):
+    def fired(self, name, node=None, shape=None, consumes=(), choices=(),
+              path="default"):
         """A point firing, for a production whose template does not nest
         another reduction inside it.  Placed where the emission COMPLETES, so
         it takes its address in reduction order like any other."""
         f = self.ledger.begin(name, id(node) if node is not None else None,
                               shape or (type(node).__name__ if node is not None else name),
-                              self.stmt_index)
+                              self.stmt_index, path)
         self.ledger.consume(name, [id(n) for n in consumes if n is not None])
         for c in choices:
             self.ledger.choice(*c)
@@ -1376,6 +1377,7 @@ class Translator:
         # placement is a slot choice when it is not a constant.
         self.fired("do_loop", st, "DO %s" % (self.loop_var or "?"),
                    consumes=(st.init, st.cond, st.next),
+                   path="const-limit" if const_lim else "variable-limit",
                    choices=[("reg", lr)] + ([] if const_lim else [("slot", lslot)]))
         self.terminate(("goto", [body_b.label, after_b.label], "t2"))
         # body: at its head only the loop register is known (and protected)
@@ -1549,6 +1551,7 @@ class Translator:
         # reduced normally, so they keep their own addresses.
         self.fired("if_multi", st, "if <c> {body}%s"
                    % (" else {alt}" if st.iffalse is not None else ""),
+                   path="with-else" if st.iffalse is not None else "no-else",
                    choices=[("order", "body_first")])
         skip_b, body_b, after_b = self.new_block(), self.new_block(), self.new_block()
         else_b = self.new_block() if st.iffalse is not None else after_b
@@ -1681,6 +1684,7 @@ class Translator:
             imm = isinstance(cond.right, c_ast.Constant)
             self.fired("condition_cmp", cond, "test %s" % cond.op,
                        consumes=(cond.right,) if imm else (),
+                       path="immediate" if imm else "register",
                        choices=[("spelling", "immediate" if imm else "register")])
         if negate:
             self.NEGTEST[t] = self._flip(t)
@@ -2053,7 +2057,7 @@ class Translator:
             b = self.bit_base_reg(base_addr, bkey, avoid=(r,))
             # PATH 1 (R27): the 16*scaled temp is live; subscript not evaluated
             self.fired("bit_address", sub, "BIT %s(%s) 16*scaled-temp" % (tname, vname),
-                       consumes=(sub,), choices=[("reg", r), ("slot", slot)])
+                       consumes=(sub,), choices=[("reg", r), ("slot", slot)], path="16scaled-temp")
             return b, r
 
         # the subscript, bounds-checked and scaled by the stride (R11)
@@ -2126,7 +2130,7 @@ class Translator:
         # pass and reported zero firings, which is indistinguishable from
         # "the bed does not exercise it": the same defect as if_multi.)
         self.fired("bit_address", None, "BIT %s(%s) computed" % (tname, vname),
-                   choices=[("reg", off)]
+                   path="computed", choices=[("reg", off)]
                            + ([("slot", self.cse[bkey]["slot"])]
                               if self.cse.get(bkey, {}).get("slot") is not None else []))
         return b, off
@@ -2178,11 +2182,11 @@ class Translator:
         mask = "lsh(0x8000, 0 - (%s & 15))" % off
         if op == "BIT_SET":
             self.emit("%s = %s | %s" % (mem, mem, mask))
-            self.fired("bit_stmt", call, "BIT_SET", consumes=(args[0], args[1]))
+            self.fired("bit_stmt", call, "BIT_SET", consumes=(args[0], args[1]), path="BIT_SET")
             return
         if op == "BIT_CLR":
             self.emit("%s = %s & ~%s" % (mem, mem, mask))
-            self.fired("bit_stmt", call, "BIT_CLR", consumes=(args[0], args[1]))
+            self.fired("bit_stmt", call, "BIT_CLR", consumes=(args[0], args[1]), path="BIT_CLR")
             return
         # BIT_PUT(w, n, e): WBTO, then the value's sign test, then WBTZ
         # (70166376..82: set the bit, materialise e, clear it again when e is
@@ -2198,7 +2202,7 @@ class Translator:
         self.terminate(("goto", [join.label], "0"))
         self.cur = join
         self.fired("bit_stmt", call, "BIT_PUT", consumes=(args[0], args[1]),
-                   choices=[("reg", vr)])
+                   choices=[("reg", vr)], path="BIT_PUT")
 
     def bit_value_reg(self, e):
         """A bit reference used as a VALUE materialises as 0 / -1: `WSUB v,v`,
@@ -2256,7 +2260,7 @@ class Translator:
                     # PORTED (P42 Stage 3): productions.t_const_materialise
                     sp = PROD.TEMPLATES["const_materialise"](self, r, k)
                     self.fired("const_materialise", e, "Constant %s" % hexc(k),
-                               choices=[("reg", r), ("spelling", sp)])
+                               choices=[("reg", r), ("spelling", sp)], path="zero-WSUB" if k == 0 else "immediate-NLDAI")
                 return Val("reg", reg=r, width=32, const=k)
             return v
         if isinstance(e, c_ast.ID):
@@ -2590,7 +2594,7 @@ class Translator:
             self.regs.set("ac2", ("addr", ekey))
             # PATH 1 (R36/D2, hoisted): the subscript is NEVER evaluated.
             self.fired("element_address", sub, "%s(%s) hoisted-temp" % (tname, vname),
-                       consumes=(sub,), choices=[("reg", "ac2"), ("slot", slot)])
+                       consumes=(sub,), choices=[("reg", "ac2"), ("slot", slot)], path="hoisted-temp")
             self.note_ref(tname, vname)
             return "ac2"
         if ekey in self.cse and self.cse[ekey].get("slot") is not None:
@@ -2603,13 +2607,13 @@ class Translator:
                 self.cse[ekey]["slot"] = None
                 # PATH 2 (R10): element temp reloaded; subscript not evaluated.
                 self.fired("element_address", sub, "%s(%s) elem-temp" % (tname, vname),
-                           consumes=(sub,), choices=[("reg", "ac2"), ("slot", slot)])
+                           consumes=(sub,), choices=[("reg", "ac2"), ("slot", slot)], path="elem-temp")
                 self.note_ref(tname, vname)
                 return "ac2"
         if self.regs.c["ac2"] in (("addr", ekey), ("live", ekey)):
             # PATH 3: already in ac2 -- ZERO instructions, subscript unevaluated.
             self.fired("element_address", sub, "%s(%s) already-in-ac2" % (tname, vname),
-                       consumes=(sub,), choices=[("reg", "ac2")])
+                       consumes=(sub,), choices=[("reg", "ac2")], path="already-in-ac2")
             self.note_ref(tname, vname)
             return "ac2"
         # R31: when the record base is ALREADY in ac2 -- left there by a bit
@@ -2626,7 +2630,7 @@ class Translator:
             # choice, and the two orders are visible in the folded address.
             self.fired("element_address", sub, "%s(%s) R31 temp-to-base" % (tname, vname),
                        consumes=(sub,), choices=[("reg", "ac2"), ("slot", slot),
-                                                 ("order", "temp_to_base")])
+                                                 ("order", "temp_to_base")], path="R31-temp-to-base")
             self.emit("ac2 = add(ac2, M32[wp(ac3, %d)])" % slot)         # XWADD
             self.regs.set("ac2", ("addr", ekey))
             self.elem_sym[ekey] = s_addv(s_load(s_const(base_addr), 32),
@@ -2643,7 +2647,7 @@ class Translator:
             # PATH 5: scaled subscript in a temp; subscript not re-evaluated.
             self.fired("element_address", sub, "%s(%s) scaled-temp" % (tname, vname),
                        consumes=(sub,), choices=[("reg", "ac2"), ("slot", slot),
-                                                 ("order", "base_to_temp")])
+                                                 ("order", "base_to_temp")], path="scaled-temp")
             self.emit("ac2 = M32[wp(ac3, %d)]" % slot)          # XWLDA 2
             self.regs.set("ac2", ("live", skey))
             if self.last_use_of(skey) <= i:
@@ -2700,7 +2704,7 @@ class Translator:
         # SS9.3 says exactly that -- ac2 is free at every base load in all 349
         # statements).
         self.fired("element_address", None, "%s(%s) computed" % (tname, vname),
-                   choices=[("reg", "ac2"), ("order", "in_place_then_move")])
+                   choices=[("reg", "ac2"), ("order", "in_place_then_move")], path="computed")
         if r != "ac2":
             self.emit("ac2 = %s" % r)                             # WMOV r,2  (R5)
             self.regs.set("ac2", ("dup", r))
@@ -2798,7 +2802,7 @@ class Translator:
             self.regs.c[rv.reg] = ("var", ("dead", rv.reg))
             # R20: the more complex operand went FIRST -- an order choice
             self.fired("binop_reg_reg", e, "BinaryOp %s (rhs first)" % e.op,
-                       choices=[("reg", r), ("order", "rhs_first")])
+                       choices=[("reg", r), ("order", "rhs_first")], path="rhs-first")
             return Val("reg", reg=r, width=32)
         lhs = self.value(e.left, want_reg=True, avoid=avoid)
         r = lhs.reg
@@ -2846,7 +2850,7 @@ class Translator:
         self.emit("%s = %s(%s, %s)" % (r, op, r, rv.reg))
         self.regs.set(r, ("live", "res"))
         self.fired("binop_reg_reg", e, "BinaryOp %s (lhs first)" % e.op,
-                   choices=[("reg", r), ("order", "lhs_first")])
+                   choices=[("reg", r), ("order", "lhs_first")], path="lhs-first")
         return Val("reg", reg=r, width=32)
 
     pending_elem_save = None
@@ -2922,6 +2926,7 @@ class Translator:
         # ORDER choice, and the slots are SLOT choices.
         self.fired("rt_call_stmt", call, "%s(%d args)" % (base, arity),
                    consumes=tuple(args),
+                   path="deferred" if defer else "immediate",
                    choices=[("order", "deferred" if defer else "immediate")]
                            + [("slot", int(str(t).split(", ")[1].rstrip(")")))
                               for t in pushes
@@ -3022,6 +3027,9 @@ class Translator:
                 if f is None:
                     refuse(t, "%s->%s not in declarations" % (ptr, t.field.name))
                 b = self.base_reg(ptr)
+                self.fired("address_of", a, "&%s->%s" % (ptr, t.field.name),
+                           path="direct-field", consumes=(t,),
+                           choices=[("spelling", "wp")])
                 return "wp(%s, %d)" % (b, f[0])
             if isinstance(t, c_ast.StructRef) and t.type == "." and isinstance(t.name, c_ast.ArrayRef):
                 # &T[i].f : the element address in ac2 (R5/R9/R10), the field's
@@ -3035,6 +3043,9 @@ class Translator:
                 if fld is None:
                     refuse(t, "%s.%s not in declarations" % (tname, t.field.name))
                 areg = self.element_address(tname, tt, t.name.subscript)
+                self.fired("address_of", a, "&%s[i].%s" % (tname, t.field.name),
+                           path="element-field", consumes=(t,),
+                           choices=[("spelling", "wp")])
                 return "wp(%s, %d)" % (areg, fld["K"])
             if isinstance(t, c_ast.ID):
                 if t.name in self.frame.locals:
@@ -3043,14 +3054,16 @@ class Translator:
                         # a CHAR(1) local's address is a BYTE address: XPEFB,
                         # `bp(ac3, 2*slot)`.  HIT_ANY_CHAR 7016DEA7
                         # `M32[0x74003F1C] = bp(ac3, 4)` for the local at slot 2.
-                        self.fired("address_of", a, "&local (byte)",
+                        self.fired("address_of", a, "&local (byte)", path="local-byte",
                                    consumes=(t,), choices=[("spelling", "bp")])
                         return "bp(ac3, %d)" % (2 * slot)
-                    self.fired("address_of", a, "&local",
+                    self.fired("address_of", a, "&local", path="local-word",
                                consumes=(t,), choices=[("spelling", "wp")])
                     return "wp(ac3, %d)" % slot
                 s = self.L.static(t.name)
                 if s is not None:
+                    self.fired("address_of", a, "&%s (static)" % t.name,
+                               path="static", consumes=(t,))
                     return hexc(s["addr"])
             refuse(a, "address form not in the subset")
         if isinstance(a, c_ast.ID) and a.name in self.args:
