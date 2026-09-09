@@ -265,3 +265,24 @@ arguments first" gets the emission wrong.  One instance cannot separate them,
 so the translator REFUSES the BITS() argument rather than carry a fitted rule
 into every other multi-dummy call in the game.  Details and the evidence:
 docs/Project37/GetInputFinding.md.
+
+### 8.8 Predicted defects — three sites that share R27's flaw
+
+R27's amendment (§8.5) replaced a bare `j > i` "is there a later use?" test with
+`reachable_later_uses`, because two statements in different arms of an `if` are
+not later statements for one another.  **Three other rules still ask the same
+question the same wrong way**, and are recorded here as PREDICTED defects so
+that when one trips it is a prediction confirmed, not a discovery:
+
+| site | rule | the test it still uses |
+|---|---|---|
+| `element_address`, R9 save | the scaled-subscript CSE temp | `any(j > i for j in self.uses.get(skey, []))` |
+| `element_address`, R10 save | the element-address temp | `later = [j for j in self.uses.get(skey, []) if j > i]` |
+| `Frame.alloc_temp` / `last_use_of`, R3 | "a temp is free from its last use on" | `max(uses)` over all uses, arms included |
+
+None of the four routines matched so far can expose them: no matched routine
+references the same table element from two arms of one `if`.  INIT_OBJ_TBL and
+DIED both have branchy bodies with repeated element references, so at least one
+of the three is expected to need the same amendment there.  **They are NOT
+being changed speculatively** — the comparator should be the one to demand it
+(ruling R3: a register or slot rule is falsified by a DIFF, never pre-empted).
