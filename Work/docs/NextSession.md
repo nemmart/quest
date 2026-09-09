@@ -126,12 +126,16 @@ coverage as partial.**
    address, and a rule can only be derived from the one or two routines
    that exercise it. Plan: **P42** (docs/Project42/PROMPT.md) —
    restructure the emit layer into a production table fired in
-   reduction order, behaviour-preserving, no new rules; **P43** — choice
-   files keyed on reductions (`routine, reduction, production, choice
-   kind` → value), so a routine closes as soon as its C is right and
-   register/slot decisions are SUPPLIED rather than predicted; the size
-   of a routine's choice file becomes the measure of what the model
-   does not yet explain; **P44** — per-production censuses over the
+   reduction order, behaviour-preserving, no new rules; **P43** (PROMPT WRITTEN,
+   docs/Project43/PROMPT.md) — choice files keyed on reductions, so a
+   routine closes as soon as its C is right and register/slot decisions
+   are SUPPLIED rather than predicted. **A choice must be LEGAL and the
+   production checks it** (a register holding a live value, an occupied
+   slot, a reorder across a dependence, a value outside a production's
+   class = HARD ERROR and a finding); a choice selects, never creates —
+   it may not change which statements exist; a single-option "choice"
+   is pruned. Choice-file size becomes the headline metric: what the
+   model does not yet explain; **P44** — per-production censuses over the
    whole book (200 instances of one production, not 2), turning choices
    back into rules. 
    → **P41 PROMPT WRITTEN** (docs/Project41/PROMPT.md): deliberately
