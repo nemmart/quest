@@ -370,3 +370,32 @@ falls into whichever range contains it.  TRANSPORT_TERRAK counts 2 statements
 and TRANSPORT_SUNDAR 138; CREATE_MAP counts 7 and DISPLAY_MAP 902.  Any census
 that treats those as four independent routines is wrong, and any sampling frame
 built on statement counts inherits the error.
+
+### 8.12 The frame relocation — DERIVED, pragma NOT needed (routine 4)
+
+Full derivation: `docs/Project37/FrameRelocation.md`.  **Verdict: no
+`#pragma fp ac2`; pragma count stays 0.**  P36 finding 1 called this a
+"register reassignment of the frame pointer"; reading FIRE.1 (the small case)
+first shows the weaker and correct story — **there is no relocation at all.**
+
+| # | rule | evidence | conf |
+|---|------|----------|------|
+| R33 | The frame pointer is not pinned.  It is an ordinary VALUE: `ac3` holds it by default and is otherwise ordinarily allocatable; when a statement needs a base and ac3 is the R7 pick, ac3 takes it and the frame becomes "not in a register".  The next frame reference emits `LDAFP` into an R7 pick and spells `wp(acN, d)`.  R24 governs *when*, R7 governs *where*. | FIRE.1 7016A3C7 (3 × `ac2 = wfp`, 3 × `ac3 = wfp`); DIED 70166376 (1 × ac2, 12 × ac3); INIT_OBJ_TBL (8 × ac3); DISTANCE_TO_PLAYER (1 × ac3) | B |
+| R34 | A live value in ac3 that must survive an `LDAFP 3` is preserved across it by `WPSH 3,3` / `WPOP 3,3`. | FIRE.1 7016A3C7; INIT_OBJ_TBL 7016DF68 | B |
+
+**DIED's long stretch is not a special case.**  Through its run of R29a bit
+assignments ac3 holds the record base (R28 already says one `LWLDA` serves the
+whole run), ac1 holds the bit offset and ac0 the bit value — so ac2 is the only
+register left for the frame, and nothing in those ten blocks wants ac2 for
+anything else.  The 22 `wp(ac2, 8)` references are an absence of register
+pressure, not a policy.  FIRE.1 and DIED differ only in how soon ac2 is reused.
+
+**Do not code "the LDAFP target is always ac2."**  It was ac2 in every observed
+instance, but in each of them ac2 was also the only register R7 could have
+picked, so the observation carries no independent information.
+
+**NOT IMPLEMENTED.**  `Regs` still models ac0–ac2 with ac3 pinned; making ac3
+allocatable and threading a "where does the frame live" state touches every
+emit site.  P36's estimate of the SIZE of that change was right even though its
+description of the phenomenon was not.  **FIRE.1 has no match number and none
+should be quoted for it.**
