@@ -312,6 +312,22 @@ class Regs:
                 return r
         return None
 
+    def pick_base(self):
+        """R41: an address or base load allocates from the two-register class
+        {ac2, ac3} -- ac2 preferred, ac3 when ac2 is occupied by a live
+        address.  ac0 and ac1 are value registers and are NOT candidates
+        however cheap they are.
+
+        Witnesses (CODEGEN_RULES §9.3): INIT_OBJ_TBL 7016DF68 loads the SAME
+        argument into ac2 once (ac2 free) and into ac3 later (ac2 live, ac0
+        free at cost 0); FIRE.1 7016A3C7 has three ac3 address loads, each
+        with ac2 live and a value register free.  Taking ac3 displaces the
+        frame, which R33/R24 re-materialise by LDAFP.
+        """
+        if self.cost("ac2") <= self.cost("ac3"):
+            return "ac2"
+        return "ac3"
+
     def pick_fp(self):
         """R33: where an `LDAFP` puts the frame.  R7's cost ordering, but the
         tie-break is ac3 (the frame's default home) rather than the lowest
@@ -1870,14 +1886,21 @@ class Translator:
 
     # -- record fields ---------------------------------------------------------
     def base_reg(self, ptr_name):
-        """R5: a base pointer used for indexing is loaded into ac2 (LWLDA 2)."""
+        """R5 as amended by R41: a base pointer used for indexing is loaded
+        into the base-register class {ac2, ac3} -- ac2 (LWLDA 2) whenever it
+        is available, ac3 when ac2 is holding a live address."""
         s = self.L.static(ptr_name)
         key = ("base", ptr_name)
-        if self.regs.c["ac2"] == ("addr", key):
-            return "ac2"
-        self.emit("ac2 = M32[%s]" % hexc(s["addr"]))
-        self.regs.set("ac2", ("addr", key))
-        return "ac2"
+        for r in ("ac2", "ac3"):
+            if self.regs.c[r] == ("addr", key):
+                return r
+        r = self.regs.pick_base()
+        if self.regs.cost(r) >= COST["live"]:
+            raise Refuse("R41: both base registers hold live addresses at a "
+                         "base load of %s -- not witnessed, no rule" % ptr_name)
+        self.emit("%s = M32[%s]" % (r, hexc(s["addr"])), uses_fp=False)
+        self.regs.set(r, ("addr", key))
+        return r
 
     def field(self, e, want_reg, avoid):
         if e.type == "->" and isinstance(e.name, c_ast.ID):
