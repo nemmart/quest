@@ -305,12 +305,19 @@ class Frame:
         self.temps = {}           # slot -> tag of the temp living there (None = free)
         self.limit = 2 * nlocal_words
 
-    def declare(self, name, width):
+    def declare(self, name, width, count=1):
         """R1/R2: declared locals take even slots 2, 4, 6, ... in declaration
-        order, one wide slot each, 16-bit locals included."""
+        order, one wide slot each, 16-bit locals included.
+
+        R2a (P37/GET_INPUT): an ARRAY local takes as many words as it needs,
+        rounded up to a whole even slot -- a CHAR(n) buffer takes ceil(n/2)
+        words.  GET_INPUT's `char buf[144]` therefore runs from slot 4 to 75
+        and the frame's first temp is slot 76, which is where the book puts
+        it (XLEF 2,[ac3+0x4C])."""
         slot = self.next_local
         self.locals[name] = (slot, width)
-        self.next_local += 2
+        words = (count * width + 15) // 16
+        self.next_local += max(2, words + (words & 1))
         return slot
 
     hw = None                 # high-water mark (first never-allocated word)
@@ -562,7 +569,13 @@ class Translator:
             if isinstance(it, c_ast.Decl):
                 if it.init is not None:
                     refuse(it, "initialised locals are not in the subset")
-                self.frame.declare(it.name, self.width_of(it.type))
+                n = 1
+                td = it.type
+                if isinstance(td, c_ast.ArrayDecl):
+                    if not isinstance(td.dim, c_ast.Constant):
+                        refuse(it, "an array local needs a constant bound")
+                    n = int(td.dim.value, 0)
+                self.frame.declare(it.name, self.width_of(it.type), n)
             else:
                 stmts.append(it)
         self.prepass(stmts)
@@ -619,6 +632,8 @@ class Translator:
         names = tdecl.type.names if isinstance(tdecl.type, c_ast.IdentifierType) else None
         if names is None:
             refuse(tdecl, "struct locals are not in the subset")
+        if names[-1] in ("char",):
+            return 8            # PL/I CHARACTER: a byte, addressed with bp()
         if names[-1] in ("int16_t",):
             return 16
         if names[-1] in ("int32_t", "int"):

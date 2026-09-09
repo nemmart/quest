@@ -248,3 +248,20 @@ follow from the one amended rule.
 - **R29a gets NO second witness here.**  All seven of OWNS' bit operations are
   `WSZB` tests; the routine contains no `WBTO` and no `WBTZ`, so the bit
   ASSIGNMENT rule stays at confidence B on DIED alone.
+
+### 8.7 From GET_INPUT (routine 2, STAGED — no match number)
+
+| # | rule | evidence | conf |
+|---|------|----------|------|
+| R2a | An ARRAY local takes as many words as it needs, rounded up to a whole even slot (a `CHAR(n)` buffer takes `ceil(n/2)` words); R1/R2's one-wide-slot rule is the scalar case. | GET_INPUT: `char buf[144]` at slots 4..75 puts the first temp at 76, which is where the book puts it (`XLEF 2,[ac3+0x4C]`), and 76/78/80/82 exactly fill the `WSAVS 0x0029` frame | B |
+| R38 | A PL/I **BIT literal** is NOT constant-folded.  It is rebuilt at every evaluation by `X.CB @7017E708`: ac2 = the destination's word address (a frame temp), ac0 = a byte pointer to the character form, ac1 = its length, then an embedded undecorated `LCALL [0x7017E708],0`. | GET_INPUT 7016AA41 (`"001"` at 0x7016A9B9, len 3) and 701703A6 (`"1"` at 0x7017024D, len 1); literal bytes read from Disassembled/quest.mem | A — two sites, both game-level |
+| R35 | (third witness) 701703A6's caller builds `'1'B`, reads it back with `XNLDA 0,[ac3+0x16]` and stores it to `wp(ac3, -7)` — a 16-bit slotpatch value return. | 701703AA..AE | A |
+
+**OPEN — the temp allocation order for a multi-dummy call.**  GET_INPUT gives
+slot 76 to argument 6 (the BIT literal) and slot 78 to argument 2 (the buffer's
+byte-pointer dummy), yet emits the slot-78 store FIRST and the X.CB call
+second.  "Left to right" (R18) gets the allocation wrong; "call-materialised
+arguments first" gets the emission wrong.  One instance cannot separate them,
+so the translator REFUSES the BITS() argument rather than carry a fitted rule
+into every other multi-dummy call in the game.  Details and the evidence:
+docs/Project37/GetInputFinding.md.

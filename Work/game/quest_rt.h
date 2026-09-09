@@ -112,6 +112,18 @@ void BIT_PUT(int16_t word, int n, int e);   /* statement: WBTO; test; WBTZ  */
  * LEN() is for.  NOT yet in the translator's subset -- it REFUSES here. */
 int LEN(const void *varying);
 
+/* ---- PL/I BIT literals (P37) ---------------------------------------------
+ * `'001'B` is NOT constant-folded by the 1986 compiler.  It is built at run
+ * time, at every evaluation, by the runtime routine X.CB @7017E708:
+ *     ac2 = the destination's WORD address (a frame temp)
+ *     ac0 = a byte pointer to the CHARACTER form of the literal
+ *     ac1 = its length
+ * followed by an embedded, undecorated `LCALL [0x7017E708],0`.  Both of the
+ * two direct game call sites agree (GET_INPUT 7016AA41 with "001";
+ * 701703A6 with "1").  BITS("001") is that literal in the C subset; the
+ * translator refuses anything but a string literal of '0'/'1'. */
+void *BITS(const char *bits);
+
 /* PL/I string concatenation a || b (CHAR temporaries; the translator's WSTB/WCMV shapes) */
 const char *CAT(const char *a, const char *b);
 
@@ -121,6 +133,9 @@ void WRITE_SCREEN$2(const int32_t *chan, const void *text);
 void WRITE_SCREEN$5(const int32_t *chan, const void *text, int16_t *row, int16_t *col, const int16_t *opts);
 /* ?RANDOM_NUMBER: uniform in lo..hi, seed updated; returns in ac0 (RTConventions). */
 int32_t RANDOM_NUMBER$3(const int32_t *lo, const int32_t *hi, int32_t *seed);
+/* ?READ: channel, buffer, one, count&, options, flags — GET_INPUT's only call */
+void READ$6(const int32_t *chan, void *buf, const int16_t *one, int16_t *count,
+            const int16_t *opts, const void *flags);
 /* ?UNSIGNED_TO_CHAR: writes a varying at the given address (register argument ac2) */
 void UNSIGNED_TO_CHAR$1(void *out);
 
