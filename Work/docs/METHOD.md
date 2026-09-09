@@ -344,6 +344,26 @@ P37's own sampling frame both did. Such a pair is reconstructed as ONE
 function with two entry prologues, compared against the union of the
 ranges.
 
+**Limits of the detector (P39, Sep 2026).** `crossings.py` suppresses
+intra-family flow by design — correct for nested entries, but it means
+it CANNOT see mis-sizing *inside* a `.N@` family. DROP.1 is a live
+instance: its body continues past its addrbook range with DROP.2's
+ON-unit embedded inside it. Widen the R40 caveat accordingly: **ON-unit
+bodies interleave into their parent's address range, so EVERY `.N@`
+statement count is suspect**, not only R40 pairs. And the addrbook's
+nested flag conflates two populations — called procedures (the 23
+uncommented `.N@` entries) and `nocall` ON-units reached through O.ON,
+which have different entry and exit conventions; conflating them is
+what produced P39's double-nesting false positive.
+
+**Marker-based sweeps are blind to expression-level gaps (P39).** A
+clean/blocked sweep keyed on statement-level markers (runtime calls,
+float mnemonics) cannot see a gap in an expression form — an indirect
+DO control variable, a width question in a divide. Two of P39's five
+validators failed on exactly that class. Any "N routines are unblocked"
+figure derived from such a sweep is an upper bound on a weaker basis
+than it appears, and promises nothing about translation.
+
 **The detector, and when to run it.** Control flow crossing an addrbook
 boundary — a routine branching outside its own [entry, next-entry) range
 or branched into from outside — finds both shapes. `compiler/
