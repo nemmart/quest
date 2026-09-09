@@ -35,6 +35,9 @@ leg" line. §3: the deterministic deferred-halt form of the P33-C fix
 
 # Landing history (newest first)
 
+## ★ P38 DONE (Sep 9 2026) — implement-then-match: R33/R34 landed (the frame is an ordinary register content; R8d: it survives a join; FP_COST ≥ 2 with the upper bound unwitnessed), **R41** the {ac2, ac3} base-register class on three witnesses — which derives R34 rather than fitting it — and **R3b VOIDED**: P35's disjoint temp pools was never evidence, replaced by R3b′ (reuse from a later statement on). Two routines abandoned with reasons rather than fitted (FIRE.1: static link + two unmodelled forms; HIT_ANY_CHAR at 8/10: would have required a cross-procedural register model from three sites of one callee). **0 routines finished; total 4 of ~130.** Blocking constructs: static link, twins/arena, floats. DIED's four pre-registrations remain NO WITNESS — the experiment is intact.
+
+
 ## ★ P37 DONE (Sep 9 2026) — the compiler model generalises: 349/349 MATCH across four routines (OWNS 152/152 new), 242/242 folded, pragma count 0. Fourteen rules added, two amended, one falsified and recorded, three prior beliefs voided. Three results outlive it: **R39** hand-assembly evidence is inadmissible and contaminates callees' metadata (LOCK_FILE/UNLOCK_FILE are the program's only such pair); **R40** PL/I multiple ENTRY (two pairs) mis-sizes addrbook statement counts, invalidating figures in P34's census and P37's own sampling frame; and the frame verdict — there is no relocation, the frame pointer is an ordinary R7-managed value — which dissolves the pragma question. METHOD §16 carries R39/R40, the detector (compiler/crossings.py, run at every routine-adding session) and the "consistent is not evidence" lesson. DIED is pre-registered as an experiment for P38.
 
 

@@ -100,7 +100,31 @@ coverage as partial.**
    valid.**  crossings.py moved to compiler/.  Next project's blockers, in
    order: **the static link / uplevel access**, **the twins/arena**, **floats**.
 
-6. **P37 DONE — MERGED** (Sep 9, verified: 349/349 MATCH across four
+6. **P38 DONE — MERGED** (Sep 9, verified: four routines 349/349, 0
+   routines FINISHED, total still 4 of ~130). Delivered: R33/R34
+   implemented (Regs models ac0–ac3; the frame is an ordinary register
+   content; REFRESH_SCREEN's five LDAFPs now come through it) with two
+   corrections the derivation lacked — **R8d** the frame survives a join
+   (a join executes no LDAFP) and **FP_COST ≥ 2**, upper bound
+   unwitnessed with the experiment named. **R41** the base-register
+   class {ac2, ac3}: address/base loads take ac2 then ac3, three
+   witnesses in three routines, and it DERIVES R34 instead of fitting
+   it. **R3b VOIDED** — P35's disjoint temp pools was never evidence
+   (REFRESH_SCREEN's string temps are live wherever a scalar temp is
+   allocated, so the observation could not have come out otherwise);
+   replaced by R3b′, reuse from a LATER statement on, with a witness on
+   each side. FIRE.1 and HIT_ANY_CHAR abandoned with reasons (the
+   latter at 8/10 rather than fit a cross-procedural register model on
+   three sites of one callee — open finding §9.5). DIED untouched: the
+   four pre-registrations stand as NO WITNESS and
+   DIED_PREREGISTERED.md is still valid — the experiment is intact, not
+   spent. **Blocking constructs, in order: static link / uplevel access
+   (the .N@ nested entries run through the addrbook), twins/arena,
+   floats**; plus three single-witness items (COM.# against −1, WADC as
+   −1, the open register question). Throughput is now bounded by the
+   constructs, not the register model.
+
+7. **P37 DONE — MERGED** (Sep 9, verified: 349/349 MATCH across four
    routines, 242/242 folded, selftest PASS, pragma count 0). OWNS
    completed 152/152; GET_INPUT and RETURN_MESSAGE staged with their
    constructs derived but deliberately not fitted; UNLOCK_FILE dropped
