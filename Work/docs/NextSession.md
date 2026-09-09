@@ -79,7 +79,16 @@ coverage as partial.**
    trunc16 intrinsics, no silent narrowing; falsify R10 against DIED's
    13 ac3 sites; no world-coordinate offset — CODEGEN_RULES tail).
    Deliver a Work.tgz (P35's session crashed sending a partial zip).
-6. **P37** (next in this line): finish DIED — (a) the FRAME RELOCATION,
+6. **P37 PROMPT WRITTEN** (docs/Project37/PROMPT.md) — changed approach
+   after P36: prove each construct on SEVERAL routines rather than
+   driving one big one. Ordered set (censused): UNLOCK_FILE 38 (bits +
+   ac2 spelling) → DISTANCE_TO_PLAYER/RETURN_MESSAGE/GET_INPUT 30/30/22
+   (no new constructs — the generality check) → INIT_OBJ_TBL 173 (the
+   smallest claim group, twins in isolation) → FIRE.1@7016A3BD 89 (the
+   smallest frame relocation: 3 ac2=wfp in 89 stmts) → OWNS 152 (second
+   bit witness) → one RANDOM routine (the honesty test) → DIED as
+   capstone. Success = completed routines and promoted rules, not
+   percentage-of-DIED. The two unbuilt constructs carried over — (a) the FRAME RELOCATION,
    which is bigger than P36's prompt described: from 70166376 to
    701663B3 the compiler does `ac2 = wfp` once and keeps a record base
    in ac3 for ~10 blocks, so all 22 frame refs spell `wp(ac2, 8)`;
