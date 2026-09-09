@@ -81,3 +81,25 @@ register (13 statements in DIED), string statements into record fields,
 `words()` (WBLM), `cmp()`, arena twins/claim/release, game→game `call`
 decoration, `&&`/`||` conditions, `if` bodies longer than one statement,
 value-returning game routines.  translate.py refuses all of them by name.
+
+
+## Carried-in for P36 (Sep 8 2026 session, from the PICK_X_Y coordinate discussion)
+
+- **Conversions are explicit intrinsics.** `RANDOM_NUMBER` (and every
+  routine returning in ac0) returns a 32-bit value. A 16-bit destination
+  inserts a CHECKED convert — the CVWN instruction, `cvwn(e)` in the IR
+  (sign-extend low 16, set OVR if it did not fit) — before the
+  `trunc16` store; a 32-bit destination inserts nothing. The C subset
+  makes this explicit (`*x = cvwn(RANDOM_NUMBER$3(...))`): no implicit
+  32→16 narrowing in the source of record; `cvwn`/`sx16`/`trunc16` are
+  header intrinsics mapping 1:1 to the IR ops. (P35 emitted the cvwn
+  from the type-driven implicit cast; P36 makes it visible and refuses
+  the silent form.)
+- **No world-coordinate offset.** The game computes entirely in the raw
+  0x3Bxx coordinate space (X 0x3B53–0x402F, Y 0x3B77–0x3FC0); there is no
+  origin subtraction in any routine. PICK_X_Y's gates
+  (`0x3BF5 < x <= 0x3FAC`, `0x3B77 < y <= 0x3FDE`) are an interior spawn
+  box in that space (the x-gate trims the barrier rim; the y-high bound
+  sits just past the data). The pixel coordinates in the world render
+  were a viewing transform, not part of the program — do not add an
+  offset to the header or the readable layer.

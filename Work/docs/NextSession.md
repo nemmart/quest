@@ -65,10 +65,12 @@ coverage as partial.**
    IR **197/197 statement-for-statement, register-exact** (compiler/
    translate.py + ircmp.py, reproduced on main; C99+C++17 clean); DIED
    refuses at the first bit field — the subset's edge. The DG compiler
-   model is compiler/CODEGEN_RULES.md (25 rules). **P36**: extend the
-   subset to what DIED needs — bit fields, ac3-repurposing, record
-   string fields, arena twins, game→game calls — with the translator
-   and comparator now in hand. Original prompt: docs/Project35/PROMPT.md (translator + four routines + an IR
+   model is compiler/CODEGEN_RULES.md (25 rules). **P36 PROMPT WRITTEN** (docs/Project36/PROMPT.md): extend the subset
+   to DIED — bit fields, ac3-repurposing, record string fields, arena
+   twins, game→game calls; carried-in rulings (explicit cvwn/sx16/
+   trunc16 intrinsics, no silent narrowing; falsify R10 against DIED's
+   13 ac3 sites; no world-coordinate offset — CODEGEN_RULES tail).
+   Deliver a Work.tgz (P35's session crashed sending a partial zip). (translator + four routines + an IR
    comparator with slot/temp/label equivalences; primary target the raw
    book, secondary the register-folded one). Design decisions of record
    (Sep 8): compiler/README.md
