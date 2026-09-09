@@ -1,5 +1,12 @@
 /* QUEST.1@7015C5E1 — argc 0, frame 0x06, WSAVS, nested.
  *
+ * PARTIAL — ABANDONED at 16/86.  See docs/Project40/QUEST1_ABANDONED.md.
+ * NO MATCH NUMBER IS QUOTED FOR IT.  The loop header matches the book
+ * instruction for instruction; the body does not, and the reason is the
+ * emission ORDER of a statement's operands (R7d's general form), which is
+ * recorded as an open finding rather than fitted.  Kept as the witness for
+ * R36', R36a, R21e' and R21c'.
+ *
  * Project 40, routine 1: the EXPRESSION-LEVEL DIAGNOSTIC.  Chosen because it
  * uses no construct at all — no float, no twin, no divide, no syscall, no
  * string, and no call of any kind (0 rt_call, 0 LJSR, 0 game→game call in 70
