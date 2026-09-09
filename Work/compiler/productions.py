@@ -596,7 +596,152 @@ def t_temp_place(tr, slot, r, w):
             else "M16[wp(ac3, %d)] = trunc16(%s)" % (slot, r))
 
 
+def t_temp_place(tr, slot, r, w):
+    """P1.  R3/R3b': a CSE temp store.  A 16-bit temp is truncated on the way
+    in, exactly as an ordinary 16-bit store is."""
+    if w == 16:
+        tr.emit("M16[wp(ac3, %d)] = trunc16(%s)" % (slot, r))
+    else:
+        tr.emit("M32[wp(ac3, %d)] = %s" % (slot, r))
+
+
+def t_assign_local(tr, slot, width, r, key):
+    """S1.  R16: a 32-bit result narrowed to a 16-bit target has already been
+    cvwn'd (the source must say so -- P36 ruling 1); the store itself is
+    trunc16."""
+    if width == 16:
+        tr.emit("M16[wp(ac3, %d)] = trunc16(%s)" % (slot, r))
+    else:
+        tr.emit("M32[wp(ac3, %d)] = %s" % (slot, r))
+    tr.regs.invalidate_var(key)
+    tr.regs.set(r, ("var", key))
+
+
+def t_return_value(tr, r, width):
+    """S10.  R35: a value-returning PL/I procedure stores its result into the
+    SAVED-ac0 IMAGE in its own frame, so WRTN restores it into ac0.  32-bit
+    takes the whole image word at wp(ac3,-8); 16-bit its low half at
+    wp(ac3,-7)."""
+    if width == 32:
+        tr.emit("M32[wp(ac3, -8)] = %s" % r)
+    else:
+        tr.emit("M16[wp(ac3, -7)] = trunc16(%s)" % r)
+    tr.terminate(("ret",))
+
+
+def t_convert(tr, r, op):
+    """E7.  Conversions are EXPLICIT in the source (P36 ruling 1): the
+    translator never inserts one, so this template only spells what the C
+    already asked for."""
+    tr.emit("%s = %s(%s)" % (r, op, r))
+    tr.regs.set(r, ("live", op))
+
+
+def t_abs_builtin(tr, r, neg, join):
+    """E8.  The PL/I ABS builtin: test, then negate in place on one arm
+    (WSGE r,r / WNEG r,r -- UPDATE_SCREENS 7017D658..65C)."""
+    tr.terminate(("goto", [neg.label, join.label], "(%s >=s 0)" % r))
+    tr.cur = neg
+    tr.emit("%s = sub(0, %s)" % (r, r))
+    tr.terminate(("goto", [join.label], "0"))
+    tr.cur = join
+    tr.regs.set(r, ("live", "abs"))
+
+
+def t_bit_stmt(tr, mem, mask, op):
+    """S13 (BIT_SET / BIT_CLR).  R29: WBTO sets, WBTZ clears; the bit is
+    numbered from the MSB.  BIT_PUT is NOT here -- it builds blocks and has no
+    witness (pathcheck excuses it by name)."""
+    if op == "BIT_SET":
+        tr.emit("%s = %s | %s" % (mem, mem, mask))
+    else:
+        tr.emit("%s = %s & ~%s" % (mem, mem, mask))
+
+
+def t_do_loop_xndo(tr, lr, vref, lslot, const_lim, limit_text):
+    """S7.  R21/R22 -- the XNDO tile.  ONE machine instruction expanding to
+    FIVE IR statements: reload the limit into the loop register, increment the
+    control variable in memory, store it back, test against the limit, branch.
+
+    This is the production that made the tile question concrete in the other
+    direction: element_address showed one production covering several AST
+    nodes, XNDO shows one instruction covering several IR statements.  A
+    per-node walk has no node to hang five statements on."""
+    if const_lim:
+        tr.emit("%s = %s" % (lr, limit_text))
+    else:
+        tr.emit("%s = sx16(M16[wp(ac3, %d)])" % (lr, lslot))
+    tr.emit("t1 = nadd(M16[%s], 1)" % vref)
+    tr.emit("M16[%s] = t1" % vref)
+    tr.emit("t2 = (t1 >s %s)" % lr)
+    tr.emit("%s = t1" % lr)
+
+
+def t_nova_wide_source(tr, t, r):
+    """C1/C2.  R14/R14b: the Nova skip forms (MOV# r,r,SZR/SNR and
+    MOV.L# r,r,SNC/SZC) test a 17-bit source built from the register's low
+    half and the carry.  The SAME emission serves condition_cmp's zero and
+    sign tests and condition_bit's materialised 0/-1 -- which is why it is one
+    template used by two productions rather than duplicated text."""
+    tr.emit("%s = ((%s & 0xFFFF) | lsh(c, 16))" % (t, r))
+
+
+def t_element_address(tr, path, **kw):
+    """A1.  The biggest tile, ported last.  SIX paths, and the span is
+    PATH-DEPENDENT: five of the six never evaluate the subscript at all --
+    they reload a finished address or a scaled subscript from a temp -- and
+    only `computed` reduces it.  That is the fact that settled the
+    tiles-vs-per-node question at the gate, and it is why this production
+    declares consumption per path rather than once.
+
+    Two register decisions live here and only ONE is under R41''s class:
+    the INDEXING BASE (always ac2 in the corpus) is the production's result;
+    the WORKING register in which the multiply and base add proceed in place
+    (R5/R6) is an ordinary R7 pick and is NOT a base register.  Conflating
+    them is what tripped the class check on its first run.  Kept separate."""
+    if path in ("hoisted-temp", "elem-temp"):
+        # R36/D2 and R10: the whole reference is already in a frame temp.
+        tr.emit("ac2 = M32[wp(ac3, %d)]" % kw["slot"])
+    elif path == "already-in-ac2":
+        pass                                    # ZERO instructions
+    elif path == "R31-temp-to-base":
+        # the base is already in ac2 from a bit reference's R28 load, so the
+        # TEMP is added to the BASE rather than the other way round
+        tr.emit("ac2 = add(ac2, M32[wp(ac3, %d)])" % kw["slot"])       # XWADD
+    elif path == "scaled-temp":
+        tr.emit("ac2 = M32[wp(ac3, %d)]" % kw["slot"])                 # XWLDA 2
+    elif path == "computed":
+        r = kw["r"]
+        tr.emit("%s = add(%s, M32[%s])" % (r, r, tr.hexc(kw["base_addr"])))
+    else:
+        raise SpanViolation("element_address: unknown path %r" % path)
+
+
+def t_element_base_add(tr, r, base_addr):
+    """A1 (scaled-temp path): LWADD -- the base added to the reloaded scaled
+    subscript."""
+    tr.emit("%s = add(%s, M32[%s])" % (r, r, tr.hexc(base_addr)))
+
+
+def t_element_move_to_base(tr, r):
+    """A1 (computed path): R5's `WMOV r,2` -- the finished address moved from
+    the working register into the addressing class."""
+    tr.emit("ac2 = %s" % r)
+
+
 TEMPLATES = {
+    "element_address": t_element_address,
+    "element_base_add": t_element_base_add,
+    "element_move_to_base": t_element_move_to_base,
+    "condition_cmp": t_nova_wide_source,
+    "condition_bit": t_nova_wide_source,
+    "do_loop": t_do_loop_xndo,
+    "temp_place": t_temp_place,
+    "assign_local": t_assign_local,
+    "return_value": t_return_value,
+    "convert": t_convert,
+    "abs_builtin": t_abs_builtin,
+    "bit_stmt": t_bit_stmt,
     "scalar_ref": t_scalar_ref,
     "field_direct": t_field_direct,
     "link_load": t_link_load,
@@ -610,6 +755,8 @@ TEMPLATES = {
 }
 
 for _n, _t in TEMPLATES.items():
+    if _n not in TABLE:          # helper templates, not productions
+        continue
     TABLE[_n].ported = True
     TABLE[_n].template = _t
 

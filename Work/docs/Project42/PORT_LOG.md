@@ -85,3 +85,73 @@ phase structure, and housing it would convert that finding into a modelling
 detail. Every orphan is a candidate transform-phase decision, and this list is
 what a phase split would be built from.
 
+
+---
+
+## Stage 3 progress — 20 of 37 ported
+
+Every port verified by `witness.sh`: eight routines byte-identical to the
+pre-port snapshot, 349/349 + 242/242 on the four that must match, and 0
+unaccounted paths.
+
+**None of the twenty needed an `if` on which routine it is in.**
+
+### Ported
+- `abs_builtin`
+- `assign_local`
+- `binop_const_addi`
+- `binop_const_inc`
+- `binop_const_scale`
+- `bit_base`
+- `bit_stmt`
+- `condition_bit`
+- `condition_cmp`
+- `const_materialise`
+- `convert`
+- `do_loop`
+- `element_address`
+- `field_direct`
+- `goto`
+- `link_load`
+- `return_value`
+- `return_void`
+- `scalar_ref`
+- `temp_place`
+
+### Still on the old path
+
+Three because they have **no witness** and must not be ported on a green bed
+run (`assign_uplevel`, `uplevel_arg_ref`, `binop_reg_mem`).
+
+The rest for a different and more interesting reason: **they have no emission
+of their own.** `field_element`, `marker_ref`, `assign_rt` and `bit_value`
+delegate entirely; `address_of` and `condition_cmp`'s non-Nova arms *compose
+text* consumed by a caller rather than emitting. A production with no template
+is a real question about whether it is a production at all, and it goes to the
+rule map rather than being forced into a template that emits nothing.
+
+`if_oneword`, `if_multi`, `rt_call_stmt`, `assign_indexed` and
+`prologue_epilogue` build blocks and frame state rather than instruction text;
+they are portable but the template boundary is not obvious, and Stage 4 should
+say where it falls rather than my guessing now.
+
+### Two ports worth noting
+
+`do_loop` is the XNDO tile: **one machine instruction, five IR statements.**
+It is the tile question in the opposite direction from `element_address` —
+there one production covers several AST nodes; here one instruction covers
+several IR statements. A per-node walk has no node to hang five statements on.
+
+`condition_cmp` and `condition_bit` share ONE template
+(`t_nova_wide_source`): R14/R14b's Nova skip forms build the same 17-bit
+source, and the same emission serving two productions is the shape the table
+should have — not duplicated text.
+
+### A regression the harness caught mid-port
+
+The `do_loop` port passed `lslot` on the constant-limit path, where it is
+never bound. `witness.sh` failed two routines and dropped the bed to 136/349
+immediately. Recorded because it is the case for the harness: a byte-identical
+check across eight routines caught in one run what a green bed run on four
+would have caught too, but *before* it could reach a commit.
+

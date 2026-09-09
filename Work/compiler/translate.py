@@ -1077,16 +1077,13 @@ class Translator:
                     refuse(st, "%s is not marked slotpatch in the addrbook, so it "
                                "does not return a value" % self.name)
                 v = self.value(st.expr, want_reg=True)
-                if self.ret_width == 32:
-                    self.emit("M32[wp(ac3, -8)] = %s" % v.reg)
-                else:
+                if self.ret_width != 32:
                     self.narrow_check(st, v)
-                    self.emit("M16[wp(ac3, -7)] = trunc16(%s)" % v.reg)
             if st.expr is None:
                 PROD.TEMPLATES["return_void"](self)
                 self.fired("return_void", st, "return")
             else:
-                self.terminate(("ret",))
+                PROD.TEMPLATES["return_value"](self, v.reg, self.ret_width)
                 self.fired("return_value", st, "return <value>",
                            consumes=(st.expr,))
             self.start(self.new_block())
@@ -1364,14 +1361,9 @@ class Translator:
             self.terminate(("goto", [body_b.label], "0"))
         # increment block (continue target): XNDO with the limit in the loop register
         self.cur = incr_b
-        if const_lim:
-            self.emit("%s = %s" % (lr, hexc(int(cond.right.value, 0))))
-        else:
-            self.emit("%s = sx16(M16[wp(ac3, %d)])" % (lr, lslot))
-        self.emit("t1 = nadd(M16[%s], 1)" % vref)
-        self.emit("M16[%s] = t1" % vref)
-        self.emit("t2 = (t1 >s %s)" % lr)
-        self.emit("%s = t1" % lr)
+        PROD.TEMPLATES["do_loop"](
+            self, lr, vref, None if const_lim else lslot, const_lim,
+            hexc(int(cond.right.value, 0)) if const_lim else None)
         # R21/R22: the XNDO tile -- ONE instruction, five IR statements.  The
         # loop register comes from R21c''s class {ac0, ac1}; the limit's
         # placement is a slot choice when it is not a constant.
@@ -1710,7 +1702,7 @@ class Translator:
             # 70166054..57: WSUB 0,0; WSZB 2,1; WADC 0,0; MOV.L# 0,0,SNC.
             vr = self.bit_value_reg(cond)
             t = self.tplace()
-            self.emit("%s = ((%s & 0xFFFF) | lsh(c, 16))" % (t, vr))
+            PROD.TEMPLATES["condition_bit"](self, t, vr)
             return "((lsh(%s, -15) & 1) %s 1)" % (t, "!=" if negate else "==")
         if not isinstance(cond, c_ast.BinaryOp) or cond.op not in self.NEG:
             refuse(cond, "condition must be a comparison")
@@ -1724,12 +1716,12 @@ class Translator:
                 # R14: a 16-bit value tested against zero uses the Nova
                 # MOV# r,r,SZR/SNR form (t = 17-bit source; test the low 16)
                 t = self.tplace()
-                self.emit("%s = ((%s & 0xFFFF) | lsh(c, 16))" % (t, lhs.reg))
+                PROD.TEMPLATES["condition_cmp"](self, t, lhs.reg)
                 return "((%s & 0xFFFF) %s 0)" % (t, op)
             if k == 0 and lhs.width == 16 and op in ("<", ">="):
                 # R14b: a 16-bit sign test is MOV.L# r,r,SNC/SZC (the sign bit)
                 t = self.tplace()
-                self.emit("%s = ((%s & 0xFFFF) | lsh(c, 16))" % (t, lhs.reg))
+                PROD.TEMPLATES["condition_cmp"](self, t, lhs.reg)
                 return "((lsh(%s, -15) & 1) %s 1)" % (t, "==" if op == "<" else "!=")
             # R15: wide skip with immediate, constant spelled hexc
             return "(%s %s %s)" % (lhs.reg, self.SKIP[op], hexc(k))
@@ -1800,11 +1792,7 @@ class Translator:
             r = self.to_reg(v)
             if width == 16:
                 self.narrow_check(lv, v)
-                self.emit("M16[wp(ac3, %d)] = trunc16(%s)" % (slot, r))
-            else:
-                self.emit("M32[wp(ac3, %d)] = %s" % (slot, r))
-            self.regs.invalidate_var(("local", lv.name))
-            self.regs.set(r, ("var", ("local", lv.name)))
+            PROD.TEMPLATES["assign_local"](self, slot, width, r, ("local", lv.name))
             return
         if isinstance(lv, c_ast.UnaryOp) and lv.op == "*" and isinstance(lv.expr, c_ast.ID) and lv.expr.name in self.args:
             n, width, const = self.args[lv.expr.name]
@@ -2180,13 +2168,9 @@ class Translator:
         self.flush_scaled_pending()
         mem = self.BIT_MEM % (b, off)
         mask = "lsh(0x8000, 0 - (%s & 15))" % off
-        if op == "BIT_SET":
-            self.emit("%s = %s | %s" % (mem, mem, mask))
-            self.fired("bit_stmt", call, "BIT_SET", consumes=(args[0], args[1]), path="BIT_SET")
-            return
-        if op == "BIT_CLR":
-            self.emit("%s = %s & ~%s" % (mem, mem, mask))
-            self.fired("bit_stmt", call, "BIT_CLR", consumes=(args[0], args[1]), path="BIT_CLR")
+        if op in ("BIT_SET", "BIT_CLR"):
+            PROD.TEMPLATES["bit_stmt"](self, mem, mask, op)
+            self.fired("bit_stmt", call, op, consumes=(args[0], args[1]), path=op)
             return
         # BIT_PUT(w, n, e): WBTO, then the value's sign test, then WBTZ
         # (70166376..82: set the bit, materialise e, clear it again when e is
@@ -2348,12 +2332,7 @@ class Translator:
             v = self.value(e.args.exprs[0], want_reg=True, avoid=avoid)
             r = v.reg
             neg, join = self.new_block(), self.new_block()
-            self.terminate(("goto", [neg.label, join.label], "(%s >=s 0)" % r))
-            self.cur = neg
-            self.emit("%s = sub(0, %s)" % (r, r))
-            self.terminate(("goto", [join.label], "0"))
-            self.cur = join
-            self.regs.set(r, ("live", "abs"))
+            PROD.TEMPLATES["abs_builtin"](self, r, neg, join)
             self.fired("abs_builtin", e, "ABS()", choices=[("reg", r)])
             return Val("reg", reg=r, width=32)
         if isinstance(e, c_ast.FuncCall) and e.name.name in ("cvwn", "sx16", "trunc16"):
@@ -2373,8 +2352,7 @@ class Translator:
                 self.emit("%s = cvwn(%s)" % (v.reg, v.reg))
                 self.regs.set(v.reg, ("live", "cvwn"))
             else:
-                self.emit("%s = %s(%s)" % (v.reg, op, v.reg))
-                self.regs.set(v.reg, ("live", op))
+                PROD.TEMPLATES["convert"](self, v.reg, op)
             self.fired("convert", e, "%s()" % op)
             return Val("reg", reg=v.reg, width=16)
         if isinstance(e, c_ast.FuncCall) and e.name.name == "BIT":
@@ -2590,7 +2568,7 @@ class Translator:
         if ekey in self.cse and self.cse[ekey].get("hoisted") \
                 and self.cse[ekey].get("slot") is not None:
             slot = self.cse[ekey]["slot"]
-            self.emit("ac2 = M32[wp(ac3, %d)]" % slot)
+            PROD.TEMPLATES["element_address"](self, "hoisted-temp", slot=slot)
             self.regs.set("ac2", ("addr", ekey))
             # PATH 1 (R36/D2, hoisted): the subscript is NEVER evaluated.
             self.fired("element_address", sub, "%s(%s) hoisted-temp" % (tname, vname),
@@ -2600,7 +2578,7 @@ class Translator:
         if ekey in self.cse and self.cse[ekey].get("slot") is not None:
             slot = self.cse[ekey]["slot"]
             if pos >= self.cse[ekey]["pos"] + 2:
-                self.emit("ac2 = M32[wp(ac3, %d)]" % slot)
+                PROD.TEMPLATES["element_address"](self, "elem-temp", slot=slot)
                 self.regs.set("ac2", ("addr", ekey))
                 self.frame.free_temp(slot)
                 self._freed.add(slot)
@@ -2631,7 +2609,7 @@ class Translator:
             self.fired("element_address", sub, "%s(%s) R31 temp-to-base" % (tname, vname),
                        consumes=(sub,), choices=[("reg", "ac2"), ("slot", slot),
                                                  ("order", "temp_to_base")], path="R31-temp-to-base")
-            self.emit("ac2 = add(ac2, M32[wp(ac3, %d)])" % slot)         # XWADD
+            PROD.TEMPLATES["element_address"](self, "R31-temp-to-base", slot=slot)      # XWADD
             self.regs.set("ac2", ("addr", ekey))
             self.elem_sym[ekey] = s_addv(s_load(s_const(base_addr), 32),
                                          self.subscript_sym(vname, t["stride"]))
@@ -2648,13 +2626,13 @@ class Translator:
             self.fired("element_address", sub, "%s(%s) scaled-temp" % (tname, vname),
                        consumes=(sub,), choices=[("reg", "ac2"), ("slot", slot),
                                                  ("order", "base_to_temp")], path="scaled-temp")
-            self.emit("ac2 = M32[wp(ac3, %d)]" % slot)          # XWLDA 2
+            PROD.TEMPLATES["element_address"](self, "scaled-temp", slot=slot)           # XWLDA 2
             self.regs.set("ac2", ("live", skey))
             if self.last_use_of(skey) <= i:
                 self.frame.free_temp(slot)                      # R3: dies at its last use
                 self._freed.add(slot)
                 self.cse[skey]["slot"] = None
-            self.emit("ac2 = add(ac2, M32[%s])" % hexc(base_addr))   # LWADD
+            PROD.TEMPLATES["element_base_add"](self, "ac2", base_addr)  # LWADD
             self.regs.set("ac2", ("addr", ekey))
             self.elem_sym[ekey] = s_addv(self.subscript_sym(vname, t["stride"]),
                                          s_load(s_const(base_addr), 32))
@@ -2679,7 +2657,7 @@ class Translator:
             slot = self.frame.alloc_temp(skey)
             self.emit("M32[wp(ac3, %d)] = %s" % (slot, r))
             self.cse[skey] = dict(slot=slot, stmt=i)
-        self.emit("%s = add(%s, M32[%s])" % (r, r, hexc(base_addr)))
+        PROD.TEMPLATES["element_address"](self, "computed", r=r, base_addr=base_addr)
         self.regs.set(r, ("addr", ekey))
         self.elem_sym[ekey] = s_addv(self.subscript_sym(vname, t["stride"]),
                                      s_load(s_const(base_addr), 32))
@@ -2706,7 +2684,7 @@ class Translator:
         self.fired("element_address", None, "%s(%s) computed" % (tname, vname),
                    choices=[("reg", "ac2"), ("order", "in_place_then_move")], path="computed")
         if r != "ac2":
-            self.emit("ac2 = %s" % r)                             # WMOV r,2  (R5)
+            PROD.TEMPLATES["element_move_to_base"](self, r)    # WMOV r,2  (R5)
             self.regs.set("ac2", ("dup", r))
             self.regs.c[r] = ("live", ekey)
         # R10: save the element address for a later multi-reference statement
@@ -2945,10 +2923,7 @@ class Translator:
     def store_temp(self, slot, r, w):
         self.fired("temp_place", None, "temp store slot %d" % slot,
                    choices=[("slot", slot)])
-        if w == 16:
-            self.emit("M16[wp(ac3, %d)] = trunc16(%s)" % (slot, r))
-        else:
-            self.emit("M32[wp(ac3, %d)] = %s" % (slot, r))
+        PROD.TEMPLATES["temp_place"](self, slot, r, w)
 
     # -- strings --------------------------------------------------------------------
     def literal(self, node):
