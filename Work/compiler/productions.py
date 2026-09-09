@@ -502,7 +502,47 @@ def t_return_void(tr):
     tr.terminate(("ret",))
 
 
+def t_scalar_ref(tr, r, text, key):
+    """A9.  A local / static / argument read into a register (R7/R8)."""
+    tr.emit("%s = %s" % (r, text))
+    tr.regs.set(r, ("var", key))
+
+
+def t_field_direct(tr, r, addr, key):
+    """A2.  The indexing base load.  R41' governs `r`: the legal set is
+    {ac2, ac3}, and the ledger rejects anything else against the production's
+    declared class."""
+    tr.emit("%s = M32[%s]" % (r, tr.hexc(addr)), uses_fp=False)
+    tr.regs.set(r, ("addr", key))
+
+
+def t_link_load(tr, r, fp, key):
+    """A6.  R42/R44: the static link, saved by WSAVS at wp(fp, -6).  Under
+    R41' this is an ordinary member of the addressing class."""
+    tr.emit("%s = M32[wp(%s, -6)]" % (r, fp), uses_fp=False)
+    tr.regs.set(r, ("addr", key))
+
+
+def t_bit_base(tr, r, addr):
+    """A5.  R28, and the R41' NEGATIVE case: the SAME physical operation as
+    t_field_direct -- loading a record base -- but the legal set is all four
+    registers, because this production is for a bit reference rather than for
+    indexing.  The two templates are deliberately separate: merging them is
+    what would force a fifth class."""
+    tr.emit("%s = M32[%s]" % (r, tr.hexc(addr)))
+
+
+def t_temp_place(tr, slot, r, w):
+    """P1.  R3/R3b': a CSE temp store."""
+    tr.emit("M%d[wp(ac3, %d)] = %s" % (w, slot, r) if w == 32
+            else "M16[wp(ac3, %d)] = trunc16(%s)" % (slot, r))
+
+
 TEMPLATES = {
+    "scalar_ref": t_scalar_ref,
+    "field_direct": t_field_direct,
+    "link_load": t_link_load,
+    "bit_base": t_bit_base,
     "const_materialise": t_const_materialise,
     "binop_const_inc": t_binop_const_inc,
     "binop_const_addi": t_binop_const_addi,

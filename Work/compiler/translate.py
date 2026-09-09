@@ -2120,6 +2120,15 @@ class Translator:
                 and any(j > i for j in self.uses.get(skey, [])):
             self.scaled_pending = (r, skey, i)
         b = self.bit_base_reg(base_addr, bkey, avoid=(off,))
+        # PATH 2: the first computation.  Like element_address, this path
+        # REDUCES the subscript rather than consuming it -- the span is
+        # path-dependent here too.  (This path was uninstrumented in the first
+        # pass and reported zero firings, which is indistinguishable from
+        # "the bed does not exercise it": the same defect as if_multi.)
+        self.fired("bit_address", None, "BIT %s(%s) computed" % (tname, vname),
+                   choices=[("reg", off)]
+                           + ([("slot", self.cse[bkey]["slot"])]
+                              if self.cse.get(bkey, {}).get("slot") is not None else []))
         return b, off
 
     scaled_pending = None
@@ -2134,7 +2143,7 @@ class Translator:
         r = self.regs.find(("addr", key)) or self.regs.find(("live", key))
         if r is None or r in avoid:
             r = self.regs.pick(avoid=avoid)
-            self.emit("%s = M32[%s]" % (r, hexc(base_addr)))            # LWLDA
+            PROD.TEMPLATES["bit_base"](self, r, base_addr)              # LWLDA
             # R28, and the R41' NEGATIVE case: this is the same physical
             # operation as field_direct's base load -- loading a record base --
             # but its legal set is all four registers, because the production
@@ -2402,8 +2411,7 @@ class Translator:
         if not want_reg:
             return Val("mem", text=text, width=width)
         r = self.regs.pick(avoid)
-        self.emit("%s = %s" % (r, text))
-        self.regs.set(r, ("var", key))
+        PROD.TEMPLATES["scalar_ref"](self, r, text, key)
         self.fired("scalar_ref", None, "load %s" % (name or key[0]),
                    choices=[("reg", r)])
         if name is not None:
@@ -2424,8 +2432,7 @@ class Translator:
         if self.regs.cost(r) >= COST["live"]:
             raise Refuse("R41′: both base registers hold live addresses at a "
                          "base load of %s -- not witnessed, no rule" % ptr_name)
-        self.emit("%s = M32[%s]" % (r, hexc(s["addr"])), uses_fp=False)
-        self.regs.set(r, ("addr", key))
+        PROD.TEMPLATES["field_direct"](self, r, s["addr"], key)
         return r
 
     def link_reg(self):
@@ -2455,9 +2462,7 @@ class Translator:
         # the link lives at wp(fp, -6); resolve the frame's register EXPLICITLY
         # (uses_fp=False) because the destination may itself be ac3, and then a
         # blanket 'ac3' -> frame-register rewrite would corrupt the source.
-        f = self.fpr()
-        self.emit("%s = M32[wp(%s, -6)]" % (r, f), uses_fp=False)
-        self.regs.set(r, ("addr", key))
+        PROD.TEMPLATES["link_load"](self, r, self.fpr(), key)
         # R41' governs the static link as well as the indexing base
         self.fired("link_load", None, "static link", choices=[("reg", r)])
         return r
