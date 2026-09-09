@@ -83,6 +83,48 @@ decoration, `&&`/`||` conditions, `if` bodies longer than one statement,
 value-returning game routines.  translate.py refuses all of them by name.
 
 
+## 7. Project 36 additions (Sep 9 2026, branch p36-died)
+
+Confidence as above.  Every rule here was motivated by DIED @7016603D and
+checked against the three P35 routines (which stay 197/197).
+
+### 7.1 Conversions (ruling 1, now enforced)
+
+| # | rule | evidence | conf |
+|---|------|----------|------|
+| R16b | A 32-bit value reaching a 16-bit destination is a translator REFUSAL unless the source wrote `cvwn(e)`.  `cvwn` is effectful (ovr on overflow); `sx16`/`trunc16` are pure.  The value `cvwn()` yields is 16-bit, so the store's type-driven narrow does not fire a second time. | PICK_X_Y 70176241 (`cvwn; M16[...] = trunc16`) — unchanged output, now explicit in the source | A |
+
+### 7.2 Bit references (DIED: 25 bit operations, 5 WSZB / 5 WBTO / 15 WBTZ)
+
+The bit address is `16 * <scaled subscript> + (16*K + n)` in a register;
+the record base goes SEPARATELY into the instruction's indirect operand
+(WSZB/WBTO/WBTZ take acS = base, acD = bit offset — EagleCompute.cpp
+:261/:272/:283).  `n` is numbered from the MSB.  Fields found in DIED:
+`PLAYER.fm591` bits 7,8,9,12,13,14,15; `PLAYER.fm590` bits 1..6,8,11;
+`PLAYER.fm63` bits 0,1,2,5.
+
+| # | rule | evidence | conf |
+|---|------|----------|------|
+| R26 | The bit offset is produced by a `*16` multiply after the stride multiply; the displacement `16*K + n` is folded into ONE WNADI. | 70166046 `NLDAI 686,1; WMUL 1,0; NLDAI 16,2; WMUL 0,2; WNADI 1,0xDB24` (= word −590, bit 4) | A |
+| R26a | The `*16` multiply's DESTINATION is the scaled value's register (R11, multiply in place) unless the scaled value is still needed after the multiply — then it is the CONSTANT's register and the IR reads `mul(16, scaled)`. | 70166283 `WMUL 2,0` (dest ac0; P*686 dead) vs 70166046 `WMUL 0,2` (dest ac2; P*686 saved to slot 10 afterwards) and 70166296 `WMUL 0,2` (dest ac2; P*686 needed for the element address at the block's end, `ac1 = add(ac1, ac0)`) | B |
+| R26b | When `16*scaled` does NOT recur and the multiply landed in the constant's register, the product is copied to an R7 pick (WMOV) before the displacement add. | 70166046 `WMOV 2,1` — absent at 70166296, where the value is saved to a temp instead | C — two instances; the alternative reading is "the WMOV frees ac2 for the base (R5)", which fits 70166046 but not 70166283 |
+| R27 | `16*scaled` is a CSE temp of its OWN, distinct from the R9 scaled temp: one is `i*stride`, the other `16*i*stride`, and a routine can save both (slot 10 vs slot 8 in DIED). It is saved when a later statement takes another bit of the same element, and each later bit reloads it and adds its own displacement. | 70166296 `XWSTA 2,[ac3+8]` then nine `XWLDA 2,[ac3+8]; WNADI 2,<disp>; WBTZ 1,2` pairs at 701662A2.. | A |
+| R28 | The record base of a bit reference is loaded by the R7 pick AVOIDING the offset register, and stays PROTECTED while the `16*scaled` temp is alive — one `LWLDA` serves the whole run. | 70166283 `LWLDA 1` (offset ac0), 70166296 `LWLDA 1` (offset ac2, ac0 live) serving nine WBTZs, 70166046 `LWLDA 2` (offset moved to ac1 first) | B |
+| R29 | A bit reference is ALWAYS materialised to 0 / −1 — `WSUB v,v`; the WSZB skip; `WADC v,v` — and a condition on it is then the R14b sign test.  The compiler does not fold the skip into the branch.  PL/I `^` (C `!`) is `WCOM` on the materialised value. | 70166054..57 `WSUB 0,0; WSZB 2,1; WADC 0,0; MOV.L# 0,0,SNC`; 70166376 `ac2 = ~ac2` | A |
+| R29a | A bit ASSIGNMENT is set-then-undo: WBTO the destination unconditionally, then the source value's sign test, then WBTZ on the zero arm. | 70166376..82 (`M16[..] \| lsh(..)`, `MOV.L#`, `M16[..] & ~lsh(..)`) | B |
+
+### 7.3 Statement shapes
+
+| # | rule | evidence | conf |
+|---|------|----------|------|
+| R13c | `if (c) goto L` normally lowers as R13 (skip-if-NOT-c over the one-word `WBR L`, R19 stubbing L when it is far).  When L is beyond WBR range AND the routine's end — where the R19 stub would sit — is ALSO beyond WBR range from the branch, no one-word form exists, so the compiler INVERTS: skip-if-c over `WBR cont`, with the XJMP to L following. | DIED 70166057 `MOV.L# 0,0,SNC; WBR 3 (0x7016605B); XJMP (0x701661AE)` — target +0x154, routine end +0x360.  FALSIFIED FIRST DRAFT: the trigger "target out of range" alone broke PICK_X_Y's three retries (64→68 statements, 13 DIFF), whose stub IS in range; the comparator caught it (ruling R3 working as intended). | B |
+
+### 7.4 Game→game calls
+
+| # | rule | evidence | conf |
+|---|------|----------|------|
+| R30 | A game→game call with argc ≥ 1 stores its arguments to STATIC book-mode slots from the addrbook's `alloc`; argument n lives at `wfp − 10 − 2n`, so the slots run downward from argument 1 and the stores appear in ASCENDING address order — right to left in the source, which is R18's push order.  The call is `call <tgt> args=<n> marker=<alloc + 2*argc> site=<pc> ret=<pc+4>`.  An argc-0 call is not a pushmap site and stays an embedded `LCALL [<tgt>],0`. | 70166108..0C (UPDATE_SCREENS: `M32[0x74009B5C] = wp(ac3,6)` = arg 3, `…5E` = arg 2, `…60` = arg 1, marker 74009B62); 70166216 / 70166327 the two undecorated LCALLs; 701661AB the LJSR audit line | A |
+
 ## Carried-in for P36 (Sep 8 2026 session, from the PICK_X_Y coordinate discussion)
 
 - **Conversions are explicit intrinsics.** `RANDOM_NUMBER` (and every

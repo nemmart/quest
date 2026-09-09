@@ -32,6 +32,9 @@ sys.path.insert(0, HERE)
 import readable as R  # noqa: E402  (addrbook loader)
 
 
+BIT_FNS = ("BIT", "BIT_SET", "BIT_CLR", "BIT_PUT")
+
+
 class Refuse(Exception):
     pass
 
@@ -283,6 +286,10 @@ class Translator:
         if self.entry is None:
             raise Refuse("routine %s not in the addrbook" % routine_name)
         self.name = routine_name
+        self.addrbook_by_name = {}
+        for pc, e in self.entries.items():
+            d = dict(e); d["pc"] = pc
+            self.addrbook_by_name.setdefault(e["name"], d)
         self.blocks = []
         self.cur = None
         self.labels = {}       # C label -> Block
@@ -328,6 +335,8 @@ class Translator:
             if t and t[0] == "goto" and label in t[1]:
                 return True
             if t and t[0] == "rt_call" and t[1].endswith("site=" + label):
+                return True
+            if t and t[0] in ("call", "instr") and t[2] == label:
                 return True
             if t and t[0] == "fall" and t[1] == label:
                 return True
@@ -479,13 +488,37 @@ class Translator:
     def prepass(self, stmts):
         self.stmt_no = {}
         self.number_stmts(stmts)
+        bitwords = set()
+        def mark(n):
+            if isinstance(n, c_ast.FuncCall) and getattr(n.name, "name", "") in BIT_FNS:
+                w = n.args.exprs[0]
+                if isinstance(w, c_ast.StructRef) and isinstance(w.name, c_ast.ArrayRef):
+                    bitwords.add(id(w.name))
+            for _, ch in n.children():
+                mark(ch)
+        for st in stmts:
+            mark(st)
         def walk(n, i):
+            # a BIT word's element reference feeds the BIT-BASE key, not the
+            # R9 scaled key: the compiler consumes i*stride into 16*i*stride
+            # and the two temps are different values (70166046 saves P*686 to
+            # slot 10; 70166296 saves 16*P*686 to slot 8).
+            if isinstance(n, c_ast.ArrayRef) and isinstance(n.name, c_ast.ID) and id(n) in bitwords:
+                for _, ch in n.children():
+                    walk(ch, i)
+                return
             if isinstance(n, c_ast.ArrayRef) and isinstance(n.name, c_ast.ID):
                 sub = self.subscript_key(n.subscript)
                 if sub is not None:
                     self.uses.setdefault(("scaled", n.name.name, sub), []).append(i)
                     d = self.elem_refs.setdefault(i, {})
                     d[(n.name.name, sub)] = d.get((n.name.name, sub), 0) + 1
+            if isinstance(n, c_ast.FuncCall) and getattr(n.name, "name", "") in BIT_FNS:
+                w = n.args.exprs[0]
+                if isinstance(w, c_ast.StructRef) and isinstance(w.name, c_ast.ArrayRef):
+                    sub = self.subscript_key(w.name.subscript)
+                    if sub is not None:
+                        self.uses.setdefault(("bitbase", w.name.name.name, sub), []).append(i)
             if isinstance(n, c_ast.ID):
                 self.uses.setdefault(("id", n.name), []).append(i)
                 d = self.var_refs.setdefault(i, {})
@@ -561,6 +594,8 @@ class Translator:
         if isinstance(st, c_ast.Assignment):
             return self.assign(st)
         if isinstance(st, c_ast.FuncCall):
+            if st.name.name in ("BIT_SET", "BIT_CLR", "BIT_PUT"):
+                return self.bit_stmt(st)
             return self.call_stmt(st)
         refuse(st, "statement kind not in the subset")
 
@@ -580,9 +615,16 @@ class Translator:
         self.begin_stmt(then) if id(then) in self.stmt_no else None
         # the test, negated (skip when NOT c)
         test = self.condition(st.cond, negate=True)
+        pos_test = self.NEGTEST.get(test)
+        head = self.cur
         then_b = self.new_block()
         cont_b = self.new_block()
         self.terminate(("goto", [then_b.label, cont_b.label], test))
+        # R13c: record the diamond so the R19 pass can INVERT it if the
+        # one-word S turns out to need an XJMP (70166057: MOV.L# skips over
+        # `WBR cont` and falls into `XJMP reincarnate`).
+        if isinstance(then, c_ast.Goto) and pos_test is not None:
+            self.if_diamonds.append((head, then_b, cont_b, pos_test))
         saved = dict(self.regs.c), dict(self.regs.stamp)
         self.cur = then_b
         self.stmt(then)          # terminates with goto/ret and starts a stray block
@@ -744,11 +786,37 @@ class Translator:
     NEG = {"==": "!=", "!=": "==", "<": ">=", ">=": "<", ">": "<=", "<=": ">"}
     SKIP = {"==": "==", "!=": "!=", "<": "<s", "<=": "<=s", ">": ">s", ">=": ">=s"}
 
+    if_diamonds = []
+    NEGTEST = {}
+
     def condition(self, cond, negate):
+        t = self._condition(cond, negate)
+        if negate:
+            self.NEGTEST[t] = self._flip(t)
+        return t
+
+    @staticmethod
+    def _flip(t):
+        """The textual complement of a lowered test (the skip's other sense)."""
+        for a, b in ((" == ", " != "), (" != ", " == "), (" >s ", " <=s "),
+                     (" <=s ", " >s "), (" >u ", " <=u "), (" <=u ", " >u "),
+                     (" <s ", " >=s "), (" >=s ", " <s ")):
+            if t.count(a) == 1:
+                return t.replace(a, b)
+        return None
+
+    def _condition(self, cond, negate):
         if isinstance(cond, c_ast.UnaryOp) and cond.op == "!":
             return self.condition(cond.expr, not negate)
         if isinstance(cond, c_ast.FuncCall) and cond.name.name == "BIT":
-            refuse(cond, "BIT(): PL/I bit-field references (bit address 16*word + n, the WSZB/WBTZ tests) are not in the subset")
+            # R29: a bit reference is ALWAYS materialised to 0 / -1 (WSUB v,v;
+            # WSZB; WADC v,v) and the condition is then the R14b sign test on
+            # it -- the compiler does not fold the skip into the branch.
+            # 70166054..57: WSUB 0,0; WSZB 2,1; WADC 0,0; MOV.L# 0,0,SNC.
+            vr = self.bit_value_reg(cond)
+            t = self.tplace()
+            self.emit("%s = ((%s & 0xFFFF) | lsh(c, 16))" % (t, vr))
+            return "((lsh(%s, -15) & 1) %s 1)" % (t, "!=" if negate else "==")
         if not isinstance(cond, c_ast.BinaryOp) or cond.op not in self.NEG:
             refuse(cond, "condition must be a comparison")
         op = self.NEG[cond.op] if negate else cond.op
@@ -895,6 +963,210 @@ class Translator:
             self.narrow_check(lv, v)
             self.emit("M16[wp(ac2, %d)] = trunc16(%s)" % (K, v.reg))
         self.regs.c["ac2"] = ("addr", ("stored",))
+
+    # -- PL/I bit references (P36, R26-R29) ----------------------------------
+    def bit_word(self, node):
+        """Decompose a BIT*() word argument into (tname, t, subscript, K).
+        Only a record element field is in the subset (DIED's 25 bit ops are
+        all PLAYER[SUB(PLAYER_NUM,10)].<word>)."""
+        if not (isinstance(node, c_ast.StructRef) and node.type == "."
+                and isinstance(node.name, c_ast.ArrayRef)):
+            refuse(node, "BIT(): the word must be a record element field T[i].f")
+        tname = node.name.name.name
+        t = self.L.table(tname)
+        if t is None:
+            refuse(node, "table %s not in declarations" % tname)
+        fld = t["fields"].get(node.field.name)
+        if fld is None:
+            refuse(node, "%s.%s not in declarations" % (tname, node.field.name))
+        if fld["width"] != 16:
+            refuse(node, "BIT(): %s.%s is not a 16-bit word" % (tname, node.field.name))
+        return tname, t, node.name.subscript, fld["K"]
+
+    def bit_address(self, wordnode, nbit):
+        """R26: the bit address is `16 * <scaled subscript> + (16*K + n)`, in a
+        register, applied to a base pointer the instruction resolves
+        indirectly (WSZB/WBTO/WBTZ take acS = base, acD = bit offset).
+        Returns (base_reg, off_reg)."""
+        if not (0 <= nbit <= 15):
+            refuse(wordnode, "BIT(): bit index %d outside 0..15" % nbit)
+        tname, t, sub, K = self.bit_word(wordnode)
+        bounds = None
+        if isinstance(sub, c_ast.FuncCall) and sub.name.name == "SUB":
+            bounds = int(sub.args.exprs[1].value, 0)
+            sub = sub.args.exprs[0]
+        if not isinstance(sub, c_ast.ID):
+            refuse(sub, "BIT(): subscript must be a variable (optionally SUB(v, n))")
+        vname = sub.name
+        i = self.stmt_index
+        skey = ("scaled", tname, vname)
+        bkey = ("bitbase", tname, vname)
+        base_addr = self.L.static(t["base"])["addr"]
+        disp = 16 * K + nbit
+
+        # R27: `16*scaled` is a CSE temp of its own (distinct from the R9
+        # scaled temp: one is i*stride, the other 16*i*stride) when later
+        # statements take another bit of the same element.  701662A2 reloads
+        # slot 8 for each of the nine WBTZs at 70166296.
+        if self.cse.get(bkey, {}).get("slot") is not None:
+            slot = self.cse[bkey]["slot"]
+            r = self.regs.pick()
+            self.emit("%s = M32[wp(ac3, %d)]" % (r, slot))              # XWLDA
+            self.regs.set(r, ("live", bkey))
+            self.emit("%s = add(%s, %s)" % (r, r, hexc(disp)))          # WNADI
+            self.regs.set(r, ("live", ("bitoff", tname, vname)))
+            if self.last_use_of(bkey) <= i:
+                self.frame.free_temp(slot)
+                self._freed.add(slot)
+                self.cse[bkey]["slot"] = None
+            b = self.bit_base_reg(base_addr, bkey, avoid=(r,))
+            return b, r
+
+        # the subscript, bounds-checked and scaled by the stride (R11)
+        v = self.value(sub, want_reg=True)
+        r = v.reg
+        if bounds is not None:
+            self.bounds_check(r, bounds)
+        kr = self.regs.pick(avoid=(r,))
+        self.emit("%s = %s" % (kr, hexc(t["stride"])))
+        self.regs.set(kr, ("const", t["stride"]))
+        self.emit("%s = mul(%s, %s)" % (r, r, kr))                      # WMUL
+        self.regs.set(r, ("live", skey))
+
+        # R26a: the *16 multiply's destination is the SCALED VALUE's register
+        # (R11, multiply in place), UNLESS the scaled value is still needed
+        # after the multiply -- then it is the constant's register, and the
+        # IR reads `mul(16, scaled)`.  70166283 `WMUL 2,0` (dest ac0, P*686
+        # dead) vs 70166046 `WMUL 0,2` (dest ac2, P*686 saved to slot 10
+        # afterwards) and 70166296 `WMUL 0,2` (dest ac2, P*686 needed for the
+        # element address at the end of the block).
+        scaled_live = any(j > i for j in self.uses.get(skey, [])) or self.scaled_pending
+        c16 = self.regs.find(("const", 16))
+        if c16 is None or c16 == r:
+            c16 = self.regs.pick(avoid=(r,))
+            self.emit("%s = %s" % (c16, hexc(16)))
+            self.regs.set(c16, ("const", 16))
+        if scaled_live:
+            off = c16
+            self.emit("%s = mul(%s, %s)" % (off, off, r))               # WMUL r,c16
+            self.regs.c[r] = ("live", skey)
+        else:
+            off = r
+            self.emit("%s = mul(%s, %s)" % (off, off, c16))             # WMUL c16,r
+        self.regs.set(off, ("live", bkey))
+
+        # R27 (save) / R26b (the WMOV): when `16*scaled` recurs it is saved to
+        # a temp and stays where it is (70166296 XWSTA 2,[ac3+8], no WMOV);
+        # when it does not recur AND the multiply landed in the constant's
+        # register, the product is copied to an R7 pick before the
+        # displacement add (70166046 WMOV 2,1).
+        if any(j > i for j in self.uses.get(bkey, [])):
+            slot = self.frame.alloc_temp(bkey)
+            self.emit("M32[wp(ac3, %d)] = %s" % (slot, off))
+            self.cse[bkey] = dict(slot=slot, stmt=i)
+        elif off is c16:
+            nr = self.regs.pick(avoid=(off,))
+            self.emit("%s = %s" % (nr, off))                            # WMOV
+            self.regs.set(nr, ("live", bkey))
+            self.regs.c[off] = ("dup", nr)
+            off = nr
+        self.emit("%s = add(%s, %s)" % (off, off, hexc(disp)))           # WNADI
+        self.regs.set(off, ("live", ("bitoff", tname, vname)))
+        # R9 for the unscaled subscript: the save is DEFERRED past the base
+        # load, to just before the operation (70166052 XWSTA 0,[ac3+0xA]).
+        if scaled_live and self.cse.get(skey, {}).get("slot") is None \
+                and any(j > i for j in self.uses.get(skey, [])):
+            self.scaled_pending = (r, skey, i)
+        b = self.bit_base_reg(base_addr, bkey, avoid=(off,))
+        return b, off
+
+    scaled_pending = None
+
+    def bit_base_reg(self, base_addr, bkey, avoid):
+        """R28: the record base of a bit reference is loaded by the R7 pick
+        avoiding the offset register (70166283 LWLDA 1, 70166296 LWLDA 1,
+        70166046 LWLDA 2 after the offset moved out of ac2), and stays
+        PROTECTED while the `16*scaled` temp is alive -- the nine WBTZs of
+        70166296 all reuse the one LWLDA 1."""
+        key = ("bitptr", base_addr)
+        r = self.regs.find(("addr", key)) or self.regs.find(("live", key))
+        if r is None or r in avoid:
+            r = self.regs.pick(avoid=avoid)
+            self.emit("%s = M32[%s]" % (r, hexc(base_addr)))            # LWLDA
+        alive = self.cse.get(bkey, {}).get("slot") is not None
+        self.regs.set(r, ("live", key) if alive else ("addr", key))
+        return r
+
+    def flush_scaled_pending(self):
+        if self.scaled_pending:
+            r, skey, i = self.scaled_pending
+            slot = self.frame.alloc_temp(skey)
+            self.emit("M32[wp(ac3, %d)] = %s" % (slot, r))
+            self.cse[skey] = dict(slot=slot, stmt=i)
+            self.scaled_pending = None
+
+    BIT_MEM = "M16[ind(%s) + lsh(%s, -4)]"
+
+    def bit_stmt(self, call):
+        """R29: the three bit operations.  WBTO sets, WBTZ clears, WSZB skips
+        when the bit is zero (EagleCompute.cpp:261/272/283; the bit is
+        numbered from the MSB, so the mask is `lsh(0x8000, -(A & 15))`)."""
+        op = call.name.name
+        args = call.args.exprs
+        nbit = int(args[1].value, 0)
+        b, off = self.bit_address(args[0], nbit)
+        self.flush_scaled_pending()
+        mem = self.BIT_MEM % (b, off)
+        mask = "lsh(0x8000, 0 - (%s & 15))" % off
+        if op == "BIT_SET":
+            self.emit("%s = %s | %s" % (mem, mem, mask))
+            return
+        if op == "BIT_CLR":
+            self.emit("%s = %s & ~%s" % (mem, mem, mask))
+            return
+        # BIT_PUT(w, n, e): WBTO, then the value's sign test, then WBTZ
+        # (70166376..82: set the bit, materialise e, clear it again when e is
+        # zero -- the compiler's unconditional-set-then-undo shape).
+        self.emit("%s = %s | %s" % (mem, mem, mask))
+        vr = self.bit_value_reg(args[2])
+        clr, join = self.new_block(), self.new_block()
+        t = self.tplace()
+        self.emit("%s = ((%s & 0xFFFF) | lsh(c, 16))" % (t, vr))
+        self.terminate(("goto", [clr.label, join.label], "((lsh(%s, -15) & 1) == 1)" % t))
+        self.cur = clr
+        self.emit("%s = %s & ~%s" % (mem, mem, mask))
+        self.terminate(("goto", [join.label], "0"))
+        self.cur = join
+
+    def bit_value_reg(self, e):
+        """A bit reference used as a VALUE materialises as 0 / -1: `WSUB v,v`,
+        the WSZB skip, `WADC v,v` (70166054..56).  `!` is the PL/I `^` and
+        lowers to WCOM (70166376 `ac2 = ~ac2`)."""
+        neg = False
+        while isinstance(e, c_ast.UnaryOp) and e.op == "!":
+            neg = not neg
+            e = e.expr
+        if not (isinstance(e, c_ast.FuncCall) and e.name.name == "BIT"):
+            refuse(e, "a bit destination takes a bit reference (optionally negated)")
+        nbit = int(e.args.exprs[1].value, 0)
+        b, off = self.bit_address(e.args.exprs[0], nbit)
+        self.flush_scaled_pending()
+        vr = self.regs.pick(avoid=(b, off))
+        self.emit("%s = sub(%s, %s)" % (vr, vr, vr))                    # WSUB v,v
+        set_b, join = self.new_block(), self.new_block()
+        self.terminate(("goto", [set_b.label, join.label], self.bit_test(b, off)))
+        self.cur = set_b
+        self.emit("%s = add(%s, ~%s)" % (vr, vr, vr))                   # WADC v,v
+        self.terminate(("goto", [join.label], "0"))
+        self.cur = join
+        self.regs.set(vr, ("live", "bitval"))
+        if neg:
+            self.emit("%s = ~%s" % (vr, vr))                            # WCOM
+            self.regs.set(vr, ("live", "bitval"))
+        return vr
+
+    def bit_test(self, b, off):
+        return "((lsh(%s, 0 - (15 - (%s & 15))) & 1) == 0)" % (self.BIT_MEM % (b, off), off)
 
     def to_reg(self, v):
         if v.kind == "reg":
@@ -1391,6 +1663,19 @@ class Translator:
                     refuse(t, "%s->%s not in declarations" % (ptr, t.field.name))
                 b = self.base_reg(ptr)
                 return "wp(%s, %d)" % (b, f[0])
+            if isinstance(t, c_ast.StructRef) and t.type == "." and isinstance(t.name, c_ast.ArrayRef):
+                # &T[i].f : the element address in ac2 (R5/R9/R10), the field's
+                # raw displacement K on top.  DIED 70166108/10A:
+                # `M32[0x74009B5E] = wp(ac2, 11496)`.
+                tname = t.name.name.name
+                tt = self.L.table(tname)
+                if tt is None:
+                    refuse(t, "table %s not in declarations" % tname)
+                fld = tt["fields"].get(t.field.name)
+                if fld is None:
+                    refuse(t, "%s.%s not in declarations" % (tname, t.field.name))
+                areg = self.element_address(tname, tt, t.name.subscript)
+                return "wp(%s, %d)" % (areg, fld["K"])
             if isinstance(t, c_ast.ID):
                 if t.name in self.frame.locals:
                     return "wp(ac3, %d)" % self.frame.locals[t.name][0]
@@ -1403,10 +1688,67 @@ class Translator:
         refuse(a, "argument form not in the subset (TMP(e) or &lvalue)")
 
     def call_stmt(self, st):
-        if "$" in st.name.name:
+        name = st.name.name
+        base = name.partition("$")[0]
+        if base in self.addrbook_by_name:
+            return self.game_call(st)
+        if "$" in name:
             self.rt_call(st)
             return
-        refuse(st, "game->game calls are not yet in the subset")
+        refuse(st, "unknown callee %s" % name)
+
+    def game_call(self, st):
+        """R30: a game->game call.  The callee's arguments live at STATIC
+        book-mode slots (quest.addrbook `alloc`); argument n is at
+        `wfp - 10 - 2n`, so the slots run DOWNWARD from arg 1 and the stores
+        appear in ASCENDING address order, i.e. right to left in the source
+        (R18's push order).  The call itself is `call <tgt> args=<n>
+        marker=<alloc + 2*argc> site=<pc> ret=<pc+4>`; an argc-0 call is not
+        in the pushmap and stays an embedded `LCALL [<tgt>],0` instruction.
+        DIED 701660F8 (UPDATE_SCREENS, 3 args), 70166323 (REPOSITION),
+        70166341 (DISPLAY_SCREEN), 701663B6 (DISPLAY_INVENTORY);
+        70166216 / 70166327 the two undecorated LCALLs."""
+        name = st.name.name
+        base, _, arity = name.partition("$")
+        arity = int(arity) if arity else 0
+        e = self.addrbook_by_name.get(base)
+        if e is None:
+            refuse(st, "game callee %s not in quest.addrbook" % base)
+        args = st.args.exprs if st.args else []
+        if len(args) != arity:
+            refuse(st, "%s called with %d arguments" % (name, len(args)))
+        if arity == 0:
+            # not a pushmap site: the instruction stays embedded
+            self.flush_elem_save()
+            cont = self.new_block()
+            self.terminate(("instr", "LCALL [0x%08X],0;" % e["pc"], cont.label))
+            self.cur = cont
+            self.regs.reset()
+            return
+        alloc = e["alloc"]
+        # the argument VALUES first (TMP dummies get a frame temp, as R18)
+        pushes = [None] * arity
+        for idx, a in enumerate(args):
+            if isinstance(a, c_ast.FuncCall) and a.name.name == "TMP":
+                v = self.value(a.args.exprs[0], want_reg=True)
+                slot = self.frame.alloc_temp(("tmp", idx))
+                self.store_temp(slot, v.reg, v.width)
+                pushes[idx] = "wp(ac3, %d)" % slot
+            else:
+                pushes[idx] = a
+        # the slot stores, right to left in the source = ascending in address
+        for idx in reversed(range(arity)):
+            p = pushes[idx]
+            text = p if isinstance(p, str) else self.address_of(p)
+            self.emit("M32[%s] = %s" % (hexc(alloc + 2 * (arity - 1 - idx)), text))
+        cont = self.new_block()
+        self.terminate(("call", "call %08X args=%d marker=%08X site=SITE ret=RET"
+                        % (e["pc"], arity, alloc + 2 * arity), cont.label, arity))
+        for s, t in list(self.frame.temps.items()):
+            if t is not None and t[0] == "tmp":
+                self.frame.free_temp(s)
+        self.cur = cont
+        self.regs.reset()
 
     # -- branch ranges (R19) ---------------------------------------------------------
     WBR_RANGE = 127
@@ -1435,11 +1777,59 @@ class Translator:
             return 0
         if t[0] == "goto":
             return 1 if len(t[1]) == 1 else (0 if any(l.startswith("t") for l in b.lines[-1:]) else 2)
+        if t[0] == "call":
+            return 4 + 3 * (t[3] if len(t) > 3 else 0)
+        if t[0] == "instr":
+            return 4
         if t[0] == "rt_call":
             text = t[1]
             n = text.count(",") + 1 if "(" in text and text.split("(")[1][0] != ")" else 0
             return 4 + 2 * n + (1 if "0x7" in text else 0)
         return 0
+
+    def block_positions(self):
+        pos, at = {}, 0
+        for b in self.blocks:
+            pos[b.label] = at
+            at += sum(self.words_of(l) for l in b.lines) + self.term_words(b)
+        return pos
+
+    def invert_far_diamonds(self):
+        """R13c: `if (c) goto L` normally lowers as R13 -- skip-if-NOT-c over
+        the one-word `WBR L`.  When L is beyond WBR range the goto needs an
+        XJMP, which is not one word, so the compiler INVERTS the diamond:
+        skip-if-c over `WBR cont`, with the XJMP following.  DIED 70166057:
+        `MOV.L# 0,0,SNC; WBR 3 (0x7016605B); XJMP (0x701661AE)` for
+        `if (BIT(..)) goto reincarnate;` with reincarnate 0x151 words away.
+        Confidence B (one routine; three instances in DIED)."""
+        if not self.if_diamonds:
+            return
+        pos = self.block_positions()
+        end = max(pos.values()) if pos else 0
+        for head, then_b, cont_b, pos_test in self.if_diamonds:
+            if then_b.term is None or then_b.term[0] != "goto" or len(then_b.term[1]) != 1:
+                continue
+            target = then_b.term[1][0]
+            if target not in pos:
+                continue
+            here = pos[then_b.label]
+            if -self.WBR_RANGE <= pos[target] - here <= self.WBR_RANGE:
+                continue
+            # R19 first: a far `goto` normally reaches a one-word WBR to a stub
+            # at the routine's end, which is what PICK_X_Y's three retries do.
+            # Inversion is only forced when the STUB is out of WBR range too --
+            # i.e. the routine is longer than a branch can span from here.
+            # DIED 70166057: the target is +0x154 and the routine end +0x360.
+            if end - here <= self.WBR_RANGE:
+                continue
+            # invert: the fall-through jumps to the continuation, the skip
+            # target keeps the (now XJMP) goto to the far label
+            jump_b = self.new_block("inv_" + cont_b.label)
+            jump_b.term = ("goto", [cont_b.label], "0")
+            i = self.blocks.index(then_b)
+            self.blocks.remove(jump_b)
+            self.blocks.insert(i, jump_b)
+            head.term = ("goto", [jump_b.label, then_b.label], pos_test)
 
     def stub_branches(self):
         """R19: an unconditional `goto L` whose WBR displacement would not fit
@@ -1470,6 +1860,7 @@ class Translator:
 
     # -- rendering ------------------------------------------------------------------
     def render(self):
+        self.invert_far_diamonds()
         self.stub_branches()
         # canonical order: DFS from entry over the terminators (what ircmp does)
         by_label = {b.label: b for b in self.blocks}
@@ -1488,6 +1879,8 @@ class Translator:
                 succ = list(b.term[1])
             elif b.term[0] == "rt_call":
                 succ = [b.term[1].split("site=")[1]]
+            elif b.term[0] in ("call", "instr"):
+                succ = [b.term[2]]
             elif b.term[0] == "fall":
                 succ = [b.term[1]]
             else:
@@ -1515,6 +1908,11 @@ class Translator:
             elif t[0] == "rt_call":
                 text, _, site = t[1].partition(" site=")
                 out.append("  %s site=%08X" % (text, pc_of[site] - 4))
+            elif t[0] == "call":
+                text = t[1].replace("SITE", "%08X" % (pc_of[t[2]] - 4)).replace("RET", "%08X" % pc_of[t[2]])
+                out.append("  " + text)
+            elif t[0] == "instr":
+                out.append("  @%08X %s" % (pc_of[t[2]] - 4, t[1]))
             elif t[0] == "ret":
                 out.append("  ret")
             out.append("")

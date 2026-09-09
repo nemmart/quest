@@ -1,23 +1,23 @@
-/* DIED @7016603D (argc 2, frame 0x07) — the player's death: clear the two
- * 32-character name/status fields, announce, reposition, refresh.
+/* DIED @7016603D (argc 2, frame 0x07) — the player has died: clear the
+ * player's name/status fields and object slot, drop the objects held back
+ * into the world, announce the death, and then either wait for a key
+ * (permanent death) or clear the status bits and reincarnate.
  *
- * STAGED STRETCH (Project 35 PLAN §7, ruling R4).  Only the opening is
- * written: the routine's first statement is a bit-field test on the
- * player record (bit address 16*(PLAYER_NUM*686) - 9436 = word -590, bit
- * 4), which is outside the translator's subset — translate.py REFUSES at
- * this line, by design (METHOD: refuse, don't guess).  The rest of the
- * routine needs, per the P35 census of its 495 book statements: bit-field
- * addressing (51 statements), ac3 repurposed as an address register (13),
- * string statements into record fields (12), arena twins/claims (20) and
- * six game->game calls.  See docs/Project35/REPORT.md §DIED. */
+ * CORRECTION to the P35 stub (METHOD §11): P35 wrote the signature as
+ * `DIED(const int16_t *who, const int16_t *how)`.  Argument 1 is in fact a
+ * CHAR VARYING passed by reference — the death message.  The routine reads
+ * its LENGTH word (`sx16(M16[R[ac3 + -12]])` at 70166144, the word AT the
+ * argument's address) to size the message temporaries, and copies the
+ * string itself with `[@ac2, sx16(M16[M32[wp(ac3,-12)]])] =
+ * [@M32[wp(ac3,-12)], varying]`.  Argument 2 is never read. */
 #include "quest_rt.h"
 #include "declarations.h"
 
-void DIED(const int16_t *who UNUSED, const int16_t *how UNUSED)
+void DIED(const int16_t *msg UNUSED, const int16_t *unused UNUSED)
 {
-    if (BIT(PLAYER[SUB(PLAYER_NUM, 10)].fm590, 4)) goto out;
-    assign_fixed(&PLAYER[SUB(PLAYER_NUM, 10)].fm625, 32, "                                ");
-    assign_fixed(&PLAYER[SUB(PLAYER_NUM, 10)].fm608, 32, "                                ");
-out:
+    if (BIT(PLAYER[SUB(PLAYER_NUM, 10)].fm590, 4)) goto reincarnate;
+    assign_varying(&PLAYER[SUB(PLAYER_NUM, 10)].fm625, 32, "                                ");
+    assign_varying(&PLAYER[SUB(PLAYER_NUM, 10)].fm608, 32, "                                ");
+reincarnate:
     return;
 }
