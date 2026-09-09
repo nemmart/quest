@@ -312,6 +312,19 @@ class Regs:
                 return r
         return None
 
+    def pick_fp(self):
+        """R33: where an `LDAFP` puts the frame.  R7's cost ordering, but the
+        tie-break is ac3 (the frame's default home) rather than the lowest
+        number.  R33 says `ac3 holds it by default`; FrameRelocation.md §4
+        forbids coding `the target is always ac2`, so the target is a pick.
+        """
+        best = None
+        for r in ("ac3", "ac0", "ac1", "ac2"):
+            k = (self.cost(r), 0 if r == "ac3" else 1, r)
+            if best is None or k < best:
+                best = k
+        return best[2]
+
     def snapshot(self):
         """R8c: the register knowledge on one control-flow edge."""
         return dict(self.c)
@@ -533,7 +546,6 @@ class Translator:
                 self.cur.term = ("goto", [b.label], "0")
         self.cur = b
 
-    fp_dirty = False
 
     def is_target(self, label):
         for b in self.blocks:
@@ -549,15 +561,32 @@ class Translator:
         return False
 
     def emit(self, text, uses_fp=None):
-        """R24: a string statement (WCMV) leaves ac3 pointing into the source;
-        `ac3 = wfp` (LDAFP) is emitted lazily, just before the next statement
-        that addresses the frame (REFRESH_SCREEN 70176ABA vs 70176ADF)."""
+        """R24: `LDAFP` is emitted lazily, just before the next statement that
+        addresses the frame (REFRESH_SCREEN 70176ABA vs 70176ADF).
+
+        R33 (P38): the generator writes `ac3` in a frame reference to MEAN
+        "the frame"; the frame's actual register is resolved here.  When the
+        frame is not in a register an `LDAFP` is appended first, and when it
+        is somewhere other than ac3 the reference is respelled.  Pass
+        `uses_fp=False` for a text whose `ac3` is a genuine register mention
+        and not a frame reference.
+        """
         if uses_fp is None:
             uses_fp = "ac3" in text
-        if self.fp_dirty and uses_fp:
-            self.cur.lines.append("ac3 = wfp")
-            self.fp_dirty = False
+        if uses_fp:
+            r = self.fpr()
+            if r != "ac3":
+                text = text.replace("ac3", r)
         self.cur.lines.append(text)
+
+    def fpr(self):
+        """R33: the register holding the frame, materialising it if needed."""
+        r = self.regs.fpreg()
+        if r is None:
+            r = self.regs.pick_fp()
+            self.cur.lines.append("%s = wfp" % r)
+            self.regs.set(r, FP)
+        return r
 
     def terminate(self, term):
         self.cur.term = term
@@ -1005,7 +1034,7 @@ class Translator:
         self.regs.set(lr, ("live", ("local", vname)))
         self.loop_var, self.loop_reg = vname, lr
         self.loop_stack.append(dict(incr=incr_b, after=after_b))
-        self.fp_dirty = False
+        self.regs.set(self.regs.fpreg() or "ac3", FP)   # R33: the frame is live at a loop head
         self.keep_live = lr
         self.run_body(st.stmt)
         self.loop_stack.pop()
@@ -2149,9 +2178,10 @@ class Translator:
             p = pushes[idx]
             texts[idx] = p if isinstance(p, str) else self.address_of(p)
         cont = self.new_block()
-        if self.fp_dirty and "ac3" in ", ".join(texts):
-            self.emit("ac3 = wfp", uses_fp=False)
-            self.fp_dirty = False
+        if "ac3" in ", ".join(texts):
+            r = self.fpr()                       # R33: may append the LDAFP
+            if r != "ac3":
+                texts = [t.replace("ac3", r) for t in texts]
         self.terminate(("rt_call", "rt_call ?%s(%s) site=%s" % (base, ", ".join(texts), cont.label)))
         for slot in [t[1] if t else None for t in temps]:
             pass
@@ -2183,7 +2213,9 @@ class Translator:
         self.regs.set("ac0", ("const", 0))
         self.regs.c["ac1"] = None
         self.regs.set("ac2", ("addr", ("wcmv-end",)))
-        self.fp_dirty = True
+        # R24 + R33: ac3 points into the source, so the frame is no longer in a
+        # register.  The next frame reference materialises it (emit -> fpr()).
+        self.regs.set("ac3", ("addr", ("wcmv-src-end",)))
 
     def string_value(self, node):
         """-> (piece text usable as a WCMV source, byte length).  A literal is
@@ -2288,7 +2320,6 @@ class Translator:
             self.regs.c["ac1"] = None
             self.regs.set("ac2", ("addr", ("wblm-end",)))
             self.regs.set("ac3", ("addr", ("wblm-end",)))
-            self.fp_dirty = True
             return
         dst = self.field_address_sym(args[0])
         n = int(args[1].value, 0)
