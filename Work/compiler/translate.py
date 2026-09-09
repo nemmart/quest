@@ -22,7 +22,7 @@ Output: an ir 6 book-like file with synthetic block pcs (canonical order,
 0x00001000 + 0x10*k), a header line `routine NAME entry lo hi` for ircmp,
 and rt_call sites at continuation-4.  Nothing here executes.
 """
-import argparse, collections, json, os, re, sys, time
+import argparse, collections, contextlib, json, os, re, sys, time
 
 from pycparser import c_ast, parse_file
 
@@ -30,6 +30,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.normpath(os.path.join(HERE, ".."))
 sys.path.insert(0, HERE)
 import readable as R  # noqa: E402  (addrbook loader)
+import productions as PROD  # noqa: E402  (P42 production table + ledger)
 
 
 BIT_FNS = ("BIT", "BIT_SET", "BIT_CLR", "BIT_PUT")
@@ -615,6 +616,61 @@ class Translator:
         if "nested" in (self.entry.get("flags") or "").split(",") and "." in routine_name:
             self.parent = routine_name.split(".", 1)[0]
         self.link_param = None
+        # P42: the reduction ledger runs in PARALLEL with these emit methods.
+        # `fire()` records an address and the choices taken and enforces the
+        # span declaration; it emits nothing, so instrumenting a method cannot
+        # change what that method produces.  Stage 3 moves templates into
+        # productions.py one at a time.
+        self.ledger = PROD.Ledger()
+
+    # -- P42: productions ------------------------------------------------
+    @contextlib.contextmanager
+    def fire(self, name, node=None, shape=None, consumes=()):
+        """Fire a production around code that already emits.
+
+        The address is assigned on COMPLETION, so the ledger is in reduction
+        order -- post-order over tile roots -- and `<production>#<n>` counts
+        that production's own firings.  `consumes` names the descendant nodes
+        this tile swallows: they are marked, and any later attempt to reduce
+        one of them separately is a span violation.  Emitting for, or firing
+        on, an undeclared node is a HARD ERROR (the user's ruling: without
+        this clause "tile" collapses back into "arbitrary method")."""
+        f = self.ledger.begin(name, id(node) if node is not None else None,
+                              shape or (type(node).__name__ if node is not None else name),
+                              self.stmt_index)
+        self.ledger.consume(name, [id(n) for n in consumes if n is not None])
+        try:
+            yield f
+        finally:
+            self.ledger.end(f)
+
+    def choice(self, kind, value, witness=None):
+        """Record a choice the firing production took.  P43's choice files
+        key on exactly these."""
+        self.ledger.choice(kind, value, witness)
+
+    def fired(self, name, node=None, shape=None, consumes=(), choices=()):
+        """A point firing, for a production whose template does not nest
+        another reduction inside it.  Placed where the emission COMPLETES, so
+        it takes its address in reduction order like any other."""
+        f = self.ledger.begin(name, id(node) if node is not None else None,
+                              shape or (type(node).__name__ if node is not None else name),
+                              self.stmt_index)
+        self.ledger.consume(name, [id(n) for n in consumes if n is not None])
+        for c in choices:
+            self.ledger.choice(*c)
+        return self.ledger.end(f)
+
+    def consume_now(self, name, *nodes):
+        """Declare a tile's span at the point the path is decided.
+
+        P42 FINDING: element_address's span is PATH-DEPENDENT.  Five of its
+        seven paths reload the element address from a temp and never evaluate
+        the subscript; two compute it and genuinely reduce the subscript.  A
+        single fixed span declaration is therefore wrong for that production,
+        and the honest form is to declare consumption on the paths that
+        consume.  Recorded rather than papered over."""
+        self.ledger.consume(name, [id(n) for n in nodes if n is not None])
 
     # -- blocks ---------------------------------------------------------
     def new_block(self, label=None):
@@ -2011,6 +2067,13 @@ class Translator:
         if r is None or r in avoid:
             r = self.regs.pick(avoid=avoid)
             self.emit("%s = M32[%s]" % (r, hexc(base_addr)))            # LWLDA
+            # R28, and the R41' NEGATIVE case: this is the same physical
+            # operation as field_direct's base load -- loading a record base --
+            # but its legal set is all four registers, because the production
+            # is FOR something else (a bit reference, not indexing).  The
+            # SD_PTR census: {ac0, ac1} 302 times out of 306.
+            self.fired("bit_base", None, "bit-reference record base",
+                       choices=[("reg", r)])
         alive = self.cse.get(bkey, {}).get("slot") is not None
         self.regs.set(r, ("live", key) if alive else ("addr", key))
         return r
@@ -2117,9 +2180,13 @@ class Translator:
                         # 7016A3D2 and INIT_OBJ_TBL 7016DF68 (`WSUB 1,1`), and
                         # it is the first half of R29's 0/-1 materialisation.
                         self.emit("%s = sub(%s, %s)" % (r, r, r))
+                        sp = "WSUB"      # R37: zero is never an immediate load
                     else:
                         self.emit("%s = %s" % (r, hexc(k)))  # NLDAI/WLDAI
+                        sp = "NLDAI"
                     self.regs.set(r, ("const", k))
+                    self.fired("const_materialise", e, "Constant %s" % hexc(k),
+                               choices=[("reg", r), ("spelling", sp)])
                 return Val("reg", reg=r, width=32, const=k)
             return v
         if isinstance(e, c_ast.ID):
@@ -2264,6 +2331,8 @@ class Translator:
         r = self.regs.pick(avoid)
         self.emit("%s = %s" % (r, text))
         self.regs.set(r, ("var", key))
+        self.fired("scalar_ref", None, "load %s" % (name or key[0]),
+                   choices=[("reg", r)])
         if name is not None:
             self.var_read(r, key, name)
         return Val("reg", reg=r, width=width)
@@ -2383,6 +2452,10 @@ class Translator:
                 refuse(e, "%s->%s not in declarations" % (ptr, e.field.name))
             K, width = f
             b = self.base_reg(ptr)
+            # R41': the ADDRESSING role -- legal set {ac2, ac3}.  The ledger
+            # rejects any other choice against the production's declared class.
+            self.fired("field_direct", e, "StructRef %s->%s" % (ptr, e.field.name),
+                       choices=[("reg", b)])
             text = "M32[wp(%s, %d)]" % (b, K) if width == 32 else "sx16(M16[wp(%s, %d)])" % (b, K)
             return self.load(text, width, ("field", ptr, K), want_reg, avoid)
         if e.type == "." and isinstance(e.name, c_ast.ArrayRef):
@@ -2395,6 +2468,8 @@ class Translator:
                 refuse(e, "%s.%s not in declarations" % (tname, e.field.name))
             K, width = fld["K"], fld["width"]
             areg = self.element_address(tname, t, e.name.subscript)
+            self.fired("field_element", e, "StructRef %s.%s" % (tname, e.field.name),
+                       consumes=(e.name,))
             text = "M32[wp(%s, %d)]" % (areg, K) if width == 32 else "sx16(M16[wp(%s, %d)])" % (areg, K)
             return self.load(text, width, ("elem", tname, K), want_reg, avoid)
         refuse(e, "field reference form not in the subset")
@@ -2433,6 +2508,9 @@ class Translator:
             slot = self.cse[ekey]["slot"]
             self.emit("ac2 = M32[wp(ac3, %d)]" % slot)
             self.regs.set("ac2", ("addr", ekey))
+            # PATH 1 (R36/D2, hoisted): the subscript is NEVER evaluated.
+            self.fired("element_address", sub, "%s(%s) hoisted-temp" % (tname, vname),
+                       consumes=(sub,), choices=[("reg", "ac2"), ("slot", slot)])
             self.note_ref(tname, vname)
             return "ac2"
         if ekey in self.cse and self.cse[ekey].get("slot") is not None:
@@ -2443,9 +2521,15 @@ class Translator:
                 self.frame.free_temp(slot)
                 self._freed.add(slot)
                 self.cse[ekey]["slot"] = None
+                # PATH 2 (R10): element temp reloaded; subscript not evaluated.
+                self.fired("element_address", sub, "%s(%s) elem-temp" % (tname, vname),
+                           consumes=(sub,), choices=[("reg", "ac2"), ("slot", slot)])
                 self.note_ref(tname, vname)
                 return "ac2"
         if self.regs.c["ac2"] in (("addr", ekey), ("live", ekey)):
+            # PATH 3: already in ac2 -- ZERO instructions, subscript unevaluated.
+            self.fired("element_address", sub, "%s(%s) already-in-ac2" % (tname, vname),
+                       consumes=(sub,), choices=[("reg", "ac2")])
             self.note_ref(tname, vname)
             return "ac2"
         # R31: when the record base is ALREADY in ac2 -- left there by a bit
@@ -2458,6 +2542,11 @@ class Translator:
                 and self.cse.get(skey, {}).get("slot") is not None \
                 and not self.var_changes_between(vname, self.cse[skey]["stmt"], i):
             slot = self.cse[skey]["slot"]
+            # PATH 4 (R31): base already in ac2, add the temp TO it -- an ORDER
+            # choice, and the two orders are visible in the folded address.
+            self.fired("element_address", sub, "%s(%s) R31 temp-to-base" % (tname, vname),
+                       consumes=(sub,), choices=[("reg", "ac2"), ("slot", slot),
+                                                 ("order", "temp_to_base")])
             self.emit("ac2 = add(ac2, M32[wp(ac3, %d)])" % slot)         # XWADD
             self.regs.set("ac2", ("addr", ekey))
             self.elem_sym[ekey] = s_addv(s_load(s_const(base_addr), 32),
@@ -2471,6 +2560,10 @@ class Translator:
         # scaled subscript
         if skey in self.cse and self.cse[skey]["slot"] is not None and not self.var_changes_between(vname, self.cse[skey]["stmt"], i):
             slot = self.cse[skey]["slot"]
+            # PATH 5: scaled subscript in a temp; subscript not re-evaluated.
+            self.fired("element_address", sub, "%s(%s) scaled-temp" % (tname, vname),
+                       consumes=(sub,), choices=[("reg", "ac2"), ("slot", slot),
+                                                 ("order", "base_to_temp")])
             self.emit("ac2 = M32[wp(ac3, %d)]" % slot)          # XWLDA 2
             self.regs.set("ac2", ("live", skey))
             if self.last_use_of(skey) <= i:
@@ -2506,6 +2599,28 @@ class Translator:
         self.regs.set(r, ("addr", ekey))
         self.elem_sym[ekey] = s_addv(self.subscript_sym(vname, t["stride"]),
                                      s_load(s_const(base_addr), 32))
+        # PATHS 6/7: the first computation.  The subscript IS reduced here --
+        # this production's span is PATH-DEPENDENT, which a single fixed span
+        # declaration cannot express.  Recorded as a P42 finding.
+        #
+        # P42 FINDING (the span check caught this on its first run): this
+        # production makes TWO register decisions, and only one is under
+        # R41''s class.
+        #   * `r` is the WORKING register -- the subscript value's register,
+        #     an ordinary R7 pick over all four, in which the stride multiply
+        #     and the base add proceed IN PLACE (R5/R6).  It is not a base
+        #     register and R41' does not govern it; it is already recorded by
+        #     whatever production produced the subscript value.
+        #   * the INDEXING BASE is what this production yields, and it is
+        #     always ac2 here -- the `WMOV r,2` below is R5 moving the
+        #     finished address into the class.
+        # Recording `r` conflated the two and tripped the class check.  The
+        # class is NOT widened to admit it: {ac2, ac3} stands, and the second
+        # member is simply unreached by these four routines (CODEGEN_RULES
+        # SS9.3 says exactly that -- ac2 is free at every base load in all 349
+        # statements).
+        self.fired("element_address", None, "%s(%s) computed" % (tname, vname),
+                   choices=[("reg", "ac2"), ("order", "in_place_then_move")])
         if r != "ac2":
             self.emit("ac2 = %s" % r)                             # WMOV r,2  (R5)
             self.regs.set("ac2", ("dup", r))
@@ -2601,6 +2716,9 @@ class Translator:
             self.emit("%s = %s(%s, %s)" % (r, op, r, rv.reg))
             self.regs.set(r, ("live", "res"))
             self.regs.c[rv.reg] = ("var", ("dead", rv.reg))
+            # R20: the more complex operand went FIRST -- an order choice
+            self.fired("binop_reg_reg", e, "BinaryOp %s (rhs first)" % e.op,
+                       choices=[("reg", r), ("order", "rhs_first")])
             return Val("reg", reg=r, width=32)
         lhs = self.value(e.left, want_reg=True, avoid=avoid)
         r = lhs.reg
@@ -2610,17 +2728,25 @@ class Translator:
             if e.op == "+" and k == 1:
                 self.emit("%s = add(%s, 1)" % (r, r))                 # WINC
                 self.regs.set(r, ("live", "sum"))
+                self.fired("binop_const_inc", e, "BinaryOp + 1",
+                           consumes=(rhs,), choices=[("spelling", "WINC")])
                 return Val("reg", reg=r, width=32)
             if e.op in ("+", "-"):
                 kk = k if e.op == "+" else -k
                 if -0x8000 <= kk <= 0x7FFF:
                     self.emit("%s = add(%s, %s)" % (r, r, hexc(kk)))     # WNADI (sign-extended)
                     self.regs.set(r, ("live", "sum"))
+                    self.fired("binop_const_addi", e, "BinaryOp %s %s" % (e.op, hexc(k)),
+                               consumes=(rhs,), choices=[("spelling", "WNADI")])
                     return Val("reg", reg=r, width=32)
                 refuse(e, "constant beyond 16 bits")
             kr = self.regs.pick(avoid=(r,))
             self.emit("%s = %s" % (kr, hexc(k)))
             self.regs.set(kr, ("const", k))
+            # D4 census target: the constant's register.  Today an R7 pick with
+            # an exclusion -- synthesised.  If D4 answers "down", a passed target.
+            self.fired("binop_const_scale", e, "BinaryOp %s const" % e.op,
+                       consumes=(rhs,), choices=[("reg", kr)])
             op = "mul" if e.op == "*" else "div"
             self.emit("%s = %s(%s, %s)" % (r, op, r, kr))
             if op == "div" and lhs.width == 16:
@@ -2636,11 +2762,15 @@ class Translator:
             if e.op in ("+", "-") and rv.width == 32:
                 self.emit("%s = %s(%s, %s)" % (r, "add" if e.op == "+" else "sub", r, rv.text))
                 self.regs.set(r, ("live", "sum"))
+                self.fired("binop_reg_mem", e, "BinaryOp %s mem32" % e.op,
+                           consumes=(rhs,), choices=[("spelling", "memory_operand")])
                 return Val("reg", reg=r, width=32)
             rv = self.value(rhs, want_reg=True, avoid=(r,))
         op = {"+": "add", "-": "sub", "*": "mul", "/": "div"}[e.op]
         self.emit("%s = %s(%s, %s)" % (r, op, r, rv.reg))
         self.regs.set(r, ("live", "res"))
+        self.fired("binop_reg_reg", e, "BinaryOp %s (lhs first)" % e.op,
+                   choices=[("reg", r), ("order", "lhs_first")])
         return Val("reg", reg=r, width=32)
 
     pending_elem_save = None
@@ -3137,6 +3267,11 @@ def main():
     ap.add_argument("--addrbook", default=os.path.join(ROOT, "emulation", "quest.addrbook"))
     ap.add_argument("--mem", default=os.path.join(ROOT, "..", "Disassembled", "quest.mem"),
                     help="memory image (hex dump) used only to resolve literal addresses")
+    ap.add_argument("--ledger", help="P42: write the reduction ledger here "
+                                     "(addresses in reduction order + the choices taken)")
+    ap.add_argument("--productions", action="store_true",
+                    help="P42 Stage 3: fire ported production templates instead of "
+                         "the legacy emit path (no production is ported yet)")
     args = ap.parse_args()
     t0 = time.time()
     ast = parse_file(args.source, use_cpp=True,
@@ -3158,11 +3293,25 @@ def main():
     except Refuse as e:
         sys.stderr.write(str(e) + "\n")
         sys.exit(2)
+    # P42: the span check has TEETH -- a consumed descendant that is
+    # separately reduced, a choice of a kind the production does not declare,
+    # or a register outside a production's declared class, is a HARD ERROR.
+    # Without this the tile discipline collapses back into arbitrary methods.
+    bad = tr.ledger.check()
+    if bad:
+        sys.stderr.write("P42 SPAN/CHOICE VIOLATIONS (%d):\n  %s\n"
+                         % (len(bad), "\n  ".join(bad)))
+        sys.exit(3)
     if args.out:
         open(args.out, "w").write(text)
     else:
         sys.stdout.write(text)
-    sys.stderr.write("translate %s: %d blocks, %.2fs\n" % (args.routine, text.count("\nblock "), time.time() - t0))
+    if args.ledger:
+        open(args.ledger, "w").write(tr.ledger.render())
+    nch = sum(len(f.choices) for f in tr.ledger.firings)
+    sys.stderr.write("translate %s: %d blocks, %d reductions, %d choices, %.2fs\n"
+                     % (args.routine, text.count("\nblock "),
+                        len(tr.ledger.firings), nch, time.time() - t0))
 
 
 if __name__ == "__main__":

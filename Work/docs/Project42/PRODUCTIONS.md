@@ -104,7 +104,10 @@ whether the book needs one.
 | `field_direct` / `link_load` | the base-register class | R41′ — see §4 |
 | `rt_call_arg` | `avoid` of the sibling temps | R18 |
 
-Seven of thirty-seven. That is the honest size of the question.
+**EIGHT** of thirty-seven, not seven: the gate table wrote `binop_*` as one
+row, but it is two productions (`binop_reg_reg`, `binop_reg_mem`), and
+`scalar_ref` inherits both `want_reg` and `avoid`. Corrected at Stage 2
+against `census_targets()`, which the selftest pins.
 
 ---
 
