@@ -84,6 +84,22 @@ coverage as partial.**
    trunc16 intrinsics, no silent narrowing; falsify R10 against DIED's
    13 ac3 sites; no world-coordinate offset — CODEGEN_RULES tail).
    Deliver a Work.tgz (P35's session crashed sending a partial zip).
+0. **P38 DONE (Sep 9 2026, branch `p38-routines`)** — see
+   docs/Project38/REPORT.md.  **Routines finished: 0; total still 4 of ~130.**
+   R33/R34 IMPLEMENTED and validated (four routines held 349/349 primary,
+   242/242 folded; REFRESH_SCREEN's five LDAFPs run through the new path).
+   Ledger: **R3b VOIDED** — P35's disjoint temp pools was never evidence, its
+   string temps are live at every scalar allocation; replaced by R3b' (pools
+   overlap, but a dead string temp's words reach a scalar temp only from a
+   LATER statement).  **R41** (base-register class {ac2,ac3}, three witnesses)
+   amends R33's mechanism and DERIVES R34.  **R8d** (the frame survives a
+   join, conf A).  FP_COST=2, lower bound established, upper bound unwitnessed
+   with the experiment named.  FIRE.1 and HIT_ANY_CHAR both ABANDONED with
+   reasons; nothing staged.  DIED not reached — **all four
+   pre-registrations remain NO WITNESS and DIED_PREREGISTERED.md is still
+   valid.**  crossings.py moved to compiler/.  Next project's blockers, in
+   order: **the static link / uplevel access**, **the twins/arena**, **floats**.
+
 6. **P37 DONE — MERGED** (Sep 9, verified: 349/349 MATCH across four
    routines, 242/242 folded, selftest PASS, pragma count 0). OWNS
    completed 152/152; GET_INPUT and RETURN_MESSAGE staged with their
