@@ -170,6 +170,13 @@ def ir_word(v):
     raise Refuse("symbolic address kind %s is not renderable" % v.kind)
 
 
+def c_name(routine):
+    """The addrbook name -> a legal C identifier.  A NESTED entry is named
+    `PARENT.N@PC`; C has no nested procedures and no `.` or `@` in an
+    identifier, so it becomes `PARENT_N` (P39).  Ordinary names pass through."""
+    return routine.split("@", 1)[0].replace(".", "_")
+
+
 class Refuse(Exception):
     pass
 
@@ -1052,25 +1059,75 @@ class Translator:
         XNDO: ac1 = lim; t1 = nadd(M16[v], 1); M16[v] = t1; t2 = (t1 >s ac1);
         ac1 = t1; goto [body, exit] t2.  (UPDATE_SCREENS 7017D635..7017D64A.)"""
         init, cond, nxt = st.init, st.cond, st.next
-        if not (isinstance(init, c_ast.Assignment) and isinstance(init.lvalue, c_ast.ID)
-                and isinstance(cond, c_ast.BinaryOp) and cond.op == "<=" and isinstance(cond.left, c_ast.ID)
-                and cond.left.name == init.lvalue.name and isinstance(nxt, c_ast.UnaryOp)
-                and nxt.op in ("p++", "++") and isinstance(nxt.expr, c_ast.ID) and nxt.expr.name == init.lvalue.name):
-            refuse(st, "only `for (v = a; v <= lim; v++)` (PL/I DO v = a TO lim) is in the subset")
-        vname = init.lvalue.name
-        if vname not in self.frame.locals or self.frame.locals[vname][1] != 16:
-            refuse(st, "the DO variable must be a 16-bit local")
-        vslot = self.frame.locals[vname][0]
+
+        # R21d (P39): the DO control variable may be a BY-REFERENCE PARAMETER,
+        # `for (*i = 1; *i <= lim; (*i)++)`.  Everything about the loop is
+        # unchanged except that every reference to it is INDIRECT through the
+        # argument slot -- `XNSTA 0,@[ac3+0xFFF4]` and the indirect `XNDO`
+        # rather than the direct forms.  Witness: LIST_PLAYERS.3 7016F55E.
+        def _ctl(e):
+            """-> the control variable's name, or None."""
+            if isinstance(e, c_ast.ID):
+                return e.name
+            if isinstance(e, c_ast.UnaryOp) and e.op == "*" and isinstance(e.expr, c_ast.ID):
+                return e.expr.name
+            return None
+
+        def _indirect(e):
+            return isinstance(e, c_ast.UnaryOp) and e.op == "*"
+
+        ok = (isinstance(init, c_ast.Assignment) and _ctl(init.lvalue) is not None
+              and isinstance(cond, c_ast.BinaryOp) and cond.op == "<="
+              and _ctl(cond.left) == _ctl(init.lvalue)
+              and _indirect(cond.left) == _indirect(init.lvalue)
+              and isinstance(nxt, c_ast.UnaryOp) and nxt.op in ("p++", "++")
+              and _ctl(nxt.expr) == _ctl(init.lvalue)
+              and _indirect(nxt.expr) == _indirect(init.lvalue))
+        if not ok:
+            refuse(st, "only `for (v = a; v <= lim; v++)` (PL/I DO v = a TO lim) "
+                       "is in the subset, with v a 16-bit local or a "
+                       "by-reference parameter")
+        vname = _ctl(init.lvalue)
+        via_arg = _indirect(init.lvalue)
+        if via_arg:
+            if vname not in self.args:
+                refuse(st, "the DO variable *%s is not a parameter" % vname)
+            n_arg, awidth, aconst = self.args[vname]
+            if awidth != 16:
+                refuse(st, "the DO variable must be 16-bit")
+            if aconst:
+                refuse(st, "write through a const parameter (the DO variable)")
+            vref = "R[ac3 + -%d]" % (10 + 2 * n_arg)
+            vkey = ("arg", vname)
+        else:
+            if vname not in self.frame.locals or self.frame.locals[vname][1] != 16:
+                refuse(st, "the DO variable must be a 16-bit local")
+            vref = "wp(ac3, %d)" % self.frame.locals[vname][0]
+            vkey = ("local", vname)
+        vslot = None if via_arg else self.frame.locals[vname][0]
         a = self.value(init.rvalue, want_reg=False)
         if a.kind != "const":
             refuse(st, "DO initial value must be a constant (only form seen)")
         const_lim = isinstance(cond.right, c_ast.Constant)
+        expr_lim = False
         if not const_lim:
-            if not isinstance(cond.right, c_ast.ID) or cond.right.name not in self.frame.locals:
-                refuse(st, "DO limit must be a local variable or a constant")
-            lim = self.value(cond.right, want_reg=True)      # the limit first: it is live for the test
-            self.regs.c[lim.reg] = ("live", "lim")
-            lslot = self.frame.locals[cond.right.name][0]
+            if isinstance(cond.right, c_ast.ID) and cond.right.name in self.frame.locals:
+                lim = self.value(cond.right, want_reg=True)  # the limit first: it is live for the test
+                self.regs.c[lim.reg] = ("live", "lim")
+                lslot = self.frame.locals[cond.right.name][0]
+            else:
+                # R21e (P39, UNDER TEST): a DO limit that is an EXPRESSION is
+                # evaluated ONCE, before the control variable's initialisation,
+                # into a frame TEMP -- PL/I evaluates the TO expression once.
+                # Unlike a limit that is a named local, the temp is not a
+                # protected user variable, so the initial constant may take the
+                # register the limit was computed in and the limit is reloaded
+                # from its temp for the test.
+                expr_lim = True
+                lv = self.value(cond.right, want_reg=True)
+                lslot = self.frame.alloc_temp(("dolim", id(st)))
+                self.emit("M16[wp(ac3, %d)] = trunc16(%s)" % (lslot, lv.reg))
+                self.regs.set(lv.reg, ("var", ("dolim", id(st))))
         # R36 (P37/OWNS 70175CBF..CC7): a subscript in the BODY that is
         # invariant in the loop variable is evaluated at the loop head -- its
         # bound check (R17) and stride multiply BEFORE the loop's own
@@ -1086,10 +1143,15 @@ class Translator:
         cr = self.regs.pick()
         self.emit("%s = %s" % (cr, hexc(a.const)))
         self.regs.set(cr, ("const", a.const))
-        self.emit("M16[wp(ac3, %d)] = trunc16(%s)" % (vslot, cr))
+        self.emit("M16[%s] = trunc16(%s)" % (vref, cr))
         if cr != lr:
             self.emit("%s = %s" % (lr, cr))
             self.regs.set(lr, ("dup", cr))
+        if expr_lim:
+            lr2 = self.regs.pick(avoid=(lr, "ac2"))
+            self.emit("%s = sx16(M16[wp(ac3, %d)])" % (lr2, lslot))
+            self.regs.set(lr2, ("live", "lim"))
+            lim = Val("reg", reg=lr2, width=16)
         for skey, hr in hoisted:
             slot = self.frame.alloc_temp(skey)
             self.emit("M32[wp(ac3, %d)] = %s" % (slot, hr))
@@ -1113,8 +1175,8 @@ class Translator:
             self.emit("%s = %s" % (lr, hexc(int(cond.right.value, 0))))
         else:
             self.emit("%s = sx16(M16[wp(ac3, %d)])" % (lr, lslot))
-        self.emit("t1 = nadd(M16[wp(ac3, %d)], 1)" % vslot)
-        self.emit("M16[wp(ac3, %d)] = t1" % vslot)
+        self.emit("t1 = nadd(M16[%s], 1)" % vref)
+        self.emit("M16[%s] = t1" % vref)
         self.emit("t2 = (t1 >s %s)" % lr)
         self.emit("%s = t1" % lr)
         self.terminate(("goto", [body_b.label, after_b.label], "t2"))
@@ -2262,6 +2324,13 @@ class Translator:
         elif vname in self.frame.locals:
             slot, width = self.frame.locals[vname]
             atom = s_load(s_addv(Sym("fp"), s_const(slot)), width)
+        elif vname in self.args:
+            # a BY-REFERENCE parameter as the subscript: the datum is at the
+            # address in the argument slot, so the symbolic form is a load
+            # THROUGH it -- `sx16(M16[R[ac3 + -12]])` (LIST_PLAYERS.3 7016F583).
+            n_arg, width, _ = self.args[vname]
+            atom = s_load(s_load(s_addv(Sym("fp"), s_const(-(10 + 2 * n_arg))),
+                                 32, ind=True), width)
         else:
             raise Refuse("no symbolic form for subscript %s" % vname)
         return s_mulk(atom, stride)
@@ -2858,11 +2927,13 @@ def main():
                      cpp_args=["-I" + os.path.join(HERE, "fake_include"), "-I" + os.path.join(ROOT, "game"),
                                "-D__TRANSLATOR__", "-fdollars-in-identifiers"])
     fdef = None
+    want = c_name(args.routine)
     for ext in ast.ext:
-        if isinstance(ext, c_ast.FuncDef) and ext.decl.name == args.routine:
+        if isinstance(ext, c_ast.FuncDef) and ext.decl.name in (args.routine, want):
             fdef = ext
     if fdef is None:
-        raise SystemExit("routine %s not defined in %s" % (args.routine, args.source))
+        raise SystemExit("routine %s (C name %s) not defined in %s"
+                         % (args.routine, want, args.source))
     tr = Translator(Layout(args.layout), args.addrbook, args.routine)
     tr.collect_protos(ast)
     tr.mem = MemImage(args.mem) if args.mem and os.path.exists(args.mem) else None

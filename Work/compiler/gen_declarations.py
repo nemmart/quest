@@ -66,6 +66,8 @@ TABLES = {
                            "fm591": (-591, 16),   # P37/OWNS + DIED: the second bit word (bits 14, 15 seen in OWNS)
                            # P37/OWNS 70175CDB: PLAYER(p).fm390(i), 10 x 16-bit, inner stride 1 word,
                            # 1-based (the DERR 17 bound on i is 10, as it is on p)
+                           # P39/LIST_PLAYERS.3 7016F59F: XNLDA 0,[ac2+0x7D8B]
+                           "fm629": (-629, 16),
                            "fm390": (-390, 16, (10,), (1,))}),
 }
 
