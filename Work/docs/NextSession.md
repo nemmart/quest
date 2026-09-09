@@ -2,6 +2,11 @@
 
 ## ★ RE-ENTRY BRIEF (written Sep 6 2026 — project asleep until next weekend)
 
+**Integrator/reviewer SOP: docs/INTEGRATOR.md** (prompts, plan-gate
+rulings, delivery mechanics, verification before merge, doc upkeep,
+standing judgements). METHOD.md remains the law for implementation
+sessions.
+
 **Tree of record: `main`.** Verify against docs/Provenance.md (post-P33-B
 table). Build: `cd Work/emulation && make`; self-tests:
 `tests/run_helpers_selftest.sh`, `tests/run_strings_selftest.sh`,

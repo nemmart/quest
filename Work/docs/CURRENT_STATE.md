@@ -1,6 +1,7 @@
 > Emulator↔hardware divergence register: docs/EmulatorDivergences.md (fixed / benign / guard; add to it whenever a manual page is read).
 > Artifact checksums of record: docs/Provenance.md (post-P33-B table, Sep 6 2026).
 > Re-entry brief and next-weekend order: docs/NextSession.md (top).
+> Integrator/reviewer SOP: docs/INTEGRATOR.md.
 
 # Where things stand — Sep 6 2026 (project asleep until next weekend)
 
