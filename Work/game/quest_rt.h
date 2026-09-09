@@ -69,9 +69,34 @@
   #endif
 #endif
 
-/* PL/I bit-string element: bit `n` (0 = MSB) of a 16-bit word field.
- * NOT yet in the translator's subset (DIED opens with one: it REFUSES here). */
-int BIT(int16_t word, int n);
+/* ---- conversions: EXPLICIT, never implicit (P36 ruling 1, Sep 8 2026) ----
+ * The DG compiler inserts a CHECKED convert when a 32-bit value reaches a
+ * 16-bit destination.  The source of record says so: a bare `int16 = int32`
+ * is a translator REFUSAL.  Each maps 1:1 to the IR op of the same name
+ * (IR.md §5.1/§5.5): cvwn is EFFECTFUL (sets OVR if the value did not fit
+ * int16), sx16/trunc16 are pure. */
+#ifdef __cplusplus
+  inline int32_t cvwn(int32_t v) { return (int32_t)(int16_t)(v & 0xFFFF); }
+  inline int32_t sx16(int32_t v) { return (int32_t)(int16_t)(v & 0xFFFF); }
+  inline int32_t trunc16(int32_t v) { return (int32_t)(v & 0xFFFF); }
+#else
+  int32_t cvwn(int32_t v);      /* CVWN: sx16(v & 0xFFFF), ovr |= did not fit */
+  int32_t sx16(int32_t v);      /* sign-extend bits 15:0 */
+  int32_t trunc16(int32_t v);   /* v & 0xFFFF */
+#endif
+
+/* ---- PL/I bit strings (P36) ----------------------------------------------
+ * A bit reference is `16 * <word displacement> + n` computed into a register
+ * and applied to a base pointer the instruction resolves indirectly
+ * (WSZB / WBTO / WBTZ, EagleCompute.cpp:261/272/283).  `n` is numbered from
+ * the MSB (0 = bit 15 of the word), which is the DG convention.
+ * The word argument is the record/static word itself, as an lvalue; the
+ * translator decomposes its address into base + scaled subscript + K and
+ * folds `16*K + n` into the one WNADI constant the compiler emits. */
+int  BIT(int16_t word, int n);              /* rvalue: 0/1  (WSZB)          */
+void BIT_SET(int16_t word, int n);          /* statement    (WBTO)          */
+void BIT_CLR(int16_t word, int n);          /* statement    (WBTZ)          */
+void BIT_PUT(int16_t word, int n, int e);   /* statement: WBTO; test; WBTZ  */
 
 /* PL/I string concatenation a || b (CHAR temporaries; the translator's WSTB/WCMV shapes) */
 const char *CAT(const char *a, const char *b);

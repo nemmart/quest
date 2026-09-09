@@ -16,8 +16,8 @@ retry:
     r = RANDOM_NUMBER$3(TMP(1), TMP(OBJ_PTR->region_count), &SD_PTR->seed);
     if (REGION[SUB(r, 100000)].x == 0) goto retry;
     if (REGION[r].type / 100 + 1 != 3) goto retry;
-    *x = RANDOM_NUMBER$3(TMP(REGION[r].x - 20), TMP(REGION[r].x + 20), &SD_PTR->seed);
-    *y = RANDOM_NUMBER$3(TMP(REGION[r].y - 20), TMP(REGION[r].y + 20), &SD_PTR->seed);
+    *x = cvwn(RANDOM_NUMBER$3(TMP(REGION[r].x - 20), TMP(REGION[r].x + 20), &SD_PTR->seed));
+    *y = cvwn(RANDOM_NUMBER$3(TMP(REGION[r].y - 20), TMP(REGION[r].y + 20), &SD_PTR->seed));
     if (*x <= 15349) goto retry;
     if (*x > 16300) goto retry;
     if (*y <= 15219) goto retry;

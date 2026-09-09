@@ -791,6 +791,15 @@ class Translator:
         self.flush_elem_save()
         self.store(lv, v)
 
+    def narrow_check(self, lv, v):
+        """P36 ruling 1: no silent 32->16 narrowing.  The DG compiler emits a
+        CHECKED convert (CVWN) here; the source of record must say so with
+        `cvwn(e)`, so a 32-bit value reaching a 16-bit destination without one
+        is a REFUSAL, not an inserted instruction."""
+        if v.width == 32:
+            refuse(lv, "32-bit value stored to a 16-bit destination without "
+                       "an explicit cvwn() (P36 ruling 1)")
+
     def store(self, lv, v):
         """Store register value v into lvalue lv (R16: a 32-bit result
         narrowed to a 16-bit target is cvwn'd first; the store is trunc16)."""
@@ -798,8 +807,7 @@ class Translator:
             slot, width = self.frame.locals[lv.name]
             r = self.to_reg(v)
             if width == 16:
-                if v.width == 32:
-                    self.emit("%s = cvwn(%s)" % (r, r))
+                self.narrow_check(lv, v)
                 self.emit("M16[wp(ac3, %d)] = trunc16(%s)" % (slot, r))
             else:
                 self.emit("M32[wp(ac3, %d)] = %s" % (slot, r))
@@ -812,8 +820,7 @@ class Translator:
                 refuse(lv, "write through a const parameter")
             r = self.to_reg(v)
             if width == 16:
-                if v.width == 32:
-                    self.emit("%s = cvwn(%s)" % (r, r))
+                self.narrow_check(lv, v)
                 self.emit("M16[R[ac3 + -%d]] = trunc16(%s)" % (10 + 2 * n, r))
             else:
                 self.emit("M32[R[ac3 + -%d]] = %s" % (10 + 2 * n, r))
@@ -885,8 +892,7 @@ class Translator:
         if width == 32:
             self.emit("M32[wp(ac2, %d)] = %s" % (K, v.reg))
         else:
-            if v.width == 32:
-                self.emit("%s = cvwn(%s)" % (v.reg, v.reg))
+            self.narrow_check(lv, v)
             self.emit("M16[wp(ac2, %d)] = trunc16(%s)" % (K, v.reg))
         self.regs.c["ac2"] = ("addr", ("stored",))
 
@@ -966,6 +972,26 @@ class Translator:
             self.cur = join
             self.regs.set(r, ("live", "abs"))
             return Val("reg", reg=r, width=32)
+        if isinstance(e, c_ast.FuncCall) and e.name.name in ("cvwn", "sx16", "trunc16"):
+            # P36 ruling 1: conversions are explicit.  `cvwn(e)` is the checked
+            # 32->16 convert the compiler inserts before a 16-bit store; the
+            # value it yields is already 16-bit, so the store's type-driven
+            # auto-narrow must NOT emit a second cvwn (hence width=16 below).
+            op = e.name.name
+            inner = e.args.exprs[0]
+            if isinstance(inner, c_ast.FuncCall) and "$" in getattr(inner.name, "name", ""):
+                v = self.rt_call(inner)          # result in ac0 (RTConventions)
+            else:
+                v = self.value(inner, want_reg=True, avoid=avoid)
+            if op == "cvwn":
+                if v.width == 16:
+                    refuse(e, "cvwn() of a value that is already 16-bit")
+                self.emit("%s = cvwn(%s)" % (v.reg, v.reg))
+                self.regs.set(v.reg, ("live", "cvwn"))
+            else:
+                self.emit("%s = %s(%s)" % (v.reg, op, v.reg))
+                self.regs.set(v.reg, ("live", op))
+            return Val("reg", reg=v.reg, width=16)
         if isinstance(e, c_ast.FuncCall) and e.name.name == "SUB":
             v = self.value(e.args.exprs[0], want_reg=True, avoid=avoid)
             self.bounds_check(v.reg, int(e.args.exprs[1].value, 0))

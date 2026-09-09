@@ -132,8 +132,20 @@ def succs_of(stmts):
     if last.kind == "call":
         return [last.st[5]]
     if last.kind == "instr":
-        # WSAVS entry block falls through; DERR is terminal
-        if last.st[2].startswith("WSAVS"):
+        # WSAVS entry block falls through; DERR is terminal.
+        #
+        # P36 ruling B (DEFECT FIX, not an equivalence): an embedded CALL
+        # instruction — an undecorated LCALL/XCALL/LJSR/XJSR, which the
+        # emitter leaves as an instruction when the site is argc-0 or not in
+        # the pushmap — RETURNS, so its block falls through to the next block
+        # in address order exactly as WSAVS's does.  Returning [] here stopped
+        # the DFS dead: 43 of DIED's 73 blocks were unreached and fell back to
+        # ADDRESS order, which on the translator's side (synthetic pcs) is
+        # really EMISSION order and would have let block ordering drift
+        # undetected.  With the fall-through, DIED is 73/73 reached.  This
+        # forgives nothing — it makes equivalence 1's canonical order stricter
+        # — and applies identically to both sides.
+        if last.st[2].startswith(("WSAVS", "LCALL", "XCALL", "LJSR", "XJSR")):
             return ["fall"]
         return []
     return []
