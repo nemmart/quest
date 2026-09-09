@@ -200,6 +200,7 @@ class Layout:
         self.statics = d["statics"]
         self.direct = d["direct"]
         self.tables = d["tables"]
+        self.frames = d.get("frames", {})     # P39: parent frame layouts
 
     def static(self, name):
         return self.statics.get(name)
@@ -209,6 +210,12 @@ class Layout:
         if f is None:
             return None
         return f["K"], f["width"]
+
+    def parent_frame(self, name):
+        """P39: the enclosing procedure's frame layout — the static link's
+        target.  Every slot in it carries a width and a named witness (the
+        user's ruling); gen_declarations.py refuses to emit one without."""
+        return self.frames.get(name)
 
     def table(self, name):
         return self.tables.get(name)
@@ -580,6 +587,14 @@ class Translator:
         self.elem_refs = {}    # pre-pass: stmt index -> {table:{subscript: count}}
         self.arm_path = {}     # pre-pass: stmt index -> the branch arms enclosing it
         self.pinned = set()    # R7c': registers pinned across an if-body
+        # R42 (P39): a NESTED procedure — the addrbook flags it, and its name
+        # is `PARENT.N@PC`.  `parent` is None for an ordinary procedure, and
+        # UP()/UPARG() then refuse.  Nesting is one level deep program-wide
+        # (P39 §2), so the parent is a name, never a chain.
+        self.parent = None
+        if "nested" in (self.entry.get("flags") or "").split(",") and "." in routine_name:
+            self.parent = routine_name.split(".", 1)[0]
+        self.link_param = None
 
     # -- blocks ---------------------------------------------------------
     def new_block(self, label=None):
@@ -680,6 +695,19 @@ class Translator:
             if isinstance(p.type, c_ast.TypeDecl) and p.name == "arg_count":
                 self.arg_count_param = p.name   # R12: the marker word
                 continue
+            if p.name == "__up":
+                # R42: the static link.  It arrives in ac1 and WSAVS saves it
+                # at wp(fp, -6); it is NOT one of the procedure's arguments and
+                # is not pushed, so it does not count toward argc.  That is why
+                # a nested procedure can take a link AND arguments without the
+                # two competing (KILL_PLAYER.4, LIST_PLAYERS.3: argc 1 + link).
+                if self.parent is None:
+                    refuse(p, "%s takes an UPLINK but the addrbook does not "
+                              "call it nested" % self.name)
+                if params.index(p) != 0:
+                    refuse(p, "the UPLINK parameter must come first")
+                self.link_param = p.name
+                continue
             if not isinstance(p.type, c_ast.PtrDecl):
                 refuse(p, "parameters are by-reference pointers (PL/I)")
             n += 1
@@ -688,6 +716,9 @@ class Translator:
             self.args[p.name] = (n, width, const)
         if n != self.entry["argc"]:
             raise Refuse("%s declares %d arguments; the addrbook says argc %d" % (self.name, n, self.entry["argc"]))
+        if self.parent is not None and self.link_param is None:
+            raise Refuse("%s is a nested procedure; its first parameter must be "
+                         "`UPLINK(%s) __up` (R42)" % (self.name, self.parent))
         # R35: the declared return type; None = a PL/I procedure (returns nothing)
         rt = decl.type.type
         self.ret_width = None
@@ -1411,6 +1442,36 @@ class Translator:
             self.regs.invalidate_var(("arg", lv.expr.name))
             self.regs.set(r, ("var", ("arg", lv.expr.name)))
             return
+        if self.is_uplevel(lv, ("UP",)):
+            # R43: an uplevel WRITE is the SAME shape as an uplevel read — link
+            # into a base, then displace.  There is no separate write form; the
+            # only witness that could have shown one is FIRE.1, which reads
+            # wp(link,10) and writes wp(link,14) with identical addressing.
+            pname, fname, slot, width = self.uplevel_slot(lv)
+            b = self.link_reg()
+            r = self.to_reg(v)
+            if width == 16:
+                self.narrow_check(lv, v)
+                self.emit("M16[wp(%s, %d)] = trunc16(%s)" % (b, slot, r), uses_fp=False)
+            else:
+                self.emit("M32[wp(%s, %d)] = %s" % (b, slot, r), uses_fp=False)
+            self.regs.invalidate_var(("up", pname, slot))
+            self.regs.set(r, ("var", ("up", pname, slot)))
+            return
+        if isinstance(lv, c_ast.UnaryOp) and lv.op == "*" and self.is_uplevel(lv.expr, ("UPARG",)):
+            pname, k = self.uplevel_arg(lv.expr)
+            width = self.uparg_width(lv, pname, k)
+            b = self.link_reg()
+            r = self.to_reg(v)
+            d = 10 + 2 * k
+            if width == 16:
+                self.narrow_check(lv, v)
+                self.emit("M16[R[%s + -%d]] = trunc16(%s)" % (b, d, r), uses_fp=False)
+            else:
+                self.emit("M32[R[%s + -%d]] = %s" % (b, d, r), uses_fp=False)
+            self.regs.invalidate_var(("uparg", pname, k))
+            self.regs.set(r, ("var", ("uparg", pname, k)))
+            return
         refuse(lv, "lvalue form not in the subset")
 
     def indexed_store(self, lv, rhs):
@@ -1846,6 +1907,34 @@ class Translator:
                 return Val("reg", reg=r, width=width)
             text = "M32[R[ac3 + -%d]]" % (10 + 2 * n) if width == 32 else "sx16(M16[R[ac3 + -%d]])" % (10 + 2 * n)
             return self.load(text, width, key, want_reg, avoid, name=e.expr.name)
+        if self.is_uplevel(e, ("UP",)):
+            # R43: an uplevel READ — load the link into a base, then displace.
+            # Structurally identical to the WRITE in store(); the compiler has
+            # no separate form for the two (FIRE.1 wp(link,10) read vs
+            # wp(link,14) written).
+            pname, fname, slot, width = self.uplevel_slot(e)
+            key = ("up", pname, slot)
+            r = self.regs.find(("var", key))
+            if r is not None:
+                return Val("reg", reg=r, width=width)
+            b = self.link_reg()
+            text = "M32[wp(%s, %d)]" % (b, slot) if width == 32 \
+                else "sx16(M16[wp(%s, %d)])" % (b, slot)
+            return self.load(text, width, key, want_reg, avoid, name=fname)
+        if isinstance(e, c_ast.UnaryOp) and e.op == "*" and self.is_uplevel(e.expr, ("UPARG",)):
+            # the parent's k'th argument: link, then INDIRECT through the
+            # parent's argument slot (FIRE.2 7016A479 `XNLDA 1,@[ac2+0xFFF4]`)
+            pname, k = self.uplevel_arg(e.expr)
+            width = self.uparg_width(e, pname, k)
+            key = ("uparg", pname, k)
+            r = self.regs.find(("var", key))
+            if r is not None:
+                return Val("reg", reg=r, width=width)
+            b = self.link_reg()
+            d = 10 + 2 * k
+            text = "M32[R[%s + -%d]]" % (b, d) if width == 32 \
+                else "sx16(M16[R[%s + -%d]])" % (b, d)
+            return self.load(text, width, key, want_reg, avoid)
         if isinstance(e, c_ast.StructRef):
             return self.field(e, want_reg, avoid)
         if isinstance(e, c_ast.ArrayRef) and self.is_indexed_field(e):
@@ -1944,6 +2033,95 @@ class Translator:
         self.emit("%s = M32[%s]" % (r, hexc(s["addr"])), uses_fp=False)
         self.regs.set(r, ("addr", key))
         return r
+
+    def link_reg(self):
+        """R42/R44 (P39): the static link — the enclosing procedure's frame
+        pointer, saved by WSAVS at wp(fp, -6).  It is loaded like any other
+        BASE (R41: the class {ac2, ac3}, ac2 preferred), and once loaded it is
+        an ordinary cached address: a second uplevel reference in the same
+        block reuses it (FIRE.2 7016A477 -> 7016A47F, where ac2 survives the
+        DERR continuation).  R8 flushes it at a real block boundary, which is
+        why the book re-loads it in every block that needs it.
+
+        Evidence for the register class being the SAME class as an ordinary
+        base, rather than a rule of its own: program-wide, the 288 base loads
+        of the link go to ac2 (276) or ac3 (12) and NEVER to ac0/ac1, though
+        those are free at cost 0 at many of the sites; the only ac0/ac1 loads
+        of the link (21) are value loads immediately before a call, which is a
+        different role.  See docs/Project39/REPORT.md §2.
+        """
+        key = ("link",)
+        for r in ("ac2", "ac3"):
+            if self.regs.c[r] == ("addr", key):
+                return r
+        r = self.regs.pick_base()
+        if self.regs.cost(r) >= COST["live"]:
+            raise Refuse("R41: both base registers hold live addresses at a "
+                         "static-link load — not witnessed, no rule")
+        # the link lives at wp(fp, -6); resolve the frame's register EXPLICITLY
+        # (uses_fp=False) because the destination may itself be ac3, and then a
+        # blanket 'ac3' -> frame-register rewrite would corrupt the source.
+        f = self.fpr()
+        self.emit("%s = M32[wp(%s, -6)]" % (r, f), uses_fp=False)
+        self.regs.set(r, ("addr", key))
+        return r
+
+    def uplevel_slot(self, e):
+        """`UP(PARENT, name)` -> (parent, name, slot, width).  The parent must
+        be the one the routine is nested in, and the slot must be in
+        declarations.json's frames table — which gen_declarations.py will only
+        emit with a width and a named witness (the P39 user ruling)."""
+        args = e.args.exprs if e.args else []
+        if len(args) != 2 or not isinstance(args[0], c_ast.ID) or not isinstance(args[1], c_ast.ID):
+            refuse(e, "UP(PARENT, name) takes two identifiers")
+        pname, fname = args[0].name, args[1].name
+        if self.parent is None:
+            refuse(e, "UP() in %s, which the addrbook does not call a nested "
+                      "procedure" % self.name)
+        if pname != self.parent:
+            refuse(e, "UP(%s, ...) in a procedure nested in %s — a procedure "
+                      "reaches its OWN enclosing frame only (nesting is one "
+                      "level deep program-wide, P39 §2)" % (pname, self.parent))
+        pf = self.L.parent_frame(pname)
+        if pf is None:
+            refuse(e, "no frame layout for %s in declarations.json" % pname)
+        f = pf["locals"].get(fname)
+        if f is None:
+            refuse(e, "%s has no slot %s in declarations.json — add it to "
+                      "gen_declarations.py PARENT_FRAMES with its width and a "
+                      "named witness" % (pname, fname))
+        return pname, fname, f["slot"], f["width"]
+
+    def uplevel_arg(self, e):
+        """`UPARG(PARENT, k)` -> (parent, k).  The parent's own parameters are
+        by-reference, so the value is `*UPARG(P, k)`: link, then the parent's
+        argument slot at wfp-10-2k, then the datum (`XNLDA 1,@[ac2+0xFFF4]`)."""
+        args = e.args.exprs if e.args else []
+        if len(args) != 2 or not isinstance(args[0], c_ast.ID) \
+                or not isinstance(args[1], c_ast.Constant):
+            refuse(e, "UPARG(PARENT, k) takes an identifier and a constant")
+        pname, k = args[0].name, int(args[1].value, 0)
+        if self.parent is None or pname != self.parent:
+            refuse(e, "UPARG(%s, ...) in %s" % (pname, self.name))
+        pf = self.L.parent_frame(pname)
+        if pf is None:
+            refuse(e, "no frame layout for %s in declarations.json" % pname)
+        if not 1 <= k <= pf["argc"]:
+            refuse(e, "%s takes %d arguments; UPARG(%s, %d)" % (pname, pf["argc"], pname, k))
+        return pname, k
+
+    def uparg_width(self, e, pname, k):
+        a = self.L.parent_frame(pname)["args"].get(str(k))
+        if a is None:
+            refuse(e, "the width of %s's argument %d is not witnessed — add it "
+                      "to gen_declarations.py PARENT_FRAMES args with a named "
+                      "witness" % (pname, k))
+        return a["width"]
+
+    @staticmethod
+    def is_uplevel(e, which=("UP", "UPARG")):
+        return isinstance(e, c_ast.FuncCall) and isinstance(e.name, c_ast.ID) \
+            and e.name.name in which
 
     def field(self, e, want_reg, avoid):
         if e.type == "->" and isinstance(e.name, c_ast.ID):

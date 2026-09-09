@@ -85,6 +85,57 @@
   int32_t trunc16(int32_t v);   /* v & 0xFFFF */
 #endif
 
+/* ---- the static link: uplevel access in a nested procedure (P39) ---------
+ * A nested PL/I procedure receives the ENCLOSING procedure's frame pointer in
+ * ac1; `WSAVS` saves it at `wp(fp, -6)`.  Every reference to a variable of the
+ * enclosing procedure is therefore a DOUBLE INDIRECTION -- load the link into
+ * a base register, then displace off it -- and it is a real cost the compiler
+ * pays at every reference (R43: it is re-loaded in every block that needs it).
+ * The source must make that visible, so an uplevel reference is spelled as an
+ * ACCESSOR, never as a plain identifier.
+ *
+ *   UPLINK(P) __up   the link parameter: the FIRST parameter of a nested
+ *                    procedure whose enclosing procedure is P
+ *   UP(P, name)      a VARIABLE of the enclosing procedure P -- an lvalue;
+ *                    `&UP(P, name)` is its address (XPEF / XPEFB)
+ *   UPARG(P, k)      the enclosing procedure's k'th ARGUMENT.  The parent's
+ *                    own parameters are by-reference, so this is a POINTER
+ *                    and the value is `*UPARG(P, k)` -- a triple indirection
+ *                    in the machine (link, then arg slot, then the datum:
+ *                    `XNLDA 1,@[ac2+0xFFF4]`, FIRE.2 7016A479).
+ *
+ * P39 gate ruling (c), Sep 9 2026 (user).  Alternatives considered and
+ * rejected: a `__enclosing` qualifier (makes an uplevel reference read like an
+ * ordinary variable, hiding the cost -- fails the stated criterion), and
+ * declaring the parent's frame as a struct the parent itself passes (the
+ * better LONG-TERM shape, and the natural endpoint once the parents are being
+ * reconstructed themselves, but it forces a struct on all 13 parents and
+ * re-derives R3's slot allocation against member order -- too much, too early).
+ *
+ * The parent's frame layout lives in game/declarations.json under "frames".
+ * RULE (P39, user ruling): a parent slot enters that table ONLY with a
+ * recorded width and a NAMED WITNESS.  Sibling nested procedures must agree on
+ * their common parent's layout independently; a disagreement is a finding, not
+ * something to reconcile.  That is the difference between DERIVING the
+ * parent's frame and FITTING it. */
+#ifdef __cplusplus
+  #define UPLINK(P)      struct P##__frame *
+  #define UP(P, name)    (__up->name)
+  #define UPARG(P, k)    (__up->__a##k)
+#else
+  #ifdef __TRANSLATOR__
+    /* the translator recognises UP/UPARG by NAME and takes the displacement
+     * from declarations.json; the link parameter is opaque to it. */
+    #define UPLINK(P)    void *
+    int32_t  UP();               /* UP(P, name)  -- an lvalue                */
+    int32_t *UPARG();            /* UPARG(P, k)  -- the parent's k'th arg    */
+  #else
+    #define UPLINK(P)    struct P##__frame *
+    #define UP(P, name)  (__up->name)
+    #define UPARG(P, k)  (__up->__a##k)
+  #endif
+#endif
+
 /* ---- PL/I bit strings (P36) ----------------------------------------------
  * A bit reference is `16 * <word displacement> + n` computed into a register
  * and applied to a base pointer the instruction resolves indirectly

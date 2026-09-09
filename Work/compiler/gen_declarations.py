@@ -70,6 +70,78 @@ TABLES = {
 }
 
 
+# ---------------------------------------------------------------------------
+# PARENT FRAMES — the static link's target layout (P39)
+# ---------------------------------------------------------------------------
+# A nested procedure reaches its enclosing procedure's variables through the
+# link at wp(fp, -6).  To emit the displacement the translator needs the
+# PARENT's frame layout, which is not known from the parent's own source (no
+# parent is reconstructed yet) — so it is recorded here, slot by slot, as the
+# nested procedures witness it.
+#
+# USER RULING (P39 gate, Sep 9 2026) — a slot enters this table ONLY with a
+# recorded WIDTH and a NAMED WITNESS.  Sibling nested procedures must agree on
+# their common parent's layout INDEPENDENTLY; a disagreement is a finding, not
+# something to reconcile.  That mutual check is the difference between deriving
+# the parent's frame and fitting it.  `check_frames()` below enforces the
+# mechanical half (width + witness present); the independence is procedural.
+#
+# name -> dict(argc, args{k: (width, witness, comment)}, locals{name: (slot, width, witness, comment)})
+# `args` carries the parent's OWN parameters, reached as UPARG(P, k): they are
+# by-reference, so the width is the width of the DATUM, not of the slot.  They
+# obey the same witness rule as the locals.
+# Slot numbers are WORD displacements off the parent's frame pointer, exactly
+# as they appear in the IR: `wp(link, slot)`.  Locals are named `w<slot>` when
+# the meaning is not known — the same convention readable.py uses for fields.
+PARENT_FRAMES = {
+    "LIST_PLAYERS": dict(
+        argc=0, args={},
+        locals={
+            "w13": (13, 16, "LIST_PLAYERS.3@7016F59F",
+                    "XNLDA 1,[ac2+0xD] — compared against PLAYER(i).fm629"),
+        }),
+    "FIRE": dict(
+        argc=2,
+        args={1: (16, "FIRE.2@7016A479",
+                  "XNLDA 1,@[ac2+0xFFF4] — a PLAYER subscript (DERR 17 bound 10)")},
+        locals={
+            "w10": (10, 32, "FIRE.1@7016A3C0",
+                    "XWLDA 0,[ac2+0xA]; a REGION subscript (DERR 17 bound 100000)"),
+            "w12": (12, 32, "FIRE.2@7016A483",
+                    "XWLDA 0,[ac2+0xC]; a PLAYER subscript (DERR 17 bound 10)"),
+            "w14": (14, 32, "FIRE.1@7016A3DA",
+                    "XWSTA 0,[ac3+0xE] — WRITTEN uplevel, and read back at 7016A401"),
+        }),
+}
+
+
+def check_frames():
+    """The user ruling, enforced: width and a named witness, or it does not go
+    in.  A missing witness is a HARD ERROR, not a warning — the whole point of
+    the rule is that a slot cannot arrive by convenience."""
+    bad = []
+    for pname, p in PARENT_FRAMES.items():
+        for fname, spec in p["locals"].items():
+            slot, width, witness = spec[0], spec[1], spec[2]
+            if width not in (8, 16, 32):
+                bad.append("%s.%s: width %r is not 8/16/32" % (pname, fname, width))
+            if not witness or "@" not in witness:
+                bad.append("%s.%s: no named witness (expected NAME@PC)" % (pname, fname))
+        for k, spec in p.get("args", {}).items():
+            width, witness = spec[0], spec[1]
+            if width not in (8, 16, 32):
+                bad.append("%s arg %s: width %r is not 8/16/32" % (pname, k, width))
+            if not witness or "@" not in witness:
+                bad.append("%s arg %s: no named witness (expected NAME@PC)" % (pname, k))
+            if not 1 <= k <= p["argc"]:
+                bad.append("%s arg %s: outside argc %d" % (pname, k, p["argc"]))
+        slots = [s[0] for s in p["locals"].values()]
+        if len(slots) != len(set(slots)):
+            bad.append("%s: two names for one slot" % pname)
+    if bad:
+        raise SystemExit("PARENT_FRAMES violates the P39 witness rule:\n  " + "\n  ".join(bad))
+
+
 def c_type(width):
     return {16: "int16_t", 32: "int32_t"}[width]
 
@@ -106,6 +178,34 @@ def gen_h(digest):
             w("    %s %s;   /* K=%d: %s */" % (c_type(width), fname, K, cmt))
         w("};")
     w("")
+    w("/* ---- parent frames: the static link's targets (P39) ----")
+    w(" * A nested procedure's UPLINK(P) points at one of these.  Members are at")
+    w(" * their WORD displacement off the parent's frame pointer; `__aK` is the")
+    w(" * parent's K'th argument (by reference, at wfp-10-2K).")
+    w(" *")
+    w(" * This view NAMES the slots and type-checks uses; it does NOT reproduce")
+    w(" * the frame's layout, and nothing should read offsetof() from it.  It")
+    w(" * cannot: the arguments sit at NEGATIVE displacements (wfp-10-2K) and the")
+    w(" * locals at positive ones, so no single struct puts both in address")
+    w(" * order.  The translator does not read this struct — it reads the same")
+    w(" * table from declarations.json, where the slot numbers are exact. */")
+    for pname, p in PARENT_FRAMES.items():
+        w("struct %s__frame {" % pname)
+        for k in range(1, p["argc"] + 1):
+            a = p.get("args", {}).get(k)
+            ty = "%s *" % c_type(a[0]) if a else "void *"
+            note = ("%s: %s" % (a[1], a[2])) if a else "width not witnessed yet"
+            w("    %s__a%d;   /* the parent's argument %d, at wfp-%d — %s */"
+              % (ty, k, k, 10 + 2 * k, note))
+        prev = 0
+        for fname, spec in sorted(p["locals"].items(), key=lambda kv: kv[1][0]):
+            slot, width, witness, cmt = spec
+            if slot > prev:
+                w("    int16_t __pad%d[%d];" % (slot, slot - prev))
+            w("    %s %s;   /* wp(link, %d) — %s: %s */" % (c_type(width), fname, slot, witness, cmt))
+            prev = slot + (width // 16)
+        w("};")
+    w("")
     w("#ifdef __cplusplus")
     w("/* C++ view: real objects bound to the world image (native runtime, later). */")
     for name, (addr, width, cmt) in STATICS.items():
@@ -139,7 +239,14 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default=os.path.join(ROOT, "game"))
     args = ap.parse_args()
-    table = dict(statics={n: dict(addr=a, width=w, comment=c) for n, (a, w, c) in STATICS.items()},
+    check_frames()                      # the P39 witness rule, enforced
+    table = dict(frames={p: dict(argc=v["argc"],
+                                 args={str(k): dict(width=s[0], witness=s[1], comment=s[2])
+                                       for k, s in v.get("args", {}).items()},
+                                 locals={n: dict(slot=s[0], width=s[1], witness=s[2], comment=s[3])
+                                         for n, s in v["locals"].items()})
+                         for p, v in PARENT_FRAMES.items()},
+                 statics={n: dict(addr=a, width=w, comment=c) for n, (a, w, c) in STATICS.items()},
                  direct={p: {n: dict(K=k, width=w, comment=c) for n, (k, w, c) in f.items()} for p, f in DIRECT.items()},
                  tables={n: dict(base=t["base"], stride=t["stride"], minK=t["minK"], origin=t["minK"] + t["stride"],
                                  bound=t["bound"], comment=t["comment"],

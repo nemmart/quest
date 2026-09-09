@@ -25,6 +25,50 @@
    }
   }
  },
+ "frames": {
+  "FIRE": {
+   "argc": 2,
+   "args": {
+    "1": {
+     "comment": "XNLDA 1,@[ac2+0xFFF4] \u2014 a PLAYER subscript (DERR 17 bound 10)",
+     "width": 16,
+     "witness": "FIRE.2@7016A479"
+    }
+   },
+   "locals": {
+    "w10": {
+     "comment": "XWLDA 0,[ac2+0xA]; a REGION subscript (DERR 17 bound 100000)",
+     "slot": 10,
+     "width": 32,
+     "witness": "FIRE.1@7016A3C0"
+    },
+    "w12": {
+     "comment": "XWLDA 0,[ac2+0xC]; a PLAYER subscript (DERR 17 bound 10)",
+     "slot": 12,
+     "width": 32,
+     "witness": "FIRE.2@7016A483"
+    },
+    "w14": {
+     "comment": "XWSTA 0,[ac3+0xE] \u2014 WRITTEN uplevel, and read back at 7016A401",
+     "slot": 14,
+     "width": 32,
+     "witness": "FIRE.1@7016A3DA"
+    }
+   }
+  },
+  "LIST_PLAYERS": {
+   "argc": 0,
+   "args": {},
+   "locals": {
+    "w13": {
+     "comment": "XNLDA 1,[ac2+0xD] \u2014 compared against PLAYER(i).fm629",
+     "slot": 13,
+     "width": 16,
+     "witness": "LIST_PLAYERS.3@7016F59F"
+    }
+   }
+  }
+ },
  "statics": {
   "CAS_PTR": {
    "addr": 1879048724,
