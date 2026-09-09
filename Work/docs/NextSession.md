@@ -65,12 +65,35 @@ coverage as partial.**
    IR **197/197 statement-for-statement, register-exact** (compiler/
    translate.py + ircmp.py, reproduced on main; C99+C++17 clean); DIED
    refuses at the first bit field — the subset's edge. The DG compiler
-   model is compiler/CODEGEN_RULES.md (25 rules). **P36 PROMPT WRITTEN** (docs/Project36/PROMPT.md): extend the subset
+   model is compiler/CODEGEN_RULES.md (25 rules). **P36 PARTIAL — MERGED** (fc623f8): four of five constructs landed for
+   DIED — bit references (R26–R29a), record-field strings + a port of
+   string_sites.py's symbolic address renderer (R31, R32), game→game
+   calls (R30), plus ruling 1 (explicit cvwn/sx16/trunc16; implicit
+   narrowing refuses) and ruling B (succs_of call fall-through: DIED
+   73/73 blocks reached). P35's three stay 197/197 primary / 128/128
+   folded, selftest PASS, C99+C++17 clean, **pragma count 0**. NOT
+   landed: arena twins and the frame relocation — see P37. Original
+   scope: docs/Project36/PROMPT.md; extend the subset
    to DIED — bit fields, ac3-repurposing, record string fields, arena
    twins, game→game calls; carried-in rulings (explicit cvwn/sx16/
    trunc16 intrinsics, no silent narrowing; falsify R10 against DIED's
    13 ac3 sites; no world-coordinate offset — CODEGEN_RULES tail).
-   Deliver a Work.tgz (P35's session crashed sending a partial zip). (translator + four routines + an IR
+   Deliver a Work.tgz (P35's session crashed sending a partial zip).
+6. **P37** (next in this line): finish DIED — (a) the FRAME RELOCATION,
+   which is bigger than P36's prompt described: from 70166376 to
+   701663B3 the compiler does `ac2 = wfp` once and keeps a record base
+   in ac3 for ~10 blocks, so all 22 frame refs spell `wp(ac2, 8)`;
+   Regs models ac0–ac2 with ac3 pinned, so this touches every emit
+   site — the user's `#pragma fp ac2` allowance is expected to earn its
+   keep here (pragmas counted next to the match number, recorded as
+   unexplained directives). (b) the arena twins/claim groups — sizing
+   is DERIVABLE (ceil(bytes/4) over the CAT chain, +2 for the length
+   word; every constant falls out of the literal lengths), needing only
+   a `LEN(v)` header form for a VARYING parameter's length. Then the
+   full 495-statement loop and R10's verdict (both its supporting site
+   701660F8 and its counter-instance 70166110 must be translated to
+   judge it; R10 stays at confidence C with the counter-instance
+   recorded). (translator + four routines + an IR
    comparator with slot/temp/label equivalences; primary target the raw
    book, secondary the register-folded one). Design decisions of record
    (Sep 8): compiler/README.md
