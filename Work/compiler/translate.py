@@ -577,6 +577,8 @@ class Block:
 
 
 class Translator:
+    hexc = staticmethod(hexc)
+
     def __init__(self, layout, addrbook, routine_name):
         self.L = layout
         self.entries = R.load_addrbook(addrbook)
@@ -1054,7 +1056,7 @@ class Translator:
                 self.stmt(st.stmt)
             return
         if isinstance(st, c_ast.Goto):
-            self.terminate(("goto", [self.c_label(st.name).label], "0"))
+            PROD.TEMPLATES["goto"](self, self.c_label(st.name).label)
             self.fired("goto", st, "goto %s" % st.name)
             self.start(self.new_block())
             return
@@ -1080,11 +1082,12 @@ class Translator:
                     self.narrow_check(st, v)
                     self.emit("M16[wp(ac3, -7)] = trunc16(%s)" % v.reg)
             if st.expr is None:
+                PROD.TEMPLATES["return_void"](self)
                 self.fired("return_void", st, "return")
             else:
+                self.terminate(("ret",))
                 self.fired("return_value", st, "return <value>",
                            consumes=(st.expr,))
-            self.terminate(("ret",))
             self.start(self.new_block())
             return
         if isinstance(st, c_ast.If):
@@ -1513,6 +1516,16 @@ class Translator:
                 if other:
                     avoid = avoid + (other[0],)
             kr = self.regs.pick(avoid=avoid)
+            # P42 ORPHAN: R36's hoist emits here and fires NO production.  A
+            # bottom-up generator reducing `T(i).f` cannot know it is inside a
+            # loop or which parts of the reference are invariant; a later loop
+            # pass can.  So this emission has no reduction address, which is
+            # why R36 has been read off one routine and been wrong for the
+            # next.  Recorded, not given a production: inventing a 38th to
+            # house it would hide the finding.
+            self.ledger.orphan_emission(
+                "hoist_invariant_subscripts", 3 if whole else 2,
+                "R36/R36a: loop-invariant hoist -- a PLACEMENT decision, not a reduction")
             self.emit("%s = %s" % (kr, hexc(t["stride"])))
             self.regs.set(kr, ("const", t["stride"]))
             self.emit("%s = mul(%s, %s)" % (r, r, kr))
@@ -2231,19 +2244,8 @@ class Translator:
                 r = self.regs.find(("const", k))
                 if r is None:
                     r = self.regs.pick(avoid)
-                    if k == 0:
-                        # R37: the compiler materialises the constant ZERO by
-                        # subtracting a register from itself (`WSUB r,r`), never
-                        # by an immediate load.  OWNS 70175DA5 `ac0 = sub(ac0,
-                        # ac0)` for `return 0`; the same shape at FIRE.1
-                        # 7016A3D2 and INIT_OBJ_TBL 7016DF68 (`WSUB 1,1`), and
-                        # it is the first half of R29's 0/-1 materialisation.
-                        self.emit("%s = sub(%s, %s)" % (r, r, r))
-                        sp = "WSUB"      # R37: zero is never an immediate load
-                    else:
-                        self.emit("%s = %s" % (r, hexc(k)))  # NLDAI/WLDAI
-                        sp = "NLDAI"
-                    self.regs.set(r, ("const", k))
+                    # PORTED (P42 Stage 3): productions.t_const_materialise
+                    sp = PROD.TEMPLATES["const_materialise"](self, r, k)
                     self.fired("const_materialise", e, "Constant %s" % hexc(k),
                                choices=[("reg", r), ("spelling", sp)])
                 return Val("reg", reg=r, width=32, const=k)
@@ -2799,29 +2801,25 @@ class Translator:
         if isinstance(rhs, c_ast.Constant):
             k = int(rhs.value, 0)
             if e.op == "+" and k == 1:
-                self.emit("%s = add(%s, 1)" % (r, r))                 # WINC
-                self.regs.set(r, ("live", "sum"))
+                sp = PROD.TEMPLATES["binop_const_inc"](self, r)
                 self.fired("binop_const_inc", e, "BinaryOp + 1",
-                           consumes=(rhs,), choices=[("spelling", "WINC")])
+                           consumes=(rhs,), choices=[("spelling", sp)])
                 return Val("reg", reg=r, width=32)
             if e.op in ("+", "-"):
                 kk = k if e.op == "+" else -k
                 if -0x8000 <= kk <= 0x7FFF:
-                    self.emit("%s = add(%s, %s)" % (r, r, hexc(kk)))     # WNADI (sign-extended)
-                    self.regs.set(r, ("live", "sum"))
+                    sp = PROD.TEMPLATES["binop_const_addi"](self, r, kk)
                     self.fired("binop_const_addi", e, "BinaryOp %s %s" % (e.op, hexc(k)),
-                               consumes=(rhs,), choices=[("spelling", "WNADI")])
+                               consumes=(rhs,), choices=[("spelling", sp)])
                     return Val("reg", reg=r, width=32)
                 refuse(e, "constant beyond 16 bits")
             kr = self.regs.pick(avoid=(r,))
-            self.emit("%s = %s" % (kr, hexc(k)))
-            self.regs.set(kr, ("const", k))
-            # D4 census target: the constant's register.  Today an R7 pick with
-            # an exclusion -- synthesised.  If D4 answers "down", a passed target.
+            op = "mul" if e.op == "*" else "div"
+            # PORTED. D4 census target: the constant's register is an R7 pick
+            # with an exclusion -- synthesised. If D4 answers "down", a target.
+            PROD.TEMPLATES["binop_const_scale"](self, r, kr, k, op)
             self.fired("binop_const_scale", e, "BinaryOp %s const" % e.op,
                        consumes=(rhs,), choices=[("reg", kr)])
-            op = "mul" if e.op == "*" else "div"
-            self.emit("%s = %s(%s, %s)" % (r, op, r, kr))
             if op == "div" and lhs.width == 16:
                 self.emit("%s = cvwn(%s)" % (r, r))                    # R16: 16-bit quotient
                 self.regs.set(r, ("live", "quot"))

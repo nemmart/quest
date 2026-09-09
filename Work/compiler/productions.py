@@ -222,6 +222,7 @@ class Ledger:
         self.consumed = {}        # id(node) -> the production that consumed it
         self.seen_roots = set()
         self.violations = []
+        self.orphans = []         # emissions belonging to NO production
 
     # -- firing ------------------------------------------------------------
     def begin(self, name, node_id, shape, stmt):
@@ -245,6 +246,18 @@ class Ledger:
         f.addr = "%s#%d" % (f.prod, n)
         self.firings.append(f)
         return f.addr
+
+    def orphan_emission(self, site, n, why):
+        """An emission that belongs to no production in the table.
+
+        P42 expected one (pre-registered: R36 would be multi-homed or an
+        orphan).  Recording them is what keeps the table honest -- an
+        unattributed emission is invisible to both the reduction ledger and
+        P43's choice files, so a rule living there cannot be addressed, cannot
+        be overridden, and cannot be censused.  This is NOT a violation: an
+        orphan is a FINDING about the production set, and Stage 4's rule map
+        is where it is reported."""
+        self.orphans.append((site, n, why))
 
     def consume(self, name, node_ids):
         for nid in node_ids:
@@ -305,6 +318,11 @@ class Ledger:
                                key=lambda kv: -len(kv[1])):
             nch = sum(len(f.choices) for f in fs)
             L.append("#   %-24s %4d firings %4d choices" % (name, len(fs), nch))
+        if self.orphans:
+            L.append("#")
+            L.append("# ORPHAN EMISSIONS -- code that belongs to no production")
+            for site, n, why in self.orphans:
+                L.append("#   %-32s %2d instruction(s)  %s" % (site, n, why))
         unfired = [p.name for p in P if p.name not in self.counts]
         L.append("#")
         L.append("# productions never fired by this routine: %d" % len(unfired))
@@ -424,3 +442,79 @@ def _selftest():
 if __name__ == "__main__":
     import sys
     sys.exit(_selftest())
+
+
+# --------------------------------------------------------------------------
+# Stage 3 -- the templates.
+#
+# A template receives the Translator and uses its Regs / Frame / Layout state
+# UNCHANGED (no allocator rewrite in this project).  It emits exactly what the
+# method it replaces emitted; the four matched routines are re-translated after
+# each port, and a template that cannot be written without an `if` on which
+# routine it is in is a FINDING -- name it and leave the production on the old
+# path rather than encoding a routine-specific hack.
+# --------------------------------------------------------------------------
+
+def t_const_materialise(tr, r, k):
+    """E6.  R37: the compiler materialises ZERO by subtracting a register from
+    itself, never by an immediate load.  Everything else is NLDAI/WLDAI."""
+    if k == 0:
+        tr.emit("%s = sub(%s, %s)" % (r, r, r))
+        spelling = "WSUB"
+    else:
+        tr.emit("%s = %s" % (r, tr.hexc(k)))
+        spelling = "NLDAI"
+    tr.regs.set(r, ("const", k))
+    return spelling
+
+
+def t_binop_const_inc(tr, r):
+    """E3.  `x + 1` is WINC, not WNADI with an immediate 1.  P43's worked
+    example of a spelling choice."""
+    tr.emit("%s = add(%s, 1)" % (r, r))
+    tr.regs.set(r, ("live", "sum"))
+    return "WINC"
+
+
+def t_binop_const_addi(tr, r, kk):
+    """E4.  A 16-bit signed immediate add (subtraction is an add of -k)."""
+    tr.emit("%s = add(%s, %s)" % (r, r, tr.hexc(kk)))
+    tr.regs.set(r, ("live", "sum"))
+    return "WNADI"
+
+
+def t_binop_const_scale(tr, r, kr, k, op):
+    """E5.  R11: the stride constant goes into a REGISTER first; there is no
+    multiply-immediate.  The register is D4's site."""
+    tr.emit("%s = %s" % (kr, tr.hexc(k)))
+    tr.regs.set(kr, ("const", k))
+    tr.emit("%s = %s(%s, %s)" % (r, op, r, kr))
+    return kr
+
+
+def t_goto(tr, label):
+    """S8."""
+    tr.terminate(("goto", [label], "0"))
+
+
+def t_return_void(tr):
+    """S9."""
+    tr.terminate(("ret",))
+
+
+TEMPLATES = {
+    "const_materialise": t_const_materialise,
+    "binop_const_inc": t_binop_const_inc,
+    "binop_const_addi": t_binop_const_addi,
+    "binop_const_scale": t_binop_const_scale,
+    "goto": t_goto,
+    "return_void": t_return_void,
+}
+
+for _n, _t in TEMPLATES.items():
+    TABLE[_n].ported = True
+    TABLE[_n].template = _t
+
+
+def ported_names():
+    return sorted(n for n, p in TABLE.items() if p.ported)
