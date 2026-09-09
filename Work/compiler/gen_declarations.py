@@ -126,15 +126,33 @@ PARENT_FRAMES = {
         }),
     "FIRE": dict(
         argc=2,
+        # P41 Item 1: FIRE.1 and FIRE.2 reach DISJOINT slots, so the P39
+        # sibling check was vacuous on that pair and every entry below was
+        # single-witness.  Discharged instead against the whole family —
+        # FIRE.3@7016A4F8 (18 link loads, unused by P39) overlaps both
+        # siblings, and FIRE's own body reads its own frame directly.  Zero
+        # disagreements.  arg 2 and w8 are the two slots that check found
+        # missing.  See docs/Project41/FIRE_MUTUAL_CHECK.md.
         args={1: (16, "FIRE.2@7016A479",
-                  "XNLDA 1,@[ac2+0xFFF4] — a PLAYER subscript (DERR 17 bound 10)")},
+                  "XNLDA 1,@[ac2+0xFFF4] — a PLAYER subscript (DERR 17 bound 10); "
+                  "also FIRE.3 ×12 and FIRE's own body ×10"),
+              2: (16, "FIRE.3@7016A6C7",
+                  "XNLDA 0,@[ac2+0xFFF2] — a subscript with DERR 17 bound 100, "
+                  "NOT the bound-10 one of arg 1; also FIRE's own body ×2")},
         locals={
+            "w8": (8, 16, "FIRE.3@7016A557",
+                   "XNLDA 0,[ac2+0x8]; 16-bit — FIRE.3 ×8 plus one XPEF, and "
+                   "FIRE's own body ×11 (XNLDA/XNSTA)"),
             "w10": (10, 32, "FIRE.1@7016A3C0",
-                    "XWLDA 0,[ac2+0xA]; a REGION subscript (DERR 17 bound 100000)"),
+                    "XWLDA 0,[ac2+0xA]; a REGION subscript (DERR 17 bound 100000); "
+                    "also FIRE.3 ×2 and FIRE's own XWSTA 2,[ac3+0xA]"),
             "w12": (12, 32, "FIRE.2@7016A485",
-                    "XWLDA 0,[ac2+0xC]; a PLAYER subscript (DERR 17 bound 10)"),
+                    "XWLDA 0,[ac2+0xC]; a PLAYER subscript (DERR 17 bound 10); "
+                    "no sibling second witness — corroborated by FIRE's own body ×10"),
             "w14": (14, 32, "FIRE.1@7016A3DC",
-                    "XWSTA 0,[ac3+0xE] — WRITTEN uplevel, and read back at 7016A401"),
+                    "XWSTA 0,[ac3+0xE] — WRITTEN uplevel, and read back at 7016A401; "
+                    "also FIRE.3 ×6.  FIRE itself NEVER touches this slot, so only "
+                    "the siblings can witness it"),
         }),
 }
 

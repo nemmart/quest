@@ -35,29 +35,40 @@
    "argc": 2,
    "args": {
     "1": {
-     "comment": "XNLDA 1,@[ac2+0xFFF4] \u2014 a PLAYER subscript (DERR 17 bound 10)",
+     "comment": "XNLDA 1,@[ac2+0xFFF4] \u2014 a PLAYER subscript (DERR 17 bound 10); also FIRE.3 \u00d712 and FIRE's own body \u00d710",
      "width": 16,
      "witness": "FIRE.2@7016A479"
+    },
+    "2": {
+     "comment": "XNLDA 0,@[ac2+0xFFF2] \u2014 a subscript with DERR 17 bound 100, NOT the bound-10 one of arg 1; also FIRE's own body \u00d72",
+     "width": 16,
+     "witness": "FIRE.3@7016A6C7"
     }
    },
    "locals": {
     "w10": {
-     "comment": "XWLDA 0,[ac2+0xA]; a REGION subscript (DERR 17 bound 100000)",
+     "comment": "XWLDA 0,[ac2+0xA]; a REGION subscript (DERR 17 bound 100000); also FIRE.3 \u00d72 and FIRE's own XWSTA 2,[ac3+0xA]",
      "slot": 10,
      "width": 32,
      "witness": "FIRE.1@7016A3C0"
     },
     "w12": {
-     "comment": "XWLDA 0,[ac2+0xC]; a PLAYER subscript (DERR 17 bound 10)",
+     "comment": "XWLDA 0,[ac2+0xC]; a PLAYER subscript (DERR 17 bound 10); no sibling second witness \u2014 corroborated by FIRE's own body \u00d710",
      "slot": 12,
      "width": 32,
      "witness": "FIRE.2@7016A485"
     },
     "w14": {
-     "comment": "XWSTA 0,[ac3+0xE] \u2014 WRITTEN uplevel, and read back at 7016A401",
+     "comment": "XWSTA 0,[ac3+0xE] \u2014 WRITTEN uplevel, and read back at 7016A401; also FIRE.3 \u00d76.  FIRE itself NEVER touches this slot, so only the siblings can witness it",
      "slot": 14,
      "width": 32,
      "witness": "FIRE.1@7016A3DC"
+    },
+    "w8": {
+     "comment": "XNLDA 0,[ac2+0x8]; 16-bit \u2014 FIRE.3 \u00d78 plus one XPEF, and FIRE's own body \u00d711 (XNLDA/XNSTA)",
+     "slot": 8,
+     "width": 16,
+     "witness": "FIRE.3@7016A557"
     }
    }
   },
