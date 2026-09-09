@@ -117,6 +117,11 @@ coverage as partial.**
    witnesses and fails the parts that had one.* One thing has no witness
    at all — the emission order of a statement's operands — and should be
    established on the book, not patched against the comparator.
+   → **P41 PROMPT WRITTEN** (docs/Project41/PROMPT.md): deliberately
+   narrow — the FIRE mutual check as THE deliverable, the R41 exclusion
+   audit, then MOVE_PLAYER.1 and RANDOM only if budget remains; plus a
+   standing instruction that operand emission order is measured on the
+   book, never patched per-diff.
    **Carried, oldest first: (a) the FIRE.1/FIRE.2 mutual check is STILL
    not performed — second project running; declarations.json's
    parent-frame layout remains fitting, and this should LEAD P41, not
