@@ -117,6 +117,23 @@ coverage as partial.**
    witnesses and fails the parts that had one.* One thing has no witness
    at all — the emission order of a statement's operands — and should be
    established on the book, not patched against the comparator.
+   → **A CHANGE OF DIRECTION (user, Sep 9)**: the diagnosis that the
+   model "closes what had two witnesses and fails what had one" points
+   at the translator's SHAPE. The DG compiler was a bottom-up parser
+   driving a code-generation table (a template per production plus a
+   register allocator); ours is a recursive walk with ~45 rules as
+   scattered conditionals, so a rule has no home, a divergence has no
+   address, and a rule can only be derived from the one or two routines
+   that exercise it. Plan: **P42** (docs/Project42/PROMPT.md) —
+   restructure the emit layer into a production table fired in
+   reduction order, behaviour-preserving, no new rules; **P43** — choice
+   files keyed on reductions (`routine, reduction, production, choice
+   kind` → value), so a routine closes as soon as its C is right and
+   register/slot decisions are SUPPLIED rather than predicted; the size
+   of a routine's choice file becomes the measure of what the model
+   does not yet explain; **P44** — per-production censuses over the
+   whole book (200 instances of one production, not 2), turning choices
+   back into rules. 
    → **P41 PROMPT WRITTEN** (docs/Project41/PROMPT.md): deliberately
    narrow — the FIRE mutual check as THE deliverable, the R41 exclusion
    audit, then MOVE_PLAYER.1 and RANDOM only if budget remains; plus a
