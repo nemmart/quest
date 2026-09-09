@@ -1,6 +1,11 @@
 {
  "direct": {
   "OBJ_PTR": {
+   "f911504": {
+    "K": 911504,
+    "comment": "P40/QUEST.1: the DO limit over CASTLE (OBJ_PTR->f911504)",
+    "width": 16
+   },
    "region_count": {
     "K": 11502,
     "comment": "P34 Census \u00a73 / PICK_X_Y_reading: region count (OBJ_PTR->f11502)",
@@ -67,6 +72,11 @@
      "witness": "LIST_PLAYERS.3@7016F59F"
     }
    }
+  },
+  "QUEST": {
+   "argc": 0,
+   "args": {},
+   "locals": {}
   }
  },
  "statics": {
@@ -117,6 +127,24 @@
   }
  },
  "tables": {
+  "CASTLE": {
+   "base": "CAS_PTR",
+   "bound": 1000,
+   "comment": "P40/QUEST.1 CAS_PTR_rec23; bound 1000 = QUEST.1's DERR 17 check",
+   "fields": {
+    "fm22": {
+     "K": -22,
+     "width": 16
+    },
+    "fm23": {
+     "K": -23,
+     "width": 16
+    }
+   },
+   "minK": -23,
+   "origin": 0,
+   "stride": 23
+  },
   "PLAYER": {
    "base": "SD_PTR",
    "bound": 10,

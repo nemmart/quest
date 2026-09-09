@@ -45,6 +45,9 @@ DIRECT = {
     },
     "OBJ_PTR": {
         "region_count": (11502, 32, "P34 Census §3 / PICK_X_Y_reading: region count (OBJ_PTR->f11502)"),
+        # P40/QUEST.1 7015C5F0: LNLDA 1,[ac2+0xDE890], stored to the R21e limit
+        # temp — the DO bound over CASTLE, whose own DERR 17 bound is 1000.
+        "f911504": (911504, 16, "P40/QUEST.1: the DO limit over CASTLE (OBJ_PTR->f911504)"),
     },
 }
 
@@ -74,6 +77,14 @@ TABLES = {
                            "fm376": (-376, 16), "fm378": (-378, 16),
                            "fm379": (-379, 16), "fm89": (-89, 16),
                            "fm390": (-390, 16, (10,), (1,))}),
+    # P40/QUEST.1 7015C60B: NLDAI 23; WMUL; LWADD 1,[0x70000214] (CAS_PTR),
+    # then XNLDA from wp(ac2,-23) and wp(ac2,-22); the DERR 17 bound is 1000.
+    # fm23/fm22 are compared against PLAYER.fm589/.fm588, which UPDATE_SCREENS
+    # shows are the player's map x and y — so these are a castle's x and y.
+    # Kept as raw fmNN names: the correspondence is a reading, not a derivation.
+    "CASTLE": dict(base="CAS_PTR", stride=23, minK=-23, bound=1000,
+                   comment="P40/QUEST.1 CAS_PTR_rec23; bound 1000 = QUEST.1's DERR 17 check",
+                   fields={"fm23": (-23, 16), "fm22": (-22, 16)}),
 }
 
 
@@ -101,6 +112,12 @@ TABLES = {
 # as they appear in the IR: `wp(link, slot)`.  Locals are named `w<slot>` when
 # the meaning is not known — the same convention readable.py uses for fields.
 PARENT_FRAMES = {
+    # P40/QUEST.1 is `nested` and so receives the link (R42: ac1, saved by
+    # WSAVS at wp(fp,-6)), but it makes ZERO uplevel references — no
+    # `wp(ac3,-6)` load appears anywhere in its 70 statements.  The entry
+    # exists so `UPLINK(QUEST)` type-checks; it records no slots because
+    # QUEST.1 witnesses none.  An empty frame asserts nothing about QUEST.
+    "QUEST": dict(argc=0, args={}, locals={}),
     "LIST_PLAYERS": dict(
         argc=0, args={},
         locals={
