@@ -14,7 +14,7 @@ same table for compiler/translate.py, which needs the numbers, not types.
 
     python3 compiler/gen_declarations.py [--out game/]
 """
-import argparse, hashlib, json, os, sys, time
+import argparse, hashlib, json, os, re, sys, time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.normpath(os.path.join(HERE, ".."))
@@ -121,42 +121,133 @@ PARENT_FRAMES = {
     "LIST_PLAYERS": dict(
         argc=0, args={},
         locals={
-            "w13": (13, 16, "LIST_PLAYERS.3@7016F59F",
+            "w13": (13, 16, "LIST_PLAYERS.3@7016F5A2",
                     "XNLDA 1,[ac2+0xD] — compared against PLAYER(i).fm629"),
         }),
     "FIRE": dict(
         argc=2,
+        # P41 Item 1: FIRE.1 and FIRE.2 reach DISJOINT slots, so the P39
+        # sibling check was vacuous on that pair and every entry below was
+        # single-witness.  Discharged instead against the whole family —
+        # FIRE.3@7016A4F8 (18 link loads, unused by P39) overlaps both
+        # siblings, and FIRE's own body reads its own frame directly.  Zero
+        # disagreements.  arg 2 and w8 are the two slots that check found
+        # missing.  See docs/Project41/FIRE_MUTUAL_CHECK.md.
         args={1: (16, "FIRE.2@7016A479",
-                  "XNLDA 1,@[ac2+0xFFF4] — a PLAYER subscript (DERR 17 bound 10)")},
+                  "XNLDA 1,@[ac2+0xFFF4] — a PLAYER subscript (DERR 17 bound 10); "
+                  "also FIRE.3 ×12 and FIRE's own body ×10"),
+              2: (16, "FIRE.3@7016A6C7",
+                  "XNLDA 0,@[ac2+0xFFF2] — a subscript with DERR 17 bound 100, "
+                  "NOT the bound-10 one of arg 1; also FIRE's own body ×2")},
         locals={
+            "w8": (8, 16, "FIRE.3@7016A557",
+                   "XNLDA 0,[ac2+0x8]; 16-bit — FIRE.3 ×8 plus one XPEF, and "
+                   "FIRE's own body ×11 (XNLDA/XNSTA)"),
             "w10": (10, 32, "FIRE.1@7016A3C0",
-                    "XWLDA 0,[ac2+0xA]; a REGION subscript (DERR 17 bound 100000)"),
-            "w12": (12, 32, "FIRE.2@7016A483",
-                    "XWLDA 0,[ac2+0xC]; a PLAYER subscript (DERR 17 bound 10)"),
-            "w14": (14, 32, "FIRE.1@7016A3DA",
-                    "XWSTA 0,[ac3+0xE] — WRITTEN uplevel, and read back at 7016A401"),
+                    "XWLDA 0,[ac2+0xA]; a REGION subscript (DERR 17 bound 100000); "
+                    "also FIRE.3 ×2 and FIRE's own XWSTA 2,[ac3+0xA]"),
+            "w12": (12, 32, "FIRE.2@7016A485",
+                    "XWLDA 0,[ac2+0xC]; a PLAYER subscript (DERR 17 bound 10); "
+                    "no sibling second witness — corroborated by FIRE's own body ×10"),
+            "w14": (14, 32, "FIRE.1@7016A3DC",
+                    "XWSTA 0,[ac3+0xE] — WRITTEN uplevel, and read back at 7016A401; "
+                    "also FIRE.3 ×6.  FIRE itself NEVER touches this slot, so only "
+                    "the siblings can witness it"),
         }),
 }
+
+
+def _instruction_text():
+    """Map instruction-start PC -> the disassembly's text for it, or None if the
+    listing is not available (the generator must still run in a bare tree).
+
+    Only real instruction lines are taken.  The hex-dump lines of the data
+    areas have the same 8-hex-then-space shape, so they are excluded by
+    requiring a mnemonic: text that starts with a letter and is not the
+    `NNNN NNNN ...  [ascii]` form.  That matters, because a witness PC that
+    landed in the data dump would otherwise pass the boundary check."""
+    path = os.path.join(ROOT, "..", "Disassembled", "quest.dis")
+    if not os.path.exists(path):
+        return None
+    out = {}
+    for line in open(path, errors="replace"):
+        if len(line) <= 8 or line[8] != " " or line[7] == " ":
+            continue
+        try:
+            pc = int(line[:8], 16)
+        except ValueError:
+            continue
+        text = line[8:].strip().rstrip(";").strip()
+        if text[:1].isalpha():
+            out[pc] = text
+    return out or None
+
+
+def _quoted_insn(comment):
+    """The instruction a witness comment quotes: its leading text, up to the
+    first `;` or em-dash.  Every PARENT_FRAMES comment is written in that
+    form (`XWSTA 0,[ac3+0xE] — WRITTEN uplevel...`)."""
+    head = re.split(r";|\u2014", comment or "", 1)[0].strip()
+    return head if head[:1].isalpha() else None
 
 
 def check_frames():
     """The user ruling, enforced: width and a named witness, or it does not go
     in.  A missing witness is a HARD ERROR, not a warning — the whole point of
-    the rule is that a slot cannot arrive by convenience."""
+    the rule is that a slot cannot arrive by convenience.
+
+    P41: the rule as first implemented checked only that a witness STRING
+    existed, not that its PC named a real instruction.  Three of the five
+    entries then in the table were wrong (FIRE w12 7016A483 and LIST_PLAYERS
+    w13 7016F59F were mid-instruction addresses; FIRE w14 7016A3DA named the
+    link LOAD rather than the reference its own comment quotes).  A witness
+    that cannot be looked up is not a witness, so the PC is now checked
+    against the disassembly.  See docs/Project41/FIRE_MUTUAL_CHECK.md.
+
+    The boundary check alone catches only two of those three: 7016A3DA IS an
+    instruction boundary — it is the link load `XWLDA 3,[ac3+0x7FFA]`, simply
+    not the `XWSTA 0,[ac3+0xE]` its own comment quotes.  So the PC is also
+    checked to name the instruction the comment cites.  A citation that
+    resolves to the wrong instruction is the same defect as one that resolves
+    to nothing."""
     bad = []
+    insns = _instruction_text()
+
+    def check_witness(label, witness, comment=None):
+        if not witness or "@" not in witness:
+            bad.append("%s: no named witness (expected NAME@PC)" % label)
+            return
+        text = witness.rsplit("@", 1)[1]
+        try:
+            pc = int(text, 16)
+        except ValueError:
+            bad.append("%s: witness PC %r is not hex" % (label, text))
+            return
+        if insns is None:
+            return
+        if pc not in insns:
+            bad.append("%s: witness PC %s is not an instruction boundary "
+                       "in Disassembled/quest.dis" % (label, text))
+            return
+        want = _quoted_insn(comment)
+        if want is None:
+            bad.append("%s: comment does not open with the instruction the "
+                       "witness cites" % label)
+        elif " ".join(want.split()) != " ".join(insns[pc].split()):
+            bad.append("%s: witness PC %s is %r, but the comment cites %r"
+                       % (label, text, insns[pc], want))
+
     for pname, p in PARENT_FRAMES.items():
         for fname, spec in p["locals"].items():
             slot, width, witness = spec[0], spec[1], spec[2]
             if width not in (8, 16, 32):
                 bad.append("%s.%s: width %r is not 8/16/32" % (pname, fname, width))
-            if not witness or "@" not in witness:
-                bad.append("%s.%s: no named witness (expected NAME@PC)" % (pname, fname))
+            check_witness("%s.%s" % (pname, fname), witness, spec[3])
         for k, spec in p.get("args", {}).items():
             width, witness = spec[0], spec[1]
             if width not in (8, 16, 32):
                 bad.append("%s arg %s: width %r is not 8/16/32" % (pname, k, width))
-            if not witness or "@" not in witness:
-                bad.append("%s arg %s: no named witness (expected NAME@PC)" % (pname, k))
+            check_witness("%s arg %s" % (pname, k), witness, spec[2])
             if not 1 <= k <= p["argc"]:
                 bad.append("%s arg %s: outside argc %d" % (pname, k, p["argc"]))
         slots = [s[0] for s in p["locals"].values()]

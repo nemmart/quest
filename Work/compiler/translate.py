@@ -1227,7 +1227,19 @@ class Translator:
             if held:
                 lim = Val("reg", reg=held[0], width=16)
             else:
-                lr2 = self.regs.pick(avoid=(lr, "ac2"))
+                # R21e′/R41, P41 audit: the limit is a VALUE, so it comes from
+                # the value class {ac0, ac1} — the SAME class R21c′ enforces for
+                # the loop register, minus the loop register itself.  This was
+                # `pick(avoid=(lr, "ac2"))`, which stated that intent ("ac2 stays
+                # free for addressing") but left ac3 — the FRAME register — in the
+                # candidate set: with lr = ac0 and ac1 live at cost 3, ac3 at
+                # FP_COST 2 wins and the loop limit lands in the frame pointer.
+                # Identical in shape to the R21c bug P40 found forty lines above,
+                # and missed by that fix.  NOT WITNESSED: none of the four matched
+                # routines reaches this line (OWNS' limit is constant, the two P35
+                # loops have no reload), so this closes a reachable leak by
+                # applying an already-derived class, and asserts nothing new.
+                lr2 = self.regs.pick(only=("ac0", "ac1"), avoid=(lr,))
                 self.emit("%s = sx16(M16[wp(ac3, %d)])" % (lr2, lslot))
                 self.regs.set(lr2, ("live", limkey))
                 lim = Val("reg", reg=lr2, width=16)
