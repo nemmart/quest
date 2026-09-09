@@ -96,7 +96,11 @@ coverage as partial.**
    frame), and the frame verdict: THERE IS NO RELOCATION — the frame
    pointer is an ordinary R7-managed value, ac3 is ordinarily
    allocatable, so the pragma allowance is moot (count 0). All folded
-   into METHOD §16 + CODEGEN_RULES. **P38**: implement R33/R34 FIRST
+   into METHOD §16 + CODEGEN_RULES. **P38 PROMPT WRITTEN** (docs/Project38/PROMPT.md) — *implement, then
+   match*: the project stands at 4 matched routines of ~130, so P38's
+   binding constraint is **stage nothing** (finish or abandon with a
+   reason; "staged, not fitted" is not a permitted outcome). Order:
+   implement R33/R34 FIRST
    (Regs must stop pinning ac3 — it unblocks the most, and FIRE.1 is
    the small validation case), then twins on INIT_OBJ_TBL, then DIED as
    a PRE-REGISTERED EXPERIMENT (docs/Project37/DIED_PREREGISTERED.md:
