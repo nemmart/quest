@@ -469,3 +469,58 @@ and ac3 holds a live base, so there is no register for the frame at all, and
 saving ac3's occupant is the only way to get one.  R34 describes what the
 allocator does when the base class and the value registers are simultaneously
 full.
+
+### 9.4 R3b VOIDED and replaced — the temp pools are not disjoint
+
+**R3b's disjointness clause is falsified.**  P35 wrote: *"scalar temps never
+take words that ever belonged to a string temp"*, on REFRESH_SCREEN's
+4/18/20-vs-6/22/34 slot pattern.  That pattern was never evidence for it.
+REFRESH_SCREEN's string temps are **live** at every point where a scalar temp
+is allocated, so slot 6 was unavailable under a disjoint reading and under an
+overlapping one alike — the observation could not have come out the other way
+(METHOD §16).  The belief has been in the ledger since P35 and was carried
+through P36 and P37 unchallenged.
+
+| # | rule | evidence | conf |
+|---|------|----------|------|
+| R3b′ | The scalar and string temp pools **overlap**.  A scalar temp takes the lowest free even slot above the locals, where a slot is free if no *live* temp of either kind holds it — but a dead **string** temp's words become available to a scalar temp only from a **later statement** on, not within the statement that killed it. | HIT_ANY_CHAR 7016DEAD: the packed CHAR VARYING takes `wp(ac3, 4)`, the slot the 30-byte prompt dummy held (4..19) until the `?WRITE_SCREEN` two statements earlier consumed it — disjointness predicts slot 20.  REFRESH_SCREEN 70176B10: the row temp does NOT take slot 6 although the CAT dummy there is already dead, because it died in that same statement — it takes 18; plain overlap predicts 6. | **B** |
+
+The statement boundary is the discriminator and each routine is a witness for
+one side of it.  Note the contrast with R3's clause for *scalar* temps, which
+frees a slot "from its last use on, **including within the statement that last
+uses it**": a string temp's words are released one statement later than a
+scalar temp's.  Both P35 routines and HIT_ANY_CHAR are 100 % on slots under
+R3b′ (identity bijections).
+
+### 9.5 OPEN — the caller's register state after a game→game call
+
+**No rule recorded.**  HIT_ANY_CHAR is complete and correct except for one
+register choice, and the choice cannot be derived from the available evidence.
+
+    7016DEAD   ac1 = 0x00020D0B      the book
+               ac0 = 0x00020D0B      translate.py (R7: everything is cost 0
+                                     after the call, ties to the lowest number)
+
+Program-wide sweep — sites loading a packed immediate and storing it to a frame
+slot in the block immediately after a decorated game→game `call`: **15 sites,
+12 use ac0, 3 use ac1.  All three ac1 sites call GET_INPUT @7016AA35**
+(701618A9, 7016DEAD, 7016F411); every ac0 site calls something else.
+
+Two readings fit all 15 and nothing here separates them:
+
+1. **The caller models the callee's exit registers.**  GET_INPUT leaves a live
+   pointer in ac0 at both of its `ret` blocks (`ac0 = M32[wp(ac3, -12)]`, then
+   `M8[ac0] = zx8(ac2)`), so ac0 is not free on return.  Quest is one PL/I
+   compilation unit, so the compiler *could* know this.  But this is a large
+   claim about the compiler resting on three call sites of a single callee.
+2. **The byte-pointer argument.**  Those three sites are also the only ones in
+   the fifteen that push a BYTE pointer (`XPEFB`, `bp(...)`) rather than a word
+   pointer.  This has **no mechanism** — how an argument is spelled cannot
+   change the caller's registers after the call — so §16 rules it out as a
+   rule even though it fits perfectly.
+
+**What would separate them:** a site calling a *different* callee that also
+leaves a live ac0 (reading 1 predicts ac1 there, reading 2 predicts ac0), or an
+ac1 site whose callee leaves ac0 dead.  Neither exists in the 15.  Until one
+is found this stays an open finding; **HIT_ANY_CHAR is abandoned at 8/10 rather
+than closed with a fitted cross-procedural rule.**

@@ -399,13 +399,19 @@ class Frame:
     hw = None                 # high-water mark (first never-allocated word)
     strings = None            # [(slot, words, tag or None)]
 
+    str_died = None           # slot -> the statement index its string temp died in
+    cur_stmt = -1             # the statement being generated
+
     def alloc_temp(self, tag, busy=()):
         """R3: the lowest free even slot above the declared locals; a slot is
-        free when its temp is dead (the caller has decided liveness) and it
-        was never part of a string temporary (R3b: the two pools are disjoint,
+        free when its temp is dead (the caller has decided liveness) and no
+        LIVE string temporary occupies it (R3b as amended in P38 -- see
+        in_string; the pools are NOT disjoint, which is what P35 read out of
         REFRESH_SCREEN's 4/18/20 vs 6/22/34)."""
         if self.hw is None:
             self.hw, self.strings = self.next_local, []
+        if self.str_died is None:
+            self.str_died = {}
         s = self.next_local
         while (s in self.temps and self.temps[s] is not None) or s in busy or self.in_string(s):
             s += 2
@@ -414,13 +420,43 @@ class Frame:
         return s
 
     def in_string(self, s):
-        return any(a <= s < a + n for a, n, _ in self.strings)
+        """A LIVE string temporary occupies s.
+
+        R3b amended (P38): the two pools are NOT disjoint, but a scalar temp
+        may take a dead string temp's words only from a LATER STATEMENT on.
+
+        HIT_ANY_CHAR 7016DEAD puts the packed CHAR VARYING at `wp(ac3, 4)` --
+        the slot the 30-byte prompt's dummy occupied (4..19) until the
+        ?WRITE_SCREEN call two statements earlier consumed it.  Disjointness
+        would put it at 20.  REFRESH_SCREEN 70176B10 does NOT reuse slot 6 for
+        the row temp although the CAT dummy there is dead by the time the temp
+        is placed -- because it died in THAT SAME statement; the temp goes to
+        18.  Plain overlap would put it at 6.  The statement boundary is the
+        discriminator and both routines are witnesses.
+
+        P35 read REFRESH_SCREEN's 4/18/20-vs-6/22/34 as evidence FOR disjoint
+        pools; it is not.  Its string temps are live at every point where a
+        scalar temp is allocated, so slot 6 was unavailable under either
+        reading and the observation could not have come out the other way
+        (METHOD §16).
+        """
+        for a, n, t in self.strings:
+            if not (a <= s < a + n):
+                continue
+            if t is not None:
+                return True
+            # dead -- but only reusable by a scalar temp from a LATER statement
+            if (self.str_died or {}).get(a, -1) >= self.cur_stmt:
+                return True
+        return False
 
     def alloc_string(self, tag, words):
         """R3b: a string temporary reuses a dead string temporary of sufficient
         size, else takes the frame's high-water mark (a bump allocation)."""
         if self.hw is None:
             self.hw, self.strings = self.next_local, []
+        if self.str_died is None:
+            self.str_died = {}
         for i, (a, n, t) in enumerate(self.strings):
             if t is None and n >= words:
                 self.strings[i] = (a, n, tag)
@@ -430,8 +466,13 @@ class Frame:
         self.hw = a + words
         return a
 
-    def free_string(self, slot):
+    def free_string(self, slot, stmt=None):
+        """A string temp dies.  `stmt` is the statement index it died in: a
+        scalar temp may take its words only from a LATER statement on (see
+        in_string)."""
         self.strings = [(a, n, None if a == slot else t) for a, n, t in self.strings]
+        if stmt is not None:
+            self.str_died[slot] = stmt
 
     def free_temp(self, slot):
         self.temps[slot] = None
@@ -683,7 +724,8 @@ class Translator:
             self.is_last_stmt = (k == len(stmts) - 1)
             self.stmt(st)
         if self.cur is not None and self.cur.term is None:
-            if not self.cur.lines and self.cur.label not in self.labels:
+            if not self.cur.lines and self.cur.label not in self.labels \
+                    and not self.is_target(self.cur.label):
                 self.blocks.remove(self.cur)         # nothing follows the last statement
             else:
                 self.terminate(("ret",))             # PL/I END = return
@@ -694,6 +736,7 @@ class Translator:
         cached copy now (cost 0); the per-statement reference counters and
         the freed-slot set restart."""
         self.stmt_index = self.stmt_no[id(node)]
+        self.frame.cur_stmt = self.stmt_index
         for r, v in self.regs.c.items():
             if v is not None and v[0] == "live":
                 if r == self.keep_live:
@@ -716,7 +759,7 @@ class Translator:
         if self.frame.strings:
             for a, n, t in self.frame.strings:
                 if t is not None:
-                    self.frame.free_string(a)
+                    self.frame.free_string(a, self.stmt_index)
 
     def width_of(self, tdecl):
         while isinstance(tdecl, (c_ast.PtrDecl, c_ast.ArrayDecl)):
@@ -2271,7 +2314,7 @@ class Translator:
                 self.emit("[@bp(ac3, %d), %d] = %s" % (2 * slot + off, ln, piece))   # WCMV
                 self.string_residue()
             if sub_slot is not None:
-                self.frame.free_string(sub_slot)
+                self.frame.free_string(sub_slot, self.stmt_index)
             off += ln
         return "[@bp(ac3, %d), %d]" % (2 * slot, n), n
 
@@ -2315,7 +2358,13 @@ class Translator:
                 return "wp(%s, %d)" % (areg, fld["K"])
             if isinstance(t, c_ast.ID):
                 if t.name in self.frame.locals:
-                    return "wp(ac3, %d)" % self.frame.locals[t.name][0]
+                    slot, width = self.frame.locals[t.name]
+                    if width == 8:
+                        # a CHAR(1) local's address is a BYTE address: XPEFB,
+                        # `bp(ac3, 2*slot)`.  HIT_ANY_CHAR 7016DEA7
+                        # `M32[0x74003F1C] = bp(ac3, 4)` for the local at slot 2.
+                        return "bp(ac3, %d)" % (2 * slot)
+                    return "wp(ac3, %d)" % slot
                 s = self.L.static(t.name)
                 if s is not None:
                     return hexc(s["addr"])
