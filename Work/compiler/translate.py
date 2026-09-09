@@ -802,6 +802,8 @@ class Translator:
                 and rt.type.names[-1] != "void":
             self.ret_width = self.width_of(rt)
         self.frame = Frame(self.entry["frame"])
+        self.fired("prologue_epilogue", fdef, "WSAVS frame 0x%X" % self.entry["frame"],
+                   choices=[("slot", self.entry["frame"])])
         body = fdef.body.block_items or []
         # declarations first (R1)
         stmts = []
@@ -1053,6 +1055,7 @@ class Translator:
             return
         if isinstance(st, c_ast.Goto):
             self.terminate(("goto", [self.c_label(st.name).label], "0"))
+            self.fired("goto", st, "goto %s" % st.name)
             self.start(self.new_block())
             return
         if isinstance(st, c_ast.Return):
@@ -1076,6 +1079,11 @@ class Translator:
                 else:
                     self.narrow_check(st, v)
                     self.emit("M16[wp(ac3, -7)] = trunc16(%s)" % v.reg)
+            if st.expr is None:
+                self.fired("return_void", st, "return")
+            else:
+                self.fired("return_value", st, "return <value>",
+                           consumes=(st.expr,))
             self.terminate(("ret",))
             self.start(self.new_block())
             return
@@ -1143,6 +1151,11 @@ class Translator:
         self.cur = cont_b
         # R8a: knowledge persists past a one-word THEN that writes no register
         self.regs.c, self.regs.stamp = saved
+        # R13: the one-word THEN is CONSUMED -- the skip form has no separate
+        # reduction for it.
+        self.fired("if_oneword", st, "if <c> <one-word>",
+                   consumes=(st.iftrue, then),
+                   choices=[("spelling", "skip_if_not")])
 
     loop_stack = []
 
@@ -1355,6 +1368,12 @@ class Translator:
         self.emit("M16[%s] = t1" % vref)
         self.emit("t2 = (t1 >s %s)" % lr)
         self.emit("%s = t1" % lr)
+        # R21/R22: the XNDO tile -- ONE instruction, five IR statements.  The
+        # loop register comes from R21c''s class {ac0, ac1}; the limit's
+        # placement is a slot choice when it is not a constant.
+        self.fired("do_loop", st, "DO %s" % (self.loop_var or "?"),
+                   consumes=(st.init, st.cond, st.next),
+                   choices=[("reg", lr)] + ([] if const_lim else [("slot", lslot)]))
         self.terminate(("goto", [body_b.label, after_b.label], "t2"))
         # body: at its head only the loop register is known (and protected)
         self.cur = body_b
@@ -1510,7 +1529,14 @@ class Translator:
         """R13b: `if (c) {body} [else {alt}]` with a body longer than one
         instruction: skip-if-c over a `goto else` block; the body ends with
         `goto after` when an else part follows (REFRESH_SCREEN 70176A93..ABA)."""
+        self._if_multi_n = getattr(self, "_if_multi_n", 0) + 1
         test = self.condition(st.cond, negate=False)
+        # R13b: the diamond.  Unlike if_oneword this does NOT consume its
+        # arms -- the body and the else part are ordinary statements and are
+        # reduced normally, so they keep their own addresses.
+        self.fired("if_multi", st, "if <c> {body}%s"
+                   % (" else {alt}" if st.iffalse is not None else ""),
+                   choices=[("order", "body_first")])
         skip_b, body_b, after_b = self.new_block(), self.new_block(), self.new_block()
         else_b = self.new_block() if st.iffalse is not None else after_b
         self.terminate(("goto", [skip_b.label, body_b.label], test))
@@ -1632,6 +1658,17 @@ class Translator:
 
     def condition(self, cond, negate):
         t = self._condition(cond, negate)
+        # C1/C2: the test's shape.  A BIT reference in a test is R29's
+        # materialise-then-sign-test, never a folded skip; everything else is
+        # a comparison, and whether the right operand rides as an immediate
+        # or is loaded into a register is a SPELLING choice (R14).
+        if isinstance(cond, c_ast.FuncCall) and cond.name.name == "BIT":
+            self.fired("condition_bit", cond, "BIT in a test", consumes=(cond,))
+        elif isinstance(cond, c_ast.BinaryOp):
+            imm = isinstance(cond.right, c_ast.Constant)
+            self.fired("condition_cmp", cond, "test %s" % cond.op,
+                       consumes=(cond.right,) if imm else (),
+                       choices=[("spelling", "immediate" if imm else "register")])
         if negate:
             self.NEGTEST[t] = self._flip(t)
         return t
@@ -1700,12 +1737,27 @@ class Translator:
         lv = st.lvalue
         if isinstance(st.rvalue, c_ast.FuncCall) and "$" in st.rvalue.name.name:
             v = self.rt_call(st.rvalue)          # result in ac0 (RTConventions)
+            kind = "assign_rt"
         elif isinstance(lv, c_ast.ArrayRef):
-            return self.indexed_store(lv, st.rvalue)
+            r = self.indexed_store(lv, st.rvalue)
+            # R23: the whole subscript chain and the value are the tile's span
+            self.fired("assign_indexed", st, "T[i].f[...] = e",
+                       consumes=(lv, st.rvalue), choices=[("order", "address_then_value")])
+            return r
         else:
             v = self.value(st.rvalue, want_reg=True)
+            kind = "assign_uplevel" if self.is_uplevel(lv, ("UP",)) or (
+                isinstance(lv, c_ast.UnaryOp) and lv.op == "*"
+                and self.is_uplevel(lv.expr, ("UPARG",))) else "assign_local"
         self.flush_elem_save()
         self.store(lv, v)
+        ch = []
+        if kind in ("assign_local", "return_value") and v.kind == "reg":
+            ch = [("reg", v.reg)]
+        elif kind == "assign_uplevel" and v.kind == "reg":
+            ch = []          # the link's register is link_load's choice
+        self.fired(kind, st, "%s = ..." % type(lv).__name__,
+                   consumes=(st.rvalue,), choices=ch)
 
     def narrow_check(self, lv, v):
         """P36 ruling 1: no silent 32->16 narrowing.  The DG compiler emits a
@@ -1986,6 +2038,9 @@ class Translator:
                 self._freed.add(slot)
                 self.cse[bkey]["slot"] = None
             b = self.bit_base_reg(base_addr, bkey, avoid=(r,))
+            # PATH 1 (R27): the 16*scaled temp is live; subscript not evaluated
+            self.fired("bit_address", sub, "BIT %s(%s) 16*scaled-temp" % (tname, vname),
+                       consumes=(sub,), choices=[("reg", r), ("slot", slot)])
             return b, r
 
         # the subscript, bounds-checked and scaled by the stride (R11)
@@ -2101,9 +2156,11 @@ class Translator:
         mask = "lsh(0x8000, 0 - (%s & 15))" % off
         if op == "BIT_SET":
             self.emit("%s = %s | %s" % (mem, mem, mask))
+            self.fired("bit_stmt", call, "BIT_SET", consumes=(args[0], args[1]))
             return
         if op == "BIT_CLR":
             self.emit("%s = %s & ~%s" % (mem, mem, mask))
+            self.fired("bit_stmt", call, "BIT_CLR", consumes=(args[0], args[1]))
             return
         # BIT_PUT(w, n, e): WBTO, then the value's sign test, then WBTZ
         # (70166376..82: set the bit, materialise e, clear it again when e is
@@ -2118,6 +2175,8 @@ class Translator:
         self.emit("%s = %s & ~%s" % (mem, mem, mask))
         self.terminate(("goto", [join.label], "0"))
         self.cur = join
+        self.fired("bit_stmt", call, "BIT_PUT", consumes=(args[0], args[1]),
+                   choices=[("reg", vr)])
 
     def bit_value_reg(self, e):
         """A bit reference used as a VALUE materialises as 0 / -1: `WSUB v,v`,
@@ -2205,7 +2264,9 @@ class Translator:
                 r = self.regs.find(("var", key))
                 if r is not None:
                     return Val("reg", reg=r, width=16)
-                return self.load("sx16(M16[wp(ac3, -9)])", 16, key, want_reg, avoid)
+                _v = self.load("sx16(M16[wp(ac3, -9)])", 16, key, want_reg, avoid)
+                self.fired("marker_ref", e, "arity marker wp(ac3,-9)")
+                return _v
             if e.name in self.args:
                 refuse(e, "a by-reference parameter is used as *%s" % e.name)
             s = self.L.static(e.name)
@@ -2239,7 +2300,10 @@ class Translator:
             b = self.link_reg()
             text = "M32[wp(%s, %d)]" % (b, slot) if width == 32 \
                 else "sx16(M16[wp(%s, %d)])" % (b, slot)
-            return self.load(text, width, key, want_reg, avoid, name=fname)
+            _v = self.load(text, width, key, want_reg, avoid, name=fname)
+            self.fired("uplevel_ref", e, "UP(%s, %s)" % (pname, fname),
+                       choices=[("reg", b)])
+            return _v
         if isinstance(e, c_ast.UnaryOp) and e.op == "*" and self.is_uplevel(e.expr, ("UPARG",)):
             # the parent's k'th argument: link, then INDIRECT through the
             # parent's argument slot (FIRE.2 7016A479 `XNLDA 1,@[ac2+0xFFF4]`)
@@ -2253,7 +2317,10 @@ class Translator:
             d = 10 + 2 * k
             text = "M32[R[%s + -%d]]" % (b, d) if width == 32 \
                 else "sx16(M16[R[%s + -%d]])" % (b, d)
-            return self.load(text, width, key, want_reg, avoid)
+            _v = self.load(text, width, key, want_reg, avoid)
+            self.fired("uplevel_arg_ref", e, "UPARG(%s, %d)" % (pname, k),
+                       choices=[("reg", b)])
+            return _v
         if isinstance(e, c_ast.StructRef):
             return self.field(e, want_reg, avoid)
         if isinstance(e, c_ast.ArrayRef) and self.is_indexed_field(e):
@@ -2272,6 +2339,7 @@ class Translator:
             self.terminate(("goto", [join.label], "0"))
             self.cur = join
             self.regs.set(r, ("live", "abs"))
+            self.fired("abs_builtin", e, "ABS()", choices=[("reg", r)])
             return Val("reg", reg=r, width=32)
         if isinstance(e, c_ast.FuncCall) and e.name.name in ("cvwn", "sx16", "trunc16"):
             # P36 ruling 1: conversions are explicit.  `cvwn(e)` is the checked
@@ -2292,11 +2360,14 @@ class Translator:
             else:
                 self.emit("%s = %s(%s)" % (v.reg, op, v.reg))
                 self.regs.set(v.reg, ("live", op))
+            self.fired("convert", e, "%s()" % op)
             return Val("reg", reg=v.reg, width=16)
         if isinstance(e, c_ast.FuncCall) and e.name.name == "BIT":
             # R29: a bit reference used as a value, outside a condition
             # (OWNS returns one directly from seven of its arms)
-            return Val("reg", reg=self.bit_value_reg(e), width=16)
+            _bvr = self.bit_value_reg(e)
+            self.fired("bit_value", e, "BIT() as a value", choices=[("reg", _bvr)])
+            return Val("reg", reg=_bvr, width=16)
         if isinstance(e, c_ast.FuncCall) and e.name.name == "SUB":
             v = self.value(e.args.exprs[0], want_reg=True, avoid=avoid)
             self.bounds_check(v.reg, int(e.args.exprs[1].value, 0))
@@ -2385,6 +2456,8 @@ class Translator:
         f = self.fpr()
         self.emit("%s = M32[wp(%s, -6)]" % (r, f), uses_fp=False)
         self.regs.set(r, ("addr", key))
+        # R41' governs the static link as well as the indexing base
+        self.fired("link_load", None, "static link", choices=[("reg", r)])
         return r
 
     def uplevel_slot(self, e):
@@ -2841,6 +2914,15 @@ class Translator:
             r = self.fpr()                       # R33: may append the LDAFP
             if r != "ac3":
                 texts = [t.replace("ac3", r) for t in texts]
+        # R18: TMP arguments left to right, each stored to its temp slot at
+        # once UNLESS a slot collides, in which case ALL stores defer -- an
+        # ORDER choice, and the slots are SLOT choices.
+        self.fired("rt_call_stmt", call, "%s(%d args)" % (base, arity),
+                   consumes=tuple(args),
+                   choices=[("order", "deferred" if defer else "immediate")]
+                           + [("slot", int(str(t).split(", ")[1].rstrip(")")))
+                              for t in pushes
+                              if isinstance(t, str) and t.startswith("wp(ac3, ")])
         self.terminate(("rt_call", "rt_call ?%s(%s) site=%s" % (base, ", ".join(texts), cont.label)))
         for slot in [t[1] if t else None for t in temps]:
             pass
@@ -2853,6 +2935,8 @@ class Translator:
         return Val("reg", reg="ac0", width=32)
 
     def store_temp(self, slot, r, w):
+        self.fired("temp_place", None, "temp store slot %d" % slot,
+                   choices=[("slot", slot)])
         if w == 16:
             self.emit("M16[wp(ac3, %d)] = trunc16(%s)" % (slot, r))
         else:
@@ -2956,7 +3040,11 @@ class Translator:
                         # a CHAR(1) local's address is a BYTE address: XPEFB,
                         # `bp(ac3, 2*slot)`.  HIT_ANY_CHAR 7016DEA7
                         # `M32[0x74003F1C] = bp(ac3, 4)` for the local at slot 2.
+                        self.fired("address_of", a, "&local (byte)",
+                                   consumes=(t,), choices=[("spelling", "bp")])
                         return "bp(ac3, %d)" % (2 * slot)
+                    self.fired("address_of", a, "&local",
+                               consumes=(t,), choices=[("spelling", "wp")])
                     return "wp(ac3, %d)" % slot
                 s = self.L.static(t.name)
                 if s is not None:
@@ -3078,6 +3166,9 @@ class Translator:
             text = p if isinstance(p, str) else self.address_of(p)
             self.emit("M32[%s] = %s" % (hexc(alloc + 2 * (arity - 1 - idx)), text))
         cont = self.new_block()
+        self.fired("game_call_stmt", st, "call %s" % st.name.name,
+                   consumes=tuple(st.args.exprs if st.args else ()),
+                   choices=[("order", "right_to_left")])
         self.terminate(("call", "call %08X args=%d marker=%08X site=SITE ret=RET"
                         % (e["pc"], arity, alloc + 2 * arity), cont.label, arity))
         for s, t in list(self.frame.temps.items()):
