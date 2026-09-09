@@ -225,13 +225,28 @@ class Layout:
 #   ("live", tag)            a value still needed in this stmt cost 3  (R7)
 #   ("addr", key)            an address (base pointer / element address) cost 0
 
-COST = {"var": 0, "addr": 0, "kconst": 0, "dup": 1, "const": 2, "live": 3}
+#   ("fp", None)             the frame pointer itself           cost FP_COST (R33)
+#
+# R33 (P38): the frame is not pinned to ac3.  It is an ordinary VALUE that ac3
+# holds by default, competing for a register like any other.  Its protection
+# cost is bounded BELOW by the four matched routines: at cost 0 or 1 `pick()`
+# takes ac3 and all four regress (PICK_X_Y 62/64, UPDATE_SCREENS 44/72,
+# REFRESH_SCREEN 59/61, OWNS 107/152 at cost 0).  At cost 2 and at cost 3 they
+# are all 100 %, so those two are indistinguishable here and the UPPER bound is
+# NOT witnessed: no statement in the four ever has all of ac0..ac2 live at once,
+# which is the only case that separates them.  2 is taken as the weaker claim.
+FP_COST = 2
+
+COST = {"var": 0, "addr": 0, "kconst": 0, "dup": 1, "const": 2, "live": 3,
+        "fp": FP_COST}
+
+FP = ("fp", None)
 
 
 class Regs:
     def __init__(self):
-        self.c = {"ac0": None, "ac1": None, "ac2": None}
-        self.stamp = {"ac0": 0, "ac1": 0, "ac2": 0}
+        self.c = {"ac0": None, "ac1": None, "ac2": None, "ac3": FP}
+        self.stamp = {"ac0": 0, "ac1": 0, "ac2": 0, "ac3": 0}
         self.t = 0
 
     def cost(self, r):
@@ -246,7 +261,7 @@ class Regs:
         """R7: the register with the lowest protection cost; ties to the
         lowest-numbered register."""
         best = None
-        for r in ("ac0", "ac1", "ac2"):
+        for r in ("ac0", "ac1", "ac2", "ac3"):
             if r in avoid:
                 continue
             k = (self.cost(r), r)
@@ -277,16 +292,48 @@ class Regs:
         return None
 
     def reset(self):
+        """R8: register knowledge resets at a join -- but NOT the frame.
+
+        R33 (P38): the frame is a value, but it is not *knowledge* about a
+        value: `LDAFP` is a real instruction and a join does not execute one.
+        Every block of all four matched routines addresses `wp(ac3, d)` with
+        no preceding LDAFP, so the frame demonstrably survives a label.  If
+        this cleared ac3 the frame would become cost 0 and `pick()` would take
+        it immediately (measured: all four regress).
+        """
         for r in self.c:
-            self.c[r] = None
+            if self.c[r] != FP:
+                self.c[r] = None
+
+    def fpreg(self):
+        """The register the frame is in, or None if it is not in one."""
+        for r, v in self.c.items():
+            if v == FP:
+                return r
+        return None
 
     def snapshot(self):
         """R8c: the register knowledge on one control-flow edge."""
         return dict(self.c)
 
     def restore(self, snap):
+        """R8c: restore the register knowledge carried on one edge.
+
+        R33 corollary: the snapshot restores *knowledge*, and where the frame
+        physically is is not knowledge -- it is the record of which LDAFPs have
+        been emitted.  So the frame stays where the emitter has actually left
+        it and the snapshot's opinion about ac3 is discarded.  NO WITNESS: in
+        all four matched routines the frame is in ac3 on both sides of every
+        edge, so this choice is untested.
+        """
+        here = self.fpreg()
         for r in self.c:
             self.c[r] = snap.get(r)
+        if here is not None:
+            for r in self.c:
+                if self.c[r] == FP and r != here:
+                    self.c[r] = None
+            self.c[here] = FP
 
     def invalidate_var(self, key):
         for r, v in self.c.items():
