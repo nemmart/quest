@@ -309,12 +309,46 @@ Four of its five call sites pass six arguments.  The one 3-argument site,
 70169B82, is inside **LOCK_FILE**, the hand-written assembly routine identified
 at the P37 plan gate, in the tail it shares with UNLOCK_FILE, building its
 arguments on the stack by hand.  The arity flag therefore records an assembly
-calling sequence, not a PL/I language feature.  **Consequence for the method:
-anything inferred about the compiler from a convention seen only at a
-LOCK_FILE/UNLOCK_FILE call site is inadmissible evidence.**
+calling sequence, not a PL/I language feature.  This generalised into a ruling
+of its own — see **R39** below and `docs/Project37/InadmissibleEvidence.md`.
 
 **RECORDED, not ruled — the self-move at 70176FF5.**  The join of the message
 diamond opens with `ac0 = ac0` (`WMOV 0,0`).  Both arms already leave the length
 in ac0, so the compiler appears to materialise a joined value into an R7 pick
 without checking whether source and destination coincide.  One instance; it
 cannot be tested until the routine translates.
+
+
+### 8.10 R39 — inadmissible evidence (an admissibility ruling, not a codegen rule)
+
+| # | rule | evidence | conf |
+|---|------|----------|------|
+| R39 | Not every addrbook entry is compiler output.  An observation taken from, or about, a **hand-assembly** routine is INADMISSIBLE as evidence about the PL/I compiler, and the contamination TRAVELS: it reaches the addrbook metadata of routines that are themselves ordinary compiled code.  Before promoting any convention, arity, frame value or entry variant to a rule, check whether its only witness lies inside a hand-assembly range; if it does, the observation is void and the rule has no evidence.  Cite as *"void under R39."* | Hand-assembly span **70169B0F..70169D69** (LOCK_FILE + UNLOCK_FILE, one unit): they branch into each other's ranges, which no two PL/I procedures can do | A |
+
+**Voided by the R39 sweep** (every call site inside the span was enumerated;
+exactly one leaves it, so the callee contamination is bounded but real):
+
+1. `RETURN_MESSAGE` `mixed:3/6` — the 3-arg caller is the assembly (§8.9).
+2. **`WSAVR` is not a compiler entry variant.**  It occurs exactly TWICE in the
+   whole addrbook, and both are LOCK_FILE and UNLOCK_FILE; all 100 other live
+   entries are `WSAVS`.  Any model treating WSAVR as one of two compiler-emitted
+   entry conventions is modelling something the compiler never emitted.  (Found
+   by the sweep, not previously noticed.)
+3. `LOCK_FILE frame 0x01 dyn,push` / `UNLOCK_FILE frame 0x00` — the assembly's
+   own stack discipline; not evidence about R1/R2/R3 frame layout.
+
+**Direction matters.**  Contamination flows OUTWARD from an assembly call site,
+not inward.  LOCK_FILE's `argc 2` and UNLOCK_FILE's `argc 1` are ADMISSIBLE:
+they were inferred from compiled call sites in `SIGNAL_TURN` (70177E7D,
+70177EFD, 70177F0B).  What a compiled caller does when calling assembly is
+still evidence about the compiler; what assembly does when calling anything is
+not.  The test is *"is the hand-written side producing the behaviour I am about
+to generalise?"*
+
+**Detector for further cases:** control flow crossing an addrbook boundary — a
+routine that branches outside its own [entry, next-entry) range, or is branched
+into from outside.  That is what exposed this pair.  This sweep does not prove
+there are no others.
+
+*(A companion entry in `docs/METHOD.md` §16 is recommended at merge time; P37's
+boundaries do not permit editing that file.)*
