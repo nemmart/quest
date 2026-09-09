@@ -142,7 +142,30 @@ instruction it quotes. 349/349 primary, 242/242 folded at landing.
    witnesses and fails the parts that had one.* One thing has no witness
    at all — the emission order of a statement's operands — and should be
    established on the book, not patched against the comparator.
-   → **A CHANGE OF DIRECTION (user, Sep 9)**: the diagnosis that the
+   → **SECOND CHANGE OF DIRECTION (user, Sep 9, later):
+   docs/REWRITE_PLAN.md is the design of record.** Generate DUMB, then
+   rewrite. Every rule today is PREDICTIVE — the generator must emit the
+   book's exact form first try, which forces a bottom-up generator to
+   know what only a later pass can know (R36 is the proof: P42's ledger
+   found the hoist fires NO production at all, in exactly the one
+   routine R36 was read off). Instead: a deliberately stupid generator
+   whose output is correct and approximately shaped; a small fixed set
+   of independently-justified, semantics-preserving REWRITES (hoist,
+   materialise, coalesce, temp reuse, spelling); and an oracle that says
+   which rewrite fires where — a far better-defined question, because
+   the legal set is enumerable by RUNNING the applicable rewrites. A
+   diff becomes a search ("what sequence takes A to B?") and the answer
+   IS the oracle input. Guards: a rewrite justified only by "the book
+   has this shape" is refused (that is a diff patcher); the set is small
+   and fixed; **the rewrite count per routine is the metric** — six
+   means the generator is right, sixty means it is laundering a wrong
+   generator. Consequence: everything clever in translate.py
+   (hoist_invariant_subscripts, the temp pool, the register cost model)
+   is to be REMOVED and re-expressed as rewrite specifications. P42
+   re-scoped (table = naive generator; do not port cleverness), P43
+   rewritten as the rewrite engine, P44 becomes censuses per rewrite
+   rule (where does it fire, and where does it NOT fire when it could).
+   → **A FIRST CHANGE OF DIRECTION (user, Sep 9, earlier)**: the diagnosis that the
    model "closes what had two witnesses and fails what had one" points
    at the translator's SHAPE. The DG compiler was a bottom-up parser
    driving a code-generation table (a template per production plus a

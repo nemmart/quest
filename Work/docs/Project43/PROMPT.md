@@ -1,3 +1,13 @@
+> **SUPERSEDED, Sep 9 2026 — do not run this.** P43 is now the REWRITE
+> ENGINE, not choice files over a predictive generator. See
+> docs/REWRITE_PLAN.md; a new prompt will replace this file. The parts
+> that carry over: the oracle is checked (a selection must be legal and
+> the production/rewrite publishes the legal set), a choice selects and
+> never creates, single-option choices are pruned, and the count is the
+> metric. The parts that do not: choice kinds keyed on reductions
+> (register/slot/order/spelling) — the oracle now keys on REWRITE SITES,
+> and the phase split it anticipated is unnecessary.
+
 # Project 43 — choice files: supplying the compiler's decisions, legally
 
 GOAL: let a routine close when its **C is right**, by supplying the

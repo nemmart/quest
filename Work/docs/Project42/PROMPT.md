@@ -1,3 +1,14 @@
+> **RE-SCOPED, Sep 9 2026 — read docs/REWRITE_PLAN.md first.** The
+> approach has changed: the generator becomes deliberately DUMB and the
+> book's shape is reached by an oracle-driven REWRITE stage (P43). This
+> prompt's production table survives as the naive generator's structure,
+> and the ledger/path-check survive as how a rewrite site gets an
+> address — but the table is no longer where rules live. **Do not port
+> cleverness that is about to be deleted** (hoist_invariant_subscripts,
+> the temp pool's liveness reuse, the register cost model's
+> protections, deferred stores): record it as a rewrite specification
+> instead. Everything else below stands.
+
 # Project 42 — the reduction-ordered emitter: productions, not methods
 
 GOAL: restructure `compiler/translate.py`'s emit layer so that code is
