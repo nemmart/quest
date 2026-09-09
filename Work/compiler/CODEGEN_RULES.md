@@ -442,11 +442,55 @@ protection cost in R7's table.  `FP_COST = 2`.
 assert that ac3 is never taken while any other register is live, which has no
 witness.
 
-### 9.3 R41 — the base-register class {ac2, ac3} (amends R5 and R33)
+### 9.3 R41′ — the base-register class {ac2, ac3} for the ADDRESSING role (amends R5, R33; scope narrowed by P41)
 
 | # | rule | evidence | conf |
 |---|------|----------|------|
-| R41 | An **address or base load** does not use R7's pick over all four registers.  It allocates from a two-register class **{ac2, ac3}, ac2 preferred**; ac0 and ac1 are value registers and are not candidates however cheap they are.  When ac2 is occupied by a live address the base goes to ac3 — displacing the frame, which R33/R24 then re-materialise by `LDAFP`. | INIT_OBJ_TBL 7016DF68: `ac2 = M32[wp(ac3, -14)]` with ac2 free, and `ac3 = M32[wp(ac3, -14)]` — the **same argument load, same routine** — with ac2 live and ac0 free and cost 0.  FIRE.1 7016A3C7: three `ac3 = <address>` sites, each with ac2 holding a live address and ac1 or ac0 free at cost 0. | **B** |
+| R41′ | A base pointer loaded **for indexing**, and the static link, do not use R7's pick over all four registers.  They allocate from a two-register class **{ac2, ac3}, ac2 preferred**.  When ac2 is occupied by a live address the base goes to ac3 — displacing the frame, which R33/R24 then re-materialise by `LDAFP`.  **This is a claim about the addressing role, not about every load of an address**: a record base loaded for a bit reference (R28) is allocated by plain R7 and reaches {ac0, ac1}. | For the class: INIT_OBJ_TBL 7016DF68: `ac2 = M32[wp(ac3, -14)]` with ac2 free, and `ac3 = M32[wp(ac3, -14)]` — the **same argument load, same routine** — with ac2 live and ac0 free and cost 0.  FIRE.1 7016A3C7: three `ac3 = <address>` sites, each with ac2 holding a live address and ac1 or ac0 free at cost 0.  For the role split: the SD_PTR census below — **302 of the 306 ac0/ac1 loads feed the bit family** (WSUB, then WBTO/WBTZ), against **zero** X-form indexing off such a base. | **B** |
+
+**P41 amended R41's SCOPE — it is now R41′.**  R41 was written as covering "an
+**address or base load**", with ac0/ac1 "not candidates however cheap they are".
+That overclaims.  `bit_base_reg` loads a record base by plain R7 over all four
+registers, and its bases land in ac0/ac1 in bulk.  The implementation was
+already right on either reading (`bit_base_reg` uses R7 and produces ac0/ac1;
+`base_reg`/`link_reg` use the class and produce ac2/ac3); it was the rule text
+that was wrong.  P41 proposed the narrowing from two PCs; the census below,
+run before the ruling, showed those two were the tip of a clean split.
+
+**The SD_PTR census** — every load of `0x70000210` in the program, by
+destination register and by what follows it:
+
+| dest | loads | what follows |
+|---|---|---|
+| ac0 | 55 | WSUB 30, WBTO 16, WBTZ 7 |
+| ac1 | 251 | WSUB 152, WBTO 55, WBTZ 42 |
+| ac2 | 248 | XPEF 111, XWSTA 33, LNLDA 26, WBTO 20, XNLDA 12, XNSTA 10 |
+| ac3 | 9 | XNSTA 3, WBTO 3, LNSTA 2, LNLDA 1 |
+
+ac0/ac1 feed the bit family; ac2/ac3 feed X-form displacement addressing.  The
+four apparent counter-examples (`XWSTA 2,[ac3+…]` / `XNSTA 2,[ac3+…]` after an
+ac0/ac1 load) are stores off the **frame** register that merely follow the load;
+nothing indexes off the ac0/ac1 base.  Examples, not the evidence: 70166278 and
+7016628B (`LWLDA 1,[0x70000210]`, each feeding a `WBTZ`).
+
+> **CAVEAT, and the confidence is set here rather than where the numbers
+> tempt.**  The census keys on the *next* instruction after each load, which is
+> a **proxy for the role, not proof of it** — a base could be loaded and used
+> several instructions later.  The proxy is clean here (each apparent
+> counter-example dissolved on inspection), but it is a proxy.  A proper
+> **R28-role census** — resolving each base's actual use rather than its
+> successor — is what would settle it.  Until then R41′ stays at **B**.
+
+**Cited by census, not by PCs (P41 practice).**  P41 found five bad witness PCs,
+roughly half of those it spot-checked.  A rule cited by a count cannot rot the
+way a rule cited by two addresses can, so where a census exists it is the
+evidence and the PCs are examples.  See METHOD §16.
+
+**A consequence for the production framing (P42).**  R41′ reads as *the
+addressing role determines the class, not the value*.  That is a statement about
+what a production is **for** — indexing versus bit-reference — which a
+production table can express and a scattered `if` cannot.  It belongs as a class
+constraint on the addressing productions, not as a rule about register loads.
 
 **R33 amended.**  R33's phenomenon stands and is confirmed: the frame is not
 pinned, it is displaced and re-materialised by `LDAFP` into a picked register.
@@ -458,13 +502,13 @@ ac0's or ac1's.
 
 **Why the four matched routines could not have witnessed this.**  In all 349 of
 their statements ac2 is free at every base load, so the class never reaches its
-second member and R41 and R5 give the same answer everywhere.  Their staying at
-100 % is therefore consistent with R41 but is not evidence for it (METHOD §16:
+second member and R41′ and R5 give the same answer everywhere.  Their staying at
+100 % is therefore consistent with R41′ but is not evidence for it (METHOD §16:
 consistent is not evidence) — the two witnesses above are.
 
 **R34 is now derived, not fitted.**  P37 recorded R34 (`WPSH 3,3` / `WPOP 3,3`
 around an `LDAFP 3`) as a separate B-confidence rule from two instances.  Under
-R41 it is a consequence: at INIT_OBJ_TBL 7016DF68 ac0, ac1 and ac2 are all live
+R41′ it is a consequence: at INIT_OBJ_TBL 7016DF68 ac0, ac1 and ac2 are all live
 and ac3 holds a live base, so there is no register for the frame at all, and
 saving ac3's occupant is the only way to get one.  R34 describes what the
 allocator does when the base class and the value registers are simultaneously
@@ -556,7 +600,7 @@ missing evidence was an ordinary routine, not a new construct.
 | R21c′ | **R21c ENFORCED and placed.** (a) The loop register comes from ac0/ac1 ONLY — stated in P37, but implemented as `pick(avoid=("ac2",))`, which fell through to ac3 and put the loop counter in the FRAME register once ac0 and ac1 were both live. QUEST.1 is the first loop to reach that state (the hoist holds one value register, the limit the other). (b) The copy into the loop register is emitted AT THE FIRST POINT THE LOOP REGISTER IS FREE: in OWNS lr is ac1, free once the control variable is stored, so the move lands there and the hoist store follows it; in QUEST.1 lr is ac0, still holding the hoisted address until its own store, so the move is deferred onto the body edge. (c) The entry test therefore compares the INITIAL VALUE's register, not the loop register — they coincide in every previously matched loop. | OWNS 70175CC7 (`WMOV 2,1` then `XWSTA 0,[ac3+4]`) vs QUEST.1 7015C5FD/7015C600 (`WSLE 2,1`, then `WMOV 2,0` in the skip block); QUEST 7015c358/7015c35a | **B** |
 
 `Regs.pick` grows an `only=` parameter so that a rule stating a register CLASS
-cannot silently fall out of it when every member is expensive.  R41's {ac2,
+cannot silently fall out of it when every member is expensive.  R41′'s {ac2,
 ac3} should be audited the same way; it was not reached in P40.
 
 ### 10.2 R7d — statement-wide allocation: CONFIRMED in the loop header, OPEN in general

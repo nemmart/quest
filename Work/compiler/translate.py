@@ -274,7 +274,7 @@ class Regs:
     def pick(self, avoid=(), only=None):
         """R7: the register with the lowest protection cost; ties to the
         lowest-numbered register.  `only` restricts the candidate set to a
-        named class -- R21c's ac0/ac1 for the loop register, R41's ac2/ac3 for
+        named class -- R21c's ac0/ac1 for the loop register, R41′'s ac2/ac3 for
         a base -- so that a rule stating a CLASS cannot silently fall out of it
         when every member is expensive (P40: `avoid=("ac2",)` let the loop
         register reach ac3, the frame)."""
@@ -331,10 +331,19 @@ class Regs:
         return None
 
     def pick_base(self):
-        """R41: an address or base load allocates from the two-register class
-        {ac2, ac3} -- ac2 preferred, ac3 when ac2 is occupied by a live
-        address.  ac0 and ac1 are value registers and are NOT candidates
-        however cheap they are.
+        """R41′: a base pointer loaded FOR INDEXING, and the static link,
+        allocate from the two-register class {ac2, ac3} -- ac2 preferred, ac3
+        when ac2 is occupied by a live address.
+
+        P41 narrowed the SCOPE (user ruling, Sep 9 2026).  R41 as written
+        covered "an address or base load" and said ac0/ac1 were never
+        candidates; that overclaims.  The class governs the ADDRESSING ROLE,
+        not every load of an address -- a record base loaded for a bit
+        reference (R28) is allocated by plain R7 and reaches {ac0, ac1}.  The
+        SD_PTR census: 302 of the 306 ac0/ac1 loads feed the bit family
+        (WSUB, then WBTO/WBTZ), against zero X-form indexing off such a base.
+        This function is the addressing path; bit_base_reg is the other one
+        and correctly does NOT call it.
 
         Witnesses (CODEGEN_RULES §9.3): INIT_OBJ_TBL 7016DF68 loads the SAME
         argument into ac2 once (ac2 free) and into ac3 later (ac2 live, ac0
@@ -1178,7 +1187,7 @@ class Translator:
                 # from 7015C5F0 straight through the entry test at 7015C5FD --
                 # no reload.  The weaker rule explains both: THE LIMIT IS AN
                 # ORDINARY LIVE VALUE, reloaded only if its register was taken.
-                # It also removes a reachable R41 violation -- the old code's
+                # It also removes a reachable R41′ violation -- the old code's
                 # unconditional `pick` could put this *value* in ac3, the frame
                 # register, once ac0/ac1/ac2 were spoken for.
                 expr_lim = True
@@ -1227,7 +1236,7 @@ class Translator:
             if held:
                 lim = Val("reg", reg=held[0], width=16)
             else:
-                # R21e′/R41, P41 audit: the limit is a VALUE, so it comes from
+                # R21e′/R41′, P41 audit: the limit is a VALUE, so it comes from
                 # the value class {ac0, ac1} — the SAME class R21c′ enforces for
                 # the loop register, minus the loop register itself.  This was
                 # `pick(avoid=(lr, "ac2"))`, which stated that intent ("ac2 stays
@@ -2261,7 +2270,7 @@ class Translator:
 
     # -- record fields ---------------------------------------------------------
     def base_reg(self, ptr_name):
-        """R5 as amended by R41: a base pointer used for indexing is loaded
+        """R5 as amended by R41′: a base pointer used for indexing is loaded
         into the base-register class {ac2, ac3} -- ac2 (LWLDA 2) whenever it
         is available, ac3 when ac2 is holding a live address."""
         s = self.L.static(ptr_name)
@@ -2271,7 +2280,7 @@ class Translator:
                 return r
         r = self.regs.pick_base()
         if self.regs.cost(r) >= COST["live"]:
-            raise Refuse("R41: both base registers hold live addresses at a "
+            raise Refuse("R41′: both base registers hold live addresses at a "
                          "base load of %s -- not witnessed, no rule" % ptr_name)
         self.emit("%s = M32[%s]" % (r, hexc(s["addr"])), uses_fp=False)
         self.regs.set(r, ("addr", key))
@@ -2280,7 +2289,7 @@ class Translator:
     def link_reg(self):
         """R42/R44 (P39): the static link — the enclosing procedure's frame
         pointer, saved by WSAVS at wp(fp, -6).  It is loaded like any other
-        BASE (R41: the class {ac2, ac3}, ac2 preferred), and once loaded it is
+        BASE (R41′: the class {ac2, ac3}, ac2 preferred), and once loaded it is
         an ordinary cached address: a second uplevel reference in the same
         block reuses it (FIRE.2 7016A477 -> 7016A47F, where ac2 survives the
         DERR continuation).  R8 flushes it at a real block boundary, which is
@@ -2299,7 +2308,7 @@ class Translator:
                 return r
         r = self.regs.pick_base()
         if self.regs.cost(r) >= COST["live"]:
-            raise Refuse("R41: both base registers hold live addresses at a "
+            raise Refuse("R41′: both base registers hold live addresses at a "
                          "static-link load — not witnessed, no rule")
         # the link lives at wp(fp, -6); resolve the frame's register EXPLICITLY
         # (uses_fp=False) because the destination may itself be ac3, and then a
