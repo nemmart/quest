@@ -904,14 +904,27 @@ class Translator:
         if isinstance(node, c_ast.UnaryOp) and node.op == "*" \
                 and isinstance(node.expr, c_ast.ID) and node.expr.name in self.args:
             return node.expr.name
+        # P39: an UPLEVEL variable as a subscript (FIRE.2 subscripts PLAYER
+        # with both UP(FIRE, w12) and *UPARG(FIRE, 1))
+        if self.is_uplevel(node, ("UP",)):
+            return "UP$%s" % node.args.exprs[1].name
+        if isinstance(node, c_ast.UnaryOp) and node.op == "*" \
+                and self.is_uplevel(node.expr, ("UPARG",)):
+            return "UPARG$%s" % node.expr.args.exprs[1].value
         return None
+
+    def subscript_node(self, vname):
+        return self._subnode.get(vname)
 
     def subscript_node_ok(self, node):
         """The subscript forms the codegen model knows: a variable (local or
         static) or a dereferenced by-reference parameter."""
         return isinstance(node, c_ast.ID) or (
             isinstance(node, c_ast.UnaryOp) and node.op == "*"
-            and isinstance(node.expr, c_ast.ID) and node.expr.name in self.args)
+            and isinstance(node.expr, c_ast.ID) and node.expr.name in self.args) \
+            or self.is_uplevel(node, ("UP",)) \
+            or (isinstance(node, c_ast.UnaryOp) and node.op == "*"
+                and self.is_uplevel(node.expr, ("UPARG",)))
 
     def var_changes_between(self, name, i, j):
         """Is variable `name` assigned in statements (i, j]?"""
@@ -2324,6 +2337,20 @@ class Translator:
         elif vname in self.frame.locals:
             slot, width = self.frame.locals[vname]
             atom = s_load(s_addv(Sym("fp"), s_const(slot)), width)
+        elif vname.startswith("UP$") or vname.startswith("UPARG$"):
+            # P39: an UPLEVEL variable as the subscript.  The symbolic form is
+            # the double indirection itself: the link at wp(fp, -6), then the
+            # parent's slot -- and for UPARG one more level, through the
+            # parent's argument slot.
+            link = s_load(s_addv(Sym("fp"), s_const(-6)), 32)
+            if vname.startswith("UP$"):
+                f = self.L.parent_frame(self.parent)["locals"][vname[3:]]
+                atom = s_load(s_addv(link, s_const(f["slot"])), f["width"])
+            else:
+                k = int(vname[6:], 0)
+                w = self.L.parent_frame(self.parent)["args"][str(k)]["width"]
+                atom = s_load(s_load(s_addv(link, s_const(-(10 + 2 * k))),
+                                     32, ind=True), w)
         elif vname in self.args:
             # a BY-REFERENCE parameter as the subscript: the datum is at the
             # address in the argument slot, so the symbolic form is a load

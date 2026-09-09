@@ -68,6 +68,11 @@ TABLES = {
                            # 1-based (the DERR 17 bound on i is 10, as it is on p)
                            # P39/LIST_PLAYERS.3 7016F59F: XNLDA 0,[ac2+0x7D8B]
                            "fm629": (-629, 16),
+                           # P39/FIRE.2 7016A497: XNLDA 2,[ac2+0x7E88] (-376);
+                           # 7016A4A0 XNLDA 0,[ac2+0x7E86] (-378) and its store;
+                           # 7016A4CB XNLDA 2,[ac2+0x7E85] (-379); 7016A4E1 (-89)
+                           "fm376": (-376, 16), "fm378": (-378, 16),
+                           "fm379": (-379, 16), "fm89": (-89, 16),
                            "fm390": (-390, 16, (10,), (1,))}),
 }
 
