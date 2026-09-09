@@ -25,8 +25,9 @@ one-time change/review notes.
 | Doc | Status | What |
 |---|---|---|
 | NextSession.md | CURRENT | Re-entry prompt: state, next task, gotchas |
-| METHOD.md | CURRENT | How to work on this project (binding) |
-| IR.md | CURRENT | THE quest.ir specification (ir 3, P26) — normative, spec-wins; grammar, block rules, executor model, version history |
+| METHOD.md | CURRENT | How to work on this project — binding for IMPLEMENTATION sessions |
+| INTEGRATOR.md | CURRENT | Binding for the REVIEWER/INTEGRATOR: prompt writing + sizing, delivery mechanics, plan-gate rulings, verify-don't-trust before merge, merging + doc upkeep, standing judgements, parallelism |
+| IR.md | CURRENT | THE quest.ir specification (**ir 6**) — normative, spec-wins; grammar, block rules, executor model, version history |
 | Plan.md | CURRENT | Milestones + Steps 1–4 big picture |
 | M3Plan.md | CURRENT | Milestone 3 minimal lift (616w), decisions, order |
 | TerminalDetach.md | CURRENT | Terminal-detach design + validation (implemented) |
@@ -47,6 +48,19 @@ one-time change/review notes.
 | Project22/ | REFERENCE | Gen-6.0 block-sync checker LANDED (Aug 28): BlockSyncDesign.md (design of record), PROMPT.md (rulings), REPORT.md (as-built + task-030 gate + Q2 carry census 163/13495 + the 029 invalid-green record); IRDesign.md = P23 context |
 | Project26/ | CURRENT | The math & control grammar (ir 3) LANDED on branch (Sep 5): MathDesign.md (design input + rulings), Census.md (27,600-embed census + per-mnemonic semantics with emulator citations), REPORT.md (as-built + battery 037 13/13), PROMPT.md, p26cov.py (coverage tool) |
 | Project4/ | REFERENCE | The DEF?ON cluster (O?AREA, P?DEFON, R?SIGNAL, DEF?ON-staged): derivations, reports, lift checklist |
+
+## The compiler line (P34–P37, Sep 2026)
+| Doc | Status | What |
+|---|---|---|
+| Project29/StringsDesign.md | CURRENT | Design of record for the string family (+ corrections log): located strings, arena twins, residues, the Mapper arena form |
+| compiler/CODEGEN_RULES.md | CURRENT | The DG PL/I code-generator model: numbered rules with their motivating instruction pairs and A/B/C confidence. Amended by every translator project |
+| Project34/ | REFERENCE | The readable layer prototype (tools → compiler/readable.py): frame/static naming, record recognition, register folding; Census.md is the frontier list |
+| Project35/ | REFERENCE | Recompilation as decompilation PROVEN: C-subset → IR translator + comparator; 3 routines 197/197 register-exact; PLAN/REPORT/results |
+| Project36/ | REFERENCE | Bit references, record-field strings + the symbolic address renderer, game→game calls, explicit conversion intrinsics; partial (twins + frame relocation deferred) |
+| Project37/ | CURRENT | Prove each construct on SEVERAL routines; DIED as capstone. draw.py = the pre-registered random selection |
+| Provenance.md | CURRENT | Artifact checksums of record, dated table per regeneration |
+| EmulatorDivergences.md | CURRENT | Every known emulator↔hardware difference: fixed / open-benign / open-guard, with the arguments |
+| Mapper.md | CURRENT | The address mapper: forms, the three-call surface, directionality rulings, the arena + claim-insertion legs |
 
 ## Working docs
 | Doc | Status | What |
