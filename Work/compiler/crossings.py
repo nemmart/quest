@@ -13,7 +13,13 @@ A `.N@ADDR` entry is a NESTED piece of its parent procedure (the addrbook
 splits one PL/I procedure into several entries), so flow between members of the
 same FAMILY is normal and is not a crossing.  Only CROSS-FAMILY flow counts.
 
-    python3 docs/Project37/crossings.py            (from the tree root)
+    python3 compiler/crossings.py                  (from the tree root)
+
+Moved here from docs/Project37/ in P38: METHOD §16 makes this a standing
+check run at the start of every routine-adding session, so it belongs with
+the other standing tools.  P37's REPORT.md and InadmissibleEvidence.md still
+quote the old path; they are the historical record of P37 and were left as
+written.
 """
 import collections
 import os
@@ -21,7 +27,7 @@ import re
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
+ROOT = os.path.abspath(os.path.join(HERE, ".."))
 sys.path.insert(0, os.path.join(ROOT, "compiler"))
 
 import ircmp as C  # noqa: E402
