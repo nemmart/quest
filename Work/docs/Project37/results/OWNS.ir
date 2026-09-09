@@ -1,0 +1,258 @@
+ir 6
+mode book
+routine OWNS entry 00001000 lo 00001000 hi 00001320
+; translate.py (Project 35) — synthetic block pcs in canonical order; not loadable
+
+block 00001000 seg 0x70000000
+  @70175CBF WSAVS 0x0003;
+  ac0 = sx16(M16[R[ac3 + -12]])
+  assert(!(ac0 >s 0x0000000A) && (ac0 >s 0), "DERR 17 @00001000")
+  goto [00001010] 0
+
+block 00001010 seg 0x70000000
+  ac1 = 0x000002AE
+  ac0 = mul(ac0, ac1)
+  ac2 = 0x00000001
+  M16[wp(ac3, 2)] = trunc16(ac2)
+  ac1 = ac2
+  M32[wp(ac3, 4)] = ac0
+  goto [00001020] 0
+
+block 00001020 seg 0x70000000
+  assert(!(ac1 >s 0x0000000A) && (ac1 >s 0), "DERR 17 @00001020")
+  goto [00001030] 0
+
+block 00001030 seg 0x70000000
+  ac1 = add(ac1, M32[wp(ac3, 4)])
+  ac1 = add(ac1, M32[0x70000210])
+  ac2 = ac1
+  ac0 = sx16(M16[wp(ac2, -390)])
+  ac2 = sx16(M16[R[ac3 + -14]])
+  goto [00001040, 00001310] (ac0 == ac2)
+
+block 00001040 seg 0x70000000
+  goto [00001050] 0
+
+block 00001050 seg 0x70000000
+  ac1 = 0x0000000A
+  t1 = nadd(M16[wp(ac3, 2)], 1)
+  M16[wp(ac3, 2)] = t1
+  t2 = (t1 >s ac1)
+  ac1 = t1
+  goto [00001020, 00001060] t2
+
+block 00001060 seg 0x70000000
+  ac0 = sx16(M16[R[ac3 + -14]])
+  goto [00001070, 000012D0] (ac0 == 0x00000008)
+
+block 00001070 seg 0x70000000
+  goto [00001080] 0
+
+block 00001080 seg 0x70000000
+  goto [00001090, 00001290] (ac0 == 0x00000003)
+
+block 00001090 seg 0x70000000
+  goto [000010A0] 0
+
+block 000010A0 seg 0x70000000
+  goto [000010B0, 00001250] (ac0 == 0x0000006A)
+
+block 000010B0 seg 0x70000000
+  goto [000010C0] 0
+
+block 000010C0 seg 0x70000000
+  goto [000010D0, 00001210] (ac0 == 0x00000069)
+
+block 000010D0 seg 0x70000000
+  goto [000010E0] 0
+
+block 000010E0 seg 0x70000000
+  goto [000010F0, 000011D0] (ac0 == 0x00000070)
+
+block 000010F0 seg 0x70000000
+  goto [00001100] 0
+
+block 00001100 seg 0x70000000
+  goto [00001110, 00001190] (ac0 == 0x0000006F)
+
+block 00001110 seg 0x70000000
+  goto [00001120] 0
+
+block 00001120 seg 0x70000000
+  goto [00001130, 00001150] (ac0 == 0x00000072)
+
+block 00001130 seg 0x70000000
+  goto [00001140] 0
+
+block 00001140 seg 0x70000000
+  ac0 = sub(ac0, ac0)
+  M16[wp(ac3, -7)] = trunc16(ac0)
+  ret
+
+block 00001150 seg 0x70000000
+  ac0 = sx16(M16[R[ac3 + -12]])
+  assert(!(ac0 >s 0x0000000A) && (ac0 >s 0), "DERR 17 @00001150")
+  goto [00001160] 0
+
+block 00001160 seg 0x70000000
+  ac1 = 0x000002AE
+  ac0 = mul(ac0, ac1)
+  ac2 = 0x00000010
+  ac0 = mul(ac0, ac2)
+  ac0 = add(ac0, 0xFFFFDB23)
+  ac1 = M32[0x70000210]
+  ac2 = sub(ac2, ac2)
+  goto [00001170, 00001180] ((lsh(M16[ind(ac1) + lsh(ac0, -4)], 0 - (15 - (ac0 & 15))) & 1) == 0)
+
+block 00001170 seg 0x70000000
+  ac2 = add(ac2, ~ac2)
+  goto [00001180] 0
+
+block 00001180 seg 0x70000000
+  M16[wp(ac3, -7)] = trunc16(ac2)
+  ret
+
+block 00001190 seg 0x70000000
+  ac1 = sx16(M16[R[ac3 + -12]])
+  assert(!(ac1 >s 0x0000000A) && (ac1 >s 0), "DERR 17 @00001190")
+  goto [000011A0] 0
+
+block 000011A0 seg 0x70000000
+  ac2 = 0x000002AE
+  ac1 = mul(ac1, ac2)
+  ac0 = 0x00000010
+  ac1 = mul(ac1, ac0)
+  ac1 = add(ac1, 0xFFFFDB24)
+  ac0 = M32[0x70000210]
+  ac2 = sub(ac2, ac2)
+  goto [000011B0, 000011C0] ((lsh(M16[ind(ac0) + lsh(ac1, -4)], 0 - (15 - (ac1 & 15))) & 1) == 0)
+
+block 000011B0 seg 0x70000000
+  ac2 = add(ac2, ~ac2)
+  goto [000011C0] 0
+
+block 000011C0 seg 0x70000000
+  M16[wp(ac3, -7)] = trunc16(ac2)
+  ret
+
+block 000011D0 seg 0x70000000
+  ac1 = sx16(M16[R[ac3 + -12]])
+  assert(!(ac1 >s 0x0000000A) && (ac1 >s 0), "DERR 17 @000011D0")
+  goto [000011E0] 0
+
+block 000011E0 seg 0x70000000
+  ac2 = 0x000002AE
+  ac1 = mul(ac1, ac2)
+  ac0 = 0x00000010
+  ac1 = mul(ac1, ac0)
+  ac1 = add(ac1, 0xFFFFDB22)
+  ac0 = M32[0x70000210]
+  ac2 = sub(ac2, ac2)
+  goto [000011F0, 00001200] ((lsh(M16[ind(ac0) + lsh(ac1, -4)], 0 - (15 - (ac1 & 15))) & 1) == 0)
+
+block 000011F0 seg 0x70000000
+  ac2 = add(ac2, ~ac2)
+  goto [00001200] 0
+
+block 00001200 seg 0x70000000
+  M16[wp(ac3, -7)] = trunc16(ac2)
+  ret
+
+block 00001210 seg 0x70000000
+  ac1 = sx16(M16[R[ac3 + -12]])
+  assert(!(ac1 >s 0x0000000A) && (ac1 >s 0), "DERR 17 @00001210")
+  goto [00001220] 0
+
+block 00001220 seg 0x70000000
+  ac2 = 0x000002AE
+  ac1 = mul(ac1, ac2)
+  ac0 = 0x00000010
+  ac1 = mul(ac1, ac0)
+  ac1 = add(ac1, 0xFFFFDB25)
+  ac0 = M32[0x70000210]
+  ac2 = sub(ac2, ac2)
+  goto [00001230, 00001240] ((lsh(M16[ind(ac0) + lsh(ac1, -4)], 0 - (15 - (ac1 & 15))) & 1) == 0)
+
+block 00001230 seg 0x70000000
+  ac2 = add(ac2, ~ac2)
+  goto [00001240] 0
+
+block 00001240 seg 0x70000000
+  M16[wp(ac3, -7)] = trunc16(ac2)
+  ret
+
+block 00001250 seg 0x70000000
+  ac1 = sx16(M16[R[ac3 + -12]])
+  assert(!(ac1 >s 0x0000000A) && (ac1 >s 0), "DERR 17 @00001250")
+  goto [00001260] 0
+
+block 00001260 seg 0x70000000
+  ac2 = 0x000002AE
+  ac1 = mul(ac1, ac2)
+  ac0 = 0x00000010
+  ac1 = mul(ac1, ac0)
+  ac1 = add(ac1, 0xFFFFDB1E)
+  ac0 = M32[0x70000210]
+  ac2 = sub(ac2, ac2)
+  goto [00001270, 00001280] ((lsh(M16[ind(ac0) + lsh(ac1, -4)], 0 - (15 - (ac1 & 15))) & 1) == 0)
+
+block 00001270 seg 0x70000000
+  ac2 = add(ac2, ~ac2)
+  goto [00001280] 0
+
+block 00001280 seg 0x70000000
+  M16[wp(ac3, -7)] = trunc16(ac2)
+  ret
+
+block 00001290 seg 0x70000000
+  ac1 = sx16(M16[R[ac3 + -12]])
+  assert(!(ac1 >s 0x0000000A) && (ac1 >s 0), "DERR 17 @00001290")
+  goto [000012A0] 0
+
+block 000012A0 seg 0x70000000
+  ac2 = 0x000002AE
+  ac1 = mul(ac1, ac2)
+  ac0 = 0x00000010
+  ac1 = mul(ac1, ac0)
+  ac1 = add(ac1, 0xFFFFDB20)
+  ac0 = M32[0x70000210]
+  ac2 = sub(ac2, ac2)
+  goto [000012B0, 000012C0] ((lsh(M16[ind(ac0) + lsh(ac1, -4)], 0 - (15 - (ac1 & 15))) & 1) == 0)
+
+block 000012B0 seg 0x70000000
+  ac2 = add(ac2, ~ac2)
+  goto [000012C0] 0
+
+block 000012C0 seg 0x70000000
+  M16[wp(ac3, -7)] = trunc16(ac2)
+  ret
+
+block 000012D0 seg 0x70000000
+  ac1 = sx16(M16[R[ac3 + -12]])
+  assert(!(ac1 >s 0x0000000A) && (ac1 >s 0), "DERR 17 @000012D0")
+  goto [000012E0] 0
+
+block 000012E0 seg 0x70000000
+  ac2 = 0x000002AE
+  ac1 = mul(ac1, ac2)
+  ac0 = 0x00000010
+  ac1 = mul(ac1, ac0)
+  ac1 = add(ac1, 0xFFFFDB1F)
+  ac0 = M32[0x70000210]
+  ac2 = sub(ac2, ac2)
+  goto [000012F0, 00001300] ((lsh(M16[ind(ac0) + lsh(ac1, -4)], 0 - (15 - (ac1 & 15))) & 1) == 0)
+
+block 000012F0 seg 0x70000000
+  ac2 = add(ac2, ~ac2)
+  goto [00001300] 0
+
+block 00001300 seg 0x70000000
+  M16[wp(ac3, -7)] = trunc16(ac2)
+  ret
+
+block 00001310 seg 0x70000000
+  ac0 = 0xFFFF8000
+  M16[wp(ac3, -7)] = trunc16(ac0)
+  ret
+
+blocks 50

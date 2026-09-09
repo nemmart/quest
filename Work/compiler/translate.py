@@ -184,6 +184,12 @@ def hexc(v):
     return "0x%08X" % (v & 0xFFFFFFFF)
 
 
+def _sx32(v):
+    """The signed reading of a 32-bit word."""
+    v &= 0xFFFFFFFF
+    return v - 0x100000000 if v & 0x80000000 else v
+
+
 # ---------------------------------------------------------------------------
 # the world layout (declarations.json)
 # ---------------------------------------------------------------------------
@@ -273,6 +279,14 @@ class Regs:
     def reset(self):
         for r in self.c:
             self.c[r] = None
+
+    def snapshot(self):
+        """R8c: the register knowledge on one control-flow edge."""
+        return dict(self.c)
+
+    def restore(self, snap):
+        for r in self.c:
+            self.c[r] = snap.get(r)
 
     def invalidate_var(self, key):
         for r, v in self.c.items():
@@ -440,6 +454,8 @@ class Translator:
         self.var_refs = {}     # pre-pass: stmt index -> {variable name: reference count}
         self.ref_seq = {}      # element (table, var) -> running reference count (R10 positions)
         self.elem_refs = {}    # pre-pass: stmt index -> {table:{subscript: count}}
+        self.arm_path = {}     # pre-pass: stmt index -> the branch arms enclosing it
+        self.pinned = set()    # R7c': registers pinned across an if-body
 
     # -- blocks ---------------------------------------------------------
     def new_block(self, label=None):
@@ -532,6 +548,12 @@ class Translator:
             self.args[p.name] = (n, width, const)
         if n != self.entry["argc"]:
             raise Refuse("%s declares %d arguments; the addrbook says argc %d" % (self.name, n, self.entry["argc"]))
+        # R35: the declared return type; None = a PL/I procedure (returns nothing)
+        rt = decl.type.type
+        self.ret_width = None
+        if isinstance(rt, c_ast.TypeDecl) and isinstance(rt.type, c_ast.IdentifierType) \
+                and rt.type.names[-1] != "void":
+            self.ret_width = self.width_of(rt)
         self.frame = Frame(self.entry["frame"])
         body = fdef.body.block_items or []
         # declarations first (R1)
@@ -571,6 +593,8 @@ class Translator:
             if v is not None and v[0] == "live":
                 if r == self.keep_live:
                     continue          # R21b: the loop register stays protected through the body's first statement
+                if r in self.pinned:
+                    continue          # R7c': pinned across an R13b if-body
                 self.regs.c[r] = ("var", v[1])
             elif v is not None and v[0] == "const":
                 self.regs.c[r] = ("kconst", v[1])   # R7a: known but unprotected
@@ -663,16 +687,21 @@ class Translator:
                 self.uses.setdefault(("assign", n.lvalue.name), []).append(i)
             for _, ch in n.children():
                 walk(ch, i)
-        def visit(lst):
+        def visit(lst, path=()):
             for st in lst:
                 i = self.stmt_no[id(st)]
+                self.arm_path[i] = path
                 subs = self.sub_stmts(st)
                 if subs:
                     for _, ch in st.children():
                         if not isinstance(ch, c_ast.Node) or any(ch is x for x in subs):
                             continue
                         walk(ch, i)
-                    visit(subs)
+                    # each branch ARM gets its own path component, so two uses
+                    # in different arms are not "the same straight-line flow"
+                    for k, sub in enumerate(subs):
+                        visit([sub] if not isinstance(sub, c_ast.Compound)
+                              else (sub.block_items or []), path + ((i, k),))
                 else:
                     walk(st, i)
         visit(stmts)
@@ -682,7 +711,19 @@ class Translator:
             node = node.args.exprs[0]
         if isinstance(node, c_ast.ID):
             return node.name
+        # `*param` -- a by-reference argument used as a subscript (OWNS
+        # subscripts PLAYER with *p in all eight of its element references)
+        if isinstance(node, c_ast.UnaryOp) and node.op == "*" \
+                and isinstance(node.expr, c_ast.ID) and node.expr.name in self.args:
+            return node.expr.name
         return None
+
+    def subscript_node_ok(self, node):
+        """The subscript forms the codegen model knows: a variable (local or
+        static) or a dereferenced by-reference parameter."""
+        return isinstance(node, c_ast.ID) or (
+            isinstance(node, c_ast.UnaryOp) and node.op == "*"
+            and isinstance(node.expr, c_ast.ID) and node.expr.name in self.args)
 
     def var_changes_between(self, name, i, j):
         """Is variable `name` assigned in statements (i, j]?"""
@@ -691,6 +732,29 @@ class Translator:
     def last_use_of(self, key):
         u = self.uses.get(key, [])
         return max(u) if u else -1
+
+    def reachable_later_uses(self, key, i):
+        """Uses of `key` after statement i that the flow from i can actually
+        REACH.  Two statements in different ARMS of an `if` are mutually
+        exclusive, so neither is "a later statement" for the other.
+
+        This is what separates OWNS from DIED for R27.  DIED's nine WBTZs are
+        consecutive siblings, so the first sees eight later uses and saves
+        16*P*686 to a temp (70166296 `XWSTA 2,[ac3+8]`).  OWNS' seven bit
+        references sit in seven different if-arms, so each sees NO reachable
+        later use and each recomputes `*p * 686 * 16` from scratch -- which is
+        exactly what the book does.  R27's trigger is narrowed accordingly.
+        """
+        pi = self.arm_path.get(i, ())
+        out = []
+        for j in self.uses.get(key, []):
+            if j <= i:
+                continue
+            pj = self.arm_path.get(j, ())
+            n = min(len(pi), len(pj))
+            if pi[:n] == pj[:n]:      # one path continues the other
+                out.append(j)
+        return out
 
     # -- statements -----------------------------------------------------
     def stmt(self, st):
@@ -708,7 +772,25 @@ class Translator:
             return
         if isinstance(st, c_ast.Return):
             if st.expr is not None:
-                refuse(st, "value returns are not in the subset (PL/I procedures here return nothing)")
+                # R35: a value-returning PL/I function stores its result into
+                # the SAVED-ac0 IMAGE in its own frame (`image ac0 wfp-8`,
+                # quest.addrbook header), so WRTN restores it into ac0.  This
+                # is exactly the addrbook's `slotpatch` flag.  A 32-bit result
+                # takes the whole image word at wp(ac3, -8)
+                # (DISTANCE_TO_PLAYER 701687D9 `XWSTA 0,[ac3+0x7FF8]`); a
+                # 16-bit result takes its low half at wp(ac3, -7)
+                # (OWNS 70175DA2 `XNSTA 2,[ac3+0x7FF9]`).
+                if self.ret_width is None:
+                    refuse(st, "this routine is declared void but returns a value")
+                if "slotpatch" not in (self.entry.get("flags") or ""):
+                    refuse(st, "%s is not marked slotpatch in the addrbook, so it "
+                               "does not return a value" % self.name)
+                v = self.value(st.expr, want_reg=True)
+                if self.ret_width == 32:
+                    self.emit("M32[wp(ac3, -8)] = %s" % v.reg)
+                else:
+                    self.narrow_check(st, v)
+                    self.emit("M16[wp(ac3, -7)] = trunc16(%s)" % v.reg)
             self.terminate(("ret",))
             self.start(self.new_block())
             return
@@ -742,7 +824,13 @@ class Translator:
             if len(st.block_items or []) != 1:
                 return False
             st = st.block_items[0]
-        return isinstance(st, (c_ast.Goto, c_ast.Return, c_ast.Continue))
+        if isinstance(st, c_ast.Return):
+            # R35: a VALUE return is not one word -- it evaluates the value,
+            # stores it into the saved-ac0 image and only then WRTNs, so it
+            # takes the R13b shape (skip-if-c over `goto else`), which is what
+            # OWNS' seven `if (*item == K) return BIT(...)` arms do.
+            return st.expr is None
+        return isinstance(st, (c_ast.Goto, c_ast.Continue))
 
     def if_stmt(self, st):
         if st.iffalse is not None or not self.one_word(st.iftrue):
@@ -802,12 +890,29 @@ class Translator:
             lim = self.value(cond.right, want_reg=True)      # the limit first: it is live for the test
             self.regs.c[lim.reg] = ("live", "lim")
             lslot = self.frame.locals[cond.right.name][0]
-        # the loop register: the cost model's pick (ac1 in UPDATE_SCREENS where
-        # ac0 holds the limit, ac0 in REFRESH_SCREEN)
-        lr = self.regs.pick()
-        self.emit("%s = %s" % (lr, hexc(a.const)))
-        self.regs.set(lr, ("const", a.const))
-        self.emit("M16[wp(ac3, %d)] = trunc16(%s)" % (vslot, lr))
+        # R36 (P37/OWNS 70175CBF..CC7): a subscript in the BODY that is
+        # invariant in the loop variable is evaluated at the loop head -- its
+        # bound check (R17) and stride multiply BEFORE the loop's own
+        # initialisation, its R9 temp store AFTER it.
+        hoisted = self.hoist_invariant_subscripts(st, vname)
+        # R21c (P37/OWNS; consistent with UPDATE_SCREENS and REFRESH_SCREEN):
+        # the DO-loop register is picked from ac0/ac1 only -- ac2 stays free
+        # for addressing -- and it is picked BEFORE the initial value's own
+        # register.  When the two differ the constant is stored from its own
+        # register and copied to the loop register (OWNS `WMOV 2,1`); when they
+        # coincide, as in both P35 loops, no move appears.
+        lr = self.regs.pick(avoid=("ac2",))
+        cr = self.regs.pick()
+        self.emit("%s = %s" % (cr, hexc(a.const)))
+        self.regs.set(cr, ("const", a.const))
+        self.emit("M16[wp(ac3, %d)] = trunc16(%s)" % (vslot, cr))
+        if cr != lr:
+            self.emit("%s = %s" % (lr, cr))
+            self.regs.set(lr, ("dup", cr))
+        for skey, hr in hoisted:
+            slot = self.frame.alloc_temp(skey)
+            self.emit("M32[wp(ac3, %d)] = %s" % (slot, hr))
+            self.cse[skey] = dict(slot=slot, stmt=self.stmt_index)
         incr_b, body_b, after_b = self.new_block(), self.new_block(), self.new_block()
         last_stmt = self.is_last_stmt
         if const_lim:
@@ -863,6 +968,55 @@ class Translator:
     keep_live = None
     is_last_stmt = False
 
+    def hoist_invariant_subscripts(self, st, vname):
+        """R36 -- the loop-invariant subscript hoist.
+
+        OWNS 70175CBF..70175CC7: the body's only element reference is
+        `PLAYER(SUB(*p,10)).fm390(i)`.  Its OUTER subscript `*p` does not
+        depend on the DO variable, and the compiler evaluates it once at the
+        loop head: the DERR 17 check sits in the entry block and the `*686`
+        multiply opens the initialisation block, with the scaled value flushed
+        to its R9 temp only after `i = 1` has been set up.  The body then
+        reloads the temp on every iteration (XWADD [ac3+4]).
+
+        Returns [(skey, register)] for the caller to store after the loop init.
+        Confidence C: ONE instance.  Neither P35 loop can witness it --
+        UPDATE_SCREENS' body subscript IS the loop variable (R9a) and
+        REFRESH_SCREEN's body references no table -- so a second witness has
+        to come from a routine with two loops (DIED has two).
+        """
+        seen, out = [], []
+        def walk(node):
+            for _, child in node.children():
+                if isinstance(child, c_ast.ArrayRef) and isinstance(child.name, c_ast.ID) \
+                        and self.L.table(child.name.name) is not None:
+                    key = self.subscript_key(child.subscript)
+                    if key != vname and (child.name.name, key) not in seen:
+                        seen.append((child.name.name, key))
+                        out.append((child.name.name, child.subscript))
+                walk(child)
+        walk(st.stmt)
+        done = []
+        for tname, sub in out:
+            t = self.L.table(tname)
+            bounds = None
+            s = sub
+            if isinstance(s, c_ast.FuncCall) and s.name.name == "SUB":
+                bounds = int(s.args.exprs[1].value, 0)
+                s = s.args.exprs[0]
+            skey = ("scaled", tname, self.subscript_key(sub))
+            v = self.value(s, want_reg=True)
+            r = v.reg
+            if bounds is not None:
+                self.bounds_check(r, bounds)
+            kr = self.regs.pick(avoid=(r,))
+            self.emit("%s = %s" % (kr, hexc(t["stride"])))
+            self.regs.set(kr, ("const", t["stride"]))
+            self.emit("%s = mul(%s, %s)" % (r, r, kr))
+            self.regs.set(r, ("live", skey))
+            done.append((skey, r))
+        return done
+
     def if_multi(self, st):
         """R13b: `if (c) {body} [else {alt}]` with a body longer than one
         instruction: skip-if-c over a `goto else` block; the body ends with
@@ -871,18 +1025,56 @@ class Translator:
         skip_b, body_b, after_b = self.new_block(), self.new_block(), self.new_block()
         else_b = self.new_block() if st.iffalse is not None else after_b
         self.terminate(("goto", [skip_b.label, body_b.label], test))
+        # R8c: the state on the SKIP edge -- the only edge into the
+        # continuation when the body does not fall through (see below)
+        skip_state = self.regs.snapshot()
         self.cur = skip_b
         self.terminate(("goto", [else_b.label], "0"))
         self.cur = body_b
-        self.regs.reset()
+        # R7c' (P37/OWNS): an R13b body INHERITS the skip's register state,
+        # and a register holding a variable that the if's CONTINUATION still
+        # reads is PINNED (cost 3) for the body's duration.  OWNS holds
+        # `*item` in ac0 across the whole seven-arm chain, so six bodies push
+        # the record subscript into ac1 (`XNLDA 1,@[ac3+0xFFF4]`) while the
+        # SEVENTH -- after which nothing reads `*item` -- takes ac0
+        # (70175D8E `XNLDA 0`).
+        # This is the narrow survivor of a falsified wider rule: see var_read.
+        # It cannot disturb an R13 one-word THEN (there is no body block), which
+        # is why UPDATE_SCREENS' `if (...) continue;` statements are untouched.
+        self.regs.restore(skip_state)
+        outer_pin = self.pinned
+        self.pinned = set(self.continuation_pins(st))
+        for r in self.pinned:
+            v = self.regs.c.get(r)
+            if v is not None and v[0] == "var":
+                self.regs.c[r] = ("live", v[1])
         self.run_body(st.iftrue)
-        if self.cur is not None and self.cur.term is None:
+        self.pinned = outer_pin
+        # after a `return`/`goto` the statement walker has already opened a
+        # fresh empty block, so "the body fell through" means that block has
+        # content or is itself a branch target
+        fell_through = (self.cur is not None and self.cur.term is None
+                        and (self.cur.lines or self.is_target(self.cur.label)))
+        if not fell_through and self.cur is not None and not self.cur.lines \
+                and self.cur in self.blocks:
+            self.blocks.remove(self.cur)
+        if fell_through:
             if st.iffalse is not None:
                 self.terminate(("goto", [after_b.label], "0"))
             else:
                 self.join(after_b)
                 self.regs.reset()
                 return
+        if not fell_through and st.iffalse is None:
+            # R8c: an `if (c) {body}` whose body RETURNS or GOTOes has only one
+            # edge into its continuation -- the skip's own `goto` -- so nothing
+            # joins there and register knowledge SURVIVES.  OWNS 7016CED..:
+            # `ac0 = *item` is loaded once and all seven chain tests compare
+            # ac0 directly; a reset would reload it seven times.  R8 (reset at
+            # a label) still governs a genuine join, where two paths meet.
+            self.cur = after_b
+            self.regs.restore(skip_state)
+            return
         if st.iffalse is not None:
             self.cur = else_b
             self.regs.reset()
@@ -893,6 +1085,30 @@ class Translator:
                 return
         self.cur = after_b
         self.regs.reset()
+
+    def release_pins(self):
+        """R7c'': drop the if-body pin, demoting the pinned live marks back to
+        ordinary cached copies (cost 0)."""
+        for r in self.pinned:
+            v = self.regs.c.get(r)
+            if v is not None and v[0] == "live":
+                self.regs.c[r] = ("var", v[1])
+        self.pinned = set()
+
+    def continuation_pins(self, st):
+        """R7c': the registers holding variables that the statements AFTER this
+        `if` still read -- the values that must survive the body."""
+        i = self.stmt_no[id(st)]
+        out = []
+        for r, v in self.regs.c.items():
+            if v is None or v[0] not in ("var", "live"):
+                continue
+            key = v[1]
+            if not (isinstance(key, tuple) and len(key) == 2 and key[0] in ("arg", "local")):
+                continue
+            if self.reachable_later_uses(("id", key[1]), i):
+                out.append(r)
+        return out
 
     def join(self, after_b):
         """Fall into after_b from the current block.  When the current block
@@ -974,6 +1190,13 @@ class Translator:
                 return "((lsh(%s, -15) & 1) %s 1)" % (t, "==" if op == "<" else "!=")
             # R15: wide skip with immediate, constant spelled hexc
             return "(%s %s %s)" % (lhs.reg, self.SKIP[op], hexc(k))
+        # R7: the left operand is a value the statement STILL NEEDS (cost 3),
+        # so the right operand's load must pick elsewhere.  OWNS 70175CDB:
+        # the field lands in ac0 and `*item` is then forced into ac2
+        # (`XNLDA 2,@[ac3+0xFFF2]`), which a cost-0 cached-copy reading of ac0
+        # would have collided with.  Only a register-borne right operand can
+        # collide; a constant is a wide skip-with-immediate (R15).
+        self.regs.c[lhs.reg] = ("live", ("cmp-lhs", lhs.reg))
         r = self.value(rhs, want_reg=True)
         return "(%s %s %s)" % (lhs.reg, self.SKIP[op], r.reg)
 
@@ -1001,6 +1224,13 @@ class Translator:
         `cvwn(e)`, so a 32-bit value reaching a 16-bit destination without one
         is a REFUSAL, not an inserted instruction."""
         if v.width == 32:
+            # R16b does not reach a LITERAL that already fits in 16 bits: the
+            # compiler loads it with a sign-extended NLDAI and stores it with a
+            # bare trunc16, no CVWN -- there is nothing to check at run time.
+            # (OWNS 70175CE7 `return -32768`; the same shape as every
+            # `M16[wp(ac3,2)] = trunc16(ac1)` loop initialisation.)
+            if v.const is not None and -0x8000 <= _sx32(v.const) <= 0x7FFF:
+                return
             refuse(lv, "32-bit value stored to a 16-bit destination without "
                        "an explicit cvwn() (P36 ruling 1)")
 
@@ -1100,6 +1330,86 @@ class Translator:
             self.emit("M16[wp(ac2, %d)] = trunc16(%s)" % (K, v.reg))
         self.regs.c["ac2"] = ("addr", ("stored",))
 
+    # -- indexed field READ (R23r; P37/OWNS 70175CDB) ------------------------
+    def is_indexed_field(self, e):
+        """`TABLE[i].field[j][...]` as an rvalue."""
+        node = e
+        while isinstance(node, c_ast.ArrayRef):
+            node = node.name
+        return (isinstance(node, c_ast.StructRef) and node.type == "."
+                and isinstance(node.name, c_ast.ArrayRef)
+                and isinstance(node.name.name, c_ast.ID)
+                and self.L.table(node.name.name.name) is not None)
+
+    def indexed_field_load(self, e, avoid):
+        """R23r — the READ counterpart of R23.  The address is built exactly as
+        for a store (each subscript checked, scaled, added to the running sum,
+        the base added last, WMOV to ac2) and the field is then loaded from
+        wp(ac2, K).  OWNS 70175CDB is the whole rule in five instructions:
+
+            ac1 = <i>                        the subscript (the DO register)
+            ac1 = add(ac1, M32[wp(ac3, 4)])  XWADD: the R9 scaled temp
+            ac1 = add(ac1, M32[0x70000210])  LWADD: the base
+            ac2 = ac1                        WMOV
+            ac0 = sx16(M16[wp(ac2, -390)])   the field
+
+        R23a: a stride of 1 emits NO scaling at all (stride 2 is `add(r, r)`,
+        any other stride is a constant in a register and WMUL) -- OWNS is the
+        first inner dimension of stride 1 seen.
+        """
+        subs = []
+        node = e
+        while isinstance(node, c_ast.ArrayRef):
+            subs.append(node.subscript)
+            node = node.name
+        subs.reverse()
+        tname = node.name.name.name
+        t = self.L.table(tname)
+        fld = t["fields"].get(node.field.name)
+        if fld is None or "dims" not in fld:
+            refuse(e, "%s.%s is not a multi-dimensional field" % (tname, node.field.name))
+        if len(subs) != len(fld["dims"]):
+            refuse(e, "wrong number of subscripts")
+        vname = self.subscript_key(node.name.subscript)
+        skey = ("scaled", tname, vname)
+        i = self.stmt_index
+        if not (skey in self.cse and self.cse[skey]["slot"] is not None):
+            refuse(e, "an indexed field read needs the scaled subscript in a temp (only form seen)")
+        partial = self.cse[skey]["slot"]
+        base_addr = self.L.static(t["base"])["addr"]
+        r = None
+        for d, (sub, stride) in enumerate(zip(subs, fld["strides"])):
+            v = self.value(sub, want_reg=True, avoid=avoid)
+            r = v.reg
+            if stride == 2:
+                self.emit("%s = add(%s, %s)" % (r, r, r))                   # WADD r,r
+            elif stride != 1:                                              # R23a: stride 1 scales by nothing
+                kr = self.regs.pick(avoid=(r,))
+                self.emit("%s = %s" % (kr, hexc(stride)))
+                self.regs.set(kr, ("const", stride))
+                self.emit("%s = mul(%s, %s)" % (r, r, kr))
+            self.emit("%s = add(%s, M32[wp(ac3, %d)])" % (r, r, partial))   # XWADD
+            self.regs.set(r, ("live", "partial"))
+            if self.last_use_of(skey) <= i and self.frame.temps.get(partial) == skey:
+                self.frame.free_temp(partial)
+                self._freed.add(partial)
+                self.cse[skey]["slot"] = None
+            if d < len(subs) - 1:
+                slot = self.frame.alloc_temp(("partial", d))
+                self.emit("M32[wp(ac3, %d)] = %s" % (slot, r))
+                partial = slot
+            elif self.frame.temps.get(partial, None) is not None \
+                    and self.frame.temps[partial][0] == "partial":
+                self.frame.free_temp(partial)
+        self.emit("%s = add(%s, M32[%s])" % (r, r, hexc(base_addr)))        # LWADD
+        if r != "ac2":
+            self.emit("ac2 = %s" % r)
+            self.regs.set("ac2", ("dup", r))
+        K, width = fld["K"], fld["width"]
+        self.regs.c["ac2"] = ("addr", ("elem", tname, vname))
+        text = "M32[wp(ac2, %d)]" % K if width == 32 else "sx16(M16[wp(ac2, %d)])" % K
+        return self.load(text, width, ("elem", tname, K), True, avoid)
+
     # -- PL/I bit references (P36, R26-R29) ----------------------------------
     def bit_word(self, node):
         """Decompose a BIT*() word argument into (tname, t, subscript, K).
@@ -1131,9 +1441,10 @@ class Translator:
         if isinstance(sub, c_ast.FuncCall) and sub.name.name == "SUB":
             bounds = int(sub.args.exprs[1].value, 0)
             sub = sub.args.exprs[0]
-        if not isinstance(sub, c_ast.ID):
-            refuse(sub, "BIT(): subscript must be a variable (optionally SUB(v, n))")
-        vname = sub.name
+        if not self.subscript_node_ok(sub):
+            refuse(sub, "BIT(): subscript must be a variable or a dereferenced "
+                        "parameter (optionally SUB(v, n))")
+        vname = self.subscript_key(sub)
         i = self.stmt_index
         skey = ("scaled", tname, vname)
         bkey = ("bitbase", tname, vname)
@@ -1168,6 +1479,14 @@ class Translator:
         self.regs.set(kr, ("const", t["stride"]))
         self.emit("%s = mul(%s, %s)" % (r, r, kr))                      # WMUL
         self.regs.set(r, ("live", skey))
+        # R7c'' : the enclosing if's pinned condition value is released once
+        # the SUBSCRIPT EXPRESSION is done -- the stride multiply is its last
+        # instruction.  The bit-address arithmetic that follows may take the
+        # register.  OWNS' six pinned bodies avoid ac0 for `*p` and for the
+        # stride constant 686 and then take it for the constant 16
+        # (70175CF8 `NLDAI 686,2` then `NLDAI 16,0`), which is exactly this
+        # boundary; the seventh, unpinned, uses ac0/ac1/ac2 in order.
+        self.release_pins()
 
         # R26a: the *16 multiply's destination is the SCALED VALUE's register
         # (R11, multiply in place), UNLESS the scaled value is still needed
@@ -1196,7 +1515,7 @@ class Translator:
         # when it does not recur AND the multiply landed in the constant's
         # register, the product is copied to an R7 pick before the
         # displacement add (70166046 WMOV 2,1).
-        if any(j > i for j in self.uses.get(bkey, [])):
+        if self.reachable_later_uses(bkey, i):
             slot = self.frame.alloc_temp(bkey)
             self.emit("M32[wp(ac3, %d)] = %s" % (slot, off))
             self.cse[bkey] = dict(slot=slot, stmt=i)
@@ -1315,14 +1634,28 @@ class Translator:
     # -- values -------------------------------------------------------------
     def value(self, e, want_reg=False, avoid=()):
         """Evaluate e.  Returns a Val; with want_reg the value is in a register."""
+        if isinstance(e, c_ast.UnaryOp) and e.op == "-" and isinstance(e.expr, c_ast.Constant):
+            # a negated literal IS a literal: the compiler loads the
+            # sign-extended immediate in one NLDAI (OWNS 70175CE7 `-32768` ->
+            # `ac0 = 0xFFFF8000 ; NLDAI 32768 (0x8000),0`)
+            e = c_ast.Constant(e.expr.type, str(-int(e.expr.value, 0)), e.coord)
         if isinstance(e, c_ast.Constant):
-            k = int(e.value, 0)
+            k = int(e.value, 0) & 0xFFFFFFFF
             v = Val("const", text=hexc(k), width=32, const=k)
             if want_reg:
                 r = self.regs.find(("const", k))
                 if r is None:
                     r = self.regs.pick(avoid)
-                    self.emit("%s = %s" % (r, hexc(k)))      # NLDAI/WLDAI
+                    if k == 0:
+                        # R37: the compiler materialises the constant ZERO by
+                        # subtracting a register from itself (`WSUB r,r`), never
+                        # by an immediate load.  OWNS 70175DA5 `ac0 = sub(ac0,
+                        # ac0)` for `return 0`; the same shape at FIRE.1
+                        # 7016A3D2 and INIT_OBJ_TBL 7016DF68 (`WSUB 1,1`), and
+                        # it is the first half of R29's 0/-1 materialisation.
+                        self.emit("%s = sub(%s, %s)" % (r, r, r))
+                    else:
+                        self.emit("%s = %s" % (r, hexc(k)))  # NLDAI/WLDAI
                     self.regs.set(r, ("const", k))
                 return Val("reg", reg=r, width=32, const=k)
             return v
@@ -1365,6 +1698,8 @@ class Translator:
             return self.load(text, width, key, want_reg, avoid, name=e.expr.name)
         if isinstance(e, c_ast.StructRef):
             return self.field(e, want_reg, avoid)
+        if isinstance(e, c_ast.ArrayRef) and self.is_indexed_field(e):
+            return self.indexed_field_load(e, avoid)
         if isinstance(e, c_ast.BinaryOp):
             return self.binop(e, avoid)
         if isinstance(e, c_ast.FuncCall) and e.name.name == "ABS":
@@ -1400,6 +1735,10 @@ class Translator:
                 self.emit("%s = %s(%s)" % (v.reg, op, v.reg))
                 self.regs.set(v.reg, ("live", op))
             return Val("reg", reg=v.reg, width=16)
+        if isinstance(e, c_ast.FuncCall) and e.name.name == "BIT":
+            # R29: a bit reference used as a value, outside a condition
+            # (OWNS returns one directly from seven of its arms)
+            return Val("reg", reg=self.bit_value_reg(e), width=16)
         if isinstance(e, c_ast.FuncCall) and e.name.name == "SUB":
             v = self.value(e.args.exprs[0], want_reg=True, avoid=avoid)
             self.bounds_check(v.reg, int(e.args.exprs[1].value, 0))
@@ -1416,7 +1755,14 @@ class Translator:
     def var_read(self, r, key, name):
         """R7b: a register holding a variable that this statement references
         again is protected (UPDATE_SCREENS 7017D67A: *y stays in ac1 for the
-        column expression, so *x takes ac2)."""
+        column expression, so *x takes ac2).
+
+        FALSIFIED HERE: P37 first tried R7c -- "the protection runs to the
+        variable's LAST REACHABLE use, anywhere" -- to explain OWNS' bit-body
+        registers.  It did not fix OWNS and it regressed UPDATE_SCREENS from
+        72/72 to 47/72 (25 DIFF), because `*x` and `*y` are read by later
+        SIBLING statements there and the compiler plainly does not protect
+        them.  The surviving rule is the narrower R7c' in if_multi."""
         self._var_done[name] = self._var_done.get(name, 0) + 1
         total = self.var_refs.get(self.stmt_index, {}).get(name, 0)
         self.regs.c[r] = ("live", key) if self._var_done[name] < total else ("var", key)
@@ -1476,9 +1822,10 @@ class Translator:
         if isinstance(sub, c_ast.FuncCall) and sub.name.name == "SUB":
             bounds = int(sub.args.exprs[1].value, 0)
             sub = sub.args.exprs[0]
-        if not isinstance(sub, c_ast.ID):
-            refuse(sub, "subscript must be a variable (optionally SUB(v, n))")
-        vname = sub.name
+        if not self.subscript_node_ok(sub):
+            refuse(sub, "subscript must be a variable or a dereferenced "
+                        "parameter (optionally SUB(v, n))")
+        vname = self.subscript_key(sub)
         i = self.stmt_index
         skey = ("scaled", tname, vname)
         ekey = ("elem", tname, vname)

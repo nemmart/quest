@@ -162,3 +162,89 @@ translate.py's 8-digit `hexc`.
   sits just past the data). The pixel coordinates in the world render
   were a viewing transform, not part of the program — do not add an
   offset to the header or the readable layer.
+
+
+## 8. Project 37 additions (Sep 9 2026, branch p37-routines)
+
+Routine 1 of the P37 set: **OWNS @70175CBF, 152/152 MATCH primary, 114/114
+folded**, with the three P35 routines at 197/197 throughout and `--selftest`
+PASS after every change.  Pragma count: **0**.
+
+### 8.0 Amendment to P36 ruling 1 (conversions)
+
+R16b refuses a 32-bit value reaching a 16-bit destination without an explicit
+`cvwn()`.  It does NOT reach a **literal that already fits in 16 bits**: the
+compiler loads such a literal with a sign-extended `NLDAI` and stores it with a
+bare `trunc16`, emitting no `CVWN`, because there is nothing to check at run
+time.  OWNS 70175CE7 (`return -32768` -> `ac0 = 0xFFFF8000 ; NLDAI 32768
+(0x8000),0`) is the instance; the same shape is every DO-loop initialisation
+(`M16[wp(ac3,2)] = trunc16(ac1)`).  The refusal stands for every non-literal.
+
+### 8.1 Value-returning routines
+
+| # | rule | evidence | conf |
+|---|------|----------|------|
+| R35 | A value-returning PL/I function stores its result into the SAVED-ac0 IMAGE of its own frame, so `WRTN` restores it into ac0 — which is exactly the addrbook's `slotpatch` flag.  A 32-bit result takes the whole image word at `wp(ac3, -8)`; a 16-bit result takes its low half at `wp(ac3, -7)`.  The translator refuses a value return from a routine the addrbook does not mark `slotpatch`. | OWNS 70175DA2 `XNSTA 2,[ac3+0x7FF9]` (16-bit); DISTANCE_TO_PLAYER 701687D9 `XWSTA 0,[ac3+0x7FF8]` (32-bit) | A — two routines, both widths |
+| R35a | A value return is therefore NOT a one-word THEN (R13): it evaluates the value, stores it, and only then `WRTN`s, so `if (c) return e;` takes the R13b shape (skip-if-c over `goto else`).  A bare `return;` remains one word. | OWNS' seven `if (*item == K) return BIT(...)` arms, 70175CED..70175D8B | A |
+
+### 8.2 Loops
+
+| # | rule | evidence | conf |
+|---|------|----------|------|
+| R21c | The DO-loop register is picked from **ac0/ac1 only** — ac2 stays free for addressing — and it is picked BEFORE the initial value's own register.  When the two differ the constant is loaded into its own register, stored to the loop variable, and copied to the loop register; when they coincide no move appears. | OWNS 70175CC7 (`ac2 = 1; XNSTA 2,[ac3+2]; WMOV 2,1` — lr ac1 because ac0 is live and ac1 holds the stride constant); UPDATE_SCREENS 7017D635 and REFRESH_SCREEN 70176B06 both coincide and emit no WMOV | A — three routines |
+| R36 | A subscript in the loop BODY that is invariant in the loop variable is evaluated at the loop head: its bound check (R17) and stride multiply BEFORE the loop's own initialisation, its R9 temp store AFTER it.  The body reloads the temp each iteration.  This is the compiler's first observed optimisation. | OWNS 70175CBF..CC7: the DERR 17 on `*p` sits in the entry block, `NLDAI 686 / WMUL` opens the init block, and `XWSTA 0,[ac3+4]` follows `WMOV 2,1` | **C** — ONE instance.  Neither P35 loop can witness it: UPDATE_SCREENS' body subscript IS the loop variable (R9a) and REFRESH_SCREEN's body references no table.  DIED has two XNDO loops and should settle it. |
+
+### 8.3 Indexed field reads
+
+| # | rule | evidence | conf |
+|---|------|----------|------|
+| R23r | The READ counterpart of R23: `T[i].f[j]` builds its address exactly as the store does — each subscript checked, scaled, added to the running sum (the R9 temp), the base added last, `WMOV` to ac2 — and then loads from `wp(ac2, K)`. | OWNS 70175CDB (five instructions: `XWADD 1,[ac3+4]; LWADD 1,[0x70000210]; WMOV 1,2; XNLDA 0,[ac2+0x7E7A]`) | B |
+| R23a | A stride of **1** emits NO scaling at all (stride 2 is `add(r, r)`, any other stride is a constant in a register and `WMUL`). | OWNS' `fm390` inner dimension, stride 1 word | B |
+| R37 | The constant ZERO is materialised by subtracting a register from itself (`WSUB r,r`), never by an immediate load. | OWNS 70175DA5 `ac0 = sub(ac0, ac0)` for `return 0`; FIRE.1 7016A3D2 and INIT_OBJ_TBL 7016DF68 `WSUB 1,1`; it is also the first half of R29's 0/-1 materialisation | A |
+
+### 8.4 Register knowledge across a branch — one rule kept, one falsified
+
+| # | rule | evidence | conf |
+|---|------|----------|------|
+| R8c | An `if (c) {body}` whose body RETURNS or GOTOes has only ONE edge into its continuation — the skip's own `goto` — so nothing joins there and register knowledge SURVIVES.  R8 (reset at a label) still governs a genuine join, where two paths meet. | OWNS 70175CED: `ac0 = *item` is loaded once and all seven chain tests compare ac0 directly; a reset reloaded it seven times (7 extra statements, caught as DIFF(extra)) | B |
+| R7c′ | An R13b body INHERITS the skip's register state, and a register holding a variable that the if's CONTINUATION still reads is PINNED (cost 3) for the duration of the body's **subscript expression**; the pin is released once that expression's stride multiply is done, and the bit-address arithmetic that follows may take the register. | OWNS: six bodies avoid ac0 for `*p` (`XNLDA 1,@[ac3+0xFFF4]`) and for the stride constant (`NLDAI 686,2`), then TAKE ac0 for the constant 16 (`NLDAI 16,0`); the seventh — after which nothing reads `*item` — runs ac0/ac1/ac2 in order (70175D8E `XNLDA 0`).  All 8 instances fit. | **C** — the release point is fitted to one routine.  DIED's 25 bit operations are the test. |
+| ~~R7c~~ | **FALSIFIED.**  First draft: "a variable's register is protected until its LAST REACHABLE use, anywhere" — the natural generalisation of R7b past the statement boundary.  It did not fix a single OWNS DIFF and it regressed **UPDATE_SCREENS from 72/72 to 47/72 (25 DIFF)**, because `*x` and `*y` are read by later SIBLING statements there and the compiler plainly does not protect them across a statement boundary.  R8b stands as written; only the narrow R7c′ survives.  (METHOD §11: recorded as the wrong turn it was — a rule that was predicted at the plan gate, built, and refuted by the comparator.) | UPDATE_SCREENS 7017D64E..7017D6A7 | — |
+
+### 8.5 R27's trigger, narrowed
+
+R27 said `16*scaled` is saved to a temp "when a later statement takes another
+bit of the same element".  OWNS falsifies that as stated: its seven bit
+references are all on `PLAYER(*p)`, yet NONE saves a temp — each recomputes
+`*p * 686 * 16` from scratch.  The difference is **reachability**: DIED's nine
+WBTZs are consecutive siblings in one block, so the first genuinely has eight
+later uses; OWNS' seven sit in seven different if-arms and are mutually
+exclusive, so no arm has a reachable later use at all.
+
+> **R27 (amended):** a later use counts only if the flow from this statement
+> can REACH it — two statements in different ARMS of an `if` are not later
+> statements for one another.
+
+Implemented as `Translator.reachable_later_uses`, over an arm-path recorded by
+the pre-pass.  Both DIED's saving behaviour and OWNS' recomputing behaviour
+follow from the one amended rule.
+
+### 8.6 Miscellany
+
+- **R7 (extended instance).**  The LEFT operand of a two-register comparison is
+  a value the statement still needs (cost 3), so the right operand's load picks
+  elsewhere: OWNS 70175CDB puts the field in ac0 and is then forced to take ac2
+  for `*item` (`XNLDA 2,@[ac3+0xFFF2]`).  A constant right operand is a wide
+  skip-with-immediate (R15) and cannot collide.
+- **Subscripts** may now be a dereferenced by-reference parameter (`*p`), not
+  only a variable; OWNS subscripts PLAYER with `*p` in all eight of its element
+  references.  `subscript_sym` still REFUSES to give such a subscript a
+  symbolic form, so a located-string statement through one is a refusal, not a
+  guess.
+- **New declarations** (gen_declarations.py): `PLAYER.fm591` (K=-591) and
+  `PLAYER.fm390[10]` (K=-390, inner stride 1, 1-based, bound 10).
+- **Fields exercised.**  OWNS' seven bit displacements decode to `fm590` bits
+  0, 2, 3, 4, 5 and `fm591` bits 14, 15.  Six overlap the set DIED established;
+  `fm590` bit 0 is new.
+- **R29a gets NO second witness here.**  All seven of OWNS' bit operations are
+  `WSZB` tests; the routine contains no `WBTO` and no `WBTZ`, so the bit
+  ASSIGNMENT rule stays at confidence B on DIED alone.
