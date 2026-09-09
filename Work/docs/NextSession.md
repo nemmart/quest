@@ -47,6 +47,31 @@ verdict line). Until it is fixed, every play leg ends by SIGTERM and four
 screens are never exercised by any battery — treat the play legs'
 coverage as partial.**
 
+**P41 LANDED Sep 9 2026** (docs/Project41/REPORT.md). The FIRE mutual
+check, owed since P38, is discharged: **vacuous on the pair P39 named**
+(FIRE.1 and FIRE.2 reach disjoint slots), then performed against the
+family with zero disagreements. R41 audited and ENFORCED; the same R21c
+defect found and fixed forty lines below P40's fix. Five bad witness PCs;
+`check_frames()` tightened to check the citation resolves to the
+instruction it quotes. 349/349 primary, 242/242 folded at landing.
+
+> **RULING OWED — R41′.** `bit_base_reg` loads a record base by plain R7
+> and its witnesses put it in **ac1** (70166278, 7016628B), which R41's
+> wording says is never a candidate. The implementation is right on
+> either reading; the rule TEXT overclaims. The proposed narrowing is in
+> Project41/REPORT.md §"R41's stated SCOPE". CODEGEN_RULES.md is
+> deliberately unedited — it is a design of record.
+
+> **DIRECTION (Sep 9 2026).** P43's prompt names
+> `docs/Project42/REPORT.md` and its production table as its foundation,
+> but **P42 has not been built** — main carried only its prompt. The
+> order is P42 first (the reduction-ordered emitter; behaviour-preserving,
+> no new rules, no routines closed, still 349/349 and 242/242), then P43
+> once a real P42 REPORT.md exists. P43's TREE VINTAGE line will be
+> corrected then. Do NOT improvise a reduction-address scheme over the
+> current emitter: it would be unstable under exactly the C edits the
+> choice-file format promises to survive.
+
 **First items next weekend, in order**
 1. **Play driver + play verdicts** (FINDINGS_SUMMARY §2): the driver's
    post-auto-move keys never reach the command prompt, so every play
