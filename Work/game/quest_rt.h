@@ -143,7 +143,8 @@
  * the MSB (0 = bit 15 of the word), which is the DG convention.
  * The word argument is the record/static word itself, as an lvalue; the
  * translator decomposes its address into base + scaled subscript + K and
- * folds `16*K + n` into the one WNADI constant the compiler emits. */
+ * folds `16*K + n` into the one WNADI constant the compiler emits.
+ *
  * SPELLING OF RECORD for a bit ASSIGNMENT (P40, Sep 9 2026).  A bit
  * destination is written with the STATEMENT forms below, never as an
  * assignment to BIT():
