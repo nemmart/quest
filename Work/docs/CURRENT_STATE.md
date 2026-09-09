@@ -35,6 +35,9 @@ leg" line. §3: the deterministic deferred-halt form of the P33-C fix
 
 # Landing history (newest first)
 
+## ★ P40 DONE (Sep 9 2026) — the expression-level diagnostic. QUEST.1 translated with NO refusal (every construct already modelled), so all 93 first-run diffs were expression-level: **four rules amended, each previously fitted to one routine** (R36′, R36a, R21e′, R21c′ — the last a reachable bug: the loop-register class could fall through to ac3). D4 answered on evidence from the parent QUEST's permuted-register twin, with OWNS as a negative control; the general statement-tree reading measured (163/242) and NOT confirmed. **0 routines finished; total 4 of ~130.** The honest read: the model closes what had two witnesses and fails what had one. Oldest outstanding item, two projects running: the FIRE.1/FIRE.2 mutual check — declarations.json's parent-frame layout is still fitting.
+
+
 ## ★ P39 DONE (Sep 9 2026) — the static link is BUILT (UPLINK/UP/UPARG; the link is an ordinary R41 base on a 276/12 census; R42–R45, three at confidence A; the parent-frame witness rule enforced as a hard error). R21e settled by a pre-registered test. **0 routines finished; total 4 of ~130.** Material gap: the FIRE.1/FIRE.2 mutual check was not performed, so FIRE's parent-frame layout is unconfirmed — the next session starts there. Revised bottleneck: expression-level gaps (R9/R10 temp placement, divide width), not the link, not twins, not floats.
 
 

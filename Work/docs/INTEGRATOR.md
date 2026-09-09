@@ -105,7 +105,12 @@ The report says what the session believes. Check the claims that matter,
 in the repo, before merging:
 
 - **Re-run the self-tests and the comparator/gates yourself** on the
-  branch. (P36: `ircmp.py --selftest` PASS and the P35 three still
+  branch. `--selftest` is NOT sufficient: it compares the book to itself
+  and never invokes the translator, so a broken header or emitter passes
+  it. **Translate at least one routine end to end.** (P40 shipped a
+  `quest_rt.h` with an unterminated comment: nothing translated on the
+  branch at all, while `--selftest` still passed and the report quoted
+  349/349 from before that commit.) (P36: `ircmp.py --selftest` PASS and the P35 three still
   197/197 — verified on merge, not assumed.)
 - **Reproduce the headline number** with the session's own commands
   (`lower.py` reproducing an artifact byte-for-byte; `translate.py` →

@@ -100,7 +100,35 @@ coverage as partial.**
    valid.**  crossings.py moved to compiler/.  Next project's blockers, in
    order: **the static link / uplevel access**, **the twins/arena**, **floats**.
 
-6. **P39 DONE — MERGED** (Sep 9, verified: four routines 349/349,
+6. **P40 DONE — MERGED** (Sep 9). **0 routines finished; total 4 of
+   ~130.** QUEST.1 abandoned at 16/86 with the reason. What it bought:
+   **four rules amended, every one of which had been fitted to a single
+   routine** — R36′ (the hoist lifts the *invariant part* of the
+   reference), R36a (before the whole loop header, not the
+   initialisation), R21e′ (the limit is an ordinary live value, reloaded
+   only if its register was taken), R21c′ (the loop-register class was
+   an exclusion and could fall through to ac3, the frame register — a
+   reachable bug). **D4 answered by evidence**: QUEST (the parent) has
+   the same loop with the registers PERMUTED, so "avoid the register the
+   limit will take" survives where "avoid ac1"/"prefer ac2" fail, with
+   OWNS as a negative control. The general statement-tree hypothesis was
+   MEASURED (163/242 blocks) and NOT confirmed — recorded, not fitted.
+   The session's own read: *the model closes the parts that had two
+   witnesses and fails the parts that had one.* One thing has no witness
+   at all — the emission order of a statement's operands — and should be
+   established on the book, not patched against the comparator.
+   **Carried, oldest first: (a) the FIRE.1/FIRE.2 mutual check is STILL
+   not performed — second project running; declarations.json's
+   parent-frame layout remains fitting, and this should LEAD P41, not
+   trail it. (b) R41's {ac2, ac3} needs the same audit R21c just got —
+   a class implemented as an exclusion can be left silently.**
+   Integrator note: the branch shipped a quest_rt.h whose comment block
+   was unterminated — NOTHING translated on it; `--selftest` passes
+   without invoking the translator, so it did not catch this. Fixed at
+   merge; INTEGRATOR.md §5 now requires translating a routine end to end
+   before merging.
+
+7. **P39 DONE — MERGED** (Sep 9, verified: four routines 349/349,
    selftest PASS, gen_declarations clean). **The static link is BUILT
    and works** — `UPLINK/UP/UPARG` (ruling c), the link is an ordinary
    R41 base (276/12 census), uplevel reads/writes/subscripts and the
