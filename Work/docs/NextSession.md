@@ -119,8 +119,10 @@ coverage as partial.**
    four pre-registrations stand as NO WITNESS and
    DIED_PREREGISTERED.md is still valid — the experiment is intact, not
    spent. **Blocking constructs, in order: static link / uplevel access
-   (the .N@ nested entries run through the addrbook), twins/arena,
-   floats**; plus three single-witness items (COM.# against −1, WADC as
+   (23 nested entries across 13 parents — **P39 PROMPT WRITTEN**,
+   docs/Project39/PROMPT.md: build the construct, validate on
+   DROP.1 / KILL_PLAYER.4 / LIST_PLAYERS.3 / FIRE.2, then return to
+   FIRE.1), twins/arena, floats**; plus three single-witness items (COM.# against −1, WADC as
    −1, the open register question). Throughput is now bounded by the
    constructs, not the register model.
 
