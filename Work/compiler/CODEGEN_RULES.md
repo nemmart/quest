@@ -119,7 +119,24 @@ the record base goes SEPARATELY into the instruction's indirect operand
 |---|------|----------|------|
 | R13c | `if (c) goto L` normally lowers as R13 (skip-if-NOT-c over the one-word `WBR L`, R19 stubbing L when it is far).  When L is beyond WBR range AND the routine's end — where the R19 stub would sit — is ALSO beyond WBR range from the branch, no one-word form exists, so the compiler INVERTS: skip-if-c over `WBR cont`, with the XJMP to L following. | DIED 70166057 `MOV.L# 0,0,SNC; WBR 3 (0x7016605B); XJMP (0x701661AE)` — target +0x154, routine end +0x360.  FALSIFIED FIRST DRAFT: the trigger "target out of range" alone broke PICK_X_Y's three retries (64→68 statements, 13 DIFF), whose stub IS in range; the comparator caught it (ruling R3 working as intended). | B |
 
-### 7.4 Game→game calls
+### 7.4 Located strings into record fields
+
+A string statement's address operand is NOT a register: lower.py prints the
+expression the master's registers unfold to, as computed by
+`emulation/tools/string_sites.py`'s `Evaluator` and printed by its `ir_word`.
+compiler/translate.py therefore carries a PORT of that model (`Sym`, `_mk`,
+`s_add*`, `ir_const`, `ir_word` — string_sites.py:221–360, :1521–1580),
+restricted to the kinds a translation can build.  It is a port, not a
+re-derivation: a disagreement between the two is a FINDING.  Constants in that
+spelling are decimal below 256 and hex above (`- 86` vs `- 0x271`) — NOT
+translate.py's 8-digit `hexc`.
+
+| # | rule | evidence | conf |
+|---|------|----------|------|
+| R31 | When the record base is ALREADY in ac2 — left there by a bit reference's R28 load — and the scaled subscript is in a temp, the compiler adds the TEMP TO THE BASE rather than reloading the temp and adding the base.  The two orders are observable, because `_mk` merges a linear form's terms in the order they were ADDED, which is the order the instructions ran. | 7016605B `XWADD 2,[ac3+0xA]` → `(M32[0x70000210] + (sx16(M16[0x70000216]) * 686) - 0x271)` vs 7016606F `WMUL 2,1; LWADD 1,[0x70000210]` → `((sx16(M16[0x70000216]) * 686) + M32[0x70000210] - 0x260)` | A |
+| R32 | A located-string statement into a record field renders its destination from the symbolic element address with the field's raw K folded in; a VARYING destination absorbs the compiler's XNSTA length-word store when `dst_count == src_count` (IR.md §5.8, P32), and the translator REFUSES the varying form otherwise. | 7016605B / 7016606F (the two 32-blank assignments); 70166096 is the separate `M16[wp(ac2,-625)] = trunc16(32)` store, which is the length word written as its own PL/I statement (`.len` as a named subfield of `VARYING(n)`) | B |
+
+### 7.5 Game→game calls
 
 | # | rule | evidence | conf |
 |---|------|----------|------|

@@ -22,7 +22,7 @@ Output: an ir 6 book-like file with synthetic block pcs (canonical order,
 0x00001000 + 0x10*k), a header line `routine NAME entry lo hi` for ircmp,
 and rt_call sites at continuation-4.  Nothing here executes.
 """
-import argparse, json, os, re, sys, time
+import argparse, collections, json, os, re, sys, time
 
 from pycparser import c_ast, parse_file
 
@@ -33,6 +33,141 @@ import readable as R  # noqa: E402  (addrbook loader)
 
 
 BIT_FNS = ("BIT", "BIT_SET", "BIT_CLR", "BIT_PUT")
+
+
+# ---------------------------------------------------------------------------
+# Symbolic addresses (P36).
+#
+# A string statement's address operand is not a register: lower.py prints the
+# expression the master's registers UNFOLD to, as computed by
+# emulation/tools/string_sites.py's Evaluator and printed by its `ir_word`.
+# The classes below are a faithful PORT of that model -- V/_terms/_mk/add/addv
+# and ir_const/ir_word (string_sites.py:221-360, :1521-1580) -- restricted to
+# the kinds a translated routine can produce (const, load, fp, lin).  It is a
+# port on purpose: if the two ever disagree that is a FINDING, not a place to
+# adjust this file until the 13 sites happen to line up.
+#
+# The one behaviour that matters most and is easy to get wrong: `_mk` merges
+# the terms of a linear form in an OrderedDict, so THE TERM ORDER IS THE ORDER
+# THE TERMS WERE ADDED -- which is the order the instructions ran.  DIED's two
+# blanking statements differ by exactly this:
+#   7016605B  base already in ac2, XWADD the scaled temp
+#             -> (M32[0x70000210] + (sx16(M16[0x70000216]) * 686) - 0x271)
+#   7016606F  scaled in ac1, LWADD the base
+#             -> ((sx16(M16[0x70000216]) * 686) + M32[0x70000210] - 0x260)
+# ---------------------------------------------------------------------------
+
+class Sym:
+    """kinds: const(k) | load(a=addr, b=bits, ind) | fp | lin(a=[(c, atom)], k)"""
+    __slots__ = ("kind", "a", "b", "k", "ind")
+
+    def __init__(self, kind, a=None, b=None, k=0, ind=False):
+        self.kind, self.a, self.b, self.k, self.ind = kind, a, b, k, ind
+
+    def key(self):
+        """The merge key of string_sites._mk (its V.show()); only needs to be
+        injective over the kinds we build."""
+        if self.kind == "const":
+            return "c%d" % self.k
+        if self.kind == "fp":
+            return "fp"
+        if self.kind == "load":
+            return "%s[%s]%s" % (self.b, self.a.key(), "i" if self.ind else "")
+        return "(" + "".join("%+d*%s" % (c, t.key()) for c, t in self.a) + "%+d)" % self.k
+
+
+def s_const(k):
+    return Sym("const", k=k)
+
+
+def s_load(addr, bits, ind=False):
+    return Sym("load", a=addr, b=bits, ind=ind)
+
+
+def _terms(v):
+    if v.kind == "const":
+        return [], v.k
+    if v.kind == "lin":
+        return list(v.a), v.k
+    return [(1, v)], 0
+
+
+def _mk(terms, k):
+    merged = collections.OrderedDict()
+    for c, t in terms:
+        key = t.key()
+        if key in merged:
+            merged[key] = (merged[key][0] + c, t)
+        else:
+            merged[key] = (c, t)
+    terms = [(c, t) for c, t in merged.values() if c != 0]
+    if not terms:
+        return s_const(k)
+    if len(terms) == 1 and terms[0][0] == 1 and k == 0:
+        return terms[0][1]
+    return Sym("lin", a=terms, k=k)
+
+
+def s_addk(a, k):
+    if k == 0:
+        return a
+    t, c = _terms(a)
+    return _mk(t, c + k)
+
+
+def s_addv(a, b):
+    ta, ca = _terms(a)
+    tb, cb = _terms(b)
+    return _mk(ta + tb, ca + cb)
+
+
+def s_mulk(a, k):
+    t, c = _terms(a)
+    return _mk([(cc * k, tt) for cc, tt in t], c * k)
+
+
+def ir_const(k):
+    """string_sites.ir_const: small values decimal, large values hex, and the
+    sign carried in the text (NOT translate.py's 8-digit hexc)."""
+    k &= 0xFFFFFFFF
+    if k >= 0x80000000:
+        s = k - 0x100000000
+        return str(s) if s > -256 else "-0x%X" % -s
+    return str(k) if k < 256 else "0x%X" % k
+
+
+def ir_word(v):
+    """string_sites.ir_word, restricted to the kinds a translation builds."""
+    if v.kind == "const":
+        return ir_const(v.k)
+    if v.kind == "fp":
+        return "ac3"
+    if v.kind == "load":
+        inner = ir_word(v.a)
+        if v.ind:
+            return "R[%s]" % inner
+        return ("sx16(M16[%s])" if v.b == 16 else "M32[%s]") % inner
+    if v.kind == "lin":
+        if len(v.a) == 1 and v.a[0][0] == 1 and v.a[0][1].kind == "fp":
+            return "wp(ac3, %d)" % v.k
+        parts = []
+        for c, t in v.a:
+            ts = ir_word(t)
+            if c == 1:
+                parts.append(("+", ts))
+            elif c == -1:
+                parts.append(("-", ts))
+            elif c > 0:
+                parts.append(("+", "(%s * %d)" % (ts, c)))
+            else:
+                parts.append(("-", "(%s * %d)" % (ts, -c)))
+        s = ""
+        for i, (sg, ts) in enumerate(parts):
+            s += (ts if i == 0 and sg == "+" else (" %s %s" % (sg, ts) if i else "0 - " + ts))
+        if v.k:
+            s += (" + %s" % ir_const(v.k)) if v.k > 0 else (" - %s" % ir_const(-v.k))
+        return "(" + s + ")" if len(parts) + (1 if v.k else 0) > 1 else s
+    raise Refuse("symbolic address kind %s is not renderable" % v.kind)
 
 
 class Refuse(Exception):
@@ -299,6 +434,7 @@ class Translator:
         self.args = {}         # param name -> (N, width, const)
         self.arg_count_param = None
         self.cse = {}          # CSE temps: key -> dict(slot, last_stmt)
+        self.elem_sym = {}     # ekey -> the symbolic element address (P36)
         self.stmt_index = 0
         self.uses = {}         # pre-pass: key -> [stmt indices]
         self.var_refs = {}     # pre-pass: stmt index -> {variable name: reference count}
@@ -1366,6 +1502,26 @@ class Translator:
         if self.regs.c["ac2"] in (("addr", ekey), ("live", ekey)):
             self.note_ref(tname, vname)
             return "ac2"
+        # R31: when the record base is ALREADY in ac2 -- left there by a bit
+        # reference's R28 load -- and the scaled subscript is in a temp, the
+        # compiler adds the TEMP TO THE BASE (`XWADD 2,[ac3+0xA]`) instead of
+        # reloading the temp and adding the base.  The two orders are visible
+        # in the folded address of the string statement that follows:
+        # 7016605B gives `(base + scaled - K)`, 7016606F `(scaled + base - K)`.
+        if self.regs.c["ac2"] == ("addr", ("bitptr", base_addr)) \
+                and self.cse.get(skey, {}).get("slot") is not None \
+                and not self.var_changes_between(vname, self.cse[skey]["stmt"], i):
+            slot = self.cse[skey]["slot"]
+            self.emit("ac2 = add(ac2, M32[wp(ac3, %d)])" % slot)         # XWADD
+            self.regs.set("ac2", ("addr", ekey))
+            self.elem_sym[ekey] = s_addv(s_load(s_const(base_addr), 32),
+                                         self.subscript_sym(vname, t["stride"]))
+            if self.last_use_of(skey) <= i:
+                self.frame.free_temp(slot)
+                self._freed.add(slot)
+                self.cse[skey]["slot"] = None
+            self.note_ref(tname, vname)
+            return "ac2"
         # scaled subscript
         if skey in self.cse and self.cse[skey]["slot"] is not None and not self.var_changes_between(vname, self.cse[skey]["stmt"], i):
             slot = self.cse[skey]["slot"]
@@ -1377,6 +1533,8 @@ class Translator:
                 self.cse[skey]["slot"] = None
             self.emit("ac2 = add(ac2, M32[%s])" % hexc(base_addr))   # LWADD
             self.regs.set("ac2", ("addr", ekey))
+            self.elem_sym[ekey] = s_addv(self.subscript_sym(vname, t["stride"]),
+                                         s_load(s_const(base_addr), 32))
             self.note_ref(tname, vname)
             return "ac2"
         # first computation: the subscript value
@@ -1400,6 +1558,8 @@ class Translator:
             self.cse[skey] = dict(slot=slot, stmt=i)
         self.emit("%s = add(%s, M32[%s])" % (r, r, hexc(base_addr)))
         self.regs.set(r, ("addr", ekey))
+        self.elem_sym[ekey] = s_addv(self.subscript_sym(vname, t["stride"]),
+                                     s_load(s_const(base_addr), 32))
         if r != "ac2":
             self.emit("ac2 = %s" % r)                             # WMOV r,2  (R5)
             self.regs.set("ac2", ("dup", r))
@@ -1410,6 +1570,19 @@ class Translator:
             self.pending_elem_save = (r, ekey, i, pos)
         self.note_ref(tname, vname)
         return "ac2"
+
+    def subscript_sym(self, vname, stride):
+        """The symbolic value of `i * stride` for a subscript that is a static
+        or a frame local (the only two DIED uses)."""
+        st = self.L.static(vname)
+        if st is not None:
+            atom = s_load(s_const(st["addr"]), st["width"])
+        elif vname in self.frame.locals:
+            slot, width = self.frame.locals[vname]
+            atom = s_load(s_addv(Sym("fp"), s_const(slot)), width)
+        else:
+            raise Refuse("no symbolic form for subscript %s" % vname)
+        return s_mulk(atom, stride)
 
     def note_ref(self, tname, vname):
         """R6: the element address in ac2 is protected (cost 3) while this
@@ -1687,8 +1860,66 @@ class Translator:
             return "M32[R[ac3 + -%d]]" % (10 + 2 * self.args[a.name][0]) if False else refuse(a, "passing a parameter on is not yet in the subset")
         refuse(a, "argument form not in the subset (TMP(e) or &lvalue)")
 
+    def string_field_stmt(self, st):
+        """R32: a located string statement whose destination is a RECORD FIELD.
+        The address operand is not a register but the expression the master's
+        registers unfold to -- lower.py prints what string_sites.py's Evaluator
+        computed -- so it is rendered from the symbolic element address
+        (`ir_word`), with the field's raw K folded in.  A varying destination
+        absorbs the compiler's XNSTA length-word store when dst_count ==
+        src_count (IR.md §5.8, P32).
+        7016605B / 7016606F: the two 32-blank assignments of DIED."""
+        name = st.name.name
+        args = st.args.exprs
+        if name == "words_copy":
+            d = self.field_address_sym(args[0])
+            src = self.field_address_sym(args[1])
+            k = int(args[2].value, 0)
+            self.emit("words(@%s, %d) = words(@%s, %d)" % (ir_word(d), k, ir_word(src), k))
+            self.regs.c["ac1"] = None
+            self.regs.set("ac2", ("addr", ("wblm-end",)))
+            self.regs.set("ac3", ("addr", ("wblm-end",)))
+            self.fp_dirty = True
+            return
+        dst = self.field_address_sym(args[0])
+        n = int(args[1].value, 0)
+        piece, plen = self.literal(args[2])
+        varying = " varying" if name == "assign_varying" else ""
+        if varying and plen != n:
+            refuse(st, "a varying destination is only absorbed when the source "
+                       "count equals the capacity (IR.md 5.8); %d vs %d" % (plen, n))
+        self.emit("[@%s, %d%s] = %s" % (ir_word(dst), n, varying, piece))
+        self.string_residue()
+
+    def field_address_sym(self, a):
+        """The symbolic WORD address of `&T[i].f` (or `&T[i].f.len`)."""
+        if not (isinstance(a, c_ast.UnaryOp) and a.op == "&"):
+            refuse(a, "a string destination must be &T[i].field")
+        t = a.expr
+        if isinstance(t, c_ast.StructRef) and t.type == "." and isinstance(t.name, c_ast.StructRef):
+            t = t.name            # &T[i].f.data / .len -> the field itself
+        if not (isinstance(t, c_ast.StructRef) and t.type == "."
+                and isinstance(t.name, c_ast.ArrayRef)):
+            refuse(a, "a string destination must be &T[i].field")
+        tname = t.name.name.name
+        tt = self.L.table(tname)
+        if tt is None:
+            refuse(t, "table %s not in declarations" % tname)
+        fld = tt["fields"].get(t.field.name)
+        if fld is None:
+            refuse(t, "%s.%s not in declarations" % (tname, t.field.name))
+        self.element_address(tname, tt, t.name.subscript)
+        ekey = ("elem", tname, self.subscript_key(t.name.subscript))
+        if ekey not in self.elem_sym:
+            refuse(t, "no symbolic form for the element address of %s" % tname)
+        return s_addk(self.elem_sym[ekey], fld["K"])
+
+    STRING_FNS = ("assign_varying", "assign_fixed", "words_copy")
+
     def call_stmt(self, st):
         name = st.name.name
+        if name in self.STRING_FNS:
+            return self.string_field_stmt(st)
         base = name.partition("$")[0]
         if base in self.addrbook_by_name:
             return self.game_call(st)
