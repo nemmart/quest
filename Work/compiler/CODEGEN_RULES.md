@@ -286,3 +286,35 @@ DIED both have branchy bodies with repeated element references, so at least one
 of the three is expected to need the same amendment there.  **They are NOT
 being changed speculatively** — the comparator should be the one to demand it
 (ruling R3: a register or slot rule is falsified by a DIFF, never pre-empted).
+
+### 8.9 From RETURN_MESSAGE (routine 3, STAGED — no match number)
+
+RETURN_MESSAGE @70176FDD is the game's fatal-error exit; its tail is
+`SYSCALL 0310` = ?RETURN (AOS/VS process exit, never returns).  Its optional
+message is argument 3, a CHAR VARYING by reference, and when absent it
+substitutes the literal at 0x70000CCD — which reads **"Unexpected error"**,
+exactly the 16 bytes the default length constant `NLDAI 16` claims.  The string
+and the constant were recovered independently and agree.
+
+**OPEN — the two mixed-arity spellings, and why this one cannot be ruled.**
+REFRESH_SCREEN reads a frame MARKER word at `wp(ac3, -9)` (R12);
+RETURN_MESSAGE instead tests an argument SLOT for null (`M32[wp(ac3, -16)]`,
+not `R[ac3 + -16]`).  A census of the addrbook shows these are the **only two
+`mixed:` routines in the program**, so no third instance exists and any binary
+discriminator fits: the question is unfalsifiable here.  Recorded as such;
+no rule.
+
+**FINDING — RETURN_MESSAGE's `mixed:3/6` is an artifact of hand-assembly.**
+Four of its five call sites pass six arguments.  The one 3-argument site,
+70169B82, is inside **LOCK_FILE**, the hand-written assembly routine identified
+at the P37 plan gate, in the tail it shares with UNLOCK_FILE, building its
+arguments on the stack by hand.  The arity flag therefore records an assembly
+calling sequence, not a PL/I language feature.  **Consequence for the method:
+anything inferred about the compiler from a convention seen only at a
+LOCK_FILE/UNLOCK_FILE call site is inadmissible evidence.**
+
+**RECORDED, not ruled — the self-move at 70176FF5.**  The join of the message
+diamond opens with `ac0 = ac0` (`WMOV 0,0`).  Both arms already leave the length
+in ac0, so the compiler appears to materialise a joined value into an R7 pick
+without checking whether source and destination coincide.  One instance; it
+cannot be tested until the routine translates.
