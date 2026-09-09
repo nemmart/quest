@@ -1,5 +1,13 @@
 # Project 37 — finish the constructs, and prove them on SEVERAL routines
 
+> **NOTE (integrator, at merge)**: this prompt's routine table was built
+> from addrbook statement counts and is therefore WRONG for
+> TRANSPORT_SUNDAR (138 is the shared body of an R40 multiple-ENTRY pair,
+> not the routine's own size) and mis-described UNLOCK_FILE (hand
+> assembly, dropped) and `wp(ac2, …)` (ordinary record spelling, not
+> frame relocation). The session's plan gate corrected all three; see
+> docs/Project37/REPORT.md and METHOD §16.
+
 GOAL: complete the two constructs P36 left unbuilt (the frame
 relocation and the arena twins), and — the change of approach for this
 project — **prove every construct on more than one routine**. P36

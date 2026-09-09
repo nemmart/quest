@@ -306,3 +306,56 @@ project's baseline (each project's step-1 baseline re-proves the
 world as it found it). Honest partial evidence delivered promptly
 beats exhaustive evidence delivered late; a red run is a
 STOP-and-report, never a solo iteration loop.
+
+## 16. Inadmissible evidence: not every routine is compiler output (P37, Sep 2026)
+
+**R39.** An observation taken from, or about, a HAND-ASSEMBLY routine is
+inadmissible as evidence about the PL/I compiler, and the contamination
+travels: it reaches the addrbook metadata of routines that are
+themselves ordinary compiled code. Cite as "void under R39".
+
+The program contains exactly one hand-assembly unit: LOCK_FILE and
+UNLOCK_FILE (70169B0F..70169D69), which branch into each other's ranges
+— something no pair of PL/I procedures can do. Voided by the P37 sweep:
+RETURN_MESSAGE's `mixed:3/6` arity (an artifact of the assembly's short
+calling sequence into a compiled six-argument procedure), `WSAVR` as a
+"compiler entry variant" (it occurs twice in 102 live entries, both
+hand-assembly), and those two routines' frame/flags values as evidence
+about frame layout.
+
+**The direction test.** Contamination flows OUTWARD from an assembly
+call site, not inward to one: LOCK_FILE's argc stays admissible because
+it was inferred from compiled callers, and what a compiled caller does
+when calling assembly is still evidence about the compiler. The question
+is not "does this involve the assembly routines?" but **"is the
+hand-written side producing the behaviour I am about to generalise?"**
+
+**R40 — multiple ENTRY points.** A one-way prologue-into-body crossing
+is not assembly but PL/I's multiple ENTRY: one procedure, several entry
+prologues, same frame and argc, each initialising the shared frame with
+different constants before branching into a common body. Two pairs:
+CREATE_MAP/DISPLAY_MAP and TRANSPORT_TERRAK/TRANSPORT_SUNDAR.
+**Consequence: per-routine statement counts taken from addrbook ranges
+MIS-SIZE an R40 pair** (TRANSPORT_TERRAK 2 vs TRANSPORT_SUNDAR 138;
+CREATE_MAP 7 vs DISPLAY_MAP 902), because the shared body falls in
+whichever range contains it. Any census, sampling frame or size-ordered
+worklist built on those counts inherits the error — P34's census and
+P37's own sampling frame both did. Such a pair is reconstructed as ONE
+function with two entry prologues, compared against the union of the
+ranges.
+
+**The detector, and when to run it.** Control flow crossing an addrbook
+boundary — a routine branching outside its own [entry, next-entry) range
+or branched into from outside — finds both shapes. `compiler/
+crossings.py` implements it; it is sub-second. **Run it at the start of
+any session that adds routines**, not once: the two things it found (a
+contaminated metadata flag and an entire unmodelled construct) were
+invisible to every other check in the project.
+
+**The general lesson (P37 §6.1), which outlives its instances.** An
+observation that is *consistent with* a rule is not evidence *for* it
+unless the rule could have been violated. Before promoting any uniform
+observation, ask what else could have happened; if the answer is
+"nothing", there is no rule there. (P37 declined to encode "the LDAFP
+target is always ac2" on exactly this ground: ac2 was forced by register
+pressure in every instance observed.)

@@ -1,3 +1,11 @@
+> **CAVEAT (added Sep 9 2026, P37/R40)**: this census used per-routine
+> statement counts derived from addrbook ranges. Those counts MIS-SIZE a
+> PL/I multiple-ENTRY pair, because the shared body falls in whichever
+> range contains it — CREATE_MAP 7 vs DISPLAY_MAP 902, TRANSPORT_TERRAK 2
+> vs TRANSPORT_SUNDAR 138. Any figure here that is per-routine and
+> size-dependent should be re-checked against the union of an R40 pair's
+> ranges. See METHOD §16 and compiler/crossings.py.
+
 # Project 34 — the readable layer: census
 
 Sep 6 2026, branch `p34-readable` (from main 4837d5c).  Book read:
