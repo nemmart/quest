@@ -144,6 +144,29 @@
  * The word argument is the record/static word itself, as an lvalue; the
  * translator decomposes its address into base + scaled subscript + K and
  * folds `16*K + n` into the one WNADI constant the compiler emits. */
+ * SPELLING OF RECORD for a bit ASSIGNMENT (P40, Sep 9 2026).  A bit
+ * destination is written with the STATEMENT forms below, never as an
+ * assignment to BIT():
+ *
+ *     BIT_SET(PLAYER[SUB(k,10)].fm591, 10);        '1'B  -- a bare WBTO
+ *     BIT_CLR(PLAYER[SUB(k,10)].fm591, 10);        '0'B  -- a bare WBTZ
+ *     BIT_PUT(w, n, BIT(v, m));                    variable source -- R29a's
+ *                                                  set-then-undo diamond
+ *
+ * These were built in P36 and first exercised by QUEST.1 @7015C5E1, whose two
+ * exit paths are exactly the bare WBTO and the bare WBTZ; both matched on the
+ * first translation.
+ *
+ * REJECTED (user ruling, P40 gate, and the reason it was withdrawn): an
+ * assignment form `BIT(w, n) = -32768;` / `= 0;`, reusing the BIT literal
+ * spelling OWNS established for a bit-valued RETURN.  It was ruled in on a
+ * report that BIT_SET/BIT_CLR did not exist -- that report was wrong (the
+ * claim came from a code read, not from running the translator; METHOD 10).
+ * With the statement forms already in the language, adding the assignment
+ * form would give one PL/I value two spellings, which is precisely the
+ * inconsistency the ruling was made to prevent.  So the ruling's PRINCIPLE is
+ * what kept it out.  One value, one spelling: the statement forms.
+ * (METHOD 11 -- recorded as the wrong turn it was.) */
 int  BIT(int16_t word, int n);              /* rvalue: 0/1  (WSZB)          */
 void BIT_SET(int16_t word, int n);          /* statement    (WBTO)          */
 void BIT_CLR(int16_t word, int n);          /* statement    (WBTZ)          */

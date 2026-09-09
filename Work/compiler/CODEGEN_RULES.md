@@ -524,3 +524,88 @@ leaves a live ac0 (reading 1 predicts ac1 there, reading 2 predicts ac0), or an
 ac1 site whose callee leaves ac0 dead.  Neither exists in the 15.  Until one
 is found this stays an open finding; **HIT_ANY_CHAR is abandoned at 8/10 rather
 than closed with a fitted cross-procedural rule.**
+
+## 10. Project 40 additions (Sep 9 2026, branch p40-routines)
+
+From **QUEST.1 @7015C5E1**, the expression-level diagnostic, with the parent
+**QUEST @7015C337** read as evidence (not translated) and **OWNS** as a
+negative control.  The four matched routines stay 349/349 primary and 242/242
+folded and `--selftest` is PASS after every change below.  QUEST.1 itself is
+**ABANDONED at 16/86** — see `docs/Project40/QUEST1_ABANDONED.md`; its loop
+header matches the book instruction for instruction, its body does not.
+
+QUEST.1 required no new construct and no new spelling.  Every rule here is an
+AMENDMENT to a rule that was fitted to a single routine, and in each case the
+amendment claims LESS and explains MORE.
+
+### 10.1 Why these were invisible until now
+
+R36 (the loop-invariant hoist) had one witness, OWNS, whose DO limit is a
+CONSTANT.  R21e (the DO limit evaluated once into a temp) had one witness,
+LIST_PLAYERS.3, which has no hoist.  **QUEST.1 is the first routine with both
+in one loop**, and every rule below is a question that only a loop with both
+can ask.  This is the general shape of the P40 finding: the model's
+single-witness rules were not wrong so much as under-determined, and the
+missing evidence was an ordinary routine, not a new construct.
+
+| # | rule | evidence | conf |
+|---|------|----------|------|
+| R36′ | **R36 AMENDED — what is hoisted is the invariant PART of the reference, and how much is invariant falls out of the reference itself.** OWNS' `PLAYER(*p).fm390(i)` has an inner subscript varying with the loop variable, so only the outer scale lifts and the base add stays in the body; QUEST.1's `PLAYER(PLAYER_NUM).fm589` is invariant entire, so the whole ELEMENT ADDRESS lifts and the body reloads it into ac2 with no base add at all. | OWNS 70175CDB (`XWADD 1,[ac3+4]; LWADD 1,[0x70000210]`) vs QUEST.1 7015C5F9/7015C5FB (`LWADD 0,[0x70000210]` before `XWSTA 0,[ac3+0x6]`) and 7015C60E (`XWLDA 2,[ac3+0x6]; XNLDA 1,[ac2+0x7DB3]`); the parent QUEST 7015c347/7015c356/7015c36e is the same shape | **B** |
+| R36a | **R36's placement, settled: "before the loop's own initialisation" means before the WHOLE loop header, the limit expression included.** OWNS' constant limit meant there was no limit evaluation to be ordered against. | QUEST.1 7015C5EA (stride multiply opens the init block, the limit load is four instructions later); QUEST 7015c344/7015c34d | **B** |
+| R21e′ | **R21e AMENDED — the limit is an ORDINARY LIVE VALUE, reloaded for the entry test only if its register was taken in between.** P39's "and is reloaded from that temp" was fitted to LIST_PLAYERS.3, where the initial constant took ac0, the register the limit was in. QUEST.1 puts the constant in ac2 and ac1 carries the limit straight through the test. The weaker rule explains both witnesses with no special case. | LIST_PLAYERS.3 7016F563 (reload) vs QUEST.1 7015C5F0..7015C5FD (no reload) | **B** |
+| R21c′ | **R21c ENFORCED and placed.** (a) The loop register comes from ac0/ac1 ONLY — stated in P37, but implemented as `pick(avoid=("ac2",))`, which fell through to ac3 and put the loop counter in the FRAME register once ac0 and ac1 were both live. QUEST.1 is the first loop to reach that state (the hoist holds one value register, the limit the other). (b) The copy into the loop register is emitted AT THE FIRST POINT THE LOOP REGISTER IS FREE: in OWNS lr is ac1, free once the control variable is stored, so the move lands there and the hoist store follows it; in QUEST.1 lr is ac0, still holding the hoisted address until its own store, so the move is deferred onto the body edge. (c) The entry test therefore compares the INITIAL VALUE's register, not the loop register — they coincide in every previously matched loop. | OWNS 70175CC7 (`WMOV 2,1` then `XWSTA 0,[ac3+4]`) vs QUEST.1 7015C5FD/7015C600 (`WSLE 2,1`, then `WMOV 2,0` in the skip block); QUEST 7015c358/7015c35a | **B** |
+
+`Regs.pick` grows an `only=` parameter so that a rule stating a register CLASS
+cannot silently fall out of it when every member is expensive.  R41's {ac2,
+ac3} should be audited the same way; it was not reached in P40.
+
+### 10.2 R7d — statement-wide allocation: CONFIRMED in the loop header, OPEN in general
+
+At QUEST.1 7015C5EA the costs are ac0 = 3 (subscript, live), ac1 = 0, ac2 = 0,
+ac3 = 2.  R7 ties to the lowest number and gives **ac1**.  The book loads
+`NLDAI 686,2` — **ac2**.
+
+| routine | site | live | limit | R7 says | book says |
+|---|---|---|---|---|---|
+| QUEST.1 | 7015C5EA | ac0 = subscript | expression | ac1 | **ac2** |
+| QUEST | 7015c344 | ac1 = subscript | expression | ac0 | **ac2** |
+| OWNS | 70175CC7 | ac0 = subscript | **constant** | ac1 | **ac1** |
+
+> **R7d (scoped).** The stride constant of an R36 hoist is TRANSIENT — dead at
+> the WMUL — while the limit that follows it in the same loop header needs a
+> VALUE register.  The constant therefore takes ac2 and leaves the value
+> register for the limit.
+
+**QUEST is the discriminator and it could have failed.**  Its registers are
+PERMUTED against QUEST.1's (subscript in ac1, limit in ac0), so "avoid ac1"
+and "prefer ac2 whenever it is free" both predict the wrong answer there,
+while "avoid the register the limit will take" comes out right in both.  OWNS
+is the negative control: with a constant limit there is nothing to avoid and
+plain R7 stands — which is why this was invisible until a routine had R36 and
+R21e in one loop.  Implementing R7d in that scope made QUEST.1's entry block,
+init block and skip block match the book instruction for instruction.
+
+**The general form is NOT implemented and is NOT a rule.**  R7d scoped to the
+loop header is a claim about one construct.  The general claim — that the
+allocator works over a whole statement's expression tree and protects a
+register a later operand will occupy — also fits QUEST.1 7015C621 (the stride
+constant takes ac2, avoiding the ac1 that `i` is about to occupy) and
+7015C650 (one operand, nothing to avoid, plain R7).  But that is a claim about
+WHEN the allocator runs rather than what it prefers, it is the largest
+structural claim anyone has made about this compiler, and QUEST.1's body is
+where it would have to be tested.  Recorded as an open finding, deliberately
+not fitted; see `docs/Project40/QUEST1_ABANDONED.md` §3.
+
+### 10.3 Not a gap after all (METHOD §11)
+
+The P40 plan gate reported that a CONSTANT bit assignment was unmodelled and
+needed a new C spelling, citing a refusal at translate.py:1891.  **That was
+wrong.**  Line 1891 types `BIT_PUT`'s third argument; it is not a general
+refusal.  `BIT_SET` / `BIT_CLR` have been declared in `quest_rt.h` and
+dispatched at translate.py:1016 since P36 and emit exactly the bare WBTO and
+bare WBTZ QUEST.1 needs — they had simply never been exercised, because DIED,
+the only previous bit-assignment witness, used the `BIT_PUT` diamond.  Both of
+QUEST.1's bit statements matched on the first translation.  No rule, no
+spelling, and the user ruling made on the strength of the wrong report was
+withdrawn rather than implemented (the reasoning is recorded in quest_rt.h).
+The claim came from reading the code instead of running it — METHOD §10.

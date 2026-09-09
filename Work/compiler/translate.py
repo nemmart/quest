@@ -271,11 +271,15 @@ class Regs:
         self.t += 1
         self.stamp[r] = self.t
 
-    def pick(self, avoid=()):
+    def pick(self, avoid=(), only=None):
         """R7: the register with the lowest protection cost; ties to the
-        lowest-numbered register."""
+        lowest-numbered register.  `only` restricts the candidate set to a
+        named class -- R21c's ac0/ac1 for the loop register, R41's ac2/ac3 for
+        a base -- so that a rule stating a CLASS cannot silently fall out of it
+        when every member is expensive (P40: `avoid=("ac2",)` let the loop
+        register reach ac3, the frame)."""
         best = None
-        for r in ("ac0", "ac1", "ac2", "ac3"):
+        for r in (only or ("ac0", "ac1", "ac2", "ac3")):
             if r in avoid:
                 continue
             k = (self.cost(r), r)
@@ -894,6 +898,21 @@ class Translator:
                     walk(st, i)
         visit(stmts)
 
+    def subscript_vars(self, node):
+        """Every identifier appearing anywhere in a subscript expression.
+        `subscript_key` names the ONE variable a simple subscript reduces to
+        and returns None for anything else; R36's D2 test needs to know
+        whether the loop variable occurs at all, however the inner subscript
+        is spelled (OWNS' is `SUB(i, 10)`)."""
+        out = set()
+        def scan(n):
+            if isinstance(n, c_ast.ID):
+                out.add(n.name)
+            for _, child in n.children():
+                scan(child)
+        scan(node)
+        return out
+
     def subscript_key(self, node):
         if isinstance(node, c_ast.FuncCall) and node.name.name == "SUB":
             node = node.args.exprs[0]
@@ -1123,64 +1142,131 @@ class Translator:
             refuse(st, "DO initial value must be a constant (only form seen)")
         const_lim = isinstance(cond.right, c_ast.Constant)
         expr_lim = False
+        # R36 (P37/OWNS 70175CBF..CC7; P40/QUEST.1 amends the placement): a
+        # subscript in the BODY that is invariant in the loop variable is
+        # evaluated at the loop head -- its bound check (R17) and stride
+        # multiply BEFORE the loop's own initialisation, its temp store AFTER
+        # it.
+        #
+        # D1 (P40/QUEST.1): "before the loop's own initialisation" means before
+        # the WHOLE loop header, the limit expression included -- not merely
+        # before the control variable's store.  OWNS could not witness this:
+        # its limit is a CONSTANT (R21a), so there was no limit evaluation to
+        # be ordered against.  QUEST.1 is the first routine with R36 and R21e
+        # together, and its init block opens with the stride multiply and
+        # reaches the limit load four instructions later (7015C5EA..F0).  The
+        # parent QUEST @7015C337 has the same loop with the registers permuted
+        # and the same order (7015c344 multiply, 7015c34d limit).
+        hoisted = self.hoist_invariant_subscripts(
+            st, vname,
+            header_expr_limit=not const_lim and not (
+                isinstance(cond.right, c_ast.ID) and cond.right.name in self.frame.locals))
         if not const_lim:
             if isinstance(cond.right, c_ast.ID) and cond.right.name in self.frame.locals:
                 lim = self.value(cond.right, want_reg=True)  # the limit first: it is live for the test
                 self.regs.c[lim.reg] = ("live", "lim")
                 lslot = self.frame.locals[cond.right.name][0]
             else:
-                # R21e (P39, UNDER TEST): a DO limit that is an EXPRESSION is
-                # evaluated ONCE, before the control variable's initialisation,
-                # into a frame TEMP -- PL/I evaluates the TO expression once.
-                # Unlike a limit that is a named local, the temp is not a
-                # protected user variable, so the initial constant may take the
-                # register the limit was computed in and the limit is reloaded
-                # from its temp for the test.
+                # R21e AMENDED (D3, P40/QUEST.1): a DO limit that is an
+                # EXPRESSION is evaluated ONCE into a frame temp -- PL/I
+                # evaluates the TO expression once.  P39 added "and is reloaded
+                # from that temp for the entry test", which was fitted to
+                # LIST_PLAYERS.3, the only witness it had.  It is not a
+                # property of the limit: there the initial constant took ac0,
+                # the register the limit was in, so the value was simply gone.
+                # QUEST.1 puts the constant in ac2 and ac1 carries the limit
+                # from 7015C5F0 straight through the entry test at 7015C5FD --
+                # no reload.  The weaker rule explains both: THE LIMIT IS AN
+                # ORDINARY LIVE VALUE, reloaded only if its register was taken.
+                # It also removes a reachable R41 violation -- the old code's
+                # unconditional `pick` could put this *value* in ac3, the frame
+                # register, once ac0/ac1/ac2 were spoken for.
                 expr_lim = True
                 lv = self.value(cond.right, want_reg=True)
                 lslot = self.frame.alloc_temp(("dolim", id(st)))
                 self.emit("M16[wp(ac3, %d)] = trunc16(%s)" % (lslot, lv.reg))
-                self.regs.set(lv.reg, ("var", ("dolim", id(st))))
-        # R36 (P37/OWNS 70175CBF..CC7): a subscript in the BODY that is
-        # invariant in the loop variable is evaluated at the loop head -- its
-        # bound check (R17) and stride multiply BEFORE the loop's own
-        # initialisation, its R9 temp store AFTER it.
-        hoisted = self.hoist_invariant_subscripts(st, vname)
+                limkey = ("dolim", id(st))
+                self.regs.set(lv.reg, ("live", limkey))
         # R21c (P37/OWNS; consistent with UPDATE_SCREENS and REFRESH_SCREEN):
         # the DO-loop register is picked from ac0/ac1 only -- ac2 stays free
         # for addressing -- and it is picked BEFORE the initial value's own
         # register.  When the two differ the constant is stored from its own
         # register and copied to the loop register (OWNS `WMOV 2,1`); when they
         # coincide, as in both P35 loops, no move appears.
-        lr = self.regs.pick(avoid=("ac2",))
+        # R21c, ENFORCED (P40/QUEST.1): the loop register comes from ac0/ac1
+        # ONLY -- ac2 stays free for addressing.  The old `pick(avoid=("ac2",))`
+        # stated the rule but did not enforce it: with ac0 and ac1 both live it
+        # fell through to ac3 and put the loop counter in the FRAME register,
+        # emitting a spurious `ac3 = ac2` and an LDAFP to recover the frame.
+        # QUEST.1 is the first loop that reaches that state (the hoist holds one
+        # value register and the limit the other), so nothing caught it before.
+        # With both live the costs tie at 3 and R7 breaks the tie on the lower
+        # number -- ac0, which is the book's loop register (7015C600 `WMOV 2,0`).
+        lr = self.regs.pick(only=("ac0", "ac1"))
         cr = self.regs.pick()
         self.emit("%s = %s" % (cr, hexc(a.const)))
         self.regs.set(cr, ("const", a.const))
         self.emit("M16[%s] = trunc16(%s)" % (vref, cr))
-        if cr != lr:
+        # R21c (P40): the copy into the loop register is emitted AT THE FIRST
+        # POINT THE LOOP REGISTER IS FREE.  In OWNS lr is ac1, which holds only
+        # the dead stride constant once the control variable is stored, so the
+        # move lands there and the hoist store follows it (70175CC7 `WMOV 2,1`
+        # then `XWSTA 0,[ac3+4]`).  In QUEST.1 lr is ac0, which still holds the
+        # HOISTED ELEMENT ADDRESS until its own store, and the entry test then
+        # intervenes -- so the move is deferred onto the body edge (7015C600).
+        # One mechanism, two placements; R36's "the temp store comes after the
+        # loop's own initialisation" is unchanged in both.
+        moved = False
+        if cr != lr and lr not in [hr for _, hr in hoisted]:
             self.emit("%s = %s" % (lr, cr))
             self.regs.set(lr, ("dup", cr))
+            moved = True
         if expr_lim:
-            lr2 = self.regs.pick(avoid=(lr, "ac2"))
-            self.emit("%s = sx16(M16[wp(ac3, %d)])" % (lr2, lslot))
-            self.regs.set(lr2, ("live", "lim"))
-            lim = Val("reg", reg=lr2, width=16)
+            # D3: reload ONLY if the limit's register was taken in between.
+            held = [r for r in ("ac0", "ac1", "ac2") if self.regs.c[r] == ("live", limkey)]
+            if held:
+                lim = Val("reg", reg=held[0], width=16)
+            else:
+                lr2 = self.regs.pick(avoid=(lr, "ac2"))
+                self.emit("%s = sx16(M16[wp(ac3, %d)])" % (lr2, lslot))
+                self.regs.set(lr2, ("live", limkey))
+                lim = Val("reg", reg=lr2, width=16)
         for skey, hr in hoisted:
             slot = self.frame.alloc_temp(skey)
             self.emit("M32[wp(ac3, %d)] = %s" % (slot, hr))
-            self.cse[skey] = dict(slot=slot, stmt=self.stmt_index)
+            # `hoisted`: the temp lives for the whole loop and the body reloads
+            # it on EVERY iteration (R36), so it is never freed at a last use
+            # the way an ordinary R9/R10 temp is.
+            self.cse[skey] = dict(slot=slot, stmt=self.stmt_index, pos=0, hoisted=True)
         incr_b, body_b, after_b = self.new_block(), self.new_block(), self.new_block()
         last_stmt = self.is_last_stmt
         if const_lim:
             # R21a: constant bounds — no entry test; the init block jumps over
             # the increment block straight into the body (REFRESH_SCREEN 70176B06)
+            if cr != lr and not moved:
+                self.emit("%s = %s" % (lr, cr))
+                self.regs.set(lr, ("dup", cr))
             self.terminate(("goto", [body_b.label], "0"))
         else:
             exit_b, skip_b = self.new_block(), self.new_block()
-            self.terminate(("goto", [exit_b.label, skip_b.label], "(%s <=s %s)" % (lr, lim.reg)))
+            # The entry test compares the INITIAL VALUE's register, not the
+            # loop register: the copy into the loop register happens on the
+            # body edge (below), so at the test the value is still only in cr.
+            # They coincide whenever cr == lr, which is every previously
+            # matched loop -- QUEST.1 is the first where they differ.
+            self.terminate(("goto", [exit_b.label, skip_b.label], "(%s <=s %s)" % (cr, lim.reg)))
             self.cur = exit_b
             self.terminate(("ret",) if last_stmt else ("goto", [after_b.label], "0"))
             self.cur = skip_b
+            # R21c (P40/QUEST.1): the copy into the loop register sits on the
+            # EDGE INTO THE BODY.  With an entry test that edge is the skip
+            # block (QUEST.1 7015C600 `WMOV 2,0`; the parent QUEST 7015c35a);
+            # with a constant limit (R21a) the init block falls straight into
+            # the body and the move appears at its end, which is where OWNS
+            # 70175CC7 shows it.  One rule, two block shapes.
+            if cr != lr and not moved:
+                self.emit("%s = %s" % (lr, cr))
+                self.regs.set(lr, ("dup", cr))
             self.terminate(("goto", [body_b.label], "0"))
         # increment block (continue target): XNDO with the limit in the loop register
         self.cur = incr_b
@@ -1224,7 +1310,7 @@ class Translator:
     keep_live = None
     is_last_stmt = False
 
-    def hoist_invariant_subscripts(self, st, vname):
+    def hoist_invariant_subscripts(self, st, vname, header_expr_limit=False):
         """R36 -- the loop-invariant subscript hoist.
 
         OWNS 70175CBF..70175CC7: the body's only element reference is
@@ -1252,6 +1338,39 @@ class Translator:
                         out.append((child.name.name, child.subscript))
                 walk(child)
         walk(st.stmt)
+        # D2 (P40/QUEST.1) -- R36 AMENDED: what is hoisted is the invariant
+        # PART of the reference, and how much of it is invariant falls out of
+        # the reference itself.
+        #
+        # OWNS' body reference is `PLAYER(*p).fm390(i)`: its INNER subscript
+        # varies with the loop variable, so only the outer scale can be lifted
+        # and the base add must stay in the body (70175CDB `XWADD 1,[ac3+4];
+        # LWADD 1,[0x70000210]`).  QUEST.1's `PLAYER(PLAYER_NUM).fm589` is
+        # invariant ENTIRE, so the whole element address is loop-invariant and
+        # the base is added before the store (7015C5F9 `LWADD 0,[0x70000210]`,
+        # then `XWSTA 0,[ac3+0x6]`); the body reloads it straight into ac2 and
+        # addresses `wp(ac2, -589)` with no base add at all (7015C60E).  The
+        # parent QUEST does the same at 7015c347/7015c356/7015c36e.
+        #
+        # One rule, two shapes, no special case for either routine.
+        def inner_subscript_uses_v(tname, key):
+            """True when some reference to T[key] is a multi-dimensional field
+            whose INNER subscript mentions the loop variable -- OWNS' shape."""
+            found = [False]
+            def scan(node):
+                for _, child in node.children():
+                    if isinstance(child, c_ast.ArrayRef) \
+                            and isinstance(child.name, c_ast.StructRef) \
+                            and isinstance(child.name.name, c_ast.ArrayRef) \
+                            and isinstance(child.name.name.name, c_ast.ID) \
+                            and child.name.name.name.name == tname \
+                            and self.subscript_key(child.name.name.subscript) == key \
+                            and vname in self.subscript_vars(child.subscript):
+                        found[0] = True
+                    scan(child)
+            scan(st.stmt)
+            return found[0]
+
         done = []
         for tname, sub in out:
             t = self.L.table(tname)
@@ -1260,15 +1379,52 @@ class Translator:
             if isinstance(s, c_ast.FuncCall) and s.name.name == "SUB":
                 bounds = int(s.args.exprs[1].value, 0)
                 s = s.args.exprs[0]
-            skey = ("scaled", tname, self.subscript_key(sub))
+            key = self.subscript_key(sub)
+            whole = not inner_subscript_uses_v(tname, key)
+            skey = ("elem", tname, key) if whole else ("scaled", tname, key)
             v = self.value(s, want_reg=True)
             r = v.reg
             if bounds is not None:
                 self.bounds_check(r, bounds)
-            kr = self.regs.pick(avoid=(r,))
+            # D4 (P40/QUEST.1 + QUEST, with OWNS as the negative control).
+            # R7 alone gives ac1 here and the book gives ac2 -- but only when
+            # an EXPRESSION limit still has to be evaluated in the same loop
+            # header.  The stride constant is transient (dead at the WMUL);
+            # the limit is not, and it needs a VALUE register.  So the constant
+            # takes ac2 and leaves the value register for the limit.
+            #
+            # Three routines, and the third is the control:
+            #   QUEST.1 7015C5EA  ac0=subscript live, limit expr  -> ac2 (R7: ac1)
+            #   QUEST   7015c344  ac1=subscript live, limit expr  -> ac2 (R7: ac0)
+            #   OWNS    70175CC7  ac0=subscript live, limit CONST -> ac1 (R7: ac1)
+            # QUEST is the discriminator: its registers are PERMUTED against
+            # QUEST.1's (subscript ac1, limit ac0), so "avoid ac1" and "prefer
+            # ac2 always" both fail on it while "avoid the register the limit
+            # will take" comes out right in both.  OWNS has no limit to
+            # evaluate, so there is nothing to avoid and plain R7 stands --
+            # which is why this was invisible until a routine had R36 and R21e
+            # in the same loop.
+            #
+            # SCOPED DELIBERATELY to the loop header.  The general form of this
+            # -- that the allocator works over a whole statement's expression
+            # tree and protects a register a later operand will occupy -- also
+            # fits QUEST.1 7015C621 and 7015C650, but it is a claim about WHEN
+            # the allocator runs, not merely what it prefers, and it is not
+            # implemented here.  See docs/Project40/QUEST1_PREDICTIONS.md D4.
+            avoid = (r,)
+            if header_expr_limit:
+                other = [q for q in ("ac0", "ac1") if q != r]
+                if other:
+                    avoid = avoid + (other[0],)
+            kr = self.regs.pick(avoid=avoid)
             self.emit("%s = %s" % (kr, hexc(t["stride"])))
             self.regs.set(kr, ("const", t["stride"]))
             self.emit("%s = mul(%s, %s)" % (r, r, kr))
+            if whole:
+                base_addr = self.L.static(t["base"])["addr"]
+                self.emit("%s = add(%s, M32[%s])" % (r, r, hexc(base_addr)))   # LWADD
+                self.elem_sym[skey] = s_addv(self.subscript_sym(key, t["stride"]),
+                                             s_load(s_const(base_addr), 32))
             self.regs.set(r, ("live", skey))
             done.append((skey, r))
         return done
@@ -2246,6 +2402,18 @@ class Translator:
         # more than once (PICK_X_Y 70176208 -> 70176226; 70176217 recomputes)
         pos = self.ref_seq.get((tname, vname), 0)
         self.ref_seq[(tname, vname)] = pos + 1
+        # R36/D2: a HOISTED element-address temp -- the whole reference was
+        # loop-invariant, so the temp already holds base + i*stride and the
+        # body reloads it straight into ac2 with no base add (QUEST.1 7015C60E
+        # `XWLDA 2,[ac3+0x6]` then `XNLDA 1,[ac2+0x7DB3]`).  It is reloaded on
+        # every iteration and outlives every use, so it is not freed here.
+        if ekey in self.cse and self.cse[ekey].get("hoisted") \
+                and self.cse[ekey].get("slot") is not None:
+            slot = self.cse[ekey]["slot"]
+            self.emit("ac2 = M32[wp(ac3, %d)]" % slot)
+            self.regs.set("ac2", ("addr", ekey))
+            self.note_ref(tname, vname)
+            return "ac2"
         if ekey in self.cse and self.cse[ekey].get("slot") is not None:
             slot = self.cse[ekey]["slot"]
             if pos >= self.cse[ekey]["pos"] + 2:
