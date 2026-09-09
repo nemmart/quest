@@ -100,7 +100,32 @@ coverage as partial.**
    valid.**  crossings.py moved to compiler/.  Next project's blockers, in
    order: **the static link / uplevel access**, **the twins/arena**, **floats**.
 
-6. **P38 DONE — MERGED** (Sep 9, verified: four routines 349/349, 0
+6. **P39 DONE — MERGED** (Sep 9, verified: four routines 349/349,
+   selftest PASS, gen_declarations clean). **The static link is BUILT
+   and works** — `UPLINK/UP/UPARG` (ruling c), the link is an ordinary
+   R41 base (276/12 census), uplevel reads/writes/subscripts and the
+   parent's by-reference parameters all lower; R42–R45 landed (three at
+   A). Your witness guard is enforced as a HARD ERROR in
+   gen_declarations' check_frames(). Two rules the gate did not predict,
+   from LIST_PLAYERS.3: R21d (indirect DO control variable, C) and
+   **R21e** (a DO limit that is an expression is evaluated once into a
+   temp) — settled by a PRE-REGISTERED test: prediction written first,
+   all three parts came out, loop head then matched exactly.
+   **0 routines finished; total still 4 of ~130.**
+   **THE MATERIAL GAP: the FIRE mutual check was NOT performed.** FIRE's
+   parent-frame layout in declarations.json rests on single witnesses
+   per slot; until FIRE.1 and FIRE.2 agree independently it is fitting,
+   not derivation. **Next session starts at FIRE.2's cvwn/divide
+   refusal, then FIRE.1, and treats FIRE's layout as unconfirmed.**
+   LIST_PLAYERS.3 abandoned (an R9/R10 temp-placement divergence
+   unrelated to the link). **Revised bottleneck: it is no longer the
+   static link, nor twins/floats — it is EXPRESSION-LEVEL gaps (R9/R10
+   temp placement, the width model for divide), which block nested
+   routines for reasons that have nothing to do with nesting.**
+   "16 of 23" is an upper bound on a weaker basis than it looked (see
+   METHOD §16 on marker-based sweeps).
+
+7. **P38 DONE — MERGED** (Sep 9, verified: four routines 349/349, 0
    routines FINISHED, total still 4 of ~130). Delivered: R33/R34
    implemented (Regs models ac0–ac3; the frame is an ordinary register
    content; REFRESH_SCREEN's five LDAFPs now come through it) with two

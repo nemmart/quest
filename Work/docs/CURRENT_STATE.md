@@ -35,6 +35,9 @@ leg" line. §3: the deterministic deferred-halt form of the P33-C fix
 
 # Landing history (newest first)
 
+## ★ P39 DONE (Sep 9 2026) — the static link is BUILT (UPLINK/UP/UPARG; the link is an ordinary R41 base on a 276/12 census; R42–R45, three at confidence A; the parent-frame witness rule enforced as a hard error). R21e settled by a pre-registered test. **0 routines finished; total 4 of ~130.** Material gap: the FIRE.1/FIRE.2 mutual check was not performed, so FIRE's parent-frame layout is unconfirmed — the next session starts there. Revised bottleneck: expression-level gaps (R9/R10 temp placement, divide width), not the link, not twins, not floats.
+
+
 ## ★ P38 DONE (Sep 9 2026) — implement-then-match: R33/R34 landed (the frame is an ordinary register content; R8d: it survives a join; FP_COST ≥ 2 with the upper bound unwitnessed), **R41** the {ac2, ac3} base-register class on three witnesses — which derives R34 rather than fitting it — and **R3b VOIDED**: P35's disjoint temp pools was never evidence, replaced by R3b′ (reuse from a later statement on). Two routines abandoned with reasons rather than fitted (FIRE.1: static link + two unmodelled forms; HIT_ANY_CHAR at 8/10: would have required a cross-procedural register model from three sites of one callee). **0 routines finished; total 4 of ~130.** Blocking constructs: static link, twins/arena, floats. DIED's four pre-registrations remain NO WITNESS — the experiment is intact.
 
 
