@@ -399,3 +399,73 @@ allocatable and threading a "where does the frame live" state touches every
 emit site.  P36's estimate of the SIZE of that change was right even though its
 description of the phenomenon was not.  **FIRE.1 has no match number and none
 should be quoted for it.**
+
+## 9. Project 38 additions (Sep 9 2026, branch p38-routines)
+
+R33/R34 are now IMPLEMENTED.  Implementing them required one correction to R8
+and produced one amendment to R33 itself, on two independent witnesses.
+
+### 9.1 R8d — the frame survives a join (a correction to R8)
+
+| # | rule | evidence | conf |
+|---|------|----------|------|
+| R8d | R8's reset at a join clears cached values but **not the frame**.  Where the frame is, is not *knowledge* about a value — it is the record of which `LDAFP`s have been executed, and a join executes none.  ac3 therefore still holds the frame at the top of a block. | Every block of all four matched routines addresses `wp(ac3, d)` with no preceding `LDAFP` — 349 statements.  Measured the other way: when `reset()` clears ac3 the frame becomes cost 0, `pick()` takes it at once and all four regress (PICK_X_Y 62/64, UPDATE_SCREENS 44/72, REFRESH_SCREEN 59/61, OWNS 107/152). | **A** |
+
+This is not an implementation detail.  R8 as written ("register knowledge
+resets at a C label") is false of ac3, and the only reason P35–P37 never met
+the falsification is that ac3 was pinned and so never passed through `reset()`.
+
+**Corollary (NO WITNESS).** `restore()` (R8c, register knowledge on one edge)
+restores the other three registers but leaves the frame where the emitter has
+actually left it.  In all four matched routines the frame is in ac3 on both
+sides of every edge, so nothing tests this; it is a modelling choice, recorded
+as one.
+
+### 9.2 FP_COST — the frame's protection cost, bounded below only
+
+The frame competes for a register like any other value (R33), so it needs a
+protection cost in R7's table.  `FP_COST = 2`.
+
+- **Lower bound, established:** at 0 or 1 all four matched routines regress
+  (figures above).  So `FP_COST >= 2`.
+- **Upper bound, NOT witnessed:** 2 and 3 give byte-identical output for all
+  four routines.  They differ in exactly one case — a statement in which
+  ac0, ac1 and ac2 are **all** live (cost 3) at the moment a register is
+  picked.  At cost 2 the frame is evicted and an `LDAFP` follows; at cost 3
+  it is not and the value must go elsewhere.  No such statement occurs in the
+  four.  **The experiment that would pin it** is any routine containing that
+  statement; INIT_OBJ_TBL 7016DF68 is a candidate (its `WPSH 3,3` site has
+  ac0, ac1 and ac2 all live) and R34 covers it, so a routine where the
+  contested register is wanted for an ordinary value is still needed.
+
+2 is taken as the weaker of the two admissible claims: 3 would additionally
+assert that ac3 is never taken while any other register is live, which has no
+witness.
+
+### 9.3 R41 — the base-register class {ac2, ac3} (amends R5 and R33)
+
+| # | rule | evidence | conf |
+|---|------|----------|------|
+| R41 | An **address or base load** does not use R7's pick over all four registers.  It allocates from a two-register class **{ac2, ac3}, ac2 preferred**; ac0 and ac1 are value registers and are not candidates however cheap they are.  When ac2 is occupied by a live address the base goes to ac3 — displacing the frame, which R33/R24 then re-materialise by `LDAFP`. | INIT_OBJ_TBL 7016DF68: `ac2 = M32[wp(ac3, -14)]` with ac2 free, and `ac3 = M32[wp(ac3, -14)]` — the **same argument load, same routine** — with ac2 live and ac0 free and cost 0.  FIRE.1 7016A3C7: three `ac3 = <address>` sites, each with ac2 holding a live address and ac1 or ac0 free at cost 0. | **B** |
+
+**R33 amended.**  R33's phenomenon stands and is confirmed: the frame is not
+pinned, it is displaced and re-materialised by `LDAFP` into a picked register.
+R33's *mechanism* — "when a statement needs a base and ac3 is the R7 pick, ac3
+takes it" — is **contradicted**.  At FIRE.1's `ac3 = M32[wp(ac3, -6)]` the costs
+are ac0 = 3 (live), ac1 = 0, ac2 = 0, ac3 = 2: R7 picks ac1, the book picks ac3.
+The discriminator in both routines is only ever **ac2's occupancy**, never
+ac0's or ac1's.
+
+**Why the four matched routines could not have witnessed this.**  In all 349 of
+their statements ac2 is free at every base load, so the class never reaches its
+second member and R41 and R5 give the same answer everywhere.  Their staying at
+100 % is therefore consistent with R41 but is not evidence for it (METHOD §16:
+consistent is not evidence) — the two witnesses above are.
+
+**R34 is now derived, not fitted.**  P37 recorded R34 (`WPSH 3,3` / `WPOP 3,3`
+around an `LDAFP 3`) as a separate B-confidence rule from two instances.  Under
+R41 it is a consequence: at INIT_OBJ_TBL 7016DF68 ac0, ac1 and ac2 are all live
+and ac3 holds a live base, so there is no register for the frame at all, and
+saving ac3's occupant is the only way to get one.  R34 describes what the
+allocator does when the base class and the value registers are simultaneously
+full.
