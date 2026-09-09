@@ -109,3 +109,32 @@ right about frames, slots, temps, conversions, control flow and bit
 operations — QUEST.1's identity slot bijection and its two first-try bit
 statements say so. What it is wrong about is **the order in which a statement's
 operands are emitted**, and that is one question, not a class of them.
+
+## 5. The book check, run — and it does NOT confirm the claim
+
+§3 said the general claim could be tested against the book with no translator
+work, so it was run. Over the 242 blocks containing two element-address
+constructions (`add(acN, M32[<table base>])`):
+
+| | blocks |
+|---|---|
+| both addresses built before either field load | 163 |
+| a field load sits between the two addresses | **79** |
+
+**This is not the clean answer the claim needs.** Had it come back 242/0 the
+general form would have had program-wide support and would have been worth
+building; a third of the population going the other way means it does not.
+
+The sweep is crude in one specific way and the number should not be read as a
+refutation either: **a block is not a statement**. R13's one-word THEN, R8c's
+surviving edges and ordinary straight-line code all put several PL/I
+statements in one block, so many of the 79 are very likely two separate
+statements, each with one element operand, which the claim says nothing about.
+Separating them needs statement boundaries, which is what the translator
+computes and this sweep does not have — the marker-level blindness of METHOD
+§16's fourth caution, met again one level down.
+
+What this settles: the general form of R7d cannot be established or dismissed
+by a cheap sweep, and QUEST.1's body alone is not enough to carry it. The
+decision to record it rather than fit it stands, and it now rests on a
+measurement rather than on caution alone.
