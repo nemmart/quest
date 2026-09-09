@@ -84,7 +84,32 @@ coverage as partial.**
    trunc16 intrinsics, no silent narrowing; falsify R10 against DIED's
    13 ac3 sites; no world-coordinate offset — CODEGEN_RULES tail).
    Deliver a Work.tgz (P35's session crashed sending a partial zip).
-6. **P37 PROMPT WRITTEN** (docs/Project37/PROMPT.md) — changed approach
+6. **P37 DONE — MERGED** (Sep 9, verified: 349/349 MATCH across four
+   routines, 242/242 folded, selftest PASS, pragma count 0). OWNS
+   completed 152/152; GET_INPUT and RETURN_MESSAGE staged with their
+   constructs derived but deliberately not fitted; UNLOCK_FILE dropped
+   as hand assembly. **Three results outlive the project**: R39
+   (inadmissible evidence — hand assembly contaminates its own metadata
+   AND its callees'; the direction test), R40 (PL/I multiple ENTRY —
+   two pairs, and per-routine addrbook statement counts MIS-SIZE them,
+   which invalidates figures in P34's census and P37's own sampling
+   frame), and the frame verdict: THERE IS NO RELOCATION — the frame
+   pointer is an ordinary R7-managed value, ac3 is ordinarily
+   allocatable, so the pragma allowance is moot (count 0). All folded
+   into METHOD §16 + CODEGEN_RULES. **P38**: implement R33/R34 FIRST
+   (Regs must stop pinning ac3 — it unblocks the most, and FIRE.1 is
+   the small validation case), then twins on INIT_OBJ_TBL, then DIED as
+   a PRE-REGISTERED EXPERIMENT (docs/Project37/DIED_PREREGISTERED.md:
+   four one-witness beliefs ride on it — R29a, R36, R7c′'s release
+   point, the join self-move — with R7c′ named in advance as the most
+   likely refutation; a contradiction is a finding, not a cue to adjust
+   the rule). Also carried: three predicted arm-path defects left
+   unfixed so tripping one is a confirmation; the BITS()-shaped
+   argument as a live search target (check DIED's eight call sites);
+   TRANSPORT_SUNDAR is an R40 pair and must be reconstructed as one
+   function with two entry prologues; run compiler/crossings.py at the
+   start of any session that adds routines. Original scope:
+   docs/Project37/PROMPT.md — changed approach
    after P36: prove each construct on SEVERAL routines rather than
    driving one big one. Ordered set (censused): UNLOCK_FILE 38 (bits +
    ac2 spelling) → DISTANCE_TO_PLAYER/RETURN_MESSAGE/GET_INPUT 30/30/22

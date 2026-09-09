@@ -35,6 +35,9 @@ leg" line. §3: the deterministic deferred-halt form of the P33-C fix
 
 # Landing history (newest first)
 
+## ★ P37 DONE (Sep 9 2026) — the compiler model generalises: 349/349 MATCH across four routines (OWNS 152/152 new), 242/242 folded, pragma count 0. Fourteen rules added, two amended, one falsified and recorded, three prior beliefs voided. Three results outlive it: **R39** hand-assembly evidence is inadmissible and contaminates callees' metadata (LOCK_FILE/UNLOCK_FILE are the program's only such pair); **R40** PL/I multiple ENTRY (two pairs) mis-sizes addrbook statement counts, invalidating figures in P34's census and P37's own sampling frame; and the frame verdict — there is no relocation, the frame pointer is an ordinary R7-managed value — which dissolves the pragma question. METHOD §16 carries R39/R40, the detector (compiler/crossings.py, run at every routine-adding session) and the "consistent is not evidence" lesson. DIED is pre-registered as an experiment for P38.
+
+
 ## ★ P35 DONE (Sep 8 2026) — recompilation as decompilation: a C-subset translator (compiler/translate.py, pycparser) reproduces the ir 6 of PICK_X_Y / UPDATE_SCREENS / REFRESH_SCREEN 197/197 statement-for-statement, register-exact (ircmp.py, seven equivalences, selftest PASS); C99+C++17 clean; DIED refuses at the first bit field. The DG PL/I codegen model: compiler/CODEGEN_RULES.md (25 rules). This is the milestone-5→6 bridge: a textual match makes the C a proven source and gcc makes it native. P36 extends the subset to DIED's constructs.
 
 
