@@ -160,7 +160,14 @@ Prompts are written per project; ask for the one you are running.
    is where P48's own type-vs-mask bug class lives). Also carries the
    `LANDMASS` JSON for `gen_declarations.py` and the `quest_rt.h` additions
    from P51/a001 Q-B.
-7d. **P53 — compile, diff, census the rewrite rules.** The measurement
+7d. **P53 — the compiler against ir 8** (`docs/Project53/PROMPT.md`) and
+   **P54 — the calling bridge** (`docs/Project54/PROMPT.md`). **RUN IN
+   PARALLEL** — P53 owns `compiler/` + `game/`, P54 owns `emulation/`.
+   P53's bar is *compiles and loads* (no execution needed — the loader
+   checks it); P54's is *a call actually executes and returns into a 0x77
+   block*, with PICK_X_Y end to end and a synthetic caller. Neither alone
+   gets you "C runs"; both together do.
+7e. **P55 — compile, diff, census the rewrite rules.** The measurement
    DESIGN §7.2a only asserts: one rule applied many times versus many rules
    applied once. Head-to-head cases: HIT_ANY_CHAR (P38 abandoned at 8/10),
    GET_INPUT (P37 staged at `BITS()`); controls PICK_X_Y and UPDATE_SCREENS.
