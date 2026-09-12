@@ -11,23 +11,23 @@ void t(void)
 {
     a[0] = 10; a[1] = 20; a[2] = 30; a[3] = 40;
     guard = 0;
-    idx   = 99;                       /* out of 1..4: SUB would trap */
+    idx   = 99;                       /* out of 1..4: RANGE_CHECK would trap */
     hit   = 0;
     miss  = 0;
     ordot = 0;
 
-    if (guard && a[SUB(idx, 4) - 1] > 0) {
+    if (guard && a[RANGE_CHECK(idx, 4) - 1] > 0) {
         hit = 1;
     } else {
         miss = 1;
     }
     /* || short-circuits on a true left arm for the same reason */
-    if (1 || a[SUB(idx, 4) - 1] > 0) {
+    if (1 || a[RANGE_CHECK(idx, 4) - 1] > 0) {
         ordot = 7;
     }
     guard = 1;
     idx = 2;
-    if (guard && a[SUB(idx, 4) - 1] == 20) {
+    if (guard && a[RANGE_CHECK(idx, 4) - 1] == 20) {
         hit = 5;
     }
 }

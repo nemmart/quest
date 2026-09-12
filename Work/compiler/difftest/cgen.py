@@ -48,12 +48,24 @@ import random
 
 # (C spelling, words, how the harness renders one element)
 TYPES = {
+    # `words` is the storage a SCALAR of this kind takes.  A byte takes half a
+    # word, so its entry is 0 and nothing in this file may multiply by it: cgen
+    # never sizes storage (that is lower_c's `char <n>`, ceil(n/2) words).  The
+    # column survives only for the two places that read [1] as "is this narrow".
+    "u8":  ("unsigned char", 0, "w8"),
     "i16": ("int16_t",  1, "w16"),
     "u16": ("uint16_t", 1, "w16"),
     "i32": ("int32_t",  2, "w32"),
     "u32": ("uint32_t", 2, "w32"),
 }
 SCALAR_KINDS = ["i16", "u16", "i32", "u32"]
+
+# Class D is the BYTE class (P53).  A, B and C keep the exact four kinds P48
+# generated, so their seeds reproduce the P48 corpus byte for byte and remain
+# usable as regression evidence across the ir 7 -> ir 8 migration; bytes arrive
+# as a fifth kind in a fourth class rather than as a change to the first three.
+BYTE_KINDS = ["u8", "i16", "u16", "i32", "u32"]
+
 
 # The constant pool is BIASED, not uniform (q001 §2.2): uniform 32-bit values
 # almost never land on a 16-bit boundary, and the narrowing rules are where
@@ -84,7 +96,8 @@ class Gen:
     def __init__(self, seed, klass):
         self.rng = random.Random(seed)
         self.seed = seed
-        self.klass = klass            # "A" flattened, "B" nested, "C" subscript-heavy
+        self.klass = klass            # "A" flattened, "B" nested, "C" subscript-heavy,
+                              # "D" byte-heavy (P53)
         self.decls = []               # (cname, kind, nelem)  nelem 0 == scalar
         self.scalars = []             # cnames assignable and readable
         self.arrays = []              # (cname, kind, nelem)
@@ -94,6 +107,7 @@ class Gen:
         self.label_n = 0
         self.census = {}
         self.depth_limit = 1 if klass == "A" else 3
+        self.kinds = BYTE_KINDS if klass == "D" else SCALAR_KINDS
 
     # ------------------------------------------------------------ census --
     def note(self, feature):
@@ -110,13 +124,13 @@ class Gen:
         self.scalars.append("chk")
         n_scalar = r.randint(4, 9)
         for i in range(n_scalar):
-            kind = r.choice(SCALAR_KINDS)
+            kind = r.choice(self.kinds)
             name = "s%d" % i
             self.decls.append((name, kind, 0))
             self.scalars.append(name)
         n_array = r.randint(1, 3) if self.klass != "A" else r.randint(0, 2)
         for i in range(n_array):
-            kind = r.choice(SCALAR_KINDS)
+            kind = r.choice(self.kinds)
             nelem = r.choice([4, 8, 16])     # powers of two: `& (n-1)` is in range
             name = "a%d" % i
             self.decls.append((name, kind, nelem))
@@ -137,11 +151,12 @@ class Gen:
         r = self.rng
         pick = r.random()
         if pick < 0.42:
-            self.note("leaf.var")
-            return r.choice(self.scalars)
+            name = r.choice(self.scalars)
+            self.note("leaf.byte_var" if self.kind_of(name) == "u8" else "leaf.var")
+            return name
         if pick < 0.55 and self.arrays:
             name, kind, nelem = r.choice(self.arrays)
-            self.note("leaf.array_read")
+            self.note("leaf.byte_read" if kind == "u8" else "leaf.array_read")
             return "%s[%s]" % (name, self.index_expr(nelem))
         if pick < 0.60 and self.loop_counters:
             self.note("leaf.loopvar")
@@ -151,7 +166,7 @@ class Gen:
 
     def index_expr(self, nelem):
         """An array index that is ALWAYS in range: masked to the power-of-two
-        size, or a SUB() check on a 1-based index (class C's speciality)."""
+        size, or a RANGE_CHECK() check on a 1-based index (class C's speciality)."""
         r = self.rng
         if self.klass == "C" and r.random() < 0.45:
             if r.random() < 0.75:
@@ -189,8 +204,11 @@ class Gen:
             sym = "<<" if form == "shl" else ">>"
             return "((%s)(%s) %s ((%s) & 31))" % (cast, self.expr(sub), sym, self.expr(sub))
         if pick < 0.62:
-            t = r.choice(["int16_t", "uint16_t", "int32_t", "uint32_t"])
-            self.note("cast." + t)
+            pool = ["int16_t", "uint16_t", "int32_t", "uint32_t"]
+            if self.klass == "D":
+                pool = pool + ["unsigned char"]
+            t = r.choice(pool)
+            self.note("cast." + t.replace(" ", "_"))
             return "((%s)(%s))" % (t, self.expr(sub))
         if pick < 0.70:
             op = r.choice(["-", "~"])
@@ -226,7 +244,8 @@ class Gen:
         rhs = self.expr(self.depth_limit)
         if self.arrays and r.random() < 0.3:
             name, kind, nelem = r.choice(self.arrays)
-            self.note("stmt.assign_array")
+            self.note("stmt.assign_byte_array" if kind == "u8"
+                      else "stmt.assign_array")
             target_kind = kind
             lhs = "%s[%s]" % (name, self.index_expr(nelem))
         else:
@@ -239,11 +258,13 @@ class Gen:
         # made a bare `int16 = int32` a refusal, and this compiler follows C
         # instead (trunc16 on the store).  Generating both is how that choice
         # gets tested rather than assumed.
-        if TYPES[target_kind][1] == 1 and r.random() < 0.5:
-            self.note("narrow.explicit")
+        narrow = target_kind in ("u8", "i16", "u16")
+        byte = target_kind == "u8"
+        if narrow and r.random() < 0.5:
+            self.note("narrow.byte_explicit" if byte else "narrow.explicit")
             rhs = "(%s)(%s)" % (TYPES[target_kind][0], rhs)
-        elif TYPES[target_kind][1] == 1:
-            self.note("narrow.implicit")
+        elif narrow:
+            self.note("narrow.byte_implicit" if byte else "narrow.implicit")
         self.emit("%s = %s;" % (lhs, rhs))
 
     def chk_update(self):
@@ -399,7 +420,8 @@ class Gen:
                '    t();']
         for name, kind, nelem in self.decls:
             render = TYPES[kind][2]
-            cast = "(uint32_t)(uint16_t)" if render == "w16" else "(uint32_t)"
+            cast = {"w8": "(uint32_t)(uint8_t)",
+                    "w16": "(uint32_t)(uint16_t)"}.get(render, "(uint32_t)")
             if nelem:
                 for i in range(nelem):
                     out.append('    printf("%s[%d]=%%08X\\n", %s%s[%d]);'
@@ -415,7 +437,7 @@ def generate(seed, klass, outdir):
     g.build_storage()
     g.init_lines()
     g.emit("")
-    budget = {"A": 14, "B": 9, "C": 9}[klass]
+    budget = {"A": 14, "B": 9, "C": 9, "D": 9}[klass]
     g.block(budget)
     os.makedirs(outdir, exist_ok=True)
     with open(os.path.join(outdir, "prog.c"), "w") as f:
@@ -432,7 +454,8 @@ def generate(seed, klass, outdir):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--seed", type=int, required=True)
-    ap.add_argument("--class", dest="klass", choices=["A", "B", "C"], default="B")
+    ap.add_argument("--class", dest="klass", choices=["A", "B", "C", "D"],
+                    default="B")
     ap.add_argument("--out", required=True)
     a = ap.parse_args()
     meta = generate(a.seed, a.klass, a.out)

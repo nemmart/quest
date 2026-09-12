@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""lower_c.py — the NAIVE C -> ir 7 compiler (Project 48, DESIGN.md §3).
+"""lower_c.py — the NAIVE C -> ir 8 compiler (Project 48; ir 8 in Project 53).
 
 Choice-free, deliberately uniform, deliberately stupid.  It emits `v`
 declarations and symbolic blocks and places nothing; the loader assigns
@@ -31,6 +31,7 @@ manifest the test rig and the differential driver read.
 
 import argparse
 import json
+import re
 import os
 import subprocess
 import sys
@@ -139,7 +140,8 @@ class Lowerer:
         self.src = os.path.basename(src)
         self.routine = routine
         self.vrows = []
-        self.vdecls = []            # emitted `v` lines, in allocation order
+        self.vdecls = []            # emitted `v` / `a` lines, in allocation order
+        self.vtype = {}             # cell name -> its declared vtype (the tripwire)
         self.nv = 0
         self.blocks = []
         self.nb = 0
@@ -170,25 +172,103 @@ class Lowerer:
     def new_v(self, kind_of_v, kind, cname="", nelem=0, anchor="", line=0):
         vname = "%s.v%d" % (self.entry, self.nv)
         self.nv += 1
+        return self.declare_cell("v", vname, kind_of_v, kind, cname, nelem,
+                                 anchor, line)
+
+    def new_a(self, local, kind_of_v, kind, cname="", nelem=0, anchor="", line=0,
+              ptr_to=None):
+        """An ARGUMENT CELL (IR.md §5.10.1c).  Same type system, same
+        placement, same cursor as a `v` — what it adds is that the routine's
+        SIGNATURE is declared, so a caller's arity and argument pointer KINDS
+        are checked against the callee rather than guessed."""
+        return self.declare_cell("a", "%s.%s" % (self.entry, local), kind_of_v,
+                                 kind, cname, nelem, anchor, line, ptr_to)
+
+    def declare_cell(self, lead, name, kind_of_v, kind, cname, nelem,
+                     anchor, line, ptr_to=None):
         ctype, words, _s, _b = KINDS[kind]
         elemwords = words
-        if nelem:
+        if ptr_to is not None:
+            # A by-reference parameter: two words, one level, KIND enforced
+            # (§5.10.1a).  The pointee width is advisory and carried for ircmp.
+            vtype = "*" + ptr_to
+            total, elemwords, render = 2, 2, "w32"
+        elif nelem:
             vtype = "words %d" % (words * nelem)
             total = words * nelem
+            render = "w16" if words == 1 else "w32"
         else:
+            # THE MUTATION MOVED HERE (a001 asked why, so it is written down):
+            # in ir 7 `no_sign_extend` corrupted the READ (`zx16` for `sx16`).
+            # In ir 8 there is no read to corrupt — §5.10.4 takes width and
+            # sign from the declaration — so the same soundness bug is now
+            # spelled as declaring `u16` where `i16` belongs.  Same bug, one
+            # level down, and the corpus must still catch it.
             vtype = kind
+            if MUTATE == "no_sign_extend" and kind == "i16":
+                vtype = "u16"
             total = words
-        render = "w16" if words == 1 else "w32"
-        self.vdecls.append("v %-24s %s" % (vname, vtype))
-        self.vrows.append(VRow(vname, kind_of_v, cname, ctype, vtype, total,
+            render = "w16" if words == 1 else "w32"
+        self.vtype[name] = vtype
+        self.vdecls.append("%s %-24s %s" % (lead, name, vtype))
+        self.vrows.append(VRow(name, kind_of_v, cname, ctype, vtype, total,
                                nelem, elemwords, render, anchor, line))
-        return vname
+        return name
 
     def new_block(self, anchor):
         b = Block("%s.b%d" % (self.entry, self.nb), anchor)
         self.nb += 1
         self.blocks.append(b)
         return b
+
+    # --------------------------------------------------------- tripwire --
+    #
+    # ir 8 REVERSED what a `v` name means (IR.md §5.10.9): in ir 7 it was the
+    # cell's ADDRESS, so `M32[V]` was how you read it; in ir 8 it is the cell's
+    # CONTENTS and `M32[V]` means "read through V as a POINTER".  72 emit sites
+    # in this file spelled the ir 7 form.
+    #
+    # The danger in a migration that size is NOT the site you convert wrongly —
+    # that fails loudly.  It is the site you FORGET, because `M32[V]` is still
+    # grammatical and, for a `v` that happens to be declared `u32`, still
+    # LOADS: it just reads through a number as if it were an address.  So this
+    # mirrors the loader's KIND tripwire (§5.10.5) at EMIT time, where the
+    # message can name the Python call site instead of an IR line number.
+    #
+    # It stays after the migration.  It costs one regex per emitted line and it
+    # is the only thing standing between "the compiler emits a pointer
+    # dereference of an integer" and a debugging session three projects later.
+    MEMFORM = re.compile(r"\bM(8|16|32)\[\s*([A-Za-z_$][\w.$]*)\s*\]")
+    POINTER_VTYPE = re.compile(r"^\*")
+
+    def tripwire(self, text):
+        for m in self.MEMFORM.finditer(text):
+            width, index = m.group(1), m.group(2)
+            if index not in self.vtype:
+                continue                      # a register or a t-place: fine
+            vt = self.vtype[index]
+            if not self.POINTER_VTYPE.match(vt):
+                raise Refusal(
+                    "ir8-tripwire", 0,
+                    "emitted `M%s[%s]` but %s is declared `%s`, not a pointer — "
+                    "in ir 8 a cell name is its CONTENTS (IR.md §5.10.4), so "
+                    "this is an unconverted ir 7 address form, not a "
+                    "dereference" % (width, index, index, vt))
+            if width == "8" and vt != "*char":
+                raise Refusal("ir8-tripwire", 0,
+                              "M8 through the word pointer %s (%s)" % (index, vt))
+            if width in ("16", "32") and vt == "*char":
+                raise Refusal("ir8-tripwire", 0,
+                              "M%s through the byte pointer %s" % (width, index))
+        # A bare AGGREGATE cell as a value or an lvalue names a region, not a
+        # value, and REFUSES at load (§5.10.4).  Catch it here too.
+        for name, vt in self.vtype.items():
+            if vt.split()[0] in ("char", "varying", "words"):
+                if re.search(r"(?<![\w.$])%s\s*=" % re.escape(name), text) or \
+                   re.search(r"=\s*%s\s*$" % re.escape(name), text):
+                    raise Refusal("ir8-tripwire", 0,
+                                  "bare aggregate `%s` (%s) used as a value or "
+                                  "an lvalue" % (name, vt))
 
     # ------------------------------------------------------- statements --
     def emit(self, text, comment=""):
@@ -197,11 +277,13 @@ class Lowerer:
             # well-formed block (every block needs a terminator, IR.md §4),
             # so it gets its own, which nothing jumps to.
             self.cur = self.new_block("unreachable")
+        self.tripwire(text)
         self.cur.lines.append("  %s%s" % (text, (" ; " + comment) if comment else ""))
 
     def terminate(self, text, comment=""):
         if self.cur is None:
             self.cur = self.new_block("unreachable")
+        self.tripwire(text)
         self.cur.term = "  %s%s" % (text, (" ; " + comment) if comment else "")
         self.cur = None
 
@@ -215,26 +297,22 @@ class Lowerer:
         """Always `tf(...)`, even when the value is already 0/1: a `goto`
         index outside [0, count) is a loud executor fault (IR.md §5.1) and I
         would rather never be able to produce one."""
-        self.emit("ac0 = M32[%s]" % cond_v)
+        self.emit("ac0 = %s" % cond_v)
         self.terminate("goto [%s, %s] tf(ac0)" % (false_b.name, true_b.name),
                        comment)
 
     # --------------------------------------------------------- accessors --
     def load_reg(self, reg, vname, kind):
-        w = KINDS[kind][1]
-        if w == 1:
-            ext = "sx16" if is_signed(kind) else "zx16"
-            if MUTATE == "no_sign_extend":
-                ext = "zx16"
-            self.emit("%s = %s(M16[%s])" % (reg, ext, vname))
-        else:
-            self.emit("%s = M32[%s]" % (reg, vname))
+        """ir 8: a cell name IS its contents, read at the DECLARED width and
+        signedness (IR.md §5.10.4).  There is no extension to spell here —
+        `v X.v3 i16` is what makes this read sign-extend.  That is why the
+        `no_sign_extend` mutation moved into new_v(): after ir 8 there is no
+        read site left to corrupt, only a declaration."""
+        self.emit("%s = %s" % (reg, vname))
 
     def store_reg(self, reg, vname, kind):
-        if KINDS[kind][1] == 1:
-            self.emit("M16[%s] = trunc16(%s)" % (vname, reg))
-        else:
-            self.emit("M32[%s] = %s" % (vname, reg))
+        """Likewise: the declaration owns the truncation, not a trunc16()."""
+        self.emit("%s = %s" % (vname, reg))
 
     def load_through_ac2(self, reg, kind):
         if KINDS[kind][1] == 1:
@@ -267,7 +345,7 @@ class Lowerer:
     def const_v(self, value, kind, anchor, line):
         v = self.new_v("node", kind, "", 0, anchor, line)
         self.emit("ac0 = %s" % self.const_text(value))
-        self.emit("M32[%s] = ac0" % v)
+        self.emit("%s = ac0" % v)
         return v, kind
 
 
@@ -348,7 +426,7 @@ class Walker:
             pk = promote(kind)
             out = L.new_v("node", pk, "", 0, "read:" + n.name, self.line(n))
             L.load_reg("ac0", vname, kind)
-            L.emit("M32[%s] = ac0" % out)
+            L.emit("%s = ac0" % out)
             return out, pk
         refuse("identifier", n, "undeclared name `%s`" % n.name)
 
@@ -366,8 +444,8 @@ class Walker:
                        "only a by-reference PARAMETER may be dereferenced")
             vname, pointee = L.params[n.expr.name]
             out = L.new_v("node", "u32", "", 0, "addr:*" + n.expr.name, self.line(n))
-            L.emit("ac0 = M32[%s]" % vname)
-            L.emit("M32[%s] = ac0" % out)
+            L.emit("ac0 = %s" % vname)
+            L.emit("%s = ac0" % out)
             return out, pointee
         refuse("lvalue", n, "not an addressable form in the subset")
 
@@ -380,11 +458,14 @@ class Walker:
                 refuse("subscript", n, "`%s` is not an array" % n.name.name)
             iv, _ik = self.expr(n.subscript)
             out = L.new_v("node", "u32", "", 0, "addr:" + n.name.name, self.line(n))
-            L.emit("ac1 = M32[%s]" % iv)
+            L.emit("ac1 = %s" % iv)
             if ew != 1:
                 L.emit("ac1 = ac1 * %d" % ew)
-            L.emit("ac2 = %s + ac1" % vname)
-            L.emit("M32[%s] = ac2" % out)
+            # ir 8: the ADDRESS of a cell is wp(cell, d) (§5.2, the kind
+            # overload).  The element scaling stays its own statement —
+            # folding it into the displacement would be a rewrite.
+            L.emit("ac2 = wp(%s, ac1)" % vname)
+            L.emit("%s = ac2" % out)
             return out, kind
         # a record table element, or a further subscript of a record field
         return self.address_of_table(n)
@@ -441,16 +522,16 @@ class Walker:
         out = L.new_v("node", "u32", "", 0, "base:" + sname, self.line(node))
         L.emit("ac2 = %s" % L.const_text(addr), "the static's own address")
         L.emit("ac0 = M32[ac2]", sname)
-        L.emit("M32[%s] = ac0" % out)
+        L.emit("%s = ac0" % out)
         return out
 
     def static_field_addr(self, sname, K, width, node):
         L = self.L
         basev = self.static_addr_v(sname, node)
         out = L.new_v("node", "u32", "", 0, "addr:%s.%d" % (sname, K), self.line(node))
-        L.emit("ac0 = M32[%s]" % basev)
+        L.emit("ac0 = %s" % basev)
         L.emit("ac2 = ac0 + %s" % L.const_text(K))
-        L.emit("M32[%s] = ac2" % out)
+        L.emit("%s = ac2" % out)
         return out, ("i32" if width == 32 else "i16")
 
     def table_field_addr(self, tname, subs, field, inner, node):
@@ -473,21 +554,21 @@ class Walker:
         basev = self.static_addr_v(t["base"], node)
         iv, _ = self.expr(subs[0])
         acc = L.new_v("node", "u32", "", 0, "addr:%s[]" % tname, self.line(node))
-        L.emit("ac0 = M32[%s]" % basev)
-        L.emit("ac1 = M32[%s]" % iv)
+        L.emit("ac0 = %s" % basev)
+        L.emit("ac1 = %s" % iv)
         L.emit("ac1 = ac1 * %d" % t["stride"])
         L.emit("ac0 = ac0 + ac1")
         L.emit("ac0 = ac0 + %s" % L.const_text(f["K"]))
-        L.emit("M32[%s] = ac0" % acc)
+        L.emit("%s = ac0" % acc)
         for sub, stride in zip(inner, f.get("strides", [])):
             sv, _ = self.expr(sub)
             nxt = L.new_v("node", "u32", "", 0, "addr:%s.%s[]" % (tname, field),
                           self.line(node))
-            L.emit("ac0 = M32[%s]" % acc)
-            L.emit("ac1 = M32[%s]" % sv)
+            L.emit("ac0 = %s" % acc)
+            L.emit("ac1 = %s" % sv)
             L.emit("ac1 = ac1 * %d" % stride)
             L.emit("ac0 = ac0 + ac1")
-            L.emit("M32[%s] = ac0" % nxt)
+            L.emit("%s = ac0" % nxt)
             acc = nxt
         return acc, ("i32" if f["width"] == 32 else "i16")
 
@@ -496,9 +577,9 @@ class Walker:
         addr_v, kind = self.address_of(n)
         pk = promote(kind)
         out = L.new_v("node", pk, "", 0, "load", self.line(n))
-        L.emit("ac2 = M32[%s]" % addr_v)
+        L.emit("ac2 = %s" % addr_v)
         L.load_through_ac2("ac0", kind)
-        L.emit("M32[%s] = ac0" % out)
+        L.emit("%s = ac0" % out)
         return out, pk
 
     # ----------------------------------------------------------- unary ---
@@ -511,7 +592,7 @@ class Walker:
         v, k = self.expr(n.expr)
         out_kind = k
         out = L.new_v("node", out_kind, "", 0, "unary" + n.op, self.line(n))
-        L.emit("ac0 = M32[%s]" % v)
+        L.emit("ac0 = %s" % v)
         if n.op == "-":
             L.emit("ac0 = 0 - ac0")
         elif n.op == "~":
@@ -523,7 +604,7 @@ class Walker:
             out_kind = "i32"
         else:
             refuse("unary " + n.op, n, "operator not in the subset")
-        L.emit("M32[%s] = ac0" % out)
+        L.emit("%s = ac0" % out)
         return out, out_kind
 
     # ---------------------------------------------------------- binary ---
@@ -541,35 +622,35 @@ class Walker:
         if n.op in self.ARITH:
             k = usual(lk, rk)
             out = L.new_v("node", k, "", 0, "op" + n.op, self.line(n))
-            L.emit("ac0 = M32[%s]" % lv)
-            L.emit("ac1 = M32[%s]" % rv)
+            L.emit("ac0 = %s" % lv)
+            L.emit("ac1 = %s" % rv)
             L.emit("ac0 = ac0 %s ac1" % self.ARITH[n.op])
-            L.emit("M32[%s] = ac0" % out)
+            L.emit("%s = ac0" % out)
             return out, k
         if n.op in ("/", "%"):
             k = usual(lk, rk)
             op = ("/" if n.op == "/" else "%") + ("s" if is_signed(k) else "u")
             out = L.new_v("node", k, "", 0, "op" + n.op, self.line(n))
-            L.emit("ac0 = M32[%s]" % lv)
-            L.emit("ac1 = M32[%s]" % rv)
+            L.emit("ac0 = %s" % lv)
+            L.emit("ac1 = %s" % rv)
             L.emit("ac0 = ac0 %s ac1" % op)
-            L.emit("M32[%s] = ac0" % out)
+            L.emit("%s = ac0" % out)
             return out, k
         if n.op in ("==", "!="):
             out = L.new_v("node", "i32", "", 0, "cmp" + n.op, self.line(n))
-            L.emit("ac0 = M32[%s]" % lv)
-            L.emit("ac1 = M32[%s]" % rv)
+            L.emit("ac0 = %s" % lv)
+            L.emit("ac1 = %s" % rv)
             L.emit("ac0 = (ac0 %s ac1)" % n.op)
-            L.emit("M32[%s] = ac0" % out)
+            L.emit("%s = ac0" % out)
             return out, "i32"
         if n.op in self.CMP:
             k = usual(lk, rk)
             op = self.CMP[n.op] + ("s" if (is_signed(k) and MUTATE != "cmp_unsigned") else "u")
             out = L.new_v("node", "i32", "", 0, "cmp" + n.op, self.line(n))
-            L.emit("ac0 = M32[%s]" % lv)
-            L.emit("ac1 = M32[%s]" % rv)
+            L.emit("ac0 = %s" % lv)
+            L.emit("ac1 = %s" % rv)
             L.emit("ac0 = (ac0 %s ac1)" % op)
-            L.emit("M32[%s] = ac0" % out)
+            L.emit("%s = ac0" % out)
             return out, "i32"
         refuse("binary " + n.op, n, "operator not in the subset")
 
@@ -584,47 +665,47 @@ class Walker:
         rv, _rk = self.expr(n.right)
         out = L.new_v("node", lk, "", 0, "shift" + n.op, self.line(n))
         if n.op == "<<":
-            L.emit("ac0 = M32[%s]" % lv)
-            L.emit("ac1 = M32[%s]" % rv)
+            L.emit("ac0 = %s" % lv)
+            L.emit("ac1 = %s" % rv)
             L.emit("ac0 = lsh(ac0, ac1)")
-            L.emit("M32[%s] = ac0" % out)
+            L.emit("%s = ac0" % out)
             return out, lk
         if not is_signed(lk) or MUTATE == "shift_logical":
-            L.emit("ac0 = M32[%s]" % lv)
-            L.emit("ac1 = M32[%s]" % rv)
+            L.emit("ac0 = %s" % lv)
+            L.emit("ac1 = %s" % rv)
             L.emit("ac1 = 0 - ac1")
             L.emit("ac0 = lsh(ac0, ac1)")
-            L.emit("M32[%s] = ac0" % out)
+            L.emit("%s = ac0" % out)
             return out, lk
         logical = L.new_v("node", "u32", "", 0, "shift>>s.logical", self.line(n))
-        L.emit("ac0 = M32[%s]" % lv)
-        L.emit("ac1 = M32[%s]" % rv)
+        L.emit("ac0 = %s" % lv)
+        L.emit("ac1 = %s" % rv)
         L.emit("ac1 = 0 - ac1")
         L.emit("ac0 = lsh(ac0, ac1)")
-        L.emit("M32[%s] = ac0" % logical)
+        L.emit("%s = ac0" % logical)
         signmask = L.new_v("node", "u32", "", 0, "shift>>s.signmask", self.line(n))
-        L.emit("ac0 = M32[%s]" % lv)
+        L.emit("ac0 = %s" % lv)
         L.emit("ac0 = lsh(ac0, -31)")
         L.emit("ac0 = ac0 & 1")
         L.emit("ac0 = 0 - ac0")
-        L.emit("M32[%s] = ac0" % signmask)
+        L.emit("%s = ac0" % signmask)
         fill = L.new_v("node", "u32", "", 0, "shift>>s.fill", self.line(n))
-        L.emit("ac1 = M32[%s]" % rv)
+        L.emit("ac1 = %s" % rv)
         L.emit("ac1 = 0 - ac1")
         L.emit("ac0 = lsh(0xFFFFFFFF, ac1)")
         L.emit("ac0 = ~ac0")
-        L.emit("M32[%s] = ac0" % fill)
-        L.emit("ac0 = M32[%s]" % signmask)
-        L.emit("ac1 = M32[%s]" % fill)
+        L.emit("%s = ac0" % fill)
+        L.emit("ac0 = %s" % signmask)
+        L.emit("ac1 = %s" % fill)
         L.emit("ac0 = ac0 & ac1")
-        L.emit("ac1 = M32[%s]" % logical)
+        L.emit("ac1 = %s" % logical)
         L.emit("ac0 = ac0 | ac1")
-        L.emit("M32[%s] = ac0" % out)
+        L.emit("%s = ac0" % out)
         return out, lk
 
     def shortcircuit(self, n):
         """C's && and || are SHORT-CIRCUIT; the IR's are EAGER (IR.md §5.3),
-        so these lower to control flow.  With SUB()'s assert in the language
+        so these lower to control flow.  With RANGE_CHECK()'s assert in the language
         the right operand really can trap, which makes this a semantic
         difference and not an optimisation."""
         L = self.L
@@ -632,28 +713,28 @@ class Walker:
         if MUTATE == "eager_bool":
             lv, _lk = self.expr(n.left)
             rv, _rk = self.expr(n.right)
-            L.emit("ac0 = M32[%s]" % lv)
+            L.emit("ac0 = %s" % lv)
             L.emit("ac0 = tf(ac0)")
-            L.emit("ac1 = M32[%s]" % rv)
+            L.emit("ac1 = %s" % rv)
             L.emit("ac1 = tf(ac1)")
             L.emit("ac0 = (ac0 %s ac1)" % n.op)
-            L.emit("M32[%s] = ac0" % out)
+            L.emit("%s = ac0" % out)
             return out, "i32"
         lv, _lk = self.expr(n.left)
         b_rhs = L.new_block("%s/rhs" % n.op)
         b_join = L.new_block("%s/join" % n.op)
         L.emit("ac0 = %d" % (0 if n.op == "&&" else 1))
-        L.emit("M32[%s] = ac0" % out)
-        L.emit("ac0 = M32[%s]" % lv)
+        L.emit("%s = ac0" % out)
+        L.emit("ac0 = %s" % lv)
         if n.op == "&&":
             L.terminate("goto [%s, %s] tf(ac0)" % (b_join.name, b_rhs.name))
         else:
             L.terminate("goto [%s, %s] tf(ac0)" % (b_rhs.name, b_join.name))
         L.open_block(b_rhs)
         rv, _rk = self.expr(n.right)
-        L.emit("ac0 = M32[%s]" % rv)
+        L.emit("ac0 = %s" % rv)
         L.emit("ac0 = tf(ac0)")
-        L.emit("M32[%s] = ac0" % out)
+        L.emit("%s = ac0" % out)
         L.goto(b_join)
         L.open_block(b_join)
         return out, "i32"
@@ -663,10 +744,10 @@ class Walker:
         kind = type_kind_of(n.to_type.type, n)
         v, _k = self.expr(n.expr)
         out = L.new_v("node", promote(kind), "", 0, "cast:" + kind, self.line(n))
-        L.emit("ac0 = M32[%s]" % v)
+        L.emit("ac0 = %s" % v)
         if KINDS[kind][1] == 1:
             L.emit("ac0 = %s(ac0)" % ("sx16" if is_signed(kind) else "zx16"))
-        L.emit("M32[%s] = ac0" % out)
+        L.emit("%s = ac0" % out)
         return out, promote(kind)
 
     # -------------------------------------------------------- builtins ---
@@ -705,17 +786,17 @@ class Walker:
         b_neg = L.new_block("ABS/neg")
         b_pos = L.new_block("ABS/pos")
         b_join = L.new_block("ABS/join")
-        L.emit("ac0 = M32[%s]" % v)
+        L.emit("ac0 = %s" % v)
         L.emit("ac0 = (ac0 >=s 0)")
         L.terminate("goto [%s, %s] tf(ac0)" % (b_neg.name, b_pos.name))
         L.open_block(b_neg)
-        L.emit("ac0 = M32[%s]" % v)
+        L.emit("ac0 = %s" % v)
         L.emit("ac0 = 0 - ac0")
-        L.emit("M32[%s] = ac0" % out)
+        L.emit("%s = ac0" % out)
         L.goto(b_join)
         L.open_block(b_pos)
-        L.emit("ac0 = M32[%s]" % v)
-        L.emit("M32[%s] = ac0" % out)
+        L.emit("ac0 = %s" % v)
+        L.emit("%s = ac0" % out)
         L.goto(b_join)
         L.open_block(b_join)
         return out, k
@@ -731,11 +812,11 @@ class Walker:
         iv, ik = self.expr(args[0])
         nv, _nk = self.expr(args[1])
         out = L.new_v("node", "i32", "", 0, "RANGE_CHECK", self.line(n))
-        L.emit("ac0 = M32[%s]" % iv)
-        L.emit("ac1 = M32[%s]" % nv)
+        L.emit("ac0 = %s" % iv)
+        L.emit("ac1 = %s" % nv)
         L.emit('assert(((ac0 >s 0) && (ac0 <=s ac1)), "DERR17 %s:%d")'
                % (L.src, self.line(n)))
-        L.emit("M32[%s] = ac0" % out)
+        L.emit("%s = ac0" % out)
         return out, "i32"
 
 
@@ -833,6 +914,7 @@ class Compiler:
         # parameters: by reference (PL/I).  a001 R4: a `u32` v holding the
         # argument's WORD ADDRESS; the rig or the calling bridge seeds it.
         params = decl.args.params if decl.args else []
+        self.nargs = 0
         for p in params:
             if isinstance(p, c_ast.Typename) and isinstance(p.type, c_ast.TypeDecl) \
                     and isinstance(p.type.type, c_ast.IdentifierType) \
@@ -844,8 +926,10 @@ class Compiler:
                 refuse("parameter", p,
                        "PL/I passes by reference: every parameter is a pointer")
             pointee = type_kind_of(p.type.type, p)
-            v = L.new_v("param", "u32", p.name, 0, "param:" + p.name,
-                        getattr(p.coord, "line", 0))
+            self.nargs += 1
+            v = L.new_a("a%d" % self.nargs, "param", "u32", p.name, 0,
+                        "param:" + p.name, getattr(p.coord, "line", 0),
+                        ptr_to=pointee)
             L.params[p.name] = (v, pointee)
         # return value
         rk = None
@@ -853,10 +937,15 @@ class Compiler:
                 and isinstance(decl.type.type, c_ast.IdentifierType)
                 and decl.type.type.names == ["void"]):
             rk = type_kind_of(decl.type, fd)
-            self.retv = L.new_v("ret", rk, "__ret", 0, "ret", 0)
+            self.retv = L.new_a("ret", "ret", rk, "__ret", 0, "ret", 0)
         else:
             self.retv = None
         self.retkind = rk
+        # The supplied-argument count (§5.10.1c).  Declared even when the
+        # routine takes none: it is half the signature, and a caller cannot
+        # emit `call` at all unless the callee declares it (IRExec.cpp:1352).
+        # The CALLER writes it; the callee only declares it.
+        L.new_a("arg_count", "argc", "u16", "__arg_count", 0, "argc", 0)
 
         self.prescan_labels(fd.body)
         entry = L.new_block("fn/entry")
@@ -945,12 +1034,12 @@ class Compiler:
             vname, kind, nelem, _ew = L.scope[lhs.name]
             if nelem:
                 refuse("assignment", n, "cannot assign to a whole array")
-            L.emit("ac0 = M32[%s]" % rv)
+            L.emit("ac0 = %s" % rv)
             L.store_reg("ac0", vname, kind)
             return
         addr_v, kind = self.W.address_of(lhs)
-        L.emit("ac0 = M32[%s]" % rv)
-        L.emit("ac2 = M32[%s]" % addr_v)
+        L.emit("ac0 = %s" % rv)
+        L.emit("ac2 = %s" % addr_v)
         L.store_through_ac2("ac0", kind)
 
     def incdec(self, n):
@@ -974,7 +1063,7 @@ class Compiler:
         if self.retkind is None:
             refuse("return", n, "a void routine cannot return a value")
         v, _k = self.W.expr(n.expr)
-        L.emit("ac0 = M32[%s]" % v)
+        L.emit("ac0 = %s" % v)
         L.store_reg("ac0", self.retv, self.retkind)
         L.terminate("ret")
 
@@ -1047,7 +1136,7 @@ class Compiler:
     # ---------------------------------------------------------- output ---
     def ir_text(self):
         L = self.L
-        out = ["ir 7", "mode stock",
+        out = ["ir 8", "mode stock",
                "; GENERATED by compiler/lower_c.py from %s (routine %s)" % (L.src, L.routine),
                "; NAIVE: every value in its own v, zero t-places, pure operators only",
                ""]
