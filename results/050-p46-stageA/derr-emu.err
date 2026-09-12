@@ -764,10 +764,10 @@ Unregistering process 100
 message to 101
 OPEN Channel 1, path :QUEST_SERVER.PR modified: 0
 OPEN Channel 2, path :SHARED_DATA_FILE modified: 1
+ISR RECEIVED MESSAGE
 OPEN Channel 3, path :WORLD_DATA_FILE modified: 1
 OPEN Channel 4, path :CASTLE_DATA_FILE modified: 1
 OPEN Channel 5, path :USER_DATA_FILE modified: 1
-ISR RECEIVED MESSAGE
 RTBridge::zero_frame_claim: entry 7017DBCE opcode A6E9 is not WSAVx/WSSVx — claim NOT zeroed (new entry shape? — further occurrences silenced)
 RTBridge::zero_frame_claim: entry 7017DBFC opcode A6E9 is not WSAVx/WSSVx — claim NOT zeroed (new entry shape? — further occurrences silenced)
 RTBridge::zero_frame_claim: entry 7017DC3A opcode A6E9 is not WSAVx/WSSVx — claim NOT zeroed (new entry shape? — further occurrences silenced)
@@ -929,9 +929,9 @@ StrHooks: QUEST2/clone max_claim s@70167744.1 = 20 bytes (cap 20)
 StrHooks: QUEST2/clone max_claim s@70167744.2 = 24 bytes (cap 24)
 StrHooks: QUEST2/clone max_claim s@7016DF68.1 = 4 bytes (cap 8192)
 StrHooks: QUEST2/clone max_claim s@7016DF68.2 = 4 bytes (cap 8192)
-StrHooks: QUEST1/master bind=4 rebind=108 unmap=3 claim=332 release=112 frame_exit=933 unwind=0 onpop=0 discarded_claims=0 cancelled=0 max_delta=1034
-StrHooks: QUEST2/clone bind=4 rebind=108 unmap=3 claim=332 release=112 frame_exit=767 unwind=0 onpop=0 discarded_claims=0 cancelled=332 max_delta=1034
-StrHooks: QUEST_SERVER/solo bind=0 rebind=0 unmap=0 claim=0 release=0 frame_exit=649 unwind=0 onpop=0 discarded_claims=0 cancelled=0 max_delta=0
+StrHooks: QUEST1/master bind=4 rebind=108 unmap=3 claim=332 release=112 frame_exit=962 unwind=0 onpop=0 discarded_claims=0 cancelled=0 max_delta=1034
+StrHooks: QUEST2/clone bind=4 rebind=108 unmap=3 claim=332 release=112 frame_exit=796 unwind=0 onpop=0 discarded_claims=0 cancelled=332 max_delta=1034
+StrHooks: QUEST_SERVER/solo bind=0 rebind=0 unmap=0 claim=0 release=0 frame_exit=146 unwind=0 onpop=0 discarded_claims=0 cancelled=0 max_delta=0
 StrHooks: QUEST1/master bind=0 rebind=0 unmap=0 claim=0 release=0 frame_exit=1 unwind=0 onpop=0 discarded_claims=0 cancelled=0 max_delta=0
 StrHooks: QUEST2/clone bind=0 rebind=0 unmap=0 claim=0 release=0 frame_exit=1 unwind=0 onpop=0 discarded_claims=0 cancelled=0 max_delta=0
 RTStubs: rtcov-QUEST1.txt — 1186 of 9828 RT words covered
