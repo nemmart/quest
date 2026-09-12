@@ -202,8 +202,18 @@ Uplevel access adds a third base via the static link.
 
 But "does `r` hold the frame here?" is a **dataflow question** whose sources
 — the `LDAFP` points, the link loads, the intervening clobbers — are already
-in the book. Reaching-definitions over base registers answers it. P48 builds
-the base-register dataflow and supplies only the residue.
+in the book. Reaching-definitions over base registers answers it, and the
+state space is **two registers**: measured over the book, ac2 and ac3 carry
+all 19,344 base uses and ac0/ac1 carry none, because the Eagle's wide
+addressing modes admit no other index register. P48 builds the
+base-register dataflow and supplies only the residue.
+
+The same constraint explains the pressure: with one of two bases usually
+holding the frame, there is ONE free base for every record access, string
+pointer and static link. Frame re-materialisation via `LDAFP`, `FP_COST ≥ 2`
+and the `WPSH`/`LDAFP`/`WPOP` dance around a live element address are
+**spilling under a two-register constraint**, not compiler quirks — so base
+spill/reload is an expected rewrite class, not a discovery waiting for P48.
 
 **And it inverts into a check.** If a `wp(r, d)` resolves against a base the
 analysis says is not the frame, while `d` lands in frame territory for that
