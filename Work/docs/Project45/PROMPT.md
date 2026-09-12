@@ -184,6 +184,11 @@ is invisible.**
 
 ## Delivery
 
-Send a **`Work.tgz` of the whole tree**, not selected files. (P35 crashed
-mid-delivery having sent a 5-file zip and half a project was lost.) Deliver
-at the gate as well as at the end.
+**Push to your branch at every stage boundary** — that is the working
+record, and nothing on it is ever lost.
+
+**Send ONE `Work.tgz` of the whole tree with the final report** — not
+selected files, and not at interim stages. The tarball is the user's
+snapshot mechanism (Plan.md, "Snapshot Practice"); the branch is the
+working record. Do not spend budget packaging a tree you have already
+pushed.
