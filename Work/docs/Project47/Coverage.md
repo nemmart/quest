@@ -23,7 +23,7 @@ stated; none of it is ground truth.
 | | battery 047b | live play Aug 22 | union |
 |---|---|---|---|
 | nodes reached (of 80) | **41** | 39 | **44** |
-| translatable leaves reached (of 20) | **15** | 15 | 16 |
+| translatable leaves reached (of 20) | **16** | 16 | 16 |
 | statements in executed blocks | **8,305 / 53,588 = 15.5%** | — | — |
 | blocks executed | 2,090 / 13,507 = 15.5% | — | — |
 
