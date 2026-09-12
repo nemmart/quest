@@ -134,3 +134,53 @@ small and say so; coordinate through a question if it is not.
 
 Same rules as before: gate only if you need a ruling, push to main, and
 `docs/Project53/f1-repro/` is read-only for you.
+
+---
+
+## Item 2b — added after this answer was first written (P53 q006)
+
+**A self-test leg that LOADS `IR.md`'s worked examples verbatim.**
+
+P53 found that both places IR.md spells an assignment to a `varying` cell use
+the **bare cell name** as the destination — §5.10.4's variable-form table and
+§5.10.10's worked example — and **neither loads**:
+
+```
+REFUSE: an aggregate cell (char/varying/words) has no CONTENTS —
+use wp(QUEST.v2, d) / bp(QUEST.v2, 0) or a string form
+```
+
+**The loader is right; the document was stale.** Your own REPORT §7 F3 records
+the cause without noticing the consequence: `check_piece` was reworked because
+a string address now arrives in three shapes and resolves through `wp`/`bp`.
+The bare name stopped being accepted then, and the two illustrations were
+written before that rework.
+
+**I have already fixed both examples** to the `wp()` spelling — that part is
+done, do not redo it.
+
+What I want from you is P53's other recommendation, which is the durable half:
+
+> IR.md's examples would benefit from being RUN rather than read, the way the
+> self-test runs its legs. Both of these examples are four lines; a leg that
+> loads §5.10.10 verbatim would have caught this.
+
+§5.10.10 is labelled *"a symbolic-only program; the self-test's shape"* — it is
+what a new reader copies, and P53 copied it and had its first HIT_ANY_CHAR unit
+refuse for no reason of its own.
+
+**Add a leg that loads the spec's worked example verbatim.** If keeping it
+verbatim is awkward, say so and propose the closest thing; the point is that a
+spec example which does not load should fail a test rather than a reader.
+
+### Why this is worth doing, beyond the one bug
+
+P53 counted three cases in this project of a normative document and its
+implementation disagreeing: q005's argument-KIND check (spec mandates,
+loader omits), your own R1 callee-in-file rule (loader enforces, spec never
+said — it invalidated two rows of P53's gate), and now this. All three
+surfaced only because a *second* project tried to use the first's work.
+
+That is the parallel structure earning its keep, and it is also a reason not
+to rely on it: a self-test leg catches this class without needing a second
+project to walk into it.

@@ -920,7 +920,7 @@ prevent.
     M16[QUEST.v6] = trunc16(ac0)                 ; a write THROUGH a *i16 pointer
     ac1 = M32[QUEST.v7]                          ; a read THROUGH a *i32 pointer
     QUEST.v7 = wp(QUEST.v1, 0)                   ; point v7 at v1 — no `&` needed
-    [@QUEST.v3, 27 varying] = [@s@70166144.3, varying]   ; twin -> v, min(len, 27) truncates
+    [@wp(QUEST.v3, 0), 27 varying] = [@s@70166144.3, varying]   ; twin -> v, min(len, 27) truncates
     M16[wp(QUEST.v4, 5)] = 0                     ; word 5 of a `words 10` aggregate
     FAKE_OCEAN.a1 = INIT_SCREEN.a1               ; pass an incoming pointer through
     goto [QUEST.b3, QUEST.b7] (ac0 <s 0)         ; symbolic exits
@@ -1165,7 +1165,7 @@ earlier are refused as always.
       goto [QUEST.b2, QUEST.b1] ((ac0 - 1) >s 0)   ; backward edge; b2 is a forward reference
 
     block QUEST.b2
-      [@QUEST.v2, 8 varying] = [@bp(QUEST.v3, 0), 11]   ; the initialised v, truncated to 8
+      [@wp(QUEST.v2, 0), 8 varying] = [@bp(QUEST.v3, 0), 11]   ; the initialised v, truncated to 8
       M16[QUEST.a1] = trunc16(QUEST.v1)   ; write out through the i16 parameter
       ret
 
