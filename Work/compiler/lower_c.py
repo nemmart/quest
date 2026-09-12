@@ -1075,7 +1075,8 @@ class Walker:
         # example.  P52 §7 F3 is why: `check_piece` was reworked to resolve
         # through wp/bp and use which wrapper it found as the word/byte
         # evidence, and the examples were not updated with it.  Reported as
-        # q006; the loader is right and the document is stale.
+        # q006 and FIXED: IR.md §5.10.4 and §5.10.10 now spell it this way, and
+        # P54 added a self-test leg that loads the spec's examples verbatim.
         L.emit("[@wp(%s, 0), %d varying] = [@bp(%s, 0), %d]"
                % (d, nbytes, v, nbytes))
         return d
@@ -1650,6 +1651,45 @@ def game_signatures(ast, routines):
     return out
 
 
+def check_unit_kinds(compilers):
+    """The argument pointer-KIND check, as a UNIT POST-PASS.
+
+    The per-statement tripwire cannot do this one.  A caller writes its
+    CALLEE's `a` cells, and the callee is compiled AFTER the caller — so at the
+    moment HIT_ANY_CHAR emits `GET_INPUT.a1 = bp(...)`, `GET_INPUT.a1` has no
+    declared type yet and the check silently passes.  Measured: flipping bp to
+    wp produced a clean compile and an IR the loader then refused.
+
+    A tripwire with a hole in exactly the construct it was added for is worse
+    than none, because it is trusted.  So the check runs again here, over the
+    finished text, when every declaration exists — which is the same shape
+    P54's loader post-pass settled on, for the same reason.
+    """
+    vtype = {}
+    for c in compilers:
+        vtype.update(c.L.vtype)
+    pat = re.compile(r"^\s*([A-Za-z_$][\w.$]*\.a\d+)\s*=\s*(wp|bp)\(")
+    for c in compilers:
+        for b in c.L.blocks:
+            for line in b.lines:
+                m = pat.match(line)
+                if not m:
+                    continue
+                cell, builder = m.group(1), m.group(2)
+                vt = vtype.get(cell)
+                if not vt or not vt.startswith("*"):
+                    continue
+                want = "bp" if vt == "*char" else "wp"
+                if builder != want:
+                    raise Refusal(
+                        "ir8-kind", 0,
+                        "in block %s: `%s` is declared `%s` but is written a %s "
+                        "pointer (%s(...)) — argument pointer KIND must match "
+                        "the callee's `a` cell (IR.md §6)"
+                        % (b.name, cell, vt,
+                           "BYTE" if builder == "bp" else "WORD", builder))
+
+
 def check_unit_order(ir):
     """a003 asked for a teeth leg on the ordering constraint, because it is the
     kind that breaks silently: a caller writes its CALLEE's `a` cells, so if a
@@ -1785,9 +1825,12 @@ def main():
         ir = unit_ir_text(compilers)
         vmap = unit_vmap_text(compilers)
         check_unit_order(ir)
+        check_unit_kinds(compilers)
     except Refusal as r:
         sys.stderr.write("REFUSE %s at %s:%d: %s\n"
-                         % (r.construct, os.path.basename(a.source), r.line, r.why))
+                         % (r.construct,
+                            ", ".join(os.path.basename(x) for x in a.source),
+                            r.line, r.why))
         return 2
 
     open(a.out, "w").write(ir)

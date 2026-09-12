@@ -1,0 +1,51 @@
+# quest.assumptions — established whole-program facts, with provenance.
+#
+# Facts the transformer may RELY ON, so a future solver does not re-derive them
+# per routine.  Each row states the claim, the evidence, and what would
+# FALSIFY it.  Checked by compiler/check_assumptions.py, which is wired into
+# tests/run_lowerc_difftest.sh; a row nobody checks is a row that quietly stops
+# being true.
+#
+# Seeded by Project 53 (docs/Project53/PROMPT.md) with the one established
+# fact: the three static pointer words whose bit 31 is clear.  That upgrades
+# IR.md §5.10.8's census from "1,008 provable, 27 assumed" to provable
+# everywhere — the dereference rewrite M32[M32[a]] -> M32[R[a]] has its
+# precondition at every site in the program.
+#
+# WHY IT HOLDS, and it is NOT "the game stores a small number there":
+# each address has exactly ONE direct writer, that writer is Eagle STARTUP
+# code, and for two of the three the value is written by the OS through a
+# by-reference argument to ?GET_SHARED_PAGE, which returns a mapped page
+# address.  A mapped page address in this process has bit 31 clear.
+#
+# P53 CORRECTION to the prompt's seed text: "sole writer" is true of DIRECT
+# stores only.  0x70000210 and 0x70000212 are ALSO passed BY REFERENCE as
+# argument 2 of ?GET_SHARED_PAGE, so the OS writes them after the game's own
+# store — which is the reason for the assumption, not a hole in it.  A checker
+# that counted only LWSTA sites would be checking the wrong thing while looking
+# right.  Hence each row carries BOTH halves.
+#
+# format: <claim> <address> <direct-writer-pc> <address-taken-pc|-> <callee|->
+#
+ptr-bit31-clear 0x70000210 7015be48 7015bed9 ?GET_SHARED_PAGE
+#   SD_PTR.  Direct store `LWSTA 0,[0x70000210]` @7015be48 (startup).  Its
+#   ADDRESS is pushed @7015bed9 as argument 2 of ?GET_SHARED_PAGE @7015bedf,
+#   which writes the mapped page address through it.
+#   FALSIFIED BY: a second direct writer; a second address-taken site; any
+#   translated routine assigning SD_PTR.
+ptr-bit31-clear 0x70000212 7015bee6 7015bef4 ?GET_SHARED_PAGE
+#   OBJ_PTR.  Direct store @7015bee6 of `LLEF 0,[0x70017C00]` — a CONSTANT
+#   effective address, so the game-side value is provable by inspection, not
+#   assumed.  The assumption covers only what ?GET_SHARED_PAGE @7015befa
+#   writes over it through the address pushed @7015bef4.
+#   FALSIFIED BY: as above, for OBJ_PTR.
+ptr-bit31-clear 0x700007A0 7015c2d6 - -
+#   A cached PLAYER element pointer.  Sole writer @7015c2d6, and NO site takes
+#   its address, so no runtime routine can write it.  Computed as
+#   SD_PTR + 686*n - 642: `WMUL 1,0` (686 = PLAYER's stride), `LWADD
+#   0,[0x70000210]`, `XLEF 2,[ac2+0x7D7E]` (-642 on the 15-bit field, which is
+#   declarations.json's own "min K seen -642" for that table).  So it is
+#   ARITHMETIC ON 0x70000210 and inherits its bit-31 property; it is not an
+#   independent assumption.
+#   FALSIFIED BY: a second direct writer; any site taking its address; any
+#   translated routine assigning it.
