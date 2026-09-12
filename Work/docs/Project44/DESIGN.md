@@ -133,49 +133,25 @@ declared maximum — because a `v` is eventually laid down *exactly on top of*
 the Eagle allocation at 0x74. Arbitrary-length string temporaries are not
 `v`s; they are `s@` twins. Assigning a twin to a `v` truncates or pads.
 
-### 4.1c Why a `v` name is an ADDRESS, not a value — settled twice, do not relitigate
+### 4.1c The variable form — SUPERSEDED BY ir 8 (P52)
 
-ir 7 (IR.md §5.10) rules that a `v` name **is an address constant**. There is
-no bare-name lvalue (`QUEST.v0 = e`), no bare-name rvalue, and **no `&`
-operator**. A read is `M32[<v>]`; an address is `wp(<v>, d)` or `bp(<v>, d)`.
+An earlier note here argued that a `v` name must be an **address constant**
+(ir 7, IR.md §5.10) and said not to relitigate it. **It was relitigated the
+same day and lost.** The note is removed rather than kept struck, because a
+"do not relitigate" banner on a decision that was reversed is worse than no
+note at all.
 
-This looks wrong at first — `v`s are meant to be the IR equivalent of C
-variables, and a variable should read as a variable. The question was raised
-again in design discussion (Sep 12) and re-settled. The reasons, strongest
-first:
+**ir 8 (P52) makes a `v` name denote the cell's CONTENTS**, as a C variable
+does: `v3 = e` writes the local, `M32[a1]` dereferences a pointer,
+`wp(v3, 0)` / `bp(v3, 0)` take the cell's address. No `&` operator is needed
+— `wp`/`bp` already carry the Eagle's word/byte pointer distinction, which is
+the one observation from the old note that survived.
 
-1. **`wp`/`bp` ALREADY ARE the address operators, and they are typed.** The
-   Eagle has two pointer kinds and they are not interchangeable — word
-   pointers (`XLEF`/`XPEF`) and byte pointers (`XLEFB`/`XPEFB`), both of
-   which P51's routines use. A C-style `&` would have to infer which from
-   the referent's type; `wp(v, d)` and `bp(v, d)` say it at the site.
-   `bp(QUEST.v2, 0)` is in the spec already.
-2. **Value versus address is unambiguous in the text.** `M32[<v>]` is the
-   value; `wp(<v>, 0)` is the address. In C, `v12` means either depending on
-   context. The thing being matched is UNTYPED — the book spells
-   `M32[wp(ac3,12)]` for a read and `wp(ac3,12)` for a pushed argument, and
-   those are different operations on one slot. A representation where both
-   spell `v12` would need the declaration consulted before any comparison.
-3. **One convention across registers, twins and `v`s.** `wp(base, d)` means
-   "base plus offset" everywhere. If a name were a value, `wp(name, d)` would
-   have to mean "address-of, plus offset" — a second meaning for the same
-   operator.
-4. **Placement stays literally "an address and nothing else"** (§5.2): the
-   loader substitutes a 0x74 constant for a 0x76 one and the statement text
-   is otherwise identical.
-5. **Ours ends up spelled the way the BOOK spells it.** The book already
-   pushes dummies as `wp(ac3, d)`. A naive `wp(<v>, 0)` has the same shape,
-   so after placement the two differ in the address expression and nothing
-   else — which keeps the diff readable at exactly the point where
-   readability matters (P53).
+The cost, accepted: access width and signedness come from the declaration
+rather than the statement, so `ircmp` must consult declarations when
+comparing against the book's explicit `M32[wp(ac3,12)]`.
 
-The C keeps the intuitive model: `TMP(1)` IS "a local, assigned, its address
-passed". Only the IR writes the address explicitly instead of deriving it.
-
-**The spec's own stated rationale — that a typed value form would put
-signedness into storage — is the WEAKEST of these**, since the declared type
-is load-bearing anyway (the width tripwire refuses `M32[<v>]` on an i16 `v`).
-Cite reasons 1, 2 and 5 if this comes up again.
+Design of record: `docs/Project52/PROMPT.md` and ir 8 in `docs/IR.md`.
 
 ### 4.1a Nesting: uplevel access is FREE in the naive form
 
