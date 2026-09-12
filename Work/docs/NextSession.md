@@ -285,6 +285,24 @@ problem with current coverage claims.
   trigger for the original defect: `Restart=always` in the unit file, so a
   restarted runner picks up the same task, wipes the in-flight attempt, and
   is refused by the task's own guard — which matches 053's ATTEMPTS=3 exactly.
+- **THE RIG SEGFAULTS AFTER A CORRECT DIAGNOSTIC** (P53 F-1). An `rt_call`
+  out of a symbolic block loads, then reports *"needs a symbol table to
+  resolve the callee (no LCALL word to resolve from)"* — which is correct and
+  is P52 §4 item 2 — and **then crashes**. P54 is closed; this is a known
+  defect against the bridge. Reproducer in `docs/Project53/`. A crash on a
+  diagnostic path gets misread later as "the IR is broken".
+- **THE LEGS ARE NOT REAPED.** Task legs are `setsid`-detached and the
+  `timeout` wraps the DRIVER, not the emulator — so when a task script dies,
+  the emulator survives as an orphan reparented to PID 1, holding memory, its
+  `/tmp/run<NNN>-*` directory and possibly its port. Observed on 054's
+  `inj-emu`. Third runner-adjacent defect, and the only one not yet fixed in
+  the repo.
+- **`inj-emu` HAS NOW FAILED THREE DIFFERENT WAYS** across three batteries —
+  a verdict flip between 052's two attempts, a core dump in 053, and a hang
+  in 054 — while every other leg is stable. It is play-mode on the `emu`
+  config with an injected fault, i.e. a race by construction. It needs a fix
+  or an explicit quarantine; it is currently the only thing between this
+  battery and a clean result.
 - **THE EMULATOR CORE DUMP IS UNEXPLAINED** and is the oldest open finding.
   P49 established it is SEPARATE from the ceiling bug: `inj-emu` produced no
   artifacts at all while `play`/`play-st` completed with full sets, so an
