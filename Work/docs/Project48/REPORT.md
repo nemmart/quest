@@ -364,7 +364,7 @@ which means they are the least-tested code in the compiler.
 | item | gate estimate | actual |
 |---|---|---|
 | `compiler/lower_c.py` | 1,300 ± 300 | **1,112** |
-| `compiler/difftest/cgen.py` | 450 ± 150 | **448** |
+| `compiler/difftest/cgen.py` | 450 ± 150 | **444** |
 | `compiler/difftest/difftest.py` | 300 ± 100 | **322** |
 | hand cases | 250 ± 100 | **194** |
 | `emulation/tests/lowerc_rig.cpp` | 300 ± 80 | **361** |
@@ -372,7 +372,7 @@ which means they are the least-tested code in the compiler.
 | UPDATE_SCREENS fixture generator | (folded into the rig estimate, 220 ± 60) | **166** |
 | `game/routines/UPDATE_SCREENS.c` | 35 | **52** (mostly the derivation) |
 | `game/quest_rt.h` (R5) | not estimated | **+44 / −4** |
-| **total new code** | **≈ 3,100 ± 900** | **2,753** |
+| **total new code** | **≈ 3,100 ± 900** | **2,749** |
 
 The estimate held: every row is inside its band and the total is 11% under.
 The compiler landed near the middle of its range; the type model itself was
@@ -401,6 +401,15 @@ Not touched: `emulation/` outside `tests/`, `docs/IR.md`,
 `docs/Provenance.md`, `Disassembled/**`, `quest.ir2.*`, `quest.addrbook`,
 `quest.arena`, `compiler/{ircmp,readable,gen_declarations,callgraph}.py`,
 `tasks/`, `docs/attic/**`. Nothing regenerated.
+
+**One tooling hazard, recorded because it will bite the next session too
+(METHOD §11).** `emulation/` has `*.o` and `*.d` in `.gitignore` but the
+built `emulator` binary is TRACKED (P46 ships it). So `make clean` in that
+directory deletes a tracked file and leaves a ` D` in `git status` that is
+easy to miss if you are only looking at what you wrote. It cost nothing here
+— the branch was already pushed and the file was restored with
+`git checkout --` — but a session that runs `make clean` and then commits
+would silently drop the binary from the tree.
 
 **To re-run everything:** `emulation/tests/run_lowerc_difftest.sh [seeds]`.
 It builds the rig, runs the hand suite, runs `seeds × 3` generated programs
