@@ -84,7 +84,16 @@ Prompts are written per project; ask for the one you are running.
    QUEST at height 8.** And the number that changes scheduling: **the battery
    executes 15.5% of the book** (8,305 / 53,588 statements), 41 of 80 nodes.
 
-4. **P48 — the naive compiler** (`docs/Project48/PROMPT.md`). C → naive IR,
+4. **P48 — the naive compiler: DONE, MERGED.** `compiler/lower_c.py` (C →
+   ir 7, choice-free, pycparser front end) + `compiler/difftest/`. **818
+   programs, 0 disagreements, 52 constructs with no census zeroes**;
+   UPDATE_SCREENS compiles, loads and runs end to end (65 `v`s, 16 symbolic
+   blocks, 227 statements, zero `t`-places, zero effectful operators). Two
+   bugs found and reported — an `ABS` result-type error surfacing three
+   operators away as `/u` for `/s`, and a generator that could emit an
+   infinite loop. Subset gaps to know about: **no user typedefs, no general
+   structs, no calls, no strings, no floats, no bits.**
+   *(superseded entry below)* **P48 (original) — the naive compiler** (`docs/Project48/PROMPT.md`). C → naive IR,
    choice-free, plus **its own differential tester against gcc**. The
    tester was DESIGN §13's separate project 4; it is folded in here, because
    obligation (a) is the compiler's deliverable and evidence that arrives as
@@ -97,7 +106,13 @@ Prompts are written per project; ask for the one you are running.
    — together worth more to L1 than the next ten routines. `emulation/` is
    free now that P46 has landed. Runs parallel with P48 (files disjoint:
    P48 writes `compiler/`, this writes `emulation/` + `tasks/`).
-5. **P50 — L1 substitution harness** — the keystone. Now known to include
+5. **P49 — the play driver, login fixtures, and task 051**
+   (`docs/Project49/PROMPT.md`). **Scheduled ahead of routine work and ahead
+   of P50**, because L1's oracle is gameplay and the battery executes 15.5%
+   of the book; P47 costs the driver fix at +7,474 statements and the two
+   logins at +4,989, against 1,768 statements for the twelve proposed first
+   routines. Holds `emulation/`, so P50 cannot run beside it.
+6. **P50 — L1 substitution harness** — the keystone. Now known to include
    the calling bridge as a new IR production (P46 F7) and the slot
    bijection in `ircmp` (P46 F6 / a002). See DESIGN §9.
 7. **First leaf routines at L1**, bottom-up per P47's order.
