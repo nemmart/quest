@@ -1,1 +1,1 @@
-tasks/053-p49-stage-b.sh: line 89: 1053327 Aborted                 (core dumped) env QUEST_PORT=$port QUEST_BLOCKS=$BLK QUEST_SYNC_LIST=$SYN QUEST_SYNC_K=$k "${cfgenv[@]}" "$@" setsid stdbuf -o0 -e0 $EMU -lockstep -silent -trace $R/trace -types lockstep,rtcalls,strings QUEST QUEST_SERVER @QUEST @QUEST > $R/out 2> $R/err 9>&-
+another battery attempt is still running; refusing overlap

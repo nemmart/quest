@@ -128,20 +128,30 @@ Prompts are written per project; ask for the one you are running.
    the calling bridge as a new IR production (P46 F7) and the slot
    bijection in `ircmp` (P46 F6 / a002). See DESIGN §9.
 7. **First leaf routines at L1**, bottom-up per P47's order.
-7b. **P51 — candidate C** (`docs/Project51/PROMPT.md`). Derive and write the
-   C for 7 routines from the disassembly. **No compiling, no matching, no
-   running.** Stage 1 of three: **P51 candidate C → P52 extend the compiler
-   to whatever P51 actually needed → P53 compile, diff against the book,
-   census the rewrite rules.** The split matters: stage 1 tells stage 2 what
-   to build rather than the compiler being extended against a guess, and the
-   derivation is the part that cannot be rushed. Head-to-head cases carried
-   to stage 3: **HIT_ANY_CHAR** (P38 abandoned it at 8/10) and **GET_INPUT**
-   (P37 staged it at `BITS()`); two known-good controls (PICK_X_Y,
-   UPDATE_SCREENS) so stage 3 can tell a missing rewrite from bad C. Runs
-   beside P49 and P50 — writes `game/routines/`,
-   `docs/Project28/RTConventions.md` and `docs/Project51/` only.
-   **Its headline deliverable is the compiler gap list**, which is P52's
-   specification.
+7b. **P51 — candidate C: DONE, MERGED.** Six routines derived
+   (HIT_ANY_CHAR, PICK_X_Y, GET_INPUT re-derived **blind**; INIT_SCREEN,
+   FAKE_OCEAN, FAKE_LAND_MASS new), each with a derivation header and a
+   confidence; UPDATE_SCREENS as the calibration row. Two sessions read all
+   seven independently and **disagreed nowhere in the machine reading** —
+   only on spelling, both settled at the gate. Four runtime findings landed
+   in `RTConventions.md` (X.CB, ?READ's arg roles, ?RANDOM_NUMBER dummy
+   widths, the byte-displacement convention).
+   **`docs/Project51/REPORT.md` §2 is the compiler gap list and is P52's
+   specification.** Headline: the needed subset is much SMALLER than feared
+   — no floats, no uplevel access, no twins, no `goto`, no ON-units, and
+   strings/bits only as three literals. The big item is **bytes** (§2 item
+   5): `char` is a WORD kind today, so GET_INPUT's 144-byte buffer would
+   lower to 144 words, and the mask set has only `trunc16`.
+7c. **P52 — extend the compiler** to P51's gap list, in its centrality
+   order. **Generator-first**: extend the differential corpus to byte types
+   BEFORE implementing them (P48's Stage-A discipline; a second width class
+   is where P48's own type-vs-mask bug class lives). Also carries the
+   `LANDMASS` JSON for `gen_declarations.py` and the `quest_rt.h` additions
+   from P51/a001 Q-B.
+7d. **P53 — compile, diff, census the rewrite rules.** The measurement
+   DESIGN §7.2a only asserts: one rule applied many times versus many rules
+   applied once. Head-to-head cases: HIT_ANY_CHAR (P38 abandoned at 8/10),
+   GET_INPUT (P37 staged at `BITS()`); controls PICK_X_Y and UPDATE_SCREENS.
 8. **Transformer + oracle + L2.**
 
 **Also carried and still unscheduled:** the play driver (below). It is not

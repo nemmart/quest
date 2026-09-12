@@ -99,3 +99,74 @@ Notes for the emitter and the executor:
    XLEF, and XWSTA spills.
 4. `?LOOKUP_PORT`'s third argument is pushed and never dereferenced by
    the body — recorded, not a problem (the frame teardown discards it).
+
+---
+
+## Additions from Project 51 (Sep 12 2026) — candidate C for seven routines
+
+Recorded as met, per the standing rule in the banner.  Evidence is
+`Disassembled/quest.dis` / `quest-rt.dis` / `quest.mem` at the addresses
+given; confidence in Salvage.md's vocabulary.
+
+### Reading convention (not a routine): byte-form X displacements are BYTES
+
+`XLEFB / XPEFB / XLDB r,[ac3+d]` address byte `d`, i.e. word slot `d/2`.
+Witnesses: GET_INPUT 7016AA37 `XLEFB 2,[ac3+0x8]` = its buffer at slot 4
+(F14); HIT_ANY_CHAR 7016DE98 `XLEFB 2,[ac3+0xA]` = the data word after the
+length word at slot 4, and 7016DEA7 `XPEFB [ac3+0x4]` = its CHAR(1) at slot
+2 (the frame closes only under this reading).  A CHAR argument is therefore
+passed as a **byte pointer**; GET_INPUT stores through arg 1 with `WSTB`
+(7016AA60..62).  **Verified** (3 sites, frame sums).
+
+### X.CB @7017E708 — build a BIT literal at run time (Salvage F12)
+
+| item | value |
+|---|---|
+| entry | 0x7017E708 |
+| inputs | **ac2** = destination WORD address (a frame temp); **ac0** = BYTE pointer to the character form of the literal (`"001"`, `"1"`); **ac1** = its length |
+| outputs | the bit string at [ac2]; ac0/ac1/ac2 not relied on afterwards by either caller |
+| call form | undecorated `LCALL [0x7017E708],0` — no stack arguments, not an `rt_call` |
+| game sites | GET_INPUT 7016AA41 (`"001"` at 0x7016A9B9, len 3, into temp 76 → arg 6 of ?READ); 701703A6 (`"1"` at 0x7017024D, len 1, into temp 22 → the routine's own return value, F4) |
+| evidence | both sites' three register loads immediately precede the LCALL; literal bytes confirmed in `quest.mem` (P45 F12; re-seen P51) |
+| confidence | **Verified** (2 sites) |
+
+What it means for the C: a BIT literal is `BITS("001")` — a call, not a
+constant; the lowering owns the temp and the three register loads.
+
+### ?READ @7017DE5F — argument roles (refines the row above and Salvage F14)
+
+From the body, 7017DE71..7017DEE6:
+
+- **arg 3 is the byte count, IN/OUT.**  The count transferred is written
+  back through it: `7017DEE2 XNLDA 0,[ac3+0xA]; 7017DEE4 XNSTA 0,@[ac3+0xFFF0]`
+  (`0xFFF0` = arg 3).  GET_INPUT passes the constant 1 in a frame temp (slot
+  80) — a dummy the callee overwrites, which PL/I permits.
+- **arg 4 is a 16-bit end/error flag.**  `7017DECD..7017DED9`: on error
+  code 24, if argc > 3, `NLDAI 0x8000,0; XNSTA 0,@[ac3+0xFFEE]` (`0xFFEE` =
+  arg 4).  Otherwise untouched.  GET_INPUT's arg 4 is its slot 2, which
+  nothing else writes and nothing reads.
+- arg 2's datum is a **pointer**: GET_INPUT stores the byte pointer to its
+  buffer in temp 78 and pushes `&temp78` (7016AA37..39, 7016AA55).  In the
+  C: `TMP(buf)`, a dummy holding the buffer's address.
+
+So F14's `?READ$6(chan, buffer, one, count&, options, flags)` reads better
+as `?READ$6(chan, TMP(buf), count (in/out, =1), flag&, options=0x1000,
+BITS("001"))`.  **Verified** (body + site).
+
+### ?RANDOM_NUMBER @7017DE33 — caller-side facts
+
+Value in ac0 (row above).  At PICK_X_Y's three sites (701761FD, 7017623D,
+7017625E) all lo/hi arguments are **dummies in 32-bit temps** (`XWSTA`),
+including the constant 1, `OBJ_PTR->region_count` (copied before its
+address is pushed) and `field ± 20` with a 16-bit field: the parameters
+are FIXED BIN(31).  The seed (`SD_PTR->seed`, K 40) is passed directly by
+reference.  KNIGHT_ATTACK 7016E810 and MOVE_FAMILIAR 7016FE5E have the same shape
+(32-bit temps at their slots 0x12/0x14 and 0x16/0x18).  **High** (3 sites read, others by grep).
+
+### ?WRITE_SCREEN @7017E27A — the text argument at a CHAR-constant site
+
+At HIT_ANY_CHAR 7016DE93..DEA3 the caller builds a **CHAR VARYING dummy**
+(length word then data) in its frame for a constant text and pushes its
+word address as arg 2; for a ≤ 2-byte constant the whole VARYING is one
+`WLDAI` immediate + `XWSTA` (7016DEAD..DEB0, length 2 | bytes).  Consistent
+with the row above and rt/write_screen.hpp.  **Verified** (2 sites).
