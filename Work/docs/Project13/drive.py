@@ -120,9 +120,57 @@ def settle(ceiling, label, grace=120):
     return False
 
 
-def step(keys, label, ceiling=120):
+def step(keys, label, ceiling=300):
     s.sendall(keys.encode('latin1'))
     return settle(ceiling, label)
+
+
+def wait_for_turns(want, ceiling, seed=b"", stall=420):
+    """Wait for the auto-move by COUNTING TURNS, not by waiting for quiet.
+
+    Quiescence cannot decide this. Measured in task 053's play.session: the
+    game prints "-> Waiting for your turn" and then RE-EMITS THE PROMPT while
+    it is still blocked on the server tick, so "is a prompt the most recent
+    thing" says "idle" in the middle of an auto-move. Under -lockstep the gap
+    to the next turn is long, so settle() returned after 2 of 3 turns, all
+    five menu keys were then delivered mid-auto-move, and the ceiling
+    surfaced at the LAST step with a label that named the wrong thing --
+    zero screens reached, exactly the failure this project set out to fix.
+
+    The direction echo is constant, so the move marker counts turns directly:
+    one echo when the command is accepted, then one per turn.
+
+    An auto-move can also stop EARLY for game reasons -- a random encounter
+    interrupts it -- so `stall` seconds with no new marker is accepted as
+    "finished", loudly, rather than burning the whole ceiling. `stall` is
+    generous because a spurious early continue is the expensive direction:
+    at 240 s it fired on a plain-emulation run whose third turn was merely
+    slow, and lockstep is slower still.
+    """
+    marker = b"Move to the "
+    deadline = time.time() + ceiling
+    # `seed` is the output already drained by the send that issued the command.
+    # The direction echo usually lands there, and counting from an empty buffer
+    # then subtracting it undercounts every turn by one (observed locally:
+    # "stopped after 0 of 3 turns" on a run that had completed one).
+    buf = seed; seen = 0; last_progress = time.time()
+    while time.time() < deadline:
+        d = drain(4)
+        if d:
+            buf += d
+            n = buf.count(marker) - 1          # first is the command echo
+            if n > seen:
+                seen = n; last_progress = time.time()
+        if seen >= want:
+            return settle(300, "prompt after the auto-move", grace=25)
+        if time.time() - last_progress > stall:
+            note("auto-move stopped after %d of %d turns (encounter or blocked "
+                 "move); continuing from the prompt" % (seen, want))
+            return settle(300, "prompt after a short auto-move", grace=25)
+    ceilings_hit.append("auto-move (%d of %d turns)" % (seen, want))
+    note("CEILING HIT after %ds waiting for the auto-move: %d of %d turns"
+         % (ceiling, seen, want))
+    return False
 
 
 drain(10)
@@ -142,8 +190,9 @@ elif mode == "play":
     settle(180, "command prompt after login/creation", grace=20)
     # --- movement: AUTO_MOVE drives FIND_OBJECT / DIST / DISTANCE_TO_PLAYER /
     #     RANDOM through the map render and territory scan every turn ---
-    send("M", 4); send("n", 4); send("3\r", 10)
-    settle(900, "auto-move (3 turns) to finish")     # lockstep is far slower here
+    send("M", 4); send("n", 4)
+    echo = send("3\r", 10)                           # the direction echo may land here
+    wait_for_turns(3, 1200, seed=echo)
     # --- menu screens (leaf named routines, batch 2 coverage too) ---
     step("O", "OBSERVE")                             # -> "Observe item" + object screen
     step("\x1b", "exit OBSERVE")                     # that screen DOES need an ESC

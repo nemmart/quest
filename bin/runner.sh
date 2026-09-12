@@ -1,6 +1,9 @@
 #!/bin/bash
 # runner.sh — the quest task runner. Polls the repo for unresulted tasks,
-# runs them, pushes results. This script never changes; tasks change.
+# runs them, pushes results. Changed ONCE by P49 (the overlap/rm-rf data-loss
+# defect); otherwise this script does not change, tasks change. A change here
+# takes effect only after the file is copied to the runner box and the unit is
+# restarted -- until then the repo and the running poller disagree.
 #
 # Setup on the runner box (once), as a dedicated non-sudo user:
 #   git clone https://x-access-token:<PAT>@github.com/nemmart/quest.git ~/queue
@@ -82,7 +85,28 @@ while true; do
   attempts=$(cat "results/$name/ATTEMPTS" 2>/dev/null || echo 0)
   attempts=$((attempts + 1))
   log "running $name (attempt $attempts/$MAX_ATTEMPTS)"
-  rm -rf "results/$name"            # clear any stale FAILED/run.log from a prior try
+  # P49: guard BEFORE the destructive step. A battery task holds this lock for
+  # its whole run; with `Restart=always` in the unit, a restarted runner would
+  # otherwise pick the same task up again, rm -rf the in-flight attempt's
+  # results, and then be refused by the task's own overlap guard -- leaving
+  # only the refusal message and burning an attempt. That destroyed task 053's
+  # results twice (see results/053-p49-stage-b/RESTORED.md). Take the lock to
+  # find out whether a task is live, then RELEASE it so the task can take it.
+  exec 8>/tmp/quest-parallel-battery.lock
+  if ! flock -n 8; then
+    exec 8>&-
+    log "a task is still holding the battery lock; deferring $name (no results touched)"
+    sleep "$POLL_SECONDS"
+    continue
+  fi
+  flock -u 8; exec 8>&-
+
+  # Deletion is recoverable rather than final: a mistaken wipe of a committed
+  # result has cost this project three incidents in one day.
+  if [ -d "results/$name" ]; then
+    mv "results/$name" "/tmp/quest-results-backup-$name-$(date +%s)" 2>/dev/null \
+      || rm -rf "results/$name"
+  fi
   mkdir -p "results/$name"
   echo "$attempts" > "results/$name/ATTEMPTS"
 
