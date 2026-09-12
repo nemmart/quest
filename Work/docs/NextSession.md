@@ -285,12 +285,26 @@ problem with current coverage claims.
   trigger for the original defect: `Restart=always` in the unit file, so a
   restarted runner picks up the same task, wipes the in-flight attempt, and
   is refused by the task's own guard — which matches 053's ATTEMPTS=3 exactly.
-- **THE RIG SEGFAULTS AFTER A CORRECT DIAGNOSTIC** (P53 F-1). An `rt_call`
-  out of a symbolic block loads, then reports *"needs a symbol table to
-  resolve the callee (no LCALL word to resolve from)"* — which is correct and
-  is P52 §4 item 2 — and **then crashes**. P54 is closed; this is a known
-  defect against the bridge. Reproducer in `docs/Project53/`. A crash on a
-  diagnostic path gets misread later as "the IR is broken".
+- **THE RIG SEGFAULTS ON A NAIVE game→game `call`** (P53 F-1, **corrected in
+  q004** — the first report blamed `rt_call` and was wrong). Measured 40/40
+  each way: an `rt_call` out of a symbolic block loads, prints the correct
+  symbol-table diagnostic and exits 1 **with no crash**; a naive `call` out of
+  a symbolic block **loads completely** — cells placed, blocks placed, 0x76
+  mapped — and then **segfaults with no diagnostic at all**, exit 139.
+  Reproducers: `docs/Project53/f1-repro/`. Hypothesis (labelled as one, not a
+  diagnosis): the seam between P48's rig, which builds one WSAVS-shaped frame
+  and leaves the shadow call stack EMPTY (`lowerc_rig.cpp:119,:319`), and
+  P54's bridge, which on `call` pushes a frame and a `call_stack` entry — a
+  rig written for call-free programs meeting a bridge that calls. **This is on
+  the path P53 was just granted the multi-routine unit to emit.**
+- **THE LOADER DOES NOT CHECK ARGUMENT POINTER KINDS** (P53 q005). `IR.md`
+  §5.1 and §6 both mandate it; `IRExec.cpp:887` and `:1349` both comment that
+  it happens; **the loop contains no kind test**. Measured: `GET_INPUT.a1 =
+  wp(...)` into a `*char` cell loads clean. The §5.10.5 M-form tripwire works
+  perfectly — kind is enforced where a pointer is USED and unenforced where
+  one is PASSED. **Two things to fix beyond the loader: a spec that overstates
+  its enforcement is worse than one admitting a gap, and the two in-code
+  comments are more misleading still because they sit at the site.**
 - **THE LEGS ARE NOT REAPED.** Task legs are `setsid`-detached and the
   `timeout` wraps the DRIVER, not the emulator — so when a task script dies,
   the emulator survives as an orphan reparented to PID 1, holding memory, its
