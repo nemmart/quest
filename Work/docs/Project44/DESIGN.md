@@ -183,14 +183,33 @@ this live":
 - **Binding** (`v` → `ac0`) *deletes* loads and stores. It is a
   **transformation** with a liveness precondition.
 
-**OPEN — the slot bijection (P46 gate, F6).** "Placement changes an address
-and nothing else" is true of the ADDRESS and false of the TEXT. The book
-never spells a local as an absolute 0x74 constant; it spells `wp(ac3, d)` —
-register-relative (IR.md §5.2; no `wp(0, d)` is ever emitted). A placed `v`
-is an absolute constant. So the equivalence between `M16[0x74001A04]` and
-`M16[wp(ac3, 6)]` is a fact **`ircmp`'s slot bijection must supply**. It is
-not in the IR and it is not free. Recorded here so P48 meets it as a known
-task rather than as an unexplained match failure.
+**OPEN — the slot bijection (P46 gate, F6; refined in P46/a002).**
+"Placement changes an address and nothing else" is true of the ADDRESS and
+false of the TEXT. The book never spells a local as an absolute 0x74
+constant; it spells `wp(r, d)` — register-relative (IR.md §5.2; no
+`wp(0, d)` is ever emitted). A placed `v` is an absolute constant. So the
+equivalence between `M16[0x74001A04]` and `M16[wp(ac3, 6)]` has to come from
+somewhere.
+
+**It is mostly DERIVABLE, not supplied.** A `wp(r, d)` is a local reference
+only when `r` currently holds the frame — and **ac3 is not pinned to the
+frame**: P38 established the frame pointer is an ordinary R7-managed value
+materialised by `LDAFP` into whatever register is free, with ac3 otherwise
+ordinarily allocatable. FIRE.1 shows all three states within a dozen
+instructions: ac3 holding the frame, ac3 repurposed as a record base, and
+the frame materialised into ac2 so that frame references spell `wp(ac2, d)`.
+Uplevel access adds a third base via the static link.
+
+But "does `r` hold the frame here?" is a **dataflow question** whose sources
+— the `LDAFP` points, the link loads, the intervening clobbers — are already
+in the book. Reaching-definitions over base registers answers it. P48 builds
+the base-register dataflow and supplies only the residue.
+
+**And it inverts into a check.** If a `wp(r, d)` resolves against a base the
+analysis says is not the frame, while `d` lands in frame territory for that
+routine, then either our base-tracking is wrong or the original compiler
+emitted something odd. Either way it stops the build rather than matching
+quietly — which is the property this design wants everywhere.
 
 ### 5.3 The merge is Milestone 5 run backwards
 
@@ -612,7 +631,7 @@ handler-bearing routine comes up. Existing material: `ON_ERROR_CATALOG.md`,
 | 4 | partial-credit metric (§8.1) | `ircmp` distance, form open |
 | 4b | is `ircmp` distance monotone under single rewrites? (§7.2b) | whether the gradient walk works, and whether search is viable later |
 | 5 | ON-condition CFG closure (§11) | deferred, gated by hard error |
-| 6 | the slot bijection: absolute 0x74 vs `wp(ac3, d)` (§5.2) | P48; `ircmp` must supply it |
+| 6 | the slot bijection: absolute 0x74 vs `wp(r, d)` (§5.2) | P48; mostly derivable from `LDAFP` dataflow — build the base tracking, supply only the residue |
 | 7 | the calling bridge as an IR production (§9.3) | P48; resizes the harness |
 
 ---
