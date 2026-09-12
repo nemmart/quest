@@ -190,7 +190,19 @@ problem with current coverage claims.
   **Do not simply set each `want` to what the tree currently prints** —
   that converts a test into a tautology. Each number needs a reason, as
   (1) has.
-- **Task 052 is GREEN and marked DONE** (integrator, Sep 12): 16/16 legs,
+- **⚠ TASK 052 WAS NOT GREEN, AND THE BATTERY IS NONDETERMINISTIC.** Found
+  by P49 (`docs/Project49/q002`). 052's `run.log` ends `TASK 052 RED (4
+  fails)`; the fourth is a real leg, `inj-emu end=I.STOP want=FATAL
+  leg=FAIL`. Worse: `ATTEMPTS=2`, and **the two attempts of the same script
+  on the same tree disagree** — attempt 1 had all 16 legs OK (which the
+  integrator read and wrongly certified), attempt 2 has inj-emu failing.
+  `inj-emu` is a play-mode leg whose injected fault races the driver's quit,
+  and the play-driver bug (stray ESC after `D` detaches) decides the race.
+  **So every battery verdict accepted since that bug appeared was drawn from
+  a distribution, not measured.** The driver fix is a CORRECTNESS item for
+  the verification apparatus, not only a coverage item. P49 Stage B fixes
+  it; the battery after that is the reference run, and 052 is not one.
+- ~~**Task 052 is GREEN and marked DONE**~~ (integrator, Sep 12): 16/16 legs,
   self-tests green with teeth red, vform selftest green with the
   broken-allocator build red, ir 7 headers and the s@ census exact. P46's
   loader work is verified.
