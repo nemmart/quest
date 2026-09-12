@@ -112,7 +112,19 @@ Prompts are written per project; ask for the one you are running.
    of the book; P47 costs the driver fix at +7,474 statements and the two
    logins at +4,989, against 1,768 statements for the twelve proposed first
    routines. Holds `emulation/`, so P50 cannot run beside it.
-6. **P50 — L1 substitution harness** — the keystone. Now known to include
+6. **P50 — L1 substitution harness: DESIGN PHASE**
+   (`docs/Project50/PROMPT.md`) — docs only, runs beside P49. Answers the
+   four questions the build rests on: does pointer-normalized mediation
+   already remove escape placement (**DESIGN §9.5, open since the design was
+   written**); what the Mapper does with a 0x76 pointer; the exit contract
+   and where "exit" is; and the calling bridge, now known to be mostly reuse
+   (`rt_call` is already a terminator, `RTStubs.cpp:563` already has an LCALL
+   replica, and returning into 0x77 works because `Machine::run` tests
+   `IRExec::has(pc)` before any fetch). Also designs the **identity-green /
+   identity-red** legs — the harness must be shown to pass AND to fail on the
+   untranslated original before any C is trusted. Build phase is a separate
+   prompt after P49 lands.
+6b. **P50-build — L1 substitution harness** — the keystone. Now known to include
    the calling bridge as a new IR production (P46 F7) and the slot
    bijection in `ircmp` (P46 F6 / a002). See DESIGN §9.
 7. **First leaf routines at L1**, bottom-up per P47's order.
