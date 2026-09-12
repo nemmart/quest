@@ -63,28 +63,46 @@ converge.
 
 Prompts are written per project; ask for the one you are running.
 
-1. **P45 — attic salvage** (`docs/Project45/PROMPT.md`). Mine `docs/attic/`,
-   produce `docs/Salvage.md`, mark tainted rows in `game/declarations.json`
-   in place. Salvage is the deliverable; reorganising the attic is not.
+1. **P45 — attic salvage: DONE, MERGED.** `docs/Salvage.md` is the
+   sanctioned extract from the attic — 22 facts, 7 measurements, 14
+   phenomena, with a per-item confidence and live corroboration. **Read it
+   instead of the attic.** Headline: a 15% wrong-citation rate among checked
+   PCs, all from two patterns (PCs computed from assumed instruction
+   lengths, and one transcribed constant). FIRE's frame slots re-verified —
+   all DERIVED, P41's readings correct, its FIRE.3 call site wrong.
+   R41 corrected post-merge: the base-register class is an ISA fact (F23),
+   only the preference order is void.
 2. **P46 — ir 7: `v` declarations, symbolic blocks, the `s@` rename**
    (`docs/Project46/PROMPT.md`). `<ENTRY>.v<digits>` / `<ENTRY>.b<digits>`,
    loader placement at 0x76 / 0x77, `t@` → `s@` by regeneration.
 
-3. **P47 — the basic compiler** — C → naive IR, choice-free.
-4. **P48 — compiler differential tester** — gcc vs our lowering, on programs that
-   are not game routines. Small, and it is the entire evidence base for
-   compiler soundness. Do not let it land after the compiler.
-5. **P49 — L1 substitution harness** — the keystone. See DESIGN §9.
-6. **First leaf routines at L1**, PICK_X_Y first, **bottom-up** by call
-   graph (DESIGN §9.4).
-7. **Call-graph extraction** from the book.
+3. **P47 — the call graph and the translation order**
+   (`docs/Project47/PROMPT.md`). Extract game call edges, find the leaves,
+   propose the first ~10 routines with reasons. DESIGN §9.4 makes
+   call-graph depth the primary ordering and the graph does not exist yet.
+   Runs parallel with P46 (files disjoint).
+4. **P48 — the basic compiler** — C → naive IR, choice-free. Needs ir 7.
+5. **P49 — compiler differential tester** — gcc vs our lowering, on
+   programs that are not game routines. Small, and it is the entire
+   evidence base for compiler soundness. Do not let it land after the
+   compiler.
+6. **P50 — L1 substitution harness** — the keystone. Now known to include
+   the calling bridge as a new IR production (P46 F7) and the slot
+   bijection in `ircmp` (P46 F6 / a002). See DESIGN §9.
+7. **First leaf routines at L1**, bottom-up per P47's order.
 8. **Transformer + oracle + L2.**
 
-**P45 and P46 RUN IN PARALLEL.** Their file sets are disjoint and each
-prompt names the other's territory. P45 owns `docs/Salvage.md`,
-`docs/Project45/`, `game/declarations.json`, attic annotations. P46 owns
-`docs/IR.md`, `docs/Provenance.md`, `emulation/`, `compiler/readable.py`,
-`docs/Project46/`. Neither touches `docs/Project44/DESIGN.md`,
+**Also carried and still unscheduled:** the play driver (below). It is not
+optional for P44 — L1's entire oracle is gameplay under lockstep, so
+broken play coverage means a broken L1 evidence base. It needs
+`emulation/` and so cannot run while P46 holds it.
+
+**P46 and P47 RUN IN PARALLEL.** Their file sets are disjoint and each
+prompt names the other's territory. P46 owns `docs/IR.md`,
+`docs/Provenance.md`, `emulation/`, `compiler/readable.py`,
+`compiler/ircmp.py`, `docs/Project33/p33.*`, `docs/Project31/strings.ledger`,
+`docs/Project46/`. P47 owns `compiler/callgraph.py` and
+`docs/Project47/`. Neither touches `docs/Project44/DESIGN.md`,
 `docs/NextSession.md` or `docs/README.md` — those are the integrator's.
 
 ---
