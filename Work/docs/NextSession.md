@@ -84,19 +84,20 @@ Prompts are written per project; ask for the one you are running.
    QUEST at height 8.** And the number that changes scheduling: **the battery
    executes 15.5% of the book** (8,305 / 53,588 statements), 41 of 80 nodes.
 
-4. **P48 — the basic compiler** — C → naive IR, choice-free. **Unblocked:
-   ir 7 has landed.**
+4. **P48 — the naive compiler** (`docs/Project48/PROMPT.md`). C → naive IR,
+   choice-free, plus **its own differential tester against gcc**. The
+   tester was DESIGN §13's separate project 4; it is folded in here, because
+   obligation (a) is the compiler's deliverable and evidence that arrives as
+   a follow-on arrives after the compiler has already been trusted. Target
+   is the call-free subset — ir 7 refuses `call`/`rt_call` in symbolic
+   blocks (P46 F7) — so UPDATE_SCREENS end to end, per Order.md.
 4b. **THE PLAY DRIVER + LOGIN FIXTURES — now ahead of routine work.** P47
    measures the driver fix at **+7,474 statements** for one key sequence and
    two login fixtures (a killed-off record; an operator login) at **+4,989**
    — together worth more to L1 than the next ten routines. `emulation/` is
    free now that P46 has landed. Runs parallel with P48 (files disjoint:
    P48 writes `compiler/`, this writes `emulation/` + `tasks/`).
-5. **P49 — compiler differential tester** — gcc vs our lowering, on
-   programs that are not game routines. Small, and it is the entire
-   evidence base for compiler soundness. Do not let it land after the
-   compiler.
-6. **P50 — L1 substitution harness** — the keystone. Now known to include
+5. **P50 — L1 substitution harness** — the keystone. Now known to include
    the calling bridge as a new IR production (P46 F7) and the slot
    bijection in `ircmp` (P46 F6 / a002). See DESIGN §9.
 7. **First leaf routines at L1**, bottom-up per P47's order.
@@ -107,7 +108,11 @@ optional for P44 — L1's entire oracle is gameplay under lockstep, so
 broken play coverage means a broken L1 evidence base. It needs
 `emulation/` and so cannot run while P46 holds it.
 
-**P48 AND THE PLAY-DRIVER PROJECT RUN IN PARALLEL.** Their file sets are disjoint and each
+**P48 AND THE PLAY-DRIVER PROJECT RUN IN PARALLEL** — P48 writes `compiler/`
+(new files) and its own `emulation/tests/` entries; the play-driver project
+owns the rest of `emulation/` and `tasks/`. **The play-driver project must
+not start until P46 is released** (it is holding `emulation/` pending task
+052). Their file sets are disjoint and each
 prompt names the other's territory. P46 owns `docs/IR.md`,
 `docs/Provenance.md`, `emulation/`, `compiler/readable.py`,
 `compiler/ircmp.py`, `docs/Project33/p33.*`, `docs/Project31/strings.ledger`,
