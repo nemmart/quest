@@ -1,55 +1,50 @@
-# Project 51 — THE C, AND THE FIRST MEASURED REWRITE CENSUS
+# Project 51 — CANDIDATE C
 
 ## GOAL
 
-Write the C we believe is right for a handful of routines, compile it to naive
-ir 7, and **measure the distance to the book** — grouped by kind.
+Derive and write **the C we believe is right** for seven routines, from the
+disassembly.
 
-This produces the number `DESIGN.md` §7.2a currently only asserts:
+That is the whole project. **No compiling, no matching, no running.** The
+compiler will not support some of what you write; that is expected, and it is
+this project's *output* rather than its problem.
 
-> **How much of the distance is ONE rule applied many times, versus MANY
-> rules applied once each?**
+**Success = seven `.c` files, each with a derivation and a confidence, plus a
+measured list of what the compiler is missing.**
 
-One rule applied 200 times is a compiler model working. Two hundred rules
-applied once each is fitting. Nobody has measured which this is, and the
-whole L2 plan rests on the answer.
+This is stage 1 of three:
 
-**Nothing runs.** Matching is a static, text-level comparison — naive IR
-beside the book's IR. The calling bridge (P50) is needed to *execute* an
-`rt_call`; it is not needed to *emit* one. So this project needs no executor
-support and no harness.
+| stage | project | what |
+|---|---|---|
+| **1** | **this** | candidate C, derived from the disassembly |
+| 2 | next | extend the compiler to whatever stage 1 actually needed |
+| 3 | after | compile, diff against the book, census the rewrite rules |
 
-**Success = `docs/Project51/Census.md`**: per routine, the naive IR, the
-book's IR, and the differences classified by kind and counted. Plus the C
-itself, with its derivation.
+The split is deliberate. **Stage 1 tells stage 2 what to build**, instead of
+the compiler being extended against a guess. And the derivation is the part
+that cannot be rushed: everything downstream rests on the C being right.
 
 ---
 
-## The routines, in priority order
+## The routines
 
-Work down the list. **Stop and report when budget runs short** — a complete
-census of four routines beats a thin one of seven.
+Work down the list. **Stop and report when budget runs short** — four
+routines derived properly beats seven derived thinly.
 
-| # | routine | stmts | why this one | compiler work needed |
-|---|---|---|---|---|
-| 1 | **HIT_ANY_CHAR** | 10 | **P38 ABANDONED it at 8/10** rather than "fit a cross-procedural register model on three sites of one callee" — exactly what an oracle SUPPLIES instead of predicting. The head-to-head against the old approach | emit-only `rt_call` ×2, one located string |
-| 2 | **PICK_X_Y** | 64 | **CONTROL — known-good C.** Matched 64/64 under the old translator, so its C is very likely right. Also exercises `rt_call` where the C is trusted, so an emission bug shows up where it cannot be confused with bad C | emit-only `rt_call` ×3, by-reference temporaries (`TMP()`) |
-| 3 | **GET_INPUT** | 22 | **P37 STAGED it** at the `BITS()` argument — the other refusal case the new design is supposed to dissolve. 27 callers / 77 sites, 82% covered | `?READ` with 6 args, `BITS()` via `X.CB`, unsigned char, a 144-byte buffer |
-| 4 | **UPDATE_SCREENS** | 72 | **CONTROL — known-good AND already compiles and runs** (P48). Zero new work; it calibrates the census | none |
-| 5 | **INIT_SCREEN** | 134 | loop cohort; no compiler change at all | none |
-| 6 | **FAKE_OCEAN** | 224 | loop cohort | none |
-| 7 | **FAKE_LAND_MASS** | 255 | loop cohort | none |
+| # | routine | stmts | why this one |
+|---|---|---|---|
+| 1 | **HIT_ANY_CHAR** | 10 | **P38 ABANDONED it at 8/10** rather than fit a cross-procedural register model on three sites of one callee. Stage 3's head-to-head against the old approach |
+| 2 | **PICK_X_Y** | 64 | **CONTROL.** Matched 64/64 under the old translator, so the C is very likely right — stage 3 needs routines whose differences are *purely* rewrite distance |
+| 3 | **GET_INPUT** | 22 | **P37 STAGED it** at the `BITS()` argument — the other case the new design should dissolve. Salvage F14 already has its frame and `?READ$6` signature |
+| 4 | **UPDATE_SCREENS** | 72 | **CONTROL, already written and RUN by P48.** No re-derivation needed; include it in the confidence table as the calibration point |
+| 5 | **INIT_SCREEN** | 134 | loop cohort — no exotic constructs |
+| 6 | **FAKE_OCEAN** | 224 | loop cohort |
+| 7 | **FAKE_LAND_MASS** | 255 | loop cohort |
 
-**Why the loop cohort matters even though it is last:** the attic's most
-refitted rules were the loop ones — R36/R36′/R36a hoisting, R21c/R21d/R21e′
-loop registers and DO limits, four of which P40 amended in a single project.
-If a small general rewrite set works anywhere, that is where it shows.
-
-**Why two controls.** When naive IR does not match, there are two causes — a
-missing rewrite, or **the C is wrong** — and a diff alone cannot tell them
-apart. On PICK_X_Y and UPDATE_SCREENS the C is known good, so their
-differences are *purely* rewrite distance. That calibrates every other
-routine's number.
+**Why the loop cohort matters** despite being last: the attic's most refitted
+rules were the loop ones — R36/R36′/R36a hoisting, R21c/R21d/R21e′ loop
+registers and DO limits, four of which P40 amended in a single project. If a
+small general rewrite set works anywhere, it shows there.
 
 ---
 
@@ -57,49 +52,67 @@ routine's number.
 
 | path | why |
 |---|---|
-| `docs/Project44/DESIGN.md` | §7 (the four transformation classes, the tripwire, §7.2a's metric split), §5.1 (`v`s-to-place vs `v`s-to-eliminate) |
-| `docs/Project48/REPORT.md` | what the compiler does and does not do; §3.2's UPDATE_SCREENS derivation is the model for yours |
-| `compiler/lower_c.py`, `compiler/difftest/` | the compiler and its tester |
-| `docs/IR.md` | ir 7 |
-| `docs/Salvage.md` | verified program facts: F1 static link, F4 slotpatch, F13 unsigned CHARACTER, F14 buffers, F17 bit fields, F23 the two base registers |
-| `docs/Project47/Order.md` | the per-routine "needs" column these priorities came from |
-| `emulation/quest.ir2.book` | the target. **Read it for COMPARISON, never to decide what to emit** |
-| `Disassembled/quest.dis`, `docs/Project34/readable/` | where the C is derived from |
+| `docs/Salvage.md` | **Read before the disassembly.** P45's verified facts: F1/F2 static link, F4 slotpatch, **F12 `X.CB` and BIT literals**, F13 CHARACTER is unsigned, **F14 GET_INPUT's frame + `?READ$6`**, F16 twin sizing, F17 record fields and bit numbering, **F18 no world-coordinate offset** (with its 0x3B73 correction) |
+| `docs/Project28/RTConventions.md` | runtime call conventions — **and where you RECORD any you work out**, see the duty below |
+| `docs/RTWorklist.md` | which runtime routines play reaches, with call counts |
+| `Disassembled/quest.dis`, `quest.mem`, `quest.symbols` | the primary source |
+| `docs/Project34/readable/` | the readable renderings — a reading aid, not authority |
+| `game/declarations.json`, `declarations.h`, `quest_rt.h` | record layouts and the C spellings |
+| `docs/Project48/REPORT.md` §3 | **the model for a derivation.** Read it before writing your first header |
+| `compiler/lower_c.py` | what the compiler accepts today, so you can name the gaps precisely |
+| `docs/Project47/CallGraph.md` | callers and callees per routine |
 
-**Do not read `docs/attic/`.** The void rule set is precisely what this
-project is measuring against, and reading it will bias the classification.
+**Do not read `docs/attic/`.**
 
 ---
 
 ## Carried-in rulings
 
-1. **RE-DERIVE the C. Do not inherit it.** `game/routines/` holds P35–P43
-   output written by sessions fitting against the book; using it to derive
-   rewrite rules risks measuring the old translator's shape. You may consult
-   it **after** writing your own, and must report whether it agreed. (P48 did
-   exactly this for UPDATE_SCREENS and said plainly that it had read the old
-   file first — that honesty is the standard.)
-2. **Every routine ships its DERIVATION**, in the file header: addresses,
-   instruction readings, and the **cross-checks that constrain it**. P48's
-   UPDATE_SCREENS header is the model — the bounds-consistency check that a
-   wrong stride would break is worth more than three restatements.
-3. **Every routine carries a CONFIDENCE.** `verified` (it ran, or it is a
-   control), `derived` (cross-checked), `claimed` (single reading). A diff on
-   a `claimed` routine is weak evidence about rewrites.
-4. **The standing rule still holds: a match failure is NEVER a reason to edit
-   the compiler.** If closing a diff seems to need a compiler change, that is
-   a soundness bug or a missing construct — a **finding**, fixed against the
-   differential tester, never against the book.
-5. **Suspect the C first** (DESIGN §7.2a's escalation order). Do not record
-   "we could not close it" as "a rewrite is missing" — that is the laundering
-   the tripwire exists to catch.
-6. **Emit-only is legitimate.** The loader will REFUSE `rt_call` in a
-   symbolic block (P46 F7). That is expected and is not a bug. Nothing in
-   this project loads or runs.
-7. **Expect R2's systematic difference to dominate.** The compiler emits pure
-   operators; the book uses the effectful family. That is one rewrite rule
-   firing on nearly every arithmetic statement, and it must be counted as
-   **one rule, many applications** — not as many differences.
+1. **RE-DERIVE. Do not inherit.** `game/routines/` holds P35–P43 output
+   written by sessions fitting against the book. Stage 3 measures rewrite
+   distance; if the C carries the old translator's shape, stage 3 measures
+   the old translator. You may consult the old file **after** writing yours,
+   and **must report whether it agreed and whether you had read it first** —
+   P48 disclosed exactly this, and "token-for-token identical" is worth much
+   less when it is not blind.
+2. **Every file ships its DERIVATION in the header**: addresses, instruction
+   readings, and above all the **cross-checks that constrain it**. P48's
+   UPDATE_SCREENS header is the model — its bounds-consistency check (two ABS
+   bounds against two subscript bounds) is a real constraint a wrong stride
+   would break, worth more than three restatements.
+3. **Every file carries a CONFIDENCE**: `verified` (ran, or matched under the
+   old line), `derived` (cross-checked against an independent constraint),
+   `claimed` (one reading, nothing corroborates it). Stage 3 weights its
+   conclusions by this, so be hard on yourself.
+4. **Write the C you believe is right, not the C you think will compile.** If
+   the clear expression of a routine needs something `lower_c.py` lacks,
+   **write it anyway and record the gap.** Bending the C to today's compiler
+   would corrupt stage 3's measurement, which is the whole point.
+5. **Never read `quest.ir2.book` to decide what to write.** It is stage 3's
+   target; derive from `quest.dis` / `quest.mem`. Reading it to *check* a
+   reading is allowed — say where you did.
+6. **`SUB()` placement matters.** P48 found the original checks the guards but
+   not the store, because it reuses a hoisted base. Where the original omits a
+   check, omit it, and say why in the header.
+
+---
+
+## The RT documentation duty — BINDING
+
+You will meet runtime routines nobody has documented. **When you work one
+out, record it in `docs/Project28/RTConventions.md`**: entry address, inputs
+(which register or slot holds what), outputs and which registers survive, the
+call form, the game call sites, the evidence, and a confidence.
+
+That file's scope was widened for this project to cover any `X.*` / `I.*` /
+`O.*` / `D.*` helper, not only the 18 `?` routines.
+
+**`X.CB` is the cautionary case.** It was worked out because GET_INPUT forced
+it and recorded in `Salvage.md` F12 — ac2 = destination word address, ac0 =
+byte pointer to the character form, ac1 = its length, undecorated
+`LCALL [0x7017E708],0`. The next session to meet a BIT literal would have
+re-derived it from nothing. **A convention that lives only in a C file's
+header is a convention the project has not learned.**
 
 ---
 
@@ -107,20 +120,17 @@ project is measuring against, and reading it will bias the classification.
 
 `docs/Project51/q001-plan-gate.md`, push to main, **STOP**. Report:
 
-1. **Your classification scheme for differences.** This is the project's
-   central instrument — the census is only as good as its categories. At
-   minimum: which of DESIGN §7's four classes (elimination, binding,
-   placement/merge, reordering) a difference belongs to, whether it is
-   systematic or one-off, and whether it might instead be **bad C**.
-2. **The compiler work items 1–3 need**, sized. Say what you would cut if
-   they overrun.
-3. **How you will diff.** `ircmp.py` exists from the old line — does it
-   serve, or does it need the slot bijection (DESIGN §5.2) first? Note
-   §5.2's refinement: the bijection is mostly **derivable** from `LDAFP`
-   dataflow over a two-register state space, not supplied.
-4. **Your prediction** for the headline number — roughly what fraction of the
-   distance you expect to be one-rule-many-applications. Written before you
-   measure, so it is scoreable.
+1. **Your reading method** — how you get from `quest.dis` to a C statement,
+   and what you do when a reading is ambiguous.
+2. **A first pass over all seven**, naming for each: the constructs it needs,
+   which of those `lower_c.py` lacks, and which runtime routines you will have
+   to work out. Rough is fine — I want the shape before you commit budget.
+3. **HIT_ANY_CHAR in full**, as the worked example, with its derivation. Ten
+   statements; deriving it at the gate proves the method and costs little.
+4. **Anything in `Salvage.md` that does not survive contact with the
+   listing.** P45 verified it, but F18 already carries one attic correction
+   (0x3B73, not 0x3B77), so a second is not unthinkable — and a wrong fact
+   there propagates into every routine.
 
 STOP. Wait for `a001`.
 
@@ -128,9 +138,9 @@ STOP. Wait for `a001`.
 
 ## Part 2 — Build
 
-Per routine: derive and write the C → compile → diff against the book →
-classify. Compiler work only where the table says so, and **only additive**:
-`--selftest` and the differential corpus must stay green after every change.
+One `.c` per routine in `game/routines/`, derivation in the header,
+confidence stated. Record runtime findings in `RTConventions.md` **as you
+go**, not at the end.
 
 ---
 
@@ -138,31 +148,31 @@ classify. Compiler work only where the table says so, and **only additive**:
 
 `docs/Project51/REPORT.md`:
 
-- **the headline census**: differences by kind, with the one-rule-many-times
-  versus many-rules-once split, and the controls' numbers called out
-  separately
-- your prediction versus the result
-- the candidate rewrite rules the census implies, each with its application
-  count — this is the **first evidence-based rewrite set** the project has
-  had, and it should be presented as candidates, not as rules
-- every routine where you suspect the C rather than a missing rewrite
-- HIT_ANY_CHAR specifically: **does the oracle approach dissolve what P38
-  abandoned at 8/10?** Answer it directly, either way
-- anything in DESIGN §7 that did not survive contact
+- **the confidence table**: routine, confidence, and what constrains it
+- **THE HANDOFF — the compiler gap list.** Every construct you wrote that
+  `lower_c.py` cannot accept, with the routines needing it and how central it
+  is. **This is stage 2's specification** and the most load-bearing section in
+  the report
+- runtime routines documented, and any you could not work out
+- per re-derived routine: **did the old `game/routines/` file agree**, and had
+  you read it first
+- anything in `Salvage.md` you would correct
+- where you are least confident, and what would settle it
 
 ---
 
 ## Boundaries — BINDING
 
-1. **You may WRITE:** `compiler/` (additive changes to `lower_c.py`, new
-   files), `game/routines/` files you author, `docs/Project51/**`.
-2. **Do NOT touch** `emulation/**` (**P49 owns it**), `docs/Project50/**`
-   (**P50 owns it**), `Disassembled/**`, `docs/IR.md`, `docs/Provenance.md`,
-   `docs/Project44/DESIGN.md`, any artifact. **Regenerate nothing.**
-3. **Nothing loads and nothing runs.** If you find yourself needing the
-   executor, you have left the project.
-4. If ir 7 cannot express something you need to emit, **STOP and report** —
-   IR changes are not yours.
+1. **You may WRITE:** `game/routines/` files you author,
+   `docs/Project28/RTConventions.md` (additive), `docs/Project51/**`.
+2. **Do NOT touch** `compiler/**` (stage 2's), `emulation/**` (**P49 owns
+   it**), `docs/Project50/**` (**P50 owns it**), `Disassembled/**`,
+   `docs/IR.md`, `docs/Salvage.md` (recommend corrections in the report),
+   `docs/Project44/DESIGN.md`, any artifact.
+3. **Nothing compiles, nothing loads, nothing runs.** If you are invoking
+   `lower_c.py`, you have left the project.
+4. If a routine needs a fact nobody has established, that is a
+   **STOP-and-report**, not a guess.
 
 ---
 
@@ -176,5 +186,5 @@ states what you found, the decision needed, the options with your read, and
 
 ## Delivery
 
-**Push to `p51-census` at every stage boundary.** One `Work.tgz` with the
-final report.
+**Push to `p51-candidate-c` at every stage boundary.** One `Work.tgz` with
+the final report.

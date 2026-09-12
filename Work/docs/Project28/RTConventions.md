@@ -1,3 +1,26 @@
+> **SCOPE WIDENED (Sep 12 2026, P51).** This file was P28's table of the
+> **18 `?` routines the game LCALLs**. It is now the **home of record for
+> ANY runtime routine's convention**, including the internal `X.*`, `I.*`,
+> `O.*` and `D.*` helpers.
+>
+> **Standing rule: if you have to work out what a runtime routine does and
+> what its inputs and outputs are, that finding goes in THIS FILE** — not
+> only in a C file's header or a project report. Otherwise the next project
+> re-derives it. `X.CB` is the cautionary case: it was worked out because
+> GET_INPUT forced it, recorded as `docs/Salvage.md` F12, and would have been
+> re-derived by the next session to meet a BIT literal.
+>
+> Give each entry: entry address, inputs (which register or slot holds what),
+> outputs and which registers survive, the call form (decorated `rt_call` or
+> an undecorated `LCALL`), the game call sites, and the evidence. Mark
+> confidence the way `Salvage.md` does — `Verified` / `High` / `Single` /
+> `Reported`.
+>
+> Cross-references: `docs/Salvage.md` (verified program facts — F12 `X.CB`,
+> F13 unsigned CHARACTER, F14 GET_INPUT's frame and `?READ$6`),
+> `docs/RTWorklist.md` (which runtime routines play actually reaches, with
+> call counts).
+
 > NOTE (Sep 6, P32 gate): this table was RIGHT about `?UNSIGNED_TO_CHAR`
 > (it writes a CHAR VARYING at the ac2 word address and returns ac0–ac2
 > unchanged; "returns in" blank). The "length in ac0" error lived in

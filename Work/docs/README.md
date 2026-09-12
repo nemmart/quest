@@ -86,6 +86,8 @@ one-time change/review notes.
 | LockstepHarness.md | REFERENCE | Harness architecture (steps 1–3) |
 | EmulationVerification.md | REFERENCE | Original dual-emulation design |
 | SyscallHandling.md | REFERENCE | Syscall dispatch architecture |
+| Project28/RTConventions.md | **CURRENT** | **Home of record for runtime-routine conventions** — the 18 `?` routines and, since P51, any internal `X.*`/`I.*`/`O.*`/`D.*` helper. Work one out, record it here |
+| RTWorklist.md | REFERENCE | Which runtime routines play actually reaches, with call counts |
 | PortingPlan.md | HISTORICAL | Phase 1–2 plan (complete) |
 | HeapSignalPlan.md | HISTORICAL | Superseded by M3Plan.md; banner explains |
 | ERROR_LIFT_SCOPE.md | HISTORICAL | Scoping doc; open questions answered, see banner; tier tables still accurate |

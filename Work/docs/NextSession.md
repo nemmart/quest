@@ -128,18 +128,20 @@ Prompts are written per project; ask for the one you are running.
    the calling bridge as a new IR production (P46 F7) and the slot
    bijection in `ircmp` (P46 F6 / a002). See DESIGN §9.
 7. **First leaf routines at L1**, bottom-up per P47's order.
-7b. **P51 — the C, and the first measured rewrite census**
-   (`docs/Project51/PROMPT.md`). Write the C for 7 routines, compile to naive
-   ir 7, diff against the book, classify the differences. Produces the number
-   DESIGN §7.2a only asserts: **how much of the distance is one rule applied
-   many times versus many rules applied once each.** Nothing runs — matching
-   is static text, so the calling bridge is not needed (emit-only `rt_call`
-   suffices). Head-to-head cases: **HIT_ANY_CHAR**, which P38 abandoned at
-   8/10 rather than fit a cross-procedural register model, and **GET_INPUT**,
-   which P37 staged at `BITS()`. Two known-good controls (PICK_X_Y,
-   UPDATE_SCREENS) calibrate the census, since a diff alone cannot separate a
-   missing rewrite from bad C. Runs beside P49 and P50 — writes `compiler/`,
-   `game/routines/`, `docs/Project51/` only.
+7b. **P51 — candidate C** (`docs/Project51/PROMPT.md`). Derive and write the
+   C for 7 routines from the disassembly. **No compiling, no matching, no
+   running.** Stage 1 of three: **P51 candidate C → P52 extend the compiler
+   to whatever P51 actually needed → P53 compile, diff against the book,
+   census the rewrite rules.** The split matters: stage 1 tells stage 2 what
+   to build rather than the compiler being extended against a guess, and the
+   derivation is the part that cannot be rushed. Head-to-head cases carried
+   to stage 3: **HIT_ANY_CHAR** (P38 abandoned it at 8/10) and **GET_INPUT**
+   (P37 staged it at `BITS()`); two known-good controls (PICK_X_Y,
+   UPDATE_SCREENS) so stage 3 can tell a missing rewrite from bad C. Runs
+   beside P49 and P50 — writes `game/routines/`,
+   `docs/Project28/RTConventions.md` and `docs/Project51/` only.
+   **Its headline deliverable is the compiler gap list**, which is P52's
+   specification.
 8. **Transformer + oracle + L2.**
 
 **Also carried and still unscheduled:** the play driver (below). It is not
@@ -256,6 +258,12 @@ QUEST_PUSH_MAP=quest.pushmap.M4` (book) or `QUEST_IR=quest.ir2.stock`
 **Standing checks:** run `compiler/crossings.py` at the start of any session
 that adds routines (the R39 hand-assembly detector — that finding survives
 the attic).
+
+**Runtime conventions: `docs/Project28/RTConventions.md` is the home of
+record** — widened Sep 12 2026 from P28's 18 `?` routines to ANY runtime
+routine, including the internal `X.*`/`I.*`/`O.*`/`D.*` helpers. **Work one
+out, record it there.** A convention that lives only in a C file's header is
+one the project has not learned; `X.CB` is the cautionary case.
 
 **Governing docs:** `METHOD.md` for implementation sessions,
 `INTEGRATOR.md` for review/integration, `IR.md` for the IR (normative,
