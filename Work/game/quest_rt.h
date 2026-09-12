@@ -33,6 +33,45 @@
 /* PL/I CHAR(n) VARYING: length word + data. Capacity is part of the type. */
 #define VARYING(n) struct { int16_t len; char data[n]; }
 
+/* ---- SUB() traps, natively (P48 a001 R5, Sep 12 2026) --------------------
+ * SUB(i, n) used to be the identity `(i)` in both native views, so the
+ * `assert(..., "DERR17 file:line")` the compiler emits for a subscript check
+ * was compared against nothing by the differential tester (P48 q001 §2.5
+ * item 9).  It is now a REAL check in both native views, and the trap is
+ * faithful in kind: the original raises DERR 17 on a bounds violation and
+ * DERR.TRP is an ABORT-kind terminal (IR.md §4a), so aborting is what the
+ * program does, not an embellishment added for the test.
+ *
+ * The line printed is the one the compiler puts in its assert message, so
+ * "both trapped at the same site" is a string compare.  The file token is
+ * reduced to its basename here rather than at the build system, so the two
+ * sides agree however the source was named on the command line.
+ *
+ * ONE object, three views, as before: the __TRANSLATOR__ view still sees a
+ * function declaration and nothing else (this whole block is invisible to
+ * it), so pycparser's parse is unchanged. */
+#ifndef __TRANSLATOR__
+#include <stdio.h>
+#include <stdlib.h>
+
+static const char *quest_basename(const char *p) {
+    const char *b = p;
+    for (const char *q = p; *q; q++) if (*q == '/' || *q == '\\') b = q + 1;
+    return b;
+}
+/* PL/I subscript check: i in 1..n, else DERR 17.  Returns i unchanged. */
+static inline int32_t quest_sub_check(int32_t i, int32_t n, const char *file, int line) {
+    if (i < 1 || i > n) {
+        printf("TRAP DERR17 %s:%d\n", quest_basename(file), line);
+        fflush(stdout);
+        exit(3);
+    }
+    return i;
+}
+/* PL/I ABS builtin: the WSGE/WNEG diamond. */
+static inline int32_t quest_abs(int32_t v) { return v < 0 ? -v : v; }
+#endif
+
 #ifdef __cplusplus
   /* ---- C++ view ---- */
   template <typename T, int N> struct array1 {
@@ -54,18 +93,19 @@
       operator const void *() { return &u.w; }
   };
   inline tmp_arg TMP(int32_t v) { tmp_arg t; t.u.w = v; return t; }
-  #define SUB(i, n) (i)
-  inline int32_t ABS(int32_t v) { return v < 0 ? -v : v; }   /* PL/I ABS builtin */
+  #define SUB(i, n) quest_sub_check((i), (n), __FILE__, __LINE__)
+  inline int32_t ABS(int32_t v) { return quest_abs(v); }     /* PL/I ABS builtin */
   extern "C" {
 #else
   /* ---- C view (the translator's) ---- */
   #define ARRAY1(T, N) T           /* element type; N from the declaration */
   void *TMP(int32_t e);            /* translator: frame temporary of the parameter's width holding e */
-  int32_t ABS(int32_t v);          /* PL/I ABS builtin: the WSGE/WNEG diamond */
   #ifdef __TRANSLATOR__
+    int32_t ABS(int32_t v);            /* PL/I ABS builtin: the WSGE/WNEG diamond */
     int32_t SUB(int32_t i, int32_t n); /* translator: assert(0 < i && i <= n), "DERR 17" */
   #else
-    #define SUB(i, n) (i)
+    #define ABS(v)    quest_abs((v))
+    #define SUB(i, n) quest_sub_check((i), (n), __FILE__, __LINE__)
   #endif
 #endif
 
