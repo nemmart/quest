@@ -220,6 +220,17 @@ problem with current coverage claims.
   self-tests green with teeth red, vform selftest green with the
   broken-allocator build red, ir 7 headers and the s@ census exact. P46's
   loader work is verified.
+- **THE RUNNER DESTROYS RESULTS (found Sep 12, task 053).** Two defects:
+  a second attempt can start while the first is still running, and
+  `bin/runner.sh:85` does `rm -rf results/$name` **before** the overlap
+  guard can refuse — so a refused attempt wipes the prior attempt's data and
+  leaves only its refusal message. 053's 104-file result survived solely
+  because it had already been committed (`3b4a3a2`); restored, see
+  `results/053-p49-stage-b/RESTORED.md`. **Third instance today** of the
+  retry machinery destroying or obscuring a result. A one-line reorder —
+  guard before `rm -rf` — closes the worst of it.
+- **THE EMULATOR CORE DUMPED** under task 053's wider coverage
+  (`Aborted (core dumped)`, run.log). New crash on newly-executed code; open.
 - **Gen 6.2 checker item**: the deterministic form of the P33-C fix — defer
   a halt to the next pair boundary (today `Lockstep::halting` only guards
   `compare_pair`).
