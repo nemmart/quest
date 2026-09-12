@@ -1,19 +1,19 @@
-fo        cfg=book  K=50  div=0   guard=0  liberr_native=1  pairs=6687 blk_equal=6687 blk_mismatch=0 k_heartbeats=6048 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
-m         cfg=book  K=50  div=0   guard=0  liberr_native=1  pairs=6323 blk_equal=6323 blk_mismatch=0 k_heartbeats=5844 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=I.STOP leg=OK
-inj       cfg=book  K=50  div=0   guard=0  liberr_native=0  pairs=6495 blk_equal=6495 blk_mismatch=0 k_heartbeats=6031 gaps_over_k=0 max_gap=50 floor=1000 OK end=FATAL want=FATAL leg=OK
-abort     cfg=book  K=50  div=0   guard=0  liberr_native=0  pairs=5454 blk_equal=5454 blk_mismatch=0 k_heartbeats=5248 gaps_over_k=0 max_gap=50 floor=10 OK end=WORLD-ABORT want=WORLD-ABORT leg=OK
-play      cfg=book  K=50  div=0   guard=0  liberr_native=0  pairs=2097562 blk_equal=2097562 blk_mismatch=0 k_heartbeats=2096624 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
-inj3      cfg=book  K=50  div=0   guard=0  liberr_native=1  pairs=6120 blk_equal=6120 blk_mismatch=0 k_heartbeats=5639 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=clean,I.STOP leg=OK
-k1fo      cfg=book  K=1   div=0   guard=0  liberr_native=1  pairs=324362 blk_equal=324362 blk_mismatch=0 k_heartbeats=323758 gaps_over_k=0 max_gap=1 floor=1000 OK end=clean want=clean,I.STOP leg=OK
-derr      cfg=book  K=1   div=0   guard=0  liberr_native=0  pairs=281148 blk_equal=281148 blk_mismatch=0 k_heartbeats=280832 gaps_over_k=0 max_gap=1 floor=1000 OK end=WORLD-ABORT want=WORLD-ABORT leg=OK
-derr-emu  cfg=emu   K=1   div=0   guard=0  liberr_native=0  pairs=263785 blk_equal=263785 blk_mismatch=0 k_heartbeats=263468 gaps_over_k=0 max_gap=1 floor=1000 OK end=WORLD-ABORT want=WORLD-ABORT leg=OK
-fo-st     cfg=stock K=50  div=0   guard=0  liberr_native=1  pairs=7095 blk_equal=7095 blk_mismatch=0 k_heartbeats=6456 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
-play-st   cfg=stock K=50  div=0   guard=0  liberr_native=0  pairs=3517888 blk_equal=3517888 blk_mismatch=0 k_heartbeats=3516866 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
-fo-emu    cfg=emu   K=50  div=0   guard=0  liberr_native=1  pairs=6919 blk_equal=6919 blk_mismatch=0 k_heartbeats=6280 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
-m-emu     cfg=emu   K=50  div=0   guard=0  liberr_native=1  pairs=6420 blk_equal=6420 blk_mismatch=0 k_heartbeats=5941 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=I.STOP leg=OK
-inj-emu   cfg=emu   K=50  div=0   guard=0  liberr_native=0  pairs=6592 blk_equal=6592 blk_mismatch=0 k_heartbeats=6128 gaps_over_k=0 max_gap=50 floor=1000 OK end=FATAL want=FATAL leg=OK
-abort-emu cfg=emu   K=50  div=0   guard=0  liberr_native=0  pairs=5131 blk_equal=5131 blk_mismatch=0 k_heartbeats=4925 gaps_over_k=0 max_gap=50 floor=10 OK end=WORLD-ABORT want=WORLD-ABORT leg=OK
-forced    cfg=book  K=1   div=1   guard=0  liberr_native=0  pairs=281577 blk_equal=281577 blk_mismatch=0 k_heartbeats=281261 gaps_over_k=0 max_gap=1 floor=10 OK end=DIVERGENCE want=DIVERGENCE leg=OK
+fo        cfg=book  K=50  div=0   guard=0  liberr_native=1  pairs=6556 blk_equal=6556 blk_mismatch=0 k_heartbeats=5917 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+m         cfg=book  K=50  div=0   guard=0  liberr_native=1  pairs=6101 blk_equal=6101 blk_mismatch=0 k_heartbeats=5622 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=I.STOP leg=OK
+inj       cfg=book  K=50  div=0   guard=0  liberr_native=0  pairs=6132 blk_equal=6132 blk_mismatch=0 k_heartbeats=5668 gaps_over_k=0 max_gap=50 floor=1000 OK end=FATAL want=FATAL leg=OK
+abort     cfg=book  K=50  div=0   guard=0  liberr_native=0  pairs=5450 blk_equal=5450 blk_mismatch=0 k_heartbeats=5244 gaps_over_k=0 max_gap=50 floor=10 OK end=WORLD-ABORT want=WORLD-ABORT leg=OK
+play      cfg=book  K=50  div=0   guard=0  liberr_native=0  pairs=2026656 blk_equal=2026656 blk_mismatch=0 k_heartbeats=2025776 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+inj3      cfg=book  K=50  div=0   guard=0  liberr_native=1  pairs=6151 blk_equal=6151 blk_mismatch=0 k_heartbeats=5670 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=clean,I.STOP leg=OK
+k1fo      cfg=book  K=1   div=0   guard=0  liberr_native=1  pairs=322545 blk_equal=322545 blk_mismatch=0 k_heartbeats=321941 gaps_over_k=0 max_gap=1 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+derr      cfg=book  K=1   div=0   guard=0  liberr_native=0  pairs=277304 blk_equal=277304 blk_mismatch=0 k_heartbeats=276988 gaps_over_k=0 max_gap=1 floor=1000 OK end=WORLD-ABORT want=WORLD-ABORT leg=OK
+derr-emu  cfg=emu   K=1   div=0   guard=0  liberr_native=0  pairs=281888 blk_equal=281888 blk_mismatch=0 k_heartbeats=281571 gaps_over_k=0 max_gap=1 floor=1000 OK end=WORLD-ABORT want=WORLD-ABORT leg=OK
+fo-st     cfg=stock K=50  div=0   guard=0  liberr_native=1  pairs=7205 blk_equal=7205 blk_mismatch=0 k_heartbeats=6566 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+play-st   cfg=stock K=50  div=0   guard=0  liberr_native=0  pairs=3454292 blk_equal=3454292 blk_mismatch=0 k_heartbeats=3453310 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+fo-emu    cfg=emu   K=50  div=0   guard=0  liberr_native=1  pairs=7158 blk_equal=7158 blk_mismatch=0 k_heartbeats=6519 gaps_over_k=0 max_gap=50 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+m-emu     cfg=emu   K=50  div=0   guard=0  liberr_native=1  pairs=6353 blk_equal=6353 blk_mismatch=0 k_heartbeats=5874 gaps_over_k=0 max_gap=50 floor=1000 OK end=I.STOP want=I.STOP leg=OK
+inj-emu   cfg=emu   K=50  div=0   guard=0  liberr_native=0  pairs=6483 blk_equal=6483 blk_mismatch=0 k_heartbeats=6019 gaps_over_k=0 max_gap=50 floor=1000 OK end=FATAL want=FATAL leg=OK
+abort-emu cfg=emu   K=50  div=0   guard=0  liberr_native=0  pairs=5442 blk_equal=5442 blk_mismatch=0 k_heartbeats=5236 gaps_over_k=0 max_gap=50 floor=10 OK end=WORLD-ABORT want=WORLD-ABORT leg=OK
+forced    cfg=book  K=1   div=1   guard=0  liberr_native=0  pairs=261635 blk_equal=261635 blk_mismatch=0 k_heartbeats=261319 gaps_over_k=0 max_gap=1 floor=10 OK end=DIVERGENCE want=DIVERGENCE leg=OK
 == Task 050 P46 Stage A: t@ -> s@ rename (047b battery verbatim; checker ON) (JOBS=3) ==
 inj: armed-pc block drops=1 (want 1)
 abort: armed-pc block drops=1 (want 1)
@@ -36,12 +36,12 @@ string_statements: book=1689 stock=1689 (want 1593/1593 = 649 P31 + 944 P32); li
 strings ledger: lower.py emitted=1822 refused=0; census EMIT p31=649/127 p32=944/0 (want 1593/0; 649/127; 944/0); same pc set=NO same text=NO
 synclist_entries=13510 (want 13510: unchanged by P31/P32)
 literal_mismatches=0 (want 0)
-string statement coverage (distinct statements, all IR legs): total 144; assign_fixed 72  assign_varying 55  cmp 12  words 5
+string statement coverage (distinct statements, all IR legs): total 145; assign_fixed 72  assign_varying 56  cmp 12  words 5
   play     assign_varying=51 assign_fixed=69 cmp=12 words=4
   play-st  assign_varying=51 assign_fixed=69 cmp=12 words=4
-  k1fo     assign_varying=47 assign_fixed=65 cmp=10 words=5
-  fo       assign_varying=46 assign_fixed=66 cmp=11 words=5
-  fo-st    assign_varying=46 assign_fixed=65 cmp=10 words=5
+  k1fo     assign_varying=46 assign_fixed=65 cmp=10 words=5
+  fo       assign_varying=45 assign_fixed=62 cmp=10 words=5
+  fo-st    assign_varying=47 assign_fixed=65 cmp=10 words=5
 string statements live in play/play-st: assign_varying, cmp, words all > 0: OK
 P32 site coverage (block first-executed in any IR leg): by slice 4: 34/677  5: 18/134  6: 15/133; by form expr 32/448  mixed 29/415  register 6/81
 P32: slices 4/5/6 live (want all > 0): True -> OK; HELP chain block 7016D5E3 live in play/play-st: {'play': False, 'play-st': False} (INFORMATIONAL: the play driver's post-auto-move keys do not reach the prompt — driver fix owed)
@@ -55,34 +55,34 @@ string family embeds remaining WCMV/WMSP/STASP: book 0/0/0 stock 0/0/0 (want 0/0
 twins 57 (want 57); groups EMIT 19/19; IR bases=57 claims=57 releases=19 (want 57/57/19)
 P46 rename census: book t@=0 s@=236 stock t@=0 s@=236 arena t@=0 s@=57 (want 0/236 0/236 0/57)
 -- hooks (per leg; clone claim must be 0 everywhere) --
-fo hooks: StrHooks: QUEST1/master bind=7 rebind=126 unmap=6 claim=392 release=133 frame_exit=2422 unwind=1 onpop=1 discarded_claims=0 cancelled=0 max_delta=1034
-fo hooks: StrHooks: QUEST2/clone bind=0 rebind=0 unmap=0 claim=0 release=0 frame_exit=2085 unwind=1 onpop=1 discarded_claims=0 cancelled=0 max_delta=0
-m hooks: StrHooks: QUEST1/master bind=5 rebind=116 unmap=4 claim=359 release=121 frame_exit=1838 unwind=1 onpop=1 discarded_claims=0 cancelled=0 max_delta=1034
-m hooks: StrHooks: QUEST2/clone bind=0 rebind=0 unmap=0 claim=0 release=0 frame_exit=1592 unwind=1 onpop=1 discarded_claims=0 cancelled=0 max_delta=0
-inj hooks: StrHooks: QUEST1/master bind=5 rebind=116 unmap=4 claim=359 release=121 frame_exit=1737 unwind=0 onpop=0 discarded_claims=0 cancelled=0 max_delta=1034
-inj hooks: StrHooks: QUEST2/clone bind=0 rebind=0 unmap=0 claim=0 release=0 frame_exit=1473 unwind=0 onpop=0 discarded_claims=0 cancelled=0 max_delta=0
+fo hooks: StrHooks: QUEST1/master bind=7 rebind=126 unmap=6 claim=392 release=133 frame_exit=2611 unwind=1 onpop=1 discarded_claims=0 cancelled=0 max_delta=1034
+fo hooks: StrHooks: QUEST2/clone bind=0 rebind=0 unmap=0 claim=0 release=0 frame_exit=2274 unwind=1 onpop=1 discarded_claims=0 cancelled=0 max_delta=0
+m hooks: StrHooks: QUEST1/master bind=5 rebind=116 unmap=4 claim=359 release=121 frame_exit=1688 unwind=1 onpop=1 discarded_claims=0 cancelled=0 max_delta=1034
+m hooks: StrHooks: QUEST2/clone bind=0 rebind=0 unmap=0 claim=0 release=0 frame_exit=1442 unwind=1 onpop=1 discarded_claims=0 cancelled=0 max_delta=0
+inj hooks: StrHooks: QUEST1/master bind=5 rebind=116 unmap=4 claim=359 release=121 frame_exit=1683 unwind=0 onpop=0 discarded_claims=0 cancelled=0 max_delta=1034
+inj hooks: StrHooks: QUEST2/clone bind=0 rebind=0 unmap=0 claim=0 release=0 frame_exit=1419 unwind=0 onpop=0 discarded_claims=0 cancelled=0 max_delta=0
 abort hooks: StrHooks: QUEST1/master bind=1 rebind=0 unmap=1 claim=2 release=1 frame_exit=157 unwind=0 onpop=0 discarded_claims=0 cancelled=0 max_delta=4
 abort hooks: StrHooks: QUEST2/clone bind=0 rebind=0 unmap=0 claim=0 release=0 frame_exit=70 unwind=0 onpop=0 discarded_claims=0 cancelled=0 max_delta=0
-play hooks: StrHooks: QUEST1/master bind=7 rebind=142 unmap=5 claim=443 release=149 frame_exit=128875 unwind=0 onpop=0 discarded_claims=0 cancelled=0 max_delta=1034
-play hooks: StrHooks: QUEST2/clone bind=0 rebind=0 unmap=0 claim=0 release=0 frame_exit=128649 unwind=0 onpop=0 discarded_claims=0 cancelled=0 max_delta=0
-inj3 hooks: StrHooks: QUEST1/master bind=5 rebind=116 unmap=4 claim=359 release=121 frame_exit=1690 unwind=1 onpop=1 discarded_claims=0 cancelled=0 max_delta=1034
-inj3 hooks: StrHooks: QUEST2/clone bind=0 rebind=0 unmap=0 claim=0 release=0 frame_exit=1438 unwind=1 onpop=1 discarded_claims=0 cancelled=0 max_delta=0
-k1fo hooks: StrHooks: QUEST1/master bind=7 rebind=126 unmap=6 claim=392 release=133 frame_exit=2524 unwind=1 onpop=1 discarded_claims=0 cancelled=0 max_delta=1034
-k1fo hooks: StrHooks: QUEST2/clone bind=0 rebind=0 unmap=0 claim=0 release=0 frame_exit=2187 unwind=1 onpop=1 discarded_claims=0 cancelled=0 max_delta=0
-derr hooks: StrHooks: QUEST1/master bind=4 rebind=108 unmap=3 claim=332 release=112 frame_exit=933 unwind=0 onpop=0 discarded_claims=0 cancelled=0 max_delta=1034
-derr hooks: StrHooks: QUEST2/clone bind=0 rebind=0 unmap=0 claim=0 release=0 frame_exit=767 unwind=0 onpop=0 discarded_claims=0 cancelled=0 max_delta=0
-derr-emu hooks: StrHooks: QUEST1/master bind=4 rebind=108 unmap=3 claim=332 release=112 frame_exit=982 unwind=0 onpop=0 discarded_claims=0 cancelled=0 max_delta=1034
-derr-emu hooks: StrHooks: QUEST2/clone bind=4 rebind=108 unmap=3 claim=332 release=112 frame_exit=816 unwind=0 onpop=0 discarded_claims=0 cancelled=332 max_delta=1034
-fo-st hooks: StrHooks: QUEST1/master bind=7 rebind=126 unmap=6 claim=392 release=133 frame_exit=2497 unwind=1 onpop=1 discarded_claims=0 cancelled=0 max_delta=1034
-fo-st hooks: StrHooks: QUEST2/clone bind=0 rebind=0 unmap=0 claim=0 release=0 frame_exit=2160 unwind=1 onpop=1 discarded_claims=0 cancelled=0 max_delta=0
-play-st hooks: StrHooks: QUEST1/master bind=7 rebind=142 unmap=5 claim=443 release=149 frame_exit=214138 unwind=0 onpop=0 discarded_claims=0 cancelled=0 max_delta=1034
-play-st hooks: StrHooks: QUEST2/clone bind=0 rebind=0 unmap=0 claim=0 release=0 frame_exit=213912 unwind=0 onpop=0 discarded_claims=0 cancelled=0 max_delta=0
-fo-emu hooks: StrHooks: QUEST1/master bind=7 rebind=126 unmap=6 claim=392 release=133 frame_exit=2689 unwind=1 onpop=1 discarded_claims=0 cancelled=0 max_delta=1034
-fo-emu hooks: StrHooks: QUEST2/clone bind=7 rebind=126 unmap=6 claim=392 release=133 frame_exit=2352 unwind=1 onpop=1 discarded_claims=0 cancelled=27 max_delta=1034
-m-emu hooks: StrHooks: QUEST1/master bind=5 rebind=116 unmap=4 claim=359 release=121 frame_exit=1846 unwind=1 onpop=1 discarded_claims=0 cancelled=0 max_delta=1034
-m-emu hooks: StrHooks: QUEST2/clone bind=5 rebind=116 unmap=4 claim=359 release=121 frame_exit=1600 unwind=1 onpop=1 discarded_claims=0 cancelled=21 max_delta=1034
-inj-emu hooks: StrHooks: QUEST1/master bind=5 rebind=116 unmap=4 claim=359 release=121 frame_exit=1757 unwind=0 onpop=0 discarded_claims=0 cancelled=0 max_delta=1034
-inj-emu hooks: StrHooks: QUEST2/clone bind=5 rebind=116 unmap=4 claim=359 release=121 frame_exit=1493 unwind=0 onpop=0 discarded_claims=0 cancelled=21 max_delta=1034
+play hooks: StrHooks: QUEST1/master bind=7 rebind=143 unmap=5 claim=446 release=150 frame_exit=124408 unwind=0 onpop=0 discarded_claims=0 cancelled=0 max_delta=1034
+play hooks: StrHooks: QUEST2/clone bind=0 rebind=0 unmap=0 claim=0 release=0 frame_exit=124180 unwind=0 onpop=0 discarded_claims=0 cancelled=0 max_delta=0
+inj3 hooks: StrHooks: QUEST1/master bind=5 rebind=116 unmap=4 claim=359 release=121 frame_exit=1682 unwind=1 onpop=1 discarded_claims=0 cancelled=0 max_delta=1034
+inj3 hooks: StrHooks: QUEST2/clone bind=0 rebind=0 unmap=0 claim=0 release=0 frame_exit=1430 unwind=1 onpop=1 discarded_claims=0 cancelled=0 max_delta=0
+k1fo hooks: StrHooks: QUEST1/master bind=7 rebind=126 unmap=6 claim=392 release=133 frame_exit=2500 unwind=1 onpop=1 discarded_claims=0 cancelled=0 max_delta=1034
+k1fo hooks: StrHooks: QUEST2/clone bind=0 rebind=0 unmap=0 claim=0 release=0 frame_exit=2163 unwind=1 onpop=1 discarded_claims=0 cancelled=0 max_delta=0
+derr hooks: StrHooks: QUEST1/master bind=4 rebind=108 unmap=3 claim=332 release=112 frame_exit=934 unwind=0 onpop=0 discarded_claims=0 cancelled=0 max_delta=1034
+derr hooks: StrHooks: QUEST2/clone bind=0 rebind=0 unmap=0 claim=0 release=0 frame_exit=768 unwind=0 onpop=0 discarded_claims=0 cancelled=0 max_delta=0
+derr-emu hooks: StrHooks: QUEST1/master bind=4 rebind=108 unmap=3 claim=332 release=112 frame_exit=933 unwind=0 onpop=0 discarded_claims=0 cancelled=0 max_delta=1034
+derr-emu hooks: StrHooks: QUEST2/clone bind=4 rebind=108 unmap=3 claim=332 release=112 frame_exit=767 unwind=0 onpop=0 discarded_claims=0 cancelled=332 max_delta=1034
+fo-st hooks: StrHooks: QUEST1/master bind=7 rebind=126 unmap=6 claim=392 release=133 frame_exit=2665 unwind=1 onpop=1 discarded_claims=0 cancelled=0 max_delta=1034
+fo-st hooks: StrHooks: QUEST2/clone bind=0 rebind=0 unmap=0 claim=0 release=0 frame_exit=2328 unwind=1 onpop=1 discarded_claims=0 cancelled=0 max_delta=0
+play-st hooks: StrHooks: QUEST1/master bind=7 rebind=143 unmap=5 claim=446 release=150 frame_exit=209539 unwind=0 onpop=0 discarded_claims=0 cancelled=0 max_delta=1034
+play-st hooks: StrHooks: QUEST2/clone bind=0 rebind=0 unmap=0 claim=0 release=0 frame_exit=209311 unwind=0 onpop=0 discarded_claims=0 cancelled=0 max_delta=0
+fo-emu hooks: StrHooks: QUEST1/master bind=7 rebind=126 unmap=6 claim=392 release=133 frame_exit=2551 unwind=1 onpop=1 discarded_claims=0 cancelled=0 max_delta=1034
+fo-emu hooks: StrHooks: QUEST2/clone bind=7 rebind=126 unmap=6 claim=392 release=133 frame_exit=2214 unwind=1 onpop=1 discarded_claims=0 cancelled=33 max_delta=1034
+m-emu hooks: StrHooks: QUEST1/master bind=5 rebind=116 unmap=4 claim=359 release=121 frame_exit=1698 unwind=1 onpop=1 discarded_claims=0 cancelled=0 max_delta=1034
+m-emu hooks: StrHooks: QUEST2/clone bind=5 rebind=116 unmap=4 claim=359 release=121 frame_exit=1452 unwind=1 onpop=1 discarded_claims=0 cancelled=15 max_delta=1034
+inj-emu hooks: StrHooks: QUEST1/master bind=5 rebind=116 unmap=4 claim=359 release=121 frame_exit=1865 unwind=0 onpop=0 discarded_claims=0 cancelled=0 max_delta=1034
+inj-emu hooks: StrHooks: QUEST2/clone bind=5 rebind=116 unmap=4 claim=359 release=121 frame_exit=1601 unwind=0 onpop=0 discarded_claims=0 cancelled=15 max_delta=1034
 abort-emu hooks: StrHooks: QUEST1/master bind=1 rebind=0 unmap=1 claim=2 release=1 frame_exit=157 unwind=0 onpop=0 discarded_claims=0 cancelled=0 max_delta=4
 abort-emu hooks: StrHooks: QUEST2/clone bind=1 rebind=0 unmap=1 claim=2 release=1 frame_exit=70 unwind=0 onpop=0 discarded_claims=0 cancelled=0 max_delta=4
 IR legs with a claiming clone: 0 (want 0 — delta_clone 0 everywhere; the emu legs cancel the master's insertions instead)
@@ -98,7 +98,7 @@ s@70167744.2 max=24 24)
 s@7016DF68.1 max=4 8192)
 s@7016DF68.2 max=4 8192)
 -- groups exercised (master claims per block, IR legs) --
-   4272 70166E7C
+   4278 70166E7C
     837 70166FE9
     108 70167744
      32 7016DF68
@@ -109,7 +109,7 @@ SELFTEST GREEN (0 failures)
 STRINGS SELFTEST: library GREEN, broken build RED (teeth confirmed)
 STRHOOKS SELFTEST: hooks GREEN, broken build RED (teeth confirmed)
 -- P26 newly-lowered mnemonic coverage (book+stock legs; regression reference) --
-P26 newly-lowered mnemonic coverage (blocks live/blocks carrying, 2074 live blocks):
-  WMUL 272/1805  LWADD 231/1528  XJMP 122/1160  LDAFP 112/1053  WNADI 152/735  MOV.L# 130/669  WADC 78/646  WSEQI 103/615  WSNEI 87/415  WSZB 106/361  CVWN 24/216  WSEQ 66/202  WCOM 37/200  WSGE 54/185  XNDO 42/176  MOV.# 39/172  WINC 23/164  WSLE 38/149  XWADD 13/143  WBTO 21/140  WSNE 16/115  WBTZ 20/106  WSLEI 25/97  WSGTI 30/96  WDIV 11/87  NADI 3/85  ADD.O# 23/81  XNSUB 6/81  WIOR 23/78  WAND 17/72  WADI 14/72  XNADI 9/69  XNADD 3/69  NSBI 11/65  NADDI 4/58  WSGT 9/58  XWMUL 2/45  WLSI 6/43  WPSH 10/39  COM.# 2/32  XWDO 3/30  WSLT 10/28  XNSBI 2/26  NSUB 6/26  NNEG 0/25  SEX 2/23  NMUL 5/21  ADD.# 0/19  WMOVR 4/19  WXOR 4/18  WNEG 5/16  NADD 1/16  WHLV 1/15  WPOP 4/14  WANDI 2/10  LNADI 0/8  WXCH 3/7  LNADD 2/5  ANDI 4/4  LDASP 1/3  LNSBI 1/3  ZEX 3/3  WLSHI 2/2  XWADI 0/2  XWSUB 0/2  MOV.R# 1/2  WIORI 0/2  NEG.L# 1/1  WULEI 1/1  WSKBO 0/1  XNISZ 0/1  LNSUB 0/1  CRYTO 1/1  XNMUL 0/1  XWSBI 0/1
+P26 newly-lowered mnemonic coverage (blocks live/blocks carrying, 2062 live blocks):
+  WMUL 269/1805  LWADD 228/1528  XJMP 121/1160  LDAFP 112/1053  WNADI 152/735  MOV.L# 130/669  WADC 78/646  WSEQI 103/615  WSNEI 87/415  WSZB 106/361  CVWN 24/216  WSEQ 65/202  WCOM 37/200  WSGE 54/185  XNDO 42/176  MOV.# 39/172  WINC 23/164  WSLE 38/149  XWADD 13/143  WBTO 21/140  WSNE 15/115  WBTZ 20/106  WSLEI 25/97  WSGTI 29/96  WDIV 11/87  NADI 3/85  ADD.O# 23/81  XNSUB 6/81  WIOR 23/78  WAND 17/72  WADI 14/72  XNADI 8/69  XNADD 3/69  NSBI 11/65  NADDI 4/58  WSGT 9/58  XWMUL 2/45  WLSI 6/43  WPSH 10/39  COM.# 2/32  XWDO 3/30  WSLT 10/28  XNSBI 2/26  NSUB 6/26  NNEG 0/25  SEX 2/23  NMUL 5/21  ADD.# 0/19  WMOVR 4/19  WXOR 4/18  WNEG 5/16  NADD 1/16  WHLV 1/15  WPOP 4/14  WANDI 2/10  LNADI 0/8  WXCH 3/7  LNADD 1/5  ANDI 4/4  LDASP 1/3  LNSBI 1/3  ZEX 3/3  WLSHI 2/2  XWADI 0/2  XWSUB 0/2  MOV.R# 1/2  WIORI 0/2  NEG.L# 1/1  WULEI 1/1  WSKBO 0/1  XNISZ 0/1  LNSUB 0/1  CRYTO 1/1  XNMUL 0/1  XWSBI 0/1
   classes live: 64/75; unreached: ADD.# LNADI LNSUB NNEG WIORI WSKBO XNISZ XNMUL XWADI XWSBI XWSUB
-wall_clock_seconds=930
+wall_clock_seconds=931
