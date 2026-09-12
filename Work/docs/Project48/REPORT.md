@@ -10,7 +10,7 @@ rewrite-RULE count from the rewrite-APPLICATION count).
 | criterion | required | actual |
 |---|---|---|
 | UPDATE_SCREENS compiles, loads, executes | yes | **yes** — 594 + 594 + 198 memory expectations over three scenarios, 0 failed, plus a DERR 17 trap leg |
-| generated programs agreeing with gcc | N ≥ 200, zero disagreements | **750**, zero disagreements (plus 8 hand cases) |
+| generated programs agreeing with gcc | N ≥ 200, zero disagreements | **810**, zero disagreements (plus 8 hand cases) |
 | the compiler, runnable without a session | `compiler/lower_c.py` + tests | **`compiler/lower_c.py`**, `compiler/difftest/`, `emulation/tests/run_lowerc_difftest.sh` |
 
 Nothing in this project read `quest.ir2.book` or `docs/attic/`. No test
@@ -31,10 +31,16 @@ ordering paid for itself twice (§2).
 |---|---|---|
 | generated, seeds 1–100 × classes A/B/C | 300 | 300 AGREE |
 | generated, seeds 101–250 × classes A/B/C | 450 | 450 AGREE |
+| generated, seeds 900–919 × A/B/C (the final whole-script run, a seed range never run during development) | 60 | 60 AGREE |
 | hand-written edge cases | 8 | 8 AGREE |
-| **total** | **758** | **0 disagreements** |
+| **total** | **818** | **0 disagreements** |
 
-Discards: **0** UB discards across 750 generated programs (gcc `-O0` vs `-O2`
+The last row matters more than its size: every other number above was
+produced while the compiler was being fixed, so those seeds had all been seen
+at least once. Seeds 900–919 had not been, and they were run by the single
+command from a clean build.
+
+Discards: **0** UB discards across 810 generated programs (gcc `-O0` vs `-O2`
 never disagreed with itself), and **0** refusals. The one ERROR seen at any
 point was a native timeout, and it was a generator bug (§2.2).
 
@@ -91,7 +97,7 @@ programs each:
 
 | mutation | programs that caught it (of 18) |
 |---|---|
-| `no_sign_extend` — read `int16_t` with `zx16` | 7 |
+| `no_sign_extend` — read `int16_t` with `zx16` | 7–8 |
 | `cmp_unsigned` — ordering comparisons always `u` | 6 |
 | `u16_unsigned` — `uint16_t` promotes to `uint32_t` | 1 |
 | `shift_logical` — signed `>>` as a logical shift | 1 |
@@ -357,21 +363,23 @@ which means they are the least-tested code in the compiler.
 
 | item | gate estimate | actual |
 |---|---|---|
-| `compiler/lower_c.py` | 1,300 ± 300 | **1,003** |
+| `compiler/lower_c.py` | 1,300 ± 300 | **1,112** |
 | `compiler/difftest/cgen.py` | 450 ± 150 | **448** |
-| `compiler/difftest/difftest.py` | 300 ± 100 | **373** |
+| `compiler/difftest/difftest.py` | 300 ± 100 | **322** |
 | hand cases | 250 ± 100 | **194** |
-| `emulation/tests/lowerc_rig.cpp` | 300 ± 80 | **348** |
+| `emulation/tests/lowerc_rig.cpp` | 300 ± 80 | **361** |
 | `run_lowerc_difftest.sh` | 60 | **98** |
 | UPDATE_SCREENS fixture generator | (folded into the rig estimate, 220 ± 60) | **166** |
 | `game/routines/UPDATE_SCREENS.c` | 35 | **52** (mostly the derivation) |
 | `game/quest_rt.h` (R5) | not estimated | **+44 / −4** |
-| **total new code** | **≈ 3,100 ± 900** | **≈ 2,750** |
+| **total new code** | **≈ 3,100 ± 900** | **2,753** |
 
-The estimate held. The compiler came in ~300 lines under because the type
-model turned out to be smaller than expected once it was C's own rules rather
-than a machine-shaped one: `promote()` and `usual()` are four lines between
-them and everything else follows.
+The estimate held: every row is inside its band and the total is 11% under.
+The compiler landed near the middle of its range; the type model itself was
+much smaller than expected once it was C's own rules rather than a
+machine-shaped one (`promote()` and `usual()` are four lines between them and
+everything else follows), and the space went into the address arithmetic for
+records and the refusal messages instead.
 
 **The environment fact recorded at the gate held too:** the first full
 emulator build on this single-core container took ~50 minutes (76 translation
