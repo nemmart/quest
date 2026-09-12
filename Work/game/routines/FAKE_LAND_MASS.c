@@ -110,18 +110,11 @@
 #include "quest_rt.h"
 #include "declarations.h"
 
-/* ---- LANDMASS: P51 finding, not yet in declarations.json (see header) ---- */
-struct landmass_rec {
-    int32_t     cell;       /* K=1035286: terrain code copied into screen cells */
-    VARYING(30) name;       /* K=1035288: length word, data from word +3 (CREATE_MAP) */
-    int16_t     x1;         /* K=1035304 */
-    int16_t     y1;         /* K=1035305 */
-    int16_t     x2;         /* K=1035306 */
-    int16_t     y2;         /* K=1035307 */
-};
-extern ARRAY1(struct landmass_rec, 1000) LANDMASS;  /* base OBJ_PTR, stride 22, origin base+1035308 */
-extern int16_t LANDMASS_COUNT;                      /* OBJ_PTR->landmass_count, K=1035307 */
-/* ------------------------------------------------------------------------- */
+/* LANDMASS now lives in game/declarations.json, where every other table's
+ * geometry lives (P53 a002, granting P51 §2.1 verbatim).  It was declared
+ * locally here only because it had nowhere else to go.  NOTE the confidence
+ * did not change by moving: P51 §1 marks the field NAMES as *claimed*, not
+ * derived — CREATE_MAP's writer would settle them (P51 §6.1). */
 
 void FAKE_LAND_MASS(const int16_t *who)
 {
@@ -133,7 +126,7 @@ void FAKE_LAND_MASS(const int16_t *who)
     x = PLAYER[RANGE_CHECK(*who, 10)].fm589;
     y = PLAYER[*who].fm588;                         /* base reused: no check */
 
-    for (m = LANDMASS_COUNT; m >= 1; m--) {
+    for (m = OBJ_PTR->landmass_count; m >= 1; m--) {
         RANGE_CHECK(m, 1000);                               /* checked once per m */
         if (!((x - 4 <= LANDMASS[m].x1) | (x - 4 <= LANDMASS[m].x2)))          /* materialised */
             continue;

@@ -44,6 +44,11 @@ DIRECT = {
         "player_count": (43, 16, "UPDATE_SCREENS loop bound (SD_PTR->f43.h)"),
     },
     "OBJ_PTR": {
+        # P51 §2.1 / P53 a002: the word before LANDMASS element 1 — the same
+        # idiom as REGION's region_count at 11502.  It is also LANDMASS[0].y2
+        # by K, which is what "the word before element 1" means.
+        "landmass_count": (1035307, 16,
+                           "P51 FAKE_LAND_MASS: land-mass count (OBJ_PTR->landmass_count)"),
         "region_count": (11502, 32, "P34 Census §3 / PICK_X_Y_reading: region count (OBJ_PTR->f11502)"),
         # P40/QUEST.1 7015C5F0: LNLDA 1,[ac2+0xDE890], stored to the R21e limit
         # temp — the DO bound over CASTLE, whose own DERR 17 bound is 1000.
@@ -82,6 +87,30 @@ TABLES = {
     # fm23/fm22 are compared against PLAYER.fm589/.fm588, which UPDATE_SCREENS
     # shows are the player's map x and y — so these are a castle's x and y.
     # Kept as raw fmNN names: the correspondence is a reading, not a derivation.
+    # P53 a002 (Q-3 granted): the LANDMASS table, VERBATIM from P51 REPORT §2.1.
+    # FAKE_LAND_MASS declared this locally in its own .c because the geometry
+    # had nowhere else to live; a second home for geometry is a divergence
+    # waiting to happen, so it comes here and the .c loses its struct.
+    #
+    # CONFIDENCE, carried forward as a002 required: P51 §1 marks the field
+    # NAMES (cell, x1, y1, x2, y2) as **claimed**, NOT derived — they rest on
+    # their uses in FAKE_LAND_MASS alone.  The LOGIC is derived (blind ×2); the
+    # names are not.  CREATE_MAP's writer (701652xx/701653xx) would settle them
+    # (P51 §6.1) and was deliberately not read here: the compiler does not care
+    # what the fields are called, and moving a single-witness claim into a
+    # canonical file is exactly how such claims get laundered.
+    "LANDMASS": dict(base="OBJ_PTR", stride=22, minK=1035286, bound=1000,
+                     origin=1035308,
+                     comment="P51 FAKE_LAND_MASS + CREATE_MAP 701744CA..EC: named "
+                             "land-mass rectangles; bound 1000 = DERR 17 at 701697DD; "
+                             "origin base+1035308 if `cell` is field 0; `name` is "
+                             "CHAR(30) VARYING (length word at +2, data at byte "
+                             "2*0xFCC19).  FIELD NAMES ARE CLAIMED, NOT DERIVED "
+                             "(P51 §1/§6.1): they rest on their uses in FAKE_LAND_MASS "
+                             "alone; CREATE_MAP's writer would settle them.",
+                     fields={"cell": (1035286, 32), "name_len": (1035288, 16),
+                             "x1": (1035304, 16), "y1": (1035305, 16),
+                             "x2": (1035306, 16), "y2": (1035307, 16)}),
     "CASTLE": dict(base="CAS_PTR", stride=23, minK=-23, bound=1000,
                    comment="P40/QUEST.1 CAS_PTR_rec23; bound 1000 = QUEST.1's DERR 17 check",
                    fields={"fm23": (-23, 16), "fm22": (-22, 16)}),
