@@ -60,6 +60,17 @@ the compiler is established against gcc, not against the book. And a routine
 can be *accepted behaviourally* (substituted into the running game under
 lockstep) long before it is accepted by exact match.
 
+## Salvaged (P45, Sep 12 2026)
+
+**`docs/Salvage.md` is the salvage of record for this directory.** Every
+program fact below has been classified, re-verified against the listing
+where a PC existed, and recorded there with its status; the void rules are
+listed there by number. Read Salvage.md, not this directory. Two facts the
+seed list below gets wrong on `main`: the FIRE parent-frame table is no
+longer single-witness (P41's family check, re-derived by P45 — every slot is
+DERIVED, LIST_PLAYERS.w13 included), and R39/R40 are METHOD-RULINGs already
+live in METHOD §16, not program facts to salvage.
+
 ## What a review session should salvage
 
 A future session may be tasked with mining this directory. The material
