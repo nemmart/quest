@@ -2,91 +2,91 @@
 # dis sha256=5c1db5fb75c8c26a70eaeab5760213973d1c80e8711b6dacbb9c28376d4118f4
 # blocks sha256=ba30a84139a7d2f489cdb6345eddde4dfdf6c77d6d75f2eaa14ab3df58a829d0
 # mem sha256=1d44317d0995843e28fd576adffb8be977489975760def777d7e7c2a70803074
-# strhooks sha256=9cc8c96cbad2fd283fef2c0e70a5fa5551231e612156bf65dd85821e2c9795a3
-# arena sha256=64ab09d44e343c367eb816f579f362c421084fb4efcead23f8dc788d93bb5522
-# per group: the LDASP/WADI pairs (acN = t@b.k), the WMSPs (claim), the STASP (release), the WCMVs with a twin operand (P32 pipeline)
+# strhooks sha256=f4251e4c8a7c12005093bcf11d4009e1bb62eb3134e05efe00810553ca985476
+# arena sha256=bb779f499772125fd7bc4b952582f19d228c8fb4702a5444736edbd72dcf01ed
+# per group: the LDASP/WADI pairs (acN = s@b.k), the WMSPs (claim), the STASP (release), the WCMVs with a twin operand (P32 pipeline)
 # a group is EMIT only if every row is; else REFUSE whole (embedded, Δ_clone != 0 there is EXPECTED)
 
 == group 70166144 DIED claims 3  EMIT
-   7016614C WADI  block 70166144 CLAIM-BASE                   ac2 = t@70166144.1   <- fold 7016614B
-   70166168 WADI  block 70166144 CLAIM-BASE                   ac1 = t@70166144.2   <- fold 70166167
-   70166182 WADI  block 70166144 CLAIM-BASE                   ac1 = t@70166144.3   <- fold 70166181
-   70166152 WMSP  block 70166144 CLAIM                        claim t@70166144.1, ac0
-   7016616F WMSP  block 70166144 CLAIM                        claim t@70166144.2, ac2
-   7016618A WMSP  block 70166144 CLAIM                        claim t@70166144.3, ac2
-   701661AA STASP block 701661A7 RELEASE                      release t@70166144, ac1
-   7016615D WCMV  block 70166144 COPY-LIT-EXACT               [@bp(t@70166144.1, 0), 3] = [@0x70165FC1:0, "\x0C\x0A\x0A"]   <- fold 7016615A 7016615C
+   7016614C WADI  block 70166144 CLAIM-BASE                   ac2 = s@70166144.1   <- fold 7016614B
+   70166168 WADI  block 70166144 CLAIM-BASE                   ac1 = s@70166144.2   <- fold 70166167
+   70166182 WADI  block 70166144 CLAIM-BASE                   ac1 = s@70166144.3   <- fold 70166181
+   70166152 WMSP  block 70166144 CLAIM                        claim s@70166144.1, ac0
+   7016616F WMSP  block 70166144 CLAIM                        claim s@70166144.2, ac2
+   7016618A WMSP  block 70166144 CLAIM                        claim s@70166144.3, ac2
+   701661AA STASP block 701661A7 RELEASE                      release s@70166144, ac1
+   7016615D WCMV  block 70166144 COPY-LIT-EXACT               [@bp(s@70166144.1, 0), 3] = [@0x70165FC1:0, "\x0C\x0A\x0A"]   <- fold 7016615A 7016615C
    70166166 WCMV  block 70166144 CONCAT-PIECE                 [@ac2, sx16(M16[M32[wp(ac3, -12)]])] = [@M32[wp(ac3, -12)], varying]   <- fold 7016615F 70166161 70166163 70166165
-   7016617A WCMV  block 70166144 COPY-STR-EXACT               [@bp(t@70166144.2, 0), ac0] = [@bp(t@70166144.1, 0), ac1]
+   7016617A WCMV  block 70166144 COPY-STR-EXACT               [@bp(s@70166144.2, 0), ac0] = [@bp(s@70166144.1, 0), ac1]
    70166180 WCMV  block 70166144 CONCAT-PIECE                 [@ac2, 23] = [@0x70165FB5:0, "\x0ABetter luck next time!"]   <- fold 7016617B 7016617D 7016617F
-   7016619C WCMV  block 70166193 ASSIGN-STR-VARYING           [@bp(t@70166144.3, 2), ac0] = [@bp(t@70166144.2, 0), ac1]
+   7016619C WCMV  block 70166193 ASSIGN-STR-VARYING           [@bp(s@70166144.3, 2), ac0] = [@bp(s@70166144.2, 0), ac1]
       note 7016617A dst cnt: leaf register ac3 does not hold fp at the statement (last writer: WLSI at 70166178) -> register
       note 7016617A src cnt: leaf register ac3 does not hold fp at the statement (last writer: WLSI at 70166178) -> register
       note 7016619C dst cnt: leaf register ac3 does not hold fp at the statement (last writer: WLSI at 7016619B) -> register
       note 7016619C src cnt: leaf register ac3 does not hold fp at the statement (last writer: WLSI at 7016619B) -> register
 
 == group 701661AE DIED claims 3  EMIT
-   701661B6 WADI  block 701661AE CLAIM-BASE                   ac1 = t@701661AE.1   <- fold 701661B5
-   701661D3 WADI  block 701661AE CLAIM-BASE                   ac1 = t@701661AE.2   <- fold 701661D2
-   701661ED WADI  block 701661AE CLAIM-BASE                   ac1 = t@701661AE.3   <- fold 701661EC
-   701661BC WMSP  block 701661AE CLAIM                        claim t@701661AE.1, ac2
-   701661DA WMSP  block 701661AE CLAIM                        claim t@701661AE.2, ac2
-   701661F5 WMSP  block 701661AE CLAIM                        claim t@701661AE.3, ac2
-   70166215 STASP block 70166212 RELEASE                      release t@701661AE, ac1
-   701661C8 WCMV  block 701661AE COPY-LIT-EXACT               [@bp(t@701661AE.1, 0), 3] = [@0x70165FC1:0, "\x0C\x0A\x0A"]   <- fold 701661C5 701661C7
+   701661B6 WADI  block 701661AE CLAIM-BASE                   ac1 = s@701661AE.1   <- fold 701661B5
+   701661D3 WADI  block 701661AE CLAIM-BASE                   ac1 = s@701661AE.2   <- fold 701661D2
+   701661ED WADI  block 701661AE CLAIM-BASE                   ac1 = s@701661AE.3   <- fold 701661EC
+   701661BC WMSP  block 701661AE CLAIM                        claim s@701661AE.1, ac2
+   701661DA WMSP  block 701661AE CLAIM                        claim s@701661AE.2, ac2
+   701661F5 WMSP  block 701661AE CLAIM                        claim s@701661AE.3, ac2
+   70166215 STASP block 70166212 RELEASE                      release s@701661AE, ac1
+   701661C8 WCMV  block 701661AE COPY-LIT-EXACT               [@bp(s@701661AE.1, 0), 3] = [@0x70165FC1:0, "\x0C\x0A\x0A"]   <- fold 701661C5 701661C7
    701661D1 WCMV  block 701661AE CONCAT-PIECE                 [@ac2, sx16(M16[M32[wp(ac3, -12)]])] = [@M32[wp(ac3, -12)], varying]   <- fold 701661CA 701661CC 701661CE 701661D0
-   701661E5 WCMV  block 701661AE COPY-STR-EXACT               [@bp(t@701661AE.2, 0), ac0] = [@bp(t@701661AE.1, 0), ac1]
+   701661E5 WCMV  block 701661AE COPY-STR-EXACT               [@bp(s@701661AE.2, 0), ac0] = [@bp(s@701661AE.1, 0), ac1]
    701661EB WCMV  block 701661AE CONCAT-PIECE                 [@ac2, 76] = [@0x70165F8F:0, "\x0AThere is a puff a orange smoke (sound familiar) and you are reincarnated!\x0A\x0A"]   <- fold 701661E6 701661E8 701661EA
-   70166207 WCMV  block 701661FE ASSIGN-STR-VARYING           [@bp(t@701661AE.3, 2), ac0] = [@bp(t@701661AE.2, 0), ac1]
+   70166207 WCMV  block 701661FE ASSIGN-STR-VARYING           [@bp(s@701661AE.3, 2), ac0] = [@bp(s@701661AE.2, 0), ac1]
       note 701661E5 dst cnt: leaf register ac3 does not hold fp at the statement (last writer: WLSI at 701661E3) -> register
       note 701661E5 src cnt: leaf register ac3 does not hold fp at the statement (last writer: WLSI at 701661E3) -> register
       note 70166207 dst cnt: leaf register ac3 does not hold fp at the statement (last writer: WLSI at 70166206) -> register
       note 70166207 src cnt: leaf register ac3 does not hold fp at the statement (last writer: WLSI at 70166206) -> register
 
 == group 70166564 DISPLAY_MAGIC claims 4  EMIT
-   70166570 WADI  block 70166564 CLAIM-BASE                   ac0 = t@70166564.1   <- fold 7016656F
-   70166593 WADI  block 70166564 CLAIM-BASE                   ac1 = t@70166564.2   <- fold 70166592
-   701665AD WADI  block 70166564 CLAIM-BASE                   ac1 = t@70166564.3   <- fold 701665AC
-   701665C8 WADI  block 70166564 CLAIM-BASE                   ac1 = t@70166564.4   <- fold 701665C7
-   70166578 WMSP  block 70166564 CLAIM                        claim t@70166564.1, ac0
-   7016659A WMSP  block 70166564 CLAIM                        claim t@70166564.2, ac2
-   701665B4 WMSP  block 70166564 CLAIM                        claim t@70166564.3, ac2
-   701665D0 WMSP  block 70166564 CLAIM                        claim t@70166564.4, ac2
-   701665F0 STASP block 701665ED RELEASE                      release t@70166564, ac1
-   70166589 WCMV  block 70166564 COPY-STR-EXACT               [@bp(t@70166564.1, 0), sx16(M16[((sx16(M16[wp(ac3, 2)]) * 16) - 0xFEAFBB8)])] = [@bp((sx16(M16[wp(ac3, 2)]) * 16), -0x1FD5F76E), sx16(M16[((sx16(M16[wp(ac3, 2)]) * 16) - 0xFEAFBB8)])]   <- fold 70166580 70166582 70166585 70166588
+   70166570 WADI  block 70166564 CLAIM-BASE                   ac0 = s@70166564.1   <- fold 7016656F
+   70166593 WADI  block 70166564 CLAIM-BASE                   ac1 = s@70166564.2   <- fold 70166592
+   701665AD WADI  block 70166564 CLAIM-BASE                   ac1 = s@70166564.3   <- fold 701665AC
+   701665C8 WADI  block 70166564 CLAIM-BASE                   ac1 = s@70166564.4   <- fold 701665C7
+   70166578 WMSP  block 70166564 CLAIM                        claim s@70166564.1, ac0
+   7016659A WMSP  block 70166564 CLAIM                        claim s@70166564.2, ac2
+   701665B4 WMSP  block 70166564 CLAIM                        claim s@70166564.3, ac2
+   701665D0 WMSP  block 70166564 CLAIM                        claim s@70166564.4, ac2
+   701665F0 STASP block 701665ED RELEASE                      release s@70166564, ac1
+   70166589 WCMV  block 70166564 COPY-STR-EXACT               [@bp(s@70166564.1, 0), sx16(M16[((sx16(M16[wp(ac3, 2)]) * 16) - 0xFEAFBB8)])] = [@bp((sx16(M16[wp(ac3, 2)]) * 16), -0x1FD5F76E), sx16(M16[((sx16(M16[wp(ac3, 2)]) * 16) - 0xFEAFBB8)])]   <- fold 70166580 70166582 70166585 70166588
    70166591 WCMV  block 70166564 CONCAT-PIECE                 [@ac2, (0 - sx16(M16[((sx16(M16[wp(ac3, 2)]) * 16) - 0xFEAFBB8)]) + 30)] = [@0x7015155A:0, (0 - sx16(M16[((sx16(M16[wp(ac3, 2)]) * 16) - 0xFEAFBB8)]) + 30)]   <- fold 7016658B 7016658D 70166590
-   701665A5 WCMV  block 70166564 COPY-STR-EXACT               [@bp(t@70166564.2, 0), 30] = [@bp(t@70166564.1, 0), 30]   <- fold 701665A4
+   701665A5 WCMV  block 70166564 COPY-STR-EXACT               [@bp(s@70166564.2, 0), 30] = [@bp(s@70166564.1, 0), 30]   <- fold 701665A4
    701665AB WCMV  block 70166564 CONCAT-PIECE                 [@ac2, 2] = [@0x701663BC:0, "| "]   <- fold 701665A6 701665A8 701665AA
-   701665BF WCMV  block 70166564 COPY-STR-EXACT               [@bp(t@70166564.3, 0), 32] = [@bp(t@70166564.2, 0), 32]   <- fold 701665BE
+   701665BF WCMV  block 70166564 COPY-STR-EXACT               [@bp(s@70166564.3, 0), 32] = [@bp(s@70166564.2, 0), 32]   <- fold 701665BE
    701665C6 WCMV  block 70166564 CONCAT-PIECE                 [@ac2, sx16(M16[wp(ac3, 6)])] = [@wp(ac3, 6), varying]   <- fold 701665C1 701665C3 701665C5
-   701665E2 WCMV  block 701665D9 ASSIGN-STR-VARYING           [@bp(t@70166564.4, 2), ac0] = [@bp(t@70166564.3, 0), ac1]
+   701665E2 WCMV  block 701665D9 ASSIGN-STR-VARYING           [@bp(s@70166564.4, 2), ac0] = [@bp(s@70166564.3, 0), ac1]
       note 701665E2 dst cnt: leaf register ac3 does not hold fp at the statement (last writer: WLSI at 701665E1) -> register
       note 701665E2 src cnt: leaf register ac3 does not hold fp at the statement (last writer: WLSI at 701665E1) -> register
 
 == group 7016693C DISPLAY_CAVE claims 1  EMIT
-   70166961 WADI  block 7016693C CLAIM-BASE                   ac0 = t@7016693C.1   <- fold 70166960
-   70166967 WMSP  block 7016693C CLAIM                        claim t@7016693C.1, ac2
-   70166990 STASP block 70166982 RELEASE                      release t@7016693C, ac1
-   70166973 WCMV  block 7016693C COPY-STR-EXACT               [@bp(t@7016693C.1, 0), ac0] = [@ac3, ac1]
+   70166961 WADI  block 7016693C CLAIM-BASE                   ac0 = s@7016693C.1   <- fold 70166960
+   70166967 WMSP  block 7016693C CLAIM                        claim s@7016693C.1, ac2
+   70166990 STASP block 70166982 RELEASE                      release s@7016693C, ac1
+   70166973 WCMV  block 7016693C COPY-STR-EXACT               [@bp(s@7016693C.1, 0), ac0] = [@ac3, ac1]
    7016697A WCMV  block 7016693C CONCAT-PIECE+SUBSTR          [@ac2, ac0] = [@ac3, ac1]
-   7016698B WCMV  block 70166982 ASSIGN-STR-VARYING-PAD       [@0x70000A4F:0, ac0] = [@bp(t@7016693C.1, 0), ac1]
+   7016698B WCMV  block 70166982 ASSIGN-STR-VARYING-PAD       [@0x70000A4F:0, ac0] = [@bp(s@7016693C.1, 0), ac1]
       note 70166973 src ptr: leaf register ac3 does not hold fp at the statement (last writer: XLEFB at 70166970) -> register
       note 7016697A src: opaque op XWMUL: (N[(W[0x70000210]+0X1EFB9)] XWMUL (fp+4)) -> register
       note 7016697A dst cnt: leaf register ac3 does not hold fp at the statement (last writer: XWLDA at 70166977) -> register
       note 7016697A src cnt: leaf register ac3 does not hold fp at the statement (last writer: XWLDA at 70166977) -> register
 
 == group 70166E7C DISPLAY_SCREEN claims 3  EMIT
-   70166E8B WADI  block 70166E7C CLAIM-BASE                   ac2 = t@70166E7C.1   <- fold 70166E8A
-   70166EA6 WADI  block 70166E7C CLAIM-BASE                   ac0 = t@70166E7C.2   <- fold 70166EA5
-   70166EC4 WADI  block 70166E7C CLAIM-BASE                   ac2 = t@70166E7C.3   <- fold 70166EC3
-   70166E91 WMSP  block 70166E7C CLAIM                        claim t@70166E7C.1, ac1
-   70166EAC WMSP  block 70166E7C CLAIM                        claim t@70166E7C.2, ac1
-   70166ECA WMSP  block 70166E7C CLAIM                        claim t@70166E7C.3, ac0
-   70166EFB STASP block 70166EF1 RELEASE                      release t@70166E7C, ac0
-   70166E9A WCMV  block 70166E7C COPY-STR-EXACT               [@bp(t@70166E7C.1, 0), sx16(M16[wp(ac3, 238)])] = [@wp(ac3, 238), varying]   <- fold 70166E95 70166E97 70166E99
-   70166EB9 WCMV  block 70166E7C COPY-STR-EXACT               [@bp(t@70166E7C.2, 0), ac0] = [@bp(t@70166E7C.1, 0), ac1]
-   70166ED9 WCMV  block 70166E7C COPY-STR-EXACT               [@bp(t@70166E7C.3, 0), ac0] = [@bp(t@70166E7C.2, 0), ac1]
-   70166EE9 WCMV  block 70166EE9 ASSIGN-STR-MIN               [@ac2, ac0] = [@bp(t@70166E7C.3, 0), 0x2F4]
+   70166E8B WADI  block 70166E7C CLAIM-BASE                   ac2 = s@70166E7C.1   <- fold 70166E8A
+   70166EA6 WADI  block 70166E7C CLAIM-BASE                   ac0 = s@70166E7C.2   <- fold 70166EA5
+   70166EC4 WADI  block 70166E7C CLAIM-BASE                   ac2 = s@70166E7C.3   <- fold 70166EC3
+   70166E91 WMSP  block 70166E7C CLAIM                        claim s@70166E7C.1, ac1
+   70166EAC WMSP  block 70166E7C CLAIM                        claim s@70166E7C.2, ac1
+   70166ECA WMSP  block 70166E7C CLAIM                        claim s@70166E7C.3, ac0
+   70166EFB STASP block 70166EF1 RELEASE                      release s@70166E7C, ac0
+   70166E9A WCMV  block 70166E7C COPY-STR-EXACT               [@bp(s@70166E7C.1, 0), sx16(M16[wp(ac3, 238)])] = [@wp(ac3, 238), varying]   <- fold 70166E95 70166E97 70166E99
+   70166EB9 WCMV  block 70166E7C COPY-STR-EXACT               [@bp(s@70166E7C.2, 0), ac0] = [@bp(s@70166E7C.1, 0), ac1]
+   70166ED9 WCMV  block 70166E7C COPY-STR-EXACT               [@bp(s@70166E7C.3, 0), ac0] = [@bp(s@70166E7C.2, 0), ac1]
+   70166EE9 WCMV  block 70166EE9 ASSIGN-STR-MIN               [@ac2, ac0] = [@bp(s@70166E7C.3, 0), 0x2F4]
       note 70166EB9 dst cnt: leaf register ac3 does not hold fp at the statement (last writer: WLSI at 70166EB7) -> register
       note 70166EB9 src cnt: leaf register ac3 does not hold fp at the statement (last writer: WLSI at 70166EB7) -> register
       note 70166ED9 dst cnt: leaf register ac3 does not hold fp at the statement (last writer: WPOP at 70166ED7) -> register
@@ -94,17 +94,17 @@
       note 70166EE9 dst ptr: leaf register ac3 does not hold fp at the statement (last writer: block entry (bp[0x7501A000:0])) -> register
 
 == group 70166F4F DISPLAY_SCREEN claims 3  EMIT
-   70166F5E WADI  block 70166F4F CLAIM-BASE                   ac2 = t@70166F4F.1   <- fold 70166F5D
-   70166F79 WADI  block 70166F4F CLAIM-BASE                   ac0 = t@70166F4F.2   <- fold 70166F78
-   70166F97 WADI  block 70166F4F CLAIM-BASE                   ac2 = t@70166F4F.3   <- fold 70166F96
-   70166F64 WMSP  block 70166F4F CLAIM                        claim t@70166F4F.1, ac1
-   70166F7F WMSP  block 70166F4F CLAIM                        claim t@70166F4F.2, ac1
-   70166F9D WMSP  block 70166F4F CLAIM                        claim t@70166F4F.3, ac0
-   70166FCE STASP block 70166FC4 RELEASE                      release t@70166F4F, ac0
-   70166F6D WCMV  block 70166F4F COPY-STR-EXACT               [@bp(t@70166F4F.1, 0), sx16(M16[wp(ac3, 238)])] = [@wp(ac3, 238), varying]   <- fold 70166F68 70166F6A 70166F6C
-   70166F8C WCMV  block 70166F4F COPY-STR-EXACT               [@bp(t@70166F4F.2, 0), ac0] = [@bp(t@70166F4F.1, 0), ac1]
-   70166FAC WCMV  block 70166F4F COPY-STR-EXACT               [@bp(t@70166F4F.3, 0), ac0] = [@bp(t@70166F4F.2, 0), ac1]
-   70166FBC WCMV  block 70166FBC ASSIGN-STR-MIN               [@ac2, ac0] = [@bp(t@70166F4F.3, 0), 0x2F4]
+   70166F5E WADI  block 70166F4F CLAIM-BASE                   ac2 = s@70166F4F.1   <- fold 70166F5D
+   70166F79 WADI  block 70166F4F CLAIM-BASE                   ac0 = s@70166F4F.2   <- fold 70166F78
+   70166F97 WADI  block 70166F4F CLAIM-BASE                   ac2 = s@70166F4F.3   <- fold 70166F96
+   70166F64 WMSP  block 70166F4F CLAIM                        claim s@70166F4F.1, ac1
+   70166F7F WMSP  block 70166F4F CLAIM                        claim s@70166F4F.2, ac1
+   70166F9D WMSP  block 70166F4F CLAIM                        claim s@70166F4F.3, ac0
+   70166FCE STASP block 70166FC4 RELEASE                      release s@70166F4F, ac0
+   70166F6D WCMV  block 70166F4F COPY-STR-EXACT               [@bp(s@70166F4F.1, 0), sx16(M16[wp(ac3, 238)])] = [@wp(ac3, 238), varying]   <- fold 70166F68 70166F6A 70166F6C
+   70166F8C WCMV  block 70166F4F COPY-STR-EXACT               [@bp(s@70166F4F.2, 0), ac0] = [@bp(s@70166F4F.1, 0), ac1]
+   70166FAC WCMV  block 70166F4F COPY-STR-EXACT               [@bp(s@70166F4F.3, 0), ac0] = [@bp(s@70166F4F.2, 0), ac1]
+   70166FBC WCMV  block 70166FBC ASSIGN-STR-MIN               [@ac2, ac0] = [@bp(s@70166F4F.3, 0), 0x2F4]
       note 70166F8C dst cnt: leaf register ac3 does not hold fp at the statement (last writer: WLSI at 70166F8A) -> register
       note 70166F8C src cnt: leaf register ac3 does not hold fp at the statement (last writer: WLSI at 70166F8A) -> register
       note 70166FAC dst cnt: leaf register ac3 does not hold fp at the statement (last writer: WPOP at 70166FAA) -> register
@@ -112,44 +112,44 @@
       note 70166FBC dst ptr: leaf register ac3 does not hold fp at the statement (last writer: block entry (bp[0x75020000:0])) -> register
 
 == group 70166FE9 DISPLAY_SCREEN claims 3  EMIT
-   70166FF8 WADI  block 70166FE9 CLAIM-BASE                   ac2 = t@70166FE9.1   <- fold 70166FF7
-   70167010 WADI  block 70166FE9 CLAIM-BASE                   ac1 = t@70166FE9.2   <- fold 7016700F
-   70167027 WADI  block 70166FE9 CLAIM-BASE                   ac2 = t@70166FE9.3   <- fold 70167026
-   70166FFE WMSP  block 70166FE9 CLAIM                        claim t@70166FE9.1, ac1
-   70167017 WMSP  block 70166FE9 CLAIM                        claim t@70166FE9.2, ac2
-   7016702E WMSP  block 70166FE9 CLAIM                        claim t@70166FE9.3, ac3
-   70167059 STASP block 70167050 RELEASE                      release t@70166FE9, ac0
-   70167007 WCMV  block 70166FE9 COPY-STR-EXACT               [@bp(t@70166FE9.1, 0), sx16(M16[wp(ac3, 618)])] = [@wp(ac3, 618), varying]   <- fold 70167002 70167004 70167006
+   70166FF8 WADI  block 70166FE9 CLAIM-BASE                   ac2 = s@70166FE9.1   <- fold 70166FF7
+   70167010 WADI  block 70166FE9 CLAIM-BASE                   ac1 = s@70166FE9.2   <- fold 7016700F
+   70167027 WADI  block 70166FE9 CLAIM-BASE                   ac2 = s@70166FE9.3   <- fold 70167026
+   70166FFE WMSP  block 70166FE9 CLAIM                        claim s@70166FE9.1, ac1
+   70167017 WMSP  block 70166FE9 CLAIM                        claim s@70166FE9.2, ac2
+   7016702E WMSP  block 70166FE9 CLAIM                        claim s@70166FE9.3, ac3
+   70167059 STASP block 70167050 RELEASE                      release s@70166FE9, ac0
+   70167007 WCMV  block 70166FE9 COPY-STR-EXACT               [@bp(s@70166FE9.1, 0), sx16(M16[wp(ac3, 618)])] = [@wp(ac3, 618), varying]   <- fold 70167002 70167004 70167006
    7016700E WCMV  block 70166FE9 CONCAT-PIECE                 [@ac2, ac0] = [@ac3, ac1]
-   70167022 WCMV  block 70166FE9 COPY-STR-EXACT               [@bp(t@70166FE9.2, 0), ac0] = [@bp(t@70166FE9.1, 0), ac1]
-   70167039 WCMV  block 70166FE9 COPY-STR-EXACT               [@bp(t@70166FE9.3, 0), ac0] = [@bp(t@70166FE9.2, 0), ac1]
-   70167049 WCMV  block 70167049 ASSIGN-STR-MIN               [@ac2, ac0] = [@bp(t@70166FE9.3, 0), 0x2F4]
+   70167022 WCMV  block 70166FE9 COPY-STR-EXACT               [@bp(s@70166FE9.2, 0), ac0] = [@bp(s@70166FE9.1, 0), ac1]
+   70167039 WCMV  block 70166FE9 COPY-STR-EXACT               [@bp(s@70166FE9.3, 0), ac0] = [@bp(s@70166FE9.2, 0), ac1]
+   70167049 WCMV  block 70167049 ASSIGN-STR-MIN               [@ac2, ac0] = [@bp(s@70166FE9.3, 0), 0x2F4]
       note 7016700E src ptr: leaf register ac3 does not hold fp at the statement (last writer: XLEFB at 7016700B) -> register
       note 70167049 dst ptr: leaf register ac3 does not hold fp at the statement (last writer: block entry (bp[0x75026000:0])) -> register
 
 == group 70167744 DISPLAY_INVENTORY claims 2  EMIT
-   70167746 WADI  block 70167744 CLAIM-BASE                   ac2 = t@70167744.1   <- fold 70167745
-   70167761 WADI  block 70167744 CLAIM-BASE                   ac1 = t@70167744.2   <- fold 70167760
-   7016774C WMSP  block 70167744 CLAIM                        claim t@70167744.1, ac0
-   70167769 WMSP  block 70167744 CLAIM                        claim t@70167744.2, ac2
-   70167797 STASP block 70167794 RELEASE                      release t@70167744, ac0
-   70167757 WCMV  block 70167744 COPY-STR-EXACT               [@bp(t@70167744.1, 0), sx16(M16[wp(ac3, 6)])] = [@wp(ac3, 6), varying]   <- fold 70167754 70167756
+   70167746 WADI  block 70167744 CLAIM-BASE                   ac2 = s@70167744.1   <- fold 70167745
+   70167761 WADI  block 70167744 CLAIM-BASE                   ac1 = s@70167744.2   <- fold 70167760
+   7016774C WMSP  block 70167744 CLAIM                        claim s@70167744.1, ac0
+   70167769 WMSP  block 70167744 CLAIM                        claim s@70167744.2, ac2
+   70167797 STASP block 70167794 RELEASE                      release s@70167744, ac0
+   70167757 WCMV  block 70167744 COPY-STR-EXACT               [@bp(s@70167744.1, 0), sx16(M16[wp(ac3, 6)])] = [@wp(ac3, 6), varying]   <- fold 70167754 70167756
    7016775F WCMV  block 70167744 CONCAT-PIECE                 [@ac2, (0 - sx16(M16[wp(ac3, 6)]) + 19)] = [@0x7015155A:0, (0 - sx16(M16[wp(ac3, 6)]) + 19)]   <- fold 70167759 7016775B 7016775E
-   7016777B WCMV  block 70167772 ASSIGN-STR-VARYING           [@bp(t@70167744.2, 2), 19] = [@bp(t@70167744.1, 0), 19]
+   7016777B WCMV  block 70167772 ASSIGN-STR-VARYING           [@bp(s@70167744.2, 2), 19] = [@bp(s@70167744.1, 0), 19]
 
 == group 7016B860 GET_QUEST claims 3  EMIT
-   7016B89D WADI  block 7016B860 CLAIM-BASE                   ac1 = t@7016B860.1   <- fold 7016B89C
-   7016B8B8 WADI  block 7016B860 CLAIM-BASE                   ac1 = t@7016B860.2   <- fold 7016B8B7
-   7016B8D2 WADI  block 7016B860 CLAIM-BASE                   ac1 = t@7016B860.3   <- fold 7016B8D1
-   7016B8A4 WMSP  block 7016B860 CLAIM                        claim t@7016B860.1, ac2
-   7016B8BF WMSP  block 7016B860 CLAIM                        claim t@7016B860.2, ac2
-   7016B8DA WMSP  block 7016B860 CLAIM                        claim t@7016B860.3, ac2
-   7016B8FA STASP block 7016B8F7 RELEASE                      release t@7016B860, ac1
-   7016B8AE WCMV  block 7016B860 COPY-STR-EXACT+CALLRESULT    [@bp(t@7016B860.1, 0), ac0] = [@ac3, ac1]
+   7016B89D WADI  block 7016B860 CLAIM-BASE                   ac1 = s@7016B860.1   <- fold 7016B89C
+   7016B8B8 WADI  block 7016B860 CLAIM-BASE                   ac1 = s@7016B860.2   <- fold 7016B8B7
+   7016B8D2 WADI  block 7016B860 CLAIM-BASE                   ac1 = s@7016B860.3   <- fold 7016B8D1
+   7016B8A4 WMSP  block 7016B860 CLAIM                        claim s@7016B860.1, ac2
+   7016B8BF WMSP  block 7016B860 CLAIM                        claim s@7016B860.2, ac2
+   7016B8DA WMSP  block 7016B860 CLAIM                        claim s@7016B860.3, ac2
+   7016B8FA STASP block 7016B8F7 RELEASE                      release s@7016B860, ac1
+   7016B8AE WCMV  block 7016B860 COPY-STR-EXACT+CALLRESULT    [@bp(s@7016B860.1, 0), ac0] = [@ac3, ac1]
    7016B8B6 WCMV  block 7016B860 CONCAT-PIECE                 [@ac2, sx16(M16[0x7000021C])] = [@0x7000021C, varying]   <- fold 7016B8AF 7016B8B2 7016B8B5
-   7016B8CA WCMV  block 7016B860 COPY-STR-EXACT+CALLRESULT    [@bp(t@7016B860.2, 0), ac0] = [@bp(t@7016B860.1, 0), ac1]
+   7016B8CA WCMV  block 7016B860 COPY-STR-EXACT+CALLRESULT    [@bp(s@7016B860.2, 0), ac0] = [@bp(s@7016B860.1, 0), ac1]
    7016B8D0 WCMV  block 7016B860 CONCAT-PIECE                 [@ac2, 2] = [@0x7016B07E:0, ".\x0A"]   <- fold 7016B8CB 7016B8CD 7016B8CF
-   7016B8EC WCMV  block 7016B8E3 ASSIGN-STR-VARYING+CALLRESULT [@bp(t@7016B860.3, 2), ac0] = [@bp(t@7016B860.2, 0), ac1]
+   7016B8EC WCMV  block 7016B8E3 ASSIGN-STR-VARYING+CALLRESULT [@bp(s@7016B860.3, 2), ac0] = [@bp(s@7016B860.2, 0), ac1]
       note 7016B8AE dst: unknown value (NADI@7016B85B) -> register
       note 7016B8AE src: unknown value (NADI@7016B85B) -> register
       note 7016B8AE src ptr: leaf register ac3 does not hold fp at the statement (last writer: XLEFB at 7016B8AB) -> register
@@ -159,33 +159,33 @@
       note 7016B8EC src: unknown value (NADI@7016B85B) -> register
 
 == group 7016BBE3 GET_QUEST claims 2  EMIT
-   7016BC26 WADI  block 7016BBE3 CLAIM-BASE                   ac1 = t@7016BBE3.1   <- fold 7016BC25
-   7016BC3F WADI  block 7016BBE3 CLAIM-BASE                   ac1 = t@7016BBE3.2   <- fold 7016BC3E
-   7016BC2D WMSP  block 7016BBE3 CLAIM                        claim t@7016BBE3.1, ac2
-   7016BC47 WMSP  block 7016BBE3 CLAIM                        claim t@7016BBE3.2, ac2
-   7016BC67 STASP block 7016BC64 RELEASE                      release t@7016BBE3, ac1
-   7016BC37 WCMV  block 7016BBE3 COPY-STR-EXACT               [@bp(t@7016BBE3.1, 0), (sx16(M16[((sx16(M16[((sx16(M16[0x70000216]) * 686) + M32[0x70000210] + 43)]) * 19) + M32[0x70000212] + 0x7C2)]) + 140)] = [@bp(ac3, 0x4E8), (sx16(M16[((sx16(M16[((sx16(M16[0x70000216]) * 686) + M32[0x70000210] + 43)]) * 19) + M32[0x70000212] + 0x7C2)]) + 140)]   <- fold 7016BC34 7016BC36
+   7016BC26 WADI  block 7016BBE3 CLAIM-BASE                   ac1 = s@7016BBE3.1   <- fold 7016BC25
+   7016BC3F WADI  block 7016BBE3 CLAIM-BASE                   ac1 = s@7016BBE3.2   <- fold 7016BC3E
+   7016BC2D WMSP  block 7016BBE3 CLAIM                        claim s@7016BBE3.1, ac2
+   7016BC47 WMSP  block 7016BBE3 CLAIM                        claim s@7016BBE3.2, ac2
+   7016BC67 STASP block 7016BC64 RELEASE                      release s@7016BBE3, ac1
+   7016BC37 WCMV  block 7016BBE3 COPY-STR-EXACT               [@bp(s@7016BBE3.1, 0), (sx16(M16[((sx16(M16[((sx16(M16[0x70000216]) * 686) + M32[0x70000210] + 43)]) * 19) + M32[0x70000212] + 0x7C2)]) + 140)] = [@bp(ac3, 0x4E8), (sx16(M16[((sx16(M16[((sx16(M16[0x70000216]) * 686) + M32[0x70000210] + 43)]) * 19) + M32[0x70000212] + 0x7C2)]) + 140)]   <- fold 7016BC34 7016BC36
    7016BC3D WCMV  block 7016BBE3 CONCAT-PIECE                 [@ac2, 141] = [@0x7016AA89:0, "before they all perish.  The barrier may only be\x0Acrossed by the use of an amulet that was charmed by\x0Aan ancient forgotten underworld wizard.\x0A"]   <- fold 7016BC38 7016BC3A 7016BC3C
-   7016BC59 WCMV  block 7016BC50 ASSIGN-STR-VARYING           [@bp(t@7016BBE3.2, 2), (sx16(M16[((sx16(M16[((sx16(M16[0x70000216]) * 686) + M32[0x70000210] + 43)]) * 19) + M32[0x70000212] + 0x7C2)]) + 0x119)] = [@bp(t@7016BBE3.1, 0), (sx16(M16[((sx16(M16[((sx16(M16[0x70000216]) * 686) + M32[0x70000210] + 43)]) * 19) + M32[0x70000212] + 0x7C2)]) + 0x119)]
+   7016BC59 WCMV  block 7016BC50 ASSIGN-STR-VARYING           [@bp(s@7016BBE3.2, 2), (sx16(M16[((sx16(M16[((sx16(M16[0x70000216]) * 686) + M32[0x70000210] + 43)]) * 19) + M32[0x70000212] + 0x7C2)]) + 0x119)] = [@bp(s@7016BBE3.1, 0), (sx16(M16[((sx16(M16[((sx16(M16[0x70000216]) * 686) + M32[0x70000210] + 43)]) * 19) + M32[0x70000212] + 0x7C2)]) + 0x119)]
 
 == group 7016DBFC HELP claims 1  EMIT
-   7016DC00 WADI  block 7016DBFC CLAIM-BASE                   ac0 = t@7016DBFC.1   <- fold 7016DBFF
-   7016DC06 WMSP  block 7016DBFC CLAIM                        claim t@7016DBFC.1, ac2
-   7016DC2E STASP block 7016DBFC RELEASE                      release t@7016DBFC, ac1
-   7016DC16 WCMV  block 7016DBFC COPY-STR-EXACT               [@bp(t@7016DBFC.1, 0), sx16(M16[((sx16(M16[wp(ac3, 16)]) * 12) - 0xFFFFD9A)])] = [@bp((sx16(M16[wp(ac3, 16)]) * 12), -0x1FFFFB32), sx16(M16[((sx16(M16[wp(ac3, 16)]) * 12) - 0xFFFFD9A)])]   <- fold 7016DC0D 7016DC0F 7016DC12 7016DC15
+   7016DC00 WADI  block 7016DBFC CLAIM-BASE                   ac0 = s@7016DBFC.1   <- fold 7016DBFF
+   7016DC06 WMSP  block 7016DBFC CLAIM                        claim s@7016DBFC.1, ac2
+   7016DC2E STASP block 7016DBFC RELEASE                      release s@7016DBFC, ac1
+   7016DC16 WCMV  block 7016DBFC COPY-STR-EXACT               [@bp(s@7016DBFC.1, 0), sx16(M16[((sx16(M16[wp(ac3, 16)]) * 12) - 0xFFFFD9A)])] = [@bp((sx16(M16[wp(ac3, 16)]) * 12), -0x1FFFFB32), sx16(M16[((sx16(M16[wp(ac3, 16)]) * 12) - 0xFFFFD9A)])]   <- fold 7016DC0D 7016DC0F 7016DC12 7016DC15
    7016DC1E WCMV  block 7016DBFC CONCAT-PIECE                 [@ac2, (0 - sx16(M16[((sx16(M16[wp(ac3, 16)]) * 12) - 0xFFFFD9A)]) + 30)] = [@0x7015155A:0, (0 - sx16(M16[((sx16(M16[wp(ac3, 16)]) * 12) - 0xFFFFD9A)]) + 30)]   <- fold 7016DC18 7016DC1A 7016DC1D
-   7016DC29 WCMV  block 7016DBFC COPY-STR-EXACT               [@ac2, 30] = [@bp(t@7016DBFC.1, 0), 30]
+   7016DC29 WCMV  block 7016DBFC COPY-STR-EXACT               [@ac2, 30] = [@bp(s@7016DBFC.1, 0), 30]
       note 7016DC29 dst ptr: leaf register ac3 does not hold fp at the statement (last writer: WLSI at 7016DC28) -> register
 
 == group 7016DF68 INIT_OBJ_TBL claims 2  EMIT
-   7016DF79 WADI  block 7016DF68 CLAIM-BASE                   ac0 = t@7016DF68.1   <- fold 7016DF78
-   7016DF97 WADI  block 7016DF68 CLAIM-BASE                   ac1 = t@7016DF68.2   <- fold 7016DF96
-   7016DF7F WMSP  block 7016DF68 CLAIM                        claim t@7016DF68.1, ac2
-   7016DF9E WMSP  block 7016DF68 CLAIM                        claim t@7016DF68.2, ac2
-   7016DFDB STASP block 7016DFC4 RELEASE                      release t@7016DF68, ac1
-   7016DF95 WCMV  block 7016DF68 COPY-STR-EXACT               [@bp(t@7016DF68.1, 1), ac0] = [@ac3, ac1]
-   7016DFA9 WCMV  block 7016DF68 COPY-STR-EXACT               [@bp(t@7016DF68.2, 0), ac0] = [@bp(t@7016DF68.1, 0), ac1]
-   7016DFD6 WCMV  block 7016DFC4 ASSIGN-STR-FIXED+SUBSTR      [@(bp(M32[0x70000210], 1) + ((sx16(M16[0x70000216]) * 4) + 0x3DF71)), 4] = [@bp(t@7016DF68.2, 0), ac1]
+   7016DF79 WADI  block 7016DF68 CLAIM-BASE                   ac0 = s@7016DF68.1   <- fold 7016DF78
+   7016DF97 WADI  block 7016DF68 CLAIM-BASE                   ac1 = s@7016DF68.2   <- fold 7016DF96
+   7016DF7F WMSP  block 7016DF68 CLAIM                        claim s@7016DF68.1, ac2
+   7016DF9E WMSP  block 7016DF68 CLAIM                        claim s@7016DF68.2, ac2
+   7016DFDB STASP block 7016DFC4 RELEASE                      release s@7016DF68, ac1
+   7016DF95 WCMV  block 7016DF68 COPY-STR-EXACT               [@bp(s@7016DF68.1, 1), ac0] = [@ac3, ac1]
+   7016DFA9 WCMV  block 7016DF68 COPY-STR-EXACT               [@bp(s@7016DF68.2, 0), ac0] = [@bp(s@7016DF68.1, 0), ac1]
+   7016DFD6 WCMV  block 7016DFC4 ASSIGN-STR-FIXED+SUBSTR      [@(bp(M32[0x70000210], 1) + ((sx16(M16[0x70000216]) * 4) + 0x3DF71)), 4] = [@bp(s@7016DF68.2, 0), ac1]
       note 7016DF95 dst cnt: leaf register ac3 does not hold fp at the statement (last writer: WPOP at 7016DF93) -> register
       note 7016DF95 src cnt: leaf register ac3 does not hold fp at the statement (last writer: WPOP at 7016DF93) -> register
       note 7016DFA9 dst cnt: leaf register ac3 does not hold fp at the statement (last writer: WLSI at 7016DFA7) -> register
@@ -193,67 +193,67 @@
       note 7016DFD6 src cnt: leaf register ac3 does not hold fp at the statement (last writer: WLSI at 7016DFD5) -> register
 
 == group 7016ED93 LIST_PLAYERS claims 5  EMIT
-   7016EDAC WADI  block 7016ED93 CLAIM-BASE                   ac0 = t@7016ED93.1   <- fold 7016EDAB
-   7016EDC0 WADI  block 7016ED93 CLAIM-BASE                   ac2 = t@7016ED93.2   <- fold 7016EDBF
-   7016EDDB WADI  block 7016ED93 CLAIM-BASE                   ac1 = t@7016ED93.3   <- fold 7016EDDA
-   7016EDF6 WADI  block 7016ED93 CLAIM-BASE                   ac1 = t@7016ED93.4   <- fold 7016EDF5
-   7016EE10 WADI  block 7016ED93 CLAIM-BASE                   ac1 = t@7016ED93.5   <- fold 7016EE0F
-   7016EDB2 WMSP  block 7016ED93 CLAIM                        claim t@7016ED93.1, ac2
-   7016EDC7 WMSP  block 7016ED93 CLAIM                        claim t@7016ED93.2, ac3
-   7016EDE2 WMSP  block 7016ED93 CLAIM                        claim t@7016ED93.3, ac2
-   7016EDFD WMSP  block 7016ED93 CLAIM                        claim t@7016ED93.4, ac2
-   7016EE18 WMSP  block 7016ED93 CLAIM                        claim t@7016ED93.5, ac2
-   7016EE38 STASP block 7016EE35 RELEASE                      release t@7016ED93, ac1
-   7016EDBB WCMV  block 7016ED93 COPY-STR-EXACT+SUBSTR        [@bp(t@7016ED93.1, 0), ac0] = [@ac3, ac1]
-   7016EDD2 WCMV  block 7016ED93 COPY-STR-EXACT               [@bp(t@7016ED93.2, 0), (sx16(M16[(M32[0x70000210] + 0x1EFB9)]) + 1)] = [@bp(t@7016ED93.1, 0), (sx16(M16[(M32[0x70000210] + 0x1EFB9)]) + 1)]   <- fold 7016EDD1
+   7016EDAC WADI  block 7016ED93 CLAIM-BASE                   ac0 = s@7016ED93.1   <- fold 7016EDAB
+   7016EDC0 WADI  block 7016ED93 CLAIM-BASE                   ac2 = s@7016ED93.2   <- fold 7016EDBF
+   7016EDDB WADI  block 7016ED93 CLAIM-BASE                   ac1 = s@7016ED93.3   <- fold 7016EDDA
+   7016EDF6 WADI  block 7016ED93 CLAIM-BASE                   ac1 = s@7016ED93.4   <- fold 7016EDF5
+   7016EE10 WADI  block 7016ED93 CLAIM-BASE                   ac1 = s@7016ED93.5   <- fold 7016EE0F
+   7016EDB2 WMSP  block 7016ED93 CLAIM                        claim s@7016ED93.1, ac2
+   7016EDC7 WMSP  block 7016ED93 CLAIM                        claim s@7016ED93.2, ac3
+   7016EDE2 WMSP  block 7016ED93 CLAIM                        claim s@7016ED93.3, ac2
+   7016EDFD WMSP  block 7016ED93 CLAIM                        claim s@7016ED93.4, ac2
+   7016EE18 WMSP  block 7016ED93 CLAIM                        claim s@7016ED93.5, ac2
+   7016EE38 STASP block 7016EE35 RELEASE                      release s@7016ED93, ac1
+   7016EDBB WCMV  block 7016ED93 COPY-STR-EXACT+SUBSTR        [@bp(s@7016ED93.1, 0), ac0] = [@ac3, ac1]
+   7016EDD2 WCMV  block 7016ED93 COPY-STR-EXACT               [@bp(s@7016ED93.2, 0), (sx16(M16[(M32[0x70000210] + 0x1EFB9)]) + 1)] = [@bp(s@7016ED93.1, 0), (sx16(M16[(M32[0x70000210] + 0x1EFB9)]) + 1)]   <- fold 7016EDD1
    7016EDD9 WCMV  block 7016ED93 CONCAT-PIECE                 [@ac2, 12] = [@bp(ac3, 48), 12]   <- fold 7016EDD3 7016EDD6 7016EDD8
-   7016EDED WCMV  block 7016ED93 COPY-STR-EXACT               [@bp(t@7016ED93.3, 0), (sx16(M16[(M32[0x70000210] + 0x1EFB9)]) + 13)] = [@bp(t@7016ED93.2, 0), (sx16(M16[(M32[0x70000210] + 0x1EFB9)]) + 13)]   <- fold 7016EDEC
+   7016EDED WCMV  block 7016ED93 COPY-STR-EXACT               [@bp(s@7016ED93.3, 0), (sx16(M16[(M32[0x70000210] + 0x1EFB9)]) + 13)] = [@bp(s@7016ED93.2, 0), (sx16(M16[(M32[0x70000210] + 0x1EFB9)]) + 13)]   <- fold 7016EDEC
    7016EDF4 WCMV  block 7016ED93 CONCAT-PIECE                 [@ac2, 4] = [@bp(ac3, 60), 4]   <- fold 7016EDEE 7016EDF1 7016EDF3
-   7016EE08 WCMV  block 7016ED93 COPY-STR-EXACT               [@bp(t@7016ED93.4, 0), (sx16(M16[(M32[0x70000210] + 0x1EFB9)]) + 17)] = [@bp(t@7016ED93.3, 0), (sx16(M16[(M32[0x70000210] + 0x1EFB9)]) + 17)]   <- fold 7016EE07
+   7016EE08 WCMV  block 7016ED93 COPY-STR-EXACT               [@bp(s@7016ED93.4, 0), (sx16(M16[(M32[0x70000210] + 0x1EFB9)]) + 17)] = [@bp(s@7016ED93.3, 0), (sx16(M16[(M32[0x70000210] + 0x1EFB9)]) + 17)]   <- fold 7016EE07
    7016EE0E WCMV  block 7016ED93 CONCAT-PIECE                 [@ac2, 2] = [@0x7016EA5F:0, "| "]   <- fold 7016EE09 7016EE0B 7016EE0D
-   7016EE2A WCMV  block 7016EE21 ASSIGN-STR-VARYING           [@bp(t@7016ED93.5, 2), (sx16(M16[(M32[0x70000210] + 0x1EFB9)]) + 19)] = [@bp(t@7016ED93.4, 0), (sx16(M16[(M32[0x70000210] + 0x1EFB9)]) + 19)]
+   7016EE2A WCMV  block 7016EE21 ASSIGN-STR-VARYING           [@bp(s@7016ED93.5, 2), (sx16(M16[(M32[0x70000210] + 0x1EFB9)]) + 19)] = [@bp(s@7016ED93.4, 0), (sx16(M16[(M32[0x70000210] + 0x1EFB9)]) + 19)]
       note 7016EDBB src: opaque op WMUL: ((N[(fp+19)]-1) WMUL N[(W[0x70000210]+0X1EFB9)]) -> register
       note 7016EDBB dst cnt: leaf register ac3 does not hold fp at the statement (last writer: WMOV at 7016EDB9) -> register
       note 7016EDBB src cnt: leaf register ac3 does not hold fp at the statement (last writer: WMOV at 7016EDB9) -> register
 
 == group 70172DDE OBSERVE claims 1  EMIT
-   70172E29 WADI  block 70172DDE CLAIM-BASE                   ac1 = t@70172DDE.1   <- fold 70172E28
-   70172E30 WMSP  block 70172DDE CLAIM                        claim t@70172DDE.1, ac2
-   70172E5F STASP block 70172E55 RELEASE                      release t@70172DDE, ac0
-   70172E3A WCMV  block 70172DDE COPY-STR-EXACT               [@bp(t@70172DDE.1, 0), M32[wp(ac3, 132)]] = [@bp(ac3, 0x43C), M32[wp(ac3, 132)]]   <- fold 70172E37 70172E39
+   70172E29 WADI  block 70172DDE CLAIM-BASE                   ac1 = s@70172DDE.1   <- fold 70172E28
+   70172E30 WMSP  block 70172DDE CLAIM                        claim s@70172DDE.1, ac2
+   70172E5F STASP block 70172E55 RELEASE                      release s@70172DDE, ac0
+   70172E3A WCMV  block 70172DDE COPY-STR-EXACT               [@bp(s@70172DDE.1, 0), M32[wp(ac3, 132)]] = [@bp(ac3, 0x43C), M32[wp(ac3, 132)]]   <- fold 70172E37 70172E39
    70172E41 WCMV  block 70172DDE CONCAT-PIECE                 [@ac2, sx16(M16[wp(ac3, 134)])] = [@wp(ac3, 134), varying]   <- fold 70172E3C 70172E3E 70172E40
-   70172E4E WCMV  block 70172E4E ASSIGN-STR-MIN               [@ac2, ac0] = [@bp(t@70172DDE.1, 0), 150]
+   70172E4E WCMV  block 70172E4E ASSIGN-STR-MIN               [@ac2, ac0] = [@bp(s@70172DDE.1, 0), 150]
       note 70172E4E dst ptr: leaf register ac3 does not hold fp at the statement (last writer: block entry (bp[0x75046000:0])) -> register
 
 == group 70172EB0 OBSERVE claims 1  EMIT
-   70172EFA WADI  block 70172EB0 CLAIM-BASE                   ac1 = t@70172EB0.1   <- fold 70172EF9
-   70172F01 WMSP  block 70172EB0 CLAIM                        claim t@70172EB0.1, ac2
-   70172F30 STASP block 70172F26 RELEASE                      release t@70172EB0, ac0
-   70172F0B WCMV  block 70172EB0 COPY-STR-EXACT               [@bp(t@70172EB0.1, 0), M32[wp(ac3, 154)]] = [@bp(ac3, 0x43C), M32[wp(ac3, 154)]]   <- fold 70172F08 70172F0A
+   70172EFA WADI  block 70172EB0 CLAIM-BASE                   ac1 = s@70172EB0.1   <- fold 70172EF9
+   70172F01 WMSP  block 70172EB0 CLAIM                        claim s@70172EB0.1, ac2
+   70172F30 STASP block 70172F26 RELEASE                      release s@70172EB0, ac0
+   70172F0B WCMV  block 70172EB0 COPY-STR-EXACT               [@bp(s@70172EB0.1, 0), M32[wp(ac3, 154)]] = [@bp(ac3, 0x43C), M32[wp(ac3, 154)]]   <- fold 70172F08 70172F0A
    70172F12 WCMV  block 70172EB0 CONCAT-PIECE                 [@ac2, sx16(M16[wp(ac3, 134)])] = [@wp(ac3, 134), varying]   <- fold 70172F0D 70172F0F 70172F11
-   70172F1F WCMV  block 70172F1F ASSIGN-STR-MIN+CALLRESULT    [@ac2, ac0] = [@bp(t@70172EB0.1, 0), 150]
+   70172F1F WCMV  block 70172F1F ASSIGN-STR-MIN+CALLRESULT    [@ac2, ac0] = [@bp(s@70172EB0.1, 0), 150]
       note 70172F1F dst ptr: leaf register ac3 does not hold fp at the statement (last writer: block entry (bp[0x75048000:0])) -> register
 
 == group 70175694 OP_EDIT claims 5  EMIT
-   701756A3 WADI  block 70175694 CLAIM-BASE                   ac2 = t@70175694.1   <- fold 701756A2
-   701756BC WADI  block 70175694 CLAIM-BASE                   ac1 = t@70175694.2   <- fold 701756BB
-   701756D6 WADI  block 70175694 CLAIM-BASE                   ac1 = t@70175694.3   <- fold 701756D5
-   701756F1 WADI  block 70175694 CLAIM-BASE                   ac1 = t@70175694.4   <- fold 701756F0
-   7017570B WADI  block 70175694 CLAIM-BASE                   ac1 = t@70175694.5   <- fold 7017570A
-   701756A9 WMSP  block 70175694 CLAIM                        claim t@70175694.1, ac1
-   701756C3 WMSP  block 70175694 CLAIM                        claim t@70175694.2, ac2
-   701756DD WMSP  block 70175694 CLAIM                        claim t@70175694.3, ac2
-   701756F8 WMSP  block 70175694 CLAIM                        claim t@70175694.4, ac2
-   70175713 WMSP  block 70175694 CLAIM                        claim t@70175694.5, ac2
-   70175743 STASP block 70175740 RELEASE                      release t@70175694, ac0
-   701756BA WCMV  block 70175694 COPY-STR-EXACT               [@bp(t@70175694.1, 1), sx16(M16[M32[wp(ac3, -12)]])] = [@M32[wp(ac3, -12)], varying]   <- fold 701756B3 701756B5 701756B7 701756B9
-   701756CE WCMV  block 70175694 COPY-STR-EXACT               [@bp(t@70175694.2, 0), ac0] = [@bp(t@70175694.1, 0), ac1]
+   701756A3 WADI  block 70175694 CLAIM-BASE                   ac2 = s@70175694.1   <- fold 701756A2
+   701756BC WADI  block 70175694 CLAIM-BASE                   ac1 = s@70175694.2   <- fold 701756BB
+   701756D6 WADI  block 70175694 CLAIM-BASE                   ac1 = s@70175694.3   <- fold 701756D5
+   701756F1 WADI  block 70175694 CLAIM-BASE                   ac1 = s@70175694.4   <- fold 701756F0
+   7017570B WADI  block 70175694 CLAIM-BASE                   ac1 = s@70175694.5   <- fold 7017570A
+   701756A9 WMSP  block 70175694 CLAIM                        claim s@70175694.1, ac1
+   701756C3 WMSP  block 70175694 CLAIM                        claim s@70175694.2, ac2
+   701756DD WMSP  block 70175694 CLAIM                        claim s@70175694.3, ac2
+   701756F8 WMSP  block 70175694 CLAIM                        claim s@70175694.4, ac2
+   70175713 WMSP  block 70175694 CLAIM                        claim s@70175694.5, ac2
+   70175743 STASP block 70175740 RELEASE                      release s@70175694, ac0
+   701756BA WCMV  block 70175694 COPY-STR-EXACT               [@bp(s@70175694.1, 1), sx16(M16[M32[wp(ac3, -12)]])] = [@M32[wp(ac3, -12)], varying]   <- fold 701756B3 701756B5 701756B7 701756B9
+   701756CE WCMV  block 70175694 COPY-STR-EXACT               [@bp(s@70175694.2, 0), ac0] = [@bp(s@70175694.1, 0), ac1]
    701756D4 WCMV  block 70175694 CONCAT-PIECE                 [@ac2, 2] = [@0x701735CD:0, " ["]   <- fold 701756CF 701756D1 701756D3
-   701756E8 WCMV  block 70175694 COPY-STR-EXACT               [@bp(t@70175694.3, 0), ac0] = [@bp(t@70175694.2, 0), ac1]
+   701756E8 WCMV  block 70175694 COPY-STR-EXACT               [@bp(s@70175694.3, 0), ac0] = [@bp(s@70175694.2, 0), ac1]
    701756EF WCMV  block 70175694 CONCAT-PIECE                 [@ac2, sx16(M16[wp(ac3, 12)])] = [@wp(ac3, 12), varying]   <- fold 701756EA 701756EC 701756EE
-   70175703 WCMV  block 70175694 COPY-STR-EXACT               [@bp(t@70175694.4, 0), ac0] = [@bp(t@70175694.3, 0), ac1]
+   70175703 WCMV  block 70175694 COPY-STR-EXACT               [@bp(s@70175694.4, 0), ac0] = [@bp(s@70175694.3, 0), ac1]
    70175709 WCMV  block 70175694 CONCAT-PIECE                 [@ac2, 4] = [@0x701735CB:0, "] : "]   <- fold 70175704 70175706 70175708
-   70175725 WCMV  block 7017571C ASSIGN-STR-VARYING           [@bp(t@70175694.5, 2), ac0] = [@bp(t@70175694.4, 0), ac1]
+   70175725 WCMV  block 7017571C ASSIGN-STR-VARYING           [@bp(s@70175694.5, 2), ac0] = [@bp(s@70175694.4, 0), ac1]
       note 701756CE dst cnt: leaf register ac3 does not hold fp at the statement (last writer: WLSI at 701756CC) -> register
       note 701756CE src cnt: leaf register ac3 does not hold fp at the statement (last writer: WLSI at 701756CC) -> register
       note 701756E8 dst cnt: leaf register ac3 does not hold fp at the statement (last writer: WLSI at 701756E6) -> register
@@ -264,25 +264,25 @@
       note 70175725 src cnt: leaf register ac3 does not hold fp at the statement (last writer: WLSI at 70175724) -> register
 
 == group 701757C5 OP_EDIT claims 5  EMIT
-   701757CC WADI  block 701757C5 CLAIM-BASE                   ac2 = t@701757C5.1   <- fold 701757CB
-   701757E5 WADI  block 701757C5 CLAIM-BASE                   ac1 = t@701757C5.2   <- fold 701757E4
-   701757FF WADI  block 701757C5 CLAIM-BASE                   ac1 = t@701757C5.3   <- fold 701757FE
-   7017581A WADI  block 701757C5 CLAIM-BASE                   ac1 = t@701757C5.4   <- fold 70175819
-   70175834 WADI  block 701757C5 CLAIM-BASE                   ac1 = t@701757C5.5   <- fold 70175833
-   701757D2 WMSP  block 701757C5 CLAIM                        claim t@701757C5.1, ac1
-   701757EC WMSP  block 701757C5 CLAIM                        claim t@701757C5.2, ac2
-   70175806 WMSP  block 701757C5 CLAIM                        claim t@701757C5.3, ac2
-   70175821 WMSP  block 701757C5 CLAIM                        claim t@701757C5.4, ac2
-   7017583C WMSP  block 701757C5 CLAIM                        claim t@701757C5.5, ac2
-   7017586C STASP block 70175869 RELEASE                      release t@701757C5, ac0
-   701757E3 WCMV  block 701757C5 COPY-STR-EXACT               [@bp(t@701757C5.1, 1), sx16(M16[M32[wp(ac3, -12)]])] = [@M32[wp(ac3, -12)], varying]   <- fold 701757DC 701757DE 701757E0 701757E2
-   701757F7 WCMV  block 701757C5 COPY-STR-EXACT               [@bp(t@701757C5.2, 0), ac0] = [@bp(t@701757C5.1, 0), ac1]
+   701757CC WADI  block 701757C5 CLAIM-BASE                   ac2 = s@701757C5.1   <- fold 701757CB
+   701757E5 WADI  block 701757C5 CLAIM-BASE                   ac1 = s@701757C5.2   <- fold 701757E4
+   701757FF WADI  block 701757C5 CLAIM-BASE                   ac1 = s@701757C5.3   <- fold 701757FE
+   7017581A WADI  block 701757C5 CLAIM-BASE                   ac1 = s@701757C5.4   <- fold 70175819
+   70175834 WADI  block 701757C5 CLAIM-BASE                   ac1 = s@701757C5.5   <- fold 70175833
+   701757D2 WMSP  block 701757C5 CLAIM                        claim s@701757C5.1, ac1
+   701757EC WMSP  block 701757C5 CLAIM                        claim s@701757C5.2, ac2
+   70175806 WMSP  block 701757C5 CLAIM                        claim s@701757C5.3, ac2
+   70175821 WMSP  block 701757C5 CLAIM                        claim s@701757C5.4, ac2
+   7017583C WMSP  block 701757C5 CLAIM                        claim s@701757C5.5, ac2
+   7017586C STASP block 70175869 RELEASE                      release s@701757C5, ac0
+   701757E3 WCMV  block 701757C5 COPY-STR-EXACT               [@bp(s@701757C5.1, 1), sx16(M16[M32[wp(ac3, -12)]])] = [@M32[wp(ac3, -12)], varying]   <- fold 701757DC 701757DE 701757E0 701757E2
+   701757F7 WCMV  block 701757C5 COPY-STR-EXACT               [@bp(s@701757C5.2, 0), ac0] = [@bp(s@701757C5.1, 0), ac1]
    701757FD WCMV  block 701757C5 CONCAT-PIECE                 [@ac2, 2] = [@0x701735CD:0, " ["]   <- fold 701757F8 701757FA 701757FC
-   70175811 WCMV  block 701757C5 COPY-STR-EXACT               [@bp(t@701757C5.3, 0), ac0] = [@bp(t@701757C5.2, 0), ac1]
+   70175811 WCMV  block 701757C5 COPY-STR-EXACT               [@bp(s@701757C5.3, 0), ac0] = [@bp(s@701757C5.2, 0), ac1]
    70175818 WCMV  block 701757C5 CONCAT-PIECE                 [@ac2, sx16(M16[wp(ac3, 14)])] = [@wp(ac3, 14), varying]   <- fold 70175813 70175815 70175817
-   7017582C WCMV  block 701757C5 COPY-STR-EXACT+CALLRESULT    [@bp(t@701757C5.4, 0), ac0] = [@bp(t@701757C5.3, 0), ac1]
+   7017582C WCMV  block 701757C5 COPY-STR-EXACT+CALLRESULT    [@bp(s@701757C5.4, 0), ac0] = [@bp(s@701757C5.3, 0), ac1]
    70175832 WCMV  block 701757C5 CONCAT-PIECE                 [@ac2, 4] = [@0x701735CB:0, "] : "]   <- fold 7017582D 7017582F 70175831
-   7017584E WCMV  block 70175845 ASSIGN-STR-VARYING+CALLRESULT [@bp(t@701757C5.5, 2), ac0] = [@bp(t@701757C5.4, 0), ac1]
+   7017584E WCMV  block 70175845 ASSIGN-STR-VARYING+CALLRESULT [@bp(s@701757C5.5, 2), ac0] = [@bp(s@701757C5.4, 0), ac1]
       note 701757F7 dst cnt: leaf register ac3 does not hold fp at the statement (last writer: WLSI at 701757F5) -> register
       note 701757F7 src cnt: leaf register ac3 does not hold fp at the statement (last writer: WLSI at 701757F5) -> register
       note 70175811 dst cnt: leaf register ac3 does not hold fp at the statement (last writer: WLSI at 7017580F) -> register
@@ -293,25 +293,25 @@
       note 7017584E src cnt: leaf register ac0 does not hold unk(LCALL:?UNSIGNED_TO_CHAR@701757C1) at the statement (last writer: block entry ((unk(LCALL:?UNSIGNED_TO_CHAR@701757C1)+N[(fp+14)]+4))) -> register
 
 == group 701758A0 OP_EDIT claims 5  EMIT
-   701758AF WADI  block 701758A0 CLAIM-BASE                   ac2 = t@701758A0.1   <- fold 701758AE
-   701758C8 WADI  block 701758A0 CLAIM-BASE                   ac1 = t@701758A0.2   <- fold 701758C7
-   701758E2 WADI  block 701758A0 CLAIM-BASE                   ac1 = t@701758A0.3   <- fold 701758E1
-   701758FF WADI  block 701758A0 CLAIM-BASE                   ac1 = t@701758A0.4   <- fold 701758FE
-   70175919 WADI  block 701758A0 CLAIM-BASE                   ac1 = t@701758A0.5   <- fold 70175918
-   701758B5 WMSP  block 701758A0 CLAIM                        claim t@701758A0.1, ac1
-   701758CF WMSP  block 701758A0 CLAIM                        claim t@701758A0.2, ac2
-   701758E9 WMSP  block 701758A0 CLAIM                        claim t@701758A0.3, ac2
-   70175906 WMSP  block 701758A0 CLAIM                        claim t@701758A0.4, ac2
-   70175921 WMSP  block 701758A0 CLAIM                        claim t@701758A0.5, ac2
-   70175951 STASP block 7017594E RELEASE                      release t@701758A0, ac0
-   701758C6 WCMV  block 701758A0 COPY-STR-EXACT               [@bp(t@701758A0.1, 1), sx16(M16[M32[wp(ac3, -12)]])] = [@M32[wp(ac3, -12)], varying]   <- fold 701758BF 701758C1 701758C3 701758C5
-   701758DA WCMV  block 701758A0 COPY-STR-EXACT               [@bp(t@701758A0.2, 0), ac0] = [@bp(t@701758A0.1, 0), ac1]
+   701758AF WADI  block 701758A0 CLAIM-BASE                   ac2 = s@701758A0.1   <- fold 701758AE
+   701758C8 WADI  block 701758A0 CLAIM-BASE                   ac1 = s@701758A0.2   <- fold 701758C7
+   701758E2 WADI  block 701758A0 CLAIM-BASE                   ac1 = s@701758A0.3   <- fold 701758E1
+   701758FF WADI  block 701758A0 CLAIM-BASE                   ac1 = s@701758A0.4   <- fold 701758FE
+   70175919 WADI  block 701758A0 CLAIM-BASE                   ac1 = s@701758A0.5   <- fold 70175918
+   701758B5 WMSP  block 701758A0 CLAIM                        claim s@701758A0.1, ac1
+   701758CF WMSP  block 701758A0 CLAIM                        claim s@701758A0.2, ac2
+   701758E9 WMSP  block 701758A0 CLAIM                        claim s@701758A0.3, ac2
+   70175906 WMSP  block 701758A0 CLAIM                        claim s@701758A0.4, ac2
+   70175921 WMSP  block 701758A0 CLAIM                        claim s@701758A0.5, ac2
+   70175951 STASP block 7017594E RELEASE                      release s@701758A0, ac0
+   701758C6 WCMV  block 701758A0 COPY-STR-EXACT               [@bp(s@701758A0.1, 1), sx16(M16[M32[wp(ac3, -12)]])] = [@M32[wp(ac3, -12)], varying]   <- fold 701758BF 701758C1 701758C3 701758C5
+   701758DA WCMV  block 701758A0 COPY-STR-EXACT               [@bp(s@701758A0.2, 0), ac0] = [@bp(s@701758A0.1, 0), ac1]
    701758E0 WCMV  block 701758A0 CONCAT-PIECE                 [@ac2, 2] = [@0x701735CD:0, " ["]   <- fold 701758DB 701758DD 701758DF
-   701758F4 WCMV  block 701758A0 COPY-STR-EXACT               [@bp(t@701758A0.3, 0), ac0] = [@bp(t@701758A0.2, 0), ac1]
+   701758F4 WCMV  block 701758A0 COPY-STR-EXACT               [@bp(s@701758A0.3, 0), ac0] = [@bp(s@701758A0.2, 0), ac1]
    701758FD WCMV  block 701758A0 CONCAT-PIECE                 [@ac2, sx16(M16[M32[wp(ac3, -14)]])] = [@M32[wp(ac3, -14)], varying]   <- fold 701758F6 701758F8 701758FA 701758FC
-   70175911 WCMV  block 701758A0 COPY-STR-EXACT               [@bp(t@701758A0.4, 0), ac0] = [@bp(t@701758A0.3, 0), ac1]
+   70175911 WCMV  block 701758A0 COPY-STR-EXACT               [@bp(s@701758A0.4, 0), ac0] = [@bp(s@701758A0.3, 0), ac1]
    70175917 WCMV  block 701758A0 CONCAT-PIECE                 [@ac2, 4] = [@0x701735CB:0, "] : "]   <- fold 70175912 70175914 70175916
-   70175933 WCMV  block 7017592A ASSIGN-STR-VARYING           [@bp(t@701758A0.5, 2), ac0] = [@bp(t@701758A0.4, 0), ac1]
+   70175933 WCMV  block 7017592A ASSIGN-STR-VARYING           [@bp(s@701758A0.5, 2), ac0] = [@bp(s@701758A0.4, 0), ac1]
       note 701758DA dst cnt: leaf register ac3 does not hold fp at the statement (last writer: WLSI at 701758D8) -> register
       note 701758DA src cnt: leaf register ac3 does not hold fp at the statement (last writer: WLSI at 701758D8) -> register
       note 701758F4 dst cnt: leaf register ac3 does not hold fp at the statement (last writer: WLSI at 701758F2) -> register
@@ -322,25 +322,25 @@
       note 70175933 src cnt: leaf register ac3 does not hold fp at the statement (last writer: WLSI at 70175932) -> register
 
 == group 7017A116 STORE claims 5  EMIT
-   7017A142 WADI  block 7017A116 CLAIM-BASE                   ac1 = t@7017A116.1   <- fold 7017A141
-   7017A15D WADI  block 7017A116 CLAIM-BASE                   ac1 = t@7017A116.2   <- fold 7017A15C
-   7017A178 WADI  block 7017A116 CLAIM-BASE                   ac1 = t@7017A116.3   <- fold 7017A177
-   7017A193 WADI  block 7017A116 CLAIM-BASE                   ac1 = t@7017A116.4   <- fold 7017A192
-   7017A1AA WADI  block 7017A116 CLAIM-BASE                   ac2 = t@7017A116.5   <- fold 7017A1A9
-   7017A149 WMSP  block 7017A116 CLAIM                        claim t@7017A116.1, ac2
-   7017A164 WMSP  block 7017A116 CLAIM                        claim t@7017A116.2, ac2
-   7017A17F WMSP  block 7017A116 CLAIM                        claim t@7017A116.3, ac2
-   7017A19A WMSP  block 7017A116 CLAIM                        claim t@7017A116.4, ac2
-   7017A1B2 WMSP  block 7017A116 CLAIM                        claim t@7017A116.5, ac3
-   7017A1D1 STASP block 7017A1CE RELEASE                      release t@7017A116, ac1
-   7017A153 WCMV  block 7017A116 COPY-STR-EXACT               [@bp(t@7017A116.1, 0), M32[wp(ac3, 60)]] = [@bp(ac3, 0x2D8), M32[wp(ac3, 60)]]   <- fold 7017A150 7017A152
+   7017A142 WADI  block 7017A116 CLAIM-BASE                   ac1 = s@7017A116.1   <- fold 7017A141
+   7017A15D WADI  block 7017A116 CLAIM-BASE                   ac1 = s@7017A116.2   <- fold 7017A15C
+   7017A178 WADI  block 7017A116 CLAIM-BASE                   ac1 = s@7017A116.3   <- fold 7017A177
+   7017A193 WADI  block 7017A116 CLAIM-BASE                   ac1 = s@7017A116.4   <- fold 7017A192
+   7017A1AA WADI  block 7017A116 CLAIM-BASE                   ac2 = s@7017A116.5   <- fold 7017A1A9
+   7017A149 WMSP  block 7017A116 CLAIM                        claim s@7017A116.1, ac2
+   7017A164 WMSP  block 7017A116 CLAIM                        claim s@7017A116.2, ac2
+   7017A17F WMSP  block 7017A116 CLAIM                        claim s@7017A116.3, ac2
+   7017A19A WMSP  block 7017A116 CLAIM                        claim s@7017A116.4, ac2
+   7017A1B2 WMSP  block 7017A116 CLAIM                        claim s@7017A116.5, ac3
+   7017A1D1 STASP block 7017A1CE RELEASE                      release s@7017A116, ac1
+   7017A153 WCMV  block 7017A116 COPY-STR-EXACT               [@bp(s@7017A116.1, 0), M32[wp(ac3, 60)]] = [@bp(ac3, 0x2D8), M32[wp(ac3, 60)]]   <- fold 7017A150 7017A152
    7017A15B WCMV  block 7017A116 CONCAT-PIECE                 [@ac2, M32[wp(ac3, 62)]] = [@0x7015155A:0, M32[wp(ac3, 62)]]   <- fold 7017A155 7017A157 7017A15A
-   7017A16F WCMV  block 7017A116 COPY-STR-EXACT               [@bp(t@7017A116.2, 0), ac0] = [@bp(t@7017A116.1, 0), ac1]
+   7017A16F WCMV  block 7017A116 COPY-STR-EXACT               [@bp(s@7017A116.2, 0), ac0] = [@bp(s@7017A116.1, 0), ac1]
    7017A176 WCMV  block 7017A116 CONCAT-PIECE                 [@ac2, sx16(M16[wp(ac3, 22)])] = [@wp(ac3, 22), varying]   <- fold 7017A171 7017A173 7017A175
-   7017A18A WCMV  block 7017A116 COPY-STR-EXACT               [@bp(t@7017A116.3, 0), ac0] = [@bp(t@7017A116.2, 0), ac1]
+   7017A18A WCMV  block 7017A116 COPY-STR-EXACT               [@bp(s@7017A116.3, 0), ac0] = [@bp(s@7017A116.2, 0), ac1]
    7017A191 WCMV  block 7017A116 CONCAT-PIECE                 [@ac2, sx16(M16[wp(ac3, 116)])] = [@wp(ac3, 116), varying]   <- fold 7017A18C 7017A18E 7017A190
-   7017A1A5 WCMV  block 7017A116 COPY-STR-EXACT               [@bp(t@7017A116.4, 0), ac0] = [@bp(t@7017A116.3, 0), ac1]
-   7017A1C3 WCMV  block 7017A1BA ASSIGN-STR-VARYING           [@bp(t@7017A116.5, 2), ac0] = [@bp(t@7017A116.4, 0), ac1]
+   7017A1A5 WCMV  block 7017A116 COPY-STR-EXACT               [@bp(s@7017A116.4, 0), ac0] = [@bp(s@7017A116.3, 0), ac1]
+   7017A1C3 WCMV  block 7017A1BA ASSIGN-STR-VARYING           [@bp(s@7017A116.5, 2), ac0] = [@bp(s@7017A116.4, 0), ac1]
       note 7017A16F dst cnt: leaf register ac3 does not hold fp at the statement (last writer: WLSI at 7017A16D) -> register
       note 7017A16F src cnt: leaf register ac3 does not hold fp at the statement (last writer: WLSI at 7017A16D) -> register
       note 7017A18A dst cnt: leaf register ac3 does not hold fp at the statement (last writer: WLSI at 7017A188) -> register

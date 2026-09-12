@@ -21,6 +21,10 @@
 #include "Instruction.hpp"
 #include "EagleInstruction.hpp"
 #include "BlockSync.hpp"
+#include "Memory.hpp"
+#include "../os/ArrayPage.hpp"
+#include <set>
+#include <functional>
 #include "RTStubs.hpp"
 #include "Lockstep.hpp"
 #include "../debug/Capture.hpp"
@@ -125,6 +129,7 @@ struct IRExec::Expr {
               TF, LSH,                    // P26: tf(e), lsh(e, amount) (pure, flag-free)
               SX16, ZX16, ZX8, TRUNC16 } kind;
   uint32_t value = 0;                     // CONST value / AC index / t index
+  int32_t  vref = -1;                     // P46 (ir 7): CONST produced from a v name — index into vars_ (width tripwire)
   std::shared_ptr<Expr> a, b;
 };
 
@@ -136,6 +141,78 @@ using P = std::shared_ptr<Expr>;
 // emitters parenthesize; the loader refuses mixed chains rather than
 // owning a precedence table).  A comparison chain has exactly one op.
 enum OpClass { OC_NONE, OC_ARITH, OC_CMP, OC_BOOL };
+
+// ---- P46 (ir 7): entry names and qualified names (docs/IR.md §5.10.2) ----
+// The namespace is EVERY entry line of the addrbook (migrated and `#`
+// unmigrated alike), `@ADDR` dropped, indexed by file order.
+struct Entries {
+  std::vector<std::string> names;
+  std::map<std::string, uint32_t> idx;
+  std::string path;
+  bool loaded = false;
+};
+static Entries g_entries;
+static void load_entries(const char* addrbook) {
+  if (g_entries.loaded) return;
+  const char* path = addrbook ? addrbook : getenv("QUEST_ADDRESS_BOOK");
+  if (!path) refuse("the file names a v or a symbolic block but QUEST_ADDRESS_BOOK is not set (ir 7 needs the addrbook's entry names, docs/IR.md §5.10.2)");
+  std::ifstream f(path);
+  if (!f) refuse(std::string("cannot open the addrbook for entry names: ") + path);
+  std::string line;
+  while (std::getline(f, line)) {
+    size_t i = 0;
+    if (!line.empty() && line[0] == '#') i = 1;          // an unmigrated entry: `#7015D068 NAME ...`
+    if (line.size() < i + 8) continue;
+    bool hex8 = true;
+    for (size_t j = i; j < i + 8; j++) if (!isxdigit(static_cast<unsigned char>(line[j]))) { hex8 = false; break; }
+    if (!hex8 || line.size() == i + 8 || !(line[i+8] == ' ' || line[i+8] == '\t')) continue;
+    std::istringstream is(line.substr(i + 8));
+    std::string name; is >> name;
+    size_t at = name.find('@');
+    if (at != std::string::npos) name = name.substr(0, at);
+    if (name.empty()) continue;
+    if (g_entries.idx.count(name)) refuse("addrbook entry name not unique after the @ADDR drop: " + name);
+    g_entries.idx[name] = uint32_t(g_entries.names.size());
+    g_entries.names.push_back(name);
+  }
+  if (g_entries.names.empty()) refuse(std::string("no entry lines in the addrbook: ") + path);
+  g_entries.path = path; g_entries.loaded = true;
+}
+// <ENTRY>.v<k> / <ENTRY>.b<k>: split on the LAST dot; the local is v|b +
+// digits; the entry is UPPERCASE `[A-Z][A-Z0-9_]*(\.<digits>)*` and must be
+// in the addrbook. Returns the entry index; kind = 'v' | 'b'.
+static uint32_t parse_qualified(const std::string& tok, char want, char& kind, std::string& entry, uint32_t& k) {
+  size_t dot = tok.rfind('.');
+  if (dot == std::string::npos || dot == 0 || dot + 2 >= tok.size())
+    refuse("malformed qualified name (want <ENTRY>.v<digits> or <ENTRY>.b<digits>): " + tok);
+  entry = tok.substr(0, dot);
+  std::string local = tok.substr(dot + 1);
+  kind = local[0];
+  if (kind != 'v' && kind != 'b') refuse("malformed qualified name (the local must be v<digits> or b<digits>): " + tok);
+  if (want && kind != want) refuse(std::string(want == 'v' ? "a block name where a v was expected" : "a v name where a block name was expected") + ": " + tok);
+  if (local.size() < 2 || local.find_first_not_of("0123456789", 1) != std::string::npos)
+    refuse("malformed qualified name (digits after v/b): " + tok);
+  if (local.size() > 6) refuse("malformed qualified name (too many digits): " + tok);
+  k = uint32_t(strtoul(local.c_str() + 1, nullptr, 10));
+  if (!(entry[0] >= 'A' && entry[0] <= 'Z')) refuse("entry names are UPPERCASE (as in the addrbook): " + tok);
+  bool in_suffix = false;
+  for (size_t i = 0; i < entry.size(); i++) {
+    char c = entry[i];
+    if (c == '.') { in_suffix = true; if (i + 1 >= entry.size() || !isdigit(static_cast<unsigned char>(entry[i+1]))) refuse("malformed entry name (an entry suffix is .<digits>): " + tok); continue; }
+    if (in_suffix) { if (!isdigit(static_cast<unsigned char>(c))) refuse("malformed entry name (an entry suffix is .<digits>): " + tok); continue; }
+    if (!((c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || c == '_')) refuse("malformed entry name (want [A-Z][A-Z0-9_]*): " + tok);
+  }
+  auto it = g_entries.idx.find(entry);
+  if (it == g_entries.idx.end()) refuse("unknown addrbook entry '" + entry + "' in " + tok + " (names come from " + g_entries.path + ")");
+  return it->second;
+}
+static bool looks_qualified(const char* s) {        // starts an uppercase identifier: a candidate name
+  return *s >= 'A' && *s <= 'Z';
+}
+// the v table the parser resolves against (set by load(); the parser is
+// otherwise stateless)
+struct VarTable { const std::vector<IRExec::Var>* vars = nullptr; const std::map<std::string, size_t>* by_name = nullptr; };
+static VarTable g_vt;
 
 struct Parser {
   const char* s;
@@ -189,6 +266,20 @@ struct Parser {
     if (lit("M16[")) { P e = expr(); if (!lit("]")) bad("expected ]"); return node(Expr::MEM16, e); }
     if (lit("M8[")) { P e = expr(); if (!lit("]")) bad("expected ]"); return node(Expr::MEM8, e); }
     if (lit("M1[")) bad("M1 not implemented (IQ3)");
+    if (looks_qualified(s)) {                                   // P46 (ir 7): <ENTRY>.v<k> — a placed address, a constant
+      const char* q = s;
+      while ((*q >= 'A' && *q <= 'Z') || (*q >= 'a' && *q <= 'z') || (*q >= '0' && *q <= '9') || *q == '_' || *q == '.') q++;
+      std::string tok(s, q - s);
+      char kind; std::string entry; uint32_t k;
+      parse_qualified(tok, 'v', kind, entry, k);
+      if (!g_vt.by_name) bad("v name outside a load");
+      auto it = g_vt.by_name->find(tok);
+      if (it == g_vt.by_name->end()) bad("v referenced before its declaration (or never declared): " + tok);
+      s = q;
+      P e = node(Expr::CONST, nullptr, nullptr, (*g_vt.vars)[it->second].addr);
+      e->vref = int32_t(it->second);
+      return e;
+    }
     if (lit("wp(")) return fn2(Expr::WP, "wp");                // P25 word-pointer builder
     if (lit("bp(")) return fn2(Expr::BP, "bp");                // P25 byte-pointer builder
     if (lit("lsh(")) return fn2(Expr::LSH, "lsh");             // P26 pure logical shift (ISA amount)
@@ -210,14 +301,14 @@ struct Parser {
       if (*s < '0' || *s > '3') bad("bad ac index");
       return node(Expr::AC, nullptr, nullptr, uint32_t(*s++ - '0'));
     }
-    if (*s == 't' && s[1] == '@') {                            // P33-B (ir 6): arena twin t@<block>.<k>
+    if (*s == 's' && s[1] == '@') {                            // P33-B (ir 6) / P46 (ir 7 spelling): arena twin s@<block>.<k>
       s += 2; char* end; unsigned long blk = strtoul(s, &end, 16);
-      if (end == s || *end != '.') bad("twin name must be t@<hex block>.<k>");
+      if (end == s || *end != '.') bad("twin name must be s@<hex block>.<k>");
       s = end + 1; unsigned long k = strtoul(s, &end, 10);
-      if (end == s || k == 0) bad("twin name must be t@<hex block>.<k>");
+      if (end == s || k == 0) bad("twin name must be s@<hex block>.<k>");
       s = end;
       if (isalnum(uchar(*s)) || *s == '_') bad("bad twin name");
-      if (!strings::Arena::loaded()) bad("t@ twin named but QUEST_ARENA is not set");
+      if (!strings::Arena::loaded()) bad("s@ twin named but QUEST_ARENA is not set");
       const strings::ArenaTemp* a = strings::Arena::find(uint32_t(blk), uint32_t(k));
       if (!a) bad("twin not in quest.arena");
       return node(Expr::CONST, nullptr, nullptr, a->addr);   // its word address
@@ -242,8 +333,10 @@ struct Parser {
         if (*s != '0' && *s != '1') bad("byte select must be 0 or 1");
         uint32_t b = uint32_t(*s++ - '0');
         if (v > 0x7FFFFFFFull) bad("byte-pointer word address exceeds 31 bits");
+        if (IRExec::is_synthetic(uint32_t(v))) bad("a 0x76/0x77 address is loader-assigned and not authorable — name the v or block");
         return node(Expr::CONST, nullptr, nullptr, uint32_t(v) * 2u + b);
       }
+      if (!neg && IRExec::is_synthetic(uint32_t(v))) bad("a 0x76/0x77 address is loader-assigned and not authorable — name the v or block");
       return node(Expr::CONST, nullptr, nullptr, uint32_t(neg ? -int64_t(v) : int64_t(v)));
     }
     if (*s >= '0' && *s <= '9') {
@@ -322,11 +415,17 @@ IRExec* IRExec::load_from_env() {
     refuse("QUEST_IR requires -lockstep (only the clone dispatches IR; "
            "a non-lockstep run would silently ignore it)");
   IRExec* ir = new IRExec();
-  ir->load(path);
+  ir->load(path, nullptr);
   return ir;
 }
 
-void IRExec::load(const std::string& path) {
+IRExec* IRExec::load_file(const std::string& path, const char* addrbook) {
+  IRExec* ir = new IRExec();
+  ir->load(path, addrbook);
+  return ir;
+}
+
+void IRExec::load(const std::string& path, const char* addrbook) {
   std::ifstream f(path);
   if (!f) refuse("cannot open QUEST_IR=" + path);
 
@@ -365,6 +464,45 @@ void IRExec::load(const std::string& path) {
   uint32_t prev_ipc = 0;
   const char* blocks_env = getenv("QUEST_BLOCKS");
   std::vector<bool> tdef(256, false);          // P26: t-places defined so far in cur
+  // P46 (ir 7): names, placement, and the conditional blocks-provenance rule
+  bool saw_numeric = false;                    // any hex8 block start or goto label
+  std::set<std::string> defined_blocks;        // symbolic headers seen
+  std::map<uint32_t, uint32_t> vcursor;        // entry idx -> next free offset in its 0x76 range
+  g_vt.vars = &vars_; g_vt.by_name = &var_by_name_;
+  auto place_block = [&](const std::string& name) -> uint32_t {   // first sight assigns (header or label)
+    auto it = block_by_name_.find(name);
+    if (it != block_by_name_.end()) return it->second;
+    load_entries(addrbook);
+    char kind; std::string entry; uint32_t k;
+    uint32_t idx = parse_qualified(name, 'b', kind, entry, k);
+    if (k >= ENTRY_STRIDE) refuse("block ordinal exceeds the entry's reserved range (k < 0x10000): " + name);
+    uint32_t addr = B_BASE + idx * ENTRY_STRIDE + k;
+    block_by_name_[name] = addr;
+    fprintf(stderr, "IRExec: block %s at %08X\n", name.c_str(), addr);
+    return addr;
+  };
+  auto is_hex8 = [](const std::string& t) {
+    return t.size() == 8 && t.find_first_not_of("0123456789ABCDEFabcdef") == std::string::npos;
+  };
+  // the width tripwire (docs/IR.md §5.10.4): a v used DIRECTLY as an index
+  // must fit the access; offsets and wp/bp are the source's business
+  std::function<void(const P&, const std::string&)> check_widths = [&](const P& e, const std::string& body) {
+    if (!e) return;
+    if ((e->kind == Expr::MEM16 || e->kind == Expr::MEM32 || e->kind == Expr::MEM8) && e->a && e->a->vref >= 0) {
+      const Var& v = vars_[size_t(e->a->vref)];
+      const char* w = e->kind == Expr::MEM32 ? "M32" : e->kind == Expr::MEM16 ? "M16" : "M8";
+      bool ok = true;
+      switch (v.type) {
+        case Var::I16: case Var::U16: case Var::I32: case Var::U32: ok = (e->kind != Expr::MEM8) && !(e->kind == Expr::MEM32 && (v.type == Var::I16 || v.type == Var::U16)); break;
+        case Var::CHAR:    ok = (e->kind == Expr::MEM8); break;   // byte data (and even then the index is a WORD address: use bp)
+        case Var::VARYING: ok = (e->kind == Expr::MEM16); break;  // the length word
+        case Var::WORDS:   ok = true; break;
+      }
+      if (v.type == Var::CHAR) ok = false;                          // a char v is addressed by bp(v, d), never by a raw word index
+      if (!ok) refuse(std::string("width tripwire: ") + w + "[" + v.name + "] does not fit a " + (v.type == Var::I16 ? "i16" : v.type == Var::U16 ? "u16" : v.type == Var::I32 ? "i32" : v.type == Var::U32 ? "u32" : v.type == Var::CHAR ? "char" : v.type == Var::VARYING ? "varying" : "words") + " v: " + body);
+    }
+    check_widths(e->a, body); check_widths(e->b, body);
+  };
 
   auto check_treads = [&](const P& e, const std::string& body) {
     std::vector<uint32_t> reads; collect_treads(e, reads);
@@ -394,9 +532,9 @@ void IRExec::load(const std::string& path) {
     std::string body = line.substr(b0);
 
     if (!got_header) {
-      if (body != "ir 6")
-        refuse("missing/unknown version header (want 'ir 6'; ir 5 files predate the "
-               "arena twins t@<block>.<k>, claim and release (P33-B) — regenerate with tools/lower.py)");
+      if (body != "ir 7")
+        refuse("missing/unknown version header (want 'ir 7'; ir 6 files spell the arena "
+               "twins t@<block>.<k> — ir 7 spells them s@<block>.<k> (P46) — regenerate with tools/lower.py)");
       got_header = true;
       continue;
     }
@@ -435,7 +573,7 @@ void IRExec::load(const std::string& path) {
       } else if (tok == "arena") {
         // P33-B: the twins this file names live in quest.arena; the loaded
         // layout (QUEST_ARENA) must be the one the emitter laid out.
-        if (!strings::Arena::loaded()) refuse("ir 6 file carries an arena line but QUEST_ARENA is not set");
+        if (!strings::Arena::loaded()) refuse("ir 7 file carries an arena line but QUEST_ARENA is not set");
         std::string got = sha256_file(strings::Arena::path());
         if (got != sha) refuse("arena provenance mismatch vs QUEST_ARENA=" + strings::Arena::path());
       } else {
@@ -445,16 +583,76 @@ void IRExec::load(const std::string& path) {
       }
       continue;
     }
+    if (tok == "v") {
+      // P46 (ir 7): `v <ENTRY>.v<k> <vtype>` — a declaration, file level (docs/IR.md §5.10.1)
+      if (cur) refuse("v declaration inside a block: " + body);
+      if (got_trailer) refuse("v declaration after the trailer: " + body);
+      std::string name, ty, ns, extra;
+      is >> name >> ty;
+      Var v; v.name = name;
+      load_entries(addrbook);
+      char kind; std::string entry; uint32_t k;
+      uint32_t idx = parse_qualified(name, 'v', kind, entry, k);
+      if (var_by_name_.count(name)) refuse("duplicate v declaration: " + name);
+      if (ty == "i16") { v.type = Var::I16; v.words = 1; }
+      else if (ty == "u16") { v.type = Var::U16; v.words = 1; }
+      else if (ty == "i32") { v.type = Var::I32; v.words = 2; }
+      else if (ty == "u32") { v.type = Var::U32; v.words = 2; }
+      else if (ty == "char" || ty == "varying" || ty == "words") {
+        if (!(is >> ns) || ns.empty() || ns.find_first_not_of("0123456789") != std::string::npos)
+          refuse("v " + ty + " needs a constant n (1..32767): " + body);
+        unsigned long n = strtoul(ns.c_str(), nullptr, 10);
+        if (n < 1 || n > 32767) refuse("v " + ty + " n must be 1..32767: " + body);
+        v.n = uint32_t(n);
+        v.type = ty == "char" ? Var::CHAR : ty == "varying" ? Var::VARYING : Var::WORDS;
+        v.words = ty == "words" ? uint32_t(n) : (ty == "char" ? uint32_t((n + 1) / 2) : 1u + uint32_t((n + 1) / 2));
+      } else refuse("unknown v type '" + ty + "' (want i16|u16|i32|u32|char n|varying n|words n): " + body);
+      if (is >> extra) refuse("trailing text after the v declaration: " + body);
+      uint32_t& cursor = vcursor[idx];
+      if (cursor + v.words > ENTRY_STRIDE) refuse("entry " + entry + " overflows its reserved 0x76 range (0x10000 words): " + body);
+      v.addr = V_BASE + idx * ENTRY_STRIDE + cursor;
+#ifdef P46_BROKEN_ALLOC
+      cursor += 0;                              // tests/run_vform_selftest.sh teeth: every v at one address
+#else
+      cursor += v.words;
+#endif
+      // disjointness, asserted loudly. It CANNOT fire in ir 7 — the
+      // allocator is sequential and there is no placement input that could
+      // ask for a shared address (docs/IR.md §5.10.3). It is not a check
+      // that passed; it is the hook the placement refusal will hang on.
+      for (const Var& o : vars_)
+        if (v.addr < o.addr + o.words && o.addr < v.addr + v.words)
+          throw std::runtime_error("IRExec: two v's share an address (allocator bug): " + v.name + " and " + o.name);
+      var_by_name_[name] = vars_.size();
+      vars_.push_back(v);
+      fprintf(stderr, "IRExec: v %s type %s words %u at %08X\n", name.c_str(), ty.c_str(), v.words, v.addr);
+      continue;
+    }
     if (tok == "block") {
       if (cur) refuse("block header inside block (missing blank line)");
       if (got_trailer) refuse("block after trailer");
       std::string pcs, segkw, segs;
       is >> pcs >> segkw >> segs;
-      if (segkw != "seg") refuse("block header missing seg: " + body);
       blocks_.push_back(Block());
       cur = &blocks_.back();
+      if (!is_hex8(pcs)) {
+        // P46 (ir 7): a SYMBOLIC block `block <ENTRY>.b<k>` — no seg (the 0x77 space fixes it)
+        if (!segkw.empty()) refuse("a symbolic block takes no seg (the 0x77 space fixes it): " + body);
+        if (defined_blocks.count(pcs)) refuse("duplicate symbolic block: " + pcs);
+        cur->name  = pcs;
+        cur->start = place_block(pcs);
+        cur->seg   = 0x70000000u;
+        defined_blocks.insert(pcs);
+        nsymbolic_++;
+        prev_ipc = 0;
+        std::fill(tdef.begin(), tdef.end(), false);
+        continue;
+      }
+      if (segkw != "seg") refuse("block header missing seg: " + body);
       cur->start = uint32_t(strtoul(pcs.c_str(), nullptr, 16));
       cur->seg   = uint32_t(strtoul(segs.c_str(), nullptr, 16));
+      if (is_synthetic(cur->start)) refuse("a hex8 block start in the 0x76/0x77 spaces: only a name denotes a symbolic block: " + body);
+      saw_numeric = true;
       if ((cur->start & 0xF0000000) != cur->seg)
         refuse("seg does not match block pc: " + body);
       if (cur->start == 0x7015BD6B)
@@ -466,15 +664,18 @@ void IRExec::load(const std::string& path) {
       continue;
     }
     if (!cur) refuse("content outside any block: " + body);
+    const bool symbolic = !cur->name.empty();
 
     Stmt st;
     if (tok[0] == '@') {
+      if (symbolic) refuse("an @addr instruction inside a symbolic block (ir 7 refuses; docs/IR.md §5.10.5): " + body);
       st.kind = Stmt::INSTR;
       st.pc = uint32_t(strtoul(tok.c_str() + 1, nullptr, 16));
       if (prev_ipc && st.pc <= prev_ipc)
         refuse("non-monotonic instruction pc in block");
       prev_ipc = st.pc;
     } else if (tok == "call") {
+      if (symbolic) refuse("a call inside a symbolic block (ir 7 refuses; the calling bridge is P48 — docs/IR.md §5.10.5): " + body);
       st.kind = Stmt::CALL;
       std::string t, a, m, si, r;
       is >> t >> a >> m >> si >> r;
@@ -496,6 +697,7 @@ void IRExec::load(const std::string& path) {
           refuse("call operands disagree with pushmap: " + body);
       }
     } else if (tok == "rt_call") {
+      if (symbolic) refuse("an rt_call inside a symbolic block (ir 7 refuses; the calling bridge is P48 — docs/IR.md §5.10.5): " + body);
       // P28 (ir 4): `rt_call ?NAME(e1, ..., eN) site=<hex8>` — TERMINATOR.
       // The game -> runtime LCALL at `site` with its N argument pushes
       // folded into pure argument expressions in PL/I order (e1 = arg 1 =
@@ -553,7 +755,7 @@ void IRExec::load(const std::string& path) {
           refuse("rt_call empty argument: " + body);
         Parser pa(at.c_str(), cur->start);
         P e = pa.expr(); pa.end();            // pure: the parser rejects effectful ops
-        check_treads(e, body);
+        check_treads(e, body); check_widths(e, body);
         st.argv.push_back(e);
       }
     } else if (tok == "ret") {
@@ -575,48 +777,56 @@ void IRExec::load(const std::string& path) {
           size_t x = lab.find_first_not_of(" \t"), y = lab.find_last_not_of(" \t");
           if (x == std::string::npos) refuse("empty goto label: " + body);
           lab = lab.substr(x, y - x + 1);
-          if (lab.size() != 8 || lab.find_first_not_of("0123456789ABCDEFabcdef") != std::string::npos)
-            refuse("goto label must be hex8: " + body);
+          if (!is_hex8(lab)) {                                   // P46 (ir 7): a symbolic label, forward references legal
+            st.labels.push_back(place_block(lab));
+            continue;
+          }
           uint32_t L = uint32_t(strtoul(lab.c_str(), nullptr, 16));
+          if (is_synthetic(L)) refuse("a hex8 goto label in the 0x76/0x77 spaces: only a name denotes a symbolic block: " + body);
+          saw_numeric = true;
           if (!BlockSync::listed(L)) refuse("goto target " + lab + " is not a listed block start");
           st.labels.push_back(L);
         }
         if (st.labels.empty()) refuse("goto with empty label list: " + body);
         Parser pe(idx.c_str(), cur->start);
         st.rhs = pe.expr(); pe.end();
-        check_treads(st.rhs, body);
+        check_treads(st.rhs, body); check_widths(st.rhs, body);
         if (st.labels.size() == 1 && !(st.rhs->kind == Expr::CONST && st.rhs->value == 0))
           refuse("single-label goto must use index 0: " + body);
       } else {
         std::istringstream ts(rest); std::string t; ts >> t;
         std::string tail; if (ts >> tail) refuse("trailing text after goto target: " + body);
-        if (t.size() != 8 || t.find_first_not_of("0123456789ABCDEFabcdef") != std::string::npos)
-          refuse("goto target must be hex8: " + body);
-        uint32_t L = uint32_t(strtoul(t.c_str(), nullptr, 16));
-        if (!BlockSync::listed(L)) refuse("goto target " + t + " is not a listed block start");
-        st.labels.push_back(L);
+        if (!is_hex8(t)) {
+          st.labels.push_back(place_block(t));                    // P46 (ir 7): symbolic sugar target
+        } else {
+          uint32_t L = uint32_t(strtoul(t.c_str(), nullptr, 16));
+          if (is_synthetic(L)) refuse("a hex8 goto label in the 0x76/0x77 spaces: only a name denotes a symbolic block: " + body);
+          saw_numeric = true;
+          if (!BlockSync::listed(L)) refuse("goto target " + t + " is not a listed block start");
+          st.labels.push_back(L);
+        }
         st.rhs = std::make_shared<Expr>(); st.rhs->kind = Expr::CONST; st.rhs->value = 0;
       }
     } else if (tok == "claim" || tok == "release") {
-      // P33-B (ir 6): `claim t@<b>.<k>, acN` — the master's WMSP: no wsp
+      // P33-B (ir 6): `claim s@<b>.<k>, acN` — the master's WMSP: no wsp
       // move on the clone (its temps live in the arena), the twin's
       // capacity checked against the master's own claim size acN;
-      // `release t@<b>, acN` — the master's STASP N: the frame slot holds
-      // t@b.1 (the clone's LDASP/WADI pair lowered to the twin's address),
-      // so acN == t@b.1 − 2 proves the slot arithmetic agreed, and acN
+      // `release s@<b>, acN` — the master's STASP N: the frame slot holds
+      // s@b.1 (the clone's LDASP/WADI pair lowered to the twin's address),
+      // so acN == s@b.1 − 2 proves the slot arithmetic agreed, and acN
       // takes the value the master's WSBI/STASP left (its restored wsp).
       std::string rest = body.substr(tok.size());
       Parser p(rest.c_str(), cur->start);
       p.ws();
-      if (p.s[0] != 't' || p.s[1] != '@') refuse(tok + " needs a twin name t@<block>[.<k>]: " + body);
+      if (p.s[0] != 's' || p.s[1] != '@') refuse(tok + " needs a twin name s@<block>[.<k>]: " + body);
       const char* q = p.s + 2; char* end; unsigned long blk = strtoul(q, &end, 16);
       if (end == q) refuse(tok + ": bad twin name: " + body);
       unsigned long k = 1;
       if (tok == "claim") {
-        if (*end != '.') refuse("claim needs t@<block>.<k>: " + body);
+        if (*end != '.') refuse("claim needs s@<block>.<k>: " + body);
         q = end + 1; k = strtoul(q, &end, 10);
         if (end == q || k == 0) refuse("claim: bad claim ordinal: " + body);
-      } else if (*end == '.') refuse("release names the block only (t@<block>): " + body);
+      } else if (*end == '.') refuse("release names the block only (s@<block>): " + body);
       p.s = end;
       if (!strings::Arena::loaded()) refuse(tok + ": QUEST_ARENA is not set");
       const strings::ArenaTemp* a = strings::Arena::find(uint32_t(blk), uint32_t(k));
@@ -640,6 +850,19 @@ void IRExec::load(const std::string& path) {
       st.str = std::make_shared<StrOp>();
       StrOp& so = *st.str;
       Parser p(body.c_str(), cur->start);
+      auto check_piece = [&](const Piece& pc, const std::string& body) {
+        check_widths(pc.addr, body);
+        if (pc.n_expr) { check_treads(pc.n_expr, body); check_widths(pc.n_expr, body); }
+        if (!pc.addr || pc.addr->vref < 0) return;
+        const Var& v = vars_[size_t(pc.addr->vref)];
+        if (pc.kind == Piece::VARYING || pc.kind == Piece::VARYING_NOCAP) {
+          if (v.type != Var::VARYING) refuse("width tripwire: [@" + v.name + ", … varying] on a v that is not `varying`: " + body);
+          if (pc.kind == Piece::VARYING && pc.n_expr == nullptr && uint32_t(pc.n) != v.n)
+            refuse("width tripwire: [@" + v.name + ", " + std::to_string(pc.n) + " varying] but the v was declared varying " + std::to_string(v.n) + ": " + body);
+        } else {
+          refuse("width tripwire: a fixed piece needs a BYTE pointer — [@bp(" + v.name + ", 0), n], not the raw word address: " + body);
+        }
+      };
       // a piece: [@<expr>, <n>] | [@<expr>, <n> varying] | [@<expr>, varying] | [@0xW:b, "text"]
       auto piece = [&](Piece& pc, bool lvalue) {
         if (!p.lit("[@")) p.bad("expected a located string or literal [@...]");
@@ -712,6 +935,7 @@ void IRExec::load(const std::string& path) {
         auto strip = [](std::string t) { t.erase(std::remove(t.begin(), t.end(), ' '), t.end()); return t; };
         if (strip(kt1) != strip(kt2)) refuse("words(): the two counts differ: " + body);
         check_treads(so.dst.addr, body); check_treads(so.src.addr, body); check_treads(so.k, body);
+        check_widths(so.dst.addr, body); check_widths(so.src.addr, body); check_widths(so.k, body);
       } else if (body.rfind("ac1 = cmp(", 0) == 0) {
         so.kind = StrOp::CMP;
         p.s += 10;
@@ -723,6 +947,7 @@ void IRExec::load(const std::string& path) {
         check_treads(so.src.addr, body); check_treads(so.dst.addr, body);
         if (so.dst.n_expr) check_treads(so.dst.n_expr, body);
         if (so.src.n_expr) check_treads(so.src.n_expr, body);
+        check_piece(so.src, body); check_piece(so.dst, body);
       } else {
         piece(so.dst, true);
         so.kind = (so.dst.kind == Piece::VARYING) ? StrOp::ASSIGN_VARYING : StrOp::ASSIGN_FIXED;
@@ -732,6 +957,7 @@ void IRExec::load(const std::string& path) {
         check_treads(so.dst.addr, body); check_treads(so.src.addr, body);
         if (so.dst.n_expr) check_treads(so.dst.n_expr, body);
         if (so.src.n_expr) check_treads(so.src.n_expr, body);
+        check_piece(so.dst, body); check_piece(so.src, body);
       }
     } else if (body.rfind("assert(", 0) == 0) {
       // P25: assert(expr) | assert(expr, "message").  Statement, never a
@@ -757,7 +983,7 @@ void IRExec::load(const std::string& path) {
       pe.ws();
       if (*pe.s != ')') refuse("assert missing closing paren: " + body);
       pe.s++; pe.end();
-      check_treads(cond, body);
+      check_treads(cond, body); check_widths(cond, body);
       st.rhs = cond;
     } else {
       st.kind = Stmt::STMT;
@@ -783,6 +1009,7 @@ void IRExec::load(const std::string& path) {
       if (l->kind != Expr::AC && l->kind != Expr::TPLACE && l->kind != Expr::CFLAG
           && l->kind != Expr::OVRFLAG)
         check_treads(l->a, body);
+      check_widths(l, body);
       Parser pr(rhs.c_str(), cur->start);
       // Effectful root op?  (docs/IR.md §5: exactly one, at the root, args pure.)
       static const struct { const char* name; EffOp op; int nargs; } effs[] = {
@@ -802,10 +1029,11 @@ void IRExec::load(const std::string& path) {
         if (!pr.lit(")")) refuse("effectful op missing ): " + body);
         pr.end();
         check_treads(a, body); if (b2) check_treads(b2, body);
+        check_widths(a, body); if (b2) check_widths(b2, body);
         st.rhs = a; st.rhs2 = b2; st.eff = eff; st.flags = true;
       } else {
         P r = pr.expr(); pr.end();
-        check_treads(r, body);
+        check_treads(r, body); check_widths(r, body);
         st.rhs = r;
       }
       st.lhs = l;
@@ -817,7 +1045,12 @@ void IRExec::load(const std::string& path) {
     cur->stmts.push_back(st);
   }
   close_block();
-  if (!saw_blocks_sha) refuse("missing blocks provenance line");
+  g_vt = VarTable{};
+  // P46 (ir 7): every symbolic label must have a header; the blocks provenance
+  // line binds the file to a CFG only when the file names a numeric block/label
+  for (auto& kv : block_by_name_)
+    if (!defined_blocks.count(kv.first)) refuse("goto to a symbolic block that no header defines: " + kv.first);
+  if (saw_numeric && !saw_blocks_sha) refuse("missing blocks provenance line");
   if (!got_trailer) refuse("missing 'blocks <count>' trailer");
   if (trailer_count != blocks_.size()) {
     char buf[96];
@@ -876,6 +1109,26 @@ const IRExec::Block* IRExec::find(uint32_t pc) const {
 }
 
 bool IRExec::has(uint32_t pc) const { return find(pc) != nullptr; }
+
+// P46 (ir 7): placement queries and the 0x76 page mapping (docs/IR.md §5.10.3/.6)
+uint32_t IRExec::v_address(const std::string& q) const {
+  auto it = var_by_name_.find(q);
+  return it == var_by_name_.end() ? 0 : vars_[it->second].addr;
+}
+uint32_t IRExec::block_address(const std::string& q) const {
+  auto it = block_by_name_.find(q);
+  return it == block_by_name_.end() ? 0 : it->second;
+}
+void IRExec::map_pages(Memory& memory) const {
+  if (vars_.empty()) return;
+  std::set<uint32_t> pages;
+  for (const Var& v : vars_)
+    for (uint32_t p = v.addr >> 10; p <= (v.addr + v.words - 1) >> 10; p++) pages.insert(p);
+  for (uint32_t p : pages)
+    memory.map_page(new os::ArrayPage(), p, Permissions::PERMISSION_READ | Permissions::PERMISSION_WRITE);
+  fprintf(stderr, "IRExec: mapped %zu page(s) in the 0x76 space (RW, no exec) for %zu v(s) for %s\n",
+          pages.size(), vars_.size(), memory.process_name.c_str());
+}
 
 // ------------------------------------------------------------- execution
 
@@ -995,7 +1248,8 @@ uint32_t IRExec::run_block(Machine& machine, uint32_t pc) {
     throw std::runtime_error("IRExec: run_block on absent block (dispatch bug)");
   if (!blk->executed) {
     blk->executed = true;
-    fprintf(stderr, "IRExec: first execution of block %08X\n", pc);
+    if (blk->name.empty()) fprintf(stderr, "IRExec: first execution of block %08X\n", pc);
+    else fprintf(stderr, "IRExec: first execution of block %s at %08X\n", blk->name.c_str(), pc);
   }
   if (machine.rtcov) {
     // P33-C: the derivation capture (QUEST_CAPTURE) sees the clone's

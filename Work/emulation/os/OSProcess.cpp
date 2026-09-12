@@ -1,6 +1,7 @@
 #include "OSProcess.hpp"
 #include "../hw/AddressBook.hpp"
 #include "../hw/strings/Arena.hpp"
+#include "../hw/IRExec.hpp"
 #include "../hw/RTStubs.hpp"
 #include "MirrorPage.hpp"
 #include "ArrayPage.hpp"
@@ -132,6 +133,12 @@ void OSProcess::launch(FSStreamIO* terminal) {
   if(hw::strings::Arena::loaded() &&
      (lockstep_role == hw::Lockstep::CLONE || (!hw::Lockstep::enabled && program == "QUEST")))
     hw::strings::Arena::map_pages(*memory);
+  // P46 (ir 7): the unplaced-v space (0x76) — only the pages the loaded
+  // IR's v declarations touch, RW/no-exec, on the clone (docs/IR.md §5.10.6).
+  // The 0x77 block space is never mapped: nothing is fetched there.
+  if(hw::IRExec::instance &&
+     (lockstep_role == hw::Lockstep::CLONE || (!hw::Lockstep::enabled && program == "QUEST")))
+    hw::IRExec::instance->map_pages(*memory);
   // Fault injector arming: QUEST clients only (both lockstep roles and
   // single-machine runs; never QUEST_SERVER). One shot per process.
   {

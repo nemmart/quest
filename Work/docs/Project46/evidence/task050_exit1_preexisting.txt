@@ -1,0 +1,15 @@
+# task 050 (main results/050-p46-stageA) vs 047b (results/047b-p33b-arena-temps): the exit=1 is pre-existing
+# Verified Sep 12 2026 by diffing the non-leg verdict lines (047b with t@ sed-renamed to s@ for the comparison):
+== r047: exit=1; legs OK: 16/16; legs with div!=0: 1 (the forced leg, want DIVERGENCE)
+== r050: exit=1; legs OK: 16/16; legs with div!=0: 1 (the forced leg, want DIVERGENCE)
+== differing verdict lines:
+20c20
+< ir headers: book 'ir 6' stock 'ir 6' (want ir 6)  embeds book=557 (want 557) stock=2436 (want 2436)
+---
+> ir headers: book 'ir 7' stock 'ir 7' (want ir 7)  embeds book=557 (want 557) stock=2436 (want 2436)
+22a23
+> P46 rename census: book t@=0 s@=236 stock t@=0 s@=236 arena t@=0 s@=57 (want 0/236 0/236 0/57)
+== the stale want lines (post-P33 numbers never refreshed; integrator's task 051), identical in both:
+embeds_book=557 (want 729 = 1673 - 944)  embeds_stock=2436 (want 2608 = 3552 - 944)  rt_call_book=987 rt_call_stock=987 (want 987/987)
+string_statements: book=1689 stock=1689 (want 1593/1593 = 649 P31 + 944 P32); literal assignments=871 (want 857 = 534 + 323) cmp=40 (want 40 = 31 + 9) words=12 (want 12)
+strings ledger: lower.py emitted=1822 refused=0; census EMIT p31=649/127 p32=944/0 (want 1593/0; 649/127; 944/0); same pc set=NO same text=NO

@@ -381,7 +381,10 @@ uint32_t Machine::run_steps(uint32_t address, int32_t count) {
     // Register poke (Project 27): at the armed pc, on arrival, set one
     // AC on both roles before anything at pc runs (the clone's IR block
     // for pc has not started; it reads machine.ac on entry). One shot.
-    if(process->poke_armed &&
+    // (P46: `process &&` — a scratch Machine with no OSProcess, as the
+    // self-tests build, has no poke/inject arming; in the emulator process
+    // is never null, so this is behaviour-neutral there.)
+    if(process && process->poke_armed &&
        static_cast<uint32_t>(pc) == RTStubs::poke_pc &&
        (RTStubs::poke_role == 0 || RTStubs::poke_role == lockstep_role)) {   // P33-A :CLONE/:MASTER suffix
       process->poke_armed = false;
@@ -390,7 +393,7 @@ uint32_t Machine::run_steps(uint32_t address, int32_t count) {
               static_cast<uint32_t>(ac[RTStubs::poke_ac]), static_cast<uint32_t>(RTStubs::poke_value));
       ac[RTStubs::poke_ac] = RTStubs::poke_value;
     }
-    if(process->inject_armed &&
+    if(process && process->inject_armed &&
        static_cast<uint32_t>(pc) == RTStubs::inject_site) {
       process->inject_armed = false;
       pc = static_cast<int32_t>(RTStubs::inject_fire(*this));

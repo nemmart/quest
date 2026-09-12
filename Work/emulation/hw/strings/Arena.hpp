@@ -1,8 +1,8 @@
 // hw/strings/Arena.hpp — the P33-B arena layout (quest.arena): one twin per
-// WMSP claim, t@<block>.<k>, at a fixed word address in the otherwise
+// WMSP claim, s@<block>.<k>, at a fixed word address in the otherwise
 // unused emulated segment [0x75000000, 0x75800000), with a capacity.
 //
-// Three consumers: the IR loader (a `t@<block>.<k>` atom resolves to the
+// Three consumers: the IR loader (a `s@<block>.<k>` atom resolves to the
 // twin's word address; `claim` carries its capacity), the Mapper (one
 // arena row per twin, keyed (block, claim); P33-A binds it at the claim's
 // WMSP hook), and the clone process (the pages are mapped RW at launch —

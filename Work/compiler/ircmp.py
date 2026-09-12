@@ -46,10 +46,10 @@ REGS4 = ("ac0", "ac1", "ac2", "ac3")
 # loading: a book-like file -> {pc: Block}; ir 6 twin lines pre-lexed
 # ----------------------------------------------------------------------------
 
-TWIN_RE = re.compile(r"t@([0-9A-Fa-f]{8})\.(\d+)")
-CLAIM_RE = re.compile(r"^claim t@([0-9A-Fa-f]{8})\.(\d+), (ac[0-3])$")
+TWIN_RE = re.compile(r"s@([0-9A-Fa-f]{8})\.(\d+)")
+CLAIM_RE = re.compile(r"^claim s@([0-9A-Fa-f]{8})\.(\d+), (ac[0-3])$")
 NEGHEX_RE = re.compile(r"([(,] ?)-0x([0-9A-Fa-f]+)")
-RELEASE_RE = re.compile(r"^release t@([0-9A-Fa-f]{8}), (ac[0-3])$")
+RELEASE_RE = re.compile(r"^release s@([0-9A-Fa-f]{8}), (ac[0-3])$")
 
 
 class Stmt:
@@ -295,7 +295,7 @@ class Canon:
         text = self.stmt(s)
         # twins that came through the numeric stand-in
         for i, (bpc, kk) in enumerate(s.twins):
-            text = text.replace("0x%08X" % (0x75000000 + i + 1), "t@%s.%d" % (self.twin(bpc), kk))
+            text = text.replace("0x%08X" % (0x75000000 + i + 1), "s@%s.%d" % (self.twin(bpc), kk))
         return text, list(self.slots)
 
 

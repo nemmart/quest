@@ -414,7 +414,7 @@ STRING_OPS = ('WCMV', 'WCMP', 'WBLM', 'WMSP', 'STASP')
 # ----------------------------------------------------------------------
 # Project 33-B — the WMSP claim groups as arena twins (--p33).  Loaded from
 # quest.strhooks (which WMSPs belong to which block, in order) and
-# quest.arena (t@<block>.<k> -> word address, capacity).  In P33 mode the
+# quest.arena (s@<block>.<k> -> word address, capacity).  In P33 mode the
 # evaluator lowers the `LDASP r; WADI 2,r` pair before claim k of a table
 # block to the twin's ADDRESS (a constant), so every downstream operand
 # that the master keeps on its stack is a static arena location here and
@@ -433,7 +433,7 @@ def p33_load(strhooks_path, arena_path):
         if not line.startswith('temp '):
             continue
         t = line.split()
-        name = t[2]                      # t@<block>.<k>
+        name = t[2]                      # s@<block>.<k>
         blk, k = name[2:].split('.')
         blk, k = int(blk, 16), int(k)
         addr = int(t[3].split('=')[1], 16)
@@ -452,10 +452,10 @@ def p33_twin_of_word(w):
     return None
 
 def p33_name(blk, k):
-    return 't@%08X.%d' % (blk, k)
+    return 's@%08X.%d' % (blk, k)
 
 def p33_word_text(w):
-    """render an arena word address: t@b.k or wp(t@b.k, off)"""
+    """render an arena word address: s@b.k or wp(s@b.k, off)"""
     t = p33_twin_of_word(w)
     if t is None:
         return None
@@ -3254,7 +3254,7 @@ def write_census(f, sites, ctx):
 # ----------------------------------------------------------------------
 
 def write_p33(path, tsv_path, sites, ctx, shas):
-    """Every claim group of the table: the LDASP/WADI pairs (-> acN = t@b.k),
+    """Every claim group of the table: the LDASP/WADI pairs (-> acN = s@b.k),
     the WMSPs (-> claim), the STASP (-> release), and every WCMV with an
     arena operand (-> P32's pipeline).  A group whose sites do not all
     EMIT is refused whole (every row REFUSE): its WMSPs stay embedded and
@@ -3302,12 +3302,12 @@ def write_p33(path, tsv_path, sites, ctx, shas):
         if g['reason']:
             continue
         if stasp is None:
-            g['reason'] = ('P33-RELEASE', 'no STASP restores wsp from t@%08X.1 - 2' % blk); continue
+            g['reason'] = ('P33-RELEASE', 'no STASP restores wsp from s@%08X.1 - 2' % blk); continue
         s, n, v = stasp
         if P33['by_addr'][v.k + 2][1] != 1:
-            g['reason'] = ('P33-RELEASE', 'STASP restores from t@%08X.%d, not claim 1' % (blk, P33['by_addr'][v.k + 2][1])); continue
+            g['reason'] = ('P33-RELEASE', 'STASP restores from s@%08X.%d, not claim 1' % (blk, P33['by_addr'][v.k + 2][1])); continue
         g['rows'].append({'pc': s.ins.pc, 'op': 'STASP', 'block': s.block.start, 'fold': [],
-                          'ir': 'release t@%08X, ac%d' % (blk, n), 'idiom': 'RELEASE', 'chain': p33_name(blk, 1)})
+                          'ir': 'release s@%08X, ac%d' % (blk, n), 'idiom': 'RELEASE', 'chain': p33_name(blk, 1)})
         for s in sorted(twin_sites, key=lambda s: s.ins.pc):
             r = p32_render(s, ctx)
             g['sites'].append(r)
@@ -3327,7 +3327,7 @@ def write_p33(path, tsv_path, sites, ctx, shas):
         W('# Project 33-B — WMSP claim groups as arena twins: per-group ledger (tools/string_sites.py --p33)\n')
         for k, v in shas:
             W('# %s sha256=%s\n' % (k, v))
-        W('# per group: the LDASP/WADI pairs (acN = t@b.k), the WMSPs (claim), the STASP (release), the WCMVs with a twin operand (P32 pipeline)\n')
+        W('# per group: the LDASP/WADI pairs (acN = s@b.k), the WMSPs (claim), the STASP (release), the WCMVs with a twin operand (P32 pipeline)\n')
         W('# a group is EMIT only if every row is; else REFUSE whole (embedded, Δ_clone != 0 there is EXPECTED)\n\n')
         for g in groups:
             W('== group %08X %s claims %d  %s\n' % (g['block'], g['func'], g['nclaims'], 'EMIT' if g['reason'] is None else 'REFUSE %s: %s' % g['reason']))

@@ -183,7 +183,7 @@ public:
     uint32_t block;               // the claim-group block address (identity of p@b)
     uint32_t arena_addr;          // word address of the varying image (length word)
     uint32_t capacity;            // data bytes
-    uint32_t claim = 0;           // P33-B: k of t@<block>.<k> (one row per WMSP claim twin); 0 = P30 fixture
+    uint32_t claim = 0;           // P33-B: k of s@<block>.<k> (one row per WMSP claim twin); 0 = P30 fixture
   };
   struct ArenaRow {
     uint32_t block, arena_addr, capacity;   // static

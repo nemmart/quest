@@ -449,30 +449,30 @@
 70165F7F WCMV emitted -	[@wp(ac3, 70), 44 varying] = [@0x7016572B:0, ".\x0A\x0BYou have successfully dodged the attack.\x0A"]
 70166067 WCMV emitted -	[@(M32[0x70000210] + (sx16(M16[0x70000216]) * 686) - 0x271), 32 varying] = [@0x7015155A:0, "                                "]
 70166084 WCMV emitted -	[@((sx16(M16[0x70000216]) * 686) + M32[0x70000210] - 0x260), 32 varying] = [@0x7015155A:0, "                                "]
-7016614C WADI emitted -	ac2 = t@70166144.1
-70166152 WMSP emitted -	claim t@70166144.1, ac0
-7016615D WCMV emitted -	[@bp(t@70166144.1, 0), 3] = [@0x70165FC1:0, "\x0C\x0A\x0A"]
+7016614C WADI emitted -	ac2 = s@70166144.1
+70166152 WMSP emitted -	claim s@70166144.1, ac0
+7016615D WCMV emitted -	[@bp(s@70166144.1, 0), 3] = [@0x70165FC1:0, "\x0C\x0A\x0A"]
 70166166 WCMV emitted -	[@ac2, sx16(M16[M32[wp(ac3, -12)]])] = [@M32[wp(ac3, -12)], varying]
-70166168 WADI emitted -	ac1 = t@70166144.2
-7016616F WMSP emitted -	claim t@70166144.2, ac2
-7016617A WCMV emitted -	[@bp(t@70166144.2, 0), ac0] = [@bp(t@70166144.1, 0), ac1]
+70166168 WADI emitted -	ac1 = s@70166144.2
+7016616F WMSP emitted -	claim s@70166144.2, ac2
+7016617A WCMV emitted -	[@bp(s@70166144.2, 0), ac0] = [@bp(s@70166144.1, 0), ac1]
 70166180 WCMV emitted -	[@ac2, 23] = [@0x70165FB5:0, "\x0ABetter luck next time!"]
-70166182 WADI emitted -	ac1 = t@70166144.3
-7016618A WMSP emitted -	claim t@70166144.3, ac2
-7016619C WCMV emitted -	[@bp(t@70166144.3, 2), ac0] = [@bp(t@70166144.2, 0), ac1]
-701661AA STASP emitted -	release t@70166144, ac1
-701661B6 WADI emitted -	ac1 = t@701661AE.1
-701661BC WMSP emitted -	claim t@701661AE.1, ac2
-701661C8 WCMV emitted -	[@bp(t@701661AE.1, 0), 3] = [@0x70165FC1:0, "\x0C\x0A\x0A"]
+70166182 WADI emitted -	ac1 = s@70166144.3
+7016618A WMSP emitted -	claim s@70166144.3, ac2
+7016619C WCMV emitted -	[@bp(s@70166144.3, 2), ac0] = [@bp(s@70166144.2, 0), ac1]
+701661AA STASP emitted -	release s@70166144, ac1
+701661B6 WADI emitted -	ac1 = s@701661AE.1
+701661BC WMSP emitted -	claim s@701661AE.1, ac2
+701661C8 WCMV emitted -	[@bp(s@701661AE.1, 0), 3] = [@0x70165FC1:0, "\x0C\x0A\x0A"]
 701661D1 WCMV emitted -	[@ac2, sx16(M16[M32[wp(ac3, -12)]])] = [@M32[wp(ac3, -12)], varying]
-701661D3 WADI emitted -	ac1 = t@701661AE.2
-701661DA WMSP emitted -	claim t@701661AE.2, ac2
-701661E5 WCMV emitted -	[@bp(t@701661AE.2, 0), ac0] = [@bp(t@701661AE.1, 0), ac1]
+701661D3 WADI emitted -	ac1 = s@701661AE.2
+701661DA WMSP emitted -	claim s@701661AE.2, ac2
+701661E5 WCMV emitted -	[@bp(s@701661AE.2, 0), ac0] = [@bp(s@701661AE.1, 0), ac1]
 701661EB WCMV emitted -	[@ac2, 76] = [@0x70165F8F:0, "\x0AThere is a puff a orange smoke (sound familiar) and you are reincarnated!\x0A\x0A"]
-701661ED WADI emitted -	ac1 = t@701661AE.3
-701661F5 WMSP emitted -	claim t@701661AE.3, ac2
-70166207 WCMV emitted -	[@bp(t@701661AE.3, 2), ac0] = [@bp(t@701661AE.2, 0), ac1]
-70166215 STASP emitted -	release t@701661AE, ac1
+701661ED WADI emitted -	ac1 = s@701661AE.3
+701661F5 WMSP emitted -	claim s@701661AE.3, ac2
+70166207 WCMV emitted -	[@bp(s@701661AE.3, 2), ac0] = [@bp(s@701661AE.2, 0), ac1]
+70166215 STASP emitted -	release s@701661AE, ac1
 7016635B WBLM emitted -	words(@((sx16(M16[0x70000216]) * 686) + M32[0x70000210] - 86), 90) = words(@((sx16(M16[0x70000216]) * 686) + M32[0x70000210] - 87), 90)
 70166492 WCMV emitted -	[@wp(ac3, 28), 92 varying] = [@0x701663DF:0, "\x0CSPELL                         | STATUS\x0A------------------------------|--------------------\x0A"]
 701664E3 WCMV emitted -	[@bp(ac3, 156), 14] = [@0x701663D7:0, "Effective for "]
@@ -484,22 +484,22 @@
 70166536 WCMV emitted -	[@ac2, ac0] = [@ac3, 40]
 7016653D WCMV emitted -	[@ac2, ac0] = [@0x701663CF:0, ac1]
 7016654E WCMV emitted -	[@wp(ac3, 6), 14 varying] = [@0x701663BD:0, "Ready for use\x0A"]
-70166570 WADI emitted -	ac0 = t@70166564.1
-70166578 WMSP emitted -	claim t@70166564.1, ac0
-70166589 WCMV emitted -	[@bp(t@70166564.1, 0), sx16(M16[((sx16(M16[wp(ac3, 2)]) * 16) - 0xFEAFBB8)])] = [@bp((sx16(M16[wp(ac3, 2)]) * 16), -0x1FD5F76E), sx16(M16[((sx16(M16[wp(ac3, 2)]) * 16) - 0xFEAFBB8)])]
+70166570 WADI emitted -	ac0 = s@70166564.1
+70166578 WMSP emitted -	claim s@70166564.1, ac0
+70166589 WCMV emitted -	[@bp(s@70166564.1, 0), sx16(M16[((sx16(M16[wp(ac3, 2)]) * 16) - 0xFEAFBB8)])] = [@bp((sx16(M16[wp(ac3, 2)]) * 16), -0x1FD5F76E), sx16(M16[((sx16(M16[wp(ac3, 2)]) * 16) - 0xFEAFBB8)])]
 70166591 WCMV emitted -	[@ac2, (0 - sx16(M16[((sx16(M16[wp(ac3, 2)]) * 16) - 0xFEAFBB8)]) + 30)] = [@0x7015155A:0, (0 - sx16(M16[((sx16(M16[wp(ac3, 2)]) * 16) - 0xFEAFBB8)]) + 30)]
-70166593 WADI emitted -	ac1 = t@70166564.2
-7016659A WMSP emitted -	claim t@70166564.2, ac2
-701665A5 WCMV emitted -	[@bp(t@70166564.2, 0), 30] = [@bp(t@70166564.1, 0), 30]
+70166593 WADI emitted -	ac1 = s@70166564.2
+7016659A WMSP emitted -	claim s@70166564.2, ac2
+701665A5 WCMV emitted -	[@bp(s@70166564.2, 0), 30] = [@bp(s@70166564.1, 0), 30]
 701665AB WCMV emitted -	[@ac2, 2] = [@0x701663BC:0, "| "]
-701665AD WADI emitted -	ac1 = t@70166564.3
-701665B4 WMSP emitted -	claim t@70166564.3, ac2
-701665BF WCMV emitted -	[@bp(t@70166564.3, 0), 32] = [@bp(t@70166564.2, 0), 32]
+701665AD WADI emitted -	ac1 = s@70166564.3
+701665B4 WMSP emitted -	claim s@70166564.3, ac2
+701665BF WCMV emitted -	[@bp(s@70166564.3, 0), 32] = [@bp(s@70166564.2, 0), 32]
 701665C6 WCMV emitted -	[@ac2, sx16(M16[wp(ac3, 6)])] = [@wp(ac3, 6), varying]
-701665C8 WADI emitted -	ac1 = t@70166564.4
-701665D0 WMSP emitted -	claim t@70166564.4, ac2
-701665E2 WCMV emitted -	[@bp(t@70166564.4, 2), ac0] = [@bp(t@70166564.3, 0), ac1]
-701665F0 STASP emitted -	release t@70166564, ac1
+701665C8 WADI emitted -	ac1 = s@70166564.4
+701665D0 WMSP emitted -	claim s@70166564.4, ac2
+701665E2 WCMV emitted -	[@bp(s@70166564.4, 2), ac0] = [@bp(s@70166564.3, 0), ac1]
+701665F0 STASP emitted -	release s@70166564, ac1
 70166703 WCMV emitted -	[@0x70000A78:0, (sx16(M16[0x70000A4E]) + 2)] = [@0x70000A4E:0, (sx16(M16[0x70000A4E]) + 2)]
 70166735 WCMV emitted -	[@bp(ac3, 16), 0] = [@0x70000A4F:0, 0]
 7016673B WCMV emitted -	[@ac2, 3] = [@0x70166627:0, "\x10\x0A\x03"]
@@ -541,12 +541,12 @@
 7016690C WCMV emitted -	[@0x70000A4F:0, ac0] = [@bp(ac3, 0x118), ac1]
 7016694D WCMV emitted -	[@ac2, ac0] = [@0x70000A4F:0, ac1]
 70166953 WCMV emitted -	[@ac2, 3] = [@0x7016661F:0, "\x10\x0B\x05"]
-70166961 WADI emitted -	ac0 = t@7016693C.1
-70166967 WMSP emitted -	claim t@7016693C.1, ac2
-70166973 WCMV emitted -	[@bp(t@7016693C.1, 0), ac0] = [@ac3, ac1]
+70166961 WADI emitted -	ac0 = s@7016693C.1
+70166967 WMSP emitted -	claim s@7016693C.1, ac2
+70166973 WCMV emitted -	[@bp(s@7016693C.1, 0), ac0] = [@ac3, ac1]
 7016697A WCMV emitted -	[@ac2, ac0] = [@ac3, ac1]
-7016698B WCMV emitted -	[@0x70000A4F:0, ac0] = [@bp(t@7016693C.1, 0), ac1]
-70166990 STASP emitted -	release t@7016693C, ac1
+7016698B WCMV emitted -	[@0x70000A4F:0, ac0] = [@bp(s@7016693C.1, 0), ac1]
+70166990 STASP emitted -	release s@7016693C, ac1
 701669BC WCMV emitted -	[@ac2, ac0] = [@0x70000A4F:0, ac1]
 701669C2 WCMV emitted -	[@ac2, 3] = [@0x70166625:0, "\x10\x0A\x06"]
 701669CB WCMV emitted -	[@ac2, ac0] = [@ac3, ac1]
@@ -559,43 +559,43 @@
 70166A1B WCMV emitted -	[@0x70000A4F:0, ac0] = [@bp(ac3, 104), ac1]
 70166A4A WCMP emitted -	ac1 = cmp([@0x70000A4F:0, ac1], [@0x70000A78, varying])
 70166DB8 WCMV emitted -	[@ac2, ac0] = [@ac3, ac1]
-70166E8B WADI emitted -	ac2 = t@70166E7C.1
-70166E91 WMSP emitted -	claim t@70166E7C.1, ac1
-70166E9A WCMV emitted -	[@bp(t@70166E7C.1, 0), sx16(M16[wp(ac3, 238)])] = [@wp(ac3, 238), varying]
-70166EA6 WADI emitted -	ac0 = t@70166E7C.2
-70166EAC WMSP emitted -	claim t@70166E7C.2, ac1
-70166EB9 WCMV emitted -	[@bp(t@70166E7C.2, 0), ac0] = [@bp(t@70166E7C.1, 0), ac1]
-70166EC4 WADI emitted -	ac2 = t@70166E7C.3
-70166ECA WMSP emitted -	claim t@70166E7C.3, ac0
-70166ED9 WCMV emitted -	[@bp(t@70166E7C.3, 0), ac0] = [@bp(t@70166E7C.2, 0), ac1]
-70166EE9 WCMV emitted -	[@ac2, ac0] = [@bp(t@70166E7C.3, 0), 0x2F4]
+70166E8B WADI emitted -	ac2 = s@70166E7C.1
+70166E91 WMSP emitted -	claim s@70166E7C.1, ac1
+70166E9A WCMV emitted -	[@bp(s@70166E7C.1, 0), sx16(M16[wp(ac3, 238)])] = [@wp(ac3, 238), varying]
+70166EA6 WADI emitted -	ac0 = s@70166E7C.2
+70166EAC WMSP emitted -	claim s@70166E7C.2, ac1
+70166EB9 WCMV emitted -	[@bp(s@70166E7C.2, 0), ac0] = [@bp(s@70166E7C.1, 0), ac1]
+70166EC4 WADI emitted -	ac2 = s@70166E7C.3
+70166ECA WMSP emitted -	claim s@70166E7C.3, ac0
+70166ED9 WCMV emitted -	[@bp(s@70166E7C.3, 0), ac0] = [@bp(s@70166E7C.2, 0), ac1]
+70166EE9 WCMV emitted -	[@ac2, ac0] = [@bp(s@70166E7C.3, 0), 0x2F4]
 70166EF1 WCMV emitted -	[@ac2, ac0] = [@ac3, ac1]
-70166EFB STASP emitted -	release t@70166E7C, ac0
-70166F5E WADI emitted -	ac2 = t@70166F4F.1
-70166F64 WMSP emitted -	claim t@70166F4F.1, ac1
-70166F6D WCMV emitted -	[@bp(t@70166F4F.1, 0), sx16(M16[wp(ac3, 238)])] = [@wp(ac3, 238), varying]
-70166F79 WADI emitted -	ac0 = t@70166F4F.2
-70166F7F WMSP emitted -	claim t@70166F4F.2, ac1
-70166F8C WCMV emitted -	[@bp(t@70166F4F.2, 0), ac0] = [@bp(t@70166F4F.1, 0), ac1]
-70166F97 WADI emitted -	ac2 = t@70166F4F.3
-70166F9D WMSP emitted -	claim t@70166F4F.3, ac0
-70166FAC WCMV emitted -	[@bp(t@70166F4F.3, 0), ac0] = [@bp(t@70166F4F.2, 0), ac1]
-70166FBC WCMV emitted -	[@ac2, ac0] = [@bp(t@70166F4F.3, 0), 0x2F4]
+70166EFB STASP emitted -	release s@70166E7C, ac0
+70166F5E WADI emitted -	ac2 = s@70166F4F.1
+70166F64 WMSP emitted -	claim s@70166F4F.1, ac1
+70166F6D WCMV emitted -	[@bp(s@70166F4F.1, 0), sx16(M16[wp(ac3, 238)])] = [@wp(ac3, 238), varying]
+70166F79 WADI emitted -	ac0 = s@70166F4F.2
+70166F7F WMSP emitted -	claim s@70166F4F.2, ac1
+70166F8C WCMV emitted -	[@bp(s@70166F4F.2, 0), ac0] = [@bp(s@70166F4F.1, 0), ac1]
+70166F97 WADI emitted -	ac2 = s@70166F4F.3
+70166F9D WMSP emitted -	claim s@70166F4F.3, ac0
+70166FAC WCMV emitted -	[@bp(s@70166F4F.3, 0), ac0] = [@bp(s@70166F4F.2, 0), ac1]
+70166FBC WCMV emitted -	[@ac2, ac0] = [@bp(s@70166F4F.3, 0), 0x2F4]
 70166FC4 WCMV emitted -	[@ac2, ac0] = [@ac3, ac1]
-70166FCE STASP emitted -	release t@70166F4F, ac0
+70166FCE STASP emitted -	release s@70166F4F, ac0
 70166FE5 WCMV emitted -	[@ac2, ac0] = [@bp(ac3, 22), ac1]
-70166FF8 WADI emitted -	ac2 = t@70166FE9.1
-70166FFE WMSP emitted -	claim t@70166FE9.1, ac1
-70167007 WCMV emitted -	[@bp(t@70166FE9.1, 0), sx16(M16[wp(ac3, 618)])] = [@wp(ac3, 618), varying]
+70166FF8 WADI emitted -	ac2 = s@70166FE9.1
+70166FFE WMSP emitted -	claim s@70166FE9.1, ac1
+70167007 WCMV emitted -	[@bp(s@70166FE9.1, 0), sx16(M16[wp(ac3, 618)])] = [@wp(ac3, 618), varying]
 7016700E WCMV emitted -	[@ac2, ac0] = [@ac3, ac1]
-70167010 WADI emitted -	ac1 = t@70166FE9.2
-70167017 WMSP emitted -	claim t@70166FE9.2, ac2
-70167022 WCMV emitted -	[@bp(t@70166FE9.2, 0), ac0] = [@bp(t@70166FE9.1, 0), ac1]
-70167027 WADI emitted -	ac2 = t@70166FE9.3
-7016702E WMSP emitted -	claim t@70166FE9.3, ac3
-70167039 WCMV emitted -	[@bp(t@70166FE9.3, 0), ac0] = [@bp(t@70166FE9.2, 0), ac1]
-70167049 WCMV emitted -	[@ac2, ac0] = [@bp(t@70166FE9.3, 0), 0x2F4]
-70167059 STASP emitted -	release t@70166FE9, ac0
+70167010 WADI emitted -	ac1 = s@70166FE9.2
+70167017 WMSP emitted -	claim s@70166FE9.2, ac2
+70167022 WCMV emitted -	[@bp(s@70166FE9.2, 0), ac0] = [@bp(s@70166FE9.1, 0), ac1]
+70167027 WADI emitted -	ac2 = s@70166FE9.3
+7016702E WMSP emitted -	claim s@70166FE9.3, ac3
+70167039 WCMV emitted -	[@bp(s@70166FE9.3, 0), ac0] = [@bp(s@70166FE9.2, 0), ac1]
+70167049 WCMV emitted -	[@ac2, ac0] = [@bp(s@70166FE9.3, 0), 0x2F4]
+70167059 STASP emitted -	release s@70166FE9, ac0
 70167081 WCMP emitted -	ac1 = cmp([@bp(ac3, 0x4D6), ac1], [@0x70000AA2, varying])
 7016708E WCMV emitted -	[@0x70000AA2:0, ac0] = [@bp(ac3, 0x4D4), ac1]
 7016710B WCMV emitted -	[@bp(ac3, 0x840), 4] = [@0x70166A79:0, "    "]
@@ -626,14 +626,14 @@
 70167719 WCMV emitted -	[@bp(ac3, 88), sx16(M16[wp(ac3, 6)])] = [@wp(ac3, 6), varying]
 70167728 WCMV emitted -	[@ac2, ac0] = [@ac3, 30]
 70167734 WCMV emitted -	[@ac2, ac0] = [@bp((sx16(M16[0x70000C68]) * 4), -0x1FD5E9E6), ac1]
-70167746 WADI emitted -	ac2 = t@70167744.1
-7016774C WMSP emitted -	claim t@70167744.1, ac0
-70167757 WCMV emitted -	[@bp(t@70167744.1, 0), sx16(M16[wp(ac3, 6)])] = [@wp(ac3, 6), varying]
+70167746 WADI emitted -	ac2 = s@70167744.1
+7016774C WMSP emitted -	claim s@70167744.1, ac0
+70167757 WCMV emitted -	[@bp(s@70167744.1, 0), sx16(M16[wp(ac3, 6)])] = [@wp(ac3, 6), varying]
 7016775F WCMV emitted -	[@ac2, (0 - sx16(M16[wp(ac3, 6)]) + 19)] = [@0x7015155A:0, (0 - sx16(M16[wp(ac3, 6)]) + 19)]
-70167761 WADI emitted -	ac1 = t@70167744.2
-70167769 WMSP emitted -	claim t@70167744.2, ac2
-7016777B WCMV emitted -	[@bp(t@70167744.2, 2), 19] = [@bp(t@70167744.1, 0), 19]
-70167797 STASP emitted -	release t@70167744, ac0
+70167761 WADI emitted -	ac1 = s@70167744.2
+70167769 WMSP emitted -	claim s@70167744.2, ac2
+7016777B WCMV emitted -	[@bp(s@70167744.2, 2), 19] = [@bp(s@70167744.1, 0), 19]
+70167797 STASP emitted -	release s@70167744, ac0
 701677D1 WCMV emitted -	[@wp(ac3, 44), 19 varying] = [@0x70167427:0, "Nothing            "]
 70167848 WCMV emitted -	[@wp(ac3, 44), 19 varying] = [@0x7015155A:0, "                   "]
 701678B0 WCMV emitted -	[@bp(ac3, 88), 2] = [@0x70167426:0, " ["]
@@ -829,18 +829,18 @@
 7016B88C WCMV emitted -	[@ac2, ac0] = [@ac3, ac1]
 7016B895 WCMV emitted -	[@ac2, ac0] = [@ac3, ac1]
 7016B89B WCMV emitted -	[@ac2, 163] = [@0x7016B07F:0, " has been abducted by evil Lord of Zorn,\x0Awho has imprisoned her in his impervious hold. Your quest is\x0Ato rescue the princess and return her to her home castle in \x0A"]
-7016B89D WADI emitted -	ac1 = t@7016B860.1
-7016B8A4 WMSP emitted -	claim t@7016B860.1, ac2
-7016B8AE WCMV emitted -	[@bp(t@7016B860.1, 0), ac0] = [@ac3, ac1]
+7016B89D WADI emitted -	ac1 = s@7016B860.1
+7016B8A4 WMSP emitted -	claim s@7016B860.1, ac2
+7016B8AE WCMV emitted -	[@bp(s@7016B860.1, 0), ac0] = [@ac3, ac1]
 7016B8B6 WCMV emitted -	[@ac2, sx16(M16[0x7000021C])] = [@0x7000021C, varying]
-7016B8B8 WADI emitted -	ac1 = t@7016B860.2
-7016B8BF WMSP emitted -	claim t@7016B860.2, ac2
-7016B8CA WCMV emitted -	[@bp(t@7016B860.2, 0), ac0] = [@bp(t@7016B860.1, 0), ac1]
+7016B8B8 WADI emitted -	ac1 = s@7016B860.2
+7016B8BF WMSP emitted -	claim s@7016B860.2, ac2
+7016B8CA WCMV emitted -	[@bp(s@7016B860.2, 0), ac0] = [@bp(s@7016B860.1, 0), ac1]
 7016B8D0 WCMV emitted -	[@ac2, 2] = [@0x7016B07E:0, ".\x0A"]
-7016B8D2 WADI emitted -	ac1 = t@7016B860.3
-7016B8DA WMSP emitted -	claim t@7016B860.3, ac2
-7016B8EC WCMV emitted -	[@bp(t@7016B860.3, 2), ac0] = [@bp(t@7016B860.2, 0), ac1]
-7016B8FA STASP emitted -	release t@7016B860, ac1
+7016B8D2 WADI emitted -	ac1 = s@7016B860.3
+7016B8DA WMSP emitted -	claim s@7016B860.3, ac2
+7016B8EC WCMV emitted -	[@bp(s@7016B860.3, 2), ac0] = [@bp(s@7016B860.2, 0), ac1]
+7016B8FA STASP emitted -	release s@7016B860, ac1
 7016B92B WCMV emitted -	[@bp(ac3, 0x4E8), 46] = [@0x7016B067:0, "The legend of Albion the giant is as follows:\x0A"]
 7016B931 WCMV emitted -	[@ac2, 166] = [@0x7016B013:0, "    Albion the giant is feared throughout the land. No\x0A    known arcane or physical harm can befall him. He can\x0A    only be defeated if the attacker holds a shard of\x0A"]
 7016B93A WCMV emitted -	[@bp(ac3, 0xBB4), 212] = [@bp(ac3, 0x4E8), 212]
@@ -874,14 +874,14 @@
 7016BC15 WCMV emitted -	[@ac2, sx16(M16[((sx16(M16[((sx16(M16[0x70000216]) * 686) + M32[0x70000210] + 43)]) * 19) + M32[0x70000212] + 0x7C2)])] = [@((sx16(M16[((sx16(M16[0x70000216]) * 686) + M32[0x70000210] + 43)]) * 19) + M32[0x70000212] + 0x7C2), varying]
 7016BC1E WCMV emitted -	[@bp(ac3, 0x4E8), (sx16(M16[((sx16(M16[((sx16(M16[0x70000216]) * 686) + M32[0x70000210] + 43)]) * 19) + M32[0x70000212] + 0x7C2)]) + 26)] = [@bp(ac3, 0x5E0), (sx16(M16[((sx16(M16[((sx16(M16[0x70000216]) * 686) + M32[0x70000210] + 43)]) * 19) + M32[0x70000212] + 0x7C2)]) + 26)]
 7016BC24 WCMV emitted -	[@ac2, 114] = [@0x7016AAD1:0, " are surrounded by\x0Aa magical barrier and are starving to death.\x0AYour quest is to bring 15 rations of food to them\x0A"]
-7016BC26 WADI emitted -	ac1 = t@7016BBE3.1
-7016BC2D WMSP emitted -	claim t@7016BBE3.1, ac2
-7016BC37 WCMV emitted -	[@bp(t@7016BBE3.1, 0), (sx16(M16[((sx16(M16[((sx16(M16[0x70000216]) * 686) + M32[0x70000210] + 43)]) * 19) + M32[0x70000212] + 0x7C2)]) + 140)] = [@bp(ac3, 0x4E8), (sx16(M16[((sx16(M16[((sx16(M16[0x70000216]) * 686) + M32[0x70000210] + 43)]) * 19) + M32[0x70000212] + 0x7C2)]) + 140)]
+7016BC26 WADI emitted -	ac1 = s@7016BBE3.1
+7016BC2D WMSP emitted -	claim s@7016BBE3.1, ac2
+7016BC37 WCMV emitted -	[@bp(s@7016BBE3.1, 0), (sx16(M16[((sx16(M16[((sx16(M16[0x70000216]) * 686) + M32[0x70000210] + 43)]) * 19) + M32[0x70000212] + 0x7C2)]) + 140)] = [@bp(ac3, 0x4E8), (sx16(M16[((sx16(M16[((sx16(M16[0x70000216]) * 686) + M32[0x70000210] + 43)]) * 19) + M32[0x70000212] + 0x7C2)]) + 140)]
 7016BC3D WCMV emitted -	[@ac2, 141] = [@0x7016AA89:0, "before they all perish.  The barrier may only be\x0Acrossed by the use of an amulet that was charmed by\x0Aan ancient forgotten underworld wizard.\x0A"]
-7016BC3F WADI emitted -	ac1 = t@7016BBE3.2
-7016BC47 WMSP emitted -	claim t@7016BBE3.2, ac2
-7016BC59 WCMV emitted -	[@bp(t@7016BBE3.2, 2), (sx16(M16[((sx16(M16[((sx16(M16[0x70000216]) * 686) + M32[0x70000210] + 43)]) * 19) + M32[0x70000212] + 0x7C2)]) + 0x119)] = [@bp(t@7016BBE3.1, 0), (sx16(M16[((sx16(M16[((sx16(M16[0x70000216]) * 686) + M32[0x70000210] + 43)]) * 19) + M32[0x70000212] + 0x7C2)]) + 0x119)]
-7016BC67 STASP emitted -	release t@7016BBE3, ac1
+7016BC3F WADI emitted -	ac1 = s@7016BBE3.2
+7016BC47 WMSP emitted -	claim s@7016BBE3.2, ac2
+7016BC59 WCMV emitted -	[@bp(s@7016BBE3.2, 2), (sx16(M16[((sx16(M16[((sx16(M16[0x70000216]) * 686) + M32[0x70000210] + 43)]) * 19) + M32[0x70000212] + 0x7C2)]) + 0x119)] = [@bp(s@7016BBE3.1, 0), (sx16(M16[((sx16(M16[((sx16(M16[0x70000216]) * 686) + M32[0x70000210] + 43)]) * 19) + M32[0x70000212] + 0x7C2)]) + 0x119)]
+7016BC67 STASP emitted -	release s@7016BBE3, ac1
 7016BC95 WCMV emitted -	[@wp(ac3, 510), 42 varying] = [@0x7016AA73:0, "There are no more quest levels as of yet.\x0A"]
 7016BCD8 WBLM emitted -	words(@((sx16(M16[0x70000216]) * 686) + M32[0x70000210] - 86), 90) = words(@((sx16(M16[0x70000216]) * 686) + M32[0x70000210] - 87), 90)
 7016D58B WCMV emitted -	[@wp(ac3, 34), 28 varying] = [@0x7016D4D7:0, "\x0C        Help\x0A\x0ATopics are:\x0A\x0A"]
@@ -979,12 +979,12 @@
 7016DB6D WCMV emitted -	[@wp(ac3, 2690), 897 varying] = [@bp(ac3, 4480), 897]
 7016DBAE WCMV emitted -	[@wp(ac3, 50), 105 varying] = [@0x7016C2DD:0, "\x0CSymbol | Name                          | Strength |\x0A---------------------------------------------------\x0A"]
 7016DBE7 WCMV emitted -	[@bp(ac3, 36), 30] = [@(0x70000266:1 + ((sx16(M16[wp(ac3, 16)]) * 24) + 1)), 30]
-7016DC00 WADI emitted -	ac0 = t@7016DBFC.1
-7016DC06 WMSP emitted -	claim t@7016DBFC.1, ac2
-7016DC16 WCMV emitted -	[@bp(t@7016DBFC.1, 0), sx16(M16[((sx16(M16[wp(ac3, 16)]) * 12) - 0xFFFFD9A)])] = [@bp((sx16(M16[wp(ac3, 16)]) * 12), -0x1FFFFB32), sx16(M16[((sx16(M16[wp(ac3, 16)]) * 12) - 0xFFFFD9A)])]
+7016DC00 WADI emitted -	ac0 = s@7016DBFC.1
+7016DC06 WMSP emitted -	claim s@7016DBFC.1, ac2
+7016DC16 WCMV emitted -	[@bp(s@7016DBFC.1, 0), sx16(M16[((sx16(M16[wp(ac3, 16)]) * 12) - 0xFFFFD9A)])] = [@bp((sx16(M16[wp(ac3, 16)]) * 12), -0x1FFFFB32), sx16(M16[((sx16(M16[wp(ac3, 16)]) * 12) - 0xFFFFD9A)])]
 7016DC1E WCMV emitted -	[@ac2, (0 - sx16(M16[((sx16(M16[wp(ac3, 16)]) * 12) - 0xFFFFD9A)]) + 30)] = [@0x7015155A:0, (0 - sx16(M16[((sx16(M16[wp(ac3, 16)]) * 12) - 0xFFFFD9A)]) + 30)]
-7016DC29 WCMV emitted -	[@ac2, 30] = [@bp(t@7016DBFC.1, 0), 30]
-7016DC2E STASP emitted -	release t@7016DBFC, ac1
+7016DC29 WCMV emitted -	[@ac2, 30] = [@bp(s@7016DBFC.1, 0), 30]
+7016DC2E STASP emitted -	release s@7016DBFC, ac1
 7016DC46 WCMV emitted -	[@bp(ac3, 68), 2] = [@0x7016C2DC:0, "  "]
 7016DC4D WCMV emitted -	[@ac2, 4] = [@(0x70151623:1 + ((sx16(M16[wp(ac3, 16)]) * 4) - 3)), 4]
 7016DC56 WCMV emitted -	[@bp(ac3, 100), 6] = [@bp(ac3, 68), 6]
@@ -1018,14 +1018,14 @@
 7016DDE9 WCMV emitted -	[@wp(ac3, 1214), 493 varying] = [@bp(ac3, 1904), 493]
 7016DE9C WCMV emitted -	[@wp(ac3, 4), 30 varying] = [@0x7016DE07:0, "\x0BHit any character to continue"]
 7016DF66 WCMV emitted -	[@ac2, ac0] = [@0x7015155A:0, ac1]
-7016DF79 WADI emitted -	ac0 = t@7016DF68.1
-7016DF7F WMSP emitted -	claim t@7016DF68.1, ac2
-7016DF95 WCMV emitted -	[@bp(t@7016DF68.1, 1), ac0] = [@ac3, ac1]
-7016DF97 WADI emitted -	ac1 = t@7016DF68.2
-7016DF9E WMSP emitted -	claim t@7016DF68.2, ac2
-7016DFA9 WCMV emitted -	[@bp(t@7016DF68.2, 0), ac0] = [@bp(t@7016DF68.1, 0), ac1]
-7016DFD6 WCMV emitted -	[@(bp(M32[0x70000210], 1) + ((sx16(M16[0x70000216]) * 4) + 0x3DF71)), 4] = [@bp(t@7016DF68.2, 0), ac1]
-7016DFDB STASP emitted -	release t@7016DF68, ac1
+7016DF79 WADI emitted -	ac0 = s@7016DF68.1
+7016DF7F WMSP emitted -	claim s@7016DF68.1, ac2
+7016DF95 WCMV emitted -	[@bp(s@7016DF68.1, 1), ac0] = [@ac3, ac1]
+7016DF97 WADI emitted -	ac1 = s@7016DF68.2
+7016DF9E WMSP emitted -	claim s@7016DF68.2, ac2
+7016DFA9 WCMV emitted -	[@bp(s@7016DF68.2, 0), ac0] = [@bp(s@7016DF68.1, 0), ac1]
+7016DFD6 WCMV emitted -	[@(bp(M32[0x70000210], 1) + ((sx16(M16[0x70000216]) * 4) + 0x3DF71)), 4] = [@bp(s@7016DF68.2, 0), ac1]
+7016DFDB STASP emitted -	release s@7016DF68, ac1
 7016E005 WCMV emitted -	[@ac2, ac0] = [@0x7015155A:0, ac1]
 7016E033 WCMV emitted -	[@(bp(M32[0x70000210], 1) + ((sx16(M16[0x70000216]) * 2) + 0x3E1CF)), 2] = [@ac3, ac1]
 7016E048 WCMV emitted -	[@(M32[0x70000210] + 0x1F216), 244 varying] = [@0x701515AA:0, "\x00  \x00\x1C\x22\x22\x1D\x1Cww\x1D\x1CWW\x1D\x1C!!\x1D\x1C()\x1D\x1Cff\x1D\x1Cmm\x1D\x1CMM\x1D\x1C++\x1D\x1Cx \x1D\x00/-\x00\x00--\x00\x00-\x5C\x00\x00\x5C-\x00\x00-/\x00\x00|-\x00\x00-|\x00 \x14 \x15\x14 \x15 |\x14 \x15\x14 \x15||\x14S\x15\x00# \x00\x00[]\x00\x00%%\x00 \x14 \x15\x14 \x15 \x14/ \x15\x14 \x5C\x15\x0Et \x0F\x00_^\x00\x00^_\x00|\x14 \x15\x14 \x15|\x1C**\x1D\x0E~~\x0F\x00|-\x00\x00-|\x00\x00--\x00\x00| \x00\x00 |\x00\x0E..\x0F\x0E:.\x0F\x0E.:\x0F\x0E :\x0F\x0E: \x0F\x14\x22\x22\x15\x14\x22\x15  \x14\x22\x15\x14{}\x15\x0E()\x0F\x00\x3B\x3B\x00\x00| \x00\x00 |\x00\x14|/\x15\x14\x5C|\x15\x00/ \x00\x00 \x5C\x00\x1C. \x1D\x1CII\x1D"]
@@ -1056,25 +1056,25 @@
 7016ED28 WCMV emitted -	[@bp(ac3, 48), 12] = [@bp(M32[wp(ac3, 16)], 2), ac1]
 7016ED54 WCMV emitted -	[@bp(ac3, 0x468), 2] = [@0x7016EA64:0, " \x14"]
 7016ED61 WCMV emitted -	[@bp(ac3, 60), 3] = [@bp(ac3, 0x468), 3]
-7016EDAC WADI emitted -	ac0 = t@7016ED93.1
-7016EDB2 WMSP emitted -	claim t@7016ED93.1, ac2
-7016EDBB WCMV emitted -	[@bp(t@7016ED93.1, 0), ac0] = [@ac3, ac1]
-7016EDC0 WADI emitted -	ac2 = t@7016ED93.2
-7016EDC7 WMSP emitted -	claim t@7016ED93.2, ac3
-7016EDD2 WCMV emitted -	[@bp(t@7016ED93.2, 0), (sx16(M16[(M32[0x70000210] + 0x1EFB9)]) + 1)] = [@bp(t@7016ED93.1, 0), (sx16(M16[(M32[0x70000210] + 0x1EFB9)]) + 1)]
+7016EDAC WADI emitted -	ac0 = s@7016ED93.1
+7016EDB2 WMSP emitted -	claim s@7016ED93.1, ac2
+7016EDBB WCMV emitted -	[@bp(s@7016ED93.1, 0), ac0] = [@ac3, ac1]
+7016EDC0 WADI emitted -	ac2 = s@7016ED93.2
+7016EDC7 WMSP emitted -	claim s@7016ED93.2, ac3
+7016EDD2 WCMV emitted -	[@bp(s@7016ED93.2, 0), (sx16(M16[(M32[0x70000210] + 0x1EFB9)]) + 1)] = [@bp(s@7016ED93.1, 0), (sx16(M16[(M32[0x70000210] + 0x1EFB9)]) + 1)]
 7016EDD9 WCMV emitted -	[@ac2, 12] = [@bp(ac3, 48), 12]
-7016EDDB WADI emitted -	ac1 = t@7016ED93.3
-7016EDE2 WMSP emitted -	claim t@7016ED93.3, ac2
-7016EDED WCMV emitted -	[@bp(t@7016ED93.3, 0), (sx16(M16[(M32[0x70000210] + 0x1EFB9)]) + 13)] = [@bp(t@7016ED93.2, 0), (sx16(M16[(M32[0x70000210] + 0x1EFB9)]) + 13)]
+7016EDDB WADI emitted -	ac1 = s@7016ED93.3
+7016EDE2 WMSP emitted -	claim s@7016ED93.3, ac2
+7016EDED WCMV emitted -	[@bp(s@7016ED93.3, 0), (sx16(M16[(M32[0x70000210] + 0x1EFB9)]) + 13)] = [@bp(s@7016ED93.2, 0), (sx16(M16[(M32[0x70000210] + 0x1EFB9)]) + 13)]
 7016EDF4 WCMV emitted -	[@ac2, 4] = [@bp(ac3, 60), 4]
-7016EDF6 WADI emitted -	ac1 = t@7016ED93.4
-7016EDFD WMSP emitted -	claim t@7016ED93.4, ac2
-7016EE08 WCMV emitted -	[@bp(t@7016ED93.4, 0), (sx16(M16[(M32[0x70000210] + 0x1EFB9)]) + 17)] = [@bp(t@7016ED93.3, 0), (sx16(M16[(M32[0x70000210] + 0x1EFB9)]) + 17)]
+7016EDF6 WADI emitted -	ac1 = s@7016ED93.4
+7016EDFD WMSP emitted -	claim s@7016ED93.4, ac2
+7016EE08 WCMV emitted -	[@bp(s@7016ED93.4, 0), (sx16(M16[(M32[0x70000210] + 0x1EFB9)]) + 17)] = [@bp(s@7016ED93.3, 0), (sx16(M16[(M32[0x70000210] + 0x1EFB9)]) + 17)]
 7016EE0E WCMV emitted -	[@ac2, 2] = [@0x7016EA5F:0, "| "]
-7016EE10 WADI emitted -	ac1 = t@7016ED93.5
-7016EE18 WMSP emitted -	claim t@7016ED93.5, ac2
-7016EE2A WCMV emitted -	[@bp(t@7016ED93.5, 2), (sx16(M16[(M32[0x70000210] + 0x1EFB9)]) + 19)] = [@bp(t@7016ED93.4, 0), (sx16(M16[(M32[0x70000210] + 0x1EFB9)]) + 19)]
-7016EE38 STASP emitted -	release t@7016ED93, ac1
+7016EE10 WADI emitted -	ac1 = s@7016ED93.5
+7016EE18 WMSP emitted -	claim s@7016ED93.5, ac2
+7016EE2A WCMV emitted -	[@bp(s@7016ED93.5, 2), (sx16(M16[(M32[0x70000210] + 0x1EFB9)]) + 19)] = [@bp(s@7016ED93.4, 0), (sx16(M16[(M32[0x70000210] + 0x1EFB9)]) + 19)]
+7016EE38 STASP emitted -	release s@7016ED93, ac1
 7016EE41 WCMV emitted -	[@bp(ac3, 0x470), 3] = [@0x7016EA5D:0, "   "]
 7016EE48 WCMV emitted -	[@ac2, 12] = [@bp(ac3, 48), 12]
 7016EE51 WCMV emitted -	[@bp(ac3, 0x414), 15] = [@bp(ac3, 0x470), 15]
@@ -1268,13 +1268,13 @@
 70172E18 WCMV emitted -	[@ac2, sx16(M16[(M32[wp(ac3, 154)] - 0xFFFF977)])] = [@bp(M32[wp(ac3, 154)], -0x1FFFF2EC), sx16(M16[(M32[wp(ac3, 154)] - 0xFFFF977)])]
 70172E21 WCMV emitted -	[@bp(ac3, 0x43C), M32[wp(ac3, 130)]] = [@bp(ac3, 0x330), M32[wp(ac3, 130)]]
 70172E27 WCMV emitted -	[@ac2, 17] = [@0x70172C37:0, " - approximately "]
-70172E29 WADI emitted -	ac1 = t@70172DDE.1
-70172E30 WMSP emitted -	claim t@70172DDE.1, ac2
-70172E3A WCMV emitted -	[@bp(t@70172DDE.1, 0), M32[wp(ac3, 132)]] = [@bp(ac3, 0x43C), M32[wp(ac3, 132)]]
+70172E29 WADI emitted -	ac1 = s@70172DDE.1
+70172E30 WMSP emitted -	claim s@70172DDE.1, ac2
+70172E3A WCMV emitted -	[@bp(s@70172DDE.1, 0), M32[wp(ac3, 132)]] = [@bp(ac3, 0x43C), M32[wp(ac3, 132)]]
 70172E41 WCMV emitted -	[@ac2, sx16(M16[wp(ac3, 134)])] = [@wp(ac3, 134), varying]
-70172E4E WCMV emitted -	[@ac2, ac0] = [@bp(t@70172DDE.1, 0), 150]
+70172E4E WCMV emitted -	[@ac2, ac0] = [@bp(s@70172DDE.1, 0), 150]
 70172E55 WCMV emitted -	[@ac2, ac0] = [@0x70172C2F:0, ac1]
-70172E5F STASP emitted -	release t@70172DDE, ac0
+70172E5F STASP emitted -	release s@70172DDE, ac0
 70172E7A WCMP emitted -	ac1 = cmp([@bp((sx16(M16[wp(ac3, 13)]) * 51), -0x1FD5EA24), sx16(M16[((sx16(M16[wp(ac3, 13)]) * 51) - 0xFEAF513)])], [@0x70172C67:0, 0])
 70172EBE WCMV emitted -	[@bp(ac3, 0x138), sx16(M16[wp(ac3, 18)])] = [@wp(ac3, 18), varying]
 70172EC9 WCMV emitted -	[@ac2, sx16(M16[((sx16(M16[wp(ac3, 13)]) * 51) - 0xFEAF513)])] = [@bp((sx16(M16[wp(ac3, 13)]) * 51), -0x1FD5EA24), sx16(M16[((sx16(M16[wp(ac3, 13)]) * 51) - 0xFEAF513)])]
@@ -1283,13 +1283,13 @@
 70172EE9 WCMV emitted -	[@ac2, ac0] = [@ac3, ac1]
 70172EF2 WCMV emitted -	[@bp(ac3, 0x43C), M32[wp(ac3, 132)]] = [@bp(ac3, 0x330), M32[wp(ac3, 132)]]
 70172EF8 WCMV emitted -	[@ac2, 17] = [@0x70172C37:0, " - approximately "]
-70172EFA WADI emitted -	ac1 = t@70172EB0.1
-70172F01 WMSP emitted -	claim t@70172EB0.1, ac2
-70172F0B WCMV emitted -	[@bp(t@70172EB0.1, 0), M32[wp(ac3, 154)]] = [@bp(ac3, 0x43C), M32[wp(ac3, 154)]]
+70172EFA WADI emitted -	ac1 = s@70172EB0.1
+70172F01 WMSP emitted -	claim s@70172EB0.1, ac2
+70172F0B WCMV emitted -	[@bp(s@70172EB0.1, 0), M32[wp(ac3, 154)]] = [@bp(ac3, 0x43C), M32[wp(ac3, 154)]]
 70172F12 WCMV emitted -	[@ac2, sx16(M16[wp(ac3, 134)])] = [@wp(ac3, 134), varying]
-70172F1F WCMV emitted -	[@ac2, ac0] = [@bp(t@70172EB0.1, 0), 150]
+70172F1F WCMV emitted -	[@ac2, ac0] = [@bp(s@70172EB0.1, 0), 150]
 70172F26 WCMV emitted -	[@ac2, ac0] = [@0x70172C2F:0, ac1]
-70172F30 STASP emitted -	release t@70172EB0, ac0
+70172F30 STASP emitted -	release s@70172EB0, ac0
 70172F5F WCMV emitted -	[@wp(ac3, 98), 46 varying] = [@0x70172C17:0, "\x0BHit space bar to observe the Sceptor of Loric"]
 70172F93 WCMV emitted -	[@wp(ac3, 18), 77 varying] = [@0x70172BEF:0, "The sceptor is encrusted with emeralds, with\x0A\x0Bthe head of a demon at one end."]
 70172FC2 WCMV emitted -	[@wp(ac3, 98), 47 varying] = [@0x70172BD7:0, "\x0BHit space bar to observe the Dark Lord's staff"]
@@ -1420,63 +1420,63 @@
 70174A64 WCMV emitted -	[@wp(ac3, 98), 33 varying] = [@0x701735EB:0, "\x0BIs it surrounded by a barrier ? "]
 70174C2B WCMV emitted -	[@wp(ac3, 40), 20 varying] = [@0x701735DF:0, "\x0BIs this a citadel? "]
 701750AB WCMV emitted -	[@wp(ac3, 40), 20 varying] = [@0x701735D5:0, "\x0BIs this a temple ? "]
-701756A3 WADI emitted -	ac2 = t@70175694.1
-701756A9 WMSP emitted -	claim t@70175694.1, ac1
-701756BA WCMV emitted -	[@bp(t@70175694.1, 1), sx16(M16[M32[wp(ac3, -12)]])] = [@M32[wp(ac3, -12)], varying]
-701756BC WADI emitted -	ac1 = t@70175694.2
-701756C3 WMSP emitted -	claim t@70175694.2, ac2
-701756CE WCMV emitted -	[@bp(t@70175694.2, 0), ac0] = [@bp(t@70175694.1, 0), ac1]
+701756A3 WADI emitted -	ac2 = s@70175694.1
+701756A9 WMSP emitted -	claim s@70175694.1, ac1
+701756BA WCMV emitted -	[@bp(s@70175694.1, 1), sx16(M16[M32[wp(ac3, -12)]])] = [@M32[wp(ac3, -12)], varying]
+701756BC WADI emitted -	ac1 = s@70175694.2
+701756C3 WMSP emitted -	claim s@70175694.2, ac2
+701756CE WCMV emitted -	[@bp(s@70175694.2, 0), ac0] = [@bp(s@70175694.1, 0), ac1]
 701756D4 WCMV emitted -	[@ac2, 2] = [@0x701735CD:0, " ["]
-701756D6 WADI emitted -	ac1 = t@70175694.3
-701756DD WMSP emitted -	claim t@70175694.3, ac2
-701756E8 WCMV emitted -	[@bp(t@70175694.3, 0), ac0] = [@bp(t@70175694.2, 0), ac1]
+701756D6 WADI emitted -	ac1 = s@70175694.3
+701756DD WMSP emitted -	claim s@70175694.3, ac2
+701756E8 WCMV emitted -	[@bp(s@70175694.3, 0), ac0] = [@bp(s@70175694.2, 0), ac1]
 701756EF WCMV emitted -	[@ac2, sx16(M16[wp(ac3, 12)])] = [@wp(ac3, 12), varying]
-701756F1 WADI emitted -	ac1 = t@70175694.4
-701756F8 WMSP emitted -	claim t@70175694.4, ac2
-70175703 WCMV emitted -	[@bp(t@70175694.4, 0), ac0] = [@bp(t@70175694.3, 0), ac1]
+701756F1 WADI emitted -	ac1 = s@70175694.4
+701756F8 WMSP emitted -	claim s@70175694.4, ac2
+70175703 WCMV emitted -	[@bp(s@70175694.4, 0), ac0] = [@bp(s@70175694.3, 0), ac1]
 70175709 WCMV emitted -	[@ac2, 4] = [@0x701735CB:0, "] : "]
-7017570B WADI emitted -	ac1 = t@70175694.5
-70175713 WMSP emitted -	claim t@70175694.5, ac2
-70175725 WCMV emitted -	[@bp(t@70175694.5, 2), ac0] = [@bp(t@70175694.4, 0), ac1]
-70175743 STASP emitted -	release t@70175694, ac0
-701757CC WADI emitted -	ac2 = t@701757C5.1
-701757D2 WMSP emitted -	claim t@701757C5.1, ac1
-701757E3 WCMV emitted -	[@bp(t@701757C5.1, 1), sx16(M16[M32[wp(ac3, -12)]])] = [@M32[wp(ac3, -12)], varying]
-701757E5 WADI emitted -	ac1 = t@701757C5.2
-701757EC WMSP emitted -	claim t@701757C5.2, ac2
-701757F7 WCMV emitted -	[@bp(t@701757C5.2, 0), ac0] = [@bp(t@701757C5.1, 0), ac1]
+7017570B WADI emitted -	ac1 = s@70175694.5
+70175713 WMSP emitted -	claim s@70175694.5, ac2
+70175725 WCMV emitted -	[@bp(s@70175694.5, 2), ac0] = [@bp(s@70175694.4, 0), ac1]
+70175743 STASP emitted -	release s@70175694, ac0
+701757CC WADI emitted -	ac2 = s@701757C5.1
+701757D2 WMSP emitted -	claim s@701757C5.1, ac1
+701757E3 WCMV emitted -	[@bp(s@701757C5.1, 1), sx16(M16[M32[wp(ac3, -12)]])] = [@M32[wp(ac3, -12)], varying]
+701757E5 WADI emitted -	ac1 = s@701757C5.2
+701757EC WMSP emitted -	claim s@701757C5.2, ac2
+701757F7 WCMV emitted -	[@bp(s@701757C5.2, 0), ac0] = [@bp(s@701757C5.1, 0), ac1]
 701757FD WCMV emitted -	[@ac2, 2] = [@0x701735CD:0, " ["]
-701757FF WADI emitted -	ac1 = t@701757C5.3
-70175806 WMSP emitted -	claim t@701757C5.3, ac2
-70175811 WCMV emitted -	[@bp(t@701757C5.3, 0), ac0] = [@bp(t@701757C5.2, 0), ac1]
+701757FF WADI emitted -	ac1 = s@701757C5.3
+70175806 WMSP emitted -	claim s@701757C5.3, ac2
+70175811 WCMV emitted -	[@bp(s@701757C5.3, 0), ac0] = [@bp(s@701757C5.2, 0), ac1]
 70175818 WCMV emitted -	[@ac2, sx16(M16[wp(ac3, 14)])] = [@wp(ac3, 14), varying]
-7017581A WADI emitted -	ac1 = t@701757C5.4
-70175821 WMSP emitted -	claim t@701757C5.4, ac2
-7017582C WCMV emitted -	[@bp(t@701757C5.4, 0), ac0] = [@bp(t@701757C5.3, 0), ac1]
+7017581A WADI emitted -	ac1 = s@701757C5.4
+70175821 WMSP emitted -	claim s@701757C5.4, ac2
+7017582C WCMV emitted -	[@bp(s@701757C5.4, 0), ac0] = [@bp(s@701757C5.3, 0), ac1]
 70175832 WCMV emitted -	[@ac2, 4] = [@0x701735CB:0, "] : "]
-70175834 WADI emitted -	ac1 = t@701757C5.5
-7017583C WMSP emitted -	claim t@701757C5.5, ac2
-7017584E WCMV emitted -	[@bp(t@701757C5.5, 2), ac0] = [@bp(t@701757C5.4, 0), ac1]
-7017586C STASP emitted -	release t@701757C5, ac0
-701758AF WADI emitted -	ac2 = t@701758A0.1
-701758B5 WMSP emitted -	claim t@701758A0.1, ac1
-701758C6 WCMV emitted -	[@bp(t@701758A0.1, 1), sx16(M16[M32[wp(ac3, -12)]])] = [@M32[wp(ac3, -12)], varying]
-701758C8 WADI emitted -	ac1 = t@701758A0.2
-701758CF WMSP emitted -	claim t@701758A0.2, ac2
-701758DA WCMV emitted -	[@bp(t@701758A0.2, 0), ac0] = [@bp(t@701758A0.1, 0), ac1]
+70175834 WADI emitted -	ac1 = s@701757C5.5
+7017583C WMSP emitted -	claim s@701757C5.5, ac2
+7017584E WCMV emitted -	[@bp(s@701757C5.5, 2), ac0] = [@bp(s@701757C5.4, 0), ac1]
+7017586C STASP emitted -	release s@701757C5, ac0
+701758AF WADI emitted -	ac2 = s@701758A0.1
+701758B5 WMSP emitted -	claim s@701758A0.1, ac1
+701758C6 WCMV emitted -	[@bp(s@701758A0.1, 1), sx16(M16[M32[wp(ac3, -12)]])] = [@M32[wp(ac3, -12)], varying]
+701758C8 WADI emitted -	ac1 = s@701758A0.2
+701758CF WMSP emitted -	claim s@701758A0.2, ac2
+701758DA WCMV emitted -	[@bp(s@701758A0.2, 0), ac0] = [@bp(s@701758A0.1, 0), ac1]
 701758E0 WCMV emitted -	[@ac2, 2] = [@0x701735CD:0, " ["]
-701758E2 WADI emitted -	ac1 = t@701758A0.3
-701758E9 WMSP emitted -	claim t@701758A0.3, ac2
-701758F4 WCMV emitted -	[@bp(t@701758A0.3, 0), ac0] = [@bp(t@701758A0.2, 0), ac1]
+701758E2 WADI emitted -	ac1 = s@701758A0.3
+701758E9 WMSP emitted -	claim s@701758A0.3, ac2
+701758F4 WCMV emitted -	[@bp(s@701758A0.3, 0), ac0] = [@bp(s@701758A0.2, 0), ac1]
 701758FD WCMV emitted -	[@ac2, sx16(M16[M32[wp(ac3, -14)]])] = [@M32[wp(ac3, -14)], varying]
-701758FF WADI emitted -	ac1 = t@701758A0.4
-70175906 WMSP emitted -	claim t@701758A0.4, ac2
-70175911 WCMV emitted -	[@bp(t@701758A0.4, 0), ac0] = [@bp(t@701758A0.3, 0), ac1]
+701758FF WADI emitted -	ac1 = s@701758A0.4
+70175906 WMSP emitted -	claim s@701758A0.4, ac2
+70175911 WCMV emitted -	[@bp(s@701758A0.4, 0), ac0] = [@bp(s@701758A0.3, 0), ac1]
 70175917 WCMV emitted -	[@ac2, 4] = [@0x701735CB:0, "] : "]
-70175919 WADI emitted -	ac1 = t@701758A0.5
-70175921 WMSP emitted -	claim t@701758A0.5, ac2
-70175933 WCMV emitted -	[@bp(t@701758A0.5, 2), ac0] = [@bp(t@701758A0.4, 0), ac1]
-70175951 STASP emitted -	release t@701758A0, ac0
+70175919 WADI emitted -	ac1 = s@701758A0.5
+70175921 WMSP emitted -	claim s@701758A0.5, ac2
+70175933 WCMV emitted -	[@bp(s@701758A0.5, 2), ac0] = [@bp(s@701758A0.4, 0), ac1]
+70175951 STASP emitted -	release s@701758A0, ac0
 7017597B WCMV emitted -	[@bp(M32[wp(ac3, -14)], 2), ac0] = [@0x7000021C, varying]
 70175BB2 WCMV emitted -	[@bp(ac3, 4), 102] = [@0x70175AFB:0, "\x0C\x14Operator Help\x15\x0A\x0AB - make building      C - make castle/citadel\x0Af - make forest        h - make hold\x0A"]
 70175BB8 WCMV emitted -	[@ac2, 120] = [@0x70175ABF:0, "I,i - set increment    K - kill player\x0AL - list               M - make mountain\x0Am - make hill          P - list players\x0A"]
@@ -1679,25 +1679,25 @@
 7017A12C WCMV emitted -	[@ac2, 2] = [@0x70179A68:0, ". "]
 7017A135 WCMV emitted -	[@bp(ac3, 0x2D8), M32[wp(ac3, 46)]] = [@bp(ac3, 0x1C8), M32[wp(ac3, 46)]]
 7017A140 WCMV emitted -	[@ac2, sx16(M16[((sx16(M16[wp(ac3, 12)]) * 9) - 0xFFFFA73)])] = [@bp((sx16(M16[wp(ac3, 12)]) * 9), -0x1FFFF4E4), sx16(M16[((sx16(M16[wp(ac3, 12)]) * 9) - 0xFFFFA73)])]
-7017A142 WADI emitted -	ac1 = t@7017A116.1
-7017A149 WMSP emitted -	claim t@7017A116.1, ac2
-7017A153 WCMV emitted -	[@bp(t@7017A116.1, 0), M32[wp(ac3, 60)]] = [@bp(ac3, 0x2D8), M32[wp(ac3, 60)]]
+7017A142 WADI emitted -	ac1 = s@7017A116.1
+7017A149 WMSP emitted -	claim s@7017A116.1, ac2
+7017A153 WCMV emitted -	[@bp(s@7017A116.1, 0), M32[wp(ac3, 60)]] = [@bp(ac3, 0x2D8), M32[wp(ac3, 60)]]
 7017A15B WCMV emitted -	[@ac2, M32[wp(ac3, 62)]] = [@0x7015155A:0, M32[wp(ac3, 62)]]
-7017A15D WADI emitted -	ac1 = t@7017A116.2
-7017A164 WMSP emitted -	claim t@7017A116.2, ac2
-7017A16F WCMV emitted -	[@bp(t@7017A116.2, 0), ac0] = [@bp(t@7017A116.1, 0), ac1]
+7017A15D WADI emitted -	ac1 = s@7017A116.2
+7017A164 WMSP emitted -	claim s@7017A116.2, ac2
+7017A16F WCMV emitted -	[@bp(s@7017A116.2, 0), ac0] = [@bp(s@7017A116.1, 0), ac1]
 7017A176 WCMV emitted -	[@ac2, sx16(M16[wp(ac3, 22)])] = [@wp(ac3, 22), varying]
-7017A178 WADI emitted -	ac1 = t@7017A116.3
-7017A17F WMSP emitted -	claim t@7017A116.3, ac2
-7017A18A WCMV emitted -	[@bp(t@7017A116.3, 0), ac0] = [@bp(t@7017A116.2, 0), ac1]
+7017A178 WADI emitted -	ac1 = s@7017A116.3
+7017A17F WMSP emitted -	claim s@7017A116.3, ac2
+7017A18A WCMV emitted -	[@bp(s@7017A116.3, 0), ac0] = [@bp(s@7017A116.2, 0), ac1]
 7017A191 WCMV emitted -	[@ac2, sx16(M16[wp(ac3, 116)])] = [@wp(ac3, 116), varying]
-7017A193 WADI emitted -	ac1 = t@7017A116.4
-7017A19A WMSP emitted -	claim t@7017A116.4, ac2
-7017A1A5 WCMV emitted -	[@bp(t@7017A116.4, 0), ac0] = [@bp(t@7017A116.3, 0), ac1]
-7017A1AA WADI emitted -	ac2 = t@7017A116.5
-7017A1B2 WMSP emitted -	claim t@7017A116.5, ac3
-7017A1C3 WCMV emitted -	[@bp(t@7017A116.5, 2), ac0] = [@bp(t@7017A116.4, 0), ac1]
-7017A1D1 STASP emitted -	release t@7017A116, ac1
+7017A193 WADI emitted -	ac1 = s@7017A116.4
+7017A19A WMSP emitted -	claim s@7017A116.4, ac2
+7017A1A5 WCMV emitted -	[@bp(s@7017A116.4, 0), ac0] = [@bp(s@7017A116.3, 0), ac1]
+7017A1AA WADI emitted -	ac2 = s@7017A116.5
+7017A1B2 WMSP emitted -	claim s@7017A116.5, ac3
+7017A1C3 WCMV emitted -	[@bp(s@7017A116.5, 2), ac0] = [@bp(s@7017A116.4, 0), ac1]
+7017A1D1 STASP emitted -	release s@7017A116, ac1
 7017A205 WCMV emitted -	[@wp(ac3, 82), 55 varying] = [@0x70179A4B:0, "What are you going to use for money, your good looks??\x0A"]
 7017A21B WCMV emitted -	[@wp(ac3, 64), 31 varying] = [@0x70179A3B:0, "Which item number to purchase? "]
 7017A279 WCMV emitted -	[@wp(ac3, 64), 24 varying] = [@0x70179A2F:0, "You cannot afford that!\x0A"]

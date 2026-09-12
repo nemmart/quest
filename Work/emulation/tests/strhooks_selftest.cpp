@@ -65,7 +65,7 @@ static constexpr uint32_t BLK_B = 0x70100040u, B1 = 0x70100042u, BS = 0x70100050
 static constexpr uint32_t ONPOP = 0x70100060u, UNWIND = 0x70100070u, PLAIN_WRTN = 0x70100080u;
 // P33-B: one twin per claim — A.1/A.2/A.3 and B.1 (quest.arena)
 static constexpr uint32_t ARENA_A1 = 0x75000000u, ARENA_A2 = 0x75001000u, ARENA_A3 = 0x75002000u, ARENA_B1 = 0x75003000u;
-static constexpr uint32_t ARENA_A = ARENA_A3, ARENA_B = ARENA_B1;   // the group results (p@b ≡ t@b.last)
+static constexpr uint32_t ARENA_A = ARENA_A3, ARENA_B = ARENA_B1;   // the group results (p@b ≡ s@b.last)
 
 // opcodes (Decoder tables): WMSP yy = 111yy11001001001, STASP yy = 101yy11001011001, WRTN = 1000011110101001
 static uint16_t WMSP(int r)  { return static_cast<uint16_t>(0xE649u | (r << 11)); }
@@ -140,10 +140,10 @@ static void write_table(const char* path, const char* body) {
 
 static const char* ARENA_FILE = "/tmp/strhooks_selftest.arena";
 static const char* ARENA_GOOD =
-  "temp 1 t@70100010.1 arena=75000000 cap=4096 bound=unbounded wmsp=70100012 routine=GROUP_A size=x\n"
-  "temp 2 t@70100010.2 arena=75001000 cap=4096 bound=unbounded wmsp=70100020 routine=GROUP_A size=y\n"
-  "temp 3 t@70100010.3 arena=75002000 cap=4096 bound=unbounded wmsp=70100028 routine=GROUP_A size=z\n"
-  "temp 4 t@70100040.1 arena=75003000 cap=4096 bound=unbounded wmsp=70100042 routine=GROUP_B size=w\n";
+  "temp 1 s@70100010.1 arena=75000000 cap=4096 bound=unbounded wmsp=70100012 routine=GROUP_A size=x\n"
+  "temp 2 s@70100010.2 arena=75001000 cap=4096 bound=unbounded wmsp=70100020 routine=GROUP_A size=y\n"
+  "temp 3 s@70100010.3 arena=75002000 cap=4096 bound=unbounded wmsp=70100028 routine=GROUP_A size=z\n"
+  "temp 4 s@70100040.1 arena=75003000 cap=4096 bound=unbounded wmsp=70100042 routine=GROUP_B size=w\n";
 
 static const char* GOOD =
   "row 1 70100010 GROUP_A first=70100012 last=70100028 nclaims=3\n"
@@ -179,10 +179,10 @@ static int run() {
   expect(Arena::by_wmsp(A2) && Arena::by_wmsp(A2)->claim == 2, "arena.by_wmsp");
   {
     std::string e2;
-    write_table(ARENA_FILE, "temp 1 t@70100010.1 arena=75000000 cap=4096 bound=unbounded wmsp=70100012 routine=A size=x\n"
-                            "temp 2 t@70100010.2 arena=75000800 cap=4096 bound=unbounded wmsp=70100020 routine=A size=y\n");
+    write_table(ARENA_FILE, "temp 1 s@70100010.1 arena=75000000 cap=4096 bound=unbounded wmsp=70100012 routine=A size=x\n"
+                            "temp 2 s@70100010.2 arena=75000800 cap=4096 bound=unbounded wmsp=70100020 routine=A size=y\n");
     expect(!Arena::load_file(ARENA_FILE, &e2) && e2.find("overlaps") != std::string::npos, "arena.overlap refused", e2.c_str());
-    write_table(ARENA_FILE, "temp 1 t@70100010.2 arena=75000000 cap=4096 bound=unbounded wmsp=70100020 routine=A size=y\n");
+    write_table(ARENA_FILE, "temp 1 s@70100010.2 arena=75000000 cap=4096 bound=unbounded wmsp=70100020 routine=A size=y\n");
     expect(!Arena::load_file(ARENA_FILE, &e2) && e2.find("lacks claim 1") != std::string::npos, "arena.missing claim refused", e2.c_str());
     write_table(ARENA_FILE, ARENA_GOOD);
     expect(Arena::load_file(ARENA_FILE, &e2), "arena.reload", e2.c_str());
