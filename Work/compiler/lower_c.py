@@ -70,6 +70,51 @@ MUTATIONS = {
 MUTATE = None
 
 
+# ===================================== the runtime calling conventions ====
+#
+# Carried-in ruling 6: `TMP(e)`'s width comes from the CALLEE'S PARAMETER, not
+# from the expression.  That is not derivable from the C — it is a lookup in
+# docs/Project28/RTConventions.md — so it lives here as DATA, with the row that
+# justifies each entry.  A call with no row REFUSES (ruling 7 applied to a
+# table): the compiler must not guess a width.
+#
+#   argc    the arity the `$N` name asserts
+#   valued  the result arrives in ac0 (RTConventions); the valued-call split of
+#           IR.md §5.10.6 makes `r = f(...)` a call plus `r = ac0` in the next
+#           block, so a call can never sit inside a larger expression
+#   dummy   1-based argument index -> the vtype a TMP() at that position takes
+RT_CALLS = {
+    # ?RANDOM_NUMBER @7017DE33.  Value in ac0 (RTConventions row).  P51 §3: at
+    # PICK_X_Y's three sites all lo/hi arguments are 32-bit temps (XWSTA),
+    # including the constant 1 and OBJ_PTR->region_count — the parameters are
+    # FIXED BIN(31).  The seed is passed directly by reference.
+    "RANDOM_NUMBER$3": dict(callee="?RANDOM_NUMBER", argc=3, valued=True,
+                            dummy={1: "i32", 2: "i32", 3: "i32"}),
+    # ?WRITE_SCREEN @7017E27A: channel, text.  A CHAR-constant text argument is
+    # a CHAR VARYING dummy built in the caller's frame, its WORD address pushed
+    # (P51 §3, HIT_ANY_CHAR 7016DE93..DEA3).
+    "WRITE_SCREEN$2": dict(callee="?WRITE_SCREEN", argc=2, valued=False,
+                           dummy={}),
+    "WRITE_SCREEN$5": dict(callee="?WRITE_SCREEN", argc=5, valued=False,
+                           dummy={5: "i16"}),
+    # ?READ @7017DE5F.  Argument roles from its BODY (RTConventions, P51 §3):
+    # arg 2's datum is a POINTER (a dummy holding the buffer's byte pointer);
+    # arg 3 is the byte count, 16-bit, IN/OUT — the callee writes it back at
+    # 7017DEE4; arg 5 is the 16-bit options word.
+    "READ$6": dict(callee="?READ", argc=6, valued=False,
+                   dummy={2: "*char", 3: "i16", 5: "i16"}),
+    "UNSIGNED_TO_CHAR$1": dict(callee="?UNSIGNED_TO_CHAR", argc=1, valued=False,
+                               dummy={}),
+}
+
+# X.CB @7017E708 (Salvage F12, RTConventions): builds a BIT literal at run
+# time.  ac2 = destination WORD address, ac0 = byte pointer to the character
+# form, ac1 = its length, then an undecorated LCALL with NO stack arguments —
+# which is why IR.md §6 widened the `rt_call` callee rule to accept a non-`?`
+# callee with an EMPTY argument list rather than adding a second production.
+X_CB = "X.CB"
+
+
 class Refusal(Exception):
     def __init__(self, construct, line, why):
         self.construct, self.line, self.why = construct, line, why
@@ -168,7 +213,11 @@ class Lowerer:
         self.routine = routine
         self.vrows = []
         self.vdecls = []            # emitted `v` / `a` lines, in allocation order
-        self.vtype = {}             # cell name -> its declared vtype (the tripwire)
+        self.vtype = {}             # cell name -> its declared vtype (the tripwire).
+                                    # SHARED across a unit (set_unit_vtype): a
+                                    # caller writes its CALLEE's `a` cells, so
+                                    # the kind check needs the callee's types.
+        self.game_routines = {}     # callable game routines IN THIS UNIT
         self.nv = 0
         self.blocks = []
         self.nb = 0
@@ -220,7 +269,10 @@ class Lowerer:
         if ptr_to is not None:
             # A by-reference parameter: two words, one level, KIND enforced
             # (§5.10.1a).  The pointee width is advisory and carried for ircmp.
-            vtype = "*" + ptr_to
+            # The IR spells a BYTE pointer `*char`, not `*u8` — the pointee
+            # forms of §5.10.1a are i16|u16|i32|u32|char|varying n|words n, and
+            # `char` is the byte one.  KIND is enforced; this is that kind.
+            vtype = "*char" if ptr_to == "u8" else "*" + ptr_to
             total, elemwords, render = 2, 2, "w32"
         elif kind == "u8" and MUTATE != "byte_as_word":
             # A byte cell is the IR's `char <n>` — an AGGREGATE, n BYTES,
@@ -436,6 +488,53 @@ class Lowerer:
 
 
 # ================================================== the expression walk ====
+
+C_ESCAPES = {"n": 10, "t": 9, "r": 13, "v": 11, "b": 8, "f": 12, "a": 7,
+             "0": 0, "\\": 92, "'": 39, '"': 34, "?": 63}
+
+
+def decode_c_string(tok, node):
+    """The BYTES of a C string literal, as pycparser hands it over (quoted,
+    escapes unexpanded).  No terminating NUL: PL/I CHAR(n) is a counted region,
+    not a C string, and the length is the declared capacity."""
+    t = tok
+    if t.startswith('"') and t.endswith('"'):
+        t = t[1:-1]
+    out, i = [], 0
+    while i < len(t):
+        ch = t[i]
+        if ch != "\\":
+            out.append(ord(ch)); i += 1; continue
+        i += 1
+        if i >= len(t):
+            refuse("string constant", node, "trailing backslash")
+        e = t[i]
+        if e == "x":
+            j = i + 1
+            while j < len(t) and t[j] in "0123456789abcdefABCDEF":
+                j += 1
+            out.append(int(t[i + 1:j], 16) & 0xFF); i = j; continue
+        if e in C_ESCAPES:
+            out.append(C_ESCAPES[e]); i += 1; continue
+        refuse("string constant", node, "unsupported escape \\%s" % e)
+    for b in out:
+        if b > 0xFF:
+            refuse("string constant", node, "byte out of range")
+    return bytes(out)
+
+
+def ir_escape(data):
+    """IR.md 5.8's literal escaping: printable 0x20..0x7E stay literal except
+    the quote, the backslash and the semicolon; everything else becomes a hex
+    escape."""
+    out = []
+    for b in data:
+        if 0x20 <= b <= 0x7E and b not in (0x22, 0x5C, 0x3B):
+            out.append(chr(b))
+        else:
+            out.append("\\x%02X" % b)
+    return "".join(out)
+
 
 def parse_int_literal(tok, node):
     """A C integer constant, with its TYPE, in our 32-bit model."""
@@ -860,9 +959,23 @@ class Walker:
             return self.builtin_abs(n, args)
         if name == "RANGE_CHECK":
             return self.builtin_sub(n, args)
+        if name in ("MIN", "MAX"):
+            return self.builtin_minmax(n, name, args)
+        if name in RT_CALLS:
+            return self.rt_call(n, name, args)
+        if name in L.game_routines:
+            return self.game_call(n, name, args)
+        if name == "BITS":
+            refuse("BITS", n, "BITS() is only an ARGUMENT of a call, never a "
+                              "value: it builds its literal into a temp through "
+                              "X.CB (IR.md §6)")
         refuse("function call", n,
-               "calls are refused in this project (P46 F7: ir 7 refuses "
-               "call/rt_call in a symbolic block); `%s` is not a builtin" % name)
+               "`%s` is not a builtin, not a runtime routine in RT_CALLS, and "
+               "not another routine of this compilation unit.  A naive `call` "
+               "enters the callee's b0, which the loader requires to be a block "
+               "of THIS file (IR.md §6, P54 a001 R1) — so compile the callee "
+               "into the same unit: --routine %s --routine %s"
+               % (name, self.L.routine, name))
 
     def builtin_abs(self, n, args):
         """a001 R1b: a lowered PL/I builtin, not a call.  The naive form is
@@ -899,6 +1012,218 @@ class Walker:
         L.goto(b_join)
         L.open_block(b_join)
         return out, k
+
+    def builtin_minmax(self, n, which, args):
+        """P51 §2 item 7: the `WSGE a,b; WMOV a,b` diamond, exactly as ABS is
+        the WSGE/WNEG diamond.  A builtin's result type is its DECLARED type
+        (P48 §2.1's bug), and MIN/MAX are declared int32_t."""
+        L = self.L
+        if len(args) != 2:
+            refuse(which, n, "%s takes two arguments" % which)
+        av, _ak = self.expr(args[0])
+        bv, _bk = self.expr(args[1])
+        out = L.new_v("node", "i32", "", 0, which, self.line(n))
+        b_a = L.new_block("%s/a" % which)
+        b_b = L.new_block("%s/b" % which)
+        b_join = L.new_block("%s/join" % which)
+        L.emit("ac0 = %s" % av)
+        L.emit("ac1 = %s" % bv)
+        L.emit("ac0 = (ac0 %s ac1)" % ("<s" if which == "MIN" else ">s"))
+        L.terminate("goto [%s, %s] tf(ac0)" % (b_b.name, b_a.name))
+        L.open_block(b_a)
+        L.emit("ac0 = %s" % av)
+        L.emit("%s = ac0" % out)
+        L.goto(b_join)
+        L.open_block(b_b)
+        L.emit("ac0 = %s" % bv)
+        L.emit("%s = ac0" % out)
+        L.goto(b_join)
+        L.open_block(b_join)
+        return out, "i32"
+
+    # ------------------------------------------------------------- calls --
+    def string_literal(self, node, text, anchor):
+        """A compiled routine's string literal is NOWHERE (IR.md §5.10.1b): a
+        §5.8 literal piece names a byte address IN THE IMAGE and the executor
+        faults if the bytes disagree.  So it becomes an INITIALISED `v`, whose
+        bytes the loader writes at placement."""
+        L = self.L
+        data = decode_c_string(text, node)
+        if not data:
+            refuse("string constant", node, "an empty string has no capacity")
+        if len(data) > 32767:
+            refuse("string constant", node, "longer than `char 32767`")
+        v = L.new_v("literal", "u8", "", len(data), anchor, self.line(node))
+        L.vdecls[-1] = "v %-24s char %d = \"%s\"" % (v, len(data), ir_escape(data))
+        L.vtype[v] = "char %d" % len(data)
+        return v, len(data)
+
+    def varying_dummy(self, node, v, nbytes, anchor):
+        """A CHAR constant reaching a CHAR VARYING parameter: the caller builds
+        the dummy — length word then data — in its own frame and pushes its
+        WORD address (P51 §2 item 4, §3; HIT_ANY_CHAR 7016DE93..DEA3).  Naive
+        means one dummy per site: the original reuses one temp for both of its
+        literals, and reusing it here would be a rewrite nobody could be
+        credited with later."""
+        L = self.L
+        d = L.new_v("dummy", "u16", "", 0, anchor, self.line(node))
+        L.vdecls[-1] = "v %-24s varying %d" % (d, nbytes)
+        L.vtype[d] = "varying %d" % nbytes
+        # The destination is `wp(cell, 0)`, NOT the bare cell name.  IR.md
+        # §5.10.4 and §5.10.10 both spell this `[@QUEST.v2, 8 varying]`, and
+        # that form does not load — measured against the spec's own worked
+        # example.  P52 §7 F3 is why: `check_piece` was reworked to resolve
+        # through wp/bp and use which wrapper it found as the word/byte
+        # evidence, and the examples were not updated with it.  Reported as
+        # q006; the loader is right and the document is stale.
+        L.emit("[@wp(%s, 0), %d varying] = [@bp(%s, 0), %d]"
+               % (d, nbytes, v, nbytes))
+        return d
+
+    def arg_address(self, n, callee, idx, spec):
+        """One by-reference argument, as the WORD ADDRESS the callee receives.
+        Returns a pure expr for the rt_call/call argument list."""
+        L = self.L
+        dummies = spec.get("dummy", {})
+        # &lvalue — the address of a static, a field, an element or a local
+        if isinstance(n, c_ast.UnaryOp) and n.op == "&":
+            av = self.address_of_any(n.expr)
+            return av
+        # a string constant reaching a CHAR VARYING parameter
+        if isinstance(n, c_ast.Constant) and n.type == "string":
+            v, nbytes = self.string_literal(n, n.value, "lit:%s#%d" % (callee, idx))
+            d = self.varying_dummy(n, v, nbytes, "dummy:%s#%d" % (callee, idx))
+            return "wp(%s, 0)" % d
+        # BITS("001") — built at run time by X.CB into a temp (Salvage F12)
+        if isinstance(n, c_ast.FuncCall) and isinstance(n.name, c_ast.ID) \
+                and n.name.name == "BITS":
+            return self.bits_literal(n, callee, idx)
+        # TMP(e) — a dummy of the CALLEE PARAMETER's width (ruling 6)
+        if isinstance(n, c_ast.FuncCall) and isinstance(n.name, c_ast.ID) \
+                and n.name.name == "TMP":
+            if idx not in dummies:
+                refuse("TMP", n,
+                       "no dummy width recorded for %s argument %d — the width "
+                       "comes from the CALLEE's parameter (carried-in ruling 6), "
+                       "which is a row in docs/Project28/RTConventions.md, not "
+                       "something to infer from the expression"
+                       % (callee, idx))
+            return self.tmp_dummy(n, callee, idx, dummies[idx])
+        refuse("argument", n,
+               "argument %d of %s is not a by-reference form: PL/I passes by "
+               "reference, so write `&lvalue`, `TMP(expr)`, a CHAR constant or "
+               "BITS(...)" % (idx, callee))
+
+    def tmp_dummy(self, n, callee, idx, vtype):
+        L = self.L
+        inner = n.args.exprs[0] if n.args and n.args.exprs else None
+        if inner is None:
+            refuse("TMP", n, "TMP takes one argument")
+        anchor = "tmp:%s#%d" % (callee, idx)
+        if vtype == "*char":
+            # arg 2 of ?READ: the datum IS a pointer — a dummy holding the
+            # buffer's BYTE pointer, whose address is pushed (P51 §2 item 3).
+            if not (isinstance(inner, c_ast.ID) and inner.name in L.scope):
+                refuse("TMP", n, "a pointer-valued dummy takes an array name")
+            base, _k, nelem, _ew = L.scope[inner.name]
+            if not nelem or not L.is_byte(base):
+                refuse("TMP", n, "a *char dummy takes a byte array")
+            d = L.new_v("dummy", "u32", "", 0, anchor, self.line(n))
+            L.vdecls[-1] = "v %-24s *char" % d
+            L.vtype[d] = "*char"
+            L.emit("%s = bp(%s, 0)" % (d, base))
+            return "wp(%s, 0)" % d
+        v, _k = self.expr(inner)
+        d = L.new_v("dummy", vtype, "", 0, anchor, self.line(n))
+        L.emit("ac0 = %s" % v)
+        L.emit("%s = ac0" % d)
+        return "wp(%s, 0)" % d
+
+    def bits_literal(self, n, callee, idx):
+        """`'001'B` is NOT constant-folded by the 1986 compiler: it is built at
+        run time, at every evaluation, by X.CB (Salvage F12).  So this is a
+        SECOND call, and because a call is a terminator it takes its own block
+        pair — two calls and three blocks for one C argument."""
+        L = self.L
+        if not (n.args and len(n.args.exprs) == 1
+                and isinstance(n.args.exprs[0], c_ast.Constant)
+                and n.args.exprs[0].type == "string"):
+            refuse("BITS", n, "BITS takes one string literal")
+        text = decode_c_string(n.args.exprs[0].value, n)
+        if any(b not in (0x30, 0x31) for b in text):
+            refuse("BITS", n, "a BIT literal is '0's and '1's only")
+        lit, nbytes = self.string_literal(n, n.args.exprs[0].value,
+                                          "bits:%s#%d" % (callee, idx))
+        dest = L.new_v("dummy", "u32", "", 0, "bits:dest", self.line(n))
+        nxt = L.new_block("X.CB/ret")
+        L.emit("ac2 = wp(%s, 0)" % dest, "X.CB: destination word address")
+        L.emit("ac0 = bp(%s, 0)" % lit, "X.CB: byte pointer to the character form")
+        L.emit("ac1 = %d" % nbytes, "X.CB: its length")
+        L.terminate("rt_call %s() ret=%s" % (X_CB, nxt.name),
+                    "undecorated, no stack arguments (IR.md §6)")
+        L.open_block(nxt)
+        return "wp(%s, 0)" % dest
+
+    def address_of_any(self, n):
+        """`&x` for the forms a call argument takes.  Returns a pure expr."""
+        L = self.L
+        if isinstance(n, c_ast.ID):
+            if n.name in L.statics:
+                return L.const_text(L.statics[n.name]["addr"])
+            if n.name in L.scope:
+                vname, _k, nelem, _ew = L.scope[n.name]
+                if L.is_byte(vname):
+                    return "bp(%s, 0)" % vname
+                return "wp(%s, 0)" % vname
+            if n.name in L.params:
+                # passing our own incoming pointer straight through
+                return L.params[n.name][0]
+            refuse("address-of", n, "undeclared name `%s`" % n.name)
+        addr_v, _kind = self.address_of(n)
+        return addr_v
+
+    def rt_call(self, n, name, args):
+        L = self.L
+        spec = RT_CALLS[name]
+        if len(args) != spec["argc"]:
+            refuse("rt_call", n, "%s takes %d arguments, %d given"
+                   % (name, spec["argc"], len(args)))
+        exprs = [self.arg_address(a, name, i + 1, spec)
+                 for i, a in enumerate(args)]
+        nxt = L.new_block("%s/ret" % name)
+        L.terminate("rt_call %s(%s) ret=%s"
+                    % (spec["callee"], ", ".join(exprs), nxt.name))
+        L.open_block(nxt)
+        if not spec["valued"]:
+            return None, None
+        # THE VALUED-CALL SPLIT (IR.md §5.10.6): the call ended a block and the
+        # result is read in the NEXT one, which is why a call can never sit
+        # inside a larger expression.
+        out = L.new_v("node", "i32", "", 0, "ret:" + name, self.line(n))
+        L.emit("ac0 = ac0", "the runtime returns in ac0 (RTConventions)")
+        L.emit("%s = ac0" % out)
+        return out, "i32"
+
+    def game_call(self, n, name, args):
+        """game->game: the arguments go in the CALLEE's `a` cells, which is
+        legal only because the game is non-reentrant (IR.md §5.10.6).  We
+        control both ends, so the original's push-and-prologue machinery is a
+        rewrite to reintroduce at L2, not something the compiler emits."""
+        L = self.L
+        sig = L.game_routines[name]
+        if len(args) != len(sig):
+            refuse("call", n, "%s takes %d arguments, %d given"
+                   % (name, len(sig), len(args)))
+        exprs = [self.address_of_any(a.expr if isinstance(a, c_ast.UnaryOp)
+                                     and a.op == "&" else a)
+                 for a in args]
+        for i, (e, pointee) in enumerate(zip(exprs, sig), 1):
+            L.emit("%s.a%d = %s" % (name, i, e))
+        L.emit("%s.arg_count = %d" % (name, len(args)))
+        nxt = L.new_block("%s/ret" % name)
+        L.terminate("call %s args=%d ret=%s" % (name, len(args), nxt.name))
+        L.open_block(nxt)
+        return None, None
 
     def builtin_sub(self, n, args):
         """PL/I's subscript check: i in 1..n, else DERR 17 (an ABORT-kind
@@ -1122,7 +1447,8 @@ class Compiler:
             L.goto(L.loops[-1][1], "continue")
             return
         if isinstance(n, c_ast.FuncCall):
-            refuse("call statement", n, "calls are refused in this project")
+            self.W.call(n)          # a void call in statement position
+            return
         refuse(type(n).__name__, n, "statement not in the v1 C subset")
 
     def assign(self, n):
@@ -1296,6 +1622,34 @@ def unit_vmap_text(compilers):
 
 
 
+def game_signatures(ast, routines):
+    """The by-reference signatures of the unit's routines, from their C
+    prototypes: name -> [pointee kind per parameter]."""
+    out = {}
+    for ext in ast.ext:
+        decl = None
+        if isinstance(ext, c_ast.FuncDef):
+            decl = ext.decl
+        elif isinstance(ext, c_ast.Decl) and isinstance(ext.type, c_ast.FuncDecl):
+            decl = ext
+        if decl is None or decl.name not in routines or decl.name in out:
+            continue
+        params = decl.type.args.params if decl.type.args else []
+        sig, ok = [], True
+        for prm in params:
+            if isinstance(prm, c_ast.Typename) and isinstance(prm.type, c_ast.TypeDecl) \
+                    and isinstance(prm.type.type, c_ast.IdentifierType) \
+                    and prm.type.type.names == ["void"]:
+                continue
+            if not isinstance(prm, c_ast.Decl) or not isinstance(prm.type, c_ast.PtrDecl):
+                ok = False
+                break
+            sig.append(type_kind_of(prm.type.type, prm))
+        if ok:
+            out[decl.name] = sig
+    return out
+
+
 def check_unit_order(ir):
     """a003 asked for a teeth leg on the ordering constraint, because it is the
     kind that breaks silently: a caller writes its CALLEE's `a` cells, so if a
@@ -1333,7 +1687,11 @@ def preprocess(path):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("source")
+    ap.add_argument("source", nargs="+",
+                    help="one or more .c files.  A compilation unit spans "
+                         "FILES as well as routines: HIT_ANY_CHAR calls "
+                         "GET_INPUT and they are separate files, but a naive "
+                         "call needs the callee's b0 in the same IR file.")
     ap.add_argument("--routine", required=True, action="append",
                     help="repeatable: a COMPILATION UNIT of several routines "
                          "(P53 a003).  A naive `call` enters the callee's b0, "
@@ -1360,25 +1718,50 @@ def main():
     if not entries:
         entries = list(routines)
 
-    text = preprocess(a.source)
     parser = c_parser.CParser()
-    try:
-        ast = parser.parse(text, filename=a.source)
-    except Exception as e:
-        sys.stderr.write("REFUSE parse at %s: %s\n" % (a.source, e))
-        return 2
+    asts = []
+    for src in a.source:
+        try:
+            asts.append((src, parser.parse(preprocess(src), filename=src)))
+        except Exception as e:
+            sys.stderr.write("REFUSE parse at %s: %s\n" % (src, e))
+            return 2
+    ast = asts[0][1]
 
     compilers = []
     try:
+        # ONE vtype map for the whole unit: a caller writes its CALLEE's `a`
+        # cells, so the q005 kind check has to see the callee's declarations,
+        # which belong to a different Lowerer.
+        unit_vtype = {}
+        # Callable game routines are the OTHER routines of this unit and
+        # nothing else — the loader requires a callee's b0 to be a block of
+        # this file (P54 a001 R1), so a call to anything outside the unit could
+        # not load, and must refuse here where the message is better.
+        sigs = {}
+        for _src, one in asts:
+            sigs.update(game_signatures(one, routines))
         for routine, entry in zip(routines, entries):
-            c = Compiler(entry, a.source, routine)
+            src, ast_for = None, None
+            for cand_src, one in asts:
+                for ext in one.ext:
+                    if isinstance(ext, c_ast.FuncDef) and ext.decl.name == routine:
+                        src, ast_for = cand_src, one
+            if ast_for is None:
+                sys.stderr.write("REFUSE routine at %s:0: no definition of `%s` "
+                                 "in any given source\n"
+                                 % (os.path.basename(a.source[0]), routine))
+                return 2
+            c = Compiler(entry, src, routine)
+            c.L.vtype = unit_vtype
+            c.L.game_routines = {k: v for k, v in sigs.items() if k != routine}
             # File-scope STORAGE in a multi-routine unit would be declared once
             # per routine and become two independent cells for one C object.
             # Rather than invent a sharing rule, refuse: no routine of the seven
             # has file-scope storage (statics come from declarations.json), and
             # the generated corpus is always a single routine.
             if len(routines) > 1:
-                for ext in ast.ext:
+                for ext in ast_for.ext:
                     if isinstance(ext, c_ast.Decl) \
                             and not isinstance(ext.type, c_ast.FuncDecl) \
                             and ext.name is not None \
@@ -1388,9 +1771,9 @@ def main():
                                "unit: one C object would become one cell per "
                                "routine" % ext.name)
             else:
-                c.collect_file_scope(ast)
+                c.collect_file_scope(ast_for)
             target = None
-            for ext in ast.ext:
+            for ext in ast_for.ext:
                 if isinstance(ext, c_ast.FuncDef) and ext.decl.name == routine:
                     target = ext
             if target is None:
