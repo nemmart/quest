@@ -1,40 +1,40 @@
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 700011C8
+System Call 303, called from 7017E2F4
  ac0=00000000
  ac1=00000000
- ac2=700010BA
+ ac2=7000118E
+dispatchSystemCall: 700010EC
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010B2
 
 WRITE (fs wt):
    (fs wt) channel = 0005
    (fs wt) options = C001
    (fs wt) record number = 0
-   (fs wt) buffer pointer = E0002A56
-   (fs wt) byte count = 001E
+   (fs wt) buffer pointer = E00022BE
+   (fs wt) byte count = 0019
 1
 WRITE EXTENSION
-   location = F000157E
-   options = 0000
+   location = F00011BE
+   options = 0800
    rel pos = 0000
-   init pos = 0000
-
-================ LOCKSTEP DIVERGENCE ================
-mediated-call input mismatch (width 1, byte range E0002A72..E0002A72):
-  clone word addr USED at read = E000214A
-  master value = 00000031
-  clone  value = 0000009B
-  read addr: master word=70001539 clone word(now)=700010A5 areas_depth(now)=4
-  master words @70001531: 2020 2020 2020 2020 2020 7C20 2020 2038 310A 7000 152A 7000 0260 8000 0002 0000
-  clone  words @7000109D: 0000 0000 0000 FFFF FFFF 0000 0000 7017 9BF4 7507 0000 7000 0260 8000 0002 0000
-master backtrace:
-frame  5 -- 7017FDED     guessing: .UKIL+0x8
-frame  4 -- STORE+0x5E7   [7017A1CA]
-frame  3 -- MOVE_PLAYER+0x79C   [701717B9]
-frame  2 -- START_TURN+0x134D   [7017956C]
-frame  1 -- QUEST+0x5D7   [7015C5DC]
-frame  0 -- 7017EA51     guessing: I.INIT+0x23
-clone backtrace:
-frame  5 -- 7017FDED     guessing: .UKIL+0x8
-frame  4 -- STORE+0x5E7   [7017A1CA]
-frame  3 -- MOVE_PLAYER+0x79C   [701717B9]
-frame  2 -- START_TURN+0x134D   [7017956C]
-frame  1 -- QUEST+0x5D7   [7015C5DC]
-frame  0 -- 7017EA51     guessing: I.INIT+0x23
-=====================================================
+   init pos = 000E
+-> Waiting for your turn
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+Thread halt
+24300808 instructions run
+Thread halt
+2125235812 instructions run
+frame  2 -- 7017FDED     guessing: .UKIL+0x8
+frame  1 -- C_A_LISTENER+0x2   [70165715]
+frame  0 -- 7017E7C1     guessing: T.INIT+0x3B
+frame  2 -- 7017FDED     guessing: .UKIL+0x8
+frame  1 -- C_A_LISTENER+0x2   [70165715]
+68 instructions run
+frame  0 -- 7017E7C1     guessing: T.INIT+0x3B
+68 instructions run
