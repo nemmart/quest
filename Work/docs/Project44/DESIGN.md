@@ -601,6 +601,15 @@ one of two things:
 - **marshal arguments exactly** — escape placement at true 0x74 addresses,
   keeps the callee checked, more work
 
+**Relaxation (P47 REPORT §6.3).** "Loses verification for that run" is only
+true of a callee the run actually executes. **A callee the battery never
+executes was never verified by that run**, so a routine whose unreplaced game
+callees are all never-executed may be translated at zero *effective* checker
+cost. After P47's first twelve this adds nine candidates. The un-checked
+callee keeps the same L1-unverified mark it already deserved — the
+relaxation is honest precisely because it changes no claim about what was
+verified.
+
 ### 9.4 Therefore: translate BOTTOM-UP
 
 Top-down is ruinous — QUEST in C means un-checking everything it reaches.
@@ -610,8 +619,28 @@ The replaced set stays downward-closed for free and checker coverage only
 grows.
 
 This reverses P37/P38's selection criterion, which picked by construct
-coverage and statement count. **Call-graph depth is now the primary
-ordering.** (PICK_X_Y was a leaf; that is part of why it went well.)
+coverage and statement count.
+
+**Amended by P47 (measured, not assumed): depth orders WITHIN the reached
+region; COVERAGE decides what is reachable at all.** Bottom-up is confirmed
+tractable — 80 nodes, 9 strata, no cycles, the replaced set downward-closed
+by construction, marginal cost zero. But the battery executes **15.5% of the
+book** (8,305 of 53,588 statements) and 41 of 80 nodes, so a walk ordered by
+depth alone arrives quickly at routines that can be built and **cannot be
+accepted**. Selection is therefore: zero §9.3 cost first, **the oracle
+actually fires** second, constructs exist third.
+
+**Consequence — some subtrees are L2-FIRST.** ATTACK, CAST,
+SEIGE/TAKE_OVER_CASTLE and OP_EDIT have no behavioural oracle at all under
+the current battery, because no scripted leg fights, casts, besieges or logs
+in as an operator. They are also where the program's mass lives (ATTACK
+4,369 statements, OP_EDIT 3,812, MOVE_PLAYER 3,392). The twelve leaves of
+P47's `Order.md` total 1,768 statements — **3.3% of the book**.
+
+**Therefore coverage work outranks routine work.** P47 measures the play
+driver fix at **+7,474 statements** for one key sequence and two login
+fixtures at **+4,989** — together worth more to L1 than the next ten
+routines. They are scheduled ahead of routine #5.
 
 It also gives a progress metric that is not binary per routine: the replaced
 frontier grows upward through the call graph, and everything inside it is C.
