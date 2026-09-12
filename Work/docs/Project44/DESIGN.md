@@ -378,6 +378,36 @@ meaning:
   the second's only predecessor is the first
 - **split** legal at any statement boundary
 
+**CORRECTIONS FROM P55's CENSUS (Sep 12 2026) — this section was written
+before there was any output to compare, and four things in it are wrong:**
+
+1. **The target is `quest.ir2.book`, NOT `quest.blocks.split`.** `blocks.split`
+   is an INPUT to the lifting that produced the book, named with a sha256 in
+   the book's own header. They differ by 4,502 blocks (18,009 → 13,507), and
+   the verdict on our lowering is OPPOSITE under the two. Measuring against
+   `blocks.split` charges ~122 blocks across the seven for a construct we get
+   right (`assert` vs the DERR skip chain).
+2. **Block COUNT is the wrong signal; use the merge-reduced CFG.** PICK_X_Y is
+   20/20 against `blocks.split` and −2 against the target — an exact count
+   match sitting on a mismatch in both directions.
+3. **The merge/split pair is NOT closed under the differences that exist.**
+   Merge and split both preserve the edge set; all three surviving difference
+   classes are edge-changing. As written this section implies the loop gap is
+   cheap. It is not — it is a lowering change (206 witnesses).
+4. **The two partitions are different KINDS of object.** The book's is a
+   MACHINE partition — every Eagle skip is a 2-way terminator, so a skip chain
+   becomes a run of 1-instruction blocks (50 of FAKE_LAND_MASS's 84 in
+   `blocks.split`). Ours is a source-construct partition. *P55 carried the
+   hypothesis that the residual divergence would be mostly this, and measured
+   it to be false*: after the DERR fold, the remaining machine-skip effect is
+   8 sites in one routine, not a systematic term.
+
+**What the census DID confirm, and it is the load-bearing result:**
+**statement placement — the code-motion class — does not occur at all.** Merge
+and split account for 71 differences across the seven, two routines match
+exactly, a third is structurally identical after merging. So the remaining
+rewrites are LOCAL, with preconditions checkable from local dataflow.
+
 **The canonical form is revisable, under one rule:** if every routine's
 oracle needs the same merge at the same construct, the canonical form is
 wrong and lowering should change — but only on a **book-wide census**, never
