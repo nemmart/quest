@@ -57,6 +57,15 @@ MUTATIONS = {
     "shift_logical":  "signed >> as a plain logical shift",
     "cmp_unsigned":   "ordering comparisons always take the u suffix",
     "abs_argtype":    "ABS returns the argument's type (the bug seed 2 found)",
+    # P53, and both are the byte bug classes the prompt names.  The first is
+    # P51 §2 item 5 itself: `char` as a one-word cell, which is what this
+    # compiler did until stage C.  The second is IR.md §5.2's byte/word
+    # asymmetry — bp()'s displacement is ALREADY IN BYTES, so scaling a byte
+    # subscript by the element width is wrong by a factor of two AND
+    # self-consistent between the store and the load, which is why
+    # cases/byte_index.c reads every byte back at a different index.
+    "byte_as_word":   "lower `char` to a one-word cell (P51 §2 item 5)",
+    "bp_scaled":      "scale a byte subscript by the element width",
 }
 MUTATE = None
 
@@ -79,19 +88,35 @@ def refuse(construct, node, why):
 # then are gone.
 
 KINDS = {            # kind -> (C spelling, words, signed, bits)
+    "u8":  ("unsigned char", 0, False, 8),   # see byte_words(): 0 is deliberate
     "i16": ("int16_t",  1, True,  16),
     "u16": ("uint16_t", 1, False, 16),
     "i32": ("int32_t",  2, True,  32),
     "u32": ("uint32_t", 2, False, 32),
 }
+
+# A BYTE IS HALF A WORD, and it is the only kind in this table that is.  Every
+# other size is `words * nelem`; a byte array of n elements is the IR's
+# `char <n>` and occupies ceil(n/2) words (IR.md §5.10.1).  KINDS["u8"][1] is 0
+# precisely so that a forgotten `words * nelem` yields 0 and refuses loudly
+# instead of silently sizing a 144-byte buffer as 0 or 144 words — P51 §2 item
+# 5 is exactly the second of those, and it is the bug this project exists to
+# not re-introduce.
+def byte_words(nbytes):
+    return (nbytes + 1) // 2
 CNAME_TO_KIND = {
     "int16_t": "i16", "short": "i16",
     "uint16_t": "u16", "unsigned short": "u16",
     "int32_t": "i32", "int": "i32", "signed int": "i32", "long": "i32",
     "uint32_t": "u32", "unsigned int": "u32", "unsigned": "u32",
     "unsigned long": "u32",
-    "char": "u16",          # Salvage F13: PL/I CHARACTER is an UNSIGNED byte
-    "unsigned char": "u16",
+    # Salvage F13: PL/I CHARACTER is an UNSIGNED byte.  Until P53 these mapped
+    # to u16, a one-word cell — so GET_INPUT's `unsigned char buf[144]` would
+    # have been 144 WORDS and every access a word access that agrees with gcc
+    # on small values.  `signed char` is deliberately absent: no routine of the
+    # seven has one, and refusing is better than guessing its extension.
+    "char": "u8",
+    "unsigned char": "u8",
 }
 
 
@@ -102,6 +127,8 @@ def promote(kind):
     counter-intuitive rule in the model and the one the hand suite's
     u16_promote case exists to hold us to."""
     if MUTATE == "u16_unsigned" and kind == "u16":
+        return "u32"
+    if MUTATE == "byte_as_word" and kind == "u8":
         return "u32"
     return "u32" if kind == "u32" else "i32"
 
@@ -186,6 +213,8 @@ class Lowerer:
 
     def declare_cell(self, lead, name, kind_of_v, kind, cname, nelem,
                      anchor, line, ptr_to=None):
+        if MUTATE == "byte_as_word" and kind == "u8":
+            kind = "u16"                      # the pre-P53 lowering, injected
         ctype, words, _s, _b = KINDS[kind]
         elemwords = words
         if ptr_to is not None:
@@ -193,6 +222,17 @@ class Lowerer:
             # (§5.10.1a).  The pointee width is advisory and carried for ircmp.
             vtype = "*" + ptr_to
             total, elemwords, render = 2, 2, "w32"
+        elif kind == "u8" and MUTATE != "byte_as_word":
+            # A byte cell is the IR's `char <n>` — an AGGREGATE, n BYTES,
+            # ceil(n/2) words.  A scalar is `char 1`: §5.10.4 has no one-byte
+            # value vtype, so even a lone byte names a region and is reached
+            # through bp().  That costs one statement per access, which is
+            # what naive costs.
+            nbytes = nelem if nelem else 1
+            vtype = "char %d" % nbytes
+            total = byte_words(nbytes)
+            elemwords = 0        # a byte is half a word: nothing may multiply
+            render = "w8"
         elif nelem:
             vtype = "words %d" % (words * nelem)
             total = words * nelem
@@ -308,13 +348,28 @@ class Lowerer:
         `v X.v3 i16` is what makes this read sign-extend.  That is why the
         `no_sign_extend` mutation moved into new_v(): after ir 8 there is no
         read site left to corrupt, only a declaration."""
-        self.emit("%s = %s" % (reg, vname))
+        if self.is_byte(vname):
+            self.emit("%s = zx8(M8[bp(%s, 0)])" % (reg, vname))
+        else:
+            self.emit("%s = %s" % (reg, vname))
 
     def store_reg(self, reg, vname, kind):
         """Likewise: the declaration owns the truncation, not a trunc16()."""
-        self.emit("%s = %s" % (vname, reg))
+        if self.is_byte(vname):
+            self.emit("M8[bp(%s, 0)] = trunc8(%s)" % (vname, reg))
+        else:
+            self.emit("%s = %s" % (vname, reg))
+
+    def is_byte(self, vname):
+        """A `char <n>` cell is an AGGREGATE: it names a region, not a value,
+        so the variable form of §5.10.4 does not apply and every access goes
+        through bp()."""
+        return self.vtype.get(vname, "").startswith("char ")
 
     def load_through_ac2(self, reg, kind):
+        if kind == "u8":
+            self.emit("%s = zx8(M8[ac2])" % reg)
+            return
         if KINDS[kind][1] == 1:
             ext = "sx16" if is_signed(kind) else "zx16"
             if MUTATE == "no_sign_extend":
@@ -324,6 +379,9 @@ class Lowerer:
             self.emit("%s = M32[ac2]" % reg)
 
     def store_through_ac2(self, reg, kind):
+        if kind == "u8":
+            self.emit("M8[ac2] = trunc8(%s)" % reg)
+            return
         if KINDS[kind][1] == 1:
             self.emit("M16[ac2] = trunc16(%s)" % reg)
         else:
@@ -459,12 +517,23 @@ class Walker:
             iv, _ik = self.expr(n.subscript)
             out = L.new_v("node", "u32", "", 0, "addr:" + n.name.name, self.line(n))
             L.emit("ac1 = %s" % iv)
-            if ew != 1:
-                L.emit("ac1 = ac1 * %d" % ew)
-            # ir 8: the ADDRESS of a cell is wp(cell, d) (§5.2, the kind
-            # overload).  The element scaling stays its own statement —
-            # folding it into the displacement would be a rewrite.
-            L.emit("ac2 = wp(%s, ac1)" % vname)
+            byte = L.is_byte(vname)
+            if byte:
+                # bp(base, d) scales the BASE to bytes and takes d ALREADY IN
+                # BYTES (IR.md §5.2's recorded asymmetry, the hardware's).  So
+                # a byte subscript is the displacement unscaled; multiplying it
+                # by an element width would be wrong by two AND self-consistent
+                # between the store and the load.  That is `bp_scaled`.
+                if MUTATE == "bp_scaled":
+                    L.emit("ac1 = ac1 * 2")
+                L.emit("ac2 = bp(%s, ac1)" % vname)
+            else:
+                if ew != 1:
+                    L.emit("ac1 = ac1 * %d" % ew)
+                # ir 8: the ADDRESS of a cell is wp(cell, d) (§5.2, the kind
+                # overload).  The element scaling stays its own statement —
+                # folding it into the displacement would be a rewrite.
+                L.emit("ac2 = wp(%s, ac1)" % vname)
             L.emit("%s = ac2" % out)
             return out, kind
         # a record table element, or a further subscript of a record field
@@ -745,7 +814,9 @@ class Walker:
         v, _k = self.expr(n.expr)
         out = L.new_v("node", promote(kind), "", 0, "cast:" + kind, self.line(n))
         L.emit("ac0 = %s" % v)
-        if KINDS[kind][1] == 1:
+        if kind == "u8":
+            L.emit("ac0 = trunc8(ac0)")
+        elif KINDS[kind][1] == 1:
             L.emit("ac0 = %s(ac0)" % ("sx16" if is_signed(kind) else "zx16"))
         L.emit("%s = ac0" % out)
         return out, promote(kind)
@@ -894,8 +965,11 @@ class Compiler:
             if d.type.dim is None or not isinstance(d.type.dim, c_ast.Constant):
                 refuse("array", d, "an array needs a constant bound")
             nelem, _ = parse_int_literal(d.type.dim.value, d)
-            if nelem < 1 or nelem * KINDS[kind][1] > 32767:
-                refuse("array", d, "bound out of the `words 1..32767` range")
+            size = nelem if kind == "u8" else nelem * KINDS[kind][1]
+            if nelem < 1 or size > 32767:
+                refuse("array", d,
+                       "bound out of the `%s 1..32767` range"
+                       % ("char" if kind == "u8" else "words"))
             v = L.new_v("local", kind, d.name, nelem, "decl:" + d.name,
                         getattr(d.coord, "line", 0))
             L.scope[d.name] = (v, kind, nelem, KINDS[kind][1])

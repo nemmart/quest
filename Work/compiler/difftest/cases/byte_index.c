@@ -20,12 +20,11 @@
 unsigned char b[16];
 unsigned char c;
 int32_t sum, hi, lo, wrapped, promoted, narrowed;
+int32_t i;   /* file scope: the rig dumps every local `v`, so the harness must print it too */
 uint32_t chk;
 
 void t(void)
 {
-    int32_t i;
-
     chk = 0;
     for (i = 0; i < 16; i++)
         b[i] = (unsigned char)(i * 17);          /* 0, 17, 34 .. 255 */
