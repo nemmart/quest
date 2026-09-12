@@ -197,3 +197,58 @@ lower.py/IRExec session; a research session (Python tools + docs) beside
 anything. State the shared-file rule in both prompts, naming the other
 project. Phase A (census, design) is almost always parallelisable even
 when Phase B is not.
+
+---
+
+## 10. The question channel (SOP, Sep 12 2026)
+
+Sessions used to raise questions by making the user copy conversation text
+between a worker session and the integrator session. That is slow, lossy,
+and the answer lands somewhere the worker cannot re-read. **Questions and
+answers now go through the repo.**
+
+### Files
+
+    docs/ProjectNN/q001-short-title.md      written by the WORKER
+    docs/ProjectNN/a001-short-title.md      written by the INTEGRATOR
+
+Matching numbers and matching titles, so a pair sorts adjacent. **The worker
+owns `q*.md`; the integrator owns `a*.md`.** Neither ever edits the other's
+file, so two sessions can push without conflict. Everything goes on **main**
+— never only on a branch, or the other side cannot see it.
+
+### The worker's obligations
+
+1. **Write the question self-contained.** The integrator does not have your
+   session context, your scrollback, or your reasoning. State: what you were
+   doing, what you found, the decision needed, the options you see and your
+   read on each.
+2. **State your DEFAULT** — what you will do if the question goes
+   unanswered. This field is mandatory. It means a slow answer does not
+   stall you, it tells the integrator how urgent the question really is, and
+   it often makes the answer unnecessary.
+3. **Commit, push, and KEEP WORKING** on anything not blocked. Stop only if
+   genuinely blocked on every front.
+4. Re-read `a*.md` before resuming the affected work. An answer may arrive
+   after you have moved on.
+
+### The integrator's obligations
+
+1. Pull, read every unanswered `q*.md`, write the matching `a*.md`, push.
+2. An answer states the ruling, the reasoning, and whether it changes any
+   design doc. **If it changes a design doc, change the doc too** — an answer
+   file is not a place for design to live.
+3. The same channel carries **unprompted guidance**, not only replies. An
+   `a*.md` with no `q*.md` is legitimate.
+
+### The user's role
+
+Reduced to two prompts: *"check for questions"* to the integrator, and
+*"check for answers"* to the worker. No copy-paste.
+
+### Why the default field matters
+
+A worker that stops dead on every uncertainty wastes a session; a worker
+that guesses silently produces work nobody can trust. Naming the default
+does both jobs at once — it keeps the session moving and it makes the guess
+visible and reversible.
