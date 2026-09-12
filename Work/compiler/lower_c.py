@@ -995,19 +995,21 @@ class Walker:
         v, argk = self.expr(args[0])
         k = argk if MUTATE == "abs_argtype" else "i32"
         out = L.new_v("node", k, "", 0, "ABS", self.line(n))
+        # P55 CHANGE 2 — ONE-ARMED, on a book-wide census: all 36
+        # compare-against-zero sites (`WSGE r,r`, IR.md §5.6) skip a
+        # ONE-INSTRUCTION arm — 14 `WNEG` and 8 `NNEG` (this idiom, narrow and
+        # wide) and 8 `WSUB` (MAX against 0).  NONE is a two-armed diamond.
+        # The positive path is the skip's fall-through and needs no block: the
+        # value is already in place and only the negative path acts.
         b_neg = L.new_block("ABS/neg")
-        b_pos = L.new_block("ABS/pos")
         b_join = L.new_block("ABS/join")
         L.emit("ac0 = %s" % v)
+        L.emit("%s = ac0" % out, "in place; only the negative arm acts")
         L.emit("ac0 = (ac0 >=s 0)")
-        L.terminate("goto [%s, %s] tf(ac0)" % (b_neg.name, b_pos.name))
+        L.terminate("goto [%s, %s] tf(ac0)" % (b_neg.name, b_join.name))
         L.open_block(b_neg)
         L.emit("ac0 = %s" % v)
         L.emit("ac0 = 0 - ac0")
-        L.emit("%s = ac0" % out)
-        L.goto(b_join)
-        L.open_block(b_pos)
-        L.emit("ac0 = %s" % v)
         L.emit("%s = ac0" % out)
         L.goto(b_join)
         L.open_block(b_join)
@@ -1023,17 +1025,22 @@ class Walker:
         av, _ak = self.expr(args[0])
         bv, _bk = self.expr(args[1])
         out = L.new_v("node", "i32", "", 0, which, self.line(n))
-        b_a = L.new_block("%s/a" % which)
+        # P55 CHANGE 2 — ONE-ARMED.  This diamond is register-REGISTER, so the
+        # 36/36 compare-against-zero census does NOT cover it and it must not
+        # be changed by pattern-match from ABS (a005 confirms: the aggregate
+        # 807:199 does not cover it either).  Its own census:
+        # 403 of 416 register-register compare-skip sites have a
+        # ONE-INSTRUCTION arm, of which 150 are exactly this lone-`MOV`
+        # diamond (P55 q002; a005 accepts it as the warrant).
+        #
+        # `a` is the in-place default, so only the `b` arm is emitted.
         b_b = L.new_block("%s/b" % which)
         b_join = L.new_block("%s/join" % which)
         L.emit("ac0 = %s" % av)
         L.emit("ac1 = %s" % bv)
+        L.emit("%s = ac0" % out, "a in place; only the b arm acts")
         L.emit("ac0 = (ac0 %s ac1)" % ("<s" if which == "MIN" else ">s"))
-        L.terminate("goto [%s, %s] tf(ac0)" % (b_b.name, b_a.name))
-        L.open_block(b_a)
-        L.emit("ac0 = %s" % av)
-        L.emit("%s = ac0" % out)
-        L.goto(b_join)
+        L.terminate("goto [%s, %s] tf(ac0)" % (b_b.name, b_join.name))
         L.open_block(b_b)
         L.emit("ac0 = %s" % bv)
         L.emit("%s = ac0" % out)
@@ -1539,27 +1546,66 @@ class Compiler:
                     self.stmt(d)
             else:
                 self.stmt(n.init)
-        b_head = L.new_block("for/head")
-        b_body = L.new_block("for/body")
+        # P55 CHANGE 1 — the canonical DG PL/I `DO` shape, on a BOOK-WIDE
+        # CENSUS of 206 XNDO/XWDO sites with no exceptions (P55 BlockCensus
+        # §2.2; ruled in P55 a001 Q2(a), landed under a004/a005):
+        #
+        #   <entry test>:  cond       -> [after, preheader]   (OUTSIDE the loop)
+        #   preheader:     goto body                (unconditional, OVER step)
+        #   step:          next; cond -> [body, after]   (the DO block:
+        #                                  increment AND test, in ONE block,
+        #                                  entered only on the back edge)
+        #   body:          ... ; goto step               (back edge)
+        #
+        # This is ordinary loop rotation, so the gcc differential oracle still
+        # checks it — which was the deciding argument for changing the LOWERING
+        # rather than adding a `DO()` macro or a rewrite (a001 Q2).
+        #
+        # DESIGN §6 permits this ONLY on a book-wide census and never to close
+        # one routine's diff.  `while_stmt` is deliberately NOT rotated: the
+        # 206 sites are PL/I DO loops, nothing censused covers a `while`, and
+        # widening on a pattern-match is the move the clause forbids.  The
+        # resulting for/while asymmetry is intended (q002 §exclusions, a005).
+        #
+        # COST, reported rather than hidden: `cond` is emitted TWICE — once as
+        # the entry test, once in the step block — so each loop's condition and
+        # its `v`s are duplicated.  That is faithful (the book loads the limit
+        # in the header and RELOADS it in the DO block, 206/206) but it raises
+        # the `v` count, a headline metric under DESIGN §5.1.
+        #
+        # Blocks are created in the book's address order.  §6: numeric order
+        # carries no meaning, so this is legibility, not semantics.
+        b_pre = L.new_block("for/preheader")
         b_step = L.new_block("for/step")
+        b_body = L.new_block("for/body")
         b_after = L.new_block("for/after")
-        L.goto(b_head)
-        L.open_block(b_head)
+
+        # The entry test stays in the CURRENT block: the book's guard is
+        # outside the loop and its not-entered leg lands on its own block.
         if n.cond is not None:
             cv, _k = self.W.expr(n.cond)
-            L.branch(cv, b_after, b_body)
+            L.branch(cv, b_after, b_pre)
         else:
-            L.goto(b_body)
-        L.open_block(b_body)
-        L.loops.append((b_after, b_step))
-        self.stmt(n.stmt)
-        L.loops.pop()
-        if L.cur is not None:
-            L.goto(b_step)
+            L.goto(b_pre)
+
+        L.open_block(b_pre)
+        L.goto(b_body, "preheader: jumps OVER the step block")
+
         L.open_block(b_step)
         if n.next is not None:
             self.stmt(n.next)
-        L.goto(b_head)
+        if n.cond is not None:
+            cv2, _k2 = self.W.expr(n.cond)
+            L.branch(cv2, b_after, b_body)
+        else:
+            L.goto(b_body)
+
+        L.open_block(b_body)
+        L.loops.append((b_after, b_step))   # break -> after, continue -> step
+        self.stmt(n.stmt)
+        L.loops.pop()
+        if L.cur is not None:
+            L.goto(b_step, "back edge")
         L.open_block(b_after)
 
 
