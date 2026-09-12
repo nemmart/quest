@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/tmp/drive053.py", line 130, in <module>
+    send("F\r", 12)
+  File "/tmp/drive053.py", line 72, in send
+    s.sendall(text.encode('latin1')); return drain(wait)
+BrokenPipeError: [Errno 32] Broken pipe

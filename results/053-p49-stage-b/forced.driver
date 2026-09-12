@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/tmp/drive053.py", line 130, in <module>
+    send("F\r", 12)
+  File "/tmp/drive053.py", line 72, in send
+    s.sendall(text.encode('latin1')); return drain(wait)
+  File "/tmp/drive053.py", line 65, in drain
+    chunk = s.recv(4096)
+ConnectionResetError: [Errno 104] Connection reset by peer

@@ -1,0 +1,40 @@
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+dispatchSystemCall: 700011C8
+dispatchSystemCall: 700010EC
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=7000118E
+System Call 303, called from 7017E2F4
+ ac0=00000000
+ ac1=00000000
+ ac2=700010B2
+
+WRITE (fs wt):
+   (fs wt) channel = 0005
+   (fs wt) options = C001
+   (fs wt) record number = 0
+   (fs wt) buffer pointer = E00022BE
+   (fs wt) byte count = 0019
+1
+WRITE EXTENSION
+   location = F00011BE
+   options = 0800
+   rel pos = 0000
+   init pos = 000E
+-> Waiting for your turn
+RETURNING AC1=00000000
+RETURNING AC1=00000000
+Thread halt
+24160162 instructions run
+Thread halt
+2117274800 instructions run
+frame  2 -- 7017FDED     guessing: .UKIL+0x8
+frame  1 -- C_A_LISTENER+0x2   [70165715]
+frame  0 -- 7017E7C1     guessing: T.INIT+0x3B
+frame  2 -- 7017FDED     guessing: .UKIL+0x8
+frame  1 -- C_A_LISTENER+0x2   [70165715]
+frame  0 -- 7017E7C1     guessing: T.INIT+0x3B
+68 instructions run
+68 instructions run
