@@ -21,7 +21,7 @@
 void RETURN_MESSAGE(const int32_t *severity, const int32_t *code, const void *msg)
 {
     int32_t len;
-    void *text;
+    const void *text;                               /* DATA() and the literal are both read-only */
     int32_t packed;
 
     if (msg == NULL) { text = "Unexpected error"; len = 16; }

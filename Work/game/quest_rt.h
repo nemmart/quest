@@ -70,6 +70,11 @@ static inline int32_t quest_range_check(int32_t i, int32_t n, const char *file, 
 }
 /* PL/I ABS builtin: the WSGE/WNEG diamond. */
 static inline int32_t quest_abs(int32_t v) { return v < 0 ? -v : v; }
+/* PL/I MIN/MAX builtins: the `WSGE a,b; WMOV a,b` diamond (P51 §2 item 7).
+ * SIGNED 32-bit, like ABS; FAKE_OCEAN and FAKE_LAND_MASS are their only
+ * users and both feed them 16-bit values that have already promoted. */
+static inline int32_t quest_min(int32_t a, int32_t b) { return a < b ? a : b; }
+static inline int32_t quest_max(int32_t a, int32_t b) { return a > b ? a : b; }
 #endif
 
 #ifdef __cplusplus
@@ -84,17 +89,28 @@ static inline int32_t quest_abs(int32_t v) { return v < 0 ? -v : v; }
    * it converts to whatever pointer the parameter wants and lives to the end
    * of the full expression (the native runtime will give it the parameter's
    * width; this is the compile-check view). */
+  /* A dummy may hold a POINTER as well as a number: GET_INPUT's `TMP(buf)`
+   * is a frame temp holding the BYTE POINTER to its buffer, whose ADDRESS is
+   * what ?READ receives as argument 2 (RTConventions ?READ row; P51 §2 item
+   * 3).  So `p` joins the union and `operator void *()` is spelled out —
+   * without it, a conversion to `void *` had to go through `int32_t *` or
+   * `int16_t *` and was AMBIGUOUS, which is the error P52/q002 §3 recorded
+   * for this line. */
   struct tmp_arg {
-      union { int32_t w; int16_t h; } u;
+      union { int32_t w; int16_t h; void *p; } u;
       operator int32_t *() { return &u.w; }
       operator const int32_t *() { return &u.w; }
       operator int16_t *() { u.h = (int16_t)u.w; return &u.h; }
       operator const int16_t *() { u.h = (int16_t)u.w; return &u.h; }
+      operator void *() { return &u.w; }
       operator const void *() { return &u.w; }
   };
   inline tmp_arg TMP(int32_t v) { tmp_arg t; t.u.w = v; return t; }
+  inline tmp_arg TMP(const void *p) { tmp_arg t; t.u.p = (void *)p; return t; }
   #define RANGE_CHECK(i, n) quest_range_check((i), (n), __FILE__, __LINE__)
   inline int32_t ABS(int32_t v) { return quest_abs(v); }     /* PL/I ABS builtin */
+  inline int32_t MIN(int32_t a, int32_t b) { return quest_min(a, b); }
+  inline int32_t MAX(int32_t a, int32_t b) { return quest_max(a, b); }
   extern "C" {
 #else
   /* ---- C view (the translator's) ---- */
@@ -102,9 +118,13 @@ static inline int32_t quest_abs(int32_t v) { return v < 0 ? -v : v; }
   void *TMP(int32_t e);            /* translator: frame temporary of the parameter's width holding e */
   #ifdef __TRANSLATOR__
     int32_t ABS(int32_t v);            /* PL/I ABS builtin: the WSGE/WNEG diamond */
+    int32_t MIN(int32_t a, int32_t b); /* PL/I MIN builtin: the WSGE/WMOV diamond */
+    int32_t MAX(int32_t a, int32_t b); /* PL/I MAX builtin: the WSGE/WMOV diamond */
     int32_t RANGE_CHECK(int32_t i, int32_t n); /* translator: assert(0 < i && i <= n), "DERR 17" */
   #else
     #define ABS(v)    quest_abs((v))
+    #define MIN(a, b) quest_min((a), (b))
+    #define MAX(a, b) quest_max((a), (b))
     #define RANGE_CHECK(i, n) quest_range_check((i), (n), __FILE__, __LINE__)
   #endif
 #endif
@@ -227,6 +247,13 @@ void BIT_PUT(int16_t word, int n, int e);   /* statement: WBTO; test; WBTZ  */
  * LEN() is for.  NOT yet in the translator's subset -- it REFUSES here. */
 int LEN(const void *varying);
 
+/* PL/I DATA of a CHAR VARYING passed by reference: the DATA bytes, i.e. a byte
+ * pointer to word+1 (the length word is at the argument's address).  Used only
+ * by RETURN_MESSAGE, which is STAGED; declared here so the native view of that
+ * file compiles.  Like LEN(), NOT yet in the translator's subset — it
+ * REFUSES. */
+const void *DATA(const void *varying);
+
 /* ---- PL/I BIT literals (P37) ---------------------------------------------
  * `'001'B` is NOT constant-folded by the 1986 compiler.  It is built at run
  * time, at every evaluation, by the runtime routine X.CB @7017E708:
@@ -253,6 +280,10 @@ void READ$6(const int32_t *chan, void *buf, const int16_t *one, int16_t *count,
             const int16_t *opts, const void *flags);
 /* ?UNSIGNED_TO_CHAR: writes a varying at the given address (register argument ac2) */
 void UNSIGNED_TO_CHAR$1(void *out);
+/* ?RETURN: the AOS/VS process exit (SYSCALL 0310), never returns.  Salvage F11:
+ * ac1 = text, ac2 = packed — REGISTER arguments, so these are values, not
+ * addresses, unlike every other row here. */
+void RETURN$2(const void *text, int32_t packed);
 
 /* ---- string statements (docs/Project29/StringsDesign.md §2; IR.md §5.8) ---- */
 /* [@dst, n varying] = piece      PL/I assignment to CHAR(n) VARYING */
@@ -267,6 +298,15 @@ void words_copy(void *dst, const void *src, int k);
 /* ---- game routines the pilot routines call (game→game `call`) ---- */
 void UPDATE_SCREENS(const int16_t *x, const int16_t *y, const int32_t *cell);
 void HIT_ANY_CHAR(void);
+/* P51 §2 item 11: the five the candidate C calls but nothing declared.  One
+ * vocabulary (P51 a001 Q-B) — these are the signatures the .c files define,
+ * and GET_INPUT's parameter is a BYTE pointer (its callers push XPEFB and its
+ * body stores through arg 1 with WSTB; RTConventions, P51 reading convention). */
+void GET_INPUT(unsigned char *ch);
+void INIT_SCREEN(const int16_t *who);
+void FAKE_OCEAN(const int16_t *who);
+void FAKE_LAND_MASS(const int16_t *who);
+void PICK_X_Y(int16_t *x, int16_t *y);
 void REPOSITION(const int16_t *who);
 void REFRESH_SCREEN(int arg_count, const int16_t *flag);
 void REFRESH_SCREEN$0(void);

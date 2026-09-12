@@ -769,11 +769,36 @@ class Compiler:
         """DESIGN §4.1: a `v` is globally scoped and qualified by addrbook
         entry, so a C file-scope object and a C local are the SAME thing
         here.  The generated test programs put observables at file scope
-        because a local of t() is not reachable from the native harness."""
+        because a local of t() is not reachable from the native harness.
+
+        Two kinds of file-scope Decl are NOT storage and must not become a `v`.
+        Both arrive the moment a routine includes `declarations.h`, which
+        UPDATE_SCREENS did not until P53 fixed its native view — so this path
+        had never been exercised by a real routine, only by generated programs
+        that include `quest_rt.h` alone:
+
+          * a BARE STRUCT definition (`struct region_rec { ... };`) has no
+            declarator at all — it defines a type and declares nothing.
+          * an `extern` declares storage that lives SOMEWHERE ELSE.  Here that
+            somewhere is the game image, whose geometry the compiler already
+            reads from declarations.json; allocating a 0x76 cell for `PLAYER`
+            would be inventing a second, wrong home for it.
+
+        Skipping an `extern` does NOT make an unknown name silently acceptable:
+        a name with no declarations.json entry still refuses at its USE site
+        (`read_id`, `address_of_structref`), where the message names the field.
+        """
         L = self.L
         for ext in ast.ext:
-            if isinstance(ext, c_ast.Decl) and not isinstance(ext.type, c_ast.FuncDecl):
-                self.declare(ext)
+            if not isinstance(ext, c_ast.Decl):
+                continue
+            if isinstance(ext.type, c_ast.FuncDecl):
+                continue
+            if ext.name is None:
+                continue                       # a bare struct/union/enum type
+            if "extern" in (ext.storage or []):
+                continue                       # lives in the image, not in 0x76
+            self.declare(ext)
 
     def declare(self, d):
         L = self.L
