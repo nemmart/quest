@@ -167,7 +167,18 @@ Prompts are written per project; ask for the one you are running.
    checks it); P54's is *a call actually executes and returns into a 0x77
    block*, with PICK_X_Y end to end and a synthetic caller. Neither alone
    gets you "C runs"; both together do.
-7e. **P55 — compile, diff, census the rewrite rules.** The measurement
+7e. **P55 — block structure: measure before matching**
+   (`docs/Project55/PROMPT.md`). Compare our compiled IR's BLOCK STRUCTURE
+   against the book's for the seven routines, classify every difference
+   (merge / split / polarity / statement placement / our C is wrong), and
+   census `XNDO`/`XWDO` loop shape **across the whole book**. Rationale: if
+   block structure does not line up, statement-level diffing is noise. The
+   project **changes nothing** — it measures and recommends. Its verdict on
+   whether the canonical block form is roughly right is what sizes P56.
+   **Nobody knows how DG PL/I emits a DO loop**, and the attic's most-refitted
+   rules were the loop rules, inferred from one or two routines instead of
+   counted. Do not repeat that.
+7f. **P56 — the transformer, the oracle, and the match.** The measurement
    DESIGN §7.2a only asserts: one rule applied many times versus many rules
    applied once. Head-to-head cases: HIT_ANY_CHAR (P38 abandoned at 8/10),
    GET_INPUT (P37 staged at `BITS()`); controls PICK_X_Y and UPDATE_SCREENS.
