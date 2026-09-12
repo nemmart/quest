@@ -226,7 +226,7 @@ System Call 36, called from 7017E302
  ac0=00000000
  ac1=00000000
  ac2=00000000
-RETURNING AC1=00000023
+RETURNING AC1=00000033
 dispatchSystemCall: 70000CCE
 System Call 26, called from 7017A657
  ac0=00000000
@@ -242,11 +242,11 @@ IREC:
    data pointer = 00000000
 
 dispatchSystemCall: F0000EA5
+dispatchSystemCall: F0000EA5
 System Call 3, called from 7017EA8E
  ac0=7017EB63
  ac1=00000000
  ac2=70000F4F
-dispatchSystemCall: F0000EA5
 System Call 3, called from 7017EA8E
  ac0=7017EB63
  ac1=00000000
@@ -338,13 +338,13 @@ RETURNING AC1=00000000
 dispatchSystemCall: 70001106
 System Call 73, called from 7015BE34
  ac0=00000000
- ac1=00000000
- ac2=00000000
 dispatchSystemCall: 70001106
 System Call 73, called from 7015BE34
  ac0=00000000
  ac1=00000000
  ac2=00000000
+ ac1=00000000
+ ac2=00000000
 RETURNING AC1=000005A1
 RETURNING AC1=000005A1
 dispatchSystemCall: 70001106
@@ -374,6 +374,9 @@ SOPEN:
   ac0 = :SHARED_DATA_FILE
   ac1 = -1
   ac2 = 61166
+Assigned channel 2
+
+RETURNING AC1=00000002
 
 SOPEN:
   ac0 = :SHARED_DATA_FILE
@@ -382,18 +385,15 @@ SOPEN:
 Assigned channel 2
 
 RETURNING AC1=00000002
-Assigned channel 2
-
-RETURNING AC1=00000002
 dispatchSystemCall: 70001134
 System Call 63, called from 7017DE01
-dispatchSystemCall: 70001134
-System Call 63, called from 7017DE01
- ac0=E0002250
- ac1=FFFFFFFF
  ac0=E0002250
  ac1=FFFFFFFF
  ac2=0000EEEE
+dispatchSystemCall: 70001134
+System Call 63, called from 7017DE01
+ ac0=E0002250
+ ac1=FFFFFFFF
  ac2=0000EEEE
 
 SOPEN:
@@ -415,10 +415,10 @@ dispatchSystemCall: 70001134
 System Call 63, called from 7017DE01
  ac0=E0002250
  ac1=FFFFFFFF
+ ac2=0000EEEE
 dispatchSystemCall: 70001134
 System Call 63, called from 7017DE01
  ac0=E0002250
- ac2=0000EEEE
  ac1=FFFFFFFF
  ac2=0000EEEE
 
@@ -426,6 +426,9 @@ SOPEN:
   ac0 = :CASTLE_DATA_FILE
   ac1 = -1
   ac2 = 61166
+Assigned channel 4
+
+RETURNING AC1=00000004
 
 SOPEN:
   ac0 = :CASTLE_DATA_FILE
@@ -434,9 +437,6 @@ SOPEN:
 Assigned channel 4
 
 RETURNING AC1=00000004
-Assigned channel 4
-
-RETURNING AC1=00000004
 dispatchSystemCall: 7000112C
 System Call 60, called from 7017DCB5
  ac0=00000000
@@ -451,17 +451,17 @@ System Call 60, called from 7017DCB5
 SPAGE:
    read only = 0
    memory destination = 70180000
+   page count (ignored) = 22
+   start page = 0
+
 
 SPAGE:
    read only = 0
    memory destination = 70180000
-   page count (ignored) = 22
-   start page = 0
-
-   page count (ignored) = 22
-   start page = 0
-
 RETURNING AC1=00000002
+   page count (ignored) = 22
+   start page = 0
+
 RETURNING AC1=00000002
 dispatchSystemCall: 7000112C
 System Call 60, called from 7017DCB5
@@ -476,8 +476,6 @@ System Call 60, called from 7017DCB5
 
 SPAGE:
    read only = 0
-   memory destination = 70017C00
-   page count (ignored) = 12
 
 SPAGE:
    read only = 0
@@ -485,16 +483,18 @@ SPAGE:
    page count (ignored) = 12
    start page = 0
 
+   memory destination = 70017C00
+   page count (ignored) = 12
    start page = 0
 
 RETURNING AC1=00000003
 RETURNING AC1=00000003
 dispatchSystemCall: 7000112C
+dispatchSystemCall: 7000112C
 System Call 60, called from 7017DCB5
  ac0=00000000
  ac1=00000004
  ac2=70001118
-dispatchSystemCall: 7000112C
 System Call 60, called from 7017DCB5
  ac0=00000000
  ac1=00000004
@@ -502,10 +502,6 @@ System Call 60, called from 7017DCB5
 
 SPAGE:
    read only = 0
-   memory destination = 7012AC00
-   page count (ignored) = 22
-   start page = 0
-
 
 SPAGE:
    read only = 0
@@ -513,17 +509,21 @@ SPAGE:
    page count (ignored) = 22
    start page = 0
 
+   memory destination = 7012AC00
 RETURNING AC1=00000004
+   page count (ignored) = 22
+   start page = 0
+
 RETURNING AC1=00000004
+dispatchSystemCall: 70001116
+System Call 300, called from 7017DD9B
+ ac0=00000000
+ ac1=00000000
 dispatchSystemCall: 70001116
 System Call 300, called from 7017DD9B
  ac0=00000000
  ac1=00000000
  ac2=700010EE
-dispatchSystemCall: 70001116
-System Call 300, called from 7017DD9B
- ac0=00000000
- ac1=00000000
  ac2=700010EE
 
 OPEN (fs op):
@@ -591,11 +591,11 @@ dispatchSystemCall: 7000112C
 System Call 303, called from 7017E2F4
  ac0=00000000
  ac1=00000000
+ ac2=700010F2
 dispatchSystemCall: 7000112C
 System Call 303, called from 7017E2F4
  ac0=00000000
  ac1=00000000
- ac2=700010F2
  ac2=700010F2
 
 WRITE (fs wt):
@@ -638,13 +638,13 @@ READ EXTENSION
 RETURNING AC1=00000000
 RETURNING AC1=00000000
 dispatchSystemCall: 700011EA
+dispatchSystemCall: 700011EA
+System Call 27, called from 7017DD03
+ ac0=E00022BC
 System Call 27, called from 7017DD03
  ac0=E00022BC
  ac1=00000000
  ac2=00000000
-dispatchSystemCall: 700011EA
-System Call 27, called from 7017DD03
- ac0=E00022BC
  ac1=00000000
  ac2=00000000
 
@@ -707,6 +707,7 @@ ISEND:
 
 RETURNING AC1=00000000
 dispatchSystemCall: 70000CCE
+RETURNING AC1=00000000
 System Call 26, called from 7017A657
  ac0=00000000
  ac1=00000000
@@ -721,16 +722,15 @@ IREC:
    data pointer = 00000000
 
 RETURNING AC1=00000000
-RETURNING AC1=00000000
-dispatchSystemCall: 70001158
-System Call 116, called from 7017E134
- ac0=00000000
- ac1=FFFFFFFF
 dispatchSystemCall: 70001158
 System Call 116, called from 7017E134
  ac0=00000000
  ac1=FFFFFFFF
  ac2=00000000
+dispatchSystemCall: 70001158
+System Call 116, called from 7017E134
+ ac0=00000000
+ ac1=FFFFFFFF
  ac2=00000000
 
 PNAME:
@@ -792,11 +792,11 @@ RETURNING AC1=00000000
 dispatchSystemCall: 70001194
 System Call 303, called from 7017E2F4
  ac0=00000000
+ ac1=00000000
+ ac2=7000115A
 dispatchSystemCall: 70001194
 System Call 303, called from 7017E2F4
  ac0=00000000
- ac1=00000000
- ac2=7000115A
  ac1=00000000
  ac2=7000115A
 
@@ -842,11 +842,11 @@ RETURNING AC1=00000000
 dispatchSystemCall: 70001194
 System Call 303, called from 7017E2F4
  ac0=00000000
- ac1=00000000
- ac2=7000115A
 dispatchSystemCall: 70001194
 System Call 303, called from 7017E2F4
  ac0=00000000
+ ac1=00000000
+ ac2=7000115A
  ac1=00000000
  ac2=7000115A
 
@@ -970,10 +970,10 @@ ISEND:
 RETURNING AC1=00000000
 dispatchSystemCall: 70000CCE
 System Call 26, called from 7017A657
+RETURNING AC1=00000000
+RETURNING AC1=00000000
  ac0=00000000
  ac1=00000000
-RETURNING AC1=00000000
-RETURNING AC1=00000000
  ac2=70000A9E
 
 IREC:
@@ -985,11 +985,11 @@ IREC:
    data pointer = 00000000
 
 dispatchSystemCall: 70001194
+dispatchSystemCall: 70001194
 System Call 303, called from 7017E2F4
  ac0=00000000
  ac1=00000000
  ac2=7000115A
-dispatchSystemCall: 70001194
 System Call 303, called from 7017E2F4
  ac0=00000000
  ac1=00000000
@@ -1031,13 +1031,13 @@ READ (fs rd):
 RETURNING AC1=00000000
 RETURNING AC1=00000000
 dispatchSystemCall: 70001194
-System Call 303, called from 7017E2F4
- ac0=00000000
 dispatchSystemCall: 70001194
 System Call 303, called from 7017E2F4
  ac0=00000000
  ac1=00000000
  ac2=7000115A
+System Call 303, called from 7017E2F4
+ ac0=00000000
  ac1=00000000
  ac2=7000115A
 
@@ -1182,7 +1182,7 @@ frame  3 -- UPDATE_USER_DATA_FILE+0x77   [7017CA12]
 frame  2 -- IPC_TASK+0xB9A   [7017B1DD]
 frame  1 -- QUEST_SERVER+0x7D2   [70178BEB]
 frame  0 -- 7017EBD2     guessing: I.INIT+0x23
-92544666 instructions run
+99112420 instructions run
 RETURNING AC1=00000000
 RETURNING AC1=00000000
 dispatchSystemCall: 7000110C
@@ -1203,22 +1203,22 @@ TASK:
    starting address = 7017E784
    AC2 = 70165713
    stack base = 70017650
+   stack size high = 0000
+   stack size low = 05AC
 
 TASK:
    packet type = 11080000
    priority = 0000
    task ID = 0000
+   starting address = 7017E784
+   AC2 = 70165713
+   stack base = 70017650
    stack size high = 0000
    stack size low = 05AC
    stack fault handler = FFFF
    flags = 0000
    task count = 0001
 
-   starting address = 7017E784
-   AC2 = 70165713
-   stack base = 70017650
-   stack size high = 0000
-   stack size low = 05AC
    stack fault handler = FFFF
    flags = 0000
    task count = 0001
@@ -1246,11 +1246,11 @@ RETURNING AC1=7001770C
 dispatchSystemCall: 700176AC
 System Call 505, called from 7017E7BD
  ac0=7017E7C4
- ac1=7001770C
- ac2=70165713
 dispatchSystemCall: 700176AC
 System Call 505, called from 7017E7BD
  ac0=7017E7C4
+ ac1=7001770C
+ ac2=70165713
  ac1=7001770C
  ac2=70165713
 RETURNING AC1=7001770C
@@ -1375,11 +1375,11 @@ dispatchSystemCall: 70001BEA
 System Call 303, called from 7017E2F4
  ac0=00000000
  ac1=00000000
- ac2=70001BB0
 dispatchSystemCall: 70001BEA
 System Call 303, called from 7017E2F4
  ac0=00000000
  ac1=00000000
+ ac2=70001BB0
  ac2=70001BB0
 
 WRITE (fs wt):
@@ -1427,11 +1427,11 @@ dispatchSystemCall: 70001C0C
 System Call 303, called from 7017E2F4
  ac0=00000000
  ac1=00000000
+ ac2=70001BD2
 dispatchSystemCall: 70001C0C
 System Call 303, called from 7017E2F4
  ac0=00000000
  ac1=00000000
- ac2=70001BD2
  ac2=70001BD2
 
 WRITE (fs wt):
@@ -1505,11 +1505,11 @@ dispatchSystemCall: 70001C0C
 System Call 303, called from 7017E2F4
  ac0=00000000
  ac1=00000000
- ac2=70001BD2
 dispatchSystemCall: 70001C0C
 System Call 303, called from 7017E2F4
  ac0=00000000
  ac1=00000000
+ ac2=70001BD2
  ac2=70001BD2
 
 WRITE (fs wt):
@@ -1531,11 +1531,11 @@ dispatchSystemCall: 70001C0C
 System Call 303, called from 7017E2F4
  ac0=00000000
  ac1=00000000
+ ac2=70001BD2
 dispatchSystemCall: 70001C0C
 System Call 303, called from 7017E2F4
  ac0=00000000
  ac1=00000000
- ac2=70001BD2
  ac2=70001BD2
 
 WRITE (fs wt):
@@ -1583,11 +1583,11 @@ dispatchSystemCall: 70001C0C
 System Call 303, called from 7017E2F4
  ac0=00000000
  ac1=00000000
- ac2=70001BD2
 dispatchSystemCall: 70001C0C
 System Call 303, called from 7017E2F4
  ac0=00000000
  ac1=00000000
+ ac2=70001BD2
  ac2=70001BD2
 
 WRITE (fs wt):
@@ -1739,11 +1739,11 @@ dispatchSystemCall: 70002026
 System Call 303, called from 7017E2F4
  ac0=00000000
  ac1=00000000
+ ac2=70001FEC
 dispatchSystemCall: 70002026
 System Call 303, called from 7017E2F4
  ac0=00000000
  ac1=00000000
- ac2=70001FEC
  ac2=70001FEC
 
 WRITE (fs wt):
@@ -1758,7 +1758,7 @@ WRITE EXTENSION
    options = 0800
    rel pos = 0000
    init pos = 000B
-    Northeast Arcolius                 
+    Wilderness                         
 RETURNING AC1=00000000
 RETURNING AC1=00000000
 dispatchSystemCall: 70002026
@@ -1784,7 +1784,7 @@ WRITE EXTENSION
    options = 0800
    rel pos = 0000
    init pos = 000C
-    City of Androlia                   
+    City of Sea Breeze                 
 RETURNING AC1=00000000
 RETURNING AC1=00000000
 dispatchSystemCall: 70002026
@@ -1869,11 +1869,11 @@ dispatchSystemCall: 70001D32
 System Call 303, called from 7017E2F4
  ac0=00000000
  ac1=00000000
+ ac2=70001CF8
 dispatchSystemCall: 70001D32
 System Call 303, called from 7017E2F4
  ac0=00000000
  ac1=00000000
- ac2=70001CF8
  ac2=70001CF8
 
 WRITE (fs wt):
@@ -1999,11 +1999,11 @@ dispatchSystemCall: 70001D1C
 System Call 303, called from 7017E2F4
  ac0=00000000
  ac1=00000000
- ac2=70001CE2
 dispatchSystemCall: 70001D1C
 System Call 303, called from 7017E2F4
  ac0=00000000
  ac1=00000000
+ ac2=70001CE2
  ac2=70001CE2
 
 WRITE (fs wt):
@@ -2077,11 +2077,11 @@ dispatchSystemCall: 70001D1C
 System Call 303, called from 7017E2F4
  ac0=00000000
  ac1=00000000
+ ac2=70001CE2
 dispatchSystemCall: 70001D1C
 System Call 303, called from 7017E2F4
  ac0=00000000
  ac1=00000000
- ac2=70001CE2
  ac2=70001CE2
 
 WRITE (fs wt):
@@ -2259,11 +2259,11 @@ dispatchSystemCall: 70001D1C
 System Call 303, called from 7017E2F4
  ac0=00000000
  ac1=00000000
+ ac2=70001CE2
 dispatchSystemCall: 70001D1C
 System Call 303, called from 7017E2F4
  ac0=00000000
  ac1=00000000
- ac2=70001CE2
  ac2=70001CE2
 
 WRITE (fs wt):
@@ -2440,11 +2440,11 @@ RETURNING AC1=00000000
 dispatchSystemCall: 70001D1C
 System Call 303, called from 7017E2F4
  ac0=00000000
+ ac1=00000000
+ ac2=70001CE2
 dispatchSystemCall: 70001D1C
 System Call 303, called from 7017E2F4
  ac0=00000000
- ac1=00000000
- ac2=70001CE2
  ac1=00000000
  ac2=70001CE2
 
@@ -2493,11 +2493,11 @@ dispatchSystemCall: 70001D1C
 System Call 303, called from 7017E2F4
  ac0=00000000
  ac1=00000000
+ ac2=70001CE2
 dispatchSystemCall: 70001D1C
 System Call 303, called from 7017E2F4
  ac0=00000000
  ac1=00000000
- ac2=70001CE2
  ac2=70001CE2
 
 WRITE (fs wt):
@@ -2505,22 +2505,22 @@ WRITE (fs wt):
    (fs wt) options = C001
    (fs wt) record number = 0
    (fs wt) buffer pointer = E00037DE
-   (fs wt) byte count = 0026
+   (fs wt) byte count = 0027
 1
 WRITE EXTENSION
    location = F0001D12
    options = 0800
    rel pos = 0000
    init pos = 320D
-Wind from West - Rainy               
+Wind from South - Rainy               
 RETURNING AC1=00000000
 RETURNING AC1=00000000
 frame  1 -- 7017ED1C     guessing: DERR.TRP+0x0
 frame  0 -- 7017EA51     guessing: I.INIT+0x23
 Thread halt
-1062690 instructions run
+1051369 instructions run
 Thread halt
-1059432 instructions run
+1048111 instructions run
 frame  2 -- 7017FDED     guessing: .UKIL+0x8
 frame  1 -- C_A_LISTENER+0x2   [70165715]
 frame  0 -- 7017E7C1     guessing: T.INIT+0x3B

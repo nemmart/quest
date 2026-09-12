@@ -1378,8 +1378,8 @@ IREC RETURN:
 *** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 548 (addr 0x70180250)
 *** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 548 (addr 0x70180250)
 *** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 548 (addr 0x70180250)
-*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 549 (addr 0x70180251)
-*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 549 (addr 0x70180251)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 548 (addr 0x70180250)
 *** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 549 (addr 0x70180251)
 *** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 549 (addr 0x70180251)
 *** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 549 (addr 0x70180251)
@@ -1568,8 +1568,8 @@ OPEN Channel 1, path :QUEST_SERVER.PR modified: 0
 OPEN Channel 2, path :SHARED_DATA_FILE modified: 1
 OPEN Channel 3, path :WORLD_DATA_FILE modified: 1
 OPEN Channel 4, path :CASTLE_DATA_FILE modified: 1
-ISR RECEIVED MESSAGE
 OPEN Channel 5, path :USER_DATA_FILE modified: 1
+ISR RECEIVED MESSAGE
 IRExec: first execution of block 70176103
 IRExec: first execution of block 70176104
 IRExec: first execution of block 70176107
@@ -1655,8 +1655,8 @@ IRExec: first execution of block 7016E1CB
 IRExec: first execution of block 7016E16B
 IRExec: first execution of block 7016E191
 IRExec: first execution of block 7016E194
-IRExec: first execution of block 7016E19B
 IRExec: first execution of block 7016E19E
+IRExec: first execution of block 7016E19B
 IRExec: first execution of block 7016E1D0
 IRExec: first execution of block 701697A1
 IRExec: first execution of block 701697A9
@@ -1664,8 +1664,14 @@ IRExec: first execution of block 701697CF
 IRExec: first execution of block 701697D2
 IRExec: first execution of block 701697DD
 IRExec: first execution of block 701697E1
+IRExec: first execution of block 701697F1
 IRExec: first execution of block 701697F2
+IRExec: first execution of block 701697FC
 IRExec: first execution of block 701697FD
+IRExec: first execution of block 70169801
+IRExec: first execution of block 70169935
+IRExec: first execution of block 701697D4
+IRExec: first execution of block 701697DA
 IRExec: first execution of block 70169800
 IRExec: first execution of block 70169803
 IRExec: first execution of block 7016980C
@@ -1674,43 +1680,6 @@ IRExec: first execution of block 7016981C
 IRExec: first execution of block 7016982A
 IRExec: first execution of block 7016982B
 IRExec: first execution of block 70169830
-IRExec: first execution of block 70169935
-IRExec: first execution of block 701697D4
-IRExec: first execution of block 701697DA
-IRExec: first execution of block 701697F1
-IRExec: first execution of block 701697FC
-IRExec: first execution of block 70169801
-IRExec: first execution of block 7016982F
-IRExec: first execution of block 70169832
-IRExec: first execution of block 70169842
-IRExec: first execution of block 70169843
-IRExec: first execution of block 70169851
-IRExec: first execution of block 70169852
-IRExec: first execution of block 70169865
-IRExec: first execution of block 70169870
-IRExec: first execution of block 70169878
-IRExec: first execution of block 70169877
-IRExec: first execution of block 7016987A
-IRExec: first execution of block 7016988C
-IRExec: first execution of block 7016989B
-IRExec: first execution of block 7016989C
-IRExec: first execution of block 701698A4
-IRExec: first execution of block 701698AD
-IRExec: first execution of block 701698B1
-IRExec: first execution of block 701698C3
-IRExec: first execution of block 701698D1
-IRExec: first execution of block 701698DA
-IRExec: first execution of block 701698E0
-IRExec: first execution of block 701698E6
-IRExec: first execution of block 701698F1
-IRExec: first execution of block 701698FB
-IRExec: first execution of block 70169901
-IRExec: first execution of block 7016990D
-IRExec: first execution of block 70169916
-IRExec: first execution of block 70169922
-IRExec: first execution of block 701698DB
-IRExec: first execution of block 70169933
-IRExec: first execution of block 701698A8
 IRExec: first execution of block 701697DB
 IRExec: first execution of block 70169939
 IRExec: first execution of block 7016E1D6
@@ -1780,19 +1749,19 @@ IRExec: first execution of block 70166B68
 
 ================ WORLD ABORT ================
 TERMINAL-ABORT at 7016871D, verified on both engines (top stack wides: 70166B8A 70001B8A — for DERR.TRP: number, faulting pc)
-pc=7016871D ac0=00003ED2 ac1=00003C94 ac2=7012AC03 ac3=70001FE4 wsp=70001FE4 wfp=70001FE4
+pc=7016871D ac0=00003ED2 ac1=00003EF6 ac2=7012AC03 ac3=70001FE4 wsp=70001FE4 wfp=70001FE4
 Data write-back SUPPRESSED (state presumed corrupt).
 =============================================
 Exception: INTWT interrupted
-Unregistering process 101
 Exception: INTWT interrupted
-OPEN Channel 1, path :QUEST.PR modified: 0
-OPEN Channel 2, path :SHARED_DATA_FILE modified: 1
-OPEN Channel 3, path :WORLD_DATA_FILE modified: 1
 Unregistering process 102
 OPEN Channel 1, path :QUEST.PR modified: 0
-OPEN Channel 4, path :CASTLE_DATA_FILE modified: 1
+Unregistering process 101
+OPEN Channel 1, path :QUEST.PR modified: 0
 OPEN Channel 2, path :SHARED_DATA_FILE modified: 1
+OPEN Channel 2, path :SHARED_DATA_FILE modified: 1
+OPEN Channel 3, path :WORLD_DATA_FILE modified: 1
+OPEN Channel 4, path :CASTLE_DATA_FILE modified: 1
 OPEN Channel 3, path :WORLD_DATA_FILE modified: 1
 OPEN Channel 4, path :CASTLE_DATA_FILE modified: 1
 All processes terminated.
@@ -1805,7 +1774,7 @@ StrHooks: QUEST1/master max_claim s@7016DF68.1 = 4 bytes (cap 8192)
 StrHooks: QUEST1/master max_claim s@7016DF68.2 = 4 bytes (cap 8192)
 StrHooks: QUEST1/master bind=1 rebind=0 unmap=1 claim=2 release=1 frame_exit=157 unwind=0 onpop=0 discarded_claims=0 cancelled=0 max_delta=4
 StrHooks: QUEST2/clone bind=0 rebind=0 unmap=0 claim=0 release=0 frame_exit=70 unwind=0 onpop=0 discarded_claims=0 cancelled=0 max_delta=0
-StrHooks: QUEST_SERVER/solo bind=0 rebind=0 unmap=0 claim=0 release=0 frame_exit=197 unwind=0 onpop=0 discarded_claims=0 cancelled=0 max_delta=0
+StrHooks: QUEST_SERVER/solo bind=0 rebind=0 unmap=0 claim=0 release=0 frame_exit=615 unwind=0 onpop=0 discarded_claims=0 cancelled=0 max_delta=0
 StrHooks: QUEST1/master bind=0 rebind=0 unmap=0 claim=0 release=0 frame_exit=1 unwind=0 onpop=0 discarded_claims=0 cancelled=0 max_delta=0
 StrHooks: QUEST2/clone bind=0 rebind=0 unmap=0 claim=0 release=0 frame_exit=1 unwind=0 onpop=0 discarded_claims=0 cancelled=0 max_delta=0
 RTStubs: rtcov-QUEST1.txt — 1102 of 9828 RT words covered
