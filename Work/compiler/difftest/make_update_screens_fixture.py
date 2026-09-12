@@ -103,8 +103,8 @@ def model():
         hit = None
         if abs(px - X) <= 4 and abs(py - Y) <= 5:
             dx, dy = X - (px - 5), Y - (py - 6)
-            assert 1 <= dx <= 9, "dx %d out of the SUB(.,9) range" % dx
-            assert 1 <= dy <= 11, "dy %d out of the SUB(.,11) range" % dy
+            assert 1 <= dx <= 9, "dx %d out of the RANGE_CHECK(.,9) range" % dx
+            assert 1 <= dy <= 11, "dy %d out of the RANGE_CHECK(.,11) range" % dy
             hit = (dx, dy)
         for cx in range(1, 10):
             for cy in range(1, 12):
@@ -153,7 +153,7 @@ def main():
     a("")
     if TRAP:
         a("; player_count = 11 drives i past PLAYER's bound of 10, so the")
-        a("; FIRST SUB(i, 10) must raise DERR 17 and the run must stop there.")
+        a("; FIRST RANGE_CHECK(i, 10) must raise DERR 17 and the run must stop there.")
         sys.stdout.write("\n".join(out) + "\n")
         return
     a("; expectations: every cell of every player's screen")

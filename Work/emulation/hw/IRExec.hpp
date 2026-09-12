@@ -35,6 +35,9 @@ public:
   // v_address / block_address return 0 for an unknown name.
   uint32_t v_address(const std::string& qualified) const;
   uint32_t block_address(const std::string& qualified) const;
+  // P52 (ir 8): the declared type of a cell, for the self-test's placement leg.
+  struct Var;                       // defined below
+  const Var* v_lookup(const std::string& qualified) const;
   size_t v_count() const { return vars_.size(); }
   size_t symbolic_block_count() const { return nsymbolic_; }
   void map_pages(class Memory& memory) const;   // clone process: the touched 0x76 pages, RW, no exec
@@ -50,6 +53,10 @@ public:
   // shared EagleInstruction helper they call (docs/IR.md §5).
   enum EffOp { EFF_NONE = 0, EFF_ADD, EFF_SUB, EFF_MUL, EFF_DIV, EFF_CVWN,
                EFF_ASH, EFF_NADD, EFF_NSUB, EFF_NMUL };
+  // P52 (ir 8): a declared cell — v, a<N>, arg_count or ret — and its type.
+  // CLASS says which namespace it came from; contiguity of `a` numbers is
+  // checked at end of load (docs/IR.md §5.10.1c).
+  enum VClass { VC_V = 0, VC_ARG, VC_ARGCOUNT, VC_RET };
   // P31 (ir 5): a string PIECE — literal (contents known, address in the
   // image, verified lazily against memory at first use), located fixed
   // [@a, n] (byte address, n bytes), located varying [@a, n varying] /
@@ -77,7 +84,10 @@ public:
                                      //   args = capacity (CLAIM) ; marker = the size register (CLAIM)
     uint32_t pc = 0;                 // INSTR: address; CALL/RT_CALL: site pc
     uint32_t target = 0;             // CALL: callee
-    uint32_t ret = 0;                // CALL: declared return pc (belief)
+    uint32_t ret = 0;                // CALL: declared return pc (belief); ir 8: the
+                                     //   placed 0x77 address of a symbolic ret= label
+    bool symbolic_ret = false;       // ir 8 (§5.10.6): a naive call out of a symbolic
+                                     //   block — no site=, no marker=, ret= is a name
     uint32_t marker = 0;             // CALL: marker slot (validated belief)
     int32_t  args = 0;               // CALL: elided arg-push count
     std::shared_ptr<Expr> lhs, rhs;  // STMT: lhs/rhs (rhs = arg a of an effectful op);
@@ -93,11 +103,25 @@ public:
   };
   // P46 (ir 7): a declared v (§5.10.1) — its type, size and placement.
   struct Var {
-    enum Type { I16, U16, I32, U32, CHAR, VARYING, WORDS } type;
-    std::string name;                    // <ENTRY>.v<k>
-    uint32_t n = 0;                      // char/varying/words: the declared n
+    enum Type { I16, U16, I32, U32, CHAR, VARYING, WORDS,
+                // ir 8 pointers — two words each; KIND enforced, pointee
+                // width advisory (docs/IR.md §5.10.1a)
+                P_I16, P_U16, P_I32, P_U32, P_CHAR, P_VARYING, P_WORDS } type;
+    VClass cls = VC_V;                   // ir 8: v / a<N> / arg_count / ret
+    uint32_t argn = 0;                   // VC_ARG: the N of a<N>
+    std::string name;                    // <ENTRY>.v<k> / .a<N> / .arg_count / .ret
+    std::string entry;                   // the owning addrbook entry
+    uint32_t n = 0;                      // char/varying/words (and their pointers): the declared n
     uint32_t words = 0;                  // size in words
     uint32_t addr = 0;                   // placed word address (0x76……)
+    std::string init;                    // ir 8: initialised `char n` bytes ("" = uninitialised)
+    bool has_init = false;
+    static bool is_pointer(Type t) { return t >= P_I16; }
+    static bool is_byte_pointer(Type t) { return t == P_CHAR; }
+    static bool is_aggregate(Type t) { return t == CHAR || t == VARYING || t == WORDS; }
+    // the variable form's access shape (docs/IR.md §5.10.4)
+    static uint32_t access_bytes(Type t) { return (t == I16 || t == U16) ? 2u : 4u; }
+    static bool access_signed(Type t) { return t == I16; }
   };
   struct Block {
     uint32_t start, seg;

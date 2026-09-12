@@ -678,7 +678,7 @@ class Walker:
         args = n.args.exprs if n.args else []
         if name == "ABS":
             return self.builtin_abs(n, args)
-        if name == "SUB":
+        if name == "RANGE_CHECK":
             return self.builtin_sub(n, args)
         refuse("function call", n,
                "calls are refused in this project (P46 F7: ir 7 refuses "
@@ -727,10 +727,10 @@ class Walker:
         quest_rt.h's quest_sub_check (a001 R5)."""
         L = self.L
         if len(args) != 2:
-            refuse("SUB", n, "SUB takes two arguments")
+            refuse("RANGE_CHECK", n, "RANGE_CHECK takes two arguments")
         iv, ik = self.expr(args[0])
         nv, _nk = self.expr(args[1])
-        out = L.new_v("node", "i32", "", 0, "SUB", self.line(n))
+        out = L.new_v("node", "i32", "", 0, "RANGE_CHECK", self.line(n))
         L.emit("ac0 = M32[%s]" % iv)
         L.emit("ac1 = M32[%s]" % nv)
         L.emit('assert(((ac0 >s 0) && (ac0 <=s ac1)), "DERR17 %s:%d")'

@@ -127,9 +127,16 @@ struct IRExec::Expr {
               LAND, LOR, LNOT, COM,       // && || ! ~
               WP, BP,                     // P25: wp(b,d) bp(b,d) pointer builders
               TF, LSH,                    // P26: tf(e), lsh(e, amount) (pure, flag-free)
-              SX16, ZX16, ZX8, TRUNC16 } kind;
-  uint32_t value = 0;                     // CONST value / AC index / t index
-  int32_t  vref = -1;                     // P46 (ir 7): CONST produced from a v name — index into vars_ (width tripwire)
+              SX16, ZX16, ZX8, TRUNC16,
+              VREF } kind;                // P52 (ir 8): THE VARIABLE FORM — the named
+                                          //   cell's CONTENTS, read at the declared
+                                          //   width/signedness (docs/IR.md §5.10.4)
+  uint32_t value = 0;                     // CONST value / AC index / t index / VREF address
+  int32_t  vref = -1;                     // P46: index into vars_ — the cell this node names
+                                          //   (set on VREF and on the CONST a cell name
+                                          //   produces inside wp()/bp(), for the tripwire)
+  uint8_t  vbytes = 0;                    // VREF: 2 or 4 — the access width
+  bool     vsigned = false;               // VREF: a 2-byte read sign-extends
   std::shared_ptr<Expr> a, b;
 };
 
@@ -178,22 +185,34 @@ static void load_entries(const char* addrbook) {
   if (g_entries.names.empty()) refuse(std::string("no entry lines in the addrbook: ") + path);
   g_entries.path = path; g_entries.loaded = true;
 }
-// <ENTRY>.v<k> / <ENTRY>.b<k>: split on the LAST dot; the local is v|b +
-// digits; the entry is UPPERCASE `[A-Z][A-Z0-9_]*(\.<digits>)*` and must be
-// in the addrbook. Returns the entry index; kind = 'v' | 'b'.
+// <ENTRY>.v<k> / <ENTRY>.b<k> / <ENTRY>.a<N> / <ENTRY>.arg_count /
+// <ENTRY>.ret: split on the LAST dot; the local is v|b|a + digits or one of
+// the two fixed names; the entry is UPPERCASE `[A-Z][A-Z0-9_]*(\.<digits>)*`
+// and must be in the addrbook. Returns the entry index.
+// kind = 'v' | 'b' | 'a' | 'c' (arg_count) | 'r' (ret).
 static uint32_t parse_qualified(const std::string& tok, char want, char& kind, std::string& entry, uint32_t& k) {
   size_t dot = tok.rfind('.');
   if (dot == std::string::npos || dot == 0 || dot + 2 >= tok.size())
-    refuse("malformed qualified name (want <ENTRY>.v<digits> or <ENTRY>.b<digits>): " + tok);
+    refuse("malformed qualified name (want <ENTRY>.v<digits>, .b<digits>, .a<digits>, .arg_count or .ret): " + tok);
   entry = tok.substr(0, dot);
   std::string local = tok.substr(dot + 1);
-  kind = local[0];
-  if (kind != 'v' && kind != 'b') refuse("malformed qualified name (the local must be v<digits> or b<digits>): " + tok);
-  if (want && kind != want) refuse(std::string(want == 'v' ? "a block name where a v was expected" : "a v name where a block name was expected") + ": " + tok);
-  if (local.size() < 2 || local.find_first_not_of("0123456789", 1) != std::string::npos)
-    refuse("malformed qualified name (digits after v/b): " + tok);
-  if (local.size() > 6) refuse("malformed qualified name (too many digits): " + tok);
-  k = uint32_t(strtoul(local.c_str() + 1, nullptr, 10));
+  k = 0;
+  if (local == "arg_count")      kind = 'c';
+  else if (local == "ret")       kind = 'r';
+  else {
+    kind = local[0];
+    if (kind != 'v' && kind != 'b' && kind != 'a')
+      refuse("malformed qualified name (the local must be v<digits>, b<digits>, a<digits>, arg_count or ret): " + tok);
+    if (local.size() < 2 || local.find_first_not_of("0123456789", 1) != std::string::npos)
+      refuse("malformed qualified name (digits after v/b/a): " + tok);
+    if (local.size() > 6) refuse("malformed qualified name (too many digits): " + tok);
+    k = uint32_t(strtoul(local.c_str() + 1, nullptr, 10));
+    if (kind == 'a' && k == 0) refuse("argument cells are numbered from 1 (docs/IR.md §5.10.1c): " + tok);
+  }
+  // `want`: 'v' = a CELL is expected (v/a/arg_count/ret all qualify — they
+  // are one kind of thing since ir 8); 'b' = a block name; 0 = anything.
+  if (want == 'b' && kind != 'b') refuse("a cell name where a block name was expected: " + tok);
+  if (want == 'v' && kind == 'b') refuse("a block name where a cell was expected: " + tok);
   if (!(entry[0] >= 'A' && entry[0] <= 'Z')) refuse("entry names are UPPERCASE (as in the addrbook): " + tok);
   bool in_suffix = false;
   for (size_t i = 0; i < entry.size(); i++) {
@@ -208,6 +227,16 @@ static uint32_t parse_qualified(const std::string& tok, char want, char& kind, s
 }
 static bool looks_qualified(const char* s) {        // starts an uppercase identifier: a candidate name
   return *s >= 'A' && *s <= 'Z';
+}
+// P52: a CELL name specifically — uppercase start, a dot, and NOT a memory
+// form. `looks_qualified` alone accepts `M32[`, which mattered the moment
+// wp()/bp() began peeking at their first operand (§5.2's overload).
+static bool at_cell_name(const char* s) {
+  if (!(*s >= 'A' && *s <= 'Z')) return false;
+  const char* q = s; bool dot = false;
+  while ((*q >= 'A' && *q <= 'Z') || (*q >= 'a' && *q <= 'z') ||
+         (*q >= '0' && *q <= '9') || *q == '_' || *q == '.') { if (*q == '.') dot = true; q++; }
+  return dot && *q != '[';
 }
 // the v table the parser resolves against (set by load(); the parser is
 // otherwise stateless)
@@ -242,6 +271,49 @@ struct Parser {
     return e;
   }
   P fn1(Expr::Kind k) { P e = expr(); if (!lit(")")) bad("expected )"); return node(k, e); }
+  // P52 (ir 8, docs/IR.md §5.10.4): a qualified CELL name. `as_address` is
+  // set by wp()/bp(), which want the cell's ADDRESS; everywhere else the
+  // name denotes the cell's CONTENTS and becomes a VREF node carrying its
+  // placed address, width and signedness, so the executor never needs the
+  // declaration table (§7).
+  P cell_ref(bool as_address) {
+    ws();
+    const char* q = s;
+    while ((*q >= 'A' && *q <= 'Z') || (*q >= 'a' && *q <= 'z') || (*q >= '0' && *q <= '9') || *q == '_' || *q == '.') q++;
+    std::string tok(s, q - s);
+    char kind; std::string entry; uint32_t k;
+    parse_qualified(tok, 'v', kind, entry, k);
+    if (!g_vt.by_name) bad("cell name outside a load");
+    auto it = g_vt.by_name->find(tok);
+    if (it == g_vt.by_name->end()) bad("cell referenced before its declaration (or never declared): " + tok);
+    s = q;
+    const IRExec::Var& v = (*g_vt.vars)[it->second];
+    if (as_address) {                       // wp(<cell>, d) / bp(<cell>, d)
+      P e = node(Expr::CONST, nullptr, nullptr, v.addr);
+      e->vref = int32_t(it->second);
+      return e;
+    }
+    // An AGGREGATE names a region, not a value (§5.10.4): refuse it as a
+    // value or an lvalue rather than silently meaning "the first word".
+    if (IRExec::Var::is_aggregate(v.type))
+      bad("an aggregate cell (char/varying/words) has no CONTENTS — use wp(" + tok +
+          ", d) / bp(" + tok + ", 0) or a string form: " + tok);
+    P e = node(Expr::VREF, nullptr, nullptr, v.addr);
+    e->vref   = int32_t(it->second);
+    e->vbytes = uint8_t(IRExec::Var::access_bytes(v.type));
+    e->vsigned = IRExec::Var::access_signed(v.type);
+    return e;
+  }
+  // wp/bp RESOLVE BY OPERAND KIND (ir 8, §5.2): a cell NAME as the base
+  // means that cell's address; anything else means its value. Decided here,
+  // statically, so no kind test survives to run time.
+  P ptr_builder(Expr::Kind k, const char* name) {
+    ws();
+    P a = at_cell_name(s) ? cell_ref(true) : expr();
+    if (!lit(",")) bad(std::string(name) + " expects two args");
+    P b = expr(); if (!lit(")")) bad("expected )");
+    return node(k, a, b);
+  }
   P fn2(Expr::Kind k, const char* name) {
     P a = expr(); if (!lit(",")) bad(std::string(name) + " expects two args");
     P b = expr(); if (!lit(")")) bad("expected )");
@@ -266,22 +338,11 @@ struct Parser {
     if (lit("M16[")) { P e = expr(); if (!lit("]")) bad("expected ]"); return node(Expr::MEM16, e); }
     if (lit("M8[")) { P e = expr(); if (!lit("]")) bad("expected ]"); return node(Expr::MEM8, e); }
     if (lit("M1[")) bad("M1 not implemented (IQ3)");
-    if (looks_qualified(s)) {                                   // P46 (ir 7): <ENTRY>.v<k> — a placed address, a constant
-      const char* q = s;
-      while ((*q >= 'A' && *q <= 'Z') || (*q >= 'a' && *q <= 'z') || (*q >= '0' && *q <= '9') || *q == '_' || *q == '.') q++;
-      std::string tok(s, q - s);
-      char kind; std::string entry; uint32_t k;
-      parse_qualified(tok, 'v', kind, entry, k);
-      if (!g_vt.by_name) bad("v name outside a load");
-      auto it = g_vt.by_name->find(tok);
-      if (it == g_vt.by_name->end()) bad("v referenced before its declaration (or never declared): " + tok);
-      s = q;
-      P e = node(Expr::CONST, nullptr, nullptr, (*g_vt.vars)[it->second].addr);
-      e->vref = int32_t(it->second);
-      return e;
+    if (at_cell_name(s)) {                                      // P52 (ir 8): THE VARIABLE FORM — the cell's CONTENTS
+      return cell_ref(false);
     }
-    if (lit("wp(")) return fn2(Expr::WP, "wp");                // P25 word-pointer builder
-    if (lit("bp(")) return fn2(Expr::BP, "bp");                // P25 byte-pointer builder
+    if (lit("wp(")) return ptr_builder(Expr::WP, "wp");          // P25 builder, ir 8 operand-kind overload
+    if (lit("bp(")) return ptr_builder(Expr::BP, "bp");          // P25 builder, ir 8 operand-kind overload
     if (lit("lsh(")) return fn2(Expr::LSH, "lsh");             // P26 pure logical shift (ISA amount)
     if (lit("ind(")) return fn1(Expr::IND);                    // P26 resolve-from-value
     if (lit("tf(")) return fn1(Expr::TF);
@@ -289,6 +350,10 @@ struct Parser {
     if (lit("zx16(")) return fn1(Expr::ZX16);
     if (lit("zx8(")) return fn1(Expr::ZX8);
     if (lit("trunc16(")) return fn1(Expr::TRUNC16);
+    if (lit("trunc8(")) return fn1(Expr::ZX8);                 // ir 8: the store-intent twin
+                                                              // of zx8 — the SAME `& 0xFF`
+                                                              // (docs/IR.md §5.3), a name and
+                                                              // not new expressiveness
     if (lit("and(") || lit("or(") || lit("xor(") || lit("com("))
       bad("functional and/or/xor/com are retired — use & | ^ ~");
     if (kw("wfp")) return node(Expr::WFP);
@@ -466,6 +531,12 @@ void IRExec::load(const std::string& path, const char* addrbook) {
   std::vector<bool> tdef(256, false);          // P26: t-places defined so far in cur
   // P46 (ir 7): names, placement, and the conditional blocks-provenance rule
   bool saw_numeric = false;                    // any hex8 block start or goto label
+  // ir 8: naive game->game calls, checked against the callee's `a` cells
+  // at end of load (the callee may be declared later in file order).
+  struct NaiveCall { std::string callee; int32_t args; std::string body; };
+  std::vector<NaiveCall> naive_calls;
+  bool ir7_compat = false;                     // ir 8 §5.10.9: an `ir 7` header — legal only
+                                               //   while the file declares no v and no a
   std::set<std::string> defined_blocks;        // symbolic headers seen
   std::map<uint32_t, uint32_t> vcursor;        // entry idx -> next free offset in its 0x76 range
   g_vt.vars = &vars_; g_vt.by_name = &var_by_name_;
@@ -484,22 +555,54 @@ void IRExec::load(const std::string& path, const char* addrbook) {
   auto is_hex8 = [](const std::string& t) {
     return t.size() == 8 && t.find_first_not_of("0123456789ABCDEFabcdef") == std::string::npos;
   };
-  // the width tripwire (docs/IR.md §5.10.4): a v used DIRECTLY as an index
-  // must fit the access; offsets and wp/bp are the source's business
+  // THE TRIPWIRE (docs/IR.md §5.10.5, ir 8 — REPLACES ir 7's width tripwire).
+  // In ir 7 `M<n>[<v>]` indexed AT the cell; in ir 8 it dereferences THROUGH
+  // it, so the rule is about pointer KIND, not about fitting a width:
+  //   M8 on a word pointer / M16|M32 on a byte pointer / M<n> on a
+  //   non-pointer  -> REFUSE.  M16 vs M32 on a word pointer: both allowed
+  //   (a wide is two consecutive words; pointee width is ADVISORY).
+  // Also here, because it is the same walk: the SCOPED top-bit-set literal
+  // refusal (§5.10.8). Unscoped it would refuse the book 660 times; in an
+  // ADDRESS position the book has 0.
+  auto tname = [](Var::Type ty) -> const char* {
+    switch (ty) {
+      case Var::I16: return "i16";           case Var::U16: return "u16";
+      case Var::I32: return "i32";           case Var::U32: return "u32";
+      case Var::CHAR: return "char";         case Var::VARYING: return "varying";
+      case Var::WORDS: return "words";       case Var::P_I16: return "*i16";
+      case Var::P_U16: return "*u16";        case Var::P_I32: return "*i32";
+      case Var::P_U32: return "*u32";        case Var::P_CHAR: return "*char";
+      case Var::P_VARYING: return "*varying"; case Var::P_WORDS: return "*words";
+    }
+    return "?";
+  };
   std::function<void(const P&, const std::string&)> check_widths = [&](const P& e, const std::string& body) {
     if (!e) return;
-    if ((e->kind == Expr::MEM16 || e->kind == Expr::MEM32 || e->kind == Expr::MEM8) && e->a && e->a->vref >= 0) {
-      const Var& v = vars_[size_t(e->a->vref)];
-      const char* w = e->kind == Expr::MEM32 ? "M32" : e->kind == Expr::MEM16 ? "M16" : "M8";
-      bool ok = true;
-      switch (v.type) {
-        case Var::I16: case Var::U16: case Var::I32: case Var::U32: ok = (e->kind != Expr::MEM8) && !(e->kind == Expr::MEM32 && (v.type == Var::I16 || v.type == Var::U16)); break;
-        case Var::CHAR:    ok = (e->kind == Expr::MEM8); break;   // byte data (and even then the index is a WORD address: use bp)
-        case Var::VARYING: ok = (e->kind == Expr::MEM16); break;  // the length word
-        case Var::WORDS:   ok = true; break;
+    const bool mem = (e->kind == Expr::MEM16 || e->kind == Expr::MEM32 || e->kind == Expr::MEM8);
+    if ((mem || e->kind == Expr::RESOLVE) && e->a) {
+      const char* w = e->kind == Expr::MEM32 ? "M32" : e->kind == Expr::MEM16 ? "M16"
+                    : e->kind == Expr::MEM8 ? "M8" : "R";
+      // (a) the scoped literal rule: a top-bit-set constant AS an index
+      if (e->a->kind == Expr::CONST && (e->a->value & 0x80000000u) && e->a->vref < 0) {
+        char buf[32]; snprintf(buf, sizeof buf, "%08X", e->a->value);
+        refuse(std::string("top-bit-set literal 0x") + buf + " in an ADDRESS position (" + w +
+               "[...]): every address the program can produce comes from wp()/bp() or a cell "
+               "name, so bit 31 is clear by construction (docs/IR.md §5.10.8): " + body);
       }
-      if (v.type == Var::CHAR) ok = false;                          // a char v is addressed by bp(v, d), never by a raw word index
-      if (!ok) refuse(std::string("width tripwire: ") + w + "[" + v.name + "] does not fit a " + (v.type == Var::I16 ? "i16" : v.type == Var::U16 ? "u16" : v.type == Var::I32 ? "i32" : v.type == Var::U32 ? "u32" : v.type == Var::CHAR ? "char" : v.type == Var::VARYING ? "varying" : "words") + " v: " + body);
+      // (b) the pointer-kind tripwire, on a bare cell name only
+      if (mem && e->a->kind == Expr::VREF) {
+        const Var& v = vars_[size_t(e->a->vref)];
+        if (!Var::is_pointer(v.type))
+          refuse(std::string("tripwire: ") + w + "[" + v.name + "] dereferences a cell that is not a "
+                 "pointer (it is " + tname(v.type) + "; ir 8 reads the cell by NAME — docs/IR.md §5.10.4/.5): " + body);
+        const bool bytep = Var::is_byte_pointer(v.type);
+        if (bytep && e->kind != Expr::MEM8)
+          refuse(std::string("tripwire: ") + w + "[" + v.name + "] on a BYTE pointer (" + tname(v.type) +
+                 ") — byte pointers take M8 only (docs/IR.md §5.10.5): " + body);
+        if (!bytep && e->kind == Expr::MEM8)
+          refuse(std::string("tripwire: M8[") + v.name + "] on a WORD pointer (" + tname(v.type) +
+                 ") — use bp(...) for byte access (docs/IR.md §5.10.5): " + body);
+      }
     }
     check_widths(e->a, body); check_widths(e->b, body);
   };
@@ -532,11 +635,17 @@ void IRExec::load(const std::string& path, const char* addrbook) {
     std::string body = line.substr(b0);
 
     if (!got_header) {
-      if (body != "ir 7")
-        refuse("missing/unknown version header (want 'ir 7'; ir 6 files spell the arena "
-               "twins t@<block>.<k> — ir 7 spells them s@<block>.<k> (P46) — regenerate with tools/lower.py)");
-      got_header = true;
-      continue;
+      // ir 8 (docs/IR.md §5.10.9). An `ir 7` header is accepted IF AND ONLY IF
+      // the file declares no `v` and no `a`: the only construct whose meaning
+      // moved is then absent, so such a file's meaning is provably unchanged.
+      // That is what lets ir 8 land without regenerating quest.ir2.{book,stock}
+      // (both declare zero of each). It is a COMPATIBILITY WINDOW, not a second
+      // dialect — the refusal below fires the moment such a file declares one.
+      if (body == "ir 8") { got_header = true; ir7_compat = false; continue; }
+      if (body == "ir 7") { got_header = true; ir7_compat = true;  continue; }
+      refuse("missing/unknown version header (want 'ir 8'; an 'ir 7' file is read only when it "
+             "declares no v and no a, docs/IR.md §5.10.9; ir 6 files spell the arena twins "
+             "t@<block>.<k> — regenerate with tools/lower.py)");
     }
     if (body.rfind("mode ", 0) == 0) {
       std::string m = body.substr(5);
@@ -583,31 +692,104 @@ void IRExec::load(const std::string& path, const char* addrbook) {
       }
       continue;
     }
-    if (tok == "v") {
-      // P46 (ir 7): `v <ENTRY>.v<k> <vtype>` — a declaration, file level (docs/IR.md §5.10.1)
-      if (cur) refuse("v declaration inside a block: " + body);
-      if (got_trailer) refuse("v declaration after the trailer: " + body);
+    if (tok == "v" || tok == "a") {
+      // P46 (ir 7): `v <ENTRY>.v<k> <vtype>`; P52 (ir 8): pointer vtypes, an
+      // INITIALISED char v, and the `a` cells — one declaration parser and one
+      // allocator, because an `a` cell IS a cell (docs/IR.md §5.10.1–.1d).
+      const bool is_arg_line = (tok == "a");
+      if (ir7_compat)
+        refuse("an `ir 7` file that declares a " + tok + " is REFUSED: in ir 7 a v name was the "
+               "cell's ADDRESS and in ir 8 it is the cell's CONTENTS, so this file means something "
+               "this loader does not implement. Regenerate it as `ir 8` (docs/IR.md §5.10.9): " + body);
+      if (cur) refuse(tok + " declaration inside a block: " + body);
+      if (got_trailer) refuse(tok + " declaration after the trailer: " + body);
       std::string name, ty, ns, extra;
       is >> name >> ty;
       Var v; v.name = name;
       load_entries(addrbook);
       char kind; std::string entry; uint32_t k;
       uint32_t idx = parse_qualified(name, 'v', kind, entry, k);
-      if (var_by_name_.count(name)) refuse("duplicate v declaration: " + name);
+      v.entry = entry;
+      if (is_arg_line && kind == 'v')
+        refuse("an `a` line declares .a<N>, .arg_count or .ret, not a v: " + body);
+      if (!is_arg_line && kind != 'v')
+        refuse("a `v` line declares .v<k>; use `a` for .a<N>/.arg_count/.ret: " + body);
+      v.cls = kind == 'a' ? VC_ARG : kind == 'c' ? VC_ARGCOUNT : kind == 'r' ? VC_RET : VC_V;
+      v.argn = (kind == 'a') ? k : 0;
+      if (var_by_name_.count(name)) refuse("duplicate declaration: " + name);
+      // arg_count is fixed at u16 — it is the LOW WORD of the LCALL marker
+      // (psr<<16)|argc; the psr half is machine state no source construct
+      // touches (docs/IR.md §5.10.1c).
+      if (v.cls == VC_ARGCOUNT && ty != "u16")
+        refuse("arg_count is u16 (the low word of the LCALL marker, docs/IR.md §5.10.1c): " + body);
       if (ty == "i16") { v.type = Var::I16; v.words = 1; }
       else if (ty == "u16") { v.type = Var::U16; v.words = 1; }
       else if (ty == "i32") { v.type = Var::I32; v.words = 2; }
       else if (ty == "u32") { v.type = Var::U32; v.words = 2; }
-      else if (ty == "char" || ty == "varying" || ty == "words") {
+      else if (ty == "*i16" || ty == "*u16" || ty == "*i32" || ty == "*u32" || ty == "*char") {
+        // ir 8 pointers: ONE LEVEL, two words, kind enforced / pointee advisory
+        v.type = ty == "*i16" ? Var::P_I16 : ty == "*u16" ? Var::P_U16
+               : ty == "*i32" ? Var::P_I32 : ty == "*u32" ? Var::P_U32 : Var::P_CHAR;
+        v.words = 2;
+      } else if (ty == "*varying" || ty == "*words") {
         if (!(is >> ns) || ns.empty() || ns.find_first_not_of("0123456789") != std::string::npos)
-          refuse("v " + ty + " needs a constant n (1..32767): " + body);
+          refuse(tok + " " + ty + " needs a constant n (1..32767): " + body);
         unsigned long n = strtoul(ns.c_str(), nullptr, 10);
-        if (n < 1 || n > 32767) refuse("v " + ty + " n must be 1..32767: " + body);
+        if (n < 1 || n > 32767) refuse(tok + " " + ty + " n must be 1..32767: " + body);
+        v.n = uint32_t(n);
+        v.type = ty == "*varying" ? Var::P_VARYING : Var::P_WORDS;
+        v.words = 2;                              // the POINTER is two words; n sizes the pointee
+      } else if (ty.size() > 1 && ty[0] == '*') {
+        refuse("no such pointer type '" + ty + "' — one level only, and the pointee must be "
+               "i16|u16|i32|u32|char|varying n|words n (docs/IR.md §5.10.1a): " + body);
+      } else if (ty == "char" || ty == "varying" || ty == "words") {
+        if (!(is >> ns) || ns.empty() || ns.find_first_not_of("0123456789") != std::string::npos)
+          refuse(tok + " " + ty + " needs a constant n (1..32767): " + body);
+        unsigned long n = strtoul(ns.c_str(), nullptr, 10);
+        if (n < 1 || n > 32767) refuse(tok + " " + ty + " n must be 1..32767: " + body);
         v.n = uint32_t(n);
         v.type = ty == "char" ? Var::CHAR : ty == "varying" ? Var::VARYING : Var::WORDS;
         v.words = ty == "words" ? uint32_t(n) : (ty == "char" ? uint32_t((n + 1) / 2) : 1u + uint32_t((n + 1) / 2));
-      } else refuse("unknown v type '" + ty + "' (want i16|u16|i32|u32|char n|varying n|words n): " + body);
-      if (is >> extra) refuse("trailing text after the v declaration: " + body);
+      } else refuse("unknown type '" + ty + "' (want i16|u16|i32|u32|char n|varying n|words n or a pointer): " + body);
+      // ir 8 (§5.10.1b): an INITIALISED v — `char <n> = "text"`. The bytes are
+      // written at placement, which is why a compiled literal can be spelled
+      // at all; §5.8's image literal and its lazy verification are untouched.
+      {
+        std::string rest;
+        std::getline(is, rest);
+        size_t eq = rest.find_first_not_of(" \t");
+        if (eq != std::string::npos && rest[eq] == '=') {
+          if (v.type != Var::CHAR)
+            refuse("only `char <n>` may be initialised (docs/IR.md §5.10.1b): " + body);
+          if (is_arg_line)
+            refuse("an argument cell is written by the caller, not initialised: " + body);
+          size_t q1 = rest.find('"', eq);
+          if (q1 == std::string::npos) refuse("an initialiser must be a \"string\": " + body);
+          std::string out;
+          size_t i2 = q1 + 1;
+          for (; i2 < rest.size() && rest[i2] != '"'; ) {
+            if (rest[i2] == '\\') {
+              if (i2 + 3 < rest.size() && rest[i2+1] == 'x' &&
+                  isxdigit(uint8_t(rest[i2+2])) && isxdigit(uint8_t(rest[i2+3]))) {
+                char hx[3] = {rest[i2+2], rest[i2+3], 0};
+                out.push_back(char(strtoul(hx, nullptr, 16)));
+                i2 += 4;
+              } else refuse("initialiser: only \\xHH escapes are allowed: " + body);
+            } else out.push_back(rest[i2++]);
+          }
+          if (i2 >= rest.size() || rest[i2] != '"') refuse("initialiser missing closing quote: " + body);
+          if (out.size() > v.n)
+            refuse("initialiser is " + std::to_string(out.size()) + " bytes but the v is char " +
+                   std::to_string(v.n) + ": " + body);
+          out.resize(v.n, ' ');                   // blank-padded, as assign_fixed pads
+          v.init = out; v.has_init = true;
+          std::istringstream tail(rest.substr(i2 + 1));
+          if (tail >> extra) refuse("trailing text after the initialiser: " + body);
+        } else {
+          std::istringstream tail(rest);
+          if (tail >> extra) refuse("trailing text after the declaration: " + body);
+        }
+      }
       uint32_t& cursor = vcursor[idx];
       if (cursor + v.words > ENTRY_STRIDE) refuse("entry " + entry + " overflows its reserved 0x76 range (0x10000 words): " + body);
       v.addr = V_BASE + idx * ENTRY_STRIDE + cursor;
@@ -616,16 +798,17 @@ void IRExec::load(const std::string& path, const char* addrbook) {
 #else
       cursor += v.words;
 #endif
-      // disjointness, asserted loudly. It CANNOT fire in ir 7 — the
-      // allocator is sequential and there is no placement input that could
-      // ask for a shared address (docs/IR.md §5.10.3). It is not a check
-      // that passed; it is the hook the placement refusal will hang on.
+      // disjointness, asserted loudly. It CANNOT fire — the allocator is
+      // sequential and there is no placement input that could ask for a
+      // shared address (docs/IR.md §5.10.3). It is not a check that passed;
+      // it is the hook the placement refusal will hang on.
       for (const Var& o : vars_)
         if (v.addr < o.addr + o.words && o.addr < v.addr + v.words)
-          throw std::runtime_error("IRExec: two v's share an address (allocator bug): " + v.name + " and " + o.name);
+          throw std::runtime_error("IRExec: two cells share an address (allocator bug): " + v.name + " and " + o.name);
       var_by_name_[name] = vars_.size();
       vars_.push_back(v);
-      fprintf(stderr, "IRExec: v %s type %s words %u at %08X\n", name.c_str(), ty.c_str(), v.words, v.addr);
+      fprintf(stderr, "IRExec: %s %s type %s words %u at %08X%s\n", tok.c_str(), name.c_str(),
+              ty.c_str(), v.words, v.addr, v.has_init ? " (initialised)" : "");
       continue;
     }
     if (tok == "block") {
@@ -675,10 +858,30 @@ void IRExec::load(const std::string& path, const char* addrbook) {
         refuse("non-monotonic instruction pc in block");
       prev_ipc = st.pc;
     } else if (tok == "call") {
-      if (symbolic) refuse("a call inside a symbolic block (ir 7 refuses; the calling bridge is P48 — docs/IR.md §5.10.5): " + body);
       st.kind = Stmt::CALL;
       std::string t, a, m, si, r;
       is >> t >> a >> m >> si >> r;
+      if (symbolic || m.rfind("ret=", 0) == 0) {
+        // ir 8 (docs/IR.md §5.10.6, §6): the NAIVE game->game call —
+        //   call <ENTRY> args=<n> ret=<ENTRY>.b<k>
+        // No site=, no marker=: there is no LCALL word, so there are no
+        // beliefs to cross-validate against one. The beliefs it DOES declare
+        // are checked against the CALLEE'S `a` cells below. Arguments travel
+        // in those cells, written by preceding statements.
+        if (!symbolic)
+          refuse("a naive `call <ENTRY> args= ret=<name>` is only legal in a symbolic block "
+                 "(a numeric block's call is validated against its LCALL at site=): " + body);
+        if (a.rfind("args=", 0) || m.rfind("ret=", 0) || !si.empty())
+          refuse("a naive call is `call <ENTRY> args=<n> ret=<ENTRY>.b<k>` (no site=, no marker=): " + body);
+        st.args = int32_t(strtol(a.c_str() + 5, nullptr, 10));
+        if (st.args < 0) refuse("negative args= on a call: " + body);
+        st.text = t;                              // the callee ENTRY name
+        st.ret = place_block(m.substr(4));        // symbolic return label
+        st.symbolic_ret = true;
+        naive_calls.push_back({t, st.args, body});   // arity/kind checked at end of load
+        cur->stmts.push_back(st);
+        continue;
+      }
       if (a.rfind("args=",0) || m.rfind("marker=",0) ||
           si.rfind("site=",0) || r.rfind("ret=",0))
         refuse("bad call operands: " + body);
@@ -697,7 +900,10 @@ void IRExec::load(const std::string& path, const char* addrbook) {
           refuse("call operands disagree with pushmap: " + body);
       }
     } else if (tok == "rt_call") {
-      if (symbolic) refuse("an rt_call inside a symbolic block (ir 7 refuses; the calling bridge is P48 — docs/IR.md §5.10.5): " + body);
+      // ir 8 (docs/IR.md §5.10.6): legal in a symbolic block too, with a
+      // symbolic ret= instead of site=. The ARGUMENTS are unchanged either
+      // way — they go on the REAL STACK, because the runtime reads argument n
+      // at wsp-2n from the LCALL marker and would never look in an `a` cell.
       // P28 (ir 4): `rt_call ?NAME(e1, ..., eN) site=<hex8>` — TERMINATOR.
       // The game -> runtime LCALL at `site` with its N argument pushes
       // folded into pure argument expressions in PL/I order (e1 = arg 1 =
@@ -711,8 +917,17 @@ void IRExec::load(const std::string& path, const char* addrbook) {
       size_t lp = rest.find('(');
       if (lp == std::string::npos) refuse("rt_call missing argument list: " + body);
       st.text = rest.substr(0, lp);
+      bool nonq_callee = false;
       if (st.text.size() < 2 || st.text[0] != '?')
-        refuse("rt_call callee must be a `?` runtime symbol: " + body);
+        // ir 8 (§6): the callee rule is WIDENED for the register-convention
+        // runtime helpers. `X.CB @7017E708` (Salvage F12) is reached by an
+        // UNDECORATED LCALL with its three arguments in ac2/ac0/ac1 and argc
+        // 0, and both book sites are already block-final with the register
+        // setup as ordinary statements — the shape rt_call validates. A
+        // non-`?` callee is accepted only with an EMPTY argument list, which
+        // is what "register convention" means here; the arity check below
+        // enforces it.
+        nonq_callee = true;
       for (char ch : st.text)
         if (!(isalnum(static_cast<unsigned char>(ch)) || ch == '?' || ch == '_' || ch == '.'))
           refuse("rt_call callee has a bad character: " + body);
@@ -739,17 +954,27 @@ void IRExec::load(const std::string& path, const char* addrbook) {
       }
       std::istringstream ts(rest.substr(rp + 1)); std::string si, tail;
       ts >> si;
-      if (si.rfind("site=", 0) != 0 || si.size() != 13 ||
-          si.find_first_not_of("0123456789ABCDEFabcdef", 5) != std::string::npos)
-        refuse("rt_call needs site=<hex8>: " + body);
-      if (ts >> tail) refuse("trailing text after rt_call site: " + body);
-      st.pc = uint32_t(strtoul(si.c_str() + 5, nullptr, 16));
-      if (st.pc == 0) refuse("bad rt_call site: " + body);
-      if (prev_ipc && st.pc <= prev_ipc)
-        refuse("rt_call site not after the block's last instruction: " + body);
-      if (st.pc < cur->start) refuse("rt_call site before its block: " + body);
-      if (!BlockSync::listed(st.pc + 4))
-        refuse("rt_call return pc (site+4) is not a listed block start: " + body);
+      if (symbolic) {                              // ir 8: a naive runtime call
+        if (si.rfind("ret=", 0) != 0)
+          refuse("an rt_call from a symbolic block needs ret=<ENTRY>.b<k> (there is no LCALL "
+                 "word to name with site=, docs/IR.md §5.10.6): " + body);
+        if (ts >> tail) refuse("trailing text after rt_call ret: " + body);
+        st.ret = place_block(si.substr(4));
+        st.symbolic_ret = true;
+        st.pc = 0;
+      } else {
+        if (si.rfind("site=", 0) != 0 || si.size() != 13 ||
+            si.find_first_not_of("0123456789ABCDEFabcdef", 5) != std::string::npos)
+          refuse("rt_call needs site=<hex8>: " + body);
+        if (ts >> tail) refuse("trailing text after rt_call site: " + body);
+        st.pc = uint32_t(strtoul(si.c_str() + 5, nullptr, 16));
+        if (st.pc == 0) refuse("bad rt_call site: " + body);
+        if (prev_ipc && st.pc <= prev_ipc)
+          refuse("rt_call site not after the block's last instruction: " + body);
+        if (st.pc < cur->start) refuse("rt_call site before its block: " + body);
+        if (!BlockSync::listed(st.pc + 4))
+          refuse("rt_call return pc (site+4) is not a listed block start: " + body);
+      }
       for (const std::string& at : argtexts) {
         if (at.find_first_not_of(" \t") == std::string::npos)
           refuse("rt_call empty argument: " + body);
@@ -758,6 +983,10 @@ void IRExec::load(const std::string& path, const char* addrbook) {
         check_treads(e, body); check_widths(e, body);
         st.argv.push_back(e);
       }
+      if (nonq_callee && !st.argv.empty())
+        refuse("rt_call callee `" + st.text + "` is not a `?` runtime symbol, so it is admitted only "
+               "as a REGISTER-CONVENTION helper with an EMPTY argument list (docs/IR.md §6, the X.CB "
+               "rule); this one declares " + std::to_string(st.argv.size()) + " arguments: " + body);
     } else if (tok == "ret") {
       st.kind = Stmt::RET;
     } else if (tok == "goto") {
@@ -853,14 +1082,47 @@ void IRExec::load(const std::string& path, const char* addrbook) {
       auto check_piece = [&](const Piece& pc, const std::string& body) {
         check_widths(pc.addr, body);
         if (pc.n_expr) { check_treads(pc.n_expr, body); check_widths(pc.n_expr, body); }
-        if (!pc.addr || pc.addr->vref < 0) return;
-        const Var& v = vars_[size_t(pc.addr->vref)];
+        if (!pc.addr) return;
+        // ir 8: a bare aggregate name is refused (§5.10.4), so a string address
+        // now reaches here in one of three shapes. Resolve the cell through
+        // wp()/bp() as well as the bare pointer, and remember WHICH — the
+        // word/byte distinction is the thing the tripwire is checking.
+        enum { AS_WORD, AS_BYTE, AS_PTR } via = AS_PTR;
+        const P& ad = pc.addr;
+        int32_t vr = -1;
+        if (ad->kind == Expr::VREF) { vr = ad->vref; via = AS_PTR; }
+        else if ((ad->kind == Expr::WP || ad->kind == Expr::BP) && ad->a && ad->a->vref >= 0) {
+          vr = ad->a->vref; via = (ad->kind == Expr::WP) ? AS_WORD : AS_BYTE;
+        }
+        if (vr < 0) return;                       // a register or a computed address: not ours
+        const Var& v = vars_[size_t(vr)];
+        if (via == AS_BYTE) {                     // bp(<cell>, d): a byte address
+          if (pc.kind == Piece::VARYING || pc.kind == Piece::VARYING_NOCAP)
+            refuse("tripwire: [@bp(" + v.name + ", …), … varying] — a varying's length word is at a "
+                   "WORD address; use wp(" + v.name + ", 0) (docs/IR.md §5.10.5): " + body);
+          return;                                 // a fixed piece over a byte pointer: correct
+        }
+        if (via == AS_PTR && Var::is_byte_pointer(v.type)) {
+          if (pc.kind == Piece::VARYING || pc.kind == Piece::VARYING_NOCAP)
+            refuse("tripwire: [@" + v.name + ", … varying] through a BYTE pointer (*char) — a varying "
+                   "needs a word address (docs/IR.md §5.10.5): " + body);
+          return;                                 // a fixed piece through a *char: correct
+        }
+        // ir 8: a string address may be the cell ITSELF (`varying n`, the ir 7
+        // case, reached through wp()) or a POINTER TO one (`*varying n`, the
+        // shape 28 of the book's 55 non-argument R[] sites have — a local
+        // holding the word address of a CHAR VARYING). Both are word
+        // addresses of a length word; nothing else is.
+        const bool direct_varying = (v.type == Var::VARYING);
+        const bool ptr_varying    = (v.type == Var::P_VARYING) && (pc.addr->kind == Expr::VREF);
         if (pc.kind == Piece::VARYING || pc.kind == Piece::VARYING_NOCAP) {
-          if (v.type != Var::VARYING) refuse("width tripwire: [@" + v.name + ", … varying] on a v that is not `varying`: " + body);
+          if (!direct_varying && !ptr_varying)
+            refuse("tripwire: [@" + v.name + ", … varying] on a cell that is neither `varying n` nor "
+                   "`*varying n` (docs/IR.md §5.10.5): " + body);
           if (pc.kind == Piece::VARYING && pc.n_expr == nullptr && uint32_t(pc.n) != v.n)
-            refuse("width tripwire: [@" + v.name + ", " + std::to_string(pc.n) + " varying] but the v was declared varying " + std::to_string(v.n) + ": " + body);
+            refuse("tripwire: [@" + v.name + ", " + std::to_string(pc.n) + " varying] but the cell was declared with capacity " + std::to_string(v.n) + ": " + body);
         } else {
-          refuse("width tripwire: a fixed piece needs a BYTE pointer — [@bp(" + v.name + ", 0), n], not the raw word address: " + body);
+          refuse("tripwire: a fixed piece needs a BYTE pointer — [@bp(" + v.name + ", 0), n], not the raw word address: " + body);
         }
       };
       // a piece: [@<expr>, <n>] | [@<expr>, <n> varying] | [@<expr>, varying] | [@0xW:b, "text"]
@@ -1004,10 +1266,11 @@ void IRExec::load(const std::string& path, const char* addrbook) {
         refuse("stack-register writes are reserved (P26 emits reads only): " + body);
       if (l->kind != Expr::AC && l->kind != Expr::MEM16 && l->kind != Expr::MEM32
           && l->kind != Expr::MEM8 && l->kind != Expr::TPLACE
-          && l->kind != Expr::CFLAG && l->kind != Expr::OVRFLAG)
-        refuse("lhs must be an ac, t-place, c, ovr, or memory cell: " + body);
+          && l->kind != Expr::CFLAG && l->kind != Expr::OVRFLAG
+          && l->kind != Expr::VREF)
+        refuse("lhs must be an ac, t-place, c, ovr, a declared cell (ir 8), or a memory cell: " + body);
       if (l->kind != Expr::AC && l->kind != Expr::TPLACE && l->kind != Expr::CFLAG
-          && l->kind != Expr::OVRFLAG)
+          && l->kind != Expr::OVRFLAG && l->kind != Expr::VREF)
         check_treads(l->a, body);
       check_widths(l, body);
       Parser pr(rhs.c_str(), cur->start);
@@ -1037,6 +1300,16 @@ void IRExec::load(const std::string& path, const char* addrbook) {
         st.rhs = r;
       }
       st.lhs = l;
+      // ir 8 (§5.10.8), the other half of the scoped literal rule: a
+      // top-bit-set constant assigned INTO a pointer cell would be an address
+      // the rewrite's precondition does not cover.
+      if (l->kind == Expr::VREF && st.rhs && st.eff == EFF_NONE &&
+          st.rhs->kind == Expr::CONST && (st.rhs->value & 0x80000000u) &&
+          Var::is_pointer(vars_[size_t(l->vref)].type)) {
+        char buf[32]; snprintf(buf, sizeof buf, "%08X", st.rhs->value);
+        refuse(std::string("top-bit-set literal 0x") + buf + " assigned to the pointer cell " +
+               vars_[size_t(l->vref)].name + " (docs/IR.md §5.10.8): " + body);
+      }
       if (l->kind == Expr::TPLACE) {
         if (tdef[l->value]) refuse("t" + std::to_string(l->value) + " assigned twice in one block: " + body);
         tdef[l->value] = true;
@@ -1050,6 +1323,38 @@ void IRExec::load(const std::string& path, const char* addrbook) {
   // line binds the file to a CFG only when the file names a numeric block/label
   for (auto& kv : block_by_name_)
     if (!defined_blocks.count(kv.first)) refuse("goto to a symbolic block that no header defines: " + kv.first);
+  // ir 8 (docs/IR.md §5.10.1c): `a` numbers must be CONTIGUOUS FROM 1 within
+  // an entry. A hole means the signature is wrong, which is precisely what
+  // these declarations exist to catch.
+  {
+    std::map<std::string, std::set<uint32_t>> args_by_entry;
+    for (const Var& v : vars_)
+      if (v.cls == VC_ARG) args_by_entry[v.entry].insert(v.argn);
+    for (auto& kv : args_by_entry) {
+      uint32_t want = 1;
+      for (uint32_t got : kv.second) {
+        if (got != want)
+          refuse("entry " + kv.first + " declares " + kv.first + ".a" + std::to_string(got) +
+                 " but not " + kv.first + ".a" + std::to_string(want) +
+                 " — argument cells are contiguous from 1 (docs/IR.md §5.10.1c)");
+        want++;
+      }
+    }
+    // ir 8 (§6): a naive call's declared arity and its arguments' pointer
+    // KINDS are checked against the CALLEE's declarations, which is what `a`
+    // cells are for — a compiled callee has no pushmap entry to check against.
+    for (const NaiveCall& nc : naive_calls) {
+      auto it = args_by_entry.find(nc.callee);
+      uint32_t have = (it == args_by_entry.end()) ? 0u : uint32_t(it->second.size());
+      if (uint32_t(nc.args) != have)
+        refuse("call " + nc.callee + " args=" + std::to_string(nc.args) + " but " + nc.callee +
+               " declares " + std::to_string(have) + " argument cell(s) (docs/IR.md §6): " + nc.body);
+      if (have && !var_by_name_.count(nc.callee + ".arg_count"))
+        refuse("call " + nc.callee + " but " + nc.callee + ".arg_count is not declared — the caller "
+               "writes it and the callee is the only thing that can discriminate arity "
+               "(docs/IR.md §5.10.1c): " + nc.body);
+    }
+  }
   if (saw_numeric && !saw_blocks_sha) refuse("missing blocks provenance line");
   if (!got_trailer) refuse("missing 'blocks <count>' trailer");
   if (trailer_count != blocks_.size()) {
@@ -1126,8 +1431,24 @@ void IRExec::map_pages(Memory& memory) const {
     for (uint32_t p = v.addr >> 10; p <= (v.addr + v.words - 1) >> 10; p++) pages.insert(p);
   for (uint32_t p : pages)
     memory.map_page(new os::ArrayPage(), p, Permissions::PERMISSION_READ | Permissions::PERMISSION_WRITE);
-  fprintf(stderr, "IRExec: mapped %zu page(s) in the 0x76 space (RW, no exec) for %zu v(s) for %s\n",
-          pages.size(), vars_.size(), memory.process_name.c_str());
+  // ir 8 (docs/IR.md §5.10.1b): an INITIALISED v has its bytes written here,
+  // at placement, before any block runs. This is why "0x76 is uninitialised"
+  // stops being true, and §5.10.7 says so rather than leaving a contradiction.
+  size_t n_init = 0;
+  for (const Var& v : vars_) {
+    if (!v.has_init) continue;
+    for (size_t i = 0; i < v.init.size(); i++)
+      memory.write_byte(v.addr * 2u + uint32_t(i), uint8_t(v.init[i]));
+    n_init++;
+  }
+  fprintf(stderr, "IRExec: mapped %zu page(s) in the 0x76 space (RW, no exec) for %zu cell(s)"
+                  " (%zu initialised) for %s\n",
+          pages.size(), vars_.size(), n_init, memory.process_name.c_str());
+}
+
+const IRExec::Var* IRExec::v_lookup(const std::string& q) const {
+  auto it = var_by_name_.find(q);
+  return it == var_by_name_.end() ? nullptr : &vars_[it->second];
 }
 
 // ------------------------------------------------------------- execution
@@ -1166,6 +1487,13 @@ struct Ctx {
       case Expr::WSP:     return uint32_t(m.wsp);       // LDASP reads machine.wsp (:512)
       case Expr::WSB:     return uint32_t(m.wsb);
       case Expr::WSL:     return uint32_t(m.wsl);
+      case Expr::VREF:    // ir 8 THE VARIABLE FORM: the cell's contents at the
+                          // DECLARED width/signedness. The parser baked address,
+                          // width and sign into the node, so the executor never
+                          // consults the declaration table (docs/IR.md §7).
+        return e->vbytes == 4 ? m.memory->read_wide(wrap(e->value))
+             : e->vsigned     ? uint32_t(int32_t(int16_t(m.memory->read_word(wrap(e->value)) & 0xFFFF)))
+                              : uint32_t(m.memory->read_word(wrap(e->value)) & 0xFFFF);
       case Expr::MEM32:   return m.memory->read_wide(addr_of(e->a));
       case Expr::MEM16:   return m.memory->read_word(addr_of(e->a)) & 0xFFFF;
       case Expr::MEM8:    return m.memory->read_byte(eval(e->a)) & 0xFF;  // RAW index:
@@ -1380,6 +1708,10 @@ uint32_t IRExec::run_block(Machine& machine, uint32_t pc) {
           if (v > 1) throw std::runtime_error("IRExec: FAULT non-0/1 flag assignment");
           (l.kind == Expr::CFLAG ? machine.c : machine.ovr) = int32_t(v);
         }
+        else if (l.kind == Expr::VREF) {          // ir 8: write the cell, declared width
+          if (l.vbytes == 4) machine.memory->write_wide(cx.wrap(l.value), v);
+          else               machine.memory->write_word(cx.wrap(l.value), v & 0xFFFF);
+        }
         else if (l.kind == Expr::MEM32)
           machine.memory->write_wide(cx.addr_of(l.a), v);
         else if (l.kind == Expr::MEM8)
@@ -1389,7 +1721,8 @@ uint32_t IRExec::run_block(Machine& machine, uint32_t pc) {
         } catch (std::runtime_error& ex) {
           char buf[192];
           bool mem = st.lhs->kind == Expr::MEM32 || st.lhs->kind == Expr::MEM16 || st.lhs->kind == Expr::MEM8;
-          uint32_t a = mem ? cx.addr_of(st.lhs->a) : 0;
+          uint32_t a = mem ? cx.addr_of(st.lhs->a)
+                     : st.lhs->kind == Expr::VREF ? cx.wrap(st.lhs->value) : 0;
           snprintf(buf, sizeof buf, "%s [IR block %08X stmt %zu, store addr %08X]",
                    ex.what(), blk->start, i, a);
           throw std::runtime_error(buf);
@@ -1489,6 +1822,15 @@ uint32_t IRExec::run_block(Machine& machine, uint32_t pc) {
       case Stmt::CALL: {
         if (i + 1 != n)
           throw std::runtime_error("IRExec: interior call (loader bug)");
+        // ir 8 (docs/IR.md §5.10.6): a call out of a symbolic block is
+        // SPECIFIED and VALIDATED by ir 8 and does NOT execute. The LCALL
+        // replica and the calling bridge are P50/P53's. Fail loudly and by
+        // name rather than transferring to a pc that does not exist.
+        if (st.symbolic_ret)
+          throw std::runtime_error("IRExec: a call out of a symbolic block LOADS and VALIDATES but "
+                                   "does not execute in ir 8 — the LCALL replica and the calling "
+                                   "bridge are P50/P53 (docs/IR.md §5.10.6, docs/Project52/REPORT.md)");
+
         // Copied-args accounting batched at the call (IR2.md §4): the
         // block's argpush statements were pure stores; the master pushed.
         machine.pc = int32_t(st.pc);
@@ -1503,6 +1845,15 @@ uint32_t IRExec::run_block(Machine& machine, uint32_t pc) {
       case Stmt::RT_CALL: {
         if (i + 1 != n)
           throw std::runtime_error("IRExec: interior rt_call (loader bug)");
+        // ir 8 (docs/IR.md §5.10.6): a call out of a symbolic block is
+        // SPECIFIED and VALIDATED by ir 8 and does NOT execute. The LCALL
+        // replica and the calling bridge are P50/P53's. Fail loudly and by
+        // name rather than transferring to a pc that does not exist.
+        if (st.symbolic_ret)
+          throw std::runtime_error("IRExec: a call out of a symbolic block LOADS and VALIDATES but "
+                                   "does not execute in ir 8 — the LCALL replica and the calling "
+                                   "bridge are P50/P53 (docs/IR.md §5.10.6, docs/Project52/REPORT.md)");
+
         // P28: evaluate every argument first (pure; order unobservable),
         // then push them RIGHT TO LEFT through the SAME helper XPEF/LPEF/
         // WPSH use (Machine::wide_push — owner of the wsp>wsl overflow

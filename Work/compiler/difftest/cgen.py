@@ -156,9 +156,9 @@ class Gen:
         if self.klass == "C" and r.random() < 0.45:
             if r.random() < 0.75:
                 self.note("index.sub_inrange")
-                return "SUB(1 + (%s & %d), %d) - 1" % (self.leaf(), nelem - 1, nelem)
+                return "RANGE_CHECK(1 + (%s & %d), %d) - 1" % (self.leaf(), nelem - 1, nelem)
             self.note("index.sub_unguarded")     # MAY trap: that is the point
-            return "SUB(1 + ((%s) & 15), %d) - 1" % (self.leaf(), nelem)
+            return "RANGE_CHECK(1 + ((%s) & 15), %d) - 1" % (self.leaf(), nelem)
         self.note("index.masked")
         return "(%s) & %d" % (self.expr(0), nelem - 1)
 
