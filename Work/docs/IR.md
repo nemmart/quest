@@ -321,9 +321,12 @@ checker; zero effect unset.
     the §5.8 string forms; `**` or a `*` applied to anything but the
     seven pointee forms of §5.10.1; a cell reference with no
     declaration, and a declaration after its first reference; an `a`
-    numbering with a hole; a `call`/`rt_call` whose declared arity or
-    whose argument pointer KINDS disagree with the callee's `a` cells;
-    a top-bit-set literal in an ADDRESS position (§5.10.8).
+    numbering with a hole; a naive `call` whose declared arity disagrees
+    with the callee's `a` cells, or whose calling block writes a pointer
+    `a` cell with a value of manifestly the WRONG KIND (§6 — the
+    argument-kind check, P54: as built, it sees `wp()`, `bp()` and pointer
+    cells, and only in the calling block); a top-bit-set literal in an
+    ADDRESS position (§5.10.8).
 
     EXECUTOR FAULTS (loud, never a silent value): goto index outside
     [0, count); zero divisor in `/s /u %s %u`; INT_MIN `/s`/`%s` -1;
@@ -993,10 +996,10 @@ convention (RTConventions.md); a valued GAME routine returns through
 `ret` from a symbolic block runs WRTN with the synthetic pc = the block's
 0x77 address (abort-message use only, as for 0x70).
 
-**What ir 8 does NOT do:** it does not make a call from a symbolic block
-EXECUTE. The LCALL replica and the calling bridge are P50/P53's; ir 8 is
-spec and loader. What remains before a call actually runs is listed in
-docs/Project52/REPORT.md.
+**What ir 8 did not do, and P54 does:** ir 8 was spec and loader; a call
+from a symbolic block now EXECUTES through the calling bridge (P54,
+docs/Project54/REPORT.md §1 — read that section for what the mechanism
+actually is; the design's "LCALL replica" was half of it).
 
 #### 5.10.7 Executor and lockstep facts (normative)
 
@@ -1343,12 +1346,27 @@ a false belief diverges loudly rather than being trusted.
   call).** No `site=`, no `marker=`: there is no LCALL word, so there are no
   beliefs to cross-validate against one. The beliefs it DOES declare are
   checked against the CALLEE'S DECLARATIONS (§5.10.1c) — `args=<n>` must
-  equal the callee's `a` count, and each `a` cell of pointer type must have
-  been written by a preceding statement whose value is of the matching
-  KIND. Arguments travel in the callee's `a` cells, written by the caller,
+  equal the callee's `a` count, and the ARGUMENT-KIND CHECK runs (P54, per
+  docs/Project54/a003 item 2 — it was specified here before it existed):
+  for each `a` cell of pointer type, the LAST write to it in the CALLING
+  BLOCK before the call must be of the matching KIND wherever that kind is
+  MANIFEST — `wp()` is a word pointer, `bp()` a byte pointer, a pointer cell
+  carries its declared kind. What the check does NOT claim: a value of
+  unknowable kind (a constant, a memory read, a register) passes, and a
+  write in an earlier block is not examined. The M-form tripwire (§5.10.5)
+  still catches a wrong kind where the pointer is USED; this catches it
+  where it is PASSED. Arguments travel in the callee's `a` cells, written by the caller,
   with `<CALLEE>.arg_count` set; the exit is `ret=`, an ordinary symbolic
   label. A valued callee returns through `<CALLEE>.ret` (§5.10.1d). Legal
-  only because the game is non-reentrant.
+  only because the game is non-reentrant. **Execution (P54):** a naive
+  `call <ENTRY>` transfers to `<ENTRY>.b0`, which must be a block of the
+  same file; the loader refuses otherwise. Calling an un-compiled Eagle
+  routine from a symbolic block is not this form (it needs the real-stack
+  protocol and the M4a area writes — P50). The bridge pushes the marker
+  with argc 0 — nothing is on the stack, `<CALLEE>.arg_count` carries the
+  arity — and the WSAVS image (frame size 0, `ovk` from the callee's
+  addrbook variant), so the callee's `ret` is the ordinary WRTN
+  (docs/Project54/REPORT.md §1).
 - **`rt_call <callee>(e1, …, eN) ret=<ENTRY>.b<k>` (ir 8, the naive runtime
   call).** Identical to the `site=` form above in everything that concerns
   the ARGUMENTS — they are evaluated right to left and pushed through
@@ -1374,10 +1392,11 @@ a false belief diverges loudly rather than being trusted.
   than treating `?` as a type distinction it was never meant to be. Note
   that a COMPILED `BITS("001")` also needs the character form to exist,
   which is §5.10.1b's business, not this rule's.
-- **Not built here.** ir 8 specifies and validates these three forms; it does
-  not make them EXECUTE. The LCALL replica and the calling bridge are
-  P50/P53's. docs/Project52/REPORT.md states what remains before a call
-  actually runs.
+- **Built in P54.** ir 8 specified and validated these three forms; the
+  calling bridge (P54, docs/Project54/REPORT.md §1–§2) makes them EXECUTE:
+  `rt_call` pushes its arguments and the marker, resolves the callee from
+  the symbol table and dispatches as LCALL would; the naive `call`
+  replicates LCALL and the callee's WSAVS together and enters `b0`.
 
 Scope by decoration ("no mixed metaphors", user ruling): a decorated
 site's pushes lower ONLY if every decorated push of the site is

@@ -23,4 +23,16 @@ set -e
 grep "stack NOT balanced" /tmp/bridge_selftest_broken.out | head -3 | sed 's/^/broken build: /'
 grep -q "BRIDGE SELFTEST RED" /tmp/bridge_selftest_broken.out
 grep -q "stack NOT balanced" /tmp/bridge_selftest_broken.out
+# P54 reopening (a003 item 1): P53's reproducer — a naive game->game call
+# through tests/lowerc_rig.cpp (a symbol-less Machine) used to segfault with
+# no diagnostic, 40/40. Pin it: the rig must exit 0 on the read-only
+# reproducer in docs/Project53/f1-repro/.
+g++ -std=c++17 -O2 -I. tests/lowerc_rig.cpp $OBJS -lpthread -o /tmp/lowerc_rig_p54
+# (copied to /tmp first: the rig writes and removes <program>.rigerr beside
+# its input, and that directory is P53's and holds a committed .rigerr)
+cp ../docs/Project53/f1-repro/call_symbolic_crash.ir ../docs/Project53/f1-repro/call_symbolic_crash.vmap /tmp/
+REPRO=/tmp/call_symbolic_crash
+/tmp/lowerc_rig_p54 --program $REPRO.ir --vmap $REPRO.vmap --addrbook quest.addrbook >/tmp/lowerc_rig_p54.out 2>/tmp/lowerc_rig_p54.err \
+  || { echo "F-1 REPRODUCER STILL FAILS (exit $?)"; tail -3 /tmp/lowerc_rig_p54.err; exit 1; }
+echo "F-1 reproducer through lowerc_rig: exit 0"
 echo "BRIDGE SELFTEST: GREEN ($(grep -c 'first execution of block .* at 77' /tmp/bridge_selftest.err) symbolic blocks first-executed), broken-bridge build RED on the stack-balance check (teeth confirmed)"

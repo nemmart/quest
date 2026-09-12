@@ -25,6 +25,8 @@
 //                     identity-red (a) an extra ?RANDOM_NUMBER call -> FAIL,
 //                     identity-red (b) the *x write-back off by one -> FAIL
 //  9. (script) -DP54_BROKEN_BRIDGE must go RED on the stack-balance check
+//  1b/1c (P54 reopening, docs/Project54/a003): the argument-KIND check at a
+//     naive call, and a game->game call on a symbol-less Machine executing
 //
 // Every program's final wsp is compared with a baseline program's — WRTN
 // pops a fixed six wides, so any bridge that leaves or takes stack shows
@@ -565,6 +567,42 @@ static int run() {
   refuses("teeth: naive call to an un-compiled entry (PICK_X_Y with no blocks)",
           HEAD + "\nblock GAMMA.b0\n  call PICK_X_Y args=0 ret=GAMMA.b1\n\nblock GAMMA.b1\n  ret\n\nblocks 2\n",
           "PICK_X_Y.b0 is not a block of this file");
+
+  // ---- 1b. THE ARGUMENT-KIND CHECK (a003 item 2): where the kind of the
+  //          value written to a pointer `a` cell is manifest, it must match ---
+  {
+    const std::string DECL = HEAD + "a GAMMA.a1 *char\na GAMMA.a2 *i16\na GAMMA.arg_count u16\nv ALPHA.v0 char 4\nv ALPHA.v1 i16\nv ALPHA.v2 *char\nv ALPHA.v3 *u32\n\n";
+    const std::string TAIL = "  GAMMA.arg_count = 2\n  call GAMMA args=2 ret=ALPHA.b1\n\nblock ALPHA.b1\n  ret\n\nblock GAMMA.b0\n  ret\n\nblocks 3\n";
+    refuses("kind: wp() into a *char cell",       DECL + "block ALPHA.b0\n  GAMMA.a1 = wp(ALPHA.v1, 0)\n  GAMMA.a2 = wp(ALPHA.v1, 0)\n" + TAIL, "GAMMA.a1 is a BYTE pointer but the value written to it in ALPHA.b0 is a WORD pointer");
+    refuses("kind: bp() into a *i16 cell",        DECL + "block ALPHA.b0\n  GAMMA.a1 = bp(ALPHA.v0, 0)\n  GAMMA.a2 = bp(ALPHA.v0, 0)\n" + TAIL, "GAMMA.a2 is a WORD pointer but the value written to it in ALPHA.b0 is a BYTE pointer");
+    refuses("kind: a *char cell into a *i16 cell",DECL + "block ALPHA.b0\n  GAMMA.a1 = bp(ALPHA.v0, 0)\n  GAMMA.a2 = ALPHA.v2\n" + TAIL, "GAMMA.a2 is a WORD pointer but the value written to it in ALPHA.b0 is a BYTE pointer");
+    refuses("kind: a *u32 cell into a *char cell",DECL + "block ALPHA.b0\n  GAMMA.a1 = ALPHA.v3\n  GAMMA.a2 = wp(ALPHA.v1, 0)\n" + TAIL, "GAMMA.a1 is a BYTE pointer but the value written to it in ALPHA.b0 is a WORD pointer");
+    refuses("kind: the LAST write counts",        DECL + "block ALPHA.b0\n  GAMMA.a1 = bp(ALPHA.v0, 0)\n  GAMMA.a1 = wp(ALPHA.v1, 0)\n  GAMMA.a2 = wp(ALPHA.v1, 0)\n" + TAIL, "GAMMA.a1 is a BYTE pointer");
+    {   // the matching kinds load; so do the two the check does not claim: an unknowable value and a write in an earlier block
+      std::string ok = DECL + "block ALPHA.b0\n  GAMMA.a1 = bp(ALPHA.v0, 0)\n  GAMMA.a2 = wp(ALPHA.v1, 0)\n" + TAIL;
+      expect(load_throws(ok).empty(), "kind: bp() into *char and wp() into *i16 load", load_throws(ok));
+      std::string ok2 = DECL + "block ALPHA.b0\n  GAMMA.a1 = ALPHA.v2\n  GAMMA.a2 = ALPHA.v3\n" + TAIL;
+      expect(load_throws(ok2).empty(), "kind: pointer cells of the matching kinds load (pointee width is advisory)", load_throws(ok2));
+      std::string unk = DECL + "block ALPHA.b0\n  GAMMA.a1 = 0x70000400\n  GAMMA.a2 = M32[wp(ALPHA.v1, 0)]\n" + TAIL;
+      expect(load_throws(unk).empty(), "kind: a constant / a memory read are of unknowable kind and are NOT checked (the spec says so)", load_throws(unk));
+      std::string earlier = DECL + "block ALPHA.b2\n  GAMMA.a1 = wp(ALPHA.v1, 0)\n  goto [ALPHA.b0] 0\n\nblock ALPHA.b0\n  GAMMA.a2 = wp(ALPHA.v1, 0)\n" + std::string(TAIL).replace(TAIL.find("blocks 3"), 8, "blocks 4");
+      expect(load_throws(earlier).empty(), "kind: a write in an EARLIER block is not checked (the check is per calling block; the spec says so)", load_throws(earlier));
+    }
+  }
+
+  // ---- 1c. a003 item 1: a game->game call on a Machine with NO symbol table
+  //          EXECUTES (CallStack::call used to dereference the null table and
+  //          the process died with no diagnostic — P53's 40/40 segfault) ------
+  {
+    IRExec* ir = load_ok("no-symbols program loads", GG_VALUED);
+    if (ir) {
+      IRExec::instance = ir; RIG(r, /*with_symbols=*/false); ir->map_pages(r.memory);
+      std::string got = r.drive(ir->block_address("GAMMA.b0"));
+      expect(got == "Empty call stack", "no-symbols rig: the game->game call runs to the program's ret (no crash, no diagnostic needed)", got);
+      expect(r.memory.read_wide(ir->v_address("GAMMA.v0")) == 42u, "no-symbols rig: the call round-tripped", hex(r.memory.read_wide(ir->v_address("GAMMA.v0"))));
+      IRExec::instance = nullptr; delete ir;
+    }
+  }
 
   // ---- 2. teeth (run) ---------------------------------------------------------
   {

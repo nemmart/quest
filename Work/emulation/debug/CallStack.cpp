@@ -15,8 +15,13 @@ bool CallStack::debug_call_history = false;
 CallStack::CallStack(SymbolTable* symbols, Machine* machine)
   : symbols(symbols), machine(machine) {}
 
+std::string CallStack::sym(int32_t address) const {
+  return symbols ? symbols->name_for_address(address) : std::string("?");
+}
+
 std::string CallStack::location_description(int32_t instruction_address, int32_t symbol_address) {
   char buf[128];
+  if(!symbols) { snprintf(buf, sizeof(buf), "%08X     (no symbol table)", instruction_address); return buf; }
   int32_t first_address = symbols->first_address(instruction_address);
   int32_t last_address = symbols->last_address(symbol_address);
   if(first_address==symbol_address && instruction_address<last_address) {
@@ -33,7 +38,7 @@ std::string CallStack::location_description(int32_t instruction_address, int32_t
 }
 
 void CallStack::call(int32_t entry_address, int32_t return_address, int32_t call_instruction_address, int32_t arguments) {
-  if(debug.count(symbols->name_for_address(entry_address)))
+  if(debug.count(sym(entry_address)))
     machine->debug = true;
 
   Call c;
@@ -50,11 +55,11 @@ void CallStack::augment(int32_t frame_pointer, int32_t local_variables) {
     throw std::runtime_error("Empty call stack");
   Call& c = call_stack.back();
   if(c.local_variables != -1)
-    fprintf(stderr, "CALL HAS ALREADY BEEN AUGMENTED: %s\n", symbols->name_for_address(c.entry_address).c_str());
+    fprintf(stderr, "CALL HAS ALREADY BEEN AUGMENTED: %s\n", sym(c.entry_address).c_str());
   c.frame_pointer = frame_pointer;
   c.local_variables = local_variables;
   if(debug_call_history)
-    printf("Called %s   [%08X]\n", symbols->name_for_address(c.entry_address).c_str(), c.entry_address);
+    printf("Called %s   [%08X]\n", sym(c.entry_address).c_str(), c.entry_address);
 }
 
 void CallStack::native_return(int32_t return_address) {
@@ -81,7 +86,7 @@ void CallStack::call_return(int32_t return_address) {
     printf("call return address; %08X, stack return address: %08X\n", return_address, c.return_address);
     fprintf(stderr, "call return address; %08X, stack return address: %08X\n", return_address, c.return_address);
   }
-  if(debug.count(symbols->name_for_address(c.entry_address)))
+  if(debug.count(sym(c.entry_address)))
     machine->debug = false;
   call_stack.pop_back();
   if(debug_call_history && !call_stack.empty())

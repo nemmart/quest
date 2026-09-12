@@ -884,7 +884,8 @@ void IRExec::load(const std::string& path, const char* addrbook) {
         st.text = t;                              // the callee ENTRY name
         st.ret = place_block(m.substr(4));        // symbolic return label
         st.symbolic_ret = true;
-        naive_calls.push_back({t, st.args, body});   // arity/kind checked at end of load
+        naive_calls.push_back({t, st.args, body});   // arity, arg_count and b0 checked at end of load; the
+                                                   //   argument KIND check runs in the post-pass after the sort
         cur->stmts.push_back(st);
         continue;
       }
@@ -1346,9 +1347,11 @@ void IRExec::load(const std::string& path, const char* addrbook) {
         want++;
       }
     }
-    // ir 8 (§6): a naive call's declared arity and its arguments' pointer
-    // KINDS are checked against the CALLEE's declarations, which is what `a`
-    // cells are for — a compiled callee has no pushmap entry to check against.
+    // ir 8 (§6): a naive call's declared arity is checked against the CALLEE's
+    // declarations, which is what `a` cells are for — a compiled callee has no
+    // pushmap entry to check against. (The arguments' pointer KINDS are checked
+    // in the post-pass below, per block — P54 a003 item 2; this comment used to
+    // claim the kind check lived here while nothing did.)
     for (const NaiveCall& nc : naive_calls) {
       auto it = args_by_entry.find(nc.callee);
       uint32_t have = (it == args_by_entry.end()) ? 0u : uint32_t(it->second.size());
@@ -1385,13 +1388,46 @@ void IRExec::load(const std::string& path, const char* addrbook) {
     if (blocks_[i].start == blocks_[i-1].start)
       refuse("duplicate block");
   // P54: bind every naive call to its callee's entry block and prologue
-  // variant now that all headers are known (the check above guarantees b0).
+  // variant now that all headers are known (the check above guarantees b0),
+  // and run THE ARGUMENT-KIND CHECK (docs/IR.md §5.1/§6; P54 reopening a003
+  // item 2 — specified and commented before it existed). For every pointer
+  // `a` cell of the callee, the LAST write to it in the CALLING BLOCK before
+  // the call must be of the matching KIND when the value's kind is manifest:
+  // wp() is a word pointer, bp() a byte pointer, a pointer cell carries its
+  // declared kind. A value of unknowable kind (a constant, a memory read, a
+  // register) and a write that lives in an earlier block are NOT checked —
+  // the spec says so since this fix, rather than claiming more.
+  auto ptr_kind = [&](const P& e) -> int {          // 0 unknown, 1 word, 2 byte
+    if (!e) return 0;
+    if (e->kind == Expr::WP) return 1;
+    if (e->kind == Expr::BP) return 2;
+    if (e->kind == Expr::VREF && e->vref >= 0 && Var::is_pointer(vars_[size_t(e->vref)].type))
+      return Var::is_byte_pointer(vars_[size_t(e->vref)].type) ? 2 : 1;
+    return 0;
+  };
   for (Block& b : blocks_)
-    for (Stmt& st : b.stmts)
-      if (st.kind == Stmt::CALL && st.symbolic_ret) {
-        st.target = block_by_name_.at(st.text + ".b0");
-        st.callee_wsavr = g_entries.wsavr.at(g_entries.idx.at(st.text));
+    for (size_t i = 0; i < b.stmts.size(); i++) {
+      Stmt& st = b.stmts[i];
+      if (!(st.kind == Stmt::CALL && st.symbolic_ret)) continue;
+      st.target = block_by_name_.at(st.text + ".b0");
+      st.callee_wsavr = g_entries.wsavr.at(g_entries.idx.at(st.text));
+      for (size_t vi = 0; vi < vars_.size(); vi++) {
+        const Var& av = vars_[vi];
+        if (av.cls != VC_ARG || av.entry != st.text || !Var::is_pointer(av.type)) continue;
+        const Stmt* last = nullptr;
+        for (size_t j = 0; j < i; j++)
+          if (b.stmts[j].kind == Stmt::STMT && b.stmts[j].lhs && b.stmts[j].lhs->kind == Expr::VREF &&
+              b.stmts[j].lhs->vref == int32_t(vi))
+            last = &b.stmts[j];
+        if (!last) continue;
+        int want = Var::is_byte_pointer(av.type) ? 2 : 1, got = ptr_kind(last->rhs);
+        if (got && got != want)
+          refuse("call " + st.text + ": argument cell " + av.name + " is a " + (want == 2 ? "BYTE" : "WORD") +
+                 " pointer but the value written to it in " + b.name + " is a " + (got == 2 ? "BYTE" : "WORD") +
+                 " pointer (" + (got == 2 ? "bp()/a *char cell" : "wp()/a word-pointer cell") +
+                 ") — the argument KIND check, docs/IR.md §5.10.6/§6");
       }
+    }
   // F6 fix (user ruling, Aug 29 2026 — Project24 REPORT §10.1, option c):
   // QUEST_INJECT/QUEST_TERMINAL arm a pc that Machine::run_steps tests on
   // ARRIVAL. The emulating master arrives at every instruction pc; an IR
