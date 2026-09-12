@@ -128,7 +128,7 @@ Sorted by height (`--strata`, `--profile`):
 | ALCHEMIST_HOME | game | 3 | ALCHEMIST_HOME, ALCHEMIST_HOME.1@7015CC78 | — | 871 | 199 | 1/1 | 4/8 |
 | CAST | game | 3 | CAST, CAST.1@7016243F, CAST.4@70163682 | CAST.2, CAST.3 | 2534 | 703 | 1/1 | 15/44 |
 | CAVE_ATTACK | game | 3 | CAVE_ATTACK, CAVE_ATTACK.1@701643E0, CAVE_ATTACK.2@70164600 | — | 1503 | 361 | 1/1 | 7/14 |
-| DIED | game | 3 | DIED | — | 495 | 73 | 7/12 | 6/6 |
+| DIED *(see note)* | game | 3 | DIED | — | 495 | 73 | 7/12 | 6/6 |
 | DROP | game | 3 | DROP, DROP.1@70169683 | DROP.2 | 1638 | 437 | 1/2 | 6/14 |
 | FIRE | game | 3 | FIRE, FIRE.1@7016A3BD, FIRE.2@7016A461, FIRE.3@7016A4F8 | — | 1305 | 307 | 1/2 | 7/11 |
 | LOOK | game | 3 | LOOK | — | 127 | 33 | 1/1 | 2/2 |
@@ -672,3 +672,20 @@ goto edges are unresolved.**
     python3 compiler/callgraph.py --unresolved
     python3 compiler/callgraph.py --profile OWNS
     python3 compiler/callgraph.py --coverage ../results/047b-p33b-arena-temps
+
+---
+
+## Note added at integration (a002): DIED is not only the death routine
+
+`DIED` is **"(re)initialise a character and place them in the world"**. It is
+reached from death AND from **first character creation**: START_TURN block
+70178246 prints *"What would you like your character to be — 'W' = wizard,
+'C' = cleric, 'D' = druid, 'F' = fighter 'B' = barbarian"* (literal
+0x7017816B) and calls DIED at 7017868D / 70178801. DIED then reaches
+REPOSITION (70166323) → PICK_X_Y (70176FC7) and PLACE_PLAYER (70176FD1).
+*"Better luck next time!"* is the death branch only.
+
+The name misleads; read the node as *respawn/initialise*. Consequence for
+coverage: **creating a character with unused initials reaches PICK_X_Y,
+REPOSITION, PLACE_PLAYER, DIED and part of START_TURN with no data fixture
+at all** — see `docs/Project47/a002-character-creation-reaches-pick-x-y.md`.

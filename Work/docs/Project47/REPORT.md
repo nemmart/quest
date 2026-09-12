@@ -119,8 +119,17 @@ literal `"This player was previously killed off!"` (0x7015BF25, 38 bytes)
 it. The battery never does: block 7015C323 executes 0×, its skip 7015C322
 11×. So "PICK_X_Y runs when you create a new character" is a login path
 inside QUEST.PR, not a different program, and not an attribution error.
-It also names the cheapest fixture for reaching PICK_X_Y, DIED and
-REPOSITION under L1: one killed-off record in the user data file.
+It also names *a* fixture for reaching PICK_X_Y, DIED and REPOSITION under
+L1: one killed-off record in the user data file.
+
+**AMENDED at integration (a002): that is the RARE route and not the cheapest
+fixture.** The common route is first character creation — START_TURN block
+70178246 prompts for the character type and calls DIED (7017868D / 70178801)
+→ REPOSITION → PICK_X_Y. DIED is "(re)initialise and place a character", not
+death-only. So the fixture is **no fixture**: the driver types unused
+initials and answers one prompt, reaching PICK_X_Y, REPOSITION,
+PLACE_PLAYER, DIED and part of START_TURN. The graph was right throughout;
+only the route chosen for the narrative was the uncommon one.
 
 **F-C. Three non-local gotos land in a sibling piece's addrbook range**
 (DROP.1 → DROP's range, ATTACK.4 → ATTACK.3's, KILL_PLAYER.1/.4 →
