@@ -1,3 +1,27 @@
+> # ⚠ VOID — REFUTED BY P49 (Sep 12 2026)
+>
+> **This document is wrong. Do not use it.** See
+> `docs/Project49/q001-plan-gate.md` §3.2 and `docs/Project49/a001-plan-gate.md`.
+>
+> It claims character creation reaches PICK_X_Y via START_TURN → DIED →
+> REPOSITION → PICK_X_Y. **Both START_TURN→DIED call sites are starvation
+> deaths** — block 7017867E prints "You have died of thirst!" and block
+> 701787F2 prints "You have died of hungar!" — and neither is a creation
+> path. Re-verified by the integrator against the book.
+>
+> Also refuted: the class-prompt block 70178246 already executes in **8 of
+> the 16 legs**, so creation was never a coverage addition; and DIED,
+> PICK_X_Y, REPOSITION and PLACE_PLAYER all sit at **0 blocks executed** in
+> the same green battery.
+>
+> **The error was mine and its shape is worth keeping.** Every individual
+> fact in this document is correct. The class prompt IS in START_TURN and
+> START_TURN DOES call DIED twice. The connection between them was
+> invented — and it is the same error this document was written to correct
+> in P47's F-B, made one message later inside the correction. *A graph plus
+> a plausible story is not a path, and the story is the part that is almost
+> never checked.*
+
 # a002 — F-B amended: the cheap route to PICK_X_Y is CHARACTER CREATION, not a killed-off record
 
 Integrator, Sep 12 2026. Post-merge. **Your graph is unaffected and correct.**

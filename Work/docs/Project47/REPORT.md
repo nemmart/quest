@@ -122,8 +122,7 @@ inside QUEST.PR, not a different program, and not an attribution error.
 It also names *a* fixture for reaching PICK_X_Y, DIED and REPOSITION under
 L1: one killed-off record in the user data file.
 
-**AMENDED at integration (a002): that is the RARE route and not the cheapest
-fixture.** The common route is first character creation — START_TURN block
+**~~AMENDED at integration (a002)~~ — THE AMENDMENT ITSELF IS VOID, refuted by P49 (see `docs/Project49/a001-plan-gate.md`). Both START_TURN→DIED sites are starvation deaths; creation does not reach PICK_X_Y, and the class-prompt block already runs in 8 legs. F-B's original killed-off-flag route is neither confirmed nor refuted and stays open. The struck amendment read:** The common route is first character creation — START_TURN block
 70178246 prompts for the character type and calls DIED (7017868D / 70178801)
 → REPOSITION → PICK_X_Y. DIED is "(re)initialise and place a character", not
 death-only. So the fixture is **no fixture**: the driver types unused

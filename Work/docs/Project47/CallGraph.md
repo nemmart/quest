@@ -675,7 +675,16 @@ goto edges are unresolved.**
 
 ---
 
-## Note added at integration (a002): DIED is not only the death routine
+## ⚠ VOID — Note added at integration (a002), REFUTED by P49
+
+**Everything in this section is wrong; see `docs/Project49/a001-plan-gate.md`.**
+The two START_TURN→DIED sites are starvation deaths ("You have died of
+thirst!", "You have died of hungar!"), not creation. DIED's reading as
+"(re)initialise and place a character" was unsupported and is withdrawn; so
+is the claim that creating a character reaches PICK_X_Y. Kept, struck, for
+the record.
+
+## ~~Note added at integration (a002): DIED is not only the death routine~~
 
 `DIED` is **"(re)initialise a character and place them in the world"**. It is
 reached from death AND from **first character creation**: START_TURN block
