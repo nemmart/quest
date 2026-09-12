@@ -1,0 +1,25 @@
+ir 8
+mode stock
+; F-1 REPRODUCER (P53 q003 / a003).  A known defect against the calling bridge.
+;
+; EXPECTED: the loader accepts this file, and at EXECUTION the executor reports
+;   IRExec: rt_call ?WRITE_SCREEN from a symbolic block needs a symbol table to
+;   resolve the callee (no LCALL word to resolve from) [IR block HIT_ANY_CHAR.b0]
+; which is correct and is docs/Project52/REPORT.md §4 item 2 exactly.
+;
+; DEFECT: the process then SEGFAULTS, after the diagnostic has been printed.
+; The message is right; only the crash after it is wrong.  Recorded because a
+; crash on a diagnostic path is read later as "the IR is broken".
+;
+; Run:
+;   lowerc_rig --program rt_call_symbolic.ir --vmap rt_call_symbolic.vmap \
+;              --addrbook emulation/quest.addrbook
+v HIT_ANY_CHAR.v0 char 4 = "HI  "
+
+block HIT_ANY_CHAR.b0
+  rt_call ?WRITE_SCREEN(0x70000260, wp(HIT_ANY_CHAR.v0, 0)) ret=HIT_ANY_CHAR.b1
+
+block HIT_ANY_CHAR.b1
+  ret
+
+blocks 2

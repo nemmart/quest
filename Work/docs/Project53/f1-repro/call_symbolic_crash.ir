@@ -1,0 +1,37 @@
+ir 8
+mode stock
+; F-1 REPRODUCER, CORRECTED (P53 q004).  100% reproducible: 5 of 5, 40 of 40.
+;
+; A naive game->game `call` out of a symbolic block.  The file LOADS COMPLETELY
+; — all four cells placed, all three blocks placed, the 0x76 pages mapped — and
+; then SEGFAULTS during execution, with NO diagnostic first.
+;
+; Run:
+;   lowerc_rig --program call_symbolic_crash.ir --vmap call_symbolic_crash.vmap \
+;              --addrbook emulation/quest.addrbook
+; Last line of stderr is `Segmentation fault`; exit 139.
+;
+; NOTE ON WHOSE IT IS — I do not claim to know.  The seam is between P48's rig,
+; which builds ONE WSAVS-shaped frame for the top-level routine and leaves the
+; shadow call stack EMPTY (tests/lowerc_rig.cpp:119, :319), and P54's bridge,
+; which on `call` pushes a frame and a call_stack entry.  A rig written for
+; call-free programs meeting a bridge that calls is enough to explain it
+; without either being wrong on its own.
+a FAKE_OCEAN.a1 *i16
+a FAKE_OCEAN.arg_count u16
+a INIT_SCREEN.a1 *i16
+a INIT_SCREEN.arg_count u16
+
+block INIT_SCREEN.b0
+  FAKE_OCEAN.a1 = INIT_SCREEN.a1
+  FAKE_OCEAN.arg_count = 1
+  call FAKE_OCEAN args=1 ret=INIT_SCREEN.b1
+
+block INIT_SCREEN.b1
+  ret
+
+
+block FAKE_OCEAN.b0
+  ret
+
+blocks 3
