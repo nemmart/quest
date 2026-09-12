@@ -123,6 +123,25 @@ PARENT_FRAMES = {
         locals={
             "w13": (13, 16, "LIST_PLAYERS.3@7016F5A2",
                     "XNLDA 1,[ac2+0xD] — compared against PLAYER(i).fm629"),
+        },
+        # P45 taint marker (docs/Salvage.md §3).  Status re-derived by P45
+        # from Disassembled/quest.dis (docs/Project45/verify_frames.py), NOT
+        # relayed from the attic.  LIST_PLAYERS.3 is the only NESTED witness,
+        # but the parent's own body reaches slot 13 twice at 16-bit width —
+        # 7016ECA6 `XNSTA 0,[ac3+0xD]` and 7016ECD7 `XNADI 1,[ac3+0xD]`.
+        # Those PCs sit inside LIST_PLAYERS.1's addrbook range, but they are
+        # PARENT code: the .1 ON-unit is only 7016EC57..7016EC73 (WSAVS 0x09
+        # … I.GOTO) and the parent resumes at 7016EC74 (METHOD §16, the
+        # DROP.1 shape).  Two independent witness classes agree on
+        # displacement and width, so the slot is DERIVED under P41's restated
+        # guard, not single-witness as P41 recorded.
+        _taint={
+            "w13": dict(status="derived", witnesses=3,
+                        independent=["LIST_PLAYERS.3", "LIST_PLAYERS"],
+                        note="P41 recorded single-witness; parent body x2 at "
+                             "7016ECA6/7016ECD7 (in LIST_PLAYERS.1's mis-sized "
+                             "addrbook range) corroborates 16-bit slot 13",
+                        verified="P45 against quest.dis, Sep 12 2026"),
         }),
     "FIRE": dict(
         argc=2,
@@ -153,6 +172,44 @@ PARENT_FRAMES = {
                     "XWSTA 0,[ac3+0xE] — WRITTEN uplevel, and read back at 7016A401; "
                     "also FIRE.3 ×6.  FIRE itself NEVER touches this slot, so only "
                     "the siblings can witness it"),
+        },
+        # P45 taint markers (docs/Salvage.md §3).  Every count below was
+        # RE-DERIVED by P45 from Disassembled/quest.dis with
+        # docs/Project45/verify_frames.py — a linear scan tracking which
+        # accumulator holds the static link (ac1 at entry; XWLDA n,[ac3+0x7FFA]
+        # thereafter) in each child, and every [ac3+d] with ac3 = fp in the
+        # parent's own body — and compared against P41's counts AFTER the
+        # scan.  Zero disagreements with P41; zero disagreements between
+        # witness classes on displacement or width.  A slot is DERIVED when at
+        # least two independent classes of {FIRE.1, FIRE.2, FIRE.3, FIRE's own
+        # body} reach it (P41's restated guard); none is single-witness.
+        # `witnesses` is the total reference count across all classes.
+        _taint={
+            "args.1": dict(status="derived", witnesses=25,
+                           independent=["FIRE.2", "FIRE.3", "FIRE"],
+                           verified="P45 against quest.dis, Sep 12 2026"),
+            "args.2": dict(status="derived", witnesses=3,
+                           independent=["FIRE.3", "FIRE"],
+                           note="FIRE.3 x1 (7016A6C7) + parent body x2 "
+                                "(70169D6B, 7016A098)",
+                           verified="P45 against quest.dis, Sep 12 2026"),
+            "w8":  dict(status="derived", witnesses=20,
+                        independent=["FIRE.3", "FIRE"],
+                        verified="P45 against quest.dis, Sep 12 2026"),
+            "w10": dict(status="derived", witnesses=6,
+                        independent=["FIRE.1", "FIRE.3", "FIRE"],
+                        verified="P45 against quest.dis, Sep 12 2026"),
+            "w12": dict(status="derived", witnesses=12,
+                        independent=["FIRE.2", "FIRE"],
+                        note="no sibling second witness; parent body x10 "
+                             "(XWLDA/XWSTA [ac3+0xC], all 32-bit)",
+                        verified="P45 against quest.dis, Sep 12 2026"),
+            "w14": dict(status="derived", witnesses=9,
+                        independent=["FIRE.1", "FIRE.3"],
+                        note="parent never touches +14; FIRE.1 x3 incl. the "
+                             "XPEF at 7016A3F2 (link loaded via ac2-held fp), "
+                             "FIRE.3 x6 (7016A79B has the link in ac3)",
+                        verified="P45 against quest.dis, Sep 12 2026"),
         }),
 }
 
@@ -359,7 +416,9 @@ def main():
                                  args={str(k): dict(width=s[0], witness=s[1], comment=s[2])
                                        for k, s in v.get("args", {}).items()},
                                  locals={n: dict(slot=s[0], width=s[1], witness=s[2], comment=s[3])
-                                         for n, s in v["locals"].items()})
+                                         for n, s in v["locals"].items()},
+                                 # P45: carry the taint markers through to the .json (a001 Q3)
+                                 **({"_taint": v["_taint"]} if "_taint" in v else {}))
                          for p, v in PARENT_FRAMES.items()},
                  statics={n: dict(addr=a, width=w, comment=c) for n, (a, w, c) in STATICS.items()},
                  direct={p: {n: dict(K=k, width=w, comment=c) for n, (k, w, c) in f.items()} for p, f in DIRECT.items()},

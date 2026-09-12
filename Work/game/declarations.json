@@ -32,6 +32,67 @@
  },
  "frames": {
   "FIRE": {
+   "_taint": {
+    "args.1": {
+     "independent": [
+      "FIRE.2",
+      "FIRE.3",
+      "FIRE"
+     ],
+     "status": "derived",
+     "verified": "P45 against quest.dis, Sep 12 2026",
+     "witnesses": 25
+    },
+    "args.2": {
+     "independent": [
+      "FIRE.3",
+      "FIRE"
+     ],
+     "note": "FIRE.3 x1 (7016A6C7) + parent body x2 (70169D6B, 7016A098)",
+     "status": "derived",
+     "verified": "P45 against quest.dis, Sep 12 2026",
+     "witnesses": 3
+    },
+    "w10": {
+     "independent": [
+      "FIRE.1",
+      "FIRE.3",
+      "FIRE"
+     ],
+     "status": "derived",
+     "verified": "P45 against quest.dis, Sep 12 2026",
+     "witnesses": 6
+    },
+    "w12": {
+     "independent": [
+      "FIRE.2",
+      "FIRE"
+     ],
+     "note": "no sibling second witness; parent body x10 (XWLDA/XWSTA [ac3+0xC], all 32-bit)",
+     "status": "derived",
+     "verified": "P45 against quest.dis, Sep 12 2026",
+     "witnesses": 12
+    },
+    "w14": {
+     "independent": [
+      "FIRE.1",
+      "FIRE.3"
+     ],
+     "note": "parent never touches +14; FIRE.1 x3 incl. the XPEF at 7016A3F2 (link loaded via ac2-held fp), FIRE.3 x6 (7016A79B has the link in ac3)",
+     "status": "derived",
+     "verified": "P45 against quest.dis, Sep 12 2026",
+     "witnesses": 9
+    },
+    "w8": {
+     "independent": [
+      "FIRE.3",
+      "FIRE"
+     ],
+     "status": "derived",
+     "verified": "P45 against quest.dis, Sep 12 2026",
+     "witnesses": 20
+    }
+   },
    "argc": 2,
    "args": {
     "1": {
@@ -73,6 +134,18 @@
    }
   },
   "LIST_PLAYERS": {
+   "_taint": {
+    "w13": {
+     "independent": [
+      "LIST_PLAYERS.3",
+      "LIST_PLAYERS"
+     ],
+     "note": "P41 recorded single-witness; parent body x2 at 7016ECA6/7016ECD7 (in LIST_PLAYERS.1's mis-sized addrbook range) corroborates 16-bit slot 13",
+     "status": "derived",
+     "verified": "P45 against quest.dis, Sep 12 2026",
+     "witnesses": 3
+    }
+   },
    "argc": 0,
    "args": {},
    "locals": {
