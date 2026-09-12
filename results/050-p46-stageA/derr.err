@@ -1313,8 +1313,8 @@ IREC RETURN:
 *** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 547 (addr 0x7018024F)
 *** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 547 (addr 0x7018024F)
 *** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 547 (addr 0x7018024F)
-*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 547 (addr 0x7018024F)
-*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 547 (addr 0x7018024F)
+*** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 548 (addr 0x70180250)
+*** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 548 (addr 0x70180250)
 *** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 548 (addr 0x70180250)
 *** RESERVED ACCESS [QUEST_SERVER]: WRITE player[0] rec 548 (addr 0x70180250)
 *** RESERVED ACCESS [QUEST_SERVER]: READ player[0] rec 548 (addr 0x70180250)
@@ -1668,28 +1668,26 @@ IRExec: first execution of block 701697FD
 IRExec: first execution of block 70169800
 IRExec: first execution of block 70169803
 IRExec: first execution of block 7016980C
+IRExec: first execution of block 7016981B
 IRExec: first execution of block 7016981C
 IRExec: first execution of block 7016982A
 IRExec: first execution of block 7016982B
-IRExec: first execution of block 7016982F
-IRExec: first execution of block 70169832
-IRExec: first execution of block 70169842
-IRExec: first execution of block 70169843
-IRExec: first execution of block 70169851
-IRExec: first execution of block 70169852
-IRExec: first execution of block 70169865
-IRExec: first execution of block 70169870
-IRExec: first execution of block 70169878
+IRExec: first execution of block 70169830
 IRExec: first execution of block 70169935
 IRExec: first execution of block 701697D4
 IRExec: first execution of block 701697DA
-IRExec: first execution of block 7016981B
-IRExec: first execution of block 70169830
 IRExec: first execution of block 701697F1
 IRExec: first execution of block 701697FC
 IRExec: first execution of block 70169801
+IRExec: first execution of block 7016982F
+IRExec: first execution of block 70169832
+IRExec: first execution of block 70169843
+IRExec: first execution of block 70169852
 IRExec: first execution of block 70169864
+IRExec: first execution of block 70169865
 IRExec: first execution of block 7016986F
+IRExec: first execution of block 70169870
+IRExec: first execution of block 70169878
 IRExec: first execution of block 701697DB
 IRExec: first execution of block 70169939
 IRExec: first execution of block 7016E1D6
@@ -1710,12 +1708,12 @@ IRExec: first execution of block 7015C3A4
 IRExec: first execution of block 7015C3AB
 IRExec: first execution of block 7015C3B5
 IRExec: first execution of block 7016B549
+IRExec: first execution of block 70165713
 IRExec: first execution of block 7016B552
+IRExec: first execution of block 70165715
 IRExec: first execution of block 7016B55C
 IRExec: first execution of block 7016B569
 IRExec: first execution of block 7016B56C
-IRExec: first execution of block 70165713
-IRExec: first execution of block 70165715
 IRExec: first execution of block 7016B57A
 IRExec: first execution of block 7016B581
 IRExec: first execution of block 7016B592
@@ -1767,6 +1765,8 @@ IRExec: first execution of block 7016872E
 IRExec: first execution of block 70166B8A
 IRExec: first execution of block 70166B8C
 IRExec: first execution of block 70166B38
+IRExec: first execution of block 7015BD3C
+IRExec: first execution of block 7015BD3F
 IRExec: first execution of block 7015BD52
 IRExec: first execution of block 70166B4C
 IRExec: first execution of block 70166BA1
@@ -1866,13 +1866,6 @@ IRExec: first execution of block 70166D18
 IRExec: first execution of block 70166D1F
 IRExec: first execution of block 70166D2B
 IRExec: first execution of block 70166D30
-IRExec: first execution of block 70166CAC
-IRExec: first execution of block 70166CD1
-IRExec: first execution of block 70166CD7
-IRExec: first execution of block 70166D3A
-IRExec: first execution of block 70166D41
-IRExec: first execution of block 70166D4B
-IRExec: first execution of block 70166D50
 IRExec: first execution of block 70166D12
 IRExec: first execution of block 70166D17
 IRExec: first execution of block 70166CF3
@@ -1905,13 +1898,15 @@ IRExec: first execution of block 7017CDC3
 IRExec: first execution of block 7017CDC7
 IRExec: first execution of block 7017CDCA
 IRExec: first execution of block 7017CDCE
-IRExec: first execution of block 7017CE15
-IRExec: first execution of block 7017CE22
-IRExec: first execution of block 7017CE2C
+IRExec: first execution of block 7017CE16
+IRExec: first execution of string statement assign_varying in block 7017CE16 stmt 0
 IRExec: first execution of block 7017CE3B
 IRExec: first execution of block 7017CE46
 IRExec: first execution of string statement cmp in block 7017CE46 stmt 1
-IRExec: first execution of block 7017CE51
+IRExec: first execution of block 7017CE50
+IRExec: first execution of block 7017CE5A
+IRExec: first execution of block 7017CE64
+IRExec: first execution of string statement assign_fixed in block 7017CE64 stmt 7
 IRExec: first execution of block 7017CEA9
 IRExec: first execution of string statement cmp in block 7017CEA9 stmt 1
 IRExec: first execution of block 7017CEB3
@@ -1929,8 +1924,6 @@ IRExec: first execution of block 7017CF56
 IRExec: first execution of block 7017CF78
 IRExec: first execution of block 7017CF83
 IRExec: first execution of block 7017CF47
-IRExec: first execution of block 7015BD3C
-IRExec: first execution of block 7015BD3F
 IRExec: first execution of block 7015BD3E
 IRExec: first execution of block 7015BD47
 IRExec: first execution of block 7017CF82
@@ -2381,7 +2374,10 @@ IRExec: first execution of block 70168446
 IRExec: first execution of block 70168456
 IRExec: first execution of block 70168471
 IRExec: first execution of block 7016847E
-IRExec: first execution of block 70168481
+IRExec: first execution of block 70168480
+IRExec: first execution of block 7016848A
+IRExec: first execution of block 7016848C
+IRExec: first execution of block 70168499
 IRExec: first execution of block 701684A1
 IRExec: first execution of string statement assign_fixed in block 701684A1 stmt 8
 IRExec: first execution of string statement assign_fixed in block 701684A1 stmt 10
@@ -2442,9 +2438,9 @@ StrHooks: QUEST1/master max_claim s@70167744.1 = 20 bytes (cap 20)
 StrHooks: QUEST1/master max_claim s@70167744.2 = 24 bytes (cap 24)
 StrHooks: QUEST1/master max_claim s@7016DF68.1 = 4 bytes (cap 8192)
 StrHooks: QUEST1/master max_claim s@7016DF68.2 = 4 bytes (cap 8192)
-StrHooks: QUEST1/master bind=4 rebind=108 unmap=3 claim=332 release=112 frame_exit=934 unwind=0 onpop=0 discarded_claims=0 cancelled=0 max_delta=1034
-StrHooks: QUEST2/clone bind=0 rebind=0 unmap=0 claim=0 release=0 frame_exit=768 unwind=0 onpop=0 discarded_claims=0 cancelled=0 max_delta=0
-StrHooks: QUEST_SERVER/solo bind=0 rebind=0 unmap=0 claim=0 release=0 frame_exit=100 unwind=0 onpop=0 discarded_claims=0 cancelled=0 max_delta=0
+StrHooks: QUEST1/master bind=4 rebind=108 unmap=3 claim=332 release=112 frame_exit=927 unwind=0 onpop=0 discarded_claims=0 cancelled=0 max_delta=1034
+StrHooks: QUEST2/clone bind=0 rebind=0 unmap=0 claim=0 release=0 frame_exit=761 unwind=0 onpop=0 discarded_claims=0 cancelled=0 max_delta=0
+StrHooks: QUEST_SERVER/solo bind=0 rebind=0 unmap=0 claim=0 release=0 frame_exit=222 unwind=0 onpop=0 discarded_claims=0 cancelled=0 max_delta=0
 StrHooks: QUEST1/master bind=0 rebind=0 unmap=0 claim=0 release=0 frame_exit=1 unwind=0 onpop=0 discarded_claims=0 cancelled=0 max_delta=0
 StrHooks: QUEST2/clone bind=0 rebind=0 unmap=0 claim=0 release=0 frame_exit=1 unwind=0 onpop=0 discarded_claims=0 cancelled=0 max_delta=0
 RTStubs: rtcov-QUEST1.txt — 1186 of 9828 RT words covered
