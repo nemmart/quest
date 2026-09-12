@@ -141,6 +141,12 @@ problem with current coverage claims.
   passed", and more dangerous, because a real regression will look normal.
   Owed: task 051, refresh the expectations. Must land before any project
   leans on the battery as a gate.
+- **TASK 052 HAS NOT COME BACK.** P46's final battery (`tasks/052-p46-final.sh`,
+  queued on main) has no `results/052-*` directory. **P46's Stage C/D loader
+  and executor changes (~250 lines in IRExec.cpp) have been verified only by
+  its own k1fo leg and the vform self-test, not by the full 16-leg battery.**
+  The merge to main was made on that basis. Read 052 when it lands; if it is
+  red, it is a P46 regression and the branch is still there.
 - **Gen 6.2 checker item**: the deterministic form of the P33-C fix — defer
   a halt to the next pair boundary (today `Lockstep::halting` only guards
   `compare_pair`).

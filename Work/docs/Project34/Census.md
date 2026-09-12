@@ -1,10 +1,13 @@
-> **CAVEAT (added Sep 9 2026, P37/R40)**: this census used per-routine
-> statement counts derived from addrbook ranges. Those counts MIS-SIZE a
-> PL/I multiple-ENTRY pair, because the shared body falls in whichever
-> range contains it — CREATE_MAP 7 vs DISPLAY_MAP 902, TRANSPORT_TERRAK 2
-> vs TRANSPORT_SUNDAR 138. Any figure here that is per-routine and
-> size-dependent should be re-checked against the union of an R40 pair's
-> ranges. See METHOD §16 and compiler/crossings.py.
+> **CAVEAT (P37/R40; widened P39, P45)**: per-routine statement counts here
+> are derived from addrbook ranges. They MIS-SIZE (a) PL/I multiple-ENTRY
+> pairs, because the shared body falls in whichever range contains it —
+> CREATE_MAP 7 vs DISPLAY_MAP 902, TRANSPORT_TERRAK 2 vs TRANSPORT_SUNDAR
+> 138 — and (b) **EVERY parent whose range contains a `nocall` ON-unit**,
+> because the unit's body is branched over and the parent's body resumes
+> inside the unit's range: verified instances READ_IN/READ_IN.1,
+> DROP.1/DROP.2, LIST_PLAYERS/LIST_PLAYERS.1 (`docs/Salvage.md` F10). Any
+> per-routine, size-dependent figure below inherits the error; the
+> whole-book totals do not. See METHOD §16 and compiler/crossings.py.
 
 # Project 34 — the readable layer: census
 
