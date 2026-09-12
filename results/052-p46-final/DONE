@@ -1,0 +1,26 @@
+Marked DONE by the integrator, Sep 12 2026.
+
+The run is GREEN. All 16 legs leg=OK, div=0, blk_mismatch=0; three
+self-tests green with teeth red; VFORM SELFTEST green with the
+broken-allocator build red on the disjointness assertion; ir 7 headers and
+the s@ census exact (236/236/57).
+
+The script's own "TASK 052 RED (3 fails)" comes from three STALE
+expectations inherited from 047b, all predating P33 and none related to
+P46:
+
+  1. line 179  embeds_book want 729 / embeds_stock want 2608
+               actual 557 / 2436 -- and the SAME FILE's P33-B section
+               independently wants 557 and gets it.
+  2. line 212  string_statements want 1593, literals want 857
+               actual 1689 / 871.
+  3. line 221  strings ledger want SE=1593 and SAME/SAMETXT=yes
+               actual SE=1822, SAME=NO, SAMETXT=NO -- this one is
+               STRUCTURALLY stale, not merely retuned: it diffs the ledger
+               against p31.tsv + p32.tsv only and never consults p33.tsv.
+
+Identical three fails appear in results/047b (the accepted reference run)
+and results/050. Fix is owed as task 051.
+
+DONE is written here to stop the retry loop: the runner treats a missing
+DONE as a failure and re-runs up to MAX_ATTEMPTS=3 at ~15 minutes each.
