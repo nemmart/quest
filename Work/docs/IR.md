@@ -1,12 +1,23 @@
 # quest.ir — THE IR SPECIFICATION (consolidated, standalone)
 
-Version: **ir 7** (Project 46, Sep 12 2026 — docs/Project44/DESIGN.md
-§4–§6, docs/Project46/{q001,a001}-plan-gate.md, REPORT.md: declared storage
+Version: **ir 8** (Project 52, Sep 12 2026 — docs/Project52/{PROMPT,
+q001-plan-gate,a001-plan-gate}.md, REPORT.md: THE VARIABLE FORM — a `v`
+name denotes the CELL'S CONTENTS as a C variable does, not its address;
+POINTER VTYPES `*i16 *u16 *i32 *u32 *char *varying n *words n`, one level
+only, word/byte kind enforced and pointee width advisory; ARGUMENT CELLS
+`a <ENTRY>.a<N>`, `a <ENTRY>.arg_count` and `a <ENTRY>.ret`, which make a
+routine's signature DECLARED; INITIALISED `v`s, so a literal the image does
+not already contain can be spelled; `trunc8`; `call`/`rt_call` legal in a
+symbolic block with a SYMBOLIC RETURN LABEL; `wp`/`bp` resolving by operand
+kind; §5.10. The loader refuses `ir 6` and, except as §5.10.9 allows,
+`ir 7`). ir 7 (Project 46, Sep 12 2026 — docs/Project44/DESIGN.md §4–§6,
+docs/Project46/{q001,a001}-plan-gate.md, REPORT.md) was declared storage
 `v` and SYMBOLIC BLOCKS, so that a naive, unplaced program loads and runs
 — `v <ENTRY>.v<k> <type>` declarations placed by the loader at 0x76,
 `block <ENTRY>.b<k>` headers and `goto` labels placed at 0x77, §5.10; plus
-the arena twins respelled `t@<block>.<k>` → `s@<block>.<k>`, §5.9; the
-loader refuses `ir 6`). ir 6 (Project 33-B, Sep 6 2026) was the arena
+the arena twins respelled `t@<block>.<k>` → `s@<block>.<k>`, §5.9. In ir 7
+a `v` name was an ADDRESS CONSTANT; ir 8 reverses that and §5.10.9 says
+what the reversal costs. ir 6 (Project 33-B, Sep 6 2026) was the arena
 twins, `claim` and `release`. ir 5 (Project 31, Sep 6 2026 — located strings: the
 `[@a, n] = piece` / `[@a, n varying] = piece` assignments, `ac1 =
 cmp(piece, piece)` and `words(@d, k) = words(@s, k)`, executed on the
@@ -57,6 +68,10 @@ decode/execute path for instructions, calls, and rets).
 
     v <ENTRY>.v<digits> <vtype>   <- ir 7: a DECLARATION (file level, outside any block;
                                        before the first reference in file order). §5.10
+    v <ENTRY>.v<digits> char <n> = "<text>"      <- ir 8: an INITIALISED v. §5.10.1b
+    a <ENTRY>.a<digits> <vtype>   <- ir 8: an ARGUMENT CELL declaration. §5.10.1c
+    a <ENTRY>.arg_count u16       <- ir 8: the supplied-argument count. §5.10.1c
+    a <ENTRY>.ret <vtype>         <- ir 8: the return cell of a valued routine. §5.10.1d
     block <hex8> seg <hex8>
     <block lines...>
                                   <- blocks separated by BLANK lines
@@ -76,9 +91,10 @@ decode/execute path for instructions, calls, and rets).
   or goto label — a symbolic-only program has no CFG to bind to; a file
   with any numeric block or label still refuses without it (the strict
   surface is unchanged).
-- Names (ir 7): a file that declares a `v` or a symbolic block needs the
-  addrbook for its entry names — QUEST_ADDRESS_BOOK, read by the IR loader
-  for names and file order only (§5.10.2); refuse if unset.
+- Names (ir 7; ir 8 adds `a`): a file that declares a `v`, an `a` cell or a
+  symbolic block needs the addrbook for its entry names —
+  QUEST_ADDRESS_BOOK, read by the IR loader for names and file order only
+  (§5.10.2); refuse if unset.
 - `mode`: `book` declares that decorated-site lowering (§6) is
   present; the loader REFUSES book-mode IR unless QUEST_ADDRESS_BOOK
   and QUEST_PUSH_MAP are set (in a stock run the area pages are not
@@ -103,6 +119,17 @@ addresses; blocks are single-entry, so statements need no identities.
     words(@e, k) = words(@e, k)    STRING STATEMENT: WBLM. §5.8.
     call <tgt> args=<n> marker=<hex8> site=<hex8> ret=<hex8>
                                    Decorated call. TERMINATOR. §6.
+    call <ENTRY> args=<n> ret=<ENTRY>.b<digits>
+                                   ir 8: a NAIVE game->game call from a
+                                   symbolic block. No site/marker (there is
+                                   no LCALL word to validate against); the
+                                   arguments were written into the callee's
+                                   `a` cells by preceding statements.
+                                   TERMINATOR. §5.10.6, §6.
+    rt_call <callee>(<expr>, ...) ret=<ENTRY>.b<digits>
+                                   ir 8: a naive runtime call from a
+                                   symbolic block. Arguments still go on the
+                                   REAL STACK. TERMINATOR. §5.10.6, §6.
     rt_call <callee>(<expr>, ...) site=<hex8>
                                    Runtime call (P28, ir 4). TERMINATOR.
                                    The game→runtime LCALL at `site` (a
@@ -166,10 +193,12 @@ possible — statements are sequence, not identities.
   s == pc & 0xF0000000; no duplicates; excluded blocks (7015BD6B)
   refused. `block <ENTRY>.b<k>` (ir 7): no `seg` (refuse one); the name
   is placed at its 0x77 address (§5.10.3); no duplicates (by name).
-- Symbolic blocks (ir 7) may contain statements, string statements,
-  `assert`, `goto` and `ret` only: an `@addr` instruction, a `call` or
-  an `rt_call` inside one REFUSES (§5.10.5 — a scope boundary, not a
-  design position).
+- Symbolic blocks may contain statements, string statements, `assert`,
+  `goto`, `ret` and (ir 8) `call`/`rt_call` with a SYMBOLIC return label
+  (§5.10.6). An `@addr` instruction inside one still REFUSES: an
+  instruction is fetched from real memory at its own address and a
+  symbolic block has none. ir 7 refused calls too; §5.10.6 says why that
+  was a scope boundary and what lifting it required.
 - Instruction addresses within a block strictly increase.
 - TERMINATOR RULE: the last line of every block is an instruction,
   `call`, `rt_call`, `ret`, or `goto`. (A final instruction's control transfer —
@@ -185,7 +214,7 @@ possible — statements are sequence, not identities.
   (QUEST_SYNC_LIST), not against quest.blocks. A translation that
   removes blocks ships a list without them (BlockSyncDesign.md rules
   1–2), and any IR line naming a delisted pc refuses at load. Symbolic
-  labels (ir 7) are not listed and not counted (§5.10.6).
+  labels (ir 7) are not listed and not counted (§5.10.7).
 
 ### 4a. DERR clusters (Project 27, Sep 5 2026 — docs/Project27/Census.md)
 
@@ -232,6 +261,9 @@ checker; zero effect unset.
 ### 5.1 Grammar
 
     lvalue  := ac0..ac3 | tN | c | ovr | M8[e] | M16[e] | M32[e]
+             | <cell>                            (ir 8: THE VARIABLE FORM — a write of the
+                                                  named cell's CONTENTS, at the declared
+                                                  width. §5.10.4)
                (wfp wsp wsb wsl are grammatically registers but WRITES are
                RESERVED — refused. The RT-call decoration project (P28)
                chose NOT to spell stack writes out: `rt_call` moves wsp
@@ -248,14 +280,17 @@ checker; zero effect unset.
                cmp    == != <s <=s >s >=s <u <=u >u >=u   (exactly one)
                bool   && ||
     prefix  := ~ e (32-bit complement, word)   |   ! e (boolean NOT, 0/1 operand)
+    cell    := <ENTRY>.v<digits> | <ENTRY>.a<digits> | <ENTRY>.arg_count |
+               <ENTRY>.ret       (ir 8: a declared v or argument cell — §5.10)
     primary := acN | tN (N = 1..255) | c | ovr | wfp | wsp | wsb | wsl |
-               <ENTRY>.v<digits>  (ir 7: the placed word ADDRESS of a declared v, a
-                                   constant — §5.10) |
+               <cell>             (ir 8: the cell's CONTENTS, read at the DECLARED
+                                   width and signedness — §5.10.4. In ir 7 this
+                                   spelling was the cell's ADDRESS; §5.10.9) |
                s@<block>.<k>      (a twin's word address, a constant — §5.9) |
                constant (0x… or signed decimal) | byte-pointer literal
                0xW:b (b in {0,1}) | M8[e] | M16[e] | M32[e] | R[e] |
                ind(e) | wp(e, e) | bp(e, e) | lsh(e, amount) | tf(e) |
-               sx16(e) | zx16(e) | zx8(e) | trunc16(e) | ( e )
+               sx16(e) | zx16(e) | zx8(e) | trunc16(e) | trunc8(e) | ( e )
     effop   := add(a, b) | sub(a, b) | mul(a, b) | div(a, b) | cvwn(a) |
                ash(a, amount) | nadd(a, b) | nsub(a, b) | nmul(a, b)
 
@@ -277,6 +312,18 @@ checker; zero effect unset.
     M1 (reserved); a hex constant in [0x76000000, 0x78000000) anywhere
     (ir 7: those addresses are loader-assigned, never authorable — only
     a `v`/`b` NAME denotes one). Anything else unrecognized: refuse.
+
+    REFUSED AT LOAD (ir 8, §5.10): `M8[<word pointer>]`;
+    `M16[<byte pointer>]`; `M32[<byte pointer>]`; `M<n>[<cell that is not
+    a pointer>]`; a bare AGGREGATE cell name (`char`/`varying`/`words`)
+    as a value or an lvalue — it names a region, not a value, and is
+    legal only as the first operand of `wp`/`bp` and as an address in
+    the §5.8 string forms; `**` or a `*` applied to anything but the
+    seven pointee forms of §5.10.1; a cell reference with no
+    declaration, and a declaration after its first reference; an `a`
+    numbering with a hole; a `call`/`rt_call` whose declared arity or
+    whose argument pointer KINDS disagree with the callee's `a` cells;
+    a top-bit-set literal in an ADDRESS position (§5.10.8).
 
     EXECUTOR FAULTS (loud, never a silent value): goto index outside
     [0, count); zero divisor in `/s /u %s %u`; INT_MIN `/s`/`%s` -1;
@@ -331,6 +378,18 @@ says otherwise; signedness is never implicit — it is in the operator
   IR text is greppable against word-addressed dumps and matches the
   dis rendering. Word-pointer constants stay plain hex. Bit-pointer
   literals (M1, future) must NOT overload `:` — see §8.
+- **wp/bp RESOLVE BY OPERAND KIND (ir 8).** A register or any other
+  expression as the base means ITS VALUE plus the displacement — the rule
+  above, unchanged. A `<cell>` name as the base means THE ADDRESS OF THAT
+  CELL plus the displacement. The parser knows which it just consumed, so
+  the choice is STATIC and the executor sees two different nodes and does
+  no kind test at run time. This is a deliberate overload and it is the
+  whole reason ir 8 needs no `&` operator: `wp`/`bp` already carry the
+  machine's word/byte pointer distinction, so `wp(PXY.v3, 0)` is the word
+  address of `v3` and `bp(PXY.v3, 0)` its byte pointer. Note the
+  composition, which reads oddly once and is right: if `v3` is `*i32`,
+  then `PXY.v3` is the pointer VALUE, `M32[PXY.v3]` is the pointee, and
+  `wp(PXY.v3, 0)` is the address of the pointer cell itself.
 - R[e]: hardware indirect resolution of an EA operand — deref the
   wrapped index, then follow bit 31 until clear (executor:
   eagle_resolve_indirect(wrap(e) | 0x80000000), inheriting the depth
@@ -528,6 +587,15 @@ literal without a `0xW:b` constant address, outside the block's segment,
 a `cmp` whose lvalue is not `ac1`; `words()` whose two counts differ
 textually; t-place reads before write anywhere in the operands.
 
+ir 8 NOTE — the `[@0xW:b, "text"]` LITERAL PIECE IS UNCHANGED, and
+deliberately so. Its address is a byte address IN THE IMAGE and its bytes
+are verified against memory; both presume the 1986 compiler put the bytes
+there, which is true of every site in the book and false of every literal a
+compiler of ours emits. A compiled literal is therefore NOT a literal piece:
+it is an INITIALISED `v` (§5.10.1b) read as an ordinary fixed piece,
+`[@bp(<name>, 0), n]`. Image literals keep their verification at full
+strength; nothing here is relaxed to accommodate compiled ones.
+
 EXECUTOR FAULTS (loud): a literal whose bytes differ from the image —
 checked LAZILY, at the FIRST execution of each literal-bearing statement,
 through `Memory::read_byte` (the normal path; a pre-scan would change
@@ -600,12 +668,20 @@ token rename — 236 tokens on 198 statements in each artifact, proven
 token-only by regeneration (docs/Project46/evidence/stageA_rename.txt); the
 loader refuses `ir 6`.
 
-### 5.10 Declared storage `v`, symbolic blocks, the 0x76/0x77 spaces (Project 46, ir 7 — docs/Project44/DESIGN.md §4–§6, docs/Project46/{q001,a001}-plan-gate.md)
+### 5.10 Declared storage, the variable form, symbolic blocks, the 0x76/0x77 spaces (Project 46 ir 7; Project 52 ir 8 — docs/Project44/DESIGN.md §4–§5, docs/Project46/{q001,a001}-plan-gate.md, docs/Project52/{q001,a001}-plan-gate.md)
 
 The point of ir 7: a NAIVE program — a compiler's first output, with no
 allocation model — is loadable and runnable. Its storage is declared
 without an address and its blocks are named without an address; the loader
 places both, in private synthetic spaces where aliasing is impossible.
+
+The point of ir 8: that program is also READABLE, and expressive enough that
+simple C compiles to it. A `v` looks like the variable it is (§5.10.4), a
+pointer is a declared type rather than a spelling convention (§5.10.1a), a
+routine's signature is declared rather than inferred from its call sites
+(§5.10.1c), and a literal the image does not contain can be written down
+(§5.10.1b). The cost is stated in §5.10.9 and accepted: access width and
+signedness now come from the declaration rather than from the statement.
 
 #### 5.10.1 Declarations
 
@@ -616,43 +692,146 @@ places both, in private synthetic spaces where aliasing is impossible.
                                                       ;   (length word at the v's address, data at +1)
             | words <n>                               ; an aggregate the source addresses by offset
                                                       ;   (array, record, bit string): n words, uninterpreted
+            | <ptype>                                 ; ir 8: a pointer — §5.10.1a
     <n>    := a constant 1..32767
 
-A type carries SIZE to the allocator and a WIDTH to the tripwire below; it
-carries no semantics into the grammar — width and sign live in the operator
-(`M16`/`M32`, `sx16`/`zx16`, §5.1), never in the storage, so `i16` and `u16`
-are the same one-word cell and the four scalar names are declaration
-vocabulary for the compiler and the (future) merge/binding transformations.
-Every `v` is FIXED SIZE, because a placed `v` is eventually laid exactly on
-top of the original's frame slot at 0x74 (DESIGN §4.1); an arbitrary-length
-string temporary is a twin `s@b.k` (§5.9), not a `v`, and assigning a twin to
-a `v` truncates or pads through the §5.8 forms.
+A type carries SIZE to the allocator, and since ir 8 it also carries WIDTH,
+SIGNEDNESS and POINTER KIND to the variable form and the tripwire
+(§5.10.4/.5). `i16` and `u16` are still the same one-word cell, but they are
+no longer interchangeable in the text: the declaration is what says whether
+a read sign-extends. Every `v` is FIXED SIZE, because a placed `v` is
+eventually laid exactly on top of the original's frame slot at 0x74 (DESIGN
+§4.1); an arbitrary-length string temporary is a twin `s@b.k` (§5.9), not a
+`v`, and assigning a twin to a `v` truncates or pads through the §5.8 forms.
 
 Rules (loader; violations REFUSE): declared before its first reference, in
 file order (single pass, as t-places); duplicate declaration; a reference
-with no declaration; a `v` line inside a block; `<n>` outside 1..32767.
-Cross-entry references are LEGAL (`QUEST.1.b0` reading `QUEST.v3` is a
-nested procedure reading its parent's local; the game is non-reentrant, so
-every routine's storage exists in exactly one copy — DESIGN §4.1).
+with no declaration; a `v` or `a` line inside a block; `<n>` outside
+1..32767. Cross-entry references are LEGAL (`QUEST.1.b0` reading `QUEST.v3`
+is a nested procedure reading its parent's local; the game is non-reentrant,
+so every routine's storage exists in exactly one copy — DESIGN §4.1). In the
+naive form that is how UPLEVEL access is spelled, and it is free: DESIGN
+§4.1a, and §5.10.8's census of the 41 sites where the book pays for it.
+
+#### 5.10.1a Pointer types (ir 8)
+
+    ptype  := *i16 | *u16 | *i32 | *u32               ; WORD pointers
+            | *char                                   ; BYTE pointer
+            | *varying <n> | *words <n>               ; WORD pointers to an aggregate
+
+**Two words in every case** — the machine has no narrow pointer. **ONE LEVEL
+ONLY**: `**` refuses, and so does `*` on anything but the seven pointee
+forms above. The book's apparent double indirection is an artefact of
+addressing — it indexes by the ADDRESS OF a cell where ir 8 NAMES the cell —
+so our types are one star shallower than the listing suggests. `?READ`'s
+argument 2, a dummy holding a byte pointer, is `*char`, not a
+pointer-to-pointer.
+
+A pointer type carries two properties, and they are not equally binding:
+
+- **KIND (word vs byte) is ENFORCED.** `M8[<word pointer>]` refuses;
+  `M16`/`M32[<byte pointer>]` refuses. The kind also selects the instruction
+  family at codegen: `XPEF` vs `XPEFB`, `XNLDA`/`XWLDA` vs
+  `XLDB`/`WLDB`/`WSTB`.
+- **POINTEE WIDTH is ADVISORY.** `M16` and `M32` on a word pointer are BOTH
+  allowed — a wide is two consecutive words and `XNLDA`/`XWLDA` both take
+  word addresses. The width is carried for the compiler and for `ircmp`, and
+  is never checked.
+
+`*varying <n>` and `*words <n>` exist because the program is full of them:
+28 of the 55 non-argument `R[]` sites in `quest.ir2.book` are a local
+holding the WORD address of a CHAR VARYING, through which the routine writes
+the length word before passing the same pointer as a text argument
+(§5.10.8). Without them the §5.8 tripwire refuses the only workaround, since
+`check_piece` requires a varying piece's address to be a `varying` cell.
+
+#### 5.10.1b Initialised `v` (ir 8)
+
+    decl   += v <ENTRY>.v<digits> char <n> = "<text>"
+
+The bytes are written by the LOADER at placement, escaped exactly as a §5.8
+literal is (printable 0x20..0x7E except `"` `\` `;` literal, everything else
+`\xHH`, `;` mandatory). `<n>` is the declared capacity; the text must be at
+most `<n>` bytes and is blank-padded to `<n>`, as `assign_fixed` pads. Only
+`char <n>` may be initialised; a varying's length word is written by the
+program, not by the declaration.
+
+This exists because **a compiled routine's string literal is nowhere.**
+§5.8's literal piece names a byte address IN THE IMAGE and the executor
+faults if the bytes disagree with memory — rules that are correct for the
+book and inapplicable to anything we generate. An initialised `v` is read as
+an ordinary fixed piece at `bp(<name>, 0)`, so no §5.8 rule is weakened for
+image literals (§5.8, ir 8 NOTE).
+
+Consequence, stated plainly so nobody meets it as a contradiction: **0x76 is
+no longer uninitialised.** §5.10.7's "a `v` read before its first write reads
+zero" holds for every `v` except an initialised one, whose bytes are present
+from load.
+
+#### 5.10.1c Argument cells and `arg_count` (ir 8)
+
+    decl   += a <ENTRY>.a<digits> <vtype>             ; N >= 1
+            | a <ENTRY>.arg_count u16
+
+`a` cells are cells like `v`s — same type system, same placement, same
+tripwire, same variable form. What they add is that a routine's SIGNATURE is
+DECLARED, so the loader can check a call's arity and its argument pointer
+KINDS against the callee rather than against a pushmap entry that a compiled
+routine does not have.
+
+Rules (loader; violations REFUSE): the `a` numbers must be CONTIGUOUS FROM 1
+— a hole means the signature is wrong, which is precisely what these
+declarations exist to catch; otherwise the `v` rules apply unchanged.
+
+`arg_count` is **u16**: it is the LOW WORD of the LCALL marker
+`(psr<<16)|argc` (the addrbook's own layout table). The `psr` half is machine
+state no source construct touches; restoring it is a rewrite's business at
+L2. NOTE for `ircmp`: the book READS that word sign-extended — REFRESH_SCREEN
+block 70176A93, `ac0 = sx16(M16[wp(ac3, -9)])` — and a `u16` cell reads
+zero-extended. `sx16 ≡ zx16` for every argc ≤ 0x7FFF, so nothing behaves
+differently; the difference is textual and is recorded here rather than
+rediscovered at L2.
+
+**One optional-argument mechanism exists in this program and `arg_count` is
+it.** Salvage F5 records two spellings; §5.10.8 shows the second is not an
+optional-argument mechanism at all.
+
+#### 5.10.1d The return cell (ir 8)
+
+    decl   += a <ENTRY>.ret <vtype>                   ; a valued routine only
+
+A value-returning PL/I function on this machine returns by SLOTPATCH: it
+stores its result into the saved-ac0 image of its own frame so that `WRTN`
+restores it — 32-bit at `wp(ac3,-8)`, 16-bit at `wp(ac3,-7)` (Salvage F4;
+the addrbook's `slotpatch` flag marks exactly these 16 entries). `<ENTRY>.ret`
+is the naive form's cell for that value: the callee writes it, the caller
+reads it, and reintroducing the slotpatch is an L2 rewrite like every other.
+
+A declared signature with no return is half a signature, and widening one
+later would touch every call site, so the form is landed now even though no
+routine yet compiled calls a valued game routine. A RUNTIME routine is
+different: it returns in `ac0` by convention (RTConventions.md), which the
+valued-call split of §5.10.6 already covers.
 
 #### 5.10.2 Names
 
-    qualified := <ENTRY> "." ("v" | "b") <digits>
+    qualified := <ENTRY> "." ("v" | "b" | "a") <digits>
+               | <ENTRY> "." ("arg_count" | "ret")          ; ir 8, the two fixed names
     <ENTRY>   := an addrbook entry name (quest.addrbook, QUEST_ADDRESS_BOOK),
                  UPPERCASE, the `@ADDR` suffix DROPPED: QUEST, QUEST.1, FIRE.1
                  (from `FIRE.1@7016A3BD`), ALCHEMIST_HOME, C_A_LISTENER
 
-Parsing splits on the LAST dotted component: `.v<digits>` / `.b<digits>` is
-the local, everything before it is the entry (an entry's own suffix is
-`.<digits>`, never `.v`/`.b`; entries are uppercase, `v`/`b` lowercase, so
-even a routine named `B12` could not collide). The namespace is ALL entry
-lines of the addrbook — the 102 migrated AND the 28 `#`-commented (not
-migrated) ones; a `nocall` ON-unit is still a routine a compiler may emit —
-130 names, unique after the suffix drop. `idx(E)` is the entry's 0-based
-position among those lines in FILE ORDER, which the addrbook's own header
-already freezes ("keep the columns"). REFUSE: a lowercase entry, an entry
-not in the addrbook, `.v`/`.b` without digits, `.x<digits>`, any other
-shape.
+Parsing splits on the LAST dotted component: `.v<digits>` / `.b<digits>` /
+`.a<digits>` / `.arg_count` / `.ret` is the local, everything before it is
+the entry (an entry's own suffix is `.<digits>`, never `.v`/`.b`/`.a`;
+entries are uppercase, the local's first character lowercase, so even a
+routine named `B12` could not collide). The namespace is ALL entry lines of
+the addrbook — the 102 migrated AND the 28 `#`-commented (not migrated)
+ones; a `nocall` ON-unit is still a routine a compiler may emit — 130 names,
+unique after the suffix drop. `idx(E)` is the entry's 0-based position among
+those lines in FILE ORDER, which the addrbook's own header already freezes
+("keep the columns"). REFUSE: a lowercase entry, an entry not in the
+addrbook, `.v`/`.b`/`.a` without digits, `.x<digits>`, any other shape.
 
 #### 5.10.3 Placement (the loader owns it; nothing else does)
 
@@ -661,7 +840,7 @@ shape.
     | 0x70  | original code                     | —                                             |
     | 0x74  | locals and args, per routine      | M4a addrbook                                  |
     | 0x75  | string twins s@<block>.<k>        | quest.arena (§5.9)                            |
-    | 0x76  | UNPLACED v                        | the IR loader, per-entry range, this section  |
+    | 0x76  | UNPLACED v AND `a` cells          | the IR loader, per-entry range, this section  |
     | 0x77  | UNPLACED symbolic blocks          | the IR loader, per-entry range, this section  |
 
 Per-entry reserved range in each space: 0x10000 words (130 × 0x10000 =
@@ -675,7 +854,11 @@ per routine is ample).
   refused at end if any label was never defined by a header.
 - A `v` is allocated SEQUENTIALLY within `0x76000000 + idx(E)·0x10000`, in
   declaration order, by its size in words; overflowing the entry's range
-  refuses. Every `v` gets its own private slot: with no placement input,
+  refuses. **ir 8: `a` cells (`a<N>`, `arg_count`, `ret`) are allocated from
+  the same cursor, in the same declaration order** — they are cells like
+  `v`s and there is one allocator, not two. An INITIALISED `v` (§5.10.1b) is
+  allocated identically and its bytes are written into its placed words at
+  load, before the first block runs. Every `v` gets its own private slot: with no placement input,
   two `v`s can never share an address, so the "live ranges disjoint"
   precondition of DESIGN §5.3 is vacuous here. The allocator asserts
   disjointness loudly anyway. NOTE, so nobody reads it as a check that
@@ -696,57 +879,137 @@ per routine is ample).
   for a 0x70 one. 0x4xxxxxxx for blocks was rejected because block
   addresses land in the PC and ring 4 has different protection semantics.
 
-#### 5.10.4 References
+#### 5.10.4 THE VARIABLE FORM (ir 8)
 
-A declared `v` is an ADDRESS CONSTANT in expressions (a001 ruling R3),
-exactly as a twin is (§5.9); the existing forms do the reading, writing,
-byte access and string work:
+**A cell name denotes the CELL'S CONTENTS, as a C variable does.** It is a
+primary and it is an lvalue. Taking its address is `wp`/`bp` (§5.2); reading
+through it, when it is a pointer, is `M8`/`M16`/`M32`.
 
-    ac0 = sx16(M16[QUEST.v0])                    ; an i16 read (sign in the operator)
-    M16[QUEST.v0] = trunc16(ac0)                 ; an i16 write
-    M32[QUEST.v1] = add(M32[QUEST.v1], 1)        ; an effectful store (ruling R6 shape)
+| operation | ir 7 (old) | **ir 8** |
+|---|---|---|
+| read a local | `M32[PXY.v3]` | `PXY.v3` |
+| write a local | `M32[PXY.v3] = e` | `PXY.v3 = e` |
+| address of a local | `PXY.v3` or `wp(PXY.v3,0)` | `wp(PXY.v3, 0)` / `bp(PXY.v3, 0)` |
+| read through a pointer | — | `M32[PXY.a1]` |
+| write through a pointer | — | `M16[PXY.a1] = e` |
+
+**Width and signedness come from the DECLARATION, not from the statement.**
+This is the one place in the spec where that is true, and §5.10.9 says what
+it costs.
+
+| declared | a read is | a write is |
+|---|---|---|
+| `i16` | `sx16(M16[addr])` | `M16[addr] = e & 0xFFFF` |
+| `u16` | `zx16(M16[addr])` | `M16[addr] = e & 0xFFFF` |
+| `i32` `u32` and every `<ptype>` | `M32[addr]` | `M32[addr] = e` |
+
+**Aggregates have no contents.** `char n`, `varying n` and `words n` name a
+region, not a value, so a bare aggregate name as a value or an lvalue
+REFUSES: it is legal only as the first operand of `wp`/`bp` and as an
+address inside the §5.8 string forms. The alternative — letting it silently
+mean "the first word" — is exactly the kind of implicit §5.1 exists to
+prevent.
+
+    QUEST.v0 = 3                                 ; an i16 write (truncating; the decl says so)
+    ac0 = QUEST.v0                               ; an i16 read (sign-extended; the decl says so)
+    QUEST.v1 = add(QUEST.v1, ac0)                ; an effectful store to a u32 cell
     ac2 = bp(QUEST.v2, 0)                        ; byte pointer into a char/varying v
+    M16[QUEST.v6] = trunc16(ac0)                 ; a write THROUGH a *i16 pointer
+    ac1 = M32[QUEST.v7]                          ; a read THROUGH a *i32 pointer
+    QUEST.v7 = wp(QUEST.v1, 0)                   ; point v7 at v1 — no `&` needed
     [@QUEST.v3, 27 varying] = [@s@70166144.3, varying]   ; twin -> v, min(len, 27) truncates
-    M16[QUEST.v4 + 5] = 0                        ; word 5 of a `words 10` aggregate
+    M16[wp(QUEST.v4, 5)] = 0                     ; word 5 of a `words 10` aggregate
+    FAKE_OCEAN.a1 = INIT_SCREEN.a1               ; pass an incoming pointer through
     goto [QUEST.b3, QUEST.b7] (ac0 <s 0)         ; symbolic exits
 
-There is NO bare-name lvalue (`QUEST.v0 = e`) and no bare-name rvalue: a
-typed value form would put signedness into storage against §5.1 and make
-`ircmp` expand names before comparing.
+The last-but-one line is worth reading twice, because it is the clearest
+case of ir 8 reading BETTER than the original: the book spells that
+pass-through `XPEF @[ac3+0xFFF4]`, a push of a slot's contents; ir 8 spells
+it as the pointer copy it is. P53's diff has to account for the difference.
 
-WIDTH TRIPWIRE (a001 ruling R5; loader, REFUSE): a `v` used DIRECTLY as an
-index (`M16[<v>]`, `M32[<v>]`, `M8[<v>]`, `[@<v>, …]`) must fit the access —
-`M32[<v>]` on an i16/u16 refuses (a one-word cell), `M16[<v>]`/`M32[<v>]`
-on a `char` refuses (byte data; use `bp`), `M32[<v>]` on a `varying`
-refuses (its first word is the 16-bit length), `M8[<v>]` on any scalar
-refuses. `words` admits any width. An index of the form `<v> + <expr>` or
-`wp/bp(<v>, d)` is NOT checked (the offset is the source's business). The
-tripwire catches a compiler emitting the wrong width at the IR boundary,
-where it is loud, instead of three projects later as a behavioural
-divergence.
+#### 5.10.5 The tripwire (ir 8; replaces ir 7's width tripwire)
 
-#### 5.10.5 What a symbolic block may contain — and may not, yet
+ir 7's tripwire asked "does this `v` fit a direct `M<n>[v]` index". In ir 8
+`M<n>[v]` no longer means that, so the rule is REPLACED, not extended
+(loader; violations REFUSE):
+
+    M8[<word pointer>]                REFUSE      ; kind
+    M16[<byte pointer>]               REFUSE      ; kind
+    M32[<byte pointer>]               REFUSE      ; kind
+    M8[<byte pointer>]                allowed
+    M16[<word pointer>]               allowed     ; pointee width is ADVISORY
+    M32[<word pointer>]               allowed     ; a wide is two consecutive words
+    M<n>[<cell that is not a pointer>]  REFUSE
+    [@<cell>, … varying]              the cell must be `varying n` or `*varying n`
+    [@<cell>, <n>]                     REFUSE — a fixed piece needs a BYTE pointer,
+                                       `[@bp(<cell>, 0), n]`
+
+An index of the form `wp/bp(<cell>, d)` is not width-checked (the offset is
+the source's business), as in ir 7. The tripwire still exists for the reason
+it was landed: it catches a compiler emitting the wrong width or the wrong
+pointer kind AT THE IR BOUNDARY, where it is loud, instead of three projects
+later as a behavioural divergence.
+
+#### 5.10.6 What a symbolic block may contain — and calls out of one (ir 8)
 
 Legal: statements (§5.1), string statements (§5.8, §5.9), `assert`, `goto`
-(any labels), `ret`. REFUSED in ir 7: `@addr` instructions, `call`,
-`rt_call`. The refusal is a SCOPE BOUNDARY, not a design position (a001
-R7): an instruction is fetched from real memory at its own address and a
-`call`/`rt_call` is validated against the LCALL word at a real `site=`
-(§6) — a compiled routine calling `?WRITE_SCREEN` has no site. DESIGN §9.3
-calls runtime calls "free"; that is true of the checker and false of the
-IR (gate finding F7). The calling bridge — a new production with its own
-validation — is P48's, and it stands between "loads and runs" and
-"substitutable". `ret` from a symbolic block runs WRTN with the synthetic
-pc = the block's 0x77 address (abort-message use only, as for 0x70).
+(any labels), `ret`, and **since ir 8 `call` and `rt_call` with a SYMBOLIC
+RETURN LABEL** (§6). Still REFUSED: `@addr` instructions, which are fetched
+from real memory at their own address and so cannot come from a block that
+has none.
 
-#### 5.10.6 Executor and lockstep facts (normative)
+ir 7 refused calls because they are validated against the LCALL word at a
+real `site=`, and a compiled routine calling `?WRITE_SCREEN` has no site
+(P46 gate finding F7; the refusal was recorded then as a SCOPE BOUNDARY, not
+a design position). ir 8 lifts it. The structure already fitted: `call` and
+`rt_call` are TERMINATORS, so a call already ends its block and the
+continuation is already a separate block — at `site+4` for a book call, at
+the symbolic label for a compiled one. The change is a symbolic target
+filling a slot that existed.
+
+**TWO ARGUMENT MECHANISMS, and the difference is not an inconsistency to
+paper over — it reflects which end of the call we control.**
+
+- **`rt_call` arguments go on the REAL STACK, as they always have.** The
+  runtime reads argument *n* at `wsp−2n` from the LCALL marker
+  (`RTBridge::arg_pointer`, hw/RTBridge.cpp:111; §6). Writing them into `a`
+  cells would put them where the callee never looks. So an `rt_call` out of
+  a symbolic block still pushes, right to left, through
+  `Machine::wide_push` — we control the caller only.
+- **game→game arguments go in the callee's `a` CELLS.** The caller writes
+  `<CALLEE>.a1 … <CALLEE>.aN` and `<CALLEE>.arg_count`, then transfers. This
+  is legal only because the game is non-reentrant, and it is the NAIVE form:
+  the original's push-and-prologue machinery is a rewrite to reintroduce at
+  L2, not something the compiler emits (same principle as pure-vs-effectful
+  operators, P48 R2). We control both ends.
+
+**THE VALUED-CALL SPLIT — a subset rule P53 needs stated, not discovered.**
+Because a call is a terminator, **a call cannot sit inside a larger
+expression.** `r = RANDOM_NUMBER$3(…)` is a call terminating one block and
+`r = ac0` opening the next. A runtime routine returns in `ac0` by
+convention (RTConventions.md); a valued GAME routine returns through
+`<CALLEE>.ret` (§5.10.1d).
+
+`ret` from a symbolic block runs WRTN with the synthetic pc = the block's
+0x77 address (abort-message use only, as for 0x70).
+
+**What ir 8 does NOT do:** it does not make a call from a symbolic block
+EXECUTE. The LCALL replica and the calling bridge are P50/P53's; ir 8 is
+spec and loader. What remains before a call actually runs is listed in
+docs/Project52/REPORT.md.
+
+#### 5.10.7 Executor and lockstep facts (normative)
 
 - 0x76 is ORDINARY MEMORY: the clone process maps, RW / no exec, exactly
   the 0x76 pages the placed `v`s touch (the address-book and arena
   precedents, `os/OSProcess.cpp`); a read or write outside a mapped page
-  faults in `Memory` exactly as any unmapped address would. Nothing is
-  initialised: a `v` read before its first write reads zero (fresh pages),
-  which is a property of the harness, not a promise of the source.
+  faults in `Memory` exactly as any unmapped address would. An uninitialised
+  `v` read before its first write reads zero (fresh pages), which is a
+  property of the harness, not a promise of the source. **ir 8 AMENDMENT: it
+  is no longer true that "nothing is initialised."** An initialised `v`
+  (§5.10.1b) has its bytes written by the loader at placement and is
+  readable before the first block runs. Said here explicitly so that a
+  future reader meets an amendment rather than a contradiction.
 - 0x77 is NEVER MAPPED. Nothing is fetched there: `Machine::run` asks the IR
   executor for the block BEFORE any memory access, so a 0x77 pc is a block
   identity by construction — `goto` returning a 0x77 label re-enters the
@@ -759,41 +1022,165 @@ pc = the block's 0x77 address (abort-message use only, as for 0x70).
   (Mapper.md §1.2). Both are consequences for SUBSTITUTION (P48), which
   will already be delisting the replaced routine's blocks; ir 7 states
   them and does nothing about them. Nothing in the book (`quest.ir2.*`)
-  names a `v` or a symbolic block, so the strict surface is untouched.
+  names a `v`, an `a` cell or a symbolic block — measured: zero `v` and
+  zero `a` declarations in either artifact — so the strict surface is
+  untouched by ir 7 and by ir 8 alike (§5.10.9).
 - Placement diagnostics: `IRExec: v <name> type <t> words <w> at 0x76……`
   and `IRExec: block <name> at 0x77……` at load (one line each, stderr);
   first execution of a symbolic block logs its name with its address.
 
-#### 5.10.7 Worked example (a symbolic-only program; the self-test's shape)
+#### 5.10.8 Dereference, the bit-31 guarantee, and what the book measures (ir 8)
 
-    ir 7
+**The naive form spells a dereference plainly: fetch the pointer, fetch
+through it.** `R[]` stays in the grammar because the book uses it; **the
+compiler never emits it.** `R[e]` means "deref, then follow bit 31 until
+clear" (§5.2), which is equivalent to a plain double fetch ONLY WHEN bit 31
+is clear. Emitting `R[]` naively would assert that invariant at every
+dereference instead of establishing it once.
+
+    M32[M32[a]]  →  M32[R[a]]        is a REWRITE, precondition: bit 31 of
+                                     the fetched word is clear
+
+One rule, ~1,000 applications — the shape DESIGN §7.2a wants.
+
+**THE PRECONDITION IS A PROPERTY OF THE FORMS, not a data assumption.**
+Every address an ir 8 program can produce comes from `wp()`, `bp()`, or a
+cell name. `wp` is `((b+d) & 0x0FFFFFFF) | seg` and `bp` is
+`set_byte_segment(seg & 7, b*2 + d)`, with `seg` = 0x70000000 for every
+block including a 0x77 one (§5.2, §5.10.3); a cell name is a 0x76 constant.
+**Bit 31 is clear by construction in all three**, so the rewrite's
+precondition holds for every address the program itself builds. The loader
+adds a belt: **a top-bit-set literal in an ADDRESS POSITION refuses** — used
+directly as an `M8`/`M16`/`M32`/`R` index, or assigned to a pointer-typed
+cell.
+
+The refusal is SCOPED to address positions deliberately. An unscoped ban on
+top-bit-set literals would refuse the book 660 times (`quest.ir2.book` and
+`quest.ir2.stock` alike): `ac1 = 0xFFFFEEEE ; NLDAI 61166,1;`,
+`ac0 = add(ac0, 0xFFFFDB10) ; WNADI 0,56080;` — sign-extended 16-bit
+immediates, not addresses. In an address position the count is **zero** in
+both artifacts (literal M/R indices with bit 31 set: 0; `wp`/`bp` base
+literals with bit 31 set: 0), so the scoped rule costs the strict surface
+nothing.
+
+**CENSUS 1 — the `R[]` sites of `quest.ir2.book`** (P52 gate §4.1; 1,032
+lines, **1,035 occurrences**; stock 914/917):
+
+| bucket | occurrences | where the value comes from | levels | is the cell written? |
+|---|---|---|---|---|
+| own-frame argument slots, `R[ac3 + -d]` and 2 spelled `R[wp(ac3,-12)]` | 939 | the caller pushed the address | 1 | — |
+| UPLEVEL argument slots, `R[ac2 + -d]` | 41 | the static link, `ac2 = M32[wp(ac3,-6)]`, in a nested `.N@` entry | 1 | — |
+| statics — `R[0x70000212]` ×22, `R[0x70000210]` ×3, `R[0x700007A0]` ×2 | **27** | a pointer word in the shared-data page | 1 | the pointer word, no; its pointee, yes (a counter at 70174209 and 701745E8) |
+| positive frame offsets, 24 plus 4 spelled `R[wp(ac3,d)]` | **28** | the routine computes it itself | 1 | **YES — 42 writes across 11 cells** |
+
+No `R[]` contains another `R[]` in either artifact: **one level, everywhere.**
+
+Three consequences the spec keeps:
+
+1. **The rewrite's precondition is PROVABLE for 1,008 of the 1,035 sites**
+   and an assumption about data for 27. For arguments we pushed the address
+   ourselves; for the 28 positive-offset sites the routine built the address
+   from `wp`/`bp`, so those are provable too. Only the statics are assumed.
+2. **The 41 uplevel sites are a DIFFERENT rewrite.** They are Salvage F2's
+   triple indirection (link → arg slot → datum) in nested entries —
+   ALCHEMIST_HOME.1 14, FIRE.3 14, BOAT.1 5, FIRE.2 3, MOVE_PLAYER.1 3,
+   BARGAIN.1 1, BARGAIN.2 1. In the naive form they are FREE: the child
+   names the parent's `a` cell cross-entry and no link exists (DESIGN
+   §4.1a). Their L2 rewrite reintroduces the static link; it is not the
+   dereference rewrite. So "one rule, many applications" covers 994 sites,
+   not all of them.
+3. **A local's address value IS assigned, and often** — the 28 positive-
+   offset sites are 11 cells written 42 times, twelve of them DIED's slot
+   +8. That is what `<ptype>` and `*varying <n>` are for (§5.10.1a); it is
+   not an edge case.
+
+**CENSUS 2 — the optional-argument mechanism** (P52 gate §4.2). Salvage F5
+records two spellings. **The second is not an optional-argument mechanism.**
+RETURN_MESSAGE @70176FDD tests `M32[wp(ac3,-16)]` for null, and (a) −16 is
+argument 3, which is supplied at BOTH arities, so a null there cannot
+discriminate 3 from 6; (b) the body reads only arguments 1, 2 and 3 and
+never touches 4, 5 or 6, so `mixed:3/6` produces no arity-dependent code at
+all; (c) all five call sites supply a non-null argument 3, so the
+default-message arm (Salvage F11's literal at 0x70000CCD) is dead in this
+program. It is a null-POINTER test on a supplied by-reference argument.
+
+**So exactly one optional-argument mechanism exists, and it is the count
+read:** REFRESH_SCREEN block 70176A93, `ac0 = sx16(M16[wp(ac3, -9)])`,
+tested `== 0`. That is what `arg_count` (§5.10.1c) is for, and there is no
+second case to support. The evidence is one witness; the spec says so
+rather than implying two.
+
+#### 5.10.9 ir 7 → ir 8: what the reversal costs, and which ir 7 files still load
+
+In ir 7 a `v` name was an ADDRESS CONSTANT (P46 a001 R3). ir 8 reverses that.
+The reversal was relitigated and won on the day it was made; DESIGN §4.1c
+records it, and the argument that lost — that a typed value form puts
+signedness into storage — is not wrong, it is **the accepted cost**:
+
+**`ircmp` must consult declarations when comparing against the book.** The
+book spells an access explicitly, `M32[wp(ac3,12)]`; ir 8 spells it
+`PXY.v3`, and only the declaration says how wide and how signed that is.
+Expanding names before comparing is now `ircmp`'s job. This compounds the
+slot-bijection obligation P46 found (DESIGN §5.2): the book spells a local
+register-relative and a placed cell is absolute.
+
+The one observation from the old note that SURVIVES: **no `&` operator is
+needed.** `wp`/`bp` already carry the word/byte distinction (§5.2).
+
+**COMPATIBILITY (loader):** an `ir 7` header is accepted **if and only if
+the file declares no `v` and no `a`**. The construct whose meaning moved is
+then absent, so such a file's meaning is provably unchanged and it loads as
+ir 8 reads it. `quest.ir2.book` and `quest.ir2.stock` declare zero of each
+and therefore keep loading untouched — which is what lets ir 8 land without
+regenerating an artifact. This is a narrow COMPATIBILITY WINDOW, not a
+second dialect: an `ir 7` file that declares a `v` is refused, loudly,
+because its `v`s mean something this loader does not implement. `ir 6` and
+earlier are refused as always.
+
+#### 5.10.10 Worked example (a symbolic-only program; the self-test's shape)
+
+    ir 8
     mode stock
     v QUEST.v0 i16
     v QUEST.v1 u32
     v QUEST.v2 varying 8
+    v QUEST.v3 char 11 = "HELLO WORLD"    ; an initialised v: the loader writes the bytes
+    v QUEST.v4 *u32                       ; a word pointer
+    a QUEST.a1 *i16                       ; argument 1 is a pointer to an i16
+    a QUEST.arg_count u16
 
     block QUEST.b0
-      M16[QUEST.v0] = 3 ; counter
-      M32[QUEST.v1] = 0
+      QUEST.v0 = 3 ; counter
+      QUEST.v1 = 0
+      QUEST.v4 = wp(QUEST.v1, 0)          ; point v4 at v1 — no `&` needed
       goto [QUEST.b1] 0
 
     block QUEST.b1
-      ac0 = sx16(M16[QUEST.v0])
-      M32[QUEST.v1] = add(M32[QUEST.v1], ac0)
-      M16[QUEST.v0] = trunc16(ac0 - 1)
+      ac0 = QUEST.v0                      ; i16: sign-extended, because the DECLARATION says so
+      M32[QUEST.v4] = add(M32[QUEST.v4], ac0)   ; accumulate THROUGH the pointer
+      QUEST.v0 = ac0 - 1                  ; i16 write: truncates, because the declaration says so
       goto [QUEST.b2, QUEST.b1] ((ac0 - 1) >s 0)   ; backward edge; b2 is a forward reference
 
     block QUEST.b2
-      [@QUEST.v2, 8 varying] = [@0x70100000:0, "HELLO WORLD"]   ; truncates to 8
+      [@QUEST.v2, 8 varying] = [@bp(QUEST.v3, 0), 11]   ; the initialised v, truncated to 8
+      M16[QUEST.a1] = trunc16(QUEST.v1)   ; write out through the i16 parameter
       ret
 
     blocks 3
 
 Loaded with `QUEST_ADDRESS_BOOK=quest.addrbook` (QUEST is idx 0): the three
 blocks are 0x77000000, 0x77000001, 0x77000002; v0 at 0x76000000 (1 word),
-v1 at 0x76000001 (2), v2 at 0x76000003 (5). No `blocks` provenance line is
-needed (no numeric label). The loop runs three times; at the `ret` v1 holds
-6 and v2 holds length 8 and `HELLO WO`.
+v1 at 0x76000001 (2), v2 at 0x76000003 (5), v3 at 0x76000008 (6), v4 at
+0x7600000E (2), a1 at 0x76000010 (2), arg_count at 0x76000012 (1) — one
+cursor, declaration order. No `blocks` provenance line is needed (no numeric
+label). The loop runs three times; at the `ret` v1 holds 6, v2 holds length
+8 and `HELLO WO`, and the i16 the caller pointed `a1` at holds 6.
+
+Read `M32[QUEST.v4] = add(M32[QUEST.v4], ac0)` against ir 7's
+`M32[QUEST.v1] = add(M32[QUEST.v1], 1)`: the ir 7 line accumulated INTO v1
+by naming its address; the ir 8 line accumulates into whatever v4 points at,
+and `QUEST.v1 = …` would be the direct write. The two spellings no longer
+mean the same thing, which is the whole of §5.10.9.
 
 ### 5.6 Class cap — what lower.py emits
 
@@ -952,6 +1339,45 @@ a false belief diverges loudly rather than being trusted.
   [no-skip, skip] with the test yielding 1 for skip (the CFG lists the
   two successors ascending in that order); lowered XNDO/XWDO use
   [fall, loop-target]. `goto L` is sugar for `goto [L] 0`.
+- **`call <ENTRY> args=<n> ret=<ENTRY>.b<k>` (ir 8, the NAIVE game→game
+  call).** No `site=`, no `marker=`: there is no LCALL word, so there are no
+  beliefs to cross-validate against one. The beliefs it DOES declare are
+  checked against the CALLEE'S DECLARATIONS (§5.10.1c) — `args=<n>` must
+  equal the callee's `a` count, and each `a` cell of pointer type must have
+  been written by a preceding statement whose value is of the matching
+  KIND. Arguments travel in the callee's `a` cells, written by the caller,
+  with `<CALLEE>.arg_count` set; the exit is `ret=`, an ordinary symbolic
+  label. A valued callee returns through `<CALLEE>.ret` (§5.10.1d). Legal
+  only because the game is non-reentrant.
+- **`rt_call <callee>(e1, …, eN) ret=<ENTRY>.b<k>` (ir 8, the naive runtime
+  call).** Identical to the `site=` form above in everything that concerns
+  the ARGUMENTS — they are evaluated right to left and pushed through
+  `Machine::wide_push`, because the runtime reads argument *n* at `wsp−2n`
+  from the LCALL marker and would never look in an `a` cell. What is absent
+  is the site: the callee symbol is resolved from the runtime symbol table
+  rather than from an LCALL's target, and the exit is `ret=`. The two
+  mechanisms differ because we control both ends of a game→game call and
+  only the caller's end of a runtime call.
+- **`X.CB` and the callee rule (ir 8).** The `rt_call` callee rule is
+  widened: a callee that is not a `?` symbol is accepted when it resolves
+  into the runtime range AND its argument list is EMPTY — the register
+  convention, with the setup as ordinary preceding statements. `X.CB
+  @7017E708` is the case that forced it (Salvage F12: ac2 = the destination
+  word address, ac0 = a byte pointer to the character form, ac1 = its
+  length, then an undecorated `LCALL [0x7017E708],0`); both book sites,
+  7016AA41 and 701703A6, are already block-final with the three register
+  arguments as ordinary statements, so the shape `rt_call` validates fits
+  without a second production. A new production would have duplicated the
+  whole belief-check apparatus for one callee, and `RTConventions.md` is
+  already the home of record for any runtime routine including the
+  `X.*`/`I.*`/`O.*`/`D.*` helpers — the IR follows the same widening rather
+  than treating `?` as a type distinction it was never meant to be. Note
+  that a COMPILED `BITS("001")` also needs the character form to exist,
+  which is §5.10.1b's business, not this rule's.
+- **Not built here.** ir 8 specifies and validates these three forms; it does
+  not make them EXECUTE. The LCALL replica and the calling bridge are
+  P50/P53's. docs/Project52/REPORT.md states what remains before a call
+  actually runs.
 
 Scope by decoration ("no mixed metaphors", user ruling): a decorated
 site's pushes lower ONLY if every decorated push of the site is
@@ -1003,19 +1429,36 @@ WPSH/WPOP instruction pairs) is superseded.
   dispatches IR; a non-lockstep run would silently ignore it). The
   self-tests load a file directly (`IRExec::load_file`) into a scratch
   Machine with `lockstep_role = CLONE` and drive `Machine::run` — the
-  same dispatch path, no lockstep peer (§5.10.6, docs/Project46/REPORT.md).
+  same dispatch path, no lockstep peer (§5.10.7, docs/Project46/REPORT.md).
 - Symbolic blocks (ir 7) execute exactly as numeric ones; `Ctx.seg` is
   0x70000000; nothing is read at the block's address.
+- The VARIABLE FORM (ir 8) costs the executor almost nothing, by design. A
+  cell reference carries its placed address, its width and its signedness
+  from the PARSER, so evaluating one is a `read_word`/`read_wide` plus the
+  declared extension, and assigning one is the matching store; the executor
+  never consults the declaration table. The `wp`/`bp` operand-kind overload
+  (§5.2) is likewise resolved statically, so the two spellings reach the
+  executor as different nodes and no kind test runs per evaluation.
 
 ## 8. Reserved / roadmap
 
-ir 7 reservations (P46): a PLACEMENT INPUT (a `v` → 0x74 address, the
-oracle of DESIGN §5.1) — when it exists, the loader REFUSES two `v`s placed
-at one address unless a liveness proof accompanies it (DESIGN §5.3; that
-proof is a transformation's, not the loader's); `call`/`rt_call`/`@addr`
-inside symbolic blocks (P48's calling bridge, §5.10.5); a symbolic
+ir 8 reservations (P52): the EXECUTION side of a call out of a symbolic
+block — the LCALL replica and the calling bridge (P50/P53); the `L2`
+rewrites ir 8 names and does not perform — `M32[M32[a]] → M32[R[a]]`
+(§5.10.8), the static-link reintroduction for the 41 uplevel sites, the
+slotpatch for `<ENTRY>.ret` (§5.10.1d), and the push-and-prologue machinery
+a game→game call replaces with `a` cells (§5.10.6); a pointer of more than
+one level, if the program ever needs one (it does not: §5.10.1a);
+initialisation of anything but `char <n>` (§5.10.1b).
+
+ir 7 reservations (P46), still open: a PLACEMENT INPUT (a `v` → 0x74
+address, the oracle of DESIGN §5.1) — when it exists, the loader REFUSES two
+`v`s placed at one address unless a liveness proof accompanies it (DESIGN
+§5.3; that proof is a transformation's, not the loader's); a symbolic
 `<ENTRY>.b<k>` for a block that IS in the book (placement of blocks,
-0x77 → 0x70, the block-merge/split transformations of DESIGN §6).
+0x77 → 0x70, the block-merge/split transformations of DESIGN §6). CLOSED by
+ir 8: `call`/`rt_call` inside symbolic blocks (§5.10.6); `@addr` inside one
+stays refused and is not a reservation but a category error.
 
 `save`; M1 (bit addressing, IQ3 — when it lands, bit pointers get the
 function-style literal `bitp(w, n)` (n = 0..31), matching the wp/bp
@@ -1032,6 +1475,49 @@ Flag-conversion (add→+ where flags are provably dead) is parked with
 direction ruled: MathDesign §5.
 
 ## 9. Version history
+
+ir 8 (Project 52, Sep 12 2026 — docs/Project52/{PROMPT,q001-plan-gate,
+a001-plan-gate,REPORT}.md; DESIGN §4.1c, which had argued the other way and
+was superseded the same day). **THE VARIABLE FORM**: a `<cell>` name denotes
+the cell's CONTENTS, at the width and signedness of its DECLARATION, and is
+both a primary and an lvalue; the address is `wp`/`bp`, which resolve by
+operand kind and therefore make an `&` operator unnecessary (§5.2, §5.10.4).
+**POINTER VTYPES** `*i16 *u16 *i32 *u32 *char *varying n *words n`, one
+level only, two words each, KIND enforced and pointee width advisory
+(§5.10.1a); `*varying`/`*words` were added at the gate because 28 of the 55
+non-argument `R[]` sites hold the word address of a CHAR VARYING and the
+§5.8 tripwire closes every workaround. **ARGUMENT CELLS** `a <ENTRY>.a<N>`,
+`a <ENTRY>.arg_count u16` and `a <ENTRY>.ret <vtype>` — cells like `v`s,
+same placement cursor, same tripwire — which make a routine's signature
+DECLARED so a call's arity and pointer kinds are checked against the callee
+instead of against a pushmap entry a compiled routine does not have
+(§5.10.1c/.1d). **INITIALISED `v`s** (`v <E>.v<k> char <n> = "text"`, bytes
+written by the loader at placement, §5.10.1b), because a compiled routine's
+string literal exists nowhere and §5.8's literal piece names an address in
+the IMAGE — the gate's blocking finding, and the reason 0x76 is no longer
+uninitialised. **`trunc8`**, the store-intent twin of `zx8` — a name, not
+new expressiveness; the prompt's claim that the mask set had no byte
+truncate was wrong (`zx8` is `& 0xFF`, §5.3). **`call`/`rt_call` LEGAL IN A
+SYMBOLIC BLOCK** with a symbolic `ret=` label, lifting P46's F7 scope
+boundary, with TWO argument mechanisms stated rather than conflated —
+`a` cells for game→game, the real stack for `rt_call` — and the
+valued-call split recorded as a subset rule (§5.10.6, §6). The `rt_call`
+callee rule widened to admit `X.CB` and the other register-convention
+runtime helpers (§6). The `M32[M32[a]] → M32[R[a]]` REWRITE and its
+precondition, with the bit-31 guarantee derived from `wp`/`bp` rather than
+assumed, and the literal refusal SCOPED to address positions — unscoped it
+would have refused the book 660 times (§5.10.8). Both censuses of record are
+in §5.10.8: 1,035 `R[]` occurrences on 1,032 lines (939 own-frame arguments,
+41 uplevel, 27 statics, 28 positive frame offsets written 42 times), and the
+correction that **only one optional-argument mechanism exists** —
+REFRESH_SCREEN's `arg_count` read; RETURN_MESSAGE's null test is a
+null-pointer test on a supplied argument, so Salvage F5 is corrected. The
+strict surface is untouched: the book names no `v`, no `a` and no symbolic
+block, and §5.10.9's compatibility rule accepts an `ir 7` header exactly
+when the file declares neither, so `quest.ir2.{book,stock}` load unchanged
+and NO ARTIFACT WAS REGENERATED. C-side rename `SUB` → `RANGE_CHECK`
+(`game/quest_rt.h` and `game/routines/*.c`; the IR does not name it — it
+lowers to `assert(e)`).
 
 ir 7 (Project 46, Sep 12 2026 — docs/Project44/DESIGN.md §4–§6,
 docs/Project46/{PROMPT,q001-plan-gate,a001-plan-gate,REPORT}.md). Two

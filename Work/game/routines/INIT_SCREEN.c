@@ -16,23 +16,23 @@
  * The listing, by statement:
  *   7016e105 x := 1;  WBR body                      DO x = 1 TO 9
  *   7016e10a NLDAI 9,0; XNDO 0,50,[x]               step: x++, exit to 7016E13F if x > 9
- *   7016e10f SUB(x,9); temp8 := x*22; y := 1        (check on x ONCE per outer iteration)
+ *   7016e10f RANGE_CHECK(x,9); temp8 := x*22; y := 1        (check on x ONCE per outer iteration)
  *   7016e11e NLDAI 11,1; XNDO 1,29,[y]              step: y++, exit to 7016E13E
- *   7016e123 SUB(*who,10); who*686 + temp8; SUB(y,11); + 2y; + SD_PTR
+ *   7016e123 RANGE_CHECK(*who,10); who*686 + temp8; RANGE_CHECK(y,11); + 2y; + SD_PTR
  *   7016e13a WSUB 1,1; XWSTA 1,[ac2+0x7D9D]         screen[x][y] := 0   (K -611)
  *   7016e13d WBR 7016E11E; 7016e13e WBR 7016E10A    the two loop tails
- *   7016e13f SUB(*who,10); temp8 := who*686; x := PLAYER[who].fm589 (K -589)
+ *   7016e13f RANGE_CHECK(*who,10); temp8 := who*686; x := PLAYER[who].fm589 (K -589)
  *   7016e152 (temp8 reused, no check)  y := PLAYER[who].fm588 (K -588)
  *   7016e15b temp8 := OBJ_PTR->region_count (K 11502)   the DO limit, once
  *   7016e162 k := 1; if !(1 <= temp8) goto 7016E1D0
  *   7016e16b XWDO 0,98,[k]                          step: k++, exit to 7016E1D0
- *   7016e170 SUB(k,100000); temp10 := k*9; rx := REGION[k].x; ry := REGION[k].y
+ *   7016e170 RANGE_CHECK(k,100000); temp10 := k*9; rx := REGION[k].x; ry := REGION[k].y
  *   7016e18b ac2=rx, ac0=x; WSUB 0,2; WSGE 2,2; WNEG 2,2; WSLEI 2,4; WBR step
  *                                                   if ABS(rx - x) > 4 continue
  *   7016e195 same with ry, y, 5                     if ABS(ry - y) > 5 continue
- *   7016e19f SUB(*who,10); who*686
- *   7016e1a8 x-5; rx - (x-5); SUB(.,9); *22; +
- *   7016e1b7 y-6; ry - (y-6); SUB(.,11); *2; +; + SD_PTR
+ *   7016e19f RANGE_CHECK(*who,10); who*686
+ *   7016e1a8 x-5; rx - (x-5); RANGE_CHECK(.,9); *22; +
+ *   7016e1b7 y-6; ry - (y-6); RANGE_CHECK(.,11); *2; +; + SD_PTR
  *   7016e1c7 XWLDA 0,[ac2+0x7D9D]; WSEQ 0,0; WBR step   if screen[..][..] != 0 continue
  *   7016e1cb XWLDA 0,[k]; XWSTA 0,[ac2+0x7D9D]      screen[..][..] := k  (base reused, no check)
  *   7016e1d0 XPEF @[ac3+0xFFF4]; LCALL FAKE_LAND_MASS,1
@@ -56,9 +56,9 @@
  * clear and, after it, the player's x/y.  One 16-bit variable each; the C
  * declares two and reuses them, because the frame has no room for four.
  *
- * SUB() placement (a001 Q-A): the clear loop checks x once per OUTER
+ * RANGE_CHECK() placement (a001 Q-A): the clear loop checks x once per OUTER
  * iteration (7016E10F, before the hoisted x*22) and *who, y per inner
- * iteration — so a bare `SUB(x, 9);` at the outer head and an unchecked x
+ * iteration — so a bare `RANGE_CHECK(x, 9);` at the outer head and an unchecked x
  * at the store.  `x = PLAYER[..].fm589` carries the *who check; the fm588
  * read reuses the base (none).  In the k loop, k is checked once at the
  * rx load and ry reuses k*9; the screen cell is checked on the LOAD (who,
@@ -76,8 +76,8 @@
  * across the fm589/fm588 pair and the load/store pair.
  *
  * What lower_c.py refuses today: the two game calls (passing the by-ref
- * parameter through), and — pending stage 2 — `SUB` in statement position.
- * Everything else (nested for, ABS, SUB, the 2-D screen field, `*who`,
+ * parameter through), and — pending stage 2 — `RANGE_CHECK` in statement position.
+ * Everything else (nested for, ABS, RANGE_CHECK, the 2-D screen field, `*who`,
  * continue) is in the subset.
  *
  * CONFIDENCE: derived (blind x2) — bound pairing, the shared column/row
@@ -94,23 +94,23 @@ void INIT_SCREEN(const int16_t *who)
     int32_t n;                                      /* the DO limit (temp slot 8) */
 
     for (x = 1; x <= 9; x++) {
-        SUB(x, 9);                                  /* checked once per outer iteration */
+        RANGE_CHECK(x, 9);                                  /* checked once per outer iteration */
         for (y = 1; y <= 11; y++)
-            PLAYER[SUB(*who, 10)].screen[x][SUB(y, 11)] = 0;
+            PLAYER[RANGE_CHECK(*who, 10)].screen[x][RANGE_CHECK(y, 11)] = 0;
     }
 
-    x = PLAYER[SUB(*who, 10)].fm589;
+    x = PLAYER[RANGE_CHECK(*who, 10)].fm589;
     y = PLAYER[*who].fm588;                         /* base reused: no check */
 
     n = OBJ_PTR->region_count;
     for (k = 1; k <= n; k++) {
-        rx = REGION[SUB(k, 100000)].x;
+        rx = REGION[RANGE_CHECK(k, 100000)].x;
         ry = REGION[k].y;                           /* k*9 reused: no check */
         if (ABS(rx - x) > 4)
             continue;
         if (ABS(ry - y) > 5)
             continue;
-        if (PLAYER[SUB(*who, 10)].screen[SUB(rx - (x - 5), 9)][SUB(ry - (y - 6), 11)] != 0)
+        if (PLAYER[RANGE_CHECK(*who, 10)].screen[RANGE_CHECK(rx - (x - 5), 9)][RANGE_CHECK(ry - (y - 6), 11)] != 0)
             continue;
         PLAYER[*who].screen[rx - (x - 5)][ry - (y - 6)] = k;   /* base reused: no check */
     }

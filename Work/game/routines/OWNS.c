@@ -13,15 +13,15 @@ int16_t OWNS(const int16_t *p, const int16_t *item)
 {
     int16_t i;
     for (i = 1; i <= 10; i++) {
-        if (PLAYER[SUB(*p, 10)].fm390[SUB(i, 10)] != *item) continue;
+        if (PLAYER[RANGE_CHECK(*p, 10)].fm390[RANGE_CHECK(i, 10)] != *item) continue;
         return -32768;
     }
-    if (*item == 8) return BIT(PLAYER[SUB(*p, 10)].fm591, 15);
-    if (*item == 3) return BIT(PLAYER[SUB(*p, 10)].fm590, 0);
-    if (*item == 106) return BIT(PLAYER[SUB(*p, 10)].fm591, 14);
-    if (*item == 105) return BIT(PLAYER[SUB(*p, 10)].fm590, 5);
-    if (*item == 112) return BIT(PLAYER[SUB(*p, 10)].fm590, 2);
-    if (*item == 111) return BIT(PLAYER[SUB(*p, 10)].fm590, 4);
-    if (*item == 114) return BIT(PLAYER[SUB(*p, 10)].fm590, 3);
+    if (*item == 8) return BIT(PLAYER[RANGE_CHECK(*p, 10)].fm591, 15);
+    if (*item == 3) return BIT(PLAYER[RANGE_CHECK(*p, 10)].fm590, 0);
+    if (*item == 106) return BIT(PLAYER[RANGE_CHECK(*p, 10)].fm591, 14);
+    if (*item == 105) return BIT(PLAYER[RANGE_CHECK(*p, 10)].fm590, 5);
+    if (*item == 112) return BIT(PLAYER[RANGE_CHECK(*p, 10)].fm590, 2);
+    if (*item == 111) return BIT(PLAYER[RANGE_CHECK(*p, 10)].fm590, 4);
+    if (*item == 114) return BIT(PLAYER[RANGE_CHECK(*p, 10)].fm590, 3);
     return 0;
 }

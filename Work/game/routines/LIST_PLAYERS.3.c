@@ -35,9 +35,9 @@ int16_t LIST_PLAYERS_3(UPLINK(LIST_PLAYERS) __up, int16_t *i)
 
 
     for (*i = 1; *i <= SD_PTR->player_count; (*i)++) {
-        if (!BIT(PLAYER[SUB(*i, 10)].fm591, 0)) continue;
-        if (BIT(PLAYER[SUB(*i, 10)].fm591, 1)) continue;
-        if (PLAYER[SUB(*i, 10)].fm629 == UP(LIST_PLAYERS, w13)) continue;
+        if (!BIT(PLAYER[RANGE_CHECK(*i, 10)].fm591, 0)) continue;
+        if (BIT(PLAYER[RANGE_CHECK(*i, 10)].fm591, 1)) continue;
+        if (PLAYER[RANGE_CHECK(*i, 10)].fm629 == UP(LIST_PLAYERS, w13)) continue;
         return -32768;
     }
     return 0;

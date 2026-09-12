@@ -39,10 +39,10 @@
  * the two DO limits, the hoisted 22*i, the cell pointer).  24 = 2 * 0x0C.
  *
  * The listing, by statement:
- *   701697a3 SUB(*who,10); temp8 := who*686; x := PLAYER[who].fm589; y := .fm588
+ *   701697a3 RANGE_CHECK(*who,10); temp8 := who*686; x := PLAYER[who].fm589; y := .fm588
  *   701697bf temp8 := x-4 (wide); m := LANDMASS_COUNT; if m < 1 return   DO m = count TO 1 BY -1
  *   701697d4 step: m := m-1 (NSBI 1); if m < 1 return                  (hand-built descending step)
- *   701697dd SUB(m,1000); temp10 := m*22   (checked ONCE per m)
+ *   701697dd RANGE_CHECK(m,1000); temp10 := m*22   (checked ONCE per m)
  *   701697e9 b0 := (x-4 <= x1); b2 := (x-4 <= x2); b0|b2; MOV.L# SZC   materialised `|`
  *              if !( x-4 <= x1 | x-4 <= x2 ) next m
  *   70169803 b := (x+4 >= x1) [temp14]; | (x+4 >= x2); element ptrs to temps 12/16
@@ -52,12 +52,12 @@
  *   7016987a temp14 := MIN(x2 - (x-4) + 1, 9)                           DO i = .. TO that
  *   7016988e temp16 := x-4; i := MAX(x1 - (x-4), 0) + 1; if i > temp14 next m
  *   701698a8 XNDO 1,138,[i]  exit -> 70169935 (next m)
- *   701698ad SUB(i,9); 22*i (hoisted to temp20 at 701698D6)
+ *   701698ad RANGE_CHECK(i,9); 22*i (hoisted to temp20 at 701698D6)
  *   701698b4 temp16 := MIN(y2 - (y-5) + 1, 11)                          DO j = .. TO that
  *   701698c5 j := MAX(y1 - (y-5), 0) + 1; if j > temp16 next i
  *   701698db XNDO 0,85,[j]  exit -> 70169933 (next i)
- *   701698e0 SUB(*who,10); SUB(j,11); screen[i][j]; WSEQ 0,0; WBR step   if != 0 continue
- *   701698fb SUB(m,1000); SUB(*who,10); SUB(i,9); SUB(j,11)              (ALL FOUR re-checked)
+ *   701698e0 RANGE_CHECK(*who,10); RANGE_CHECK(j,11); screen[i][j]; WSEQ 0,0; WBR step   if != 0 continue
+ *   701698fb RANGE_CHECK(m,1000); RANGE_CHECK(*who,10); RANGE_CHECK(i,9); RANGE_CHECK(j,11)              (ALL FOUR re-checked)
  *   7016992b screen[i][j] := LANDMASS[m].cell (32-bit)
  *   70169935 next m: XJMP 701697D4;  70169939 WRTN
  *
@@ -75,11 +75,11 @@
  *  - the descending loop's two exits (count < 1; m-1 < 1) both go to WRTN,
  *    and every "next m" lands on the decrement at 701697D4.
  *
- * SUB() placement (a001 Q-A): m is checked once per m iteration (701697DD,
- * before the hoisted m*22) -> bare `SUB(m, 1000);` at the m loop head; i once
- * per i iteration (701698AD, hoisted 22*i) -> bare `SUB(i, 9);`.  The load
+ * RANGE_CHECK() placement (a001 Q-A): m is checked once per m iteration (701697DD,
+ * before the hoisted m*22) -> bare `RANGE_CHECK(m, 1000);` at the m loop head; i once
+ * per i iteration (701698AD, hoisted 22*i) -> bare `RANGE_CHECK(i, 9);`.  The load
  * checks *who and j inline.  The STORE re-checks all four (m, who, i, j),
- * so the store carries all four SUBs.
+ * so the store carries all four RANGE_CHECKs.
  *
  * Eager vs branch (a001 Q-D) — the routine that MATERIALISES: all three
  * overlap conditions are `WADC r,r; W<cmp>; WSUB r,r` booleans combined
@@ -100,7 +100,7 @@
  * 22*i, the x-4 / y-5 copies in three widths, the LDAFP spills.
  *
  * What lower_c.py refuses today: the LANDMASS table (not declared), MIN,
- * MAX, `SUB` in statement position.  The descending `for` with `--`, the
+ * MAX, `RANGE_CHECK` in statement position.  The descending `for` with `--`, the
  * `|`/`&` on comparisons and the nested computed-bound loops are in the
  * subset.
  *
@@ -130,11 +130,11 @@ void FAKE_LAND_MASS(const int16_t *who)
     int16_t m;                                      /* slot 6 */
     int16_t n_i, n_j;                               /* the two DO limits (temps 14, 16) */
 
-    x = PLAYER[SUB(*who, 10)].fm589;
+    x = PLAYER[RANGE_CHECK(*who, 10)].fm589;
     y = PLAYER[*who].fm588;                         /* base reused: no check */
 
     for (m = LANDMASS_COUNT; m >= 1; m--) {
-        SUB(m, 1000);                               /* checked once per m */
+        RANGE_CHECK(m, 1000);                               /* checked once per m */
         if (!((x - 4 <= LANDMASS[m].x1) | (x - 4 <= LANDMASS[m].x2)))          /* materialised */
             continue;
         if (!((x + 4 >= LANDMASS[m].x1) | (x + 4 >= LANDMASS[m].x2)))          /* materialised */
@@ -145,12 +145,12 @@ void FAKE_LAND_MASS(const int16_t *who)
 
         n_i = MIN(LANDMASS[m].x2 - (x - 4) + 1, 9);
         for (i = MAX(LANDMASS[m].x1 - (x - 4), 0) + 1; i <= n_i; i++) {
-            SUB(i, 9);                              /* checked once per i */
+            RANGE_CHECK(i, 9);                              /* checked once per i */
             n_j = MIN(LANDMASS[m].y2 - (y - 5) + 1, 11);
             for (j = MAX(LANDMASS[m].y1 - (y - 5), 0) + 1; j <= n_j; j++) {
-                if (PLAYER[SUB(*who, 10)].screen[i][SUB(j, 11)] != 0)
+                if (PLAYER[RANGE_CHECK(*who, 10)].screen[i][RANGE_CHECK(j, 11)] != 0)
                     continue;
-                PLAYER[SUB(*who, 10)].screen[SUB(i, 9)][SUB(j, 11)] = LANDMASS[SUB(m, 1000)].cell;
+                PLAYER[RANGE_CHECK(*who, 10)].screen[RANGE_CHECK(i, 9)][RANGE_CHECK(j, 11)] = LANDMASS[RANGE_CHECK(m, 1000)].cell;
             }
         }
     }

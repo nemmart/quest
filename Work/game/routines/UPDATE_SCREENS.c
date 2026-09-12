@@ -25,7 +25,7 @@
  *    is an independent check on the reading, not a restatement of it.
  *  - i is bounds-checked TWICE (7017d64d, 7017d664) and the store is NOT
  *    checked a third time, because the original reuses the element base it
- *    hoisted into frame slot 6.  The SUB() calls are placed to match: two on
+ *    hoisted into frame slot 6.  The RANGE_CHECK() calls are placed to match: two on
  *    the tests, none on the store.
  *
  * NOT reproduced here, and correctly so: the original hoists `i * 686` into
@@ -42,11 +42,11 @@ void UPDATE_SCREENS(const int16_t *x, const int16_t *y, const int32_t *cell)
 
     n = SD_PTR->player_count;
     for (i = 1; i <= n; i++) {
-        if (ABS(PLAYER[SUB(i, 10)].fm589 - *x) > 4)
+        if (ABS(PLAYER[RANGE_CHECK(i, 10)].fm589 - *x) > 4)
             continue;
-        if (ABS(PLAYER[SUB(i, 10)].fm588 - *y) > 5)
+        if (ABS(PLAYER[RANGE_CHECK(i, 10)].fm588 - *y) > 5)
             continue;
-        PLAYER[i].screen[SUB(*x - (PLAYER[i].fm589 - 5), 9)]
-                        [SUB(*y - (PLAYER[i].fm588 - 6), 11)] = *cell;
+        PLAYER[i].screen[RANGE_CHECK(*x - (PLAYER[i].fm589 - 5), 9)]
+                        [RANGE_CHECK(*y - (PLAYER[i].fm588 - 6), 11)] = *cell;
     }
 }

@@ -17,7 +17,7 @@
  * for; 12-13 are never touched.
  *
  * The listing, by statement:
- *   701699b7 SUB(*who,10); temp8 := who*686; x := PLAYER[who].fm589; y := .fm588 (base reused)
+ *   701699b7 RANGE_CHECK(*who,10); temp8 := who*686; x := PLAYER[who].fm589; y := .fm588 (base reused)
  *   701699d3 x+4; WSLEI 0,16300; WBR L        if x+4 > 16300 goto L      \ short-circuit
  *   701699d9 x-4; WSGTI 0,15349; WBR L        if x-4 <= 15349 goto L     / `||`, branch shape
  *   701699df XJMP 70169A6F                    else skip to the y half
@@ -26,20 +26,20 @@
  *   701699f8 else: lo := MAX(1, 10 - (x+4-16300)); hi := 9 (NADI/NADDI/NSUB; WSGE 0,2; WMOV 2,0)
  *   70169a0a temp8 := hi; i := lo; if !(lo <= hi) goto 70169A6F        DO i = lo TO hi
  *   70169a16 XNDO 0,86,[i]  (limit reloaded from temp8, P4)  exit -> 70169A6F
- *   70169a1b SUB(i,9); temp10 := i*22; j := 1                          DO j = 1 TO 11
+ *   70169a1b RANGE_CHECK(i,9); temp10 := i*22; j := 1                          DO j = 1 TO 11
  *   70169a2a XNDO 1,65,[j]  exit -> 70169A6E (-> 70169A16)
- *   70169a2f SUB(*who,10); SUB(j,11); screen[i][j]; WSEQ 1,1; WBR step  if != 0 continue
- *   70169a4a SUB(*who,10); SUB(i,9); SUB(j,11); screen[i][j] := 11      (ALL re-checked)
+ *   70169a2f RANGE_CHECK(*who,10); RANGE_CHECK(j,11); screen[i][j]; WSEQ 1,1; WBR step  if != 0 continue
+ *   70169a4a RANGE_CHECK(*who,10); RANGE_CHECK(i,9); RANGE_CHECK(j,11); screen[i][j] := 11      (ALL re-checked)
  *   70169a6f y+5; WSLEI 0,16350; WBR M; y-5; WSGTI 0,15219; WBR M; XJMP WRTN
  *   70169a7f M: y-5; WSLEI 0,15219; WBR else
  *   70169a86   lo := 1; hi := MIN(15220 - (y-5), 11)
  *   70169a98 else: lo := MAX(1, 12 - (y+5-16350)); hi := 11
  *   70169aab temp8 := hi; j := lo; if !(lo <= hi) return               DO j = lo TO hi
  *   70169ab6 XNDO 1,85,[j]  exit -> 70169B0E (WRTN)
- *   70169abb SUB(j,11); temp10 := 2*j; i := 1                          DO i = 1 TO 9
+ *   70169abb RANGE_CHECK(j,11); temp10 := 2*j; i := 1                          DO i = 1 TO 9
  *   70169ac7 XNDO 0,67,[i]  exit -> 70169B0D (-> 70169AB6)
- *   70169acc SUB(*who,10); SUB(i,9); screen[i][j]; WSEQ; WBR step      if != 0 continue
- *   70169ae9 SUB(*who,10); SUB(i,9); SUB(j,11); screen[i][j] := 11
+ *   70169acc RANGE_CHECK(*who,10); RANGE_CHECK(i,9); screen[i][j]; WSEQ; WBR step      if != 0 continue
+ *   70169ae9 RANGE_CHECK(*who,10); RANGE_CHECK(i,9); RANGE_CHECK(j,11); screen[i][j] := 11
  *   70169b0e WRTN
  *
  * The checks that constrain the reading:
@@ -63,12 +63,12 @@
  * the C follows the order the machine computes them.  The arithmetic inside
  * them is 16-bit (N-ops: FIXED BIN(15) precision); the C is plain int16.
  *
- * SUB() placement (a001 Q-A): each half checks the OUTER counter once per
+ * RANGE_CHECK() placement (a001 Q-A): each half checks the OUTER counter once per
  * outer iteration (i at 70169A1B, j at 70169ABB, where the row/column term
- * is hoisted) -> a bare SUB statement at the outer head, unchecked in the
+ * is hoisted) -> a bare RANGE_CHECK statement at the outer head, unchecked in the
  * load.  The inner counter and *who are checked in the load; the STORE
  * re-checks all three (who, i, j — the compiler did not reuse the base
- * here, unlike INIT_SCREEN), so the store carries all three SUBs.
+ * here, unlike INIT_SCREEN), so the store carries all three RANGE_CHECKs.
  *
  * Eager vs branch (a001 Q-D): all conditions are branch shapes — the two
  * `||` gates (701699D3..DF, 70169A6F..7D) are skip chains to one stub, the
@@ -79,7 +79,7 @@
  *
  * NOT reproduced: temp 8/10 reuse, the who*686 hoist, the 16-bit N-ops.
  *
- * What lower_c.py refuses today: MIN, MAX, and `SUB` in statement position.
+ * What lower_c.py refuses today: MIN, MAX, and `RANGE_CHECK` in statement position.
  *
  * CONFIDENCE: derived (blind x2) — F18 constants from an independent site,
  * the clip/column inverse relation, frame accounting (10 of 12); not run.
@@ -94,7 +94,7 @@ void FAKE_OCEAN(const int16_t *who)
     int16_t lo, hi;                                 /* slots 6, 7 */
     int16_t n;                                      /* the DO limit (temp slot 8) */
 
-    x = PLAYER[SUB(*who, 10)].fm589;
+    x = PLAYER[RANGE_CHECK(*who, 10)].fm589;
     y = PLAYER[*who].fm588;                         /* base reused: no check */
 
     if (x + 4 > 16300 || x - 4 <= 15349) {          /* branch shape */
@@ -107,11 +107,11 @@ void FAKE_OCEAN(const int16_t *who)
         }
         n = hi;
         for (i = lo; i <= n; i++) {
-            SUB(i, 9);                              /* once per outer iteration */
+            RANGE_CHECK(i, 9);                              /* once per outer iteration */
             for (j = 1; j <= 11; j++) {
-                if (PLAYER[SUB(*who, 10)].screen[i][SUB(j, 11)] != 0)
+                if (PLAYER[RANGE_CHECK(*who, 10)].screen[i][RANGE_CHECK(j, 11)] != 0)
                     continue;
-                PLAYER[SUB(*who, 10)].screen[SUB(i, 9)][SUB(j, 11)] = 11;
+                PLAYER[RANGE_CHECK(*who, 10)].screen[RANGE_CHECK(i, 9)][RANGE_CHECK(j, 11)] = 11;
             }
         }
     }
@@ -126,11 +126,11 @@ void FAKE_OCEAN(const int16_t *who)
         }
         n = hi;
         for (j = lo; j <= n; j++) {
-            SUB(j, 11);                             /* once per outer iteration */
+            RANGE_CHECK(j, 11);                             /* once per outer iteration */
             for (i = 1; i <= 9; i++) {
-                if (PLAYER[SUB(*who, 10)].screen[SUB(i, 9)][j] != 0)
+                if (PLAYER[RANGE_CHECK(*who, 10)].screen[RANGE_CHECK(i, 9)][j] != 0)
                     continue;
-                PLAYER[SUB(*who, 10)].screen[SUB(i, 9)][SUB(j, 11)] = 11;
+                PLAYER[RANGE_CHECK(*who, 10)].screen[RANGE_CHECK(i, 9)][RANGE_CHECK(j, 11)] = 11;
             }
         }
     }

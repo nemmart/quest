@@ -14,7 +14,7 @@
  *     is a native compile error and a translator refusal.
  *   - TMP(e): a by-reference argument that is an expression — the DG
  *     compiler materialises it in a frame temporary (PL/I dummy argument).
- *   - SUB(i, n): PL/I subscript check, i in 1..n, else DERR 17.
+ *   - RANGE_CHECK(i, n): PL/I subscript check, i in 1..n, else DERR 17.
  *   - two-arity game routines: one body with a leading `int arg_count`
  *     (the frame marker word), plus NAME$N call sites.
  */
@@ -33,8 +33,8 @@
 /* PL/I CHAR(n) VARYING: length word + data. Capacity is part of the type. */
 #define VARYING(n) struct { int16_t len; char data[n]; }
 
-/* ---- SUB() traps, natively (P48 a001 R5, Sep 12 2026) --------------------
- * SUB(i, n) used to be the identity `(i)` in both native views, so the
+/* ---- RANGE_CHECK() traps, natively (P48 a001 R5, Sep 12 2026) --------------------
+ * RANGE_CHECK(i, n) used to be the identity `(i)` in both native views, so the
  * `assert(..., "DERR17 file:line")` the compiler emits for a subscript check
  * was compared against nothing by the differential tester (P48 q001 §2.5
  * item 9).  It is now a REAL check in both native views, and the trap is
@@ -60,7 +60,7 @@ static const char *quest_basename(const char *p) {
     return b;
 }
 /* PL/I subscript check: i in 1..n, else DERR 17.  Returns i unchanged. */
-static inline int32_t quest_sub_check(int32_t i, int32_t n, const char *file, int line) {
+static inline int32_t quest_range_check(int32_t i, int32_t n, const char *file, int line) {
     if (i < 1 || i > n) {
         printf("TRAP DERR17 %s:%d\n", quest_basename(file), line);
         fflush(stdout);
@@ -76,7 +76,7 @@ static inline int32_t quest_abs(int32_t v) { return v < 0 ? -v : v; }
   /* ---- C++ view ---- */
   template <typename T, int N> struct array1 {
       T *e;                              /* bound to the world image at run time */
-      T &operator[](int i) { return e[i - 1]; }   /* 1-based; bounds check = SUB() */
+      T &operator[](int i) { return e[i - 1]; }   /* 1-based; bounds check = RANGE_CHECK() */
   };
   #define ARRAY1(T, N) array1<T, N>
   template <typename T> struct based_ptr { T *p; T *operator->() { return p; } };
@@ -93,7 +93,7 @@ static inline int32_t quest_abs(int32_t v) { return v < 0 ? -v : v; }
       operator const void *() { return &u.w; }
   };
   inline tmp_arg TMP(int32_t v) { tmp_arg t; t.u.w = v; return t; }
-  #define SUB(i, n) quest_sub_check((i), (n), __FILE__, __LINE__)
+  #define RANGE_CHECK(i, n) quest_range_check((i), (n), __FILE__, __LINE__)
   inline int32_t ABS(int32_t v) { return quest_abs(v); }     /* PL/I ABS builtin */
   extern "C" {
 #else
@@ -102,10 +102,10 @@ static inline int32_t quest_abs(int32_t v) { return v < 0 ? -v : v; }
   void *TMP(int32_t e);            /* translator: frame temporary of the parameter's width holding e */
   #ifdef __TRANSLATOR__
     int32_t ABS(int32_t v);            /* PL/I ABS builtin: the WSGE/WNEG diamond */
-    int32_t SUB(int32_t i, int32_t n); /* translator: assert(0 < i && i <= n), "DERR 17" */
+    int32_t RANGE_CHECK(int32_t i, int32_t n); /* translator: assert(0 < i && i <= n), "DERR 17" */
   #else
     #define ABS(v)    quest_abs((v))
-    #define SUB(i, n) quest_sub_check((i), (n), __FILE__, __LINE__)
+    #define RANGE_CHECK(i, n) quest_range_check((i), (n), __FILE__, __LINE__)
   #endif
 #endif
 
@@ -189,8 +189,8 @@ static inline int32_t quest_abs(int32_t v) { return v < 0 ? -v : v; }
  * destination is written with the STATEMENT forms below, never as an
  * assignment to BIT():
  *
- *     BIT_SET(PLAYER[SUB(k,10)].fm591, 10);        '1'B  -- a bare WBTO
- *     BIT_CLR(PLAYER[SUB(k,10)].fm591, 10);        '0'B  -- a bare WBTZ
+ *     BIT_SET(PLAYER[RANGE_CHECK(k,10)].fm591, 10);        '1'B  -- a bare WBTO
+ *     BIT_CLR(PLAYER[RANGE_CHECK(k,10)].fm591, 10);        '0'B  -- a bare WBTZ
  *     BIT_PUT(w, n, BIT(v, m));                    variable source -- R29a's
  *                                                  set-then-undo diamond
  *

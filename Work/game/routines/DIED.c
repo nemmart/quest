@@ -15,9 +15,9 @@
 
 void DIED(const int16_t *msg UNUSED, const int16_t *unused UNUSED)
 {
-    if (BIT(PLAYER[SUB(PLAYER_NUM, 10)].fm590, 4)) goto reincarnate;
-    assign_varying(&PLAYER[SUB(PLAYER_NUM, 10)].fm625, 32, "                                ");
-    assign_varying(&PLAYER[SUB(PLAYER_NUM, 10)].fm608, 32, "                                ");
+    if (BIT(PLAYER[RANGE_CHECK(PLAYER_NUM, 10)].fm590, 4)) goto reincarnate;
+    assign_varying(&PLAYER[RANGE_CHECK(PLAYER_NUM, 10)].fm625, 32, "                                ");
+    assign_varying(&PLAYER[RANGE_CHECK(PLAYER_NUM, 10)].fm608, 32, "                                ");
 reincarnate:
     return;
 }

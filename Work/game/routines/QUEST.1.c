@@ -41,10 +41,10 @@ void QUEST_1(UPLINK(QUEST) __up)
 {
     int16_t i;
     for (i = 1; i <= OBJ_PTR->f911504; i++) {
-        if (PLAYER[SUB(PLAYER_NUM, 10)].fm589 != CASTLE[SUB(i, 1000)].fm23) continue;
-        if (PLAYER[SUB(PLAYER_NUM, 10)].fm588 != CASTLE[SUB(i, 1000)].fm22) continue;
-        BIT_SET(PLAYER[SUB(PLAYER_NUM, 10)].fm591, 10);
+        if (PLAYER[RANGE_CHECK(PLAYER_NUM, 10)].fm589 != CASTLE[RANGE_CHECK(i, 1000)].fm23) continue;
+        if (PLAYER[RANGE_CHECK(PLAYER_NUM, 10)].fm588 != CASTLE[RANGE_CHECK(i, 1000)].fm22) continue;
+        BIT_SET(PLAYER[RANGE_CHECK(PLAYER_NUM, 10)].fm591, 10);
         return;
     }
-    BIT_CLR(PLAYER[SUB(PLAYER_NUM, 10)].fm591, 10);
+    BIT_CLR(PLAYER[RANGE_CHECK(PLAYER_NUM, 10)].fm591, 10);
 }

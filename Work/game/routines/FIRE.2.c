@@ -37,12 +37,12 @@ void FIRE_2(UPLINK(FIRE) __up)
 {
     WRITE_SCREEN$2(&OUT_CHAN, "The wizard has been killed!\n");
 
-    PLAYER[SUB(*UPARG(FIRE, 1), 10)].fm378 =
-        cvwn(PLAYER[SUB(*UPARG(FIRE, 1), 10)].fm378
-             + cvwn(PLAYER[SUB(UP(FIRE, w12), 10)].fm376 / 10) + 1);
+    PLAYER[RANGE_CHECK(*UPARG(FIRE, 1), 10)].fm378 =
+        cvwn(PLAYER[RANGE_CHECK(*UPARG(FIRE, 1), 10)].fm378
+             + cvwn(PLAYER[RANGE_CHECK(UP(FIRE, w12), 10)].fm376 / 10) + 1);
 
-    PLAYER[SUB(*UPARG(FIRE, 1), 10)].fm379 =
-        cvwn(PLAYER[SUB(UP(FIRE, w12), 10)].fm89 * 5
-             + (PLAYER[SUB(*UPARG(FIRE, 1), 10)].fm379
+    PLAYER[RANGE_CHECK(*UPARG(FIRE, 1), 10)].fm379 =
+        cvwn(PLAYER[RANGE_CHECK(UP(FIRE, w12), 10)].fm89 * 5
+             + (PLAYER[RANGE_CHECK(*UPARG(FIRE, 1), 10)].fm379
                 + RANDOM_NUMBER$3(TMP(3), TMP(10), &SD_PTR->seed)));
 }

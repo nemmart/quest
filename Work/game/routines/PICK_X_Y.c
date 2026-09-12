@@ -20,7 +20,7 @@
  *   701761f4 LWLDA 2,[SD_PTR]; XPEF [ac2+0x28]; XPEF [ac3+0x6]; XPEF [ac3+0x4]
  *   701761fd LCALL ?RANDOM_NUMBER,3                 (lo, hi, &SD_PTR->seed K=40) -> ac0
  *   70176201 XWSTA 0,[ac3+0x2]                      r (slot 2, 32-bit) := ac0
- *   70176203 WUGTI 0,100000; WSGT 0,0; DERR 17      SUB(r, 100000) — the ONLY check on r
+ *   70176203 WUGTI 0,100000; WSGT 0,0; DERR 17      RANGE_CHECK(r, 100000) — the ONLY check on r
  *   70176208 NLDAI 9,1; WMUL 1,0; XWSTA 0,[ac3+0x4] temp 4 := r*9 (hoisted)
  *   7017620d LWADD 0,[OBJ_PTR]; WMOV 0,2; XNLDA 2,[ac2+0x2CE7]   REGION[r].x (K 11495)
  *   70176213 XWSTA 0,[ac3+0x6]                      temp 6 := element base (hoisted)
@@ -58,9 +58,9 @@
  * where the source is 16-bit: ?RANDOM_NUMBER's parameters are FIXED BIN(31)
  * (recorded in RTConventions.md).  The seed is passed directly.
  *
- * SUB() placement: r is checked once, at 70176203, and every later REGION[r]
+ * RANGE_CHECK() placement: r is checked once, at 70176203, and every later REGION[r]
  * access reuses the hoisted r*9 (temp 4) or element base (temp 6) with no
- * re-check.  Per a001 Q-A the check is a bare `SUB(r, 100000);` statement
+ * re-check.  Per a001 Q-A the check is a bare `RANGE_CHECK(r, 100000);` statement
  * and every subscript below it is unchecked.
  *
  * Eager vs branch (a001 Q-D): every condition in this routine is a
@@ -75,7 +75,7 @@
  * reuse (4/6/8 serve as lo/hi, r*9, base, lo/hi again).
  *
  * What lower_c.py refuses today: the three ?RANDOM_NUMBER calls (value in
- * ac0), TMP(), `&` of a field.  The loop, the REGION accesses, SUB, `/`, the
+ * ac0), TMP(), `&` of a field.  The loop, the REGION accesses, RANGE_CHECK, `/`, the
  * 16-bit stores through parameters and the 4-term `&&` are in the subset.
  *
  * CONFIDENCE: verified (matched 64/64 under the old line, P35) — this
@@ -90,7 +90,7 @@ void PICK_X_Y(int16_t *x, int16_t *y)
 
     for (;;) {
         r = RANDOM_NUMBER$3(TMP(1), TMP(OBJ_PTR->region_count), &SD_PTR->seed);
-        SUB(r, 100000);                             /* checked once; unchecked below */
+        RANGE_CHECK(r, 100000);                             /* checked once; unchecked below */
         if (REGION[r].x == 0)
             continue;
         if (REGION[r].type / 100 + 1 != 3)          /* CVWN after the divide */
