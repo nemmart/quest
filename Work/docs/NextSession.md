@@ -230,6 +230,27 @@ problem with current coverage claims.
   self-tests green with teeth red, vform selftest green with the
   broken-allocator build red, ir 7 headers and the s@ census exact. P46's
   loader work is verified.
+- **THE RUNNER BOX FILLED ITS DISK (Sep 12 2026, task 054).** 93G/98G used,
+  0 available. Cause: **`/tmp/run<NNN>-<leg>` directories are never cleaned
+  up** — every leg of every battery since task 037 was still there. Growth
+  made it acute: play-st legs ran ~460–600M for tasks 037–052, **2.0G for
+  053** and ~720M for 054, because P49's driver fix quadrupled the trace
+  volume. Two fixes owed, for whoever next touches `tasks/` or `bin/`:
+  1. **Clean up leg directories** after a battery, or prune on a retention
+     limit. At 053's rate this refills in four or five batteries. Note P49's
+     new runner also moves old result dirs to
+     `/tmp/quest-results-backup-<name>-<epoch>` instead of `rm -rf` — safer,
+     but a second unbounded leak by design.
+  2. **Check free space before starting a battery.** What made this
+     expensive was not the full disk but that 054 ran FIVE LEGS
+     SUCCESSFULLY and then died mid-battery, leaving a partial result that
+     reads as a real failure.
+  **Symptoms, so it is recognised faster next time:** the runner sits in
+  `sleep 60` doing nothing (its first action is `git fetch`, which needs to
+  write, so it fails and retries silently forever), the box falls behind
+  `origin/main`, results never push, and **the `FAILED` marker is itself
+  truncated** — 054's reads `1055240` with no `exit=` prefix because the
+  write failed, which any tool parsing it would misread.
 - **STANDING MEASUREMENT RULE (P49 q003 §2): a coverage delta smaller than a
   few HUNDRED statements is inside the noise.** Three independent sources of
   run-to-run variation: **world generation is random** (FAKE_LAND_MASS moved
