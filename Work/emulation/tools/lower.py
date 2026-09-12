@@ -1054,7 +1054,7 @@ def fold_condition(guard, guard_block, f, dis, succs, dis_pcs, dis_index):
 # nothing but an LDAFP sits between the first folded pc and the site.
 STR_FOLDABLE = ("NLDAI", "WLDAI", "WMOV", "XNLDA", "XWLDA", "LNLDA", "LWLDA", "XLEF", "LLEF",
                 "XLEFB", "LLEFB", "XLDB", "LLDB", "WLDB", "ZEX", "SEX", "XNSTA", "LNSTA",
-                "LDASP")   # P33-B: the `LDASP r; WADI 2,r` pair folds into `acr = t@b.k` (site = the WADI)
+                "LDASP")   # P33-B: the `LDASP r; WADI 2,r` pair folds into `acr = s@b.k` (site = the WADI)
 
 def parse_strings_sites(path, dis_path, blocks_path):
     """-> {site pc: {"op","block","idiom","verdict","fold":[pcs],"ir":text}}"""
@@ -1128,7 +1128,7 @@ def main():
     ap.add_argument("--strings-sites", help="P31 artifact: docs/Project31/p31.tsv (string_sites.py --p31-tsv)")
     ap.add_argument("--strings-sites32", help="P32 artifact: docs/Project32/p32.tsv (string_sites.py --p32-tsv); slices 4..6")
     ap.add_argument("--strings-sites33", help="P33-B artifact: docs/Project33/p33.tsv (string_sites.py --p33-tsv); slice 7 (the arena twins)")
-    ap.add_argument("--arena", help="P33-B: quest.arena (the twins the ir 6 file names; provenance line)")
+    ap.add_argument("--arena", help="P33-B: quest.arena (the twins the ir 7 file names; provenance line)")
     ap.add_argument("--strings-slice", type=int, default=0,
                     help="P31 (ir 5): 0 = no string statements (ir 5 header only); 1 = literal assignments; "
                          "2 = + the other located assignments; 3 = + cmp and words")
@@ -1182,7 +1182,7 @@ def main():
             die("--strings-slice > 3 needs --strings-sites32")
         if a.strings_sites33:
             if not a.arena:
-                die("--strings-sites33 needs --arena (the ir 6 file names its twins)")
+                die("--strings-sites33 needs --arena (the ir 7 file names its twins)")
             rows33, shas33 = parse_strings_sites(a.strings_sites33, a.dis, a.blocks)
             if shas33.get("arena") != sha256(a.arena):
                 die("--strings-sites33 provenance: arena sha256 differs from %s" % a.arena)
@@ -1192,7 +1192,7 @@ def main():
                 a.str_rows[pc33] = row33
         elif a.strings_slice > 6:
             die("--strings-slice > 6 needs --strings-sites33")
-    out = ["ir 6",
+    out = ["ir 7",
            "mode %s" % ("book" if a.book else "stock"),
            "source  %s sha256=%s" % (a.dis, sha256(a.dis)),
            "blocks  %s sha256=%s" % (a.blocks, sha256(a.blocks)),

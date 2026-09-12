@@ -1,0 +1,18 @@
+# Stage A play leg — k1fo (047b's leg: failopen driver, K=1, book, checker ON, QUEST_ARENA), in-container, Sep 12 2026
+# regenerated ir 7 book: ir 7; 9d31d80967e63767
+div=0
+299793
+Arena: /home/claude/quest/Work/emulation/quest.arena — 57 twins
+IRExec: loaded 13507 IR blocks from /home/claude/quest/Work/emulation/quest.ir2.book
+Arena: mapped 453 page(s) at 75000000 (RW, no exec) for QUEST
+1356
+StrHooks: QUEST1/master bind=7 rebind=126 unmap=6 claim=392 release=133 frame_exit=2620 unwind=1 onpop=1 discarded_claims=0 cancelled=0 max_delta=1034
+StrHooks: QUEST2/clone bind=0 rebind=0 unmap=0 claim=0 release=0 frame_exit=2283 unwind=1 onpop=1 discarded_claims=0 cancelled=0 max_delta=0
+end=clean
+leg exit 0
+blk check: pairs=299793 blk_equal=299793 blk_mismatch=0 k_heartbeats=299189 gaps_over_k=0 max_gap=1 floor=1000 OK
+047b reference (main results/047b-p33b-arena-temps/verdicts.txt):
+k1fo      cfg=book  K=1   div=0   guard=0  liberr_native=1  pairs=323657 blk_equal=323657 blk_mismatch=0 k_heartbeats=323053 gaps_over_k=0 max_gap=1 floor=1000 OK end=clean want=clean,I.STOP leg=OK
+k1fo hooks: StrHooks: QUEST1/master bind=7 rebind=126 unmap=6 claim=392 release=133 frame_exit=2500 unwind=1 onpop=1 discarded_claims=0 cancelled=0 max_delta=1034
+k1fo hooks: StrHooks: QUEST2/clone bind=0 rebind=0 unmap=0 claim=0 release=0 frame_exit=2163 unwind=1 onpop=1 discarded_claims=0 cancelled=0 max_delta=0
+string statements first-executed: 122

@@ -29,7 +29,7 @@
 //     the worker runs master half, clone half, compare, nothing between,
 //     so every event precedes the clone's execution of the same block.
 //
-//  P33-B: the arena has one twin per claim (t@<block>.<k>, quest.arena —
+//  P33-B: the arena has one twin per claim (s@<block>.<k>, quest.arena —
 //  hw/strings/Arena). Claim k of block b binds ITS row at its WMSP hook
 //  (master_addr = wsp_before + 2); there is no rebind between claims any
 //  more — every master temp has its own clone twin, so every residue

@@ -210,14 +210,14 @@ struct Parser {
       if (*s < '0' || *s > '3') bad("bad ac index");
       return node(Expr::AC, nullptr, nullptr, uint32_t(*s++ - '0'));
     }
-    if (*s == 't' && s[1] == '@') {                            // P33-B (ir 6): arena twin t@<block>.<k>
+    if (*s == 's' && s[1] == '@') {                            // P33-B (ir 6) / P46 (ir 7 spelling): arena twin s@<block>.<k>
       s += 2; char* end; unsigned long blk = strtoul(s, &end, 16);
-      if (end == s || *end != '.') bad("twin name must be t@<hex block>.<k>");
+      if (end == s || *end != '.') bad("twin name must be s@<hex block>.<k>");
       s = end + 1; unsigned long k = strtoul(s, &end, 10);
-      if (end == s || k == 0) bad("twin name must be t@<hex block>.<k>");
+      if (end == s || k == 0) bad("twin name must be s@<hex block>.<k>");
       s = end;
       if (isalnum(uchar(*s)) || *s == '_') bad("bad twin name");
-      if (!strings::Arena::loaded()) bad("t@ twin named but QUEST_ARENA is not set");
+      if (!strings::Arena::loaded()) bad("s@ twin named but QUEST_ARENA is not set");
       const strings::ArenaTemp* a = strings::Arena::find(uint32_t(blk), uint32_t(k));
       if (!a) bad("twin not in quest.arena");
       return node(Expr::CONST, nullptr, nullptr, a->addr);   // its word address
@@ -394,9 +394,9 @@ void IRExec::load(const std::string& path) {
     std::string body = line.substr(b0);
 
     if (!got_header) {
-      if (body != "ir 6")
-        refuse("missing/unknown version header (want 'ir 6'; ir 5 files predate the "
-               "arena twins t@<block>.<k>, claim and release (P33-B) — regenerate with tools/lower.py)");
+      if (body != "ir 7")
+        refuse("missing/unknown version header (want 'ir 7'; ir 6 files spell the arena "
+               "twins t@<block>.<k> — ir 7 spells them s@<block>.<k> (P46) — regenerate with tools/lower.py)");
       got_header = true;
       continue;
     }
@@ -435,7 +435,7 @@ void IRExec::load(const std::string& path) {
       } else if (tok == "arena") {
         // P33-B: the twins this file names live in quest.arena; the loaded
         // layout (QUEST_ARENA) must be the one the emitter laid out.
-        if (!strings::Arena::loaded()) refuse("ir 6 file carries an arena line but QUEST_ARENA is not set");
+        if (!strings::Arena::loaded()) refuse("ir 7 file carries an arena line but QUEST_ARENA is not set");
         std::string got = sha256_file(strings::Arena::path());
         if (got != sha) refuse("arena provenance mismatch vs QUEST_ARENA=" + strings::Arena::path());
       } else {
@@ -598,25 +598,25 @@ void IRExec::load(const std::string& path) {
         st.rhs = std::make_shared<Expr>(); st.rhs->kind = Expr::CONST; st.rhs->value = 0;
       }
     } else if (tok == "claim" || tok == "release") {
-      // P33-B (ir 6): `claim t@<b>.<k>, acN` — the master's WMSP: no wsp
+      // P33-B (ir 6): `claim s@<b>.<k>, acN` — the master's WMSP: no wsp
       // move on the clone (its temps live in the arena), the twin's
       // capacity checked against the master's own claim size acN;
-      // `release t@<b>, acN` — the master's STASP N: the frame slot holds
-      // t@b.1 (the clone's LDASP/WADI pair lowered to the twin's address),
-      // so acN == t@b.1 − 2 proves the slot arithmetic agreed, and acN
+      // `release s@<b>, acN` — the master's STASP N: the frame slot holds
+      // s@b.1 (the clone's LDASP/WADI pair lowered to the twin's address),
+      // so acN == s@b.1 − 2 proves the slot arithmetic agreed, and acN
       // takes the value the master's WSBI/STASP left (its restored wsp).
       std::string rest = body.substr(tok.size());
       Parser p(rest.c_str(), cur->start);
       p.ws();
-      if (p.s[0] != 't' || p.s[1] != '@') refuse(tok + " needs a twin name t@<block>[.<k>]: " + body);
+      if (p.s[0] != 's' || p.s[1] != '@') refuse(tok + " needs a twin name s@<block>[.<k>]: " + body);
       const char* q = p.s + 2; char* end; unsigned long blk = strtoul(q, &end, 16);
       if (end == q) refuse(tok + ": bad twin name: " + body);
       unsigned long k = 1;
       if (tok == "claim") {
-        if (*end != '.') refuse("claim needs t@<block>.<k>: " + body);
+        if (*end != '.') refuse("claim needs s@<block>.<k>: " + body);
         q = end + 1; k = strtoul(q, &end, 10);
         if (end == q || k == 0) refuse("claim: bad claim ordinal: " + body);
-      } else if (*end == '.') refuse("release names the block only (t@<block>): " + body);
+      } else if (*end == '.') refuse("release names the block only (s@<block>): " + body);
       p.s = end;
       if (!strings::Arena::loaded()) refuse(tok + ": QUEST_ARENA is not set");
       const strings::ArenaTemp* a = strings::Arena::find(uint32_t(blk), uint32_t(k));

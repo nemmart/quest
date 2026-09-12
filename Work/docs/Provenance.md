@@ -202,3 +202,25 @@ the temp operands are arena constants and would be counted as P32
 candidates); the P31/P32 artifacts are frozen at the P32 table. K=1 gates
 (local, Sep 6, checker ON): book k1fo 0 div / 311,581 pairs; stock 0 div /
 306,900; derr, derr-emu, forced as the P33-B report §5.
+
+## Sep 12 2026 — after P46 Stage A (the `t@` → `s@` rename, ir 7; branch p46-ir7)
+
+Pure token rename of the arena twins, by REGENERATION through the P33-B
+chain (strhooks.py → arena.py → string_sites.py --p33 → lower.py); the
+chain was first run unchanged and reproduced every artifact below
+byte-for-byte (baseline), then the tools were renamed and it was re-run.
+Evidence: docs/Project46/evidence/stageA_rename.txt.
+
+| file | sha256 (first 16) | was | note |
+|---|---|---|---|
+| emulation/quest.ir2.book        | 9d31d80967e63767 | e2f18f144c195da4 | ir 7: 236 `s@` tokens on 198 statements (0 `t@`); `ir 7` line + strings33/arena sha lines are the only other differences |
+| emulation/quest.ir2.stock       | 79fbf07abef83626 | c4340b497ea16eda | same |
+| emulation/quest.arena           | bb779f499772125f | 64ab09d44e343c36 | 57 twins `s@<block>.<k>`; layout unchanged; strhooks sha comment line follows |
+| emulation/quest.strhooks        | f4251e4c8a7c1200 | 9cc8c96cbad2fd28 | one comment line respelled; rows/wmsp/stasp lines byte-identical |
+| docs/Project33/p33.tsv      | 1456de7dd146b46b | a9fb1bbb24784e8c | 503 tokens respelled; header carries the new strhooks/arena sha256 |
+| docs/Project33/p33.ledger   | acb39a97cc041afe | a90dd01a8dbbfd2b | 236 tokens respelled; header as p33.tsv |
+| docs/Project31/strings.ledger | a2cc104ad270d471 | 7aaf0cc8164ed78c | lower.py's ledger at slice 7 (1,822 emitted, 0 refused): tokens respelled, nothing else |
+| emulation/quest.synclist.p27    | af1be42f5831fb2c | — | UNCHANGED (no block added or removed) |
+| Disassembled/*, blocks.split, pushmap, addrbook, tags, p31.tsv, p32.tsv | — | — | as the P33-B table |
+
+Regeneration: the P33-B commands above, unchanged.

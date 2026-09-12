@@ -251,7 +251,7 @@ void StrHooks::report() {
   if(!active) return;
   for(MachineHooks* h : all_) {
     for(const auto& kv : h->max_claim_)
-      fprintf(stderr, "StrHooks: %s max_claim t@%08X.%u = %u bytes (cap %u)\n", h->label().c_str(),
+      fprintf(stderr, "StrHooks: %s max_claim s@%08X.%u = %u bytes (cap %u)\n", h->label().c_str(),
               Arena::temps()[kv.first - 1].block, Arena::temps()[kv.first - 1].claim, kv.second,
               Arena::temps()[kv.first - 1].capacity);
   }
@@ -334,7 +334,7 @@ void MachineHooks::wmsp(uint32_t pc, int32_t ac, int32_t wsp_before, int32_t wsp
     }
     it->second.claims_seen = h->n;
   }
-  // P33-B: claim k binds ITS twin t@b.k (one Mapper row per claim): the
+  // P33-B: claim k binds ITS twin s@b.k (one Mapper row per claim): the
   // master temp k's base <-> the twin's arena address. No rebind between
   // claims; every residue pointer into any temp of the group maps.
   const ArenaTemp* twin = Arena::by_wmsp(pc);
@@ -343,7 +343,7 @@ void MachineHooks::wmsp(uint32_t pc, int32_t ac, int32_t wsp_before, int32_t wsp
   // statement makes the same check on its side; here it is the master's)
   if(static_cast<uint32_t>(4 * ac) > twin->capacity) {
     char buf[200];
-    snprintf(buf, sizeof buf, "WMSP %08X claims %d wides (%d bytes) but t@%08X.%u has capacity %u — quest.arena undersized",
+    snprintf(buf, sizeof buf, "WMSP %08X claims %d wides (%d bytes) but s@%08X.%u has capacity %u — quest.arena undersized",
              pc, ac, 4 * ac, twin->block, twin->claim, twin->capacity);
     hook_abort(&m_, buf);
   }

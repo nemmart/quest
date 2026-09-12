@@ -43,10 +43,10 @@ bool Arena::load_file(const std::string& path, std::string* err) {
     char* e = nullptr;
     a.id = static_cast<uint32_t>(strtoul(t[0].c_str(), &e, 10));
     if(*e || a.id != temps_.size() + 1) return fail("temp: ids must be 1..n in order");
-    // t@<block>.<k>
-    if(t[1].compare(0, 2, "t@") != 0) return fail("temp: name must be t@<block>.<k>");
+    // s@<block>.<k>
+    if(t[1].compare(0, 2, "s@") != 0) return fail("temp: name must be s@<block>.<k>");
     size_t dot = t[1].find('.');
-    if(dot == std::string::npos) return fail("temp: name must be t@<block>.<k>");
+    if(dot == std::string::npos) return fail("temp: name must be s@<block>.<k>");
     a.block = static_cast<uint32_t>(strtoul(t[1].substr(2, dot - 2).c_str(), &e, 16));
     if(*e) return fail("temp: bad block in name");
     a.claim = static_cast<uint32_t>(strtoul(t[1].substr(dot + 1).c_str(), &e, 10));

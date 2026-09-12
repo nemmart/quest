@@ -1,6 +1,11 @@
 # quest.ir — THE IR SPECIFICATION (consolidated, standalone)
 
-Version: **ir 5** (Project 31, Sep 6 2026 — located strings: the
+Version: **ir 7** (Project 46, Sep 12 2026 — Stage A: the arena twins
+respelled `t@<block>.<k>` → `s@<block>.<k>`, a token rename and nothing
+else (§5.9, §9); the loader refuses `ir 6`. Stage B of the same project
+adds the `v` declarations and symbolic blocks and is written into this
+document when it lands). ir 6 (Project 33-B, Sep 6 2026) was the arena
+twins, `claim` and `release`. ir 5 (Project 31, Sep 6 2026 — located strings: the
 `[@a, n] = piece` / `[@a, n varying] = piece` assignments, `ac1 =
 cmp(piece, piece)` and `words(@d, k) = words(@s, k)`, executed on the
 P30 string library; docs/Project31/{Census,REPORT}.md, §5.8). ir 4
@@ -535,34 +540,40 @@ in all, embeds 729 (book) / 2,608 (stock).  Slice 3 reproduces the P31
 artifacts byte for byte; slice 0 the ir 4 artifacts except the version
 line.  The `strings32` provenance line names p32.tsv.
 
-### 5.9 Arena twins, claim, release (Project 33-B, ir 6 — docs/Project29/StringsDesign.md §5.2/§6, docs/Project33/REPORT-B.md)
+### 5.9 Arena twins, claim, release (Project 33-B, ir 6; respelled `s@` in ir 7 — docs/Project29/StringsDesign.md §5.2/§6, docs/Project33/REPORT-B.md)
 
 The master keeps a concatenation group's temporaries on its stack (WMSP
 claims); the clone keeps each temp as a TWIN at a fixed arena address
 (quest.arena, `QUEST_ARENA=<file>`; the segment [0x75000000, 0x75800000)):
 
-    twin    := t@<block>.<k>               ; WORD address of the k-th claim's twin of the group
+    twin    := s@<block>.<k>               ; WORD address of the k-th claim's twin of the group
                                            ;   whose claims live in block <block> (hex8, k >= 1);
-                                           ;   an ordinary constant in expressions: bp(t@b.k, o)
-                                           ;   is its byte pointer, wp(t@b.k, o) a word inside it
-    stmt    := acN = t@<block>.<k>         ; the master's `LDASP r; WADI 2,r` (the temp's base):
+                                           ;   an ordinary constant in expressions: bp(s@b.k, o)
+                                           ;   is its byte pointer, wp(s@b.k, o) a word inside it
+    stmt    := acN = s@<block>.<k>         ; the master's `LDASP r; WADI 2,r` (the temp's base):
                                            ;   every slot store, reload, XLEFB, length-word store,
                                            ;   WSTB and XPEF push downstream then hits the arena
-             | claim t@<block>.<k>, acN    ; the master's WMSP: the clone's wsp does NOT move;
+             | claim s@<block>.<k>, acN    ; the master's WMSP: the clone's wsp does NOT move;
                                            ;   FAULT if 4*acN (bytes) exceeds the twin's capacity
-             | release t@<block>, acN      ; the master's `STASP N` (the group's end): asserts
-                                           ;   acN == t@<block>.1 - 2 (the slot arithmetic agreed),
+             | release s@<block>, acN      ; the master's `STASP N` (the group's end): asserts
+                                           ;   acN == s@<block>.1 - 2 (the slot arithmetic agreed),
                                            ;   then acN := wsp (the master's residue, its restored wsp)
 
 The 96 WCMVs of the 19 groups are ordinary §5.8 statements over twin
-addresses (P32's forms; `[@bp(t@b.k, 0), n] = piece`, `[@t@b.k, n varying]
-= …`). Loader rules: `t@` names resolve through quest.arena (REFUSE if
+addresses (P32's forms; `[@bp(s@b.k, 0), n] = piece`, `[@s@b.k, n varying]
+= …`). Loader rules: `s@` names resolve through quest.arena (REFUSE if
 unset or unknown; the file's `arena <path> sha256=` line must match
 QUEST_ARENA); `claim`/`release` need a register; `release` names the block
 only. The checker (P33-A, `QUEST_STRINGS_CHECK=1`) binds one Mapper row per
 twin at the master's WMSP hook and models the master's claims as stack
 INSERTIONS the clone lacks (Mapper.md §1.4, P33-B corrections). Readable
-layer: `p@b ≡ t@b.last`, the intermediate twins folded (ground is `t@b.k`).
+layer: `s@b ≡ s@b.last`, the intermediate twins folded (ground is `s@b.k`).
+SPELLING (P46, ir 7): the twins were `t@<block>.<k>` in ir 6; the `t@`
+prefix collided in spelling with the t-places `t1…t255` (§5.4), which the
+twins have nothing to do with, so ir 7 spells them `s@` (S for string). Pure
+token rename — 236 tokens on 198 statements in each artifact, proven
+token-only by regeneration (docs/Project46/evidence/stageA_rename.txt); the
+loader refuses `ir 6`.
 
 ### 5.6 Class cap — what lower.py emits
 
@@ -788,6 +799,17 @@ Flag-conversion (add→+ where flags are provably dead) is parked with
 direction ruled: MathDesign §5.
 
 ## 9. Version history
+
+ir 7, Stage A (Project 46, Sep 12 2026 — docs/Project46/REPORT.md): the
+arena twins respelled `t@<block>.<k>` → `s@<block>.<k>` in the grammar
+(§5.9), `quest.arena`, and the P33 per-site artifacts; nothing else moves.
+Regenerated through the P33-B chain of record (strhooks.py → arena.py →
+string_sites.py --p33 → lower.py), never by editing artifacts; the diff
+against a `sed`-renamed scratch copy of the ir 6 artifacts is exactly the
+version line and the `strings33`/`arena` provenance lines (their inputs
+changed). The loader refuses `ir 6`. Stage B (same version) adds `v`
+declarations, symbolic blocks and the 0x76/0x77 spaces — recorded below
+when landed.
 
 ir 6 (Project 33-B, Sep 6 2026 — docs/Project33/REPORT-B.md): the arena twins
 `t@<block>.<k>`, `claim`, `release` (§5.9); the loader refuses ir 5; the
