@@ -257,20 +257,24 @@ class Gen:
         self.note("stmt.incdec")
         self.emit("%s%s;" % (name, op))
 
-    def stmt_if(self, budget, in_loop):
+    def stmt_if(self, budget, in_loop, depth):
+        """`depth` MUST be threaded through: a loop nested inside an `if`
+        inside a loop is still nested, and giving it the enclosing loop's
+        counter resets that counter and the outer loop never ends.  Found by
+        the driver's own timeout at seed 29 class A."""
         r = self.rng
         self.note("stmt.if")
         self.emit("if (%s) {" % self.cond())
         self.indent += 1
         self.chk_update()
-        self.block(max(1, budget // 2), in_loop)
+        self.block(max(1, budget // 2), in_loop, depth)
         self.indent -= 1
         if r.random() < 0.6:
             self.note("stmt.else")
             self.emit("} else {")
             self.indent += 1
             self.chk_update()
-            self.block(max(1, budget // 2), in_loop)
+            self.block(max(1, budget // 2), in_loop, depth)
             self.indent -= 1
         self.emit("}")
 
@@ -282,7 +286,7 @@ class Gen:
         cannot skip the increment.  A generator that can emit an infinite
         loop turns every timeout into a question."""
         r = self.rng
-        lc = self.loop_counters[min(depth, len(self.loop_counters) - 1)]
+        lc = self.loop_counters[min(depth, len(self.loop_counters) - 2)]
         trips = r.randint(0, 5)
         is_for = r.random() < 0.6
         if is_for:
@@ -313,7 +317,7 @@ class Gen:
         self.note("stmt.goto_backward")
         n = self.label_n
         self.label_n += 1
-        lc = self.loop_counters[min(depth, len(self.loop_counters) - 1)]
+        lc = self.loop_counters[len(self.loop_counters) - 1]
         self.emit("%s = 0;" % lc)
         self.emit("L%d: ;" % n)
         self.chk_update()
@@ -332,7 +336,7 @@ class Gen:
             elif pick < 0.58:
                 self.incdec()
             elif pick < 0.72 and budget > 1:
-                self.stmt_if(budget, in_loop)
+                self.stmt_if(budget, in_loop, depth)
             elif pick < 0.84 and budget > 2 and depth < 2:
                 self.stmt_loop(budget, depth)
             elif pick < 0.88 and in_loop:

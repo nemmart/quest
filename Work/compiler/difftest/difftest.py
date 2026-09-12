@@ -86,10 +86,16 @@ def native_run(d, opt):
     return canonical(out), None
 
 
+MUTATE = None
+
+
 def ir_run(d, rig, addrbook, entry):
-    rc, out, err = run([sys.executable, LOWER_C, os.path.join(d, "prog.c"),
-                        "--routine", "t", "--entry", entry,
-                        "-o", os.path.join(d, "prog.ir")], cwd=d, timeout=120)
+    cmd = [sys.executable, LOWER_C, os.path.join(d, "prog.c"),
+           "--routine", "t", "--entry", entry,
+           "-o", os.path.join(d, "prog.ir")]
+    if MUTATE:
+        cmd += ["--mutate", MUTATE]
+    rc, out, err = run(cmd, cwd=d, timeout=120)
     if rc == 2:
         return None, "REFUSE " + (err.strip().splitlines() or [""])[0][:300]
     if rc != 0:
@@ -201,7 +207,14 @@ def main():
                     help="run the hand-written edge-case suite instead of generating")
     ap.add_argument("--census", action="store_true", default=True)
     ap.add_argument("--keep", action="store_true", help="keep every work dir")
+    ap.add_argument("--mutate", default=None,
+                    help="teeth leg: compile with a deliberate soundness bug; "
+                         "the run is EXPECTED to go red")
+    ap.add_argument("--expect-red", action="store_true",
+                    help="invert the exit code: succeed only if something DISAGREED")
     a = ap.parse_args()
+    global MUTATE
+    MUTATE = a.mutate
 
     sys.path.insert(0, HERE)
     os.makedirs(a.work, exist_ok=True)
@@ -213,7 +226,8 @@ def main():
     failures = []
 
     if a.cases:
-        return run_cases(a, want_ir)
+        rc = run_cases(a, want_ir)
+        return (0 if rc else 1) if a.expect_red else rc
 
     jobs = [(a.seed0 + i, k)
             for i in range(a.seeds)
@@ -231,7 +245,7 @@ def main():
             failures.append((seed, klass, res))
             print("!! seed %d class %s: %s %s"
                   % (seed, klass, res.verdict, res.first_diff or res.detail))
-            if res.verdict == "DISAGREE":
+            if res.verdict == "DISAGREE" and not a.mutate:
                 before, after = shrink(seed, klass, d, a.rig, a.addrbook, a.entry)
                 print("   shrunk %d -> %d lines; reproducer in %s"
                       % (before, after, d))
@@ -252,7 +266,10 @@ def main():
             print("  %-26s %8d %8d" % (feat, census[feat], programs_with[feat]))
         print("  %d distinct features over %d programs" % (len(census), len(jobs)))
 
-    return 1 if (counts["DISAGREE"] or counts["ERROR"] or counts["UB"]) else 0
+    bad = counts["DISAGREE"] or counts["ERROR"] or counts["UB"]
+    if a.expect_red:
+        return 0 if counts["DISAGREE"] else 1
+    return 1 if bad else 0
 
 
 def run_cases(a, want_ir):

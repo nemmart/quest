@@ -31,5 +31,33 @@ python3 "$DT" --cases --rig "$RIGDIR/lowerc_rig"
 echo
 echo "=== $SEEDS seeds x 3 classes ==="
 python3 "$DT" --seeds "$SEEDS" --seed0 "$SEED0" --rig "$RIGDIR/lowerc_rig"
+
+echo
+echo "=== the compiler's own invariants ==="
+# Naive means naive: zero t-places anywhere in the output (a001 R3), and no
+# effectful operator (a001 R2).  Both are greppable properties.
+IRS=$(find /tmp/p48-difftest -name 'prog.ir' 2>/dev/null | head -60)
+if [ -n "$IRS" ]; then
+  BAD=$(grep -hoE '\bt[0-9]+\b' $IRS | wc -l)
+  EFF=$(grep -hoE '\b(add|sub|mul|div|cvwn|ash|nadd|nsub|nmul)\(' $IRS | wc -l)
+  echo "  t-places emitted: $BAD (must be 0)"
+  echo "  effectful ops emitted: $EFF (must be 0)"
+  [ "$BAD" = "0" ] && [ "$EFF" = "0" ] || { echo "  INVARIANT VIOLATED"; exit 1; }
+fi
+
+echo
+echo "=== teeth: every deliberate soundness bug must be CAUGHT ==="
+# A differential tester that has never gone red proves nothing (the P46
+# -DP46_BROKEN_ALLOC precedent).  Each --mutate is one plausible wrong
+# lowering; --expect-red succeeds only when the corpus DISAGREES.
+for M in u16_unsigned no_sign_extend eager_bool shift_logical cmp_unsigned abs_argtype; do
+  if python3 "$DT" --seeds 6 --mutate "$M" --expect-red --rig "$RIGDIR/lowerc_rig" \
+       >/tmp/p48/teeth.$M.txt 2>&1; then
+    echo "  caught: $M ($(grep -c '^!! ' /tmp/p48/teeth.$M.txt) of 18 programs)"
+  else
+    echo "  NOT CAUGHT: $M — the tester has a hole"; exit 1
+  fi
+done
+
 echo
 echo "LOWERC DIFFTEST: GREEN"
