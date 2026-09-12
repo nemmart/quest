@@ -76,7 +76,7 @@ Kept separate in the source tree and in every discussion:
 
 | class | what it is | size | address space |
 |---|---|---|---|
-| `v0…vn` | storage the source (or a transformation) needs | **fixed** | 0x76 → 0x74 |
+| `v0…vn` | storage the source (or a transformation) needs — scalars `i16/u16/i32/u32`, plus `char n` and `words n` (P46 gate R4: a fixed string and a local array are ordinary PL/I locals) | **fixed** | 0x76 → 0x74 |
 | `s@b.k` | string temps of a concatenation group (master's WMSP claims) | computed at runtime | 0x75 arena |
 | `t0…t8` | byproducts of lowering ONE instruction | none | — |
 
@@ -183,6 +183,15 @@ this live":
 - **Binding** (`v` → `ac0`) *deletes* loads and stores. It is a
   **transformation** with a liveness precondition.
 
+**OPEN — the slot bijection (P46 gate, F6).** "Placement changes an address
+and nothing else" is true of the ADDRESS and false of the TEXT. The book
+never spells a local as an absolute 0x74 constant; it spells `wp(ac3, d)` —
+register-relative (IR.md §5.2; no `wp(0, d)` is ever emitted). A placed `v`
+is an absolute constant. So the equivalence between `M16[0x74001A04]` and
+`M16[wp(ac3, 6)]` is a fact **`ircmp`'s slot bijection must supply**. It is
+not in the IR and it is not free. Recorded here so P48 meets it as a known
+task rather than as an unexplained match failure.
+
 ### 5.3 The merge is Milestone 5 run backwards
 
 M5 was to be live-range analysis over the original's reused slots —
@@ -242,9 +251,14 @@ to close one routine's diff. Measure merge/split entries per routine and let
 the number decide. `quest.blocks.split` holds the book's partition, so a
 count mismatch surfaces immediately rather than after a failed match.
 
-Block ordering is observable: order changes fall-through, and branch
-polarity flips with it (`goto [X,Y] c` vs `goto [Y,X] !c`). Placement and
-if/else reversal are therefore entangled and must agree.
+**Correction (P46 gate, F5):** an earlier draft said block ordering is
+observable because order changes fall-through. That describes the BOOK's
+lowering of machine skips, not a property of this IR — IR.md §4 has no
+fall-through, every terminator is explicit. `goto [X,Y] c` versus
+`goto [Y,X] !c` is a **polarity choice with no ordering behind it**, and it
+belongs to the oracle and to `ircmp`, not to the loader. Ruling: numeric
+order carries no meaning (§6 above) stands; the entanglement claim is
+withdrawn.
 
 ---
 
@@ -474,8 +488,17 @@ wrong-but-coincidentally-same-result translations.
 
 ### 9.3 Runtime calls are free; game calls are not
 
-`$N` routines are runtime, already lifted, not in the sync list. A C routine
-calling out to those costs nothing.
+`$N` routines are runtime, already lifted, not in the sync list, so a C
+routine calling them costs nothing **as far as the CHECKER is concerned**.
+
+**Correction (P46 gate, F7): they are not free in the IR.** `rt_call` and
+`call` are validated against an LCALL word at a real site (IR.md §6). A
+compiled routine calling `?WRITE_SCREEN` has no site. ir 7 therefore REFUSES
+`@addr`, `call` and `rt_call` inside a symbolic block, and the calling
+bridge is a **new IR production plus its validation rules** — not a detail
+of the harness. It is the thing standing between "a naive program loads and
+runs" and "a naive program is substitutable", and it is P48's keystone
+within a keystone.
 
 The constraint is on calls to **Eagle game code**: that callee's blocks *are*
 compared, our argument setup differs, and it diverges. Each such edge costs
@@ -589,6 +612,8 @@ handler-bearing routine comes up. Existing material: `ON_ERROR_CATALOG.md`,
 | 4 | partial-credit metric (§8.1) | `ircmp` distance, form open |
 | 4b | is `ircmp` distance monotone under single rewrites? (§7.2b) | whether the gradient walk works, and whether search is viable later |
 | 5 | ON-condition CFG closure (§11) | deferred, gated by hard error |
+| 6 | the slot bijection: absolute 0x74 vs `wp(ac3, d)` (§5.2) | P48; `ircmp` must supply it |
+| 7 | the calling bridge as an IR production (§9.3) | P48; resizes the harness |
 
 ---
 
@@ -603,7 +628,7 @@ Dependency order, each to get its own prompt. Not a schedule.
 | 2 | **IR spec update + loader + runner** | `v` declarations, `<ENTRY>.b<digits>` blocks at 0x77, `s@` rename, loader placement. **ir 7.** |
 | 3 | **the basic compiler** | C → naive IR. Choice-free. |
 | 4 | **compiler differential tester** | gcc vs our lowering on non-game programs. Small, and it is the ENTIRE evidence base for obligation (a). Must not land after the compiler. |
-| 5 | **L1 substitution harness** | entry interception, sync-list exclusion, calling-convention bridge, rendezvous contract. **The keystone: this is the backup plan.** |
+| 5 | **L1 substitution harness** | entry interception, sync-list exclusion, the **calling bridge** (a new IR production + validation — P46 F7, bigger than first scoped), the **slot bijection** in `ircmp` (P46 F6), the rendezvous contract. **The keystone: this is the backup plan.** |
 | 6 | **first leaf routines at L1** | PICK_X_Y first |
 | 7 | **call-graph extraction** | from the book; needed to order bottom-up |
 | 8 | **transformer + oracle + L2** | the ambitious layer, on top of a working L1 |

@@ -35,6 +35,15 @@ leg" line. §3: the deterministic deferred-halt form of the P33-C fix
 
 # Landing history (newest first)
 
+> **⚠ VOID BELOW FOR P35–P43 (banner added Sep 12 2026).** The entries for
+> P35 through P41 record the compiler line, which ended. Every RULE NUMBER
+> they cite (R33–R45, R21c′/d/e′, R36′, R3b′, …) is **void** — see
+> `docs/attic/README.md`. They are kept as landing history, not as live
+> results. Facts about the PROGRAM mentioned in them (R39's hand-assembly
+> pair, R40's multiple ENTRY, the static link, the FIRE family counts)
+> survive only via `docs/Salvage.md` once P45 has verified them. Current
+> direction: `docs/Project44/DESIGN.md`.
+
 ## ★ P41 DONE (landed Sep 9 2026) — the FIRE mutual check, discharged and found VACUOUS. The item outstanding since P38: **FIRE.1 and FIRE.2 reach DISJOINT parent slots**, so P39's sibling guard could never have failed and every entry in the table was single-witness. Discharged instead against the *family* — FIRE.3 (18 link loads, unused by P39) overlaps both siblings, and FIRE's own body is direct evidence of its own frame — **zero disagreements; P39's readings were all correct**. Two missing slots added (arg 2 at −14, w8 at +8), after the audit so it ran neutral. Item 2: **R41 is ENFORCED** (a closed enumeration, not an exclusion), but the sweep found **the same R21c defect forty lines below P40's fix** — R21e′ at line 1230 could load a DO-limit into the frame pointer; fixed by applying an already-derived class, no new rule. **Five bad witness PCs found** (three in PARENT_FRAMES, two in R28's docstring — roughly half of those spot-checked); `check_frames()` now checks the PC names the instruction its comment cites, not merely that a witness string exists. **0 routines finished; total 4 of ~130.** Ruling owed: **R41′**, the scope narrowing (`bit_base_reg` puts a record base in ac1, which R41's wording forbids — the implementation is right, the rule text overclaims). The lesson, third instance: a check that cannot fail reads exactly like a check that passed.
 
 
