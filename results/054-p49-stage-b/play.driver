@@ -1,0 +1,7 @@
+##### DRIVER: auto-move stopped after 0 of 3 turns (encounter or blocked move); continuing from the prompt
+Traceback (most recent call last):
+  File "/tmp/drive054.py", line 198, in <module>
+    step("\x1b", "exit OBSERVE")                     # that screen DOES need an ESC
+  File "/tmp/drive054.py", line 124, in step
+    s.sendall(keys.encode('latin1'))
+BrokenPipeError: [Errno 32] Broken pipe
