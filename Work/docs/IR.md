@@ -1,10 +1,12 @@
 # quest.ir — THE IR SPECIFICATION (consolidated, standalone)
 
-Version: **ir 7** (Project 46, Sep 12 2026 — Stage A: the arena twins
-respelled `t@<block>.<k>` → `s@<block>.<k>`, a token rename and nothing
-else (§5.9, §9); the loader refuses `ir 6`. Stage B of the same project
-adds the `v` declarations and symbolic blocks and is written into this
-document when it lands). ir 6 (Project 33-B, Sep 6 2026) was the arena
+Version: **ir 7** (Project 46, Sep 12 2026 — docs/Project44/DESIGN.md
+§4–§6, docs/Project46/{q001,a001}-plan-gate.md, REPORT.md: declared storage
+`v` and SYMBOLIC BLOCKS, so that a naive, unplaced program loads and runs
+— `v <ENTRY>.v<k> <type>` declarations placed by the loader at 0x76,
+`block <ENTRY>.b<k>` headers and `goto` labels placed at 0x77, §5.10; plus
+the arena twins respelled `t@<block>.<k>` → `s@<block>.<k>`, §5.9; the
+loader refuses `ir 6`). ir 6 (Project 33-B, Sep 6 2026) was the arena
 twins, `claim` and `release`. ir 5 (Project 31, Sep 6 2026 — located strings: the
 `[@a, n] = piece` / `[@a, n varying] = piece` assignments, `ac1 =
 cmp(piece, piece)` and `words(@d, k) = words(@s, k)`, executed on the
@@ -53,13 +55,15 @@ decode/execute path for instructions, calls, and rets).
     strings <path> sha256=<hex>     <- ir 5, present when string statements were emitted
                                        (docs/Project31/p31.tsv, the per-site artifact)
 
+    v <ENTRY>.v<digits> <vtype>   <- ir 7: a DECLARATION (file level, outside any block;
+                                       before the first reference in file order). §5.10
     block <hex8> seg <hex8>
     <block lines...>
                                   <- blocks separated by BLANK lines
-    block <hex8> seg <hex8>
+    block <ENTRY>.b<digits>       <- ir 7: a SYMBOLIC block (no seg: the 0x77 space fixes it). §5.10
     <block lines...>
 
-    blocks <count>                <- trailer (count of block sections)
+    blocks <count>                <- trailer (count of block sections, numeric AND symbolic)
 
 - `;` begins a comment anywhere on any line (the grammar has no other
   use of `;`). Comments are audit trail: emitters SHOULD echo source
@@ -67,7 +71,14 @@ decode/execute path for instructions, calls, and rets).
 - Provenance: the loader recomputes sha256 of the file named by
   QUEST_BLOCKS and refuses on mismatch with the `blocks` line; other
   recorded inputs are verified when present on the host. quest.ir is
-  therefore bound to the exact CFG the run uses.
+  therefore bound to the exact CFG the run uses. Since ir 7 the `blocks`
+  line is REQUIRED only when the file names a numeric (hex8) block start
+  or goto label — a symbolic-only program has no CFG to bind to; a file
+  with any numeric block or label still refuses without it (the strict
+  surface is unchanged).
+- Names (ir 7): a file that declares a `v` or a symbolic block needs the
+  addrbook for its entry names — QUEST_ADDRESS_BOOK, read by the IR loader
+  for names and file order only (§5.10.2); refuse if unset.
 - `mode`: `book` declares that decorated-site lowering (§6) is
   present; the loader REFUSES book-mode IR unless QUEST_ADDRESS_BOOK
   and QUEST_PUSH_MAP are set (in a stock run the area pages are not
@@ -104,7 +115,10 @@ addresses; blocks are single-entry, so statements need no identities.
                                    / syscall sentinel), as for a final
                                    instruction. §6.
     ret                            WRTN. TERMINATOR. §6.
-    goto [<hex8>, ...] <expr>      Exit. TERMINATOR (P26). The expr is
+    goto [<label>, ...] <expr>     Exit. TERMINATOR (P26). label := <hex8> |
+                                   <ENTRY>.b<digits> (ir 7, §5.10; mixed lists
+                                   are legal; a symbolic label may be a
+                                   FORWARD reference). The expr is
                                    a STRICT index into the label list:
                                    false=0 / true=1 for the two-label
                                    if, k for a table. Every label must
@@ -117,7 +131,7 @@ addresses; blocks are single-entry, so statements need no identities.
                                    direct XJMP); a single-label goto
                                    with any other index REFUSES at
                                    load.
-    goto <hex8>                    Parser SUGAR for `goto [<hex8>] 0`
+    goto <label>                   Parser SUGAR for `goto [<label>] 0`
                                    (accepted, never emitted — the dump
                                    form is the list form).
     save <hex>                     RESERVED (not implemented; loader
@@ -150,7 +164,12 @@ possible — statements are sequence, not identities.
 
 - `block <pc> seg <s>`: pc must be a listed quest.blocks start;
   s == pc & 0xF0000000; no duplicates; excluded blocks (7015BD6B)
-  refused.
+  refused. `block <ENTRY>.b<k>` (ir 7): no `seg` (refuse one); the name
+  is placed at its 0x77 address (§5.10.3); no duplicates (by name).
+- Symbolic blocks (ir 7) may contain statements, string statements,
+  `assert`, `goto` and `ret` only: an `@addr` instruction, a `call` or
+  an `rt_call` inside one REFUSES (§5.10.5 — a scope boundary, not a
+  design position).
 - Instruction addresses within a block strictly increase.
 - TERMINATOR RULE: the last line of every block is an instruction,
   `call`, `rt_call`, `ret`, or `goto`. (A final instruction's control transfer —
@@ -162,10 +181,11 @@ possible — statements are sequence, not identities.
 - Anything unrecognized refuses. No silent skips, ever — including in
   the emitter's own input parsers.
 - SYNC LIST (P27, ir 3 note — no grammar change): the loader validates
-  block starts AND goto labels against the SHIPPED sync list
+  NUMERIC block starts AND numeric goto labels against the SHIPPED sync list
   (QUEST_SYNC_LIST), not against quest.blocks. A translation that
   removes blocks ships a list without them (BlockSyncDesign.md rules
-  1–2), and any IR line naming a delisted pc refuses at load.
+  1–2), and any IR line naming a delisted pc refuses at load. Symbolic
+  labels (ir 7) are not listed and not counted (§5.10.6).
 
 ### 4a. DERR clusters (Project 27, Sep 5 2026 — docs/Project27/Census.md)
 
@@ -229,6 +249,9 @@ checker; zero effect unset.
                bool   && ||
     prefix  := ~ e (32-bit complement, word)   |   ! e (boolean NOT, 0/1 operand)
     primary := acN | tN (N = 1..255) | c | ovr | wfp | wsp | wsb | wsl |
+               <ENTRY>.v<digits>  (ir 7: the placed word ADDRESS of a declared v, a
+                                   constant — §5.10) |
+               s@<block>.<k>      (a twin's word address, a constant — §5.9) |
                constant (0x… or signed decimal) | byte-pointer literal
                0xW:b (b in {0,1}) | M8[e] | M16[e] | M32[e] | R[e] |
                ind(e) | wp(e, e) | bp(e, e) | lsh(e, amount) | tf(e) |
@@ -251,7 +274,9 @@ checker; zero effect unset.
     and()/or()/xor()/com(); an effectful op anywhere but statement
     root; mixed-class or chained-comparison chains; t read-before-write
     or double write; stack-register writes; `goto [L] k` with k != 0;
-    M1 (reserved). Anything else unrecognized: refuse.
+    M1 (reserved); a hex constant in [0x76000000, 0x78000000) anywhere
+    (ir 7: those addresses are loader-assigned, never authorable — only
+    a `v`/`b` NAME denotes one). Anything else unrecognized: refuse.
 
     EXECUTOR FAULTS (loud, never a silent value): goto index outside
     [0, count); zero divisor in `/s /u %s %u`; INT_MIN `/s`/`%s` -1;
@@ -575,6 +600,201 @@ token rename — 236 tokens on 198 statements in each artifact, proven
 token-only by regeneration (docs/Project46/evidence/stageA_rename.txt); the
 loader refuses `ir 6`.
 
+### 5.10 Declared storage `v`, symbolic blocks, the 0x76/0x77 spaces (Project 46, ir 7 — docs/Project44/DESIGN.md §4–§6, docs/Project46/{q001,a001}-plan-gate.md)
+
+The point of ir 7: a NAIVE program — a compiler's first output, with no
+allocation model — is loadable and runnable. Its storage is declared
+without an address and its blocks are named without an address; the loader
+places both, in private synthetic spaces where aliasing is impossible.
+
+#### 5.10.1 Declarations
+
+    decl   := v <ENTRY>.v<digits> <vtype>            ; file level, outside any block
+    vtype  := i16 | u16 | i32 | u32                   ; 1, 1, 2, 2 words
+            | char <n>                                ; fixed CHAR(n): ceil(n/2) words (§5.8 [@a, n])
+            | varying <n>                             ; CHAR(n) VARYING: 1 + ceil(n/2) words
+                                                      ;   (length word at the v's address, data at +1)
+            | words <n>                               ; an aggregate the source addresses by offset
+                                                      ;   (array, record, bit string): n words, uninterpreted
+    <n>    := a constant 1..32767
+
+A type carries SIZE to the allocator and a WIDTH to the tripwire below; it
+carries no semantics into the grammar — width and sign live in the operator
+(`M16`/`M32`, `sx16`/`zx16`, §5.1), never in the storage, so `i16` and `u16`
+are the same one-word cell and the four scalar names are declaration
+vocabulary for the compiler and the (future) merge/binding transformations.
+Every `v` is FIXED SIZE, because a placed `v` is eventually laid exactly on
+top of the original's frame slot at 0x74 (DESIGN §4.1); an arbitrary-length
+string temporary is a twin `s@b.k` (§5.9), not a `v`, and assigning a twin to
+a `v` truncates or pads through the §5.8 forms.
+
+Rules (loader; violations REFUSE): declared before its first reference, in
+file order (single pass, as t-places); duplicate declaration; a reference
+with no declaration; a `v` line inside a block; `<n>` outside 1..32767.
+Cross-entry references are LEGAL (`QUEST.1.b0` reading `QUEST.v3` is a
+nested procedure reading its parent's local; the game is non-reentrant, so
+every routine's storage exists in exactly one copy — DESIGN §4.1).
+
+#### 5.10.2 Names
+
+    qualified := <ENTRY> "." ("v" | "b") <digits>
+    <ENTRY>   := an addrbook entry name (quest.addrbook, QUEST_ADDRESS_BOOK),
+                 UPPERCASE, the `@ADDR` suffix DROPPED: QUEST, QUEST.1, FIRE.1
+                 (from `FIRE.1@7016A3BD`), ALCHEMIST_HOME, C_A_LISTENER
+
+Parsing splits on the LAST dotted component: `.v<digits>` / `.b<digits>` is
+the local, everything before it is the entry (an entry's own suffix is
+`.<digits>`, never `.v`/`.b`; entries are uppercase, `v`/`b` lowercase, so
+even a routine named `B12` could not collide). The namespace is ALL entry
+lines of the addrbook — the 102 migrated AND the 28 `#`-commented (not
+migrated) ones; a `nocall` ON-unit is still a routine a compiler may emit —
+130 names, unique after the suffix drop. `idx(E)` is the entry's 0-based
+position among those lines in FILE ORDER, which the addrbook's own header
+already freezes ("keep the columns"). REFUSE: a lowercase entry, an entry
+not in the addrbook, `.v`/`.b` without digits, `.x<digits>`, any other
+shape.
+
+#### 5.10.3 Placement (the loader owns it; nothing else does)
+
+    | space | contents                          | assigned by                                   |
+    |-------|-----------------------------------|-----------------------------------------------|
+    | 0x70  | original code                     | —                                             |
+    | 0x74  | locals and args, per routine      | M4a addrbook                                  |
+    | 0x75  | string twins s@<block>.<k>        | quest.arena (§5.9)                            |
+    | 0x76  | UNPLACED v                        | the IR loader, per-entry range, this section  |
+    | 0x77  | UNPLACED symbolic blocks          | the IR loader, per-entry range, this section  |
+
+Per-entry reserved range in each space: 0x10000 words (130 × 0x10000 =
+0x820000 < 0x1000000; the whole 0x74 area is 40,428 words, so 65,536 words
+per routine is ample).
+
+- A symbolic block's address is a pure function of its name:
+  `addr(<E>.b<k>) = 0x77000000 + idx(E)·0x10000 + k`, k < 0x10000 (refuse
+  otherwise). No loader state, deterministic, invertible for diagnostics.
+  It is assigned on FIRST SIGHT (a header or a label) and the file is
+  refused at end if any label was never defined by a header.
+- A `v` is allocated SEQUENTIALLY within `0x76000000 + idx(E)·0x10000`, in
+  declaration order, by its size in words; overflowing the entry's range
+  refuses. Every `v` gets its own private slot: with no placement input,
+  two `v`s can never share an address, so the "live ranges disjoint"
+  precondition of DESIGN §5.3 is vacuous here. The allocator asserts
+  disjointness loudly anyway. NOTE, so nobody reads it as a check that
+  passed: in ir 7 that assertion CANNOT fire — there is no input that
+  could ask for a shared address. The REFUSAL of an aliasing placement
+  belongs to the placement input (§8), when it exists.
+- Numeric ORDER of symbolic blocks carries no meaning: every terminator is
+  explicit (§4), so there is no fall-through for address order to encode.
+- PLACEMENT IS NOT BINDING (DESIGN §5.2): placing a `v` (0x76 → 0x74, a
+  future input) substitutes one constant for another in the statement text
+  and changes nothing else. Binding a `v` to a register deletes loads and
+  stores and is a transformation, outside this spec.
+- Why ring 7: every M16/M32/R index is wrapped `(e & 0x0FFFFFFF) | seg`
+  (§5.2; `Machine::copy_segment`), which replaces ONLY the top nibble, so a
+  0x74/0x75/0x76/0x77 address referenced from any ring-7 block survives the
+  wrap unchanged — bits 27:24 (the `4`, `5`, `6`, `7`) are preserved. A
+  block's `seg` is `start & 0xF0000000` = 0x70000000 for a 0x77 block as
+  for a 0x70 one. 0x4xxxxxxx for blocks was rejected because block
+  addresses land in the PC and ring 4 has different protection semantics.
+
+#### 5.10.4 References
+
+A declared `v` is an ADDRESS CONSTANT in expressions (a001 ruling R3),
+exactly as a twin is (§5.9); the existing forms do the reading, writing,
+byte access and string work:
+
+    ac0 = sx16(M16[QUEST.v0])                    ; an i16 read (sign in the operator)
+    M16[QUEST.v0] = trunc16(ac0)                 ; an i16 write
+    M32[QUEST.v1] = add(M32[QUEST.v1], 1)        ; an effectful store (ruling R6 shape)
+    ac2 = bp(QUEST.v2, 0)                        ; byte pointer into a char/varying v
+    [@QUEST.v3, 27 varying] = [@s@70166144.3, varying]   ; twin -> v, min(len, 27) truncates
+    M16[QUEST.v4 + 5] = 0                        ; word 5 of a `words 10` aggregate
+    goto [QUEST.b3, QUEST.b7] (ac0 <s 0)         ; symbolic exits
+
+There is NO bare-name lvalue (`QUEST.v0 = e`) and no bare-name rvalue: a
+typed value form would put signedness into storage against §5.1 and make
+`ircmp` expand names before comparing.
+
+WIDTH TRIPWIRE (a001 ruling R5; loader, REFUSE): a `v` used DIRECTLY as an
+index (`M16[<v>]`, `M32[<v>]`, `M8[<v>]`, `[@<v>, …]`) must fit the access —
+`M32[<v>]` on an i16/u16 refuses (a one-word cell), `M16[<v>]`/`M32[<v>]`
+on a `char` refuses (byte data; use `bp`), `M32[<v>]` on a `varying`
+refuses (its first word is the 16-bit length), `M8[<v>]` on any scalar
+refuses. `words` admits any width. An index of the form `<v> + <expr>` or
+`wp/bp(<v>, d)` is NOT checked (the offset is the source's business). The
+tripwire catches a compiler emitting the wrong width at the IR boundary,
+where it is loud, instead of three projects later as a behavioural
+divergence.
+
+#### 5.10.5 What a symbolic block may contain — and may not, yet
+
+Legal: statements (§5.1), string statements (§5.8, §5.9), `assert`, `goto`
+(any labels), `ret`. REFUSED in ir 7: `@addr` instructions, `call`,
+`rt_call`. The refusal is a SCOPE BOUNDARY, not a design position (a001
+R7): an instruction is fetched from real memory at its own address and a
+`call`/`rt_call` is validated against the LCALL word at a real `site=`
+(§6) — a compiled routine calling `?WRITE_SCREEN` has no site. DESIGN §9.3
+calls runtime calls "free"; that is true of the checker and false of the
+IR (gate finding F7). The calling bridge — a new production with its own
+validation — is P48's, and it stands between "loads and runs" and
+"substitutable". `ret` from a symbolic block runs WRTN with the synthetic
+pc = the block's 0x77 address (abort-message use only, as for 0x70).
+
+#### 5.10.6 Executor and lockstep facts (normative)
+
+- 0x76 is ORDINARY MEMORY: the clone process maps, RW / no exec, exactly
+  the 0x76 pages the placed `v`s touch (the address-book and arena
+  precedents, `os/OSProcess.cpp`); a read or write outside a mapped page
+  faults in `Memory` exactly as any unmapped address would. Nothing is
+  initialised: a `v` read before its first write reads zero (fresh pages),
+  which is a property of the harness, not a promise of the source.
+- 0x77 is NEVER MAPPED. Nothing is fetched there: `Machine::run` asks the IR
+  executor for the block BEFORE any memory access, so a 0x77 pc is a block
+  identity by construction — `goto` returning a 0x77 label re-enters the
+  same path. `IRExec::has(pc)` is the whole dispatch.
+- Both spaces are clone-only, like every IR block (§1, §7): only the clone
+  dispatches IR; the master never sees a 0x76 or 0x77 address.
+- A 0x77 arrival is NOT a listed sync-list pc, so it does not tick the
+  block ordinal; a 0x76 pointer in a register at a rendezvous decodes as
+  Mapper form `None` and would MISMATCH a master stack pointer
+  (Mapper.md §1.2). Both are consequences for SUBSTITUTION (P48), which
+  will already be delisting the replaced routine's blocks; ir 7 states
+  them and does nothing about them. Nothing in the book (`quest.ir2.*`)
+  names a `v` or a symbolic block, so the strict surface is untouched.
+- Placement diagnostics: `IRExec: v <name> type <t> words <w> at 0x76……`
+  and `IRExec: block <name> at 0x77……` at load (one line each, stderr);
+  first execution of a symbolic block logs its name with its address.
+
+#### 5.10.7 Worked example (a symbolic-only program; the self-test's shape)
+
+    ir 7
+    mode stock
+    v QUEST.v0 i16
+    v QUEST.v1 u32
+    v QUEST.v2 varying 8
+
+    block QUEST.b0
+      M16[QUEST.v0] = 3 ; counter
+      M32[QUEST.v1] = 0
+      goto [QUEST.b1] 0
+
+    block QUEST.b1
+      ac0 = sx16(M16[QUEST.v0])
+      M32[QUEST.v1] = add(M32[QUEST.v1], ac0)
+      M16[QUEST.v0] = trunc16(ac0 - 1)
+      goto [QUEST.b2, QUEST.b1] ((ac0 - 1) >s 0)   ; backward edge; b2 is a forward reference
+
+    block QUEST.b2
+      [@QUEST.v2, 8 varying] = [@0x70100000:0, "HELLO WORLD"]   ; truncates to 8
+      ret
+
+    blocks 3
+
+Loaded with `QUEST_ADDRESS_BOOK=quest.addrbook` (QUEST is idx 0): the three
+blocks are 0x77000000, 0x77000001, 0x77000002; v0 at 0x76000000 (1 word),
+v1 at 0x76000001 (2), v2 at 0x76000003 (5). No `blocks` provenance line is
+needed (no numeric label). The loop runs three times; at the `ret` v1 holds
+6 and v2 holds length 8 and `HELLO WO`.
+
 ### 5.6 Class cap — what lower.py emits
 
 Everything in Project26/Census.md buckets (a), (b) and the ruled-in
@@ -780,9 +1000,22 @@ WPSH/WPOP instruction pairs) is superseded.
   that block. First execution of each block logs once to stderr
   (coverage evidence).
 - QUEST_IR requires -lockstep (refused otherwise: only the clone
-  dispatches IR; a non-lockstep run would silently ignore it).
+  dispatches IR; a non-lockstep run would silently ignore it). The
+  self-tests load a file directly (`IRExec::load_file`) into a scratch
+  Machine with `lockstep_role = CLONE` and drive `Machine::run` — the
+  same dispatch path, no lockstep peer (§5.10.6, docs/Project46/REPORT.md).
+- Symbolic blocks (ir 7) execute exactly as numeric ones; `Ctx.seg` is
+  0x70000000; nothing is read at the block's address.
 
 ## 8. Reserved / roadmap
+
+ir 7 reservations (P46): a PLACEMENT INPUT (a `v` → 0x74 address, the
+oracle of DESIGN §5.1) — when it exists, the loader REFUSES two `v`s placed
+at one address unless a liveness proof accompanies it (DESIGN §5.3; that
+proof is a transformation's, not the loader's); `call`/`rt_call`/`@addr`
+inside symbolic blocks (P48's calling bridge, §5.10.5); a symbolic
+`<ENTRY>.b<k>` for a block that IS in the book (placement of blocks,
+0x77 → 0x70, the block-merge/split transformations of DESIGN §6).
 
 `save`; M1 (bit addressing, IQ3 — when it lands, bit pointers get the
 function-style literal `bitp(w, n)` (n = 0..31), matching the wp/bp
@@ -800,16 +1033,28 @@ direction ruled: MathDesign §5.
 
 ## 9. Version history
 
-ir 7, Stage A (Project 46, Sep 12 2026 — docs/Project46/REPORT.md): the
-arena twins respelled `t@<block>.<k>` → `s@<block>.<k>` in the grammar
-(§5.9), `quest.arena`, and the P33 per-site artifacts; nothing else moves.
-Regenerated through the P33-B chain of record (strhooks.py → arena.py →
-string_sites.py --p33 → lower.py), never by editing artifacts; the diff
-against a `sed`-renamed scratch copy of the ir 6 artifacts is exactly the
-version line and the `strings33`/`arena` provenance lines (their inputs
-changed). The loader refuses `ir 6`. Stage B (same version) adds `v`
-declarations, symbolic blocks and the 0x76/0x77 spaces — recorded below
-when landed.
+ir 7 (Project 46, Sep 12 2026 — docs/Project44/DESIGN.md §4–§6,
+docs/Project46/{PROMPT,q001-plan-gate,a001-plan-gate,REPORT}.md). Two
+stages, one version. Stage A: the arena twins respelled `t@<block>.<k>` →
+`s@<block>.<k>` (§5.9), `quest.arena`, and the P33 per-site artifacts;
+nothing else moves. Regenerated through the P33-B chain of record
+(strhooks.py → arena.py → string_sites.py --p33 → lower.py), never by
+editing artifacts; the diff against a `sed`-renamed scratch copy of the ir
+6 artifacts is exactly the version line and the `strings33`/`arena`
+provenance lines (their inputs changed); 236 tokens on 198 statements per
+artifact (docs/Project46/evidence/stageA_rename.txt). Stages B–D: declared
+storage `v <ENTRY>.v<k> <vtype>` (i16 u16 i32 u32, char n, varying n,
+words n), a `v` name as an address constant (§5.1 primary), symbolic blocks
+`block <ENTRY>.b<k>` with symbolic `goto` labels (forward references
+legal), placement by the loader at 0x76 (sequential per entry) and 0x77
+(`base + idx·0x10000 + k`), names from the addrbook's 130 entry lines in
+file order, the width tripwire, the `blocks` provenance line conditional
+on a numeric block or label, refusals of `@addr`/`call`/`rt_call` in
+symbolic blocks and of literal 0x76/0x77 constants (§5.10). The strict
+surface is untouched: the book names no `v` and no symbolic block, and a
+renamed ir 6 program loads and runs identically (task 050, 16/16 legs,
+0 div). The loader refuses `ir 6` (regenerate artifacts and binaries
+together, as always). Self-test: tests/run_vform_selftest.sh.
 
 ir 6 (Project 33-B, Sep 6 2026 — docs/Project33/REPORT-B.md): the arena twins
 `t@<block>.<k>`, `claim`, `release` (§5.9); the loader refuses ir 5; the
