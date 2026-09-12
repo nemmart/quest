@@ -128,6 +128,18 @@ Prompts are written per project; ask for the one you are running.
    the calling bridge as a new IR production (P46 F7) and the slot
    bijection in `ircmp` (P46 F6 / a002). See DESIGN §9.
 7. **First leaf routines at L1**, bottom-up per P47's order.
+7b. **P51 — the C, and the first measured rewrite census**
+   (`docs/Project51/PROMPT.md`). Write the C for 7 routines, compile to naive
+   ir 7, diff against the book, classify the differences. Produces the number
+   DESIGN §7.2a only asserts: **how much of the distance is one rule applied
+   many times versus many rules applied once each.** Nothing runs — matching
+   is static text, so the calling bridge is not needed (emit-only `rt_call`
+   suffices). Head-to-head cases: **HIT_ANY_CHAR**, which P38 abandoned at
+   8/10 rather than fit a cross-procedural register model, and **GET_INPUT**,
+   which P37 staged at `BITS()`. Two known-good controls (PICK_X_Y,
+   UPDATE_SCREENS) calibrate the census, since a diff alone cannot separate a
+   missing rewrite from bad C. Runs beside P49 and P50 — writes `compiler/`,
+   `game/routines/`, `docs/Project51/` only.
 8. **Transformer + oracle + L2.**
 
 **Also carried and still unscheduled:** the play driver (below). It is not
