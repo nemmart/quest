@@ -36,6 +36,14 @@ Everything below exists to keep these separate and individually testable.
 - **(a) Soundness.** The naive C → IR lowering preserves semantics.
   Established by differential testing against gcc on programs that are
   **not** game routines. Never established against the book.
+
+  **Named residual (P48 gate §2.5 item 1): this proves the lowering faithful
+  to the IR AS IMPLEMENTED, not as specified.** The differential rig runs the
+  real `IRExec`, so an executor bug in the v-form paths is invisible to it —
+  and invisible to lockstep too, because lockstep only ever exercises the
+  book's IR. P46's vform self-test is the only other thing that has executed
+  those paths. Nothing in the L1 line closes this; it is recorded so that it
+  is not mistaken for covered.
 - **(b) Match.** The IR, after transformation, equals the book's IR.
   Established by `ircmp`.
 
@@ -453,8 +461,23 @@ patching the model to absorb what was really a finding about the program.
    finding** with its evidence
 
 Rewrite-set growth does not block a sound match — the proof stands
-regardless — but it is a loud signal that step 2 is being skipped. Report
-rewrite-set size and oracle length per routine, and drive both down.
+regardless — but it is a loud signal that step 2 is being skipped.
+
+**Two metrics, and they must not be confused (refined after P48's gate):**
+
+- **Rewrite-RULE count** — how many DISTINCT rules exist. *This* is the
+  tripwire. ~20 is the target; growth is the reportable event.
+- **Rewrite APPLICATION count**, and oracle length per routine — how much
+  supplying a routine needed. This is the progress metric, and it is
+  expected to be LARGE early.
+
+**One rule applied 200 times is a compiler model working. Two hundred rules
+applied once each is fitting.** The distinction matters immediately: P48's
+ruling R2 (the naive compiler emits only pure operators, so flag conversion
+is a rewrite with a flag-liveness precondition) means a single sound rule
+fires on **every arithmetic statement in the program**. Counted as
+applications that is an alarm; counted as rules it is one entry. Report both,
+and drive rule count down.
 
 The merge (§5.3) gives the same evidence by a different mechanism: two `v`s
 the original clearly shared that refuse to merge means our C has them live
