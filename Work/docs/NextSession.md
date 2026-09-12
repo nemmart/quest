@@ -146,12 +146,27 @@ problem with current coverage claims.
   passed", and more dangerous, because a real regression will look normal.
   Owed: task 051, refresh the expectations. Must land before any project
   leans on the battery as a gate.
-- **TASK 052 HAS NOT COME BACK.** P46's final battery (`tasks/052-p46-final.sh`,
-  queued on main) has no `results/052-*` directory. **P46's Stage C/D loader
-  and executor changes (~250 lines in IRExec.cpp) have been verified only by
-  its own k1fo leg and the vform self-test, not by the full 16-leg battery.**
-  The merge to main was made on that basis. Read 052 when it lands; if it is
-  red, it is a P46 regression and the branch is still there.
+- **TASK 051 — REFRESH THE BATTERY'S EXPECTATIONS. Now urgent, and it is
+  costing real time.** The battery script exits 1 on three stale `want`
+  values, so it never writes `DONE`; the runner treats a missing `DONE` as
+  failure and **re-runs up to MAX_ATTEMPTS=3 at ~15 minutes each**
+  (`PIPELINE.md`, `bin/runner.sh:67`). Every battery has therefore been
+  running 3× and ending in a false failure. Identical three fails in 047b
+  (the accepted reference run), 050 and 052. The fixes:
+  1. `embeds_book` want 729 → **557**, `embeds_stock` 2608 → **2436**
+     (the same file's P33-B section already wants and gets 557)
+  2. `string_statements` want 1593 → **1689**, literals 857 → **871**
+  3. the strings-ledger check is **structurally** stale, not merely
+     mis-numbered: it diffs lower.py's ledger against `p31.tsv` + `p32.tsv`
+     and never consults `p33.tsv`, so it cannot pass on any post-P33 tree.
+     Widen it; do not retune it.
+  **Do not simply set each `want` to what the tree currently prints** —
+  that converts a test into a tautology. Each number needs a reason, as
+  (1) has.
+- **Task 052 is GREEN and marked DONE** (integrator, Sep 12): 16/16 legs,
+  self-tests green with teeth red, vform selftest green with the
+  broken-allocator build red, ir 7 headers and the s@ census exact. P46's
+  loader work is verified.
 - **Gen 6.2 checker item**: the deterministic form of the P33-C fix — defer
   a halt to the next pair boundary (today `Lockstep::halting` only guards
   `compare_pair`).
