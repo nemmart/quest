@@ -26,9 +26,12 @@
 #include <set>
 #include <functional>
 #include "RTStubs.hpp"
+#include "NativeRegistry.hpp"
+#include "../os/OSProcess.hpp"
 #include "Lockstep.hpp"
 #include "../debug/Capture.hpp"
 #include "../debug/SymbolTable.hpp"
+#include "../debug/CallStack.hpp"
 #include "../debug/Disassembler.hpp"
 #include "Mapper.hpp"
 #include "strings/EagleString.hpp"
@@ -154,6 +157,8 @@ enum OpClass { OC_NONE, OC_ARITH, OC_CMP, OC_BOOL };
 // unmigrated alike), `@ADDR` dropped, indexed by file order.
 struct Entries {
   std::vector<std::string> names;
+  std::vector<bool> wsavr;                 // P54: column 7 of the addrbook line is WSAVS|WSAVR —
+                                           //   the callee's ovk when the bridge replicates its prologue
   std::map<std::string, uint32_t> idx;
   std::string path;
   bool loaded = false;
@@ -174,13 +179,14 @@ static void load_entries(const char* addrbook) {
     for (size_t j = i; j < i + 8; j++) if (!isxdigit(static_cast<unsigned char>(line[j]))) { hex8 = false; break; }
     if (!hex8 || line.size() == i + 8 || !(line[i+8] == ' ' || line[i+8] == '\t')) continue;
     std::istringstream is(line.substr(i + 8));
-    std::string name; is >> name;
+    std::string name, c3, c4, c5, c6, variant; is >> name >> c3 >> c4 >> c5 >> c6 >> variant;
     size_t at = name.find('@');
     if (at != std::string::npos) name = name.substr(0, at);
     if (name.empty()) continue;
     if (g_entries.idx.count(name)) refuse("addrbook entry name not unique after the @ADDR drop: " + name);
     g_entries.idx[name] = uint32_t(g_entries.names.size());
     g_entries.names.push_back(name);
+    g_entries.wsavr.push_back(variant == "WSAVR");   // anything else (WSAVS, or a short line) is WSAVS
   }
   if (g_entries.names.empty()) refuse(std::string("no entry lines in the addrbook: ") + path);
   g_entries.path = path; g_entries.loaded = true;
@@ -1353,6 +1359,15 @@ void IRExec::load(const std::string& path, const char* addrbook) {
         refuse("call " + nc.callee + " but " + nc.callee + ".arg_count is not declared — the caller "
                "writes it and the callee is the only thing that can discriminate arity "
                "(docs/IR.md §5.10.1c): " + nc.body);
+      // P54 (a001 R1): `call <ENTRY>` enters <ENTRY>.b0, which must be a block
+      // of THIS file. A callee with no b0 is either a signature typo or an
+      // un-compiled Eagle routine — and calling original code from a symbolic
+      // block needs the real-stack argument protocol and the M4a area writes,
+      // which is P50's, not the naive bridge's.
+      if (!defined_blocks.count(nc.callee + ".b0"))
+        refuse("call " + nc.callee + " but " + nc.callee + ".b0 is not a block of this file — a naive "
+               "call enters the callee's b0 (docs/IR.md §6, P54 a001 R1); calling an un-compiled "
+               "Eagle routine from a symbolic block is not the naive bridge's (P50): " + nc.body);
     }
   }
   if (saw_numeric && !saw_blocks_sha) refuse("missing blocks provenance line");
@@ -1369,6 +1384,14 @@ void IRExec::load(const std::string& path, const char* addrbook) {
   for (size_t i = 1; i < blocks_.size(); i++)
     if (blocks_[i].start == blocks_[i-1].start)
       refuse("duplicate block");
+  // P54: bind every naive call to its callee's entry block and prologue
+  // variant now that all headers are known (the check above guarantees b0).
+  for (Block& b : blocks_)
+    for (Stmt& st : b.stmts)
+      if (st.kind == Stmt::CALL && st.symbolic_ret) {
+        st.target = block_by_name_.at(st.text + ".b0");
+        st.callee_wsavr = g_entries.wsavr.at(g_entries.idx.at(st.text));
+      }
   // F6 fix (user ruling, Aug 29 2026 — Project24 REPORT §10.1, option c):
   // QUEST_INJECT/QUEST_TERMINAL arm a pc that Machine::run_steps tests on
   // ARRIVAL. The emulating master arrives at every instruction pc; an IR
@@ -1569,6 +1592,26 @@ struct Ctx {
   }
 };
 } // namespace
+
+NativeRegistry* IRExec::rt_registry_override = nullptr;
+
+// P54: the WSAVS/WSAVR replica for a symbolic callee (EagleStack.cpp
+// :422-438 is the instruction; RTBridge::emulate_frame :137-149 writes the
+// same image as residue). Frame size 0: no claim, so ruling 8's zeroing has
+// nothing to zero. ovk comes from the callee's addrbook variant, the only
+// place the naive form has it. The shadow frame is augmented so WRTN's
+// call_return pairs with the bridge's call.
+void IRExec::enter_frame(Machine& m, bool wsavr) {
+  m.wide_push(m.ac[0]);
+  m.wide_push(m.ac[1]);
+  m.wide_push(m.ac[2]);
+  m.wide_push(m.wfp);
+  m.wide_push(m.ac[3] | (m.c << 31));
+  m.ac[3] = m.wsp;
+  m.wfp = m.wsp;
+  m.ovk = wsavr ? 0 : 1;
+  m.call_stack->augment(m.wfp, 0);
+}
 
 uint32_t IRExec::run_block(Machine& machine, uint32_t pc) {
   Block* blk = const_cast<Block*>(find(pc));
@@ -1822,14 +1865,38 @@ uint32_t IRExec::run_block(Machine& machine, uint32_t pc) {
       case Stmt::CALL: {
         if (i + 1 != n)
           throw std::runtime_error("IRExec: interior call (loader bug)");
-        // ir 8 (docs/IR.md §5.10.6): a call out of a symbolic block is
-        // SPECIFIED and VALIDATED by ir 8 and does NOT execute. The LCALL
-        // replica and the calling bridge are P50/P53's. Fail loudly and by
-        // name rather than transferring to a pc that does not exist.
-        if (st.symbolic_ret)
-          throw std::runtime_error("IRExec: a call out of a symbolic block LOADS and VALIDATES but "
-                                   "does not execute in ir 8 — the LCALL replica and the calling "
-                                   "bridge are P50/P53 (docs/IR.md §5.10.6, docs/Project52/REPORT.md)");
+        if (st.symbolic_ret) {
+          // P54 — THE NAIVE game->game CALL (docs/IR.md §5.10.6, §6; a001 R1/R2).
+          // The arguments are already in the callee's `a` cells and its
+          // arg_count, written by the preceding statements; the bridge does
+          // not touch them. What it replicates is what LCALL and the callee's
+          // WSAVS do TOGETHER, because a symbolic callee has no WSAVS word
+          // and its `ret` is WRTN, which pops a six-wide frame from wfp:
+          //   1. LCALL's half (EagleStack.cpp:239-245, :273-274, :284; the
+          //      RTStubs::inject_fire replica :591-594): the marker, ac3 = the
+          //      return pc — here the placed 0x77 address of ret= — ovr = 0,
+          //      the shadow-stack push.
+          //   2. WSAVS's half: enter_frame (EagleStack.cpp:422-438).
+          // The marker's argc is 0 (a001 R2): nothing was pushed, so WRTN's
+          // callee-pop pops nothing; the arity travels in <CALLEE>.arg_count.
+          // Reintroducing the original's push-and-prologue shape is an L2
+          // rewrite, not something the naive form fakes.
+          for (int r = 0; r < 4; r++) machine.ac[r] = int32_t(cx.ac[r]);
+          machine.pc = int32_t(blk->start);      // wide_push folds copy_segment(pc, wsp); a fault names the block
+#ifdef P54_BROKEN_BRIDGE
+          // run_bridge_selftest.sh teeth: a marker claiming n pushed arguments
+          // that were never pushed — WRTN then pops 2n words of the caller's
+          // stack, and the self-test's stack-balance check must go RED.
+          machine.wide_push((machine.get_psr() << 16) | st.args);
+#else
+          machine.wide_push((machine.get_psr() << 16) | 0);
+#endif
+          machine.ac[3] = int32_t(st.ret);
+          machine.ovr = 0;
+          machine.call_stack->call(int32_t(st.target), machine.ac[3], int32_t(blk->start), 0);
+          enter_frame(machine, st.callee_wsavr);
+          return st.target;                       // <CALLEE>.b0; the callee's `ret` lands on ret=
+        }
 
         // Copied-args accounting batched at the call (IR2.md §4): the
         // block's argpush statements were pure stores; the master pushed.
@@ -1845,14 +1912,52 @@ uint32_t IRExec::run_block(Machine& machine, uint32_t pc) {
       case Stmt::RT_CALL: {
         if (i + 1 != n)
           throw std::runtime_error("IRExec: interior rt_call (loader bug)");
-        // ir 8 (docs/IR.md §5.10.6): a call out of a symbolic block is
-        // SPECIFIED and VALIDATED by ir 8 and does NOT execute. The LCALL
-        // replica and the calling bridge are P50/P53's. Fail loudly and by
-        // name rather than transferring to a pc that does not exist.
-        if (st.symbolic_ret)
-          throw std::runtime_error("IRExec: a call out of a symbolic block LOADS and VALIDATES but "
-                                   "does not execute in ir 8 — the LCALL replica and the calling "
-                                   "bridge are P50/P53 (docs/IR.md §5.10.6, docs/Project52/REPORT.md)");
+        if (st.symbolic_ret) {
+          // P54 — THE NAIVE RUNTIME CALL (docs/IR.md §5.10.6, §6; a001 R3/R4).
+          // Arguments go on the REAL STACK exactly as the site= form below
+          // pushes them (the runtime reads argument n at wsp-2n from the
+          // marker, RTBridge::arg_pointer) — what is absent is the LCALL
+          // word, so the callee is resolved from the symbol table and the
+          // marker / return / dispatch are replicated here rather than
+          // executed. Model: EagleStack.cpp LCALL :238-306; the dispatch
+          // tail :286-306 is duplicated below by ruling (a001 R4) rather than
+          // factored out of the strict surface.
+          std::vector<uint32_t> vals;
+          vals.reserve(st.argv.size());
+          for (const auto& e : st.argv) vals.push_back(cx.eval(e));
+          for (int r = 0; r < 4; r++) machine.ac[r] = int32_t(cx.ac[r]);
+          machine.pc = int32_t(blk->start);
+          if (!machine.symbols)
+            throw std::runtime_error("IRExec: rt_call " + st.text + " from a symbolic block needs a symbol "
+                                     "table to resolve the callee (no LCALL word to resolve from) [IR block " +
+                                     blk->name + "]");
+          uint32_t entry = machine.symbols->address_for_name(st.text);
+          if (entry == 0xFFFFFFFFu)
+            throw std::runtime_error("IRExec: rt_call " + st.text + " from a symbolic block: the callee is not "
+                                     "in the symbol table [IR block " + blk->name + "]");
+          if (Machine::get_segment(entry) != 7)
+            throw std::runtime_error("ILLEGAL CALL");           // EagleStack.cpp:282-283, same text
+          for (size_t k = vals.size(); k-- > 0; )
+            machine.wide_push(int32_t(vals[k]));                 // eN first ... e1 last (arg 1 at wsp-2)
+          machine.wide_push((machine.get_psr() << 16) | int32_t(vals.size()));   // the psr-saving marker form
+          machine.ac[3] = int32_t(st.ret);                       // return = the placed 0x77 address of ret=
+          machine.ovr = 0;
+          machine.call_stack->call(int32_t(entry), machine.ac[3], int32_t(blk->start), int32_t(vals.size()));
+          // ---- dispatch tail (EagleStack.cpp:286-306, duplicated by a001 R4) ----
+          const NativeRegistry* reg = rt_registry_override ? rt_registry_override
+                                    : machine.process ? &machine.process->native_registry : nullptr;
+          NativeFunc native = reg ? reg->lookup(entry) : nullptr;
+          if (native) {
+            if (machine.rt_pending_return != 0)                  // nested-in-fallback guard: re-emulate
+              return entry;
+            if (RTStubs::defer_dispatch(entry)) {                // crossings checker: break AT the entry
+              machine.pending_native = native;
+              return entry;
+            }
+            return native(machine);                              // a native returns the post-call pc
+          }
+          return entry;                                          // emulate the callee; its WRTN returns to ac3
+        }
 
         // P28: evaluate every argument first (pure; order unobservable),
         // then push them RIGHT TO LEFT through the SAME helper XPEF/LPEF/
