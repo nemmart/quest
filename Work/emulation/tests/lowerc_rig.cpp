@@ -349,9 +349,19 @@ int main(int argc, char** argv) {
     }
     uint32_t n = r.nelem ? r.nelem : 1;
     for (uint32_t i = 0; i < n; i++) {
-      uint32_t at = base + i * (r.elemwords ? r.elemwords : 1);
-      uint32_t v = (r.render == "w16") ? (M.read_word(at) & 0xFFFFu)
-                                       : M.read_wide(at);
+      uint32_t v;
+      if (r.render == "w8") {
+        // P53 (a001 Q-2a).  A byte cell is `char <n>`: the v is placed at a
+        // WORD address and element i is byte i of that region, so the index
+        // is base*2 + i and NOT base + i*elemwords.  Two bytes share a word,
+        // which is the whole reason the word path cannot render this and the
+        // reason a corpus without it cannot see a byte-address bug at all.
+        v = M.read_byte(base * 2 + i) & 0xFFu;
+      } else if (r.render == "w16") {
+        v = M.read_word(base + i * (r.elemwords ? r.elemwords : 1)) & 0xFFFFu;
+      } else {
+        v = M.read_wide(base + i * (r.elemwords ? r.elemwords : 1));
+      }
       if (r.nelem) printf("%s[%u]=%08X\n", r.cname.c_str(), i, v);
       else printf("%s=%08X\n", r.cname.c_str(), v);
     }

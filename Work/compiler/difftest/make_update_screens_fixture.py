@@ -147,9 +147,13 @@ def main():
     a("%08X %04X 16          ; *x = %d" % (ARGS, X & 0xFFFF, X))
     a("%08X %04X 16          ; *y = %d" % (ARGS + 1, Y & 0xFFFF, Y))
     a("%08X %08X 32          ; *cell" % (ARGS + 2, CELL))
-    a("setv UPDATE_SCREENS.v0 %08X 32   ; x" % ARGS)
-    a("setv UPDATE_SCREENS.v1 %08X 32   ; y" % (ARGS + 1))
-    a("setv UPDATE_SCREENS.v2 %08X 32   ; cell" % (ARGS + 2))
+    # ir 8 (P53): a by-reference parameter is an ARGUMENT CELL of pointer type,
+    # `a <ENTRY>.a<N> *<pointee>`, not a `u32` v holding an address.  The cell
+    # still holds the argument's word address and the rig still seeds it by
+    # name, so only the three names moved.
+    a("setv UPDATE_SCREENS.a1 %08X 32   ; x" % ARGS)
+    a("setv UPDATE_SCREENS.a2 %08X 32   ; y" % (ARGS + 1))
+    a("setv UPDATE_SCREENS.a3 %08X 32   ; cell" % (ARGS + 2))
     a("")
     if TRAP:
         a("; player_count = 11 drives i past PLAYER's bound of 10, so the")

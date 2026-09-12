@@ -34,6 +34,7 @@
  * compiler's.  This C recomputes, which is what naive means.
  */
 #include "quest_rt.h"
+#include "declarations.h"
 
 void UPDATE_SCREENS(const int16_t *x, const int16_t *y, const int32_t *cell)
 {

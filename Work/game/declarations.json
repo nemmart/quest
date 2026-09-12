@@ -6,6 +6,11 @@
     "comment": "P40/QUEST.1: the DO limit over CASTLE (OBJ_PTR->f911504)",
     "width": 16
    },
+   "landmass_count": {
+    "K": 1035307,
+    "comment": "P51 FAKE_LAND_MASS: land-mass count (OBJ_PTR->landmass_count)",
+    "width": 16
+   },
    "region_count": {
     "K": 11502,
     "comment": "P34 Census \u00a73 / PICK_X_Y_reading: region count (OBJ_PTR->f11502)",
@@ -228,6 +233,40 @@
    "minK": -23,
    "origin": 0,
    "stride": 23
+  },
+  "LANDMASS": {
+   "base": "OBJ_PTR",
+   "bound": 1000,
+   "comment": "P51 FAKE_LAND_MASS + CREATE_MAP 701744CA..EC: named land-mass rectangles; bound 1000 = DERR 17 at 701697DD; origin base+1035308 if `cell` is field 0; `name` is CHAR(30) VARYING (length word at +2, data at byte 2*0xFCC19).  FIELD NAMES ARE CLAIMED, NOT DERIVED (P51 \u00a71/\u00a76.1): they rest on their uses in FAKE_LAND_MASS alone; CREATE_MAP's writer would settle them.",
+   "fields": {
+    "cell": {
+     "K": 1035286,
+     "width": 32
+    },
+    "name_len": {
+     "K": 1035288,
+     "width": 16
+    },
+    "x1": {
+     "K": 1035304,
+     "width": 16
+    },
+    "x2": {
+     "K": 1035306,
+     "width": 16
+    },
+    "y1": {
+     "K": 1035305,
+     "width": 16
+    },
+    "y2": {
+     "K": 1035307,
+     "width": 16
+    }
+   },
+   "minK": 1035286,
+   "origin": 1035308,
+   "stride": 22
   },
   "PLAYER": {
    "base": "SD_PTR",
