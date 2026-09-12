@@ -202,53 +202,61 @@ when Phase B is not.
 
 ## 10. The question channel (SOP, Sep 12 2026)
 
-Sessions used to raise questions by making the user copy conversation text
-between a worker session and the integrator session. That is slow, lossy,
-and the answer lands somewhere the worker cannot re-read. **Questions and
-answers now go through the repo.**
+Questions used to travel as copy-pasted conversation text between a worker
+session and the integrator session. Slow, lossy, and the answer landed
+somewhere the worker could not re-read. **Questions, plan gates, and answers
+now go through the repo. The user carries only a nudge, never content.**
 
 ### Files
 
     docs/ProjectNN/q001-short-title.md      written by the WORKER
     docs/ProjectNN/a001-short-title.md      written by the INTEGRATOR
 
-Matching numbers and matching titles, so a pair sorts adjacent. **The worker
-owns `q*.md`; the integrator owns `a*.md`.** Neither ever edits the other's
-file, so two sessions can push without conflict. Everything goes on **main**
-— never only on a branch, or the other side cannot see it.
+Matching numbers and titles so a pair sorts adjacent. **Worker owns `q*.md`;
+integrator owns `a*.md`.** Neither edits the other's files, so parallel
+sessions never conflict. Everything on **main** — a question on a branch is
+invisible.
 
-### The worker's obligations
+### The loop
 
-1. **Write the question self-contained.** The integrator does not have your
-   session context, your scrollback, or your reasoning. State: what you were
-   doing, what you found, the decision needed, the options you see and your
-   read on each.
-2. **State your DEFAULT** — what you will do if the question goes
-   unanswered. This field is mandatory. It means a slow answer does not
-   stall you, it tells the integrator how urgent the question really is, and
-   it often makes the answer unnecessary.
-3. **Commit, push, and KEEP WORKING** on anything not blocked. Stop only if
-   genuinely blocked on every front.
-4. Re-read `a*.md` before resuming the affected work. An answer may arrive
-   after you have moved on.
+1. Worker writes `qNNN`, commits, pushes to main, **STOPS**, and tells the
+   user it is there.
+2. User tells the integrator.
+3. Integrator pulls, writes `aNNN`, pushes, tells the user.
+4. User tells the worker.
+5. Worker pulls, reads `aNNN`, resumes.
 
-### The integrator's obligations
+**The worker waits.** It does not work ahead on other fronts while a
+question is outstanding: a ruling can invalidate work done in parallel, and
+reviewing work built on a guess costs more than the idle time saves.
 
-1. Pull, read every unanswered `q*.md`, write the matching `a*.md`, push.
-2. An answer states the ruling, the reasoning, and whether it changes any
-   design doc. **If it changes a design doc, change the doc too** — an answer
-   file is not a place for design to live.
-3. The same channel carries **unprompted guidance**, not only replies. An
-   `a*.md` with no `q*.md` is legitimate.
+**The plan gate uses this channel.** "Part 1 — STOP AND REPORT" means write
+the gate report as `q001-plan-gate.md` and push it. Not chat.
+
+### What a question must contain
+
+The integrator has none of the worker's context — no scrollback, no
+reasoning, no half-formed hypotheses:
+
+- what you were doing and what you found
+- the decision needed
+- the options you see, with your read on each
+- **your RECOMMENDATION** — what you would do if it were your call, and why
+
+The recommendation is mandatory. It is often the whole answer ("yes, do
+that"), it makes disagreement specific rather than vague, and writing it
+frequently dissolves the question.
+
+### What an answer must contain
+
+The ruling, the reasoning, and whether it changes a design doc. **If it
+changes a design doc, change the doc in the same push** — an answer file is
+not a place for design to live, or the next session will not find it.
+
+The channel also carries **unprompted guidance**: an `aNNN` with no `qNNN`
+is legitimate.
 
 ### The user's role
 
-Reduced to two prompts: *"check for questions"* to the integrator, and
-*"check for answers"* to the worker. No copy-paste.
-
-### Why the default field matters
-
-A worker that stops dead on every uncertainty wastes a session; a worker
-that guesses silently produces work nobody can trust. Naming the default
-does both jobs at once — it keeps the session moving and it makes the guess
-visible and reversible.
+Two nudges per exchange: *"there's a question"* to the integrator,
+*"the answer is ready"* to the worker. No content, no copy-paste.

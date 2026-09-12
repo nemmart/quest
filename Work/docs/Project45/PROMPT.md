@@ -83,7 +83,7 @@ Do not write `Salvage.md` yet. Report:
 4. **Your estimate of how many claims are in scope**, against the numbers
    above.
 
-STOP. Wait for a ruling.
+STOP. Push the gate as `q001-plan-gate.md` and wait for `a001`.
 
 ---
 
@@ -151,29 +151,36 @@ state it).
 
 ---
 
-## Coordination — the question channel (BINDING)
+## Coordination — questions and the plan gate (BINDING)
 
-**You have the repo. Use it to ask questions; do not wait on chat.**
+**You have the repo. Questions and the plan gate go through it, not through
+chat.**
 
-When you need a ruling, write `docs/Project45/q001-short-title.md`
-(`q002`, `q003`, …), commit, **push to main**, and **keep working on
-anything not blocked**. The integrator pulls, writes
-`docs/Project45/a001-short-title.md` alongside it, and pushes. You own
-`q*.md`; the integrator owns `a*.md`; neither edits the other's files.
+Write `docs/Project45/q001-short-title.md` (`q002`, `q003`, …), commit,
+**push to main**, then **STOP and tell the user it is there.** Do not work
+ahead on other fronts while a question is outstanding — a ruling can
+invalidate work done in parallel. The integrator pulls, writes
+`docs/Project45/a001-short-title.md`, and pushes; the user will tell you
+when to look. Pull and read it before resuming.
 
-Each question must contain, because the integrator has none of your context:
+You own `q*.md`; the integrator owns `a*.md`. Never edit an `a*.md`.
+
+**Part 1's plan gate IS a question file** — write it as
+`q001-plan-gate.md` and push it.
+
+Every question must contain, because the integrator has none of your
+context:
 
 - what you were doing and what you found
 - the decision you need
 - the options you see, with your read on each
-- **YOUR DEFAULT — what you will do if nobody answers.** Mandatory. It keeps
-  you moving and tells the integrator how urgent this actually is.
+- **your RECOMMENDATION** — what you would do if it were your call, and why
 
-Re-read `a*.md` before resuming affected work; an answer may land after you
-have moved on. Full SOP: `docs/INTEGRATOR.md` §10.
+The recommendation is mandatory. It is often the entire answer, and writing
+it out will sometimes dissolve the question.
 
-**Push questions to main, not to your branch** — a question on a branch is
-invisible.
+Full SOP: `docs/INTEGRATOR.md` §10. **Push to main — a question on a branch
+is invisible.**
 
 ## Delivery
 

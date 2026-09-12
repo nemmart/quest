@@ -121,10 +121,10 @@ questions. Verify artifacts against `docs/Provenance.md`. *(A tarball can be
 stale: the Sep 12 design session ran on one cut before the P41 merge and
 before `REWRITE_PLAN.md` landed. Pull before trusting a tarball's vintage.)*
 
-**Questions go through the repo, not through the user.** Worker writes
-`docs/ProjectNN/qNNN-title.md` and pushes to main; integrator answers in
-`aNNN-title.md`. Every question states the author's DEFAULT if unanswered.
-SOP: `docs/INTEGRATOR.md` §10.
+**Questions and plan gates go through the repo.** Worker writes
+`docs/ProjectNN/qNNN-title.md`, pushes to main, and **stops**; integrator
+answers in `aNNN-title.md`; the user carries only a nudge each way. Every
+question states the worker's RECOMMENDATION. SOP: `docs/INTEGRATOR.md` §10.
 
 **Build:** `cd Work/emulation && make`. Self-tests:
 `tests/run_helpers_selftest.sh`, `tests/run_strings_selftest.sh`,
