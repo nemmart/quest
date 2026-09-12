@@ -79,10 +79,35 @@ translated routine writing one of those words.
 
 ## 4. The compiler NEVER emits `R[]`
 
-The naive form spells a dereference plainly — **`M32[M32[a]]`**: fetch the
-pointer, fetch through it. `R[]` stays in the IR because the book uses it.
+The naive form spells a dereference plainly — fetch the pointer with `M32[a]`,
+then read through the result. `R[]` stays in the IR because the book uses it.
 
-**`M32[M32[a]] → M32[R[a]]` is a REWRITE**, with the precondition above.
+### The rule, stated precisely
+
+It acts on the **inner fetch**, wherever that fetch appears — not on the whole
+`M32[M32[a]]` shape:
+
+```
+M32[a]  →  R[a]        iff bit 31 of the word at `a` is clear
+```
+
+So `M16[M32[a]] → M16[R[a]]`, `M32[M32[a]] → M32[R[a]]`, and a bare
+`ac2 = M32[a]` feeding an address use becomes `ac2 = R[a]` by the same rule.
+
+**Stating it on the outer shape would be wrong**, and the counts show why:
+
+| outer form | sites |
+|---|---:|
+| `M16[R[…]]` | **861** |
+| `M32[R[…]]` | 35 |
+
+Most dereferences read a **16-bit datum through a 32-bit pointer**, so a rule
+written as `M32[M32[a]] → M32[R[a]]` would cover 35 of 896. There are also
+`= R[…]` sites where the resolved pointer is the value rather than something
+read through — which the inner-fetch formulation covers and an outer-shape
+pattern does not.
+
+**This is a REWRITE**, with the precondition above.
 
 Why it is not a lowering:
 
