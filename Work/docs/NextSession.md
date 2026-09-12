@@ -120,6 +120,17 @@ problem with current coverage claims.
   partial. Fix the driver (validate the full sequence, foreground), require
   `I.STOP` for play verdicts, add a standing "statements never executed by
   any leg" verdict line. Then re-run the 16-leg battery.
+- **THE BATTERY'S FAILED MARKER IS ALWAYS SET** (found Sep 12 2026, P46
+  task 050). `results/*/FAILED` has read `exit=1` since at least 047b —
+  the accepted reference run — while every leg was `leg=OK`. Cause: `want`
+  values in the P27/P28/P31/P32 sections are stale relative to P33
+  (`embeds_book` wants 729 where the same file's P33-B section correctly
+  wants and gets 557; `string_statements` wants 1593 and gets 1689). **A
+  battery whose failure marker is always set cannot detect a failure** —
+  the inverse of P41's "a check that cannot fail reads like a check that
+  passed", and more dangerous, because a real regression will look normal.
+  Owed: task 051, refresh the expectations. Must land before any project
+  leans on the battery as a gate.
 - **Gen 6.2 checker item**: the deterministic form of the P33-C fix — defer
   a halt to the next pair boundary (today `Lockstep::halting` only guards
   `compare_pair`).
