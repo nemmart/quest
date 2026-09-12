@@ -142,7 +142,19 @@ Prompts are written per project; ask for the one you are running.
    strings/bits only as three literals. The big item is **bytes** (§2 item
    5): `char` is a WORD kind today, so GET_INPUT's 144-byte buffer would
    lower to 144 words, and the mask set has only `trunc16`.
-7c. **P52 — extend the compiler** to P51's gap list, in its centrality
+7c. **P52 — ir 8: DONE, MERGED.** `docs/IR.md` 1,144 → 1,630 lines, loader
+   `IRExec.cpp` +421/−88, **self-test GREEN 129 cases** with teeth on every
+   refusal. Landed: the **variable form** (a cell name is its CONTENTS,
+   width and sign from the declaration; `wp`/`bp` resolve by operand kind,
+   so no `&` operator), **pointer vtypes** `*i16 *u16 *i32 *u32 *char` plus
+   `*varying`/`*words` (KIND enforced, pointee width advisory),
+   **initialised `v`** (`char n = "text"` — the gate's blocking finding: a
+   compiled routine's literal exists nowhere in the image), `a`/`arg_count`/
+   `ret` cells, `trunc8`, the widened `X.CB` callee rule, and symbolic call
+   returns that **validate but do not execute**. Both artifacts load
+   unchanged via the ir 7 compatibility window; **nothing was regenerated**.
+   Also: `SUB` → `RANGE_CHECK` across `game/`.
+7c-old. **P52 (superseded) — extend the compiler** to P51's gap list, in its centrality
    order. **Generator-first**: extend the differential corpus to byte types
    BEFORE implementing them (P48's Stage-A discipline; a second width class
    is where P48's own type-vs-mask bug class lives). Also carries the
