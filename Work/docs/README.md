@@ -61,6 +61,7 @@ one-time change/review notes.
 | Project29/StringsDesign.md | CURRENT | Design of record for the string family: located strings, arena twins, residues, the Mapper arena form |
 | Provenance.md | CURRENT | Artifact checksums of record, dated table per regeneration |
 | EmulatorDivergences.md | CURRENT | Every known emulator↔hardware difference: fixed / open-benign / open-guard |
+| Indirection.md | **REFERENCE** | **`R[]`, `M32[M32[a]]`, and why the dereference rewrite is legal.** The census (1,035 sites, one level everywhere), the precondition and its provenance, why the compiler never emits `R[]`, why no `**` type is needed, and what would falsify it. **Cite this rather than restating it** |
 | Mapper.md | CURRENT | The address mapper: forms, the three-call surface, directionality rulings, the arena + claim-insertion legs |
 
 ## Working docs
