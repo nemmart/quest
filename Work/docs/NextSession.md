@@ -230,6 +230,27 @@ problem with current coverage claims.
   self-tests green with teeth red, vform selftest green with the
   broken-allocator build red, ir 7 headers and the s@ census exact. P46's
   loader work is verified.
+- **STANDING MEASUREMENT RULE (P49 q003 §2): a coverage delta smaller than a
+  few HUNDRED statements is inside the noise.** Three independent sources of
+  run-to-run variation: **world generation is random** (FAKE_LAND_MASS moved
+  248 → 133 statements between two runs of one battery), `inj-emu`'s
+  injected-fault race, and random encounters interrupting the auto-move. Any
+  project claiming a coverage gain must exceed that band or report a
+  distribution over several runs.
+- **`bin/runner.sh` HAS BEEN FIXED IN THE REPO BUT NOT DEPLOYED.** P49 moved
+  the overlap guard before the destructive step and made deletion
+  recoverable (move to `/tmp/quest-results-backup-<name>-<epoch>`). **It does
+  not take effect until someone copies it to the runner box and restarts the
+  unit** — until then the repo and the running poller disagree. Likely
+  trigger for the original defect: `Restart=always` in the unit file, so a
+  restarted runner picks up the same task, wipes the in-flight attempt, and
+  is refused by the task's own guard — which matches 053's ATTEMPTS=3 exactly.
+- **THE EMULATOR CORE DUMP IS UNEXPLAINED** and is the oldest open finding.
+  P49 established it is SEPARATE from the ceiling bug: `inj-emu` produced no
+  artifacts at all while `play`/`play-st` completed with full sets, so an
+  abort in a leg that produced nothing cannot have stopped a screen exit in
+  two that finished. `inj-emu` is the only `play`-mode leg on the `emu`
+  config, so nothing else in the battery covers that combination.
 - **THE RUNNER DESTROYS RESULTS (found Sep 12, task 053).** Two defects:
   a second attempt can start while the first is still running, and
   `bin/runner.sh:85` does `rm -rf results/$name` **before** the overlap
