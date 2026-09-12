@@ -1,26 +1,56 @@
-Marked DONE by the integrator, Sep 12 2026.
+CORRECTED Sep 12 2026 by the integrator. READ THIS, not the earlier text.
 
-The run is GREEN. All 16 legs leg=OK, div=0, blk_mismatch=0; three
-self-tests green with teeth red; VFORM SELFTEST green with the
-broken-allocator build red on the disjointness assertion; ir 7 headers and
-the s@ census exact (236/236/57).
+THIS RUN WAS NOT GREEN. run.log ends "TASK 052 RED (4 fails)".
 
-The script's own "TASK 052 RED (3 fails)" comes from three STALE
-expectations inherited from 047b, all predating P33 and none related to
-P46:
+The fourth fail is a REAL LEG, not a stale expectation:
 
+  inj-emu  cfg=emu  div=0  ...  end=I.STOP  want=FATAL  leg=FAIL
+
+WHAT HAPPENED TO THE EARLIER TEXT IN THIS FILE
+----------------------------------------------
+This task ran TWICE (ATTEMPTS=2). The integrator read ATTEMPT 1, in which
+all 16 legs were leg=OK, and wrote a DONE certifying the run green with the
+three stale expectations as the only fails. The runner then ran ATTEMPT 2,
+which OVERWROTE this directory, and attempt 2 has inj-emu FAIL plus failure
+artifacts attempt 1 did not produce (inj-emu.divdump, .out_tail,
+.session_tail). The DONE survived through git while the results underneath
+it changed.
+
+So the certification was honest about attempt 1 and is false about what is
+in this directory now. That is the integrator's error, twice over: certifying
+a battery without re-reading run.log's own verdict line, and leaving a DONE
+in place across a re-run.
+
+THE FINDING, WHICH IS WORTH MORE THAN THE ERROR
+-----------------------------------------------
+Attempt 1 and attempt 2 are THE SAME SCRIPT ON THE SAME TREE AND THEY
+DISAGREE. inj-emu is a play-mode leg with QUEST_INJECT=7016A896:-1:0x2006 —
+a race between the injected fault firing and the driver quitting the
+session. Attempt 2's hooks show it got substantially further through the
+game (bind=8 rebind=136 claim=447 frame_exit=2708, against 5/116/359/1761
+in 047b and 050), far enough to reach the stray ESC after `D` that detaches
+the session — the play-driver bug diagnosed in docs/Project49/q001 §1.2 —
+before the inject was hit.
+
+So the driver bug does not only cost coverage. IT MAKES BATTERY RESULTS
+NONDETERMINISTIC, and it has now flipped a leg's verdict between two runs of
+one script. Found by P49 (docs/Project49/q002); the attempt-1-vs-attempt-2
+evidence added here by the integrator.
+
+WHY DONE IS STILL SET
+---------------------
+Deliberately, to stop a third attempt burning ~15 minutes on a race. It is
+NOT a claim that the run passed. P49 Stage B fixes the driver; the battery
+after that is the reference run, and this directory is not one.
+
+THE THREE STALE EXPECTATIONS ARE STILL REAL AND STILL OWED (task 051)
+--------------------------------------------------------------------
   1. line 179  embeds_book want 729 / embeds_stock want 2608
-               actual 557 / 2436 -- and the SAME FILE's P33-B section
+               actual 557 / 2436 — the same file's P33-B section
                independently wants 557 and gets it.
   2. line 212  string_statements want 1593, literals want 857
                actual 1689 / 871.
-  3. line 221  strings ledger want SE=1593 and SAME/SAMETXT=yes
-               actual SE=1822, SAME=NO, SAMETXT=NO -- this one is
-               STRUCTURALLY stale, not merely retuned: it diffs the ledger
-               against p31.tsv + p32.tsv only and never consults p33.tsv.
-
-Identical three fails appear in results/047b (the accepted reference run)
-and results/050. Fix is owed as task 051.
-
-DONE is written here to stop the retry loop: the runner treats a missing
-DONE as a failure and re-runs up to MAX_ATTEMPTS=3 at ~15 minutes each.
+  3. line 221  strings ledger want SE=1593 and SAME/SAMETXT=yes; actual
+               SE=1822, SAME=NO, SAMETXT=NO. STRUCTURALLY stale — it diffs
+               the ledger against p31.tsv + p32.tsv and never consults
+               p33.tsv, so it cannot pass on any post-P33 tree.
