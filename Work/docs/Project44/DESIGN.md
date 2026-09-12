@@ -115,6 +115,62 @@ declared maximum — because a `v` is eventually laid down *exactly on top of*
 the Eagle allocation at 0x74. Arbitrary-length string temporaries are not
 `v`s; they are `s@` twins. Assigning a twin to a `v` truncates or pads.
 
+### 4.1a Nesting: uplevel access is FREE in the naive form
+
+A nested entry reading its parent's local is, at 0x76, **an ordinary read of
+a global**. `FIRE.1` reads `FIRE.v0` by name. No static link, no parent frame
+pointer, no indirection — scope is carried by the qualified name, and the
+address is absolute and known. The compiler knows at generation time that
+`FIRE.v0` belongs to the parent; nothing at run time needs to.
+
+This retires, for L1, the construct that consumed a whole project: P39 built
+`UPLINK`/`UP`/`UPARG` and landed R42–R45 to model the link, and P47 counted
+63 XCALL sites each carrying a link load. **None of that is needed to
+generate or to run the naive form.**
+
+The link returns only as an **L2 matching obligation**: the original spells
+the access `wp(link, d)` having loaded the link from `wp(fp, -6)`, so a
+rewrite must reintroduce the link register and the indirection. That is a
+transformation with a precondition — not a construct the compiler must
+understand. Same pattern as register allocation, hoisting and slot reuse:
+the hard thing becomes a rewrite.
+
+**Two consequences.**
+
+**L1 gets nested routines nearly free.** A C `FIRE.1` is substitutable with no
+link machinery, provided its arguments arrive correctly. Nesting therefore
+does not gate first-target selection, and P47's leaf set can be read without
+regard to which families have nested entries.
+
+**The merge (§5.3) is PER-FAMILY, not per-entry.** `FIRE` and `FIRE.1` share
+one `v` namespace, so their live ranges interact and must be analysed
+together. This is correct and simpler than the alternative — one call-graph
+node, one namespace, one liveness problem — but P48 must not assume
+per-entry scope.
+
+### 4.1b The nesting table
+
+Measured, two independent ways: **nesting is exactly one level deep
+program-wide** (Salvage, from P39's correction of the five apparent
+double-nestings; and P47, which found all 63 XCALL targets to be `.N@`
+entries of the *caller's own* family, with no `.N@` calling another family's
+`.N@`).
+
+So the parent map is flat — `FIRE.1 → FIRE`, `FIRE.2 → FIRE`, never
+`FIRE.2 → FIRE.1` — and **the naming convention is already the table**: strip
+the last `.N` and you have the parent.
+
+Two rulings anyway:
+
+1. **Carry it as an explicit table, not as a parsing rule.** PL/I permits
+   arbitrary depth. A rule derived from names silently does the wrong thing
+   the day something does not fit; a table can be checked. P47 produces
+   family structure already, so the table is a byproduct of work in flight
+   and is an **input P48 takes from P47**.
+2. **A parent chain deeper than one level is a HARD ERROR.** Not something to
+   cope with. It would mean P47's graph and Salvage's finding are both wrong,
+   which is a finding worth stopping for.
+
 ### 4.2 Compiler-invented storage is also `v`
 
 Some storage has a home but no name in the C source — e.g. a hoisted
