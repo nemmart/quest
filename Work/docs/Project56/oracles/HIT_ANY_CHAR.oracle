@@ -1,0 +1,27 @@
+# HIT_ANY_CHAR — Project 56, the first case.
+#
+# Sites are the `v` itself (DESIGN §7.4): `v` names are qualified by addrbook
+# entry and derived from the source, so no IR position is ever named and this
+# file does not become write-once when anything upstream changes.
+#
+# `frame+N` rather than an absolute: it is the spelling HIT_ANY_CHAR.c's own
+# frame comment uses ("ch at slot 2", "length word at 4"), so the oracle is
+# checkable by eye against the C and against the disassembly, and the addrbook
+# stays the single source of the base.
+
+routine HIT_ANY_CHAR
+
+# --- placement -------------------------------------------------------------
+place  v0            frame+2        # ch, CHAR(1); the even pair 2-3 (Salvage F22)
+place  v2            frame+4        # the 30-byte varying temp
+place  v4            frame+4        # the SAME temp — merge; live ranges checked
+place  v1            0x7016DE07:0   # the literal, in the code image
+# NOT a placement: `GET_INPUT.a1` was on this list until the monotonicity
+# replay showed the line moving the distance by 0.  R2 already derives the
+# argument cell (0x74003F1C = wfp-10-2N) from the addrbook, so supplying it
+# was supplying something the model explains.  Oracle length 5 -> 4.
+
+# --- rewrites --------------------------------------------------------------
+# "CHAR constant <= 2 bytes -> WLDAI + one wide store" — named as future work
+# by HIT_ANY_CHAR.c's own header before any of this was measured.
+rewrite pack_varying_imm  at=v4  reg=ac1
