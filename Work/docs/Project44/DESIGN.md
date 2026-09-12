@@ -466,6 +466,14 @@ They are complementary precisely where each is weak:
 
 - **L1** is behavioural truth on **executed paths only**. A block no play
   session reaches is unverified — but it is *identified* as unverified.
+
+  **Measured (P47 gate, Sep 12 2026): the battery reaches 41 of 80 call-graph
+  nodes and 15 of 20 leaves.** So L1 as it stands can validate roughly half
+  the program, and the rest is **L2-only** until play coverage improves.
+  This makes the owed play-driver fix (`NextSession.md`) potentially the
+  gating item for the whole L1 strategy rather than hygiene — P47's
+  `Coverage.md` is charged with judging how much of the gap is the driver bug
+  versus genuinely hard game states.
 - **L2** is static truth on **all paths**, including those play never
   reaches.
 
@@ -658,7 +666,7 @@ Dependency order, each to get its own prompt. Not a schedule.
 | 3 | **the basic compiler** | C → naive IR. Choice-free. |
 | 4 | **compiler differential tester** | gcc vs our lowering on non-game programs. Small, and it is the ENTIRE evidence base for obligation (a). Must not land after the compiler. |
 | 5 | **L1 substitution harness** | entry interception, sync-list exclusion, the **calling bridge** (a new IR production + validation — P46 F7, bigger than first scoped), the **slot bijection** in `ircmp` (P46 F6), the rendezvous contract. **The keystone: this is the backup plan.** |
-| 6 | **first leaf routines at L1** | PICK_X_Y first |
+| 6 | **first leaf routines at L1** | **selected by P47's `Order.md`, on evidence.** "PICK_X_Y first" is WITHDRAWN (P47 gate): the battery never executes it, nor its only caller REPOSITION, so under L1 its oracle would never fire and the checker would stay green whether the C was right or catastrophic. **A first target must be a routine play actually reaches** |
 | 7 | **call-graph extraction** | from the book; needed to order bottom-up |
 | 8 | **transformer + oracle + L2** | the ambitious layer, on top of a working L1 |
 
