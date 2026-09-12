@@ -17,6 +17,7 @@
 
 namespace hw {
 class Machine;
+class NativeRegistry;
 
 class IRExec {
 public:
@@ -47,6 +48,19 @@ public:
   // exit pc chosen by the embedded terminator (or the 0x30000000
   // syscall sentinel propagated from an embedded instruction).
   uint32_t run_block(Machine& machine, uint32_t pc);
+  // P54 — THE CALLING BRIDGE (docs/Project54/{q001,a001}-plan-gate.md).
+  // enter_frame: the WSAVS/WSAVR replica for a SYMBOLIC callee, which has no
+  // WSAVS instruction of its own and whose `ret` is WRTN (EagleStack.cpp
+  // WRTN pops the six-wide frame this writes). Frame size 0: a compiled
+  // routine's locals live at 0x76, so there is nothing to claim or zero.
+  // Named so the Eagle->compiled entry (P50) can call the same prologue.
+  static void enter_frame(Machine& machine, bool wsavr);
+  // rt_registry_override: the self-tests' native registry (a001 R3). A
+  // symbolic rt_call has no LCALL word to resolve from, so the callee comes
+  // from machine.symbols and its native (if any) from
+  // machine.process->native_registry — which needs an OSProcess the rigs
+  // do not build. Null in the emulator; consulted only when set.
+  static NativeRegistry* rt_registry_override;
 
   struct Expr;                       // opaque AST node
   // P26 (ir 3): effectful ops sit only at statement root and name the
@@ -87,7 +101,11 @@ public:
     uint32_t ret = 0;                // CALL: declared return pc (belief); ir 8: the
                                      //   placed 0x77 address of a symbolic ret= label
     bool symbolic_ret = false;       // ir 8 (§5.10.6): a naive call out of a symbolic
-                                     //   block — no site=, no marker=, ret= is a name
+                                     //   block — no site=, no marker=, ret= is a name.
+                                     //   P54: CALL: target = the placed address of
+                                     //   <CALLEE>.b0 (the entry block, a001 R1)
+    bool callee_wsavr = false;       // P54 CALL (naive): the callee's addrbook variant
+                                     //   is WSAVR (ovk 0) rather than WSAVS (ovk 1)
     uint32_t marker = 0;             // CALL: marker slot (validated belief)
     int32_t  args = 0;               // CALL: elided arg-push count
     std::shared_ptr<Expr> lhs, rhs;  // STMT: lhs/rhs (rhs = arg a of an effectful op);

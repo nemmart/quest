@@ -20,6 +20,8 @@
 //     WSAVS frame) — final v memory and the WRTN residues checked against
 //     hand-computed expectations
 //  4. faults — a goto index out of range is a loud executor FAULT
+//  P54: leg 3b runs a naive game->game call through the calling bridge;
+//     the rt_call legs are in tests/bridge_selftest.cpp
 //
 // NOT covered (docs/Project46/REPORT.md): the Mapper/checker's view of 0x76
 // pointers at a rendezvous; ordinal counting for 0x77 arrivals; call /
@@ -43,6 +45,7 @@
 #include "hw/Decoder.hpp"
 #include "hw/Permissions.hpp"
 #include "os/ArrayPage.hpp"
+#include "debug/SymbolTable.hpp"
 using namespace hw;
 
 static int fails = 0, cases = 0;
@@ -157,11 +160,15 @@ static const char* PROGRAM_TEXT =
   "\n"
   "blocks 9\n";
 
-// A load-only program: a naive game->game call and a naive rt_call, both with
-// SYMBOLIC ret= labels. ir 8 SPECIFIES and VALIDATES these; it does not make
-// them execute (the LCALL replica and the bridge are P50/P53), so the
-// execution leg asserts a loud, honest refusal rather than a result.
-static const char* CALLS_TEXT =
+// P54: calls out of a symbolic block now EXECUTE (docs/Project54). Two
+// programs: NOB0_TEXT keeps P52's shape (a call to an entry with no b0) and
+// must now REFUSE by a001 R1; GG_TEXT is a naive game->game call that runs
+// through the bridge -- the caller writes the callee's `a` cell and
+// arg_count, `call` transfers to ALPHA.b0 (LCALL + WSAVS replicated), the
+// callee writes through the pointer and `ret`s (WRTN) onto GAMMA.b1. The
+// rt_call legs live in tests/bridge_selftest.cpp (they need a symbol table
+// and a native registry).
+static const char* NOB0_TEXT =
   "ir 8\n"
   "mode stock\n"
   "a ALPHA.a1 *i16\n"
@@ -169,26 +176,48 @@ static const char* CALLS_TEXT =
   "v GAMMA.v0 i16\n"
   "\n"
   "block GAMMA.b0\n"
-  "  ALPHA.a1 = wp(GAMMA.v0, 0) ; the caller writes the callee's argument cells\n"
+  "  ALPHA.a1 = wp(GAMMA.v0, 0)\n"
   "  ALPHA.arg_count = 1\n"
   "  call ALPHA args=1 ret=GAMMA.b1\n"
   "\n"
   "block GAMMA.b1\n"
-  "  rt_call ?WRITE_SCREEN(0x70000260, 0x70000262) ret=GAMMA.b2 ; arguments still go on the stack\n"
+  "  ret\n"
   "\n"
-  "block GAMMA.b2\n"
+  "blocks 2\n";
+static const char* GG_TEXT =
+  "ir 8\n"
+  "mode stock\n"
+  "a ALPHA.a1 *i16\n"
+  "a ALPHA.arg_count u16\n"
+  "v GAMMA.v0 i16\n"
+  "v GAMMA.v1 u32\n"
+  "\n"
+  "block GAMMA.b0\n"
+  "  ac0 = 0x1234\n"
+  "  ALPHA.a1 = wp(GAMMA.v0, 0) ; the caller writes the callee's argument cells\n"
+  "  ALPHA.arg_count = 1\n"
+  "  call ALPHA args=1 ret=GAMMA.b1\n"
+  "\n"
+  "block ALPHA.b0\n"
+  "  ac0 = ALPHA.arg_count\n"
+  "  M16[ALPHA.a1] = ac0 + 6 ; 7, through the caller's pointer\n"
+  "  ret\n"
+  "\n"
+  "block GAMMA.b1\n"
+  "  GAMMA.v1 = ac0 ; WRTN restored the CALLER's ac0, not the callee's\n"
   "  ret\n"
   "\n"
   "blocks 3\n";
 
 struct Rig {
   Memory memory;
+  debug::SymbolTable symbols;                          // P54: CallStack::call reads it
   Machine machine;
   std::vector<os::ArrayPage*> pages;
   static constexpr uint32_t STACK = 0x70000000u;    // 8 pages
   static constexpr uint32_t CODE  = 0x70100000u;    // the literal's page
   static constexpr int32_t  WFP = 0x70001000, SAVED_WFP = 0x70000F00;
-  Rig() : machine(nullptr, nullptr, nullptr, &memory) {
+  Rig() : machine(nullptr, nullptr, &symbols, &memory) {
     memory.process_name = "vform";
     map(STACK, 8); map(CODE, 2);
     machine.zero_claims = false;
@@ -396,23 +425,28 @@ static int run() {
   expect(r.machine.ac[3] == Rig::SAVED_WFP, "ret: ac3 = wfp");
   expect(r.machine.c == 0, "ret: c from the return word");
 
-  // ---- 3b. ir 8: calls out of a symbolic block LOAD and VALIDATE, and do
-  //          NOT execute (docs/IR.md 5.10.6) ---------------------------------
+  // ---- 3b. P54: a naive game->game call EXECUTES through the bridge; a
+  //          call whose callee has no b0 REFUSES (a001 R1) ------------------
+  refuses("teeth: naive call to an entry with no b0", NOB0_TEXT, "ALPHA.b0 is not a block of this file");
   {
-    write_file(SCRATCH, CALLS_TEXT);
+    write_file(SCRATCH, GG_TEXT);
     IRExec* c = nullptr;
     try { c = IRExec::load_file(SCRATCH, ADDRBOOK); }
-    catch(const std::exception& e) { fail("naive call program loads", e.what()); }
+    catch(const std::exception& e) { fail("game->game program loads", e.what()); }
     if (c) {
-      expect(c->symbolic_block_count() == 3, "calls program: 3 symbolic blocks", std::to_string(c->symbolic_block_count()));
+      expect(c->symbolic_block_count() == 3, "game->game program: 3 symbolic blocks", std::to_string(c->symbolic_block_count()));
       IRExec::instance = c;
       RIG(k);
       c->map_pages(k.memory);
+      int32_t wsp0 = k.machine.wsp;
       std::string got;
-      try { k.machine.run_steps(c->block_address("GAMMA.b0"), 10); got = "returned"; }
+      try { k.machine.run_steps(c->block_address("GAMMA.b0"), 20); got = "returned"; }
       catch(const std::exception& e) { got = e.what(); }
-      expect(got.find("does not execute in ir 8") != std::string::npos,
-             "a naive call refuses to EXECUTE, loudly and by name", got);
+      expect(got == "Empty call stack", "game->game: ends at GAMMA.b1's ret (the top-level WRTN)", got);
+      expect(k.memory.read_word(c->v_address("GAMMA.v0")) == 7, "game->game: the callee wrote 7 through the caller's pointer", hex(k.memory.read_word(c->v_address("GAMMA.v0"))));
+      expect(k.memory.read_wide(c->v_address("GAMMA.v1")) == 0x1234u, "game->game: the caller's ac0 survived the call (WRTN restored the replica image)", hex(k.memory.read_wide(c->v_address("GAMMA.v1"))));
+      expect(k.machine.wfp == Rig::SAVED_WFP, "game->game: the rig frame popped last (stack balanced)", hex(uint32_t(k.machine.wfp)));
+      (void)wsp0;
       IRExec::instance = nullptr;
       delete c;
     }
