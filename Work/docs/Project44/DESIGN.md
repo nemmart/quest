@@ -662,9 +662,23 @@ construction.
 
 **Outgoing calls are part of the contract.** PICK_X_Y calls
 `RANDOM_NUMBER$3`, which advances the seed; same calls, same order, same
-arguments, or everything downstream diverges. The checker should compare the
-**outgoing call sequence**, not just end state — which additionally catches
-wrong-but-coincidentally-same-result translations.
+arguments, or everything downstream diverges.
+
+**RULING (P54 §4, MEASURED — not a preference): the outgoing call sequence
+must be compared DIRECTLY — logged callee, arguments, order. Comparing
+shared data and outputs is NOT sufficient, and an earlier draft of this
+section implied it was.**
+
+P54 proved it by counterexample on PICK_X_Y. Drop one in-loop draw and the
+two walks **COALESCE**: the original bails once at the skipped position (two
+of its three region values bail), after which both accept the same point at
+the same position. So the draw count, **the seed, and the coordinates** all
+coincide. Every state-based comparison passes on a program that made a
+different sequence of calls.
+
+The general form: state comparison can only see a divergence that *survives*
+to the boundary, and a retry loop is precisely the structure that absorbs
+one. Only a logged call sequence sees it.
 
 ### 9.3 Runtime calls are free; game calls are not
 
