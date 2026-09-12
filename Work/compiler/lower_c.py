@@ -238,8 +238,10 @@ class Lowerer:
 
     def load_through_ac2(self, reg, kind):
         if KINDS[kind][1] == 1:
-            self.emit("%s = %s(M16[ac2])"
-                      % (reg, "sx16" if is_signed(kind) else "zx16"))
+            ext = "sx16" if is_signed(kind) else "zx16"
+            if MUTATE == "no_sign_extend":
+                ext = "zx16"
+            self.emit("%s = %s(M16[ac2])" % (reg, ext))
         else:
             self.emit("%s = M32[ac2]" % reg)
 

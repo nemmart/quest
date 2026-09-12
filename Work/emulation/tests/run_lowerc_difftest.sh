@@ -60,4 +60,39 @@ for M in u16_unsigned no_sign_extend eager_bool shift_logical cmp_unsigned abs_a
 done
 
 echo
+echo "=== UPDATE_SCREENS end to end ==="
+# Stage C: the C this project wrote, compiled, loaded and RUN as a standalone
+# v-form program.  Expectations come from an independent model of the
+# disassembly (make_update_screens_fixture.py), never from the compiler.
+MK=../compiler/difftest/make_update_screens_fixture.py
+US=../game/routines/UPDATE_SCREENS.c
+python3 ../compiler/lower_c.py "$US" --routine UPDATE_SCREENS \
+        --entry UPDATE_SCREENS -o /tmp/p48/us.ir
+python3 ../compiler/lower_c.py "$US" --routine UPDATE_SCREENS \
+        --entry UPDATE_SCREENS --mutate no_sign_extend -o /tmp/p48/us_bad.ir
+for SC in "" "--neg" "--wrap"; do
+  python3 "$MK" $SC > /tmp/p48/us.fixture
+  R=$("$RIGDIR/lowerc_rig" --program /tmp/p48/us.ir --vmap /tmp/p48/us.vmap \
+        --addrbook ./quest.addrbook --fixture /tmp/p48/us.fixture 2>/dev/null \
+        | grep '^EXPECT:')
+  echo "  ${SC:-positive}: $R"
+  case "$R" in *", 0 failed") ;; *) echo "  UPDATE_SCREENS FAILED"; exit 1;; esac
+done
+# the DERR 17 leg: player_count past PLAYER's bound must abort at the first SUB
+python3 "$MK" --trap > /tmp/p48/us_trap.fixture
+T=$("$RIGDIR/lowerc_rig" --program /tmp/p48/us.ir --vmap /tmp/p48/us.vmap \
+      --addrbook ./quest.addrbook --fixture /tmp/p48/us_trap.fixture 2>/dev/null)
+case "$T" in TRAP\ DERR17*) echo "  trap leg: $T";;
+             *) echo "  trap leg did not fire: $T"; exit 1;; esac
+# teeth: only the --wrap scenario can tell sx16 from zx16 in this routine,
+# because every 16-bit datum it reads is used inside a DIFFERENCE of two
+# 16-bit data, and such a difference is invariant under +65536.
+python3 "$MK" --wrap > /tmp/p48/us.fixture
+B=$("$RIGDIR/lowerc_rig" --program /tmp/p48/us_bad.ir --vmap /tmp/p48/us_bad.vmap \
+      --addrbook ./quest.addrbook --fixture /tmp/p48/us.fixture 2>/dev/null \
+      | grep '^EXPECT:')
+case "$B" in *", 0 failed") echo "  teeth: a no_sign_extend build PASSED — no teeth"; exit 1;;
+             *) echo "  teeth: no_sign_extend build caught ($B)";; esac
+
+echo
 echo "LOWERC DIFFTEST: GREEN"

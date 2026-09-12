@@ -135,10 +135,23 @@ struct Rig {
   }
 };
 
-// A "fixture" file pre-seeds memory before the run: `<hex word addr> <hex
-// value> <16|32>` per line, plus `map <hex word base> <npages>`.  Generated
-// programs need none; UPDATE_SCREENS needs SD_PTR and a player table.
-static void apply_fixture(Rig& r, const char* path) {
+// A "fixture" file is the whole of a hand-written end-to-end test:
+//
+//   map  <hex word base> <npages>      map memory before writing it
+//   <hex word addr> <hex value> 16|32  seed a word / wide
+//   setv <ENTRY.vN> <hex value> 16|32  seed a `v` BY NAME — the loader owns
+//                                      the 0x76 address, so a by-reference
+//                                      parameter can only be seeded this way
+//                                      (a001 R4: a param is a u32 v holding
+//                                      the argument's word address)
+//   expect <hex word addr> <hex> 16|32 [label]   checked AFTER the run
+//
+// Generated programs need no fixture; UPDATE_SCREENS needs SD_PTR, a player
+// table, its three arguments, and its expectations.
+struct Expect { uint32_t addr, want; int width; std::string label; };
+static std::vector<Expect> expects;
+
+static void apply_fixture(Rig& r, const char* path, IRExec* ir) {
   std::ifstream f(path);
   if (!f) throw std::runtime_error(std::string("cannot open fixture ") + path);
   std::string line;
@@ -148,7 +161,27 @@ static void apply_fixture(Rig& r, const char* path) {
     std::istringstream is(line);
     std::string tok;
     if (!(is >> tok)) continue;
-    if (tok == "map") {
+    if (tok == "expect") {
+      std::string addr, val, width, label;
+      is >> addr >> val >> width;
+      std::getline(is, label);
+      while (!label.empty() && label[0] == ' ') label.erase(0, 1);
+      Expect e;
+      e.addr = uint32_t(std::strtoul(addr.c_str(), nullptr, 16));
+      e.want = uint32_t(std::strtoul(val.c_str(), nullptr, 16));
+      e.width = (width == "16") ? 16 : 32;
+      e.label = label;
+      expects.push_back(e);
+    } else if (tok == "setv") {
+      std::string name, val, width;
+      is >> name >> val >> width;
+      uint32_t at = ir->v_address(name);
+      if (at == 0)
+        throw std::runtime_error("fixture setv: no such v " + name);
+      uint32_t v = uint32_t(std::strtoul(val.c_str(), nullptr, 16));
+      if (width == "16") r.memory.write_word(at, v & 0xFFFFu);
+      else r.memory.write_wide(at, v);
+    } else if (tok == "map") {
       std::string base, n;
       is >> base >> n;
       r.map(uint32_t(std::strtoul(base.c_str(), nullptr, 16)),
@@ -257,7 +290,7 @@ int main(int argc, char** argv) {
   rig.reset(new Rig());
   try {
     ir->map_pages(rig->memory);
-    if (fixture) apply_fixture(*rig, fixture);
+    if (fixture) apply_fixture(*rig, fixture, ir);
   } catch (const std::exception& e) {
     printf("RIGERROR setup: %s\n", e.what());
     return 1;
@@ -293,6 +326,19 @@ int main(int argc, char** argv) {
   }
 
   Memory& M = rig->memory;
+  int failed = 0;
+  for (const Expect& e : expects) {
+    uint32_t got = (e.width == 16) ? (M.read_word(e.addr) & 0xFFFFu)
+                                   : M.read_wide(e.addr);
+    if (got != e.want) {
+      if (failed < 20)
+        printf("EXPECT FAIL %08X = %08X want %08X  %s\n",
+               e.addr, got, e.want, e.label.c_str());
+      failed++;
+    }
+  }
+  if (!expects.empty())
+    printf("EXPECT: %zu checked, %d failed\n", expects.size(), failed);
   for (const VRow& r : vm.rows) {
     bool observable = (r.kind == "local" || r.kind == "param" || r.kind == "ret");
     if (!dump_all && (!observable || r.cname.empty())) continue;
@@ -311,5 +357,5 @@ int main(int argc, char** argv) {
     }
   }
   fflush(stdout);
-  return 0;
+  return failed ? 1 : 0;
 }
