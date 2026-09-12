@@ -1,0 +1,22 @@
+# Stage C/D strict-surface leg — k1fo again, on the Stage C/D binary (loader with v/symbolic blocks) and the UNCHANGED ir 7 book, in-container, Sep 12 2026
+div=0
+307197
+Arena: /home/claude/quest/Work/emulation/quest.arena — 57 twins
+IRExec: loaded 13507 IR blocks from /home/claude/quest/Work/emulation/quest.ir2.book
+Arena: mapped 453 page(s) at 75000000 (RW, no exec) for QUEST
+1359
+StrHooks: QUEST1/master bind=7 rebind=126 unmap=6 claim=392 release=133 frame_exit=2635 unwind=1 onpop=1 discarded_claims=0 cancelled=0 max_delta=1034
+StrHooks: QUEST2/clone bind=0 rebind=0 unmap=0 claim=0 release=0 frame_exit=2298 unwind=1 onpop=1 discarded_claims=0 cancelled=0 max_delta=0
+end=clean
+leg exit 0
+blk check: pairs=307197 blk_equal=307197 blk_mismatch=0 k_heartbeats=306593 gaps_over_k=0 max_gap=1 floor=1000 OK
+0x76 mapping lines in the clone's stderr (want 0: the book declares no v): 0
+
+# self-tests on the same binary
+SELFTEST GREEN (0 failures)
+STRINGS SELFTEST: library GREEN, broken build RED (teeth confirmed)
+STRHOOKS SELFTEST: hooks GREEN, broken build RED (teeth confirmed)
+VFORM SELFTEST GREEN (84 cases, 0 failures)
+
+# vform selftest stdout
+VFORM SELFTEST GREEN (84 cases, 0 failures)

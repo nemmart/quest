@@ -10,6 +10,7 @@
 // run the single instruction through the normal decode/execute path
 // with all hooks, re-read locals. Any impossibility THROWS (METHOD §8).
 #include <cstdint>
+#include <map>
 #include <memory>
 #include <string>
 #include <vector>
@@ -23,9 +24,22 @@ public:
   // the env is absent; every validation failure REFUSES (throws) — a
   // present-but-bad quest.ir must never silently fall back to emulation.
   static IRExec* load_from_env();
+  // P46 (ir 7): load a file directly (the self-tests; no QUEST_IR, no
+  // -lockstep gate). `addrbook` supplies the entry NAMES a v-form program
+  // needs (§5.10.2; nullptr = QUEST_ADDRESS_BOOK from the environment).
+  static IRExec* load_file(const std::string& path, const char* addrbook = nullptr);
   static IRExec* instance;         // set at launch; nullptr = no QUEST_IR
 
   bool has(uint32_t pc) const;
+  // P46 (ir 7): the placement queries and the 0x76 page mapping (§5.10.3/.6).
+  // v_address / block_address return 0 for an unknown name.
+  uint32_t v_address(const std::string& qualified) const;
+  uint32_t block_address(const std::string& qualified) const;
+  size_t v_count() const { return vars_.size(); }
+  size_t symbolic_block_count() const { return nsymbolic_; }
+  void map_pages(class Memory& memory) const;   // clone process: the touched 0x76 pages, RW, no exec
+  static constexpr uint32_t V_BASE = 0x76000000u, B_BASE = 0x77000000u, ENTRY_STRIDE = 0x10000u;
+  static bool is_synthetic(uint32_t word) { return word >= V_BASE && word < B_BASE + 0x01000000u; }
   // Runs one IR block; machine.pc is at the block entry. Returns the
   // exit pc chosen by the embedded terminator (or the 0x30000000
   // syscall sentinel propagated from an embedded instruction).
@@ -77,8 +91,17 @@ public:
     std::shared_ptr<StrOp> str;      // STRING (P31, ir 5): the located-string statement
     bool flags = false;              // STMT: writes c/ovr (effectful) -> ovk/ovr check
   };
+  // P46 (ir 7): a declared v (§5.10.1) — its type, size and placement.
+  struct Var {
+    enum Type { I16, U16, I32, U32, CHAR, VARYING, WORDS } type;
+    std::string name;                    // <ENTRY>.v<k>
+    uint32_t n = 0;                      // char/varying/words: the declared n
+    uint32_t words = 0;                  // size in words
+    uint32_t addr = 0;                   // placed word address (0x76……)
+  };
   struct Block {
     uint32_t start, seg;
+    std::string name;                    // P46: <ENTRY>.b<k> for a symbolic block; empty for a numeric one
     uint32_t fall = 0;                   // fall-through exit (0 = terminator embed)
     bool executed = false;               // first-execution logged (coverage)
     std::vector<Stmt> stmts;
@@ -86,8 +109,12 @@ public:
 
 private:
   IRExec() = default;
-  void load(const std::string& path);
+  void load(const std::string& path, const char* addrbook);
   std::vector<Block> blocks_;        // sorted by start
+  std::vector<Var> vars_;            // P46: declaration order
+  std::map<std::string, size_t> var_by_name_;
+  std::map<std::string, uint32_t> block_by_name_;   // P46: symbolic block name -> 0x77 address
+  size_t nsymbolic_ = 0;
   const std::string* last_format_ = nullptr;  // decoded fmt of last instr
   const Block* find(uint32_t pc) const;
 };
