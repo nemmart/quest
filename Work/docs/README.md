@@ -24,9 +24,10 @@ one-time change/review notes.
 ## Start here
 | Doc | Status | What |
 |---|---|---|
-| NextSession.md | CURRENT | Re-entry prompt: state, next task, gotchas |
+| NextSession.md | CURRENT | Re-entry prompt: state, next task, gotchas. **Rewritten Sep 12 2026** |
+| Project44/DESIGN.md | CURRENT | The design of record — read before any implementation work |
 | METHOD.md | CURRENT | How to work on this project — binding for IMPLEMENTATION sessions |
-| INTEGRATOR.md | CURRENT | Binding for the REVIEWER/INTEGRATOR: prompt writing + sizing, delivery mechanics, plan-gate rulings, verify-don't-trust before merge, merging + doc upkeep, standing judgements, parallelism |
+| INTEGRATOR.md | CURRENT | Binding for the REVIEWER/INTEGRATOR (§10 = the repo question channel): prompt writing + sizing, delivery mechanics, plan-gate rulings, verify-don't-trust before merge, merging + doc upkeep, standing judgements, parallelism |
 | IR.md | CURRENT | THE quest.ir specification (**ir 6**) — normative, spec-wins; grammar, block rules, executor model, version history |
 | Plan.md | CURRENT | Milestones + Steps 1–4 big picture |
 | M3Plan.md | CURRENT | Milestone 3 minimal lift (616w), decisions, order |
@@ -49,17 +50,17 @@ one-time change/review notes.
 | Project26/ | CURRENT | The math & control grammar (ir 3) LANDED on branch (Sep 5): MathDesign.md (design input + rulings), Census.md (27,600-embed census + per-mnemonic semantics with emulator citations), REPORT.md (as-built + battery 037 13/13), PROMPT.md, p26cov.py (coverage tool) |
 | Project4/ | REFERENCE | The DEF?ON cluster (O?AREA, P?DEFON, R?SIGNAL, DEF?ON-staged): derivations, reports, lift checklist |
 
-## The compiler line (P34–P37, Sep 2026)
+## Project 44 — the current direction (Sep 2026)
 | Doc | Status | What |
 |---|---|---|
-| Project29/StringsDesign.md | CURRENT | Design of record for the string family (+ corrections log): located strings, arena twins, residues, the Mapper arena form |
-| compiler/CODEGEN_RULES.md | CURRENT | The DG PL/I code-generator model: numbered rules with their motivating instruction pairs and A/B/C confidence. Amended by every translator project |
-| Project34/ | REFERENCE | The readable layer prototype (tools → compiler/readable.py): frame/static naming, record recognition, register folding; Census.md is the frontier list |
-| Project35/ | REFERENCE | Recompilation as decompilation PROVEN: C-subset → IR translator + comparator; 3 routines 197/197 register-exact; PLAN/REPORT/results |
-| Project36/ | REFERENCE | Bit references, record-field strings + the symbolic address renderer, game→game calls, explicit conversion intrinsics; partial (twins + frame relocation deferred) |
-| Project37/ | CURRENT | Prove each construct on SEVERAL routines; DIED as capstone. draw.py = the pre-registered random selection |
+| Project44/DESIGN.md | **CURRENT** | **The design of record.** Compiler/transformer split, the two obligations, v/t/s@ storage classes, the 0x74–0x77 address spaces, oracle-driven rewrites + the rewrite-set tripwire, L1 (behavioural) vs L2 (exact) acceptance, bottom-up translation order |
+| Project45/PROMPT.md | CURRENT | P45 attic salvage (runs parallel with P46) |
+| Project46/PROMPT.md | CURRENT | P46 ir 7: v declarations, symbolic blocks, the s@ rename (parallel with P45) |
+| attic/README.md | **VOID** | **Projects 35–43 + CODEGEN_RULES.md + translate.py.** The compiler line: 4 routines of ~130 in nine projects, last three closed zero. Do not read, do not cite, do not carry rules forward. Lists what P45 should mine. `attic/REWRITE_PLAN.md` is the exception — superseded by absorption, not void |
+| Project34/ | REFERENCE | The readable layer prototype (→ compiler/readable.py). Predates the compiler line; Census.md figures are MIS-SIZED for multiple-ENTRY routines (attic/README.md, R40) |
+| Project29/StringsDesign.md | CURRENT | Design of record for the string family: located strings, arena twins, residues, the Mapper arena form |
 | Provenance.md | CURRENT | Artifact checksums of record, dated table per regeneration |
-| EmulatorDivergences.md | CURRENT | Every known emulator↔hardware difference: fixed / open-benign / open-guard, with the arguments |
+| EmulatorDivergences.md | CURRENT | Every known emulator↔hardware difference: fixed / open-benign / open-guard |
 | Mapper.md | CURRENT | The address mapper: forms, the three-call surface, directionality rulings, the arena + claim-insertion legs |
 
 ## Working docs
@@ -67,7 +68,7 @@ one-time change/review notes.
 |---|---|---|
 | SessionPlan.md | CURRENT | Step-1 running log; session records at bottom |
 | RTWorklist.md | CURRENT | Play-session data: reached routines, call sites |
-| NextSession.prev.md | HISTORICAL | Previous re-entry prompt |
+| attic/NextSession.pre-P44.md | VOID | Pre-P44 re-entry brief, 829 lines of compiler-line archaeology. P45 only |
 
 ## Findings (stable reference)
 | Doc | Status | What |

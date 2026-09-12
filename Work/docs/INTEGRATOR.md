@@ -197,3 +197,66 @@ lower.py/IRExec session; a research session (Python tools + docs) beside
 anything. State the shared-file rule in both prompts, naming the other
 project. Phase A (census, design) is almost always parallelisable even
 when Phase B is not.
+
+---
+
+## 10. The question channel (SOP, Sep 12 2026)
+
+Questions used to travel as copy-pasted conversation text between a worker
+session and the integrator session. Slow, lossy, and the answer landed
+somewhere the worker could not re-read. **Questions, plan gates, and answers
+now go through the repo. The user carries only a nudge, never content.**
+
+### Files
+
+    docs/ProjectNN/q001-short-title.md      written by the WORKER
+    docs/ProjectNN/a001-short-title.md      written by the INTEGRATOR
+
+Matching numbers and titles so a pair sorts adjacent. **Worker owns `q*.md`;
+integrator owns `a*.md`.** Neither edits the other's files, so parallel
+sessions never conflict. Everything on **main** — a question on a branch is
+invisible.
+
+### The loop
+
+1. Worker writes `qNNN`, commits, pushes to main, **STOPS**, and tells the
+   user it is there.
+2. User tells the integrator.
+3. Integrator pulls, writes `aNNN`, pushes, tells the user.
+4. User tells the worker.
+5. Worker pulls, reads `aNNN`, resumes.
+
+**The worker waits.** It does not work ahead on other fronts while a
+question is outstanding: a ruling can invalidate work done in parallel, and
+reviewing work built on a guess costs more than the idle time saves.
+
+**The plan gate uses this channel.** "Part 1 — STOP AND REPORT" means write
+the gate report as `q001-plan-gate.md` and push it. Not chat.
+
+### What a question must contain
+
+The integrator has none of the worker's context — no scrollback, no
+reasoning, no half-formed hypotheses:
+
+- what you were doing and what you found
+- the decision needed
+- the options you see, with your read on each
+- **your RECOMMENDATION** — what you would do if it were your call, and why
+
+The recommendation is mandatory. It is often the whole answer ("yes, do
+that"), it makes disagreement specific rather than vague, and writing it
+frequently dissolves the question.
+
+### What an answer must contain
+
+The ruling, the reasoning, and whether it changes a design doc. **If it
+changes a design doc, change the doc in the same push** — an answer file is
+not a place for design to live, or the next session will not find it.
+
+The channel also carries **unprompted guidance**: an `aNNN` with no `qNNN`
+is legitimate.
+
+### The user's role
+
+Two nudges per exchange: *"there's a question"* to the integrator,
+*"the answer is ready"* to the worker. No content, no copy-paste.
