@@ -37,6 +37,16 @@ Everything below exists to keep these separate and individually testable.
   Established by differential testing against gcc on programs that are
   **not** game routines. Never established against the book.
 
+  **Standing rule on the generator (P48 F5): every construct that can TRAP or
+  FAULT is also a short-circuit detector — and in a subset with no
+  side-effecting subexpressions it may be the ONLY one.** Measured: before
+  `SUB()` was made to trap, the corpus contained nothing capable of
+  distinguishing eager from short-circuit `&&`/`||` evaluation, and an
+  `eager_bool` mutation was completely invisible. When the subset grows a
+  trapping construct (a call that can signal, an unguarded divide, a varying
+  assignment that can fault), the generator must place it in the RIGHT
+  OPERAND of `&&`/`||` deliberately.
+
   **Named residual (P48 gate §2.5 item 1): this proves the lowering faithful
   to the IR AS IMPLEMENTED, not as specified.** The differential rig runs the
   real `IRExec`, so an executor bug in the v-form paths is invisible to it —
@@ -84,7 +94,7 @@ Kept separate in the source tree and in every discussion:
 
 | class | what it is | size | address space |
 |---|---|---|---|
-| `v0…vn` | storage the source (or a transformation) needs — scalars `i16/u16/i32/u32`, plus `char n` and `words n` (P46 gate R4: a fixed string and a local array are ordinary PL/I locals) | **fixed** | 0x76 → 0x74 |
+| `v0…vn` | storage the source, **the lowering** (expression nodes — the great majority, P48 F2) or a transformation needs — scalars `i16/u16/i32/u32`, plus `char n` and `words n` (P46 gate R4: a fixed string and a local array are ordinary PL/I locals) | **fixed** | 0x76 → 0x74 |
 | `s@b.k` | string temps of a concatenation group (master's WMSP claims) | computed at runtime | 0x75 arena |
 | `t0…t8` | byproducts of lowering ONE instruction | none | — |
 
@@ -228,9 +238,20 @@ then one decision pulling one `v` down onto the address the original used.
 
 Consequences worth stating:
 
-- **Oracle length is literally a count of unexplained decisions**, starting
-  at "all of them" and falling as the model improves. This is the headline
-  metric.
+- **Oracle length is a count of unexplained PLACEMENT decisions** — and it
+  splits in two (P48 F3):
+  - **`v`s-to-place**, bounded by the original's frame. *This* is oracle
+    length, the headline metric, falling as the model improves.
+  - **`v`s-to-eliminate** — expression nodes with nothing at 0x74 to be
+    placed onto, because the original never had them. They are *eliminated*
+    (§4.1's third fate), not placed. **~92% of a naive routine's `v`s are
+    these** (UPDATE_SCREENS: 65 `v`s, ~60 expression temporaries). A measure
+    of how naive the lowering is, not a debt.
+
+  **By-reference parameter `v`s are outside the placement count too** (P48
+  F4): the original's arguments live at `wfp-10-2N`, reached by indirection
+  through the frame, so there is no 0x74 cell to lay them onto. The calling
+  bridge WRITES them rather than placing them.
 - A `v` still sitting at 0x76 when `ircmp` runs is self-evidently unmatched;
   unplaced variables show up as divergences for free.
 - Comparison happens **after** placement. The book spells locals as
@@ -395,6 +416,11 @@ ac3 = fp
 M32[ac3+0x100] = t0
 ```
 
+(**P48 F1**: the spelling `t0` above illustrates the machine-lifting house
+style, NOT the compiler's. The naive compiler emits **zero** `t`-places —
+every value goes into its own `v`, asserted by grep in its own tests. Read
+`t0` here as a `v`.)
+
 Then, as removals and bindings on top:
 
 - `ac3 = fp` **eliminated** — precondition: ac3 provably already holds fp
@@ -543,8 +569,26 @@ The oracle closes and the IR matches the book register-exact.
 
 They are complementary precisely where each is weak:
 
-- **L1** is behavioural truth on **executed paths only**. A block no play
-  session reaches is unverified — but it is *identified* as unverified.
+- **L1** is behavioural truth on **executed paths only**, **and only for bugs
+  the routine's own arithmetic can expose** (P48 F6 — a second axis, and not
+  fixable by running more of the program). A block no play session reaches is
+  unverified, but it is at least *identified* as unverified; an
+  arithmetically-invisible bug is not identified at all.
+
+  **The witness.** A `no_sign_extend` mutation PASSES UPDATE_SCREENS'
+  end-to-end check — not through a weak fixture, but because every 16-bit
+  datum the routine reads is used inside a *difference* of two 16-bit data,
+  and such a difference is invariant under a uniform +65536. Only coordinates
+  where the difference itself crosses the 16-bit boundary could distinguish
+  `sx16` from `zx16`, and Salvage F18 puts the world in the raw positive
+  0x3Bxx space, so those coordinates **do not occur in the game**. The bug
+  class is unobservable there at L1, on realistic data, at any coverage,
+  forever. L2 catches it trivially: the book spells `XNLDA`, a sign-extending
+  load.
+
+  **Consequence: P47's coverage numbers are an UPPER BOUND on L1's power, not
+  a measure of it.** And this is the strongest argument for L2 the project has
+  produced — which arrived from the L1 side.
 
   **Measured (P47 gate, Sep 12 2026): the battery reaches 41 of 80 call-graph
   nodes and 15 of 20 leaves.** So L1 as it stands can validate roughly half
