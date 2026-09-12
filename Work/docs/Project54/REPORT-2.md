@@ -84,6 +84,31 @@ now says arity, `arg_count` and `b0` are checked there and the kind check
 runs in the post-pass; `:1349`'s paragraph no longer claims the kind check
 lives in the loop below it, and says why it once did.
 
+## Item 2b — the spec's worked examples are RUN (P53 q006)
+
+`tests/spec_examples_selftest.cpp`, its own binary because the loader
+caches the addrbook entry table once per process and this leg needs the
+REAL `quest.addrbook` (the §5.10.10 prose depends on QUEST being idx 0).
+The text is **extracted from `docs/IR.md` at run time** (`QUEST_IR_SPEC`,
+default `../docs/IR.md`), so the leg tests whatever the spec currently says:
+
+- **§5.10.10 verbatim**: loads; the seven cell placements and three block
+  placements the prose states are checked; then it EXECUTES with `a1`
+  pointed at a rig word, and the prose's outcome is checked — v1 holds 6, v2
+  holds length 8 and `HELLO WO`, the pointed i16 holds 6, the counter reached
+  0 after three iterations. 28 cases.
+- **§5.10.4's illustration lines** are not a program (the table declares
+  nothing and one line reads an arena twin), so — as the answer allowed —
+  each is wrapped in a minimal program with the declarations the prose
+  implies and must LOAD; 10 load, the `s@70166144.3` twin line is skipped
+  and the leg says so.
+
+**Teeth**, in `run_bridge_selftest.sh`: the same binary against a copy of
+the spec with §5.10.10's destination respelled as the bare cell name — the
+stale form P53 met — must go RED with the `has no CONTENTS` refusal. It
+does; and against the pre-fix `IR.md` (`git show d04a084`) it is RED with
+exactly the message P53's HIT_ANY_CHAR unit got.
+
 ## Item 3 — the battery
 
 Not queued. Nothing here changes the strict surface: `CallStack` behaves
@@ -94,6 +119,6 @@ zero.
 ## Files
 
 `emulation/debug/CallStack.{cpp,hpp}`, `emulation/hw/IRExec.cpp`,
-`emulation/tests/{bridge_selftest.cpp,run_bridge_selftest.sh}`,
+`emulation/tests/{bridge_selftest.cpp,spec_examples_selftest.cpp,run_bridge_selftest.sh}`,
 `docs/IR.md`, `docs/Project54/REPORT-2.md`. Read-only and unchanged:
 `docs/Project53/f1-repro/**`, `tests/lowerc_rig.cpp`.

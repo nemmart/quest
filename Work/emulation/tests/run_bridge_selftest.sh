@@ -35,4 +35,18 @@ REPRO=/tmp/call_symbolic_crash
 /tmp/lowerc_rig_p54 --program $REPRO.ir --vmap $REPRO.vmap --addrbook quest.addrbook >/tmp/lowerc_rig_p54.out 2>/tmp/lowerc_rig_p54.err \
   || { echo "F-1 REPRODUCER STILL FAILS (exit $?)"; tail -3 /tmp/lowerc_rig_p54.err; exit 1; }
 echo "F-1 reproducer through lowerc_rig: exit 0"
+# P54 reopening (a003 item 2b, P53 q006): RUN the spec's worked examples,
+# extracted from docs/IR.md at run time. Teeth: the same leg against a copy
+# with 5.10.10's varying destination respelled as the bare cell name (the
+# stale form P53 met) must go RED with the aggregate-has-no-CONTENTS refusal.
+g++ -std=c++17 -O2 -I. tests/spec_examples_selftest.cpp $OBJS -lpthread -o /tmp/spec_examples_selftest
+/tmp/spec_examples_selftest 2>/tmp/spec_examples_selftest.err | tee -a /tmp/bridge_selftest.out
+grep -q "SPEC EXAMPLES SELFTEST GREEN" /tmp/bridge_selftest.out
+sed 's|\[@wp(QUEST.v2, 0), 8 varying\]|[@QUEST.v2, 8 varying]|' ../docs/IR.md > /tmp/IR_stale_example.md
+set +e
+QUEST_IR_SPEC=/tmp/IR_stale_example.md /tmp/spec_examples_selftest > /tmp/spec_examples_stale.out 2>/dev/null
+set -e
+grep -q "SPEC EXAMPLES SELFTEST RED" /tmp/spec_examples_stale.out
+grep -q "has no CONTENTS" /tmp/spec_examples_stale.out
+echo "spec examples: GREEN against docs/IR.md, RED against the stale spelling (teeth confirmed)"
 echo "BRIDGE SELFTEST: GREEN ($(grep -c 'first execution of block .* at 77' /tmp/bridge_selftest.err) symbolic blocks first-executed), broken-bridge build RED on the stack-balance check (teeth confirmed)"
