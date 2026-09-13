@@ -1,45 +1,40 @@
-static length words (phase B): 0 bounded of 40: 
+static length words (phase B): 5 bounded of 40: 7000021C<=132 700007AD<=0 700007B1<=0 70000A4E<=80 70000A78<=80
    70000216 unbounded: store @7015C0B3:4 <= 1; store @7015C0C5:2 unbounded: t1
-   7000021A unbounded: store @7015C005:2 unbounded: trunc16(sub(<entry 7015C005>, <entry 7015C005>))
-   7000021C unbounded: call 7017C877 by-reference @7015C4FB:16
-   7000021D unbounded: copy @70168117:20 of unbounded count
+   7000021A unbounded: store @7015C005:2 <= 0; store @7015C113:9 <= -32768; call 7017C877 by-reference @7015C4FB:16
+   7000021D unbounded: copy @70168117:20 reaches the word (count <= 18)
    70000260 unbounded: rt_call ?OPEN_SHARED_IO_FILE arg 1 @7015BE78:4
-   7000026C unbounded: copy @70168117:20 of unbounded count
-   7000026E unbounded: copy @70168117:20 of unbounded count
-   70000270 unbounded: copy @70168117:20 of unbounded count
-   700007AD unbounded: copy @70168117:20 of unbounded count
-   700007B1 unbounded: copy @70168117:20 of unbounded count
-   70000A4E tore @701668A9:0 <= 80; store @70166904:0 <= 80; store @70166982:0 <= 80; store @701669D9:0 <= 80; store @70166A13:0 <= 80; copy @70168117:20 of unbounded count
-   70000A78 unbounded: whole-varying copy @701666F8:2 from 70000A4E (unbounded)
-   70000AA2 unbounded: copy @701666F8:2 stops short (count <= 2); copy @701667ED:1 of unbounded count
-   70000C1E unbounded: copy @701666F8:2 stops short (count <= 2); copy @701667ED:1 of unbounded count
-   70000C34 unbounded: copy @701666F8:2 stops short (count <= 2); copy @701667ED:1 of unbounded count
-   70000C44 unbounded: copy @701666F8:2 stops short (count <= 2); copy @701667ED:1 of unbounded count
-   70000C54 unbounded: copy @701666F8:2 of unbounded count
+   7000026C unbounded: copy @70168117:20 stops short (count <= 18); store @7017CF37:2 unbounded: trunc16(sx16(M16[wp(M32[0x70000212], 0x7D1)]))
+   7000026E unbounded: copy @70168117:20 stops short (count <= 18); store @7017CD71:2 unbounded: trunc16(sx16(M16[M32[0x70000212]]))
+   70000270 unbounded: copy @70168117:20 stops short (count <= 18); store @701710D6:6 unbounded: trunc16(nadd(sx16(M16[wp(add(mul(sx16(M16[<argument (-12, '7
+   70000AA2 0166982:4 stops short (count <= 80); copy @701669D9:1 stops short (count <= 80); copy @70166A13:1 stops short (count <= 80); copy @70167085:3 of unbounded count
+   70000C1E 0166982:4 stops short (count <= 80); copy @701669D9:1 stops short (count <= 80); copy @70166A13:1 stops short (count <= 80); copy @70167085:3 of unbounded count
+   70000C34 0166982:4 stops short (count <= 80); copy @701669D9:1 stops short (count <= 80); copy @70166A13:1 stops short (count <= 80); copy @70167085:3 of unbounded count
+   70000C44 0166982:4 stops short (count <= 80); copy @701669D9:1 stops short (count <= 80); copy @70166A13:1 stops short (count <= 80); copy @70167085:3 of unbounded count
+   70000C54 0166982:4 stops short (count <= 80); copy @701669D9:1 stops short (count <= 80); copy @70166A13:1 stops short (count <= 80); copy @70167085:3 of unbounded count
    70000C66 
-   70000C68 unbounded: copy @701666F8:2 of unbounded count
-   70000C6A unbounded: copy @701666F8:2 of unbounded count
-   70000C6C unbounded: copy @701666F8:2 of unbounded count
-   70000C6E unbounded: copy @701666F8:2 of unbounded count
-   70000C70 unbounded: copy @701666F8:2 of unbounded count
+   70000C68 0166982:4 stops short (count <= 80); copy @701669D9:1 stops short (count <= 80); copy @70166A13:1 stops short (count <= 80); copy @70167085:3 of unbounded count
+   70000C6A 0166982:4 stops short (count <= 80); copy @701669D9:1 stops short (count <= 80); copy @70166A13:1 stops short (count <= 80); copy @70167085:3 of unbounded count
+   70000C6C 0166982:4 stops short (count <= 80); copy @701669D9:1 stops short (count <= 80); copy @70166A13:1 stops short (count <= 80); copy @70167085:3 of unbounded count
+   70000C6E 0166982:4 stops short (count <= 80); copy @701669D9:1 stops short (count <= 80); copy @70166A13:1 stops short (count <= 80); copy @70167085:3 of unbounded count
+   70000C70 0166982:4 stops short (count <= 80); copy @701669D9:1 stops short (count <= 80); copy @70166A13:1 stops short (count <= 80); copy @70167085:3 of unbounded count
    70000C72 
-   7015041D unbounded: copy @701666F8:2 stops short (count <= 2); copy @701667ED:1 of unbounded count
+   7015041D 0166982:4 stops short (count <= 80); copy @701669D9:1 stops short (count <= 80); copy @70166A13:1 stops short (count <= 80); copy @70167085:3 of unbounded count
    7015076D 
    7015076E 
-   7015088E unbounded: copy @701666F8:2 stops short (count <= 2); copy @701667ED:1 of unbounded count
-   70150894 unbounded: copy @701666F8:2 stops short (count <= 2); copy @701667ED:1 of unbounded count
-   701508D8 unbounded: copy @701666F8:2 of unbounded count
-   7015BF38 unbounded: copy @701666F8:2 stops short (count <= 2); copy @701667ED:1 of unbounded count
-   70165008 unbounded: copy @701666F8:2 stops short (count <= 2); copy @701667ED:1 of unbounded count
-   70165009 unbounded: copy @701666F8:2 stops short (count <= 2); copy @701667ED:1 of unbounded count
-   7016500A unbounded: copy @701666F8:2 stops short (count <= 2); copy @701667ED:1 of unbounded count
-   7016500B unbounded: copy @701666F8:2 stops short (count <= 2); copy @701667ED:1 of unbounded count
-   7016500C unbounded: copy @701666F8:2 stops short (count <= 2); copy @701667ED:1 of unbounded count
-   7016500D unbounded: copy @701666F8:2 stops short (count <= 2); copy @701667ED:1 of unbounded count
-   7016500E unbounded: copy @701666F8:2 stops short (count <= 2); copy @701667ED:1 of unbounded count
-   7016500F unbounded: copy @701666F8:2 stops short (count <= 2); copy @701667ED:1 of unbounded count
-   70165010 unbounded: copy @701666F8:2 stops short (count <= 2); copy @701667ED:1 of unbounded count
-slot model: call policy upward; clobber-all events: {'clobber-all:raw': 206, 'clobber-all:store': 90, 'clobber-all:WCMV': 61, 'clobber-all:call': 22, 'raw-call-argc0-non-nested': 151, 'clobber-all:WBLM': 4, 'clobber-all:rt_call': 3}
+   7015088E 0166982:4 stops short (count <= 80); copy @701669D9:1 stops short (count <= 80); copy @70166A13:1 stops short (count <= 80); copy @70167085:3 of unbounded count
+   70150894 0166982:4 stops short (count <= 80); copy @701669D9:1 stops short (count <= 80); copy @70166A13:1 stops short (count <= 80); copy @70167085:3 of unbounded count
+   701508D8 0166982:4 stops short (count <= 80); copy @701669D9:1 stops short (count <= 80); copy @70166A13:1 stops short (count <= 80); copy @70167085:3 of unbounded count
+   7015BF38 0166982:4 stops short (count <= 80); copy @701669D9:1 stops short (count <= 80); copy @70166A13:1 stops short (count <= 80); copy @70167085:3 of unbounded count
+   70165008 0166982:4 stops short (count <= 80); copy @701669D9:1 stops short (count <= 80); copy @70166A13:1 stops short (count <= 80); copy @70167085:3 of unbounded count
+   70165009 0166982:4 stops short (count <= 80); copy @701669D9:1 stops short (count <= 80); copy @70166A13:1 stops short (count <= 80); copy @70167085:3 of unbounded count
+   7016500A 0166982:4 stops short (count <= 80); copy @701669D9:1 stops short (count <= 80); copy @70166A13:1 stops short (count <= 80); copy @70167085:3 of unbounded count
+   7016500B 0166982:4 stops short (count <= 80); copy @701669D9:1 stops short (count <= 80); copy @70166A13:1 stops short (count <= 80); copy @70167085:3 of unbounded count
+   7016500C 0166982:4 stops short (count <= 80); copy @701669D9:1 stops short (count <= 80); copy @70166A13:1 stops short (count <= 80); copy @70167085:3 of unbounded count
+   7016500D 0166982:4 stops short (count <= 80); copy @701669D9:1 stops short (count <= 80); copy @70166A13:1 stops short (count <= 80); copy @70167085:3 of unbounded count
+   7016500E 0166982:4 stops short (count <= 80); copy @701669D9:1 stops short (count <= 80); copy @70166A13:1 stops short (count <= 80); copy @70167085:3 of unbounded count
+   7016500F 0166982:4 stops short (count <= 80); copy @701669D9:1 stops short (count <= 80); copy @70166A13:1 stops short (count <= 80); copy @70167085:3 of unbounded count
+   70165010 0166982:4 stops short (count <= 80); copy @701669D9:1 stops short (count <= 80); copy @70166A13:1 stops short (count <= 80); copy @70167085:3 of unbounded count
+slot model: call policy upward; clobber-all events: {'clobber-all:raw': 206, 'clobber-all:store': 24, 'clobber-all:WCMV': 31, 'clobber-all:call': 22, 'raw-call-argc0-non-nested': 151, 'clobber-all:WBLM': 4, 'static-bounded:WCMV': 36, 'clobber-all:rt_call': 2}
 book: 13507 blocks, 1689 string sites (WCMV 1637, WCMP 40, WBLM 12)
 cfg: 7 unresolved successor situations
     ('7015BD68', 'successor 7015BD6B not a book block')
@@ -65,22 +60,22 @@ cfg: 134 blocks without predecessors; 128 of them are addrbook entries; 6 are no
   varying        cond     -> invariant    7
   operands settled by a slot invariant: 25
   settled, listed (pc routine role | reason):
-    7016566D DISPLAY_MAP            dst/ac0 | join{constant 2 | 80 - slot20 with the slot in [0, 80] (invariant)}
-    7016566D DISPLAY_MAP            src/ac1 | join{constant 2 | 80 - slot20 with the slot in [0, 80] (invariant)}
-    70167EE1 DISPLAY_INVENTORY      dst/ac0 | join{constant 3 | 30 - slot6 with the slot in [0, 30] (invariant)}
-    70167EE1 DISPLAY_INVENTORY      src/ac1 | join{constant 3 | 30 - slot6 with the slot in [0, 30] (invariant)}
-    70167F05 DISPLAY_INVENTORY      dst/ac0 | join{30 - slot6 with the slot in [0, 30] (invariant) | constant 3}
-    70167F05 DISPLAY_INVENTORY      src/ac1 | join{30 - slot6 with the slot in [0, 30] (invariant) | constant 3}
-    70167F29 DISPLAY_INVENTORY      dst/ac0 | join{constant 3 | 30 - slot6 with the slot in [0, 30] (invariant)}
-    70167F29 DISPLAY_INVENTORY      src/ac1 | join{constant 3 | 30 - slot6 with the slot in [0, 30] (invariant)}
+    7016566D DISPLAY_MAP            dst/ac0 | join{constant 2 | 80 - x with x <= 80 (table / static / invariant)}
+    7016566D DISPLAY_MAP            src/ac1 | join{constant 2 | 80 - x with x <= 80 (table / static / invariant)}
+    70167EE1 DISPLAY_INVENTORY      dst/ac0 | join{30 - x with x <= 30 (table / static / invariant) | constant 3}
+    70167EE1 DISPLAY_INVENTORY      src/ac1 | join{30 - x with x <= 30 (table / static / invariant) | constant 3}
+    70167F05 DISPLAY_INVENTORY      dst/ac0 | join{constant 3 | 30 - x with x <= 30 (table / static / invariant)}
+    70167F05 DISPLAY_INVENTORY      src/ac1 | join{constant 3 | 30 - x with x <= 30 (table / static / invariant)}
+    70167F29 DISPLAY_INVENTORY      dst/ac0 | join{30 - x with x <= 30 (table / static / invariant) | constant 3}
+    70167F29 DISPLAY_INVENTORY      src/ac1 | join{30 - x with x <= 30 (table / static / invariant) | constant 3}
     70172DED OBSERVE                dst/ac0 | length word wp(wfp, 0x12) in [0, 32767] (slot invariant)
     70172DED OBSERVE                src/ac1 | length word wp(wfp, 0x12) in [0, 32767] (slot invariant)
     70172EBE OBSERVE                dst/ac0 | length word wp(wfp, 0x12) in [0, 32767] (slot invariant)
     70172EBE OBSERVE                src/ac1 | length word wp(wfp, 0x12) in [0, 32767] (slot invariant)
-    70173253 OBSERVE                dst/ac0 | join{150 - slot18 with the slot in [0, 150] (invariant) | constant 19}
-    70173253 OBSERVE                src/ac1 | join{150 - slot18 with the slot in [0, 150] (invariant) | constant 19}
-    70173279 OBSERVE                dst/ac0 | join{150 - slot18 with the slot in [0, 150] (invariant) | constant 34}
-    70173279 OBSERVE                src/ac1 | join{150 - slot18 with the slot in [0, 150] (invariant) | constant 34}
+    70173253 OBSERVE                dst/ac0 | join{150 - x with x <= 150 (table / static / invariant) | constant 19}
+    70173253 OBSERVE                src/ac1 | join{150 - x with x <= 150 (table / static / invariant) | constant 19}
+    70173279 OBSERVE                dst/ac0 | join{150 - x with x <= 150 (table / static / invariant) | constant 34}
+    70173279 OBSERVE                src/ac1 | join{150 - x with x <= 150 (table / static / invariant) | constant 34}
     7017A176 STORE.1@70179BF4       dst/ac0 | length word wp(wfp, 0x16) in [0, 32767] (slot invariant)
     7017A176 STORE.1@70179BF4       src/ac1 | length word wp(wfp, 0x16) in [0, 32767] (slot invariant)
     7017CE4D TERRITORY              s1/ac1  | length word wp(wfp, 6) in [0, 32767] (slot invariant)
@@ -99,23 +94,17 @@ cfg: 134 blocks without predecessors; 128 of them are addrbook entries; 6 are no
     7015D1F4 ALLY_PLAYER.1@7015D068 s2/ac0  slot 516   | no dominating definite write of slot 516
     7015D94A ATTACK                 dst/ac0 slot 50    | no dominating definite write of slot 50
     7015D981 ATTACK                 dst/ac0 slot 50    | no dominating definite write of slot 50
-    7015D9DD ATTACK                 dst/ac0 slot 3     | FAILS: @7015D7D2:1 in [5,5]; clobber @7015E031:1 raw XCALL (arguments not lifted) (frame range unkn
-    7015D9DD ATTACK                 dst/ac0 slot 2     | FAILS: @7015D7C8:1 in [4,4]; clobber @7015E031:1 raw XCALL (arguments not lifted) (frame range unkn
-    7015D9E6 ATTACK                 dst/ac0 slot 3     | FAILS: @7015D7D2:1 in [5,5]; clobber @7015E031:1 raw XCALL (arguments not lifted) (frame range unkn
-    7015D9E6 ATTACK                 dst/ac0 slot 2     | FAILS: @7015D7C8:1 in [4,4]; clobber @7015E031:1 raw XCALL (arguments not lifted) (frame range unkn
-    7015D9F9 ATTACK                 dst/ac0 slot 3     | FAILS: @7015D7D2:1 in [5,5]; clobber @7015E031:1 raw XCALL (arguments not lifted) (frame range unkn
-    7015D9F9 ATTACK                 dst/ac0 slot 2     | FAILS: @7015D7C8:1 in [4,4]; clobber @7015E031:1 raw XCALL (arguments not lifted) (frame range unkn
-    7015DA05 ATTACK                 dst/ac0 slot 3     | FAILS: @7015D7D2:1 in [5,5]; clobber @7015E031:1 raw XCALL (arguments not lifted) (frame range unkn
-    7015DA05 ATTACK                 dst/ac0 slot 2     | FAILS: @7015D7C8:1 in [4,4]; clobber @7015E031:1 raw XCALL (arguments not lifted) (frame range unkn
-    7015DA0E ATTACK                 dst/ac0 slot 3     | FAILS: @7015D7D2:1 in [5,5]; clobber @7015E031:1 raw XCALL (arguments not lifted) (frame range unkn
-    7015DA0E ATTACK                 dst/ac0 slot 2     | FAILS: @7015D7C8:1 in [4,4]; clobber @7015E031:1 raw XCALL (arguments not lifted) (frame range unkn
+    7015DA05 ATTACK                 dst/ac0 slot 2     | FAILS: @7015D7C8:1 in [4,4]; clobber @7015DF06:1 raw XCALL (arguments not lifted) (frame range unkn
+    7015DA05 ATTACK                 dst/ac0 slot 3     | FAILS: @7015D7D2:1 in [5,5]; writer @7015D7D7:2 = t1 -> None
+    7015DA0E ATTACK                 dst/ac0 slot 2     | FAILS: @7015D7C8:1 in [4,4]; clobber @7015DF06:1 raw XCALL (arguments not lifted) (frame range unkn
+    7015DA0E ATTACK                 dst/ac0 slot 3     | FAILS: @7015D7D2:1 in [5,5]; writer @7015D7D7:2 = t1 -> None
     7015DA15 ATTACK                 dst/ac0 slot 26    | no dominating definite write of slot 26
+    7015DA1E ATTACK                 dst/ac0 slot 2     | FAILS: @7015D7C8:1 in [4,4]; clobber @7015DF06:1 raw XCALL (arguments not lifted) (frame range unkn
+    7015DA1E ATTACK                 dst/ac0 slot 3     | FAILS: @7015D7D2:1 in [5,5]; writer @7015D7D7:2 = t1 -> None
     7015DA1E ATTACK                 dst/ac0 slot 26    | no dominating definite write of slot 26
-    7015DA1E ATTACK                 dst/ac0 slot 3     | FAILS: @7015D7D2:1 in [5,5]; clobber @7015E031:1 raw XCALL (arguments not lifted) (frame range unkn
-    7015DA1E ATTACK                 dst/ac0 slot 2     | FAILS: @7015D7C8:1 in [4,4]; clobber @7015E031:1 raw XCALL (arguments not lifted) (frame range unkn
+    7015DA2F ATTACK                 dst/ac0 slot 2     | FAILS: @7015D7C8:1 in [4,4]; clobber @7015DF06:1 raw XCALL (arguments not lifted) (frame range unkn
+    7015DA2F ATTACK                 dst/ac0 slot 3     | FAILS: @7015D7D2:1 in [5,5]; writer @7015D7D7:2 = t1 -> None
     7015DA2F ATTACK                 dst/ac0 slot 26    | no dominating definite write of slot 26
-    7015DA2F ATTACK                 dst/ac0 slot 3     | FAILS: @7015D7D2:1 in [5,5]; clobber @7015E031:1 raw XCALL (arguments not lifted) (frame range unkn
-    7015DA2F ATTACK                 dst/ac0 slot 2     | FAILS: @7015D7C8:1 in [4,4]; clobber @7015E031:1 raw XCALL (arguments not lifted) (frame range unkn
     7015DA79 ATTACK                 dst/ac0 slot 7     | FAILS: writer @7015D80E:15 = trunc16(nsub(sx16(M16[wp(wfp, 7)]), nmul(nsub(cvwn(add(cvwn(div(sx16(M -> None
     7015DA82 ATTACK                 dst/ac0 slot 7     | FAILS: writer @7015D80E:15 = trunc16(nsub(sx16(M16[wp(wfp, 7)]), nmul(nsub(cvwn(add(cvwn(div(sx16(M -> None
     7015DA89 ATTACK                 dst/ac0 slot 26    | no dominating definite write of slot 26
@@ -138,9 +127,9 @@ cfg: 134 blocks without predecessors; 128 of them are addrbook entries; 6 are no
     7015F292 ATTACK.3@7015E84A      dst/ac0 slot 14    | no dominating definite write of slot 14
     7015F29B ATTACK.3@7015E84A      dst/ac0 slot 14    | no dominating definite write of slot 14
     7015F2AC ATTACK.3@7015E84A      dst/ac0 slot 14    | no dominating definite write of slot 14
-    7015FF82 BACKPACK               dst/ac0 slot 12    | FAILS: @7015FDEE:4 in [0,0]; @7015FE71:0 in [6,6]; clobber @7015FF16:6 store M16[wp(ac2, 4)] (frame range unknown)
-    7015FF8B BACKPACK               dst/ac0 slot 12    | FAILS: @7015FDEE:4 in [0,0]; @7015FE71:0 in [6,6]; clobber @7015FF16:6 store M16[wp(ac2, 4)] (frame range unknown)
-    7015FF9C BACKPACK               dst/ac0 slot 12    | FAILS: @7015FDEE:4 in [0,0]; @7015FE71:0 in [6,6]; clobber @7015FF16:6 store M16[wp(ac2, 4)] (frame range unknown)
+    7015FF82 BACKPACK               dst/ac0 slot 12    | FAILS: @7015FDEE:4 in [0,0]; clobber @7015FF16:6 store M16[wp(ac2, 4)] (frame range unknown)
+    7015FF8B BACKPACK               dst/ac0 slot 12    | FAILS: @7015FDEE:4 in [0,0]; clobber @7015FF16:6 store M16[wp(ac2, 4)] (frame range unknown)
+    7015FF9C BACKPACK               dst/ac0 slot 12    | FAILS: @7015FDEE:4 in [0,0]; clobber @7015FF16:6 store M16[wp(ac2, 4)] (frame range unknown)
     701608BD BARGAIN.1@70160854     dst/ac0 slot 12    | no dominating definite write of slot 12
     701608C6 BARGAIN.1@70160854     dst/ac0 slot 12    | no dominating definite write of slot 12
     701608D7 BARGAIN.1@70160854     dst/ac0 slot 12    | no dominating definite write of slot 12
@@ -163,13 +152,10 @@ cfg: 134 blocks without predecessors; 128 of them are addrbook entries; 6 are no
     70164071 CAVE_ATTACK            dst/ac0 slot 9     | FAILS: writer @70163FDF:5 = trunc16(sx16(M16[wp(add(mul(sx16(M16[0x70000216]), 0x2AE), M32[0x70000 -> None
     7016407A CAVE_ATTACK            dst/ac0 slot 9     | FAILS: writer @70163FDF:5 = trunc16(sx16(M16[wp(add(mul(sx16(M16[0x70000216]), 0x2AE), M32[0x70000 -> None
     70164081 CAVE_ATTACK            dst/ac0 slot 20    | no dominating definite write of slot 20
-    7016408A CAVE_ATTACK            dst/ac0 slot 9     | FAILS: writer @70163FDF:5 = trunc16(sx16(M16[wp(add(mul(sx16(M16[0x70000216]), 0x2AE), M32[0x70000 -> None
     7016408A CAVE_ATTACK            dst/ac0 slot 20    | no dominating definite write of slot 20
-    7016409B CAVE_ATTACK            dst/ac0 slot 9     | FAILS: writer @70163FDF:5 = trunc16(sx16(M16[wp(add(mul(sx16(M16[0x70000216]), 0x2AE), M32[0x70000 -> None
+    7016408A CAVE_ATTACK            dst/ac0 slot 9     | FAILS: writer @70163FDF:5 = trunc16(sx16(M16[wp(add(mul(sx16(M16[0x70000216]), 0x2AE), M32[0x70000 -> None
     7016409B CAVE_ATTACK            dst/ac0 slot 20    | no dominating definite write of slot 20
-    70164159 CAVE_ATTACK            dst/ac0 slot 6     | FAILS: @7016410C:2 in [1,1]; writer @70164113:2 = t1 -> None
-    70164162 CAVE_ATTACK            dst/ac0 slot 6     | FAILS: @7016410C:2 in [1,1]; writer @70164113:2 = t1 -> None
-    70164170 CAVE_ATTACK            dst/ac0 slot 6     | FAILS: @7016410C:2 in [1,1]; writer @70164113:2 = t1 -> None
+    7016409B CAVE_ATTACK            dst/ac0 slot 9     | FAILS: writer @70163FDF:5 = trunc16(sx16(M16[wp(add(mul(sx16(M16[0x70000216]), 0x2AE), M32[0x70000 -> None
     70164364 CAVE_ATTACK            dst/ac0 slot 42    | no dominating definite write of slot 42
     7016436D CAVE_ATTACK            dst/ac0 slot 42    | no dominating definite write of slot 42
     7016437E CAVE_ATTACK            dst/ac0 slot 42    | no dominating definite write of slot 42
@@ -189,8 +175,8 @@ cfg: 134 blocks without predecessors; 128 of them are addrbook entries; 6 are no
     70165A94 DEFEND                 dst/ac0 slot 5     | FAILS: writer @701658D8:16 = trunc16(nsub(sx16(M16[wp(wfp, 5)]), nmul(nsub(cvwn(add(cvwn(div(sx16(M -> None
     70165A9D DEFEND                 dst/ac0 slot 5     | FAILS: writer @701658D8:16 = trunc16(nsub(sx16(M16[wp(wfp, 5)]), nmul(nsub(cvwn(add(cvwn(div(sx16(M -> None
     70165AA4 DEFEND                 dst/ac0 slot 18    | no dominating definite write of slot 18
-    70165AAF DEFEND                 dst/ac0 slot 18    | no dominating definite write of slot 18
     70165AAF DEFEND                 dst/ac0 slot 5     | FAILS: writer @701658D8:16 = trunc16(nsub(sx16(M16[wp(wfp, 5)]), nmul(nsub(cvwn(add(cvwn(div(sx16(M -> None
+    70165AAF DEFEND                 dst/ac0 slot 18    | no dominating definite write of slot 18
     70165BCB DEFEND                 dst/ac0 slot 52    | no dominating definite write of slot 52
     70165BD4 DEFEND                 dst/ac0 slot 52    | no dominating definite write of slot 52
     70165BE5 DEFEND                 dst/ac0 slot 52    | no dominating definite write of slot 52
@@ -214,25 +200,23 @@ cfg: 134 blocks without predecessors; 128 of them are addrbook entries; 6 are no
     701664EA DISPLAY_MAGIC          dst/ac0 slot 28    | no dominating definite write of slot 28
     701664F6 DISPLAY_MAGIC          dst/ac0 slot 28    | no dominating definite write of slot 28
     7016652A DISPLAY_MAGIC          dst/ac0 slot 78    | no dominating definite write of slot 78
-    70166589 DISPLAY_MAGIC          dst/ac0 slot 2     | FAILS: @7016649D:2 in [1,1]; writer @701664A4:2 = t1 -> None
-    70166591 DISPLAY_MAGIC          dst/ac0 slot 2     | FAILS: @7016649D:2 in [1,1]; writer @701664A4:2 = t1 -> None
     701665C6 DISPLAY_MAGIC          dst/ac0 slot 6     | no dominating definite write of slot 6
-    701665E2 DISPLAY_MAGIC          dst/ac0 slot 6     | no dominating definite write of slot 6
     701665E2 DISPLAY_MAGIC          dst/ac0 slot 2     | FAILS: @7016649D:2 in [1,1]; writer @701664A4:2 = t1 -> None
+    701665E2 DISPLAY_MAGIC          dst/ac0 slot 6     | no dominating definite write of slot 6
     7016697A DISPLAY_CAVE           dst/ac0 slot 6     | FAILS: writer @7016693C:0 = trunc16(sx16(M16[wp(M32[0x70000210], 0x1EFB9)])) -> None
     70166DB8 DISPLAY_SCREEN         dst/ac0 slot 1042  | FAILS: writer @70166D9D:3 = trunc16(sx16(M16[wp(add(mul(sx16(M16[wp(wfp, 8)]), 0x12E), M32[0x70000 -> None
     70166E9A DISPLAY_SCREEN         dst/ac0 slot 238   | no dominating definite write of slot 238
     70166EB9 DISPLAY_SCREEN         dst/ac0 slot 238   | no dominating definite write of slot 238
     70166ED9 DISPLAY_SCREEN         dst/ac0 slot 238   | no dominating definite write of slot 238
     70166EE9 DISPLAY_SCREEN         dst/ac0 slot 238   | no dominating definite write of slot 238
-    70166EF1 DISPLAY_SCREEN         dst/ac0 slot 10    | FAILS: writer @70166DB2:0 = trunc16({0xA | sx16(M16[wp(wfp, 0x412)])}) -> None
+    70166EF1 DISPLAY_SCREEN         dst/ac0 slot 10    | FAILS: writer @70166DB2:0 = trunc16({sx16(M16[wp(wfp, 0x412)]) | 0xA}) -> None
     70166F6D DISPLAY_SCREEN         dst/ac0 slot 238   | no dominating definite write of slot 238
     70166F8C DISPLAY_SCREEN         dst/ac0 slot 238   | no dominating definite write of slot 238
     70166FAC DISPLAY_SCREEN         dst/ac0 slot 238   | no dominating definite write of slot 238
     70166FBC DISPLAY_SCREEN         dst/ac0 slot 238   | no dominating definite write of slot 238
-    70166FC4 DISPLAY_SCREEN         dst/ac0 slot 10    | FAILS: writer @70166DB2:0 = trunc16({0xA | sx16(M16[wp(wfp, 0x412)])}) -> None
-    70166FE5 DISPLAY_SCREEN         dst/ac0 slot 10    | FAILS: writer @70166DB2:0 = trunc16({0xA | sx16(M16[wp(wfp, 0x412)])}) -> None
-    70166FE5 DISPLAY_SCREEN         dst/ac0 slot 998   | FAILS: writer @70166FD9:2 = trunc16(add(sx16(M16[wp(wfp, 0x3E6)]), {nsub(0x54, M16[wp(wfp, 0x3E6)] -> None
+    70166FC4 DISPLAY_SCREEN         dst/ac0 slot 10    | FAILS: writer @70166DB2:0 = trunc16({sx16(M16[wp(wfp, 0x412)]) | 0xA}) -> None
+    70166FE5 DISPLAY_SCREEN         dst/ac0 slot 998   | FAILS: writer @70166FD9:2 = trunc16(add(sx16(M16[wp(wfp, 0x3E6)]), {sx16(M16[wp(wfp, 0xA)]) | nsub -> None
+    70166FE5 DISPLAY_SCREEN         dst/ac0 slot 10    | FAILS: writer @70166DB2:0 = trunc16({sx16(M16[wp(wfp, 0x412)]) | 0xA}) -> None
     70167007 DISPLAY_SCREEN         dst/ac0 slot 618   | no dominating definite write of slot 618
     7016700E DISPLAY_SCREEN         dst/ac0 slot 998   | no dominating definite write of slot 998
     70167022 DISPLAY_SCREEN         dst/ac0 slot 998   | no dominating definite write of slot 998
@@ -241,8 +225,8 @@ cfg: 134 blocks without predecessors; 128 of them are addrbook entries; 6 are no
     70167039 DISPLAY_SCREEN         dst/ac0 slot 618   | no dominating definite write of slot 618
     70167049 DISPLAY_SCREEN         dst/ac0 slot 998   | no dominating definite write of slot 998
     70167049 DISPLAY_SCREEN         dst/ac0 slot 618   | no dominating definite write of slot 618
-    70167081 DISPLAY_SCREEN         s1/ac1  slot 618   | FAILS: writer @70167050:3 = trunc16(sub(0x2F4, {<residue WCMV.ac1@70167049:0> | sub(<residue WCMV. -> None
-    7016708E DISPLAY_SCREEN         dst/ac0 slot 618   | FAILS: writer @70167050:3 = trunc16(sub(0x2F4, {<residue WCMV.ac1@70167049:0> | sub(<residue WCMV. -> None
+    70167081 DISPLAY_SCREEN         s1/ac1  slot 618   | FAILS: writer @70167050:3 = trunc16(sub(0x2F4, {sub(<residue WCMV.ac1@70167049:0>, 1) | <residue W -> None
+    7016708E DISPLAY_SCREEN         dst/ac0 slot 618   | FAILS: writer @70167050:3 = trunc16(sub(0x2F4, {sub(<residue WCMV.ac1@70167049:0>, 1) | <residue W -> None
     70167112 DISPLAY_SCREEN         dst/ac0 slot 18    | no dominating definite write of slot 18
     7016711E DISPLAY_SCREEN         dst/ac0 slot 18    | no dominating definite write of slot 18
     7016713B DISPLAY_SCREEN         s1/ac1  slot 18    | FAILS: writer @70167127:4 = trunc16(sub(0x27, <residue WCMV.ac1@70167127:0>)) -> None
@@ -318,7 +302,7 @@ cfg: 134 blocks without predecessors; 128 of them are addrbook entries; 6 are no
     7016A330 FIRE                   dst/ac0 slot 112   | no dominating definite write of slot 112
     7016A339 FIRE                   dst/ac0 slot 112   | no dominating definite write of slot 112
     7016A34A FIRE                   dst/ac0 slot 112   | no dominating definite write of slot 112
-    7016DC1E HELP.1@7016D570        dst/ac0 slot 16    | no dominating definite write of slot 16
+    7016DC16 HELP.1@7016D570        dst/ac0 slot 16    | no dominating definite write of slot 16
     7016E3B7 KILL_PLAYER.2@7016E317 s2/ac0  slot 516   | no dominating definite write of slot 516
     7016EC1C LIST_PLAYERS           dst/ac0 slot 14    | FAILS: @7016EBCF:1 in [1,1]; writer @7016EBD4:2 = t1 -> None
     7016EC27 LIST_PLAYERS           dst/ac0 slot 14    | FAILS: @7016EBCF:1 in [1,1]; writer @7016EBD4:2 = t1 -> None
@@ -392,31 +376,31 @@ cfg: 134 blocks without predecessors; 128 of them are addrbook entries; 6 are no
     70172F0B OBSERVE                dst/ac0 slot 13    | FAILS: writer @70172D0F:4 = trunc16(sx16(M16[wp(add(add(mul(sx16(M16[<argument (-12, '70172D00')>] -> None
     70172F12 OBSERVE                dst/ac0 slot 134   | no dominating definite write of slot 134
     70172F1F OBSERVE                dst/ac0 slot 96    | FAILS: writer @70172EB0:2 = add(add(add(add(add(sx16(M16[wp(wfp, 0x12)]), sx16(M16[wp(mul(0x33, sx -> None
-    70172F1F OBSERVE                dst/ac0 slot 134   | no dominating definite write of slot 134
     70172F1F OBSERVE                dst/ac0 slot 13    | FAILS: writer @70172D0F:4 = trunc16(sx16(M16[wp(add(add(mul(sx16(M16[<argument (-12, '70172D00')>] -> None
-    7017320C OBSERVE                dst/ac0 slot 18    | FAILS: @70172CEA:5 in [0,0]; @701730AB:0 in [35,35]; @701731AB:0 in [73,73]; @70172FED:0 in [31,31]; writer @70172F26:4 = trunc16(sub(0x96, <residue WCMV.ac1@70172F26:0>)
-    7017321B OBSERVE                dst/ac0 slot 18    | FAILS: @70172CEA:5 in [0,0]; @701730AB:0 in [35,35]; @701731AB:0 in [73,73]; @70172FED:0 in [31,31]; writer @70172F26:4 = trunc16(sub(0x96, <residue WCMV.ac1@70172F26:0>)
+    70172F1F OBSERVE                dst/ac0 slot 134   | no dominating definite write of slot 134
+    7017320C OBSERVE                dst/ac0 slot 18    | FAILS: @70172CEA:5 in [0,0]; writer @70172F26:4 = trunc16(sub(0x96, <residue WCMV.ac1@70172F26:0>)) -> None
+    7017321B OBSERVE                dst/ac0 slot 18    | FAILS: @70172CEA:5 in [0,0]; writer @70172F26:4 = trunc16(sub(0x96, <residue WCMV.ac1@70172F26:0>)) -> None
     70173222 OBSERVE                dst/ac0 slot 134   | no dominating definite write of slot 134
+    7017322E OBSERVE                dst/ac0 slot 18    | FAILS: @70172CEA:5 in [0,0]; writer @70172F26:4 = trunc16(sub(0x96, <residue WCMV.ac1@70172F26:0>)) -> None
     7017322E OBSERVE                dst/ac0 slot 134   | no dominating definite write of slot 134
-    7017322E OBSERVE                dst/ac0 slot 18    | FAILS: @70172CEA:5 in [0,0]; @701730AB:0 in [35,35]; @701731AB:0 in [73,73]; @70172FED:0 in [31,31]; writer @70172F26:4 = trunc16(sub(0x96, <residue WCMV.ac1@70172F26:0>)
-    701732B0 OBSERVE                dst/ac0 slot 18    | FAILS: @70172CEA:5 in [0,0]; @701730AB:0 in [35,35]; @701731AB:0 in [73,73]; @70172FED:0 in [31,31]; writer @70172F26:4 = trunc16(sub(0x96, <residue WCMV.ac1@70172F26:0>)
-    701732BF OBSERVE                dst/ac0 slot 18    | FAILS: @70172CEA:5 in [0,0]; @701730AB:0 in [35,35]; @701731AB:0 in [73,73]; @70172FED:0 in [31,31]; writer @70172F26:4 = trunc16(sub(0x96, <residue WCMV.ac1@70172F26:0>)
+    701732B0 OBSERVE                dst/ac0 slot 18    | FAILS: @70172CEA:5 in [0,0]; writer @70172F26:4 = trunc16(sub(0x96, <residue WCMV.ac1@70172F26:0>)) -> None
+    701732BF OBSERVE                dst/ac0 slot 18    | FAILS: @70172CEA:5 in [0,0]; writer @70172F26:4 = trunc16(sub(0x96, <residue WCMV.ac1@70172F26:0>)) -> None
     701732C6 OBSERVE                dst/ac0 slot 134   | no dominating definite write of slot 134
+    701732D2 OBSERVE                dst/ac0 slot 18    | FAILS: @70172CEA:5 in [0,0]; writer @70172F26:4 = trunc16(sub(0x96, <residue WCMV.ac1@70172F26:0>)) -> None
     701732D2 OBSERVE                dst/ac0 slot 134   | no dominating definite write of slot 134
-    701732D2 OBSERVE                dst/ac0 slot 18    | FAILS: @70172CEA:5 in [0,0]; @701730AB:0 in [35,35]; @701731AB:0 in [73,73]; @70172FED:0 in [31,31]; writer @70172F26:4 = trunc16(sub(0x96, <residue WCMV.ac1@70172F26:0>)
-    701732E7 OBSERVE                s1/ac1  slot 18    | FAILS: @70172CEA:5 in [0,0]; @701730AB:0 in [35,35]; writer @701732D9:4 = trunc16(sub(0x96, <residue WCMV.ac1@701732D9:0>)) -> None
-    701732FE OBSERVE                dst/ac0 slot 18    | FAILS: @70172CEA:5 in [0,0]; @701730AB:0 in [35,35]; writer @701732D9:4 = trunc16(sub(0x96, <residue WCMV.ac1@701732D9:0>)) -> None
-    70173307 OBSERVE                dst/ac0 slot 18    | FAILS: @70172CEA:5 in [0,0]; @701730AB:0 in [35,35]; writer @701732D9:4 = trunc16(sub(0x96, <residue WCMV.ac1@701732D9:0>)) -> None
-    70173315 OBSERVE                dst/ac0 slot 18    | FAILS: @70172CEA:5 in [0,0]; @701730AB:0 in [35,35]; writer @701732D9:4 = trunc16(sub(0x96, <residue WCMV.ac1@701732D9:0>)) -> None
+    701732E7 OBSERVE                s1/ac1  slot 18    | FAILS: @70172CEA:5 in [0,0]; writer @70172F26:4 = trunc16(sub(0x96, <residue WCMV.ac1@70172F26:0>)) -> None
+    701732FE OBSERVE                dst/ac0 slot 18    | FAILS: @70172CEA:5 in [0,0]; writer @70172F26:4 = trunc16(sub(0x96, <residue WCMV.ac1@70172F26:0>)) -> None
+    70173307 OBSERVE                dst/ac0 slot 18    | FAILS: @70172CEA:5 in [0,0]; writer @70172F26:4 = trunc16(sub(0x96, <residue WCMV.ac1@70172F26:0>)) -> None
+    70173315 OBSERVE                dst/ac0 slot 18    | FAILS: @70172CEA:5 in [0,0]; writer @70172F26:4 = trunc16(sub(0x96, <residue WCMV.ac1@70172F26:0>)) -> None
     701733BF OBSERVE.1@70173378     s1/ac1  slot 13    | FAILS: @7017338B:4 in [1,1]; writer @7017339B:2 = t1 -> None
     70173565 OBSERVE.1@70173378     dst/ac0 slot 134   | no dominating definite write of slot 134
     7017356E OBSERVE.1@70173378     dst/ac0 slot 134   | no dominating definite write of slot 134
     7017357D OBSERVE.1@70173378     dst/ac0 slot 134   | no dominating definite write of slot 134
     70173584 OBSERVE.1@70173378     dst/ac0 slot 98    | no dominating definite write of slot 98
-    7017358D OBSERVE.1@70173378     dst/ac0 slot 134   | no dominating definite write of slot 134
     7017358D OBSERVE.1@70173378     dst/ac0 slot 98    | no dominating definite write of slot 98
-    7017359E OBSERVE.1@70173378     dst/ac0 slot 134   | no dominating definite write of slot 134
+    7017358D OBSERVE.1@70173378     dst/ac0 slot 134   | no dominating definite write of slot 134
     7017359E OBSERVE.1@70173378     dst/ac0 slot 98    | no dominating definite write of slot 98
+    7017359E OBSERVE.1@70173378     dst/ac0 slot 134   | no dominating definite write of slot 134
     7017390D OP_EDIT.1@701738CF     s2/ac0  slot 17    | FAILS: @701738DE:3 in [1,1]; writer @701738EA:2 = t1 -> None
     70173B29 OP_EDIT.2@7017395B     dst/ac0 slot 17    | FAILS: @70173A85:3 in [1,1]; writer @70173A93:2 = t1 -> None
     70173B34 OP_EDIT.2@7017395B     dst/ac0 slot 17    | FAILS: @70173A85:3 in [1,1]; writer @70173A93:2 = t1 -> None
@@ -429,20 +413,20 @@ cfg: 134 blocks without predecessors; 128 of them are addrbook entries; 6 are no
     70173C0B OP_EDIT.2@7017395B     dst/ac0 slot 98    | no dominating definite write of slot 98
     70173C0B OP_EDIT.2@7017395B     dst/ac0 slot 70    | no dominating definite write of slot 70
     70173C12 OP_EDIT.2@7017395B     dst/ac0 slot 116   | no dominating definite write of slot 116
-    70173C1B OP_EDIT.2@7017395B     dst/ac0 slot 116   | no dominating definite write of slot 116
     70173C1B OP_EDIT.2@7017395B     dst/ac0 slot 98    | no dominating definite write of slot 98
     70173C1B OP_EDIT.2@7017395B     dst/ac0 slot 70    | no dominating definite write of slot 70
+    70173C1B OP_EDIT.2@7017395B     dst/ac0 slot 116   | no dominating definite write of slot 116
     70173C2E OP_EDIT.2@7017395B     dst/ac0 slot 136   | no dominating definite write of slot 136
     70173C83 OP_EDIT.2@7017395B     dst/ac0 slot 17    | FAILS: @70173A85:3 in [1,1]; writer @70173A93:2 = t1 -> None
     70173C8E OP_EDIT.2@7017395B     dst/ac0 slot 17    | FAILS: @70173A85:3 in [1,1]; writer @70173A93:2 = t1 -> None
     70173D12 OP_EDIT.2@7017395B     dst/ac0 slot 98    | no dominating definite write of slot 98
     70173D1B OP_EDIT.2@7017395B     dst/ac0 slot 98    | no dominating definite write of slot 98
     70173D2E OP_EDIT.2@7017395B     dst/ac0 slot 116   | no dominating definite write of slot 116
-    70173D37 OP_EDIT.2@7017395B     dst/ac0 slot 116   | no dominating definite write of slot 116
     70173D37 OP_EDIT.2@7017395B     dst/ac0 slot 98    | no dominating definite write of slot 98
+    70173D37 OP_EDIT.2@7017395B     dst/ac0 slot 116   | no dominating definite write of slot 116
     70173D4D OP_EDIT.2@7017395B     dst/ac0 slot 136   | no dominating definite write of slot 136
-    70173D58 OP_EDIT.2@7017395B     dst/ac0 slot 116   | no dominating definite write of slot 116
     70173D58 OP_EDIT.2@7017395B     dst/ac0 slot 98    | no dominating definite write of slot 98
+    70173D58 OP_EDIT.2@7017395B     dst/ac0 slot 116   | no dominating definite write of slot 116
     70173D58 OP_EDIT.2@7017395B     dst/ac0 slot 136   | no dominating definite write of slot 136
     70173EE6 OP_EDIT.3@70173DE4     s2/ac0  slot 17    | FAILS: @70173EB5:3 in [1,1]; writer @70173EC3:2 = t1 -> None
     70173FCE OP_EDIT.3@70173DE4     s2/ac0  slot 17    | FAILS: @70173F9C:4 in [1,1]; writer @70173FAB:2 = t1 -> None
@@ -450,16 +434,16 @@ cfg: 134 blocks without predecessors; 128 of them are addrbook entries; 6 are no
     70174085 OP_EDIT.3@70173DE4     dst/ac0 slot 98    | no dominating definite write of slot 98
     70174094 OP_EDIT.3@70173DE4     dst/ac0 slot 98    | no dominating definite write of slot 98
     7017409B OP_EDIT.3@70173DE4     dst/ac0 slot 116   | no dominating definite write of slot 116
-    701740A6 OP_EDIT.3@70173DE4     dst/ac0 slot 116   | no dominating definite write of slot 116
     701740A6 OP_EDIT.3@70173DE4     dst/ac0 slot 98    | no dominating definite write of slot 98
+    701740A6 OP_EDIT.3@70173DE4     dst/ac0 slot 116   | no dominating definite write of slot 116
     701748C5 OP_EDIT.3@70173DE4     dst/ac0 slot 98    | no dominating definite write of slot 98
     701748CE OP_EDIT.3@70173DE4     dst/ac0 slot 98    | no dominating definite write of slot 98
     701748DD OP_EDIT.3@70173DE4     dst/ac0 slot 98    | no dominating definite write of slot 98
     701748E4 OP_EDIT.3@70173DE4     dst/ac0 slot 116   | no dominating definite write of slot 116
-    70174903 OP_EDIT.3@70173DE4     dst/ac0 slot 116   | no dominating definite write of slot 116
     70174903 OP_EDIT.3@70173DE4     dst/ac0 slot 98    | no dominating definite write of slot 98
-    7017491A OP_EDIT.3@70173DE4     dst/ac0 slot 116   | no dominating definite write of slot 116
+    70174903 OP_EDIT.3@70173DE4     dst/ac0 slot 116   | no dominating definite write of slot 116
     7017491A OP_EDIT.3@70173DE4     dst/ac0 slot 98    | no dominating definite write of slot 98
+    7017491A OP_EDIT.3@70173DE4     dst/ac0 slot 116   | no dominating definite write of slot 116
     701756EF OP_EDIT.4@70175672     dst/ac0 slot 12    | no dominating definite write of slot 12
     70175703 OP_EDIT.4@70175672     dst/ac0 slot 12    | no dominating definite write of slot 12
     70175725 OP_EDIT.4@70175672     dst/ac0 slot 12    | no dominating definite write of slot 12
@@ -470,24 +454,20 @@ cfg: 134 blocks without predecessors; 128 of them are addrbook entries; 6 are no
     70176C94 REPORT                 dst/ac0 slot 3     | FAILS: writer @70176C28:4 = trunc16(sx16(M16[wp(add(add(mul(sx16(M16[0x70000216]), 0x2AE), {1 | t1 -> None
     70176CAA REPORT                 dst/ac0 slot 3     | FAILS: writer @70176C28:4 = trunc16(sx16(M16[wp(add(add(mul(sx16(M16[0x70000216]), 0x2AE), {1 | t1 -> None
     70176CB6 REPORT                 dst/ac0 slot 2     | FAILS: @70176C0B:4 in [1,1]; writer @70176C15:2 = t1 -> None
-    70176CBF REPORT                 dst/ac0 slot 3     | FAILS: writer @70176C28:4 = trunc16(sx16(M16[wp(add(add(mul(sx16(M16[0x70000216]), 0x2AE), {1 | t1 -> None
     70176CBF REPORT                 dst/ac0 slot 2     | FAILS: @70176C0B:4 in [1,1]; writer @70176C15:2 = t1 -> None
-    70176CCD REPORT                 dst/ac0 slot 3     | FAILS: writer @70176C28:4 = trunc16(sx16(M16[wp(add(add(mul(sx16(M16[0x70000216]), 0x2AE), {1 | t1 -> None
+    70176CBF REPORT                 dst/ac0 slot 3     | FAILS: writer @70176C28:4 = trunc16(sx16(M16[wp(add(add(mul(sx16(M16[0x70000216]), 0x2AE), {1 | t1 -> None
     70176CCD REPORT                 dst/ac0 slot 2     | FAILS: @70176C0B:4 in [1,1]; writer @70176C15:2 = t1 -> None
+    70176CCD REPORT                 dst/ac0 slot 3     | FAILS: writer @70176C28:4 = trunc16(sx16(M16[wp(add(add(mul(sx16(M16[0x70000216]), 0x2AE), {1 | t1 -> None
     70176D71 REPORT                 dst/ac0 slot 3     | FAILS: writer @70176C28:4 = trunc16(sx16(M16[wp(add(add(mul(sx16(M16[0x70000216]), 0x2AE), {1 | t1 -> None
     70176D68 REPORT                 dst/ac0 slot 2     | FAILS: @70176C0B:4 in [1,1]; writer @70176C15:2 = t1 -> None
     70176D71 REPORT                 dst/ac0 slot 2     | FAILS: @70176C0B:4 in [1,1]; writer @70176C15:2 = t1 -> None
-    70176DFE REPORT                 dst/ac0 slot 2     | FAILS: @70176C0B:4 in [1,1]; writer @70176C15:2 = t1 -> None
-    70176E07 REPORT                 dst/ac0 slot 2     | FAILS: @70176C0B:4 in [1,1]; writer @70176C15:2 = t1 -> None
-    70176E1A REPORT                 dst/ac0 slot 2     | FAILS: @70176C0B:4 in [1,1]; writer @70176C15:2 = t1 -> None
     70176E4E REPORT                 dst/ac0 slot 2     | FAILS: @70176C0B:4 in [1,1]; writer @70176C15:2 = t1 -> None
     70176E2F REPORT                 dst/ac0 slot 2     | FAILS: @70176C0B:4 in [1,1]; writer @70176C15:2 = t1 -> None
     70176E3E REPORT                 dst/ac0 slot 2     | FAILS: @70176C0B:4 in [1,1]; writer @70176C15:2 = t1 -> None
     70176E45 REPORT                 dst/ac0 slot 44    | no dominating definite write of slot 44
     70176E4E REPORT                 dst/ac0 slot 44    | no dominating definite write of slot 44
-    70176EFA REPORT                 dst/ac0 slot 2     | FAILS: writer @70176C15:2 = t1 -> None
-    70176F03 REPORT                 dst/ac0 slot 2     | FAILS: writer @70176C15:2 = t1 -> None
-    70176F16 REPORT                 dst/ac0 slot 2     | FAILS: writer @70176C15:2 = t1 -> None
+    70176E5F REPORT                 dst/ac0 slot 44    | no dominating definite write of slot 44
+    70176E5F REPORT                 dst/ac0 slot 2     | FAILS: @70176C0B:4 in [1,1]; writer @70176C15:2 = t1 -> None
     70176F22 REPORT                 dst/ac0 slot 5     | FAILS: @70176C0B:2 in [0,0]; writer @70176E7E:1 = trunc16(sx16(M16[wp(wfp, 2)])) -> None
     70176F2B REPORT                 dst/ac0 slot 5     | FAILS: @70176C0B:2 in [0,0]; writer @70176E7E:1 = trunc16(sx16(M16[wp(wfp, 2)])) -> None
     70176F2B REPORT                 dst/ac0 slot 2     | FAILS: writer @70176C15:2 = t1 -> None
@@ -502,10 +482,10 @@ cfg: 134 blocks without predecessors; 128 of them are addrbook entries; 6 are no
     70177744 SEIGE                  dst/ac0 slot 50    | no dominating definite write of slot 50
     70177753 SEIGE                  dst/ac0 slot 50    | no dominating definite write of slot 50
     7017775A SEIGE                  dst/ac0 slot 8     | no dominating definite write of slot 8
-    70177763 SEIGE                  dst/ac0 slot 8     | no dominating definite write of slot 8
     70177763 SEIGE                  dst/ac0 slot 50    | no dominating definite write of slot 50
-    70177774 SEIGE                  dst/ac0 slot 8     | no dominating definite write of slot 8
+    70177763 SEIGE                  dst/ac0 slot 8     | no dominating definite write of slot 8
     70177774 SEIGE                  dst/ac0 slot 50    | no dominating definite write of slot 50
+    70177774 SEIGE                  dst/ac0 slot 8     | no dominating definite write of slot 8
     701777C6 SEIGE                  dst/ac0 slot 8     | no dominating definite write of slot 8
     701777CF SEIGE                  dst/ac0 slot 8     | no dominating definite write of slot 8
     701777DD SEIGE                  dst/ac0 slot 8     | no dominating definite write of slot 8
@@ -536,16 +516,16 @@ cfg: 134 blocks without predecessors; 128 of them are addrbook entries; 6 are no
     7017A126 STORE.1@70179BF4       dst/ac0 slot 64    | no dominating definite write of slot 64
     7017A135 STORE.1@70179BF4       dst/ac0 slot 64    | no dominating definite write of slot 64
     7017A140 STORE.1@70179BF4       dst/ac0 slot 12    | FAILS: writer @7017A0C7:2 = trunc16(sx16(M16[wp(add(mul(sx16(M16[wp(wfp, 0x11)]), 0x10), sx16(M16[ -> None
-    7017A153 STORE.1@70179BF4       dst/ac0 slot 12    | FAILS: writer @7017A0C7:2 = trunc16(sx16(M16[wp(add(mul(sx16(M16[wp(wfp, 0x11)]), 0x10), sx16(M16[ -> None
     7017A153 STORE.1@70179BF4       dst/ac0 slot 64    | no dominating definite write of slot 64
-    7017A16F STORE.1@70179BF4       dst/ac0 slot 12    | FAILS: writer @7017A0C7:2 = trunc16(sx16(M16[wp(add(mul(sx16(M16[wp(wfp, 0x11)]), 0x10), sx16(M16[ -> None
+    7017A153 STORE.1@70179BF4       dst/ac0 slot 12    | FAILS: writer @7017A0C7:2 = trunc16(sx16(M16[wp(add(mul(sx16(M16[wp(wfp, 0x11)]), 0x10), sx16(M16[ -> None
     7017A16F STORE.1@70179BF4       dst/ac0 slot 64    | no dominating definite write of slot 64
-    7017A18A STORE.1@70179BF4       dst/ac0 slot 12    | FAILS: writer @7017A0C7:2 = trunc16(sx16(M16[wp(add(mul(sx16(M16[wp(wfp, 0x11)]), 0x10), sx16(M16[ -> None
+    7017A16F STORE.1@70179BF4       dst/ac0 slot 12    | FAILS: writer @7017A0C7:2 = trunc16(sx16(M16[wp(add(mul(sx16(M16[wp(wfp, 0x11)]), 0x10), sx16(M16[ -> None
     7017A18A STORE.1@70179BF4       dst/ac0 slot 64    | no dominating definite write of slot 64
+    7017A18A STORE.1@70179BF4       dst/ac0 slot 12    | FAILS: writer @7017A0C7:2 = trunc16(sx16(M16[wp(add(mul(sx16(M16[wp(wfp, 0x11)]), 0x10), sx16(M16[ -> None
     7017A191 STORE.1@70179BF4       dst/ac0 slot 116   | no dominating definite write of slot 116
+    7017A1A5 STORE.1@70179BF4       dst/ac0 slot 116   | no dominating definite write of slot 116
     7017A1A5 STORE.1@70179BF4       dst/ac0 slot 64    | no dominating definite write of slot 64
     7017A1A5 STORE.1@70179BF4       dst/ac0 slot 12    | FAILS: writer @7017A0C7:2 = trunc16(sx16(M16[wp(add(mul(sx16(M16[wp(wfp, 0x11)]), 0x10), sx16(M16[ -> None
-    7017A1A5 STORE.1@70179BF4       dst/ac0 slot 116   | no dominating definite write of slot 116
     7017A4FE STORE.1@70179BF4       dst/ac0 slot 14    | FAILS: writer @7017A250:3 = trunc16(sx16(M16[wp(add(mul(sx16(M16[wp(wfp, 0x11)]), 0x10), cvwn(<res -> None
     7017A507 STORE.1@70179BF4       dst/ac0 slot 14    | FAILS: writer @7017A250:3 = trunc16(sx16(M16[wp(add(mul(sx16(M16[wp(wfp, 0x11)]), 0x10), cvwn(<res -> None
     7017A515 STORE.1@70179BF4       dst/ac0 slot 14    | FAILS: writer @7017A250:3 = trunc16(sx16(M16[wp(add(mul(sx16(M16[wp(wfp, 0x11)]), 0x10), cvwn(<res -> None
@@ -569,23 +549,29 @@ cfg: 134 blocks without predecessors; 128 of them are addrbook entries; 6 are no
     7017D3A5 TOWER_ATTACK           dst/ac0 slot 20    | no dominating definite write of slot 20
 
 === a004. Chains: cond operands DERIVED from a dominating base-class root (2 passes) ===
-  WCMV  dst/ac0  expr            177
-  WCMV  dst/ac0  lenload-expr    166
-  WCMV  dst/ac0  register        114
-  WCMV  dst/ac0  wide-expr        29
-  WCMV  src/ac1  expr            178
-  WCMV  src/ac1  register         87
-  WCMV  src/ac1  wide-expr        29
-  derived operands: 780
-  cond operands NOT derived: 108 at 67 sites
-    register         58
-    expr             36
-    wide-expr        10
+  WCMV  dst/ac0  expr            160
+  WCMV  dst/ac0  lenload-expr    156
+  WCMV  dst/ac0  register        102
+  WCMV  dst/ac0  wide-expr        25
+  WCMV  src/ac1  expr            160
+  WCMV  src/ac1  register         83
+  WCMV  src/ac1  wide-expr        25
+  derived operands: 711
+  cond operands NOT derived: 132 at 79 sites
+    register         68
+    expr             46
+    wide-expr        14
     lenload-expr      4
-  distinct length words asserted at base-class roots: 169; distinct length words behind the undérived cond operands: 56 (40 of them also roots)
+  distinct length words asserted at base-class roots: 152; distinct length words behind the undérived cond operands: 68 (46 of them also roots)
   cond operands not derived, listed (pc routine role class | why not):
     7015D94A ATTACK                 dst/ac0 register     | join{WCMV residue ac1 = len - min(|n|,|len|) @7015D942:0 (closure: >= 0 iff its len >= 0) | length word wp(wfp, 0x32)}
-    7015D981 ATTACK                 dst/ac0 register     | join{WCMV residue ac1 = len - min(|n|,|len|) @7015D979:0 (closure: >= 0 iff its len >= 0) | length word wp(wfp, 0x32)}
+    7015D981 ATTACK                 dst/ac0 register     | join{length word wp(wfp, 0x32) | WCMV residue ac1 = len - min(|n|,|len|) @7015D979:0 (closure: >= 0 iff its len >= 0)}
+    7015DA0E ATTACK                 dst/ac0 expr         | length word (sx16(M16[({add({M32[wp(add(add(add(mul(sx16(M16[w in an image table, <= 9 over the guarded index range + le
+    7015DA0E ATTACK                 src/ac1 expr         | length word (sx16(M16[({add({M32[wp(add(add(add(mul(sx16(M16[w in an image table, <= 9 over the guarded index range + le
+    7015DA1E ATTACK                 dst/ac0 expr         | length word (sx16(M16[({add({M32[wp(add(add(add(mul(sx16(M16[w in an image table, <= 9 over the guarded index range + le
+    7015DA1E ATTACK                 src/ac1 expr         | length word (sx16(M16[({add({M32[wp(add(add(add(mul(sx16(M16[w in an image table, <= 9 over the guarded index range + le
+    7015DA2F ATTACK                 dst/ac0 expr         | length word (sx16(M16[({add({M32[wp(add(add(add(mul(sx16(M16[w in an image table, <= 9 over the guarded index range + le
+    7015DA2F ATTACK                 src/ac1 expr         | length word (sx16(M16[({add({M32[wp(add(add(add(mul(sx16(M16[w in an image table, <= 9 over the guarded index range + le
     7015F972 ATTACK.5@7015F8F6      dst/ac0 register     | length word wp(<opaque slot 24 clobbered: WCMV destination @7015F90E:25>, -0x271)
     7015F972 ATTACK.5@7015F8F6      src/ac1 register     | length word wp(<opaque slot 24 clobbered: WCMV destination @7015F90E:25>, -0x271)
     7015F972 ATTACK.5@7015F8F6      dst/ac0 register     | length word wp(add(mul(M32[wp(<entry 7015F8F6>, 0xA)], 0x2AE), M32[0x70000210]), -0x271) + length word wp(mul(sx16(M16[w
@@ -594,28 +580,32 @@ cfg: 134 blocks without predecessors; 128 of them are addrbook entries; 6 are no
     701609CA BARGAIN.2@70160920     src/ac1 register     | length word wp(mul(add(sx16(M16[wp(add(cvwn(sx16(M16[wp(wfp, 3)])), wfp), 5)]), 0xFFFFFF9C), 9), -0xFFFF977) + constant 
     701609E0 BARGAIN.2@70160920     dst/ac0 register     | length word wp(mul(sx16(M16[wp(add(cvwn(sx16(M16[wp(wfp, 3)])), wfp), 5)]), 9), -0xFFFFA73) + constant 2
     701609E0 BARGAIN.2@70160920     src/ac1 register     | length word wp(mul(sx16(M16[wp(add(cvwn(sx16(M16[wp(wfp, 3)])), wfp), 5)]), 9), -0xFFFFA73) + constant 2
-    70164038 CAVE_ATTACK            dst/ac0 register     | join{length word wp(wfp, 0x2A) | WCMV residue ac1 = len - min(|n|,|len|) @70164030:0 (closure: >= 0 iff its len >= 0)}
-    70165A5D DEFEND                 dst/ac0 register     | join{length word wp(wfp, 0x34) | WCMV residue ac1 = len - min(|n|,|len|) @70165A55:0 (closure: >= 0 iff its len >= 0)}
-    70165DCC DEFEND                 dst/ac0 register     | join{WCMV residue ac1 = len - min(|n|,|len|) @70165DC4:0 (closure: >= 0 iff its len >= 0) | length word wp(wfp, 0x34)}
+    70164038 CAVE_ATTACK            dst/ac0 register     | join{WCMV residue ac1 = len - min(|n|,|len|) @70164030:0 (closure: >= 0 iff its len >= 0) | length word wp(wfp, 0x2A)}
+    70165A5D DEFEND                 dst/ac0 register     | join{WCMV residue ac1 = len - min(|n|,|len|) @70165A55:0 (closure: >= 0 iff its len >= 0) | length word wp(wfp, 0x34)}
+    70165DCC DEFEND                 dst/ac0 register     | join{length word wp(wfp, 0x34) | WCMV residue ac1 = len - min(|n|,|len|) @70165DC4:0 (closure: >= 0 iff its len >= 0)}
     7016619C DIED                   dst/ac0 register     | length word <opaque slot -12 clobbered: WCMV destination (frame range unknown) @7016606F:6> + constant 3 + constant 23
     7016619C DIED                   src/ac1 register     | length word <opaque slot -12 clobbered: WCMV destination (frame range unknown) @7016606F:6> + constant 3 + constant 23
     70166207 DIED                   dst/ac0 register     | length word <argument (-12, '7016603D')> + constant 3 + constant 76
     70166207 DIED                   src/ac1 register     | length word <argument (-12, '7016603D')> + constant 3 + constant 76
-    701664F6 DISPLAY_MAGIC          dst/ac0 register     | join{constant 40 | length word wp(wfp, 0x1C) + constant 14}
+    701664F6 DISPLAY_MAGIC          dst/ac0 register     | join{length word wp(wfp, 0x1C) + constant 14 | constant 40}
+    701665E2 DISPLAY_MAGIC          dst/ac0 register     | length word wp(mul(sx16(M16[wp(wfp, 2)]), 0x10), -0xFEAFBB8) in an image table, <= 24 over the guarded index range + 30 
+    701665E2 DISPLAY_MAGIC          src/ac1 register     | length word wp(mul(sx16(M16[wp(wfp, 2)]), 0x10), -0xFEAFBB8) in an image table, <= 24 over the guarded index range + 30 
     70166703 DISPLAY_CAVE           dst/ac0 expr         | length word 0x70000A4E + constant 2
     70166703 DISPLAY_CAVE           src/ac1 expr         | length word 0x70000A4E + constant 2
     7016697A DISPLAY_CAVE           dst/ac0 register     | length word wp(wfp, 6)
     7016697A DISPLAY_CAVE           src/ac1 register     | length word wp(wfp, 6)
+    7016698B DISPLAY_CAVE           dst/ac0 register     | join{constant 80 | length word wp(M32[0x70000210], 0x1EFB9) + length word 0x70000A4E + constant 3}
+    7016698B DISPLAY_CAVE           src/ac1 register     | length word wp(M32[0x70000210], 0x1EFB9) + length word 0x70000A4E + constant 3
     701669E1 DISPLAY_CAVE           dst/ac0 register     | join{constant 80 | length word 0x70000A4E + constant 3 + constant 4}
     701669E1 DISPLAY_CAVE           src/ac1 register     | length word 0x70000A4E + constant 3 + constant 4
     70166A1B DISPLAY_CAVE           dst/ac0 register     | join{length word 0x70000A4E + constant 3 + constant 4 | constant 80}
     70166A1B DISPLAY_CAVE           src/ac1 register     | length word 0x70000A4E + constant 3 + constant 4
-    70166DB8 DISPLAY_SCREEN         dst/ac0 register     | join{constant 10 | length word wp(wfp, 0x412)}
+    70166DB8 DISPLAY_SCREEN         dst/ac0 register     | join{length word wp(wfp, 0x412) | constant 10}
     70166DB8 DISPLAY_SCREEN         src/ac1 register     | length word wp(wfp, 0x412)
-    70166EE9 DISPLAY_SCREEN         dst/ac0 register     | join{length word wp(wfp, 0xEE) + constant 1 + constant 1 + constant 1 | constant 756}
-    70166EF1 DISPLAY_SCREEN         dst/ac0 register     | join{WCMV residue ac1 = len - min(|n|,|len|) @70166EE9:0 (closure: >= 0 iff its len >= 0) | length word wp(wfp, 0xA)}
+    70166EE9 DISPLAY_SCREEN         dst/ac0 register     | join{constant 756 | length word wp(wfp, 0xEE) + constant 1 + constant 1 + constant 1}
+    70166EF1 DISPLAY_SCREEN         dst/ac0 register     | join{length word wp(wfp, 0xA) | WCMV residue ac1 = len - min(|n|,|len|) @70166EE9:0 (closure: >= 0 iff its len >= 0)}
     70166FBC DISPLAY_SCREEN         dst/ac0 register     | join{length word wp(wfp, 0xEE) + constant 1 + constant 1 + constant 1 | constant 756}
-    70166FC4 DISPLAY_SCREEN         dst/ac0 register     | join{WCMV residue ac1 = len - min(|n|,|len|) @70166FBC:0 (closure: >= 0 iff its len >= 0) | length word wp(wfp, 0xA)}
+    70166FC4 DISPLAY_SCREEN         dst/ac0 register     | join{length word wp(wfp, 0xA) | WCMV residue ac1 = len - min(|n|,|len|) @70166FBC:0 (closure: >= 0 iff its len >= 0)}
     70167049 DISPLAY_SCREEN         dst/ac0 register     | join{constant 756 | length word wp(wfp, 0x26A) + length word wp(wfp, 0x3E6) + constant 1 + constant 1}
     7016708E DISPLAY_SCREEN         dst/ac0 register     | length word wp(wfp, 0x26A) + constant 2
     7016708E DISPLAY_SCREEN         src/ac1 register     | length word wp(wfp, 0x26A) + constant 2
@@ -630,8 +620,8 @@ cfg: 134 blocks without predecessors; 128 of them are addrbook entries; 6 are no
     70167683 DISPLAY_INVENTORY      src/ac1 expr         | length word (sx16(M16[wp(wfp, 2)]) * 9) - 0xFFFFCFB + constant 2
     7016769A DISPLAY_INVENTORY      dst/ac0 expr         | length word (sx16(M16[wp(wfp, 2)]) * 9) - 0xFFFFA73 + constant 2
     7016769A DISPLAY_INVENTORY      src/ac1 expr         | length word (sx16(M16[wp(wfp, 2)]) * 9) - 0xFFFFA73 + constant 2
-    701676E5 DISPLAY_INVENTORY      dst/ac0 register     | join{constant 30 | length word wp(wfp, 6) + constant 1}
-    70167728 DISPLAY_INVENTORY      dst/ac0 register     | join{constant 30 | length word wp(wfp, 6) + constant 1}
+    701676E5 DISPLAY_INVENTORY      dst/ac0 register     | join{length word wp(wfp, 6) + constant 1 | constant 30}
+    70167728 DISPLAY_INVENTORY      dst/ac0 register     | join{length word wp(wfp, 6) + constant 1 | constant 30}
     70167734 DISPLAY_INVENTORY      dst/ac0 register     | join{length word wp(<opaque slot 42 clobbered: WCMV destination @70167728:0>, -0xFEAF4F4) | WCMV residue ac1 = len - min
     70168668 DISPLAY_FLASK          dst/ac0 expr         | length word wp(wfp, 0x12) + constant 2
     70168668 DISPLAY_FLASK          src/ac1 expr         | length word wp(wfp, 0x12) + constant 2
@@ -639,6 +629,8 @@ cfg: 134 blocks without predecessors; 128 of them are addrbook entries; 6 are no
     7016A226 FIRE                   src/ac1 expr         | length word wp(wfp, 0x70) + constant 40
     7016A34A FIRE                   dst/ac0 expr         | length word wp(wfp, 0x70) + constant 40
     7016A34A FIRE                   src/ac1 expr         | length word wp(wfp, 0x70) + constant 40
+    7016B8CA GET_QUEST              dst/ac0 register     | length word wp(mul(nadd(sx16({<opaque raw DIVX @7016B856> | (t in an image table, <= 9 over the guarded index range + co
+    7016B8CA GET_QUEST              src/ac1 register     | length word wp(mul(nadd(sx16({<opaque raw DIVX @7016B856> | (t in an image table, <= 9 over the guarded index range + co
     7016BC59 GET_QUEST              dst/ac0 expr         | length word (sx16(M16[(sx16(M16[0x70000216]) * 0x2AE) + M32[0x70000210] + 0x2B]) * 0x13) + M32[0x70000212] + 0x7C2 + con
     7016BC59 GET_QUEST              src/ac1 expr         | length word (sx16(M16[(sx16(M16[0x70000216]) * 0x2AE) + M32[0x70000210] + 0x2B]) * 0x13) + M32[0x70000212] + 0x7C2 + con
     7016EDBB LIST_PLAYERS.1@7016EC57 dst/ac0 register     | length word wp(wfp, 0x234)
@@ -656,9 +648,9 @@ cfg: 134 blocks without predecessors; 128 of them are addrbook entries; 6 are no
     70172DED OBSERVE                dst/ac0 lenload-expr | length word wp(wfp, 0x12)
     70172E4E OBSERVE                dst/ac0 register     | join{constant 150 | length word wp(wfp, 0x86) + length word wp(wfp, 0x12) + length word wp(mul(0x33, add(sx16(M16[wp(wfp
     70172EBE OBSERVE                dst/ac0 lenload-expr | length word wp(wfp, 0x12)
-    70172F1F OBSERVE                dst/ac0 register     | join{length word wp(wfp, 0x12) + length word wp(mul(0x33, sx16(M16[wp(wfp, 0xD)])), -0xFEAF513) + constant 1 + length wo
+    70172F1F OBSERVE                dst/ac0 register     | join{constant 150 | length word wp(wfp, 0x12) + length word wp(mul(0x33, sx16(M16[wp(wfp, 0xD)])), -0xFEAF513) + constan
     7017322E OBSERVE                dst/ac0 register     | join{constant 150 | length word wp(wfp, 0x12) + constant 19 + length word wp(wfp, 0x86)}
-    701732D2 OBSERVE                dst/ac0 register     | join{length word wp(wfp, 0x86) + length word wp(wfp, 0x12) + constant 23 | constant 150}
+    701732D2 OBSERVE                dst/ac0 register     | join{constant 150 | length word wp(wfp, 0x86) + length word wp(wfp, 0x12) + constant 23}
     70173BEC OP_EDIT.2@7017395B     dst/ac0 wide-expr    | length word wp(wfp, 0x46) + constant 1 + constant 1
     70173BEC OP_EDIT.2@7017395B     src/ac1 wide-expr    | length word wp(wfp, 0x46) + constant 1 + constant 1
     70173BFC OP_EDIT.2@7017395B     dst/ac0 wide-expr    | length word wp(wfp, 0x46) + constant 1 + constant 1 + length word wp(wfp, 0x62)
@@ -677,23 +669,35 @@ cfg: 134 blocks without predecessors; 128 of them are addrbook entries; 6 are no
     7017584E OP_EDIT.6@701757A8     src/ac1 register     | length word <opaque slot -12 clobbered: raw LJSR (arguments not lifted) (frame range unknown) @701757A8:1> + constant 1 
     70175933 OP_EDIT.8@70175897     dst/ac0 register     | length word <opaque slot -12 clobbered: raw LJSR (arguments not lifted) (frame range unknown) @70175897:1> + constant 1 
     70175933 OP_EDIT.8@70175897     src/ac1 register     | length word <opaque slot -12 clobbered: raw LJSR (arguments not lifted) (frame range unknown) @70175897:1> + constant 1 
+    70176E2F REPORT                 dst/ac0 wide-expr    | length word wp(add(mul(sx16(M16[wp(wfp, 2)]), 0x2AE), M32[0x70000210]), -0x271) + length word wp(mul(sx16(M16[wp(add(mul
+    70176E2F REPORT                 src/ac1 wide-expr    | length word wp(add(mul(sx16(M16[wp(wfp, 2)]), 0x2AE), M32[0x70000210]), -0x271) + length word wp(mul(sx16(M16[wp(add(mul
+    70176E3E REPORT                 dst/ac0 wide-expr    | length word wp(add(mul(sx16(M16[wp(wfp, 2)]), 0x2AE), M32[0x70000210]), -0x271) + length word wp(mul(sx16(M16[wp(add(mul
+    70176E3E REPORT                 src/ac1 wide-expr    | length word wp(add(mul(sx16(M16[wp(wfp, 2)]), 0x2AE), M32[0x70000210]), -0x271) + length word wp(mul(sx16(M16[wp(add(mul
+    70176E4E REPORT                 dst/ac0 register     | length word wp(wfp, 0x2C) + length word wp(add(mul(sx16(M16[wp(wfp, 2)]), 0x2AE), M32[0x70000210]), -0x271) + length wor
+    70176E4E REPORT                 src/ac1 register     | length word wp(wfp, 0x2C) + length word wp(add(mul(sx16(M16[wp(wfp, 2)]), 0x2AE), M32[0x70000210]), -0x271) + length wor
+    70176E5F REPORT                 dst/ac0 register     | length word wp(wfp, 0x2C) + length word wp(add(mul(sx16(M16[wp(wfp, 2)]), 0x2AE), M32[0x70000210]), -0x271) + length wor
+    70176E5F REPORT                 src/ac1 register     | length word wp(wfp, 0x2C) + length word wp(add(mul(sx16(M16[wp(wfp, 2)]), 0x2AE), M32[0x70000210]), -0x271) + length wor
+    70176F2B REPORT                 dst/ac0 expr         | length word (sx16(M16[wp(wfp, 5)]) * 0x2AE) + M32[0x70000210] - 0x271 + length word (sx16(M16[(sx16(M16[wp(wfp, 2)]) * 0
+    70176F2B REPORT                 src/ac1 expr         | length word (sx16(M16[wp(wfp, 5)]) * 0x2AE) + M32[0x70000210] - 0x271 + length word (sx16(M16[(sx16(M16[wp(wfp, 2)]) * 0
+    70176F3C REPORT                 dst/ac0 expr         | length word (sx16(M16[wp(wfp, 5)]) * 0x2AE) + M32[0x70000210] - 0x271 + length word (sx16(M16[(sx16(M16[wp(wfp, 2)]) * 0
+    70176F3C REPORT                 src/ac1 expr         | length word (sx16(M16[wp(wfp, 5)]) * 0x2AE) + M32[0x70000210] - 0x271 + length word (sx16(M16[(sx16(M16[wp(wfp, 2)]) * 0
     701772FB SEIGE                  dst/ac0 expr         | length word (sx16(M16[wp(wfp, 3)]) * 0x17) + M32[0x70000214] - 0x11 + constant 2
     701772FB SEIGE                  src/ac1 expr         | length word (sx16(M16[wp(wfp, 3)]) * 0x17) + M32[0x70000214] - 0x11 + constant 2
-    701773A7 SEIGE                  dst/ac0 register     | length word wp(mul(nadd(sx16({(t1 & 0xFFFF) | <opaque raw DIVX @7017733D>}), 1), 0x10), -0xFEAF5A6) + constant 32 + cons
-    701773A7 SEIGE                  src/ac1 register     | length word wp(mul(nadd(sx16({(t1 & 0xFFFF) | <opaque raw DIVX @7017733D>}), 1), 0x10), -0xFEAF5A6) + constant 32 + cons
+    701773A7 SEIGE                  dst/ac0 register     | length word wp(mul(nadd(sx16({<opaque raw DIVX @7017733D> | (t in an image table, <= 9 over the guarded index range + co
+    701773A7 SEIGE                  src/ac1 register     | length word wp(mul(nadd(sx16({<opaque raw DIVX @7017733D> | (t in an image table, <= 9 over the guarded index range + co
     7017A176 STORE.1@70179BF4       dst/ac0 lenload-expr | length word wp(wfp, 0x16)
     7017BFB4 TERRITORY_MAP          dst/ac0 expr         | length word wp(wfp, 0x1AA8) + constant 29
     7017BFB4 TERRITORY_MAP          src/ac1 expr         | length word wp(wfp, 0x1AA8) + constant 29
-    7017C1BB TERRITORY_MAP          dst/ac0 expr         | length word wp(wfp, 0x1AA8) + length word (sx16(M16[{t1 | 1} + wfp + 0x3D1]) * 0x13) + M32[0x70000212] + 0x7C2 + constan
-    7017C1BB TERRITORY_MAP          src/ac1 expr         | length word wp(wfp, 0x1AA8) + length word (sx16(M16[{t1 | 1} + wfp + 0x3D1]) * 0x13) + M32[0x70000212] + 0x7C2 + constan
+    7017C1BB TERRITORY_MAP          dst/ac0 expr         | length word wp(wfp, 0x1AA8) + length word (sx16(M16[{1 | t1} + wfp + 0x3D1]) * 0x13) + M32[0x70000212] + 0x7C2 + constan
+    7017C1BB TERRITORY_MAP          src/ac1 expr         | length word wp(wfp, 0x1AA8) + length word (sx16(M16[{1 | t1} + wfp + 0x3D1]) * 0x13) + M32[0x70000212] + 0x7C2 + constan
     7017CEF1 TERRITORY              dst/ac0 lenload-expr | length word wp(wfp, 6)
     7017CF04 TERRITORY              dst/ac0 expr         | length word wp(wfp, 6) + constant 1
     7017CF04 TERRITORY              src/ac1 expr         | length word wp(wfp, 6) + constant 1
-    7017CF22 TERRITORY              src/ac1 register     | length word wp(wfp, 6) + constant 1 + length word wp(add({<opaque slot 12 clobbered: WCMV destination (frame range unkno
+    7017CF22 TERRITORY              src/ac1 register     | length word wp(wfp, 6) + constant 1 + length word wp(add({mul(sx16(M16[0x7000026E]), 0x14) | <opaque slot 12 clobbered: 
     7017D004 TERRITORY              dst/ac0 expr         | length word (sx16(M16[wp(wfp, 2)]) * 0x16) + M32[0x70000212] + 0xFCC18 + constant 2
     7017D004 TERRITORY              src/ac1 expr         | length word (sx16(M16[wp(wfp, 2)]) * 0x16) + M32[0x70000212] + 0xFCC18 + constant 2
 wrote docs/Project58/sites.tsv
-wrote docs/Project58/asserts.tsv (1315 operand rows)
+wrote docs/Project58/asserts.tsv (1220 operand rows)
 
 === 1. Site classification by count operands (textual, from the IR) ===
   WBLM  const                               12
@@ -749,15 +753,15 @@ wrote docs/Project58/asserts.tsv (1315 operand rows)
 
 === 3. Chain heads vs residue-fed (register operands only) ===
   register operands: 432; fed ONLY by string residues: 18; chain heads (some non-residue root): 414
-    const+lenload                                                 202
+    const+lenload                                                 224
     lenload                                                        94
-    opaque                                                         59
+    opaque                                                         38
     residue                                                        18
     lenload+residue                                                 8
     const+lenload+opaque                                            8
     const+residue                                                   6
-    const+opaque                                                    6
     const                                                           6
+    const+opaque                                                    5
     const+lenload+mem:M16                                           4
     const+mem:M32                                                   4
     const+entry+residue                                             4
@@ -773,88 +777,100 @@ wrote docs/Project58/asserts.tsv (1315 operand rows)
 
 === 5/6/7. Verdicts per operand ===
   const          yes       1158
-  expr           cond       391
-  expr           unknown     10
-  lenload-expr   cond       207
+  expr           cond       366
+  expr           unknown      6
+  expr           yes         29
+  lenload-expr   cond       187
+  lenload-expr   yes         20
   literal        yes        882
-  register       cond       311
-  register       unknown    110
-  register       yes         11
+  register       cond       297
+  register       unknown     86
+  register       yes         49
   varying        cond       206
-  wide-expr      cond        68
-  wide-expr      unknown     12
+  wide-expr      cond        64
+  wide-expr      unknown      8
+  wide-expr      yes          8
 
   verdicts when length words are TRACED THROUGH their writes (the induction):
   const          yes      -> yes       1158
-  expr           cond     -> cond       185
+  expr           cond     -> cond       160
   expr           cond     -> unknown    180
   expr           cond     -> yes         26
-  expr           unknown  -> unknown      6
+  expr           unknown  -> unknown      2
   expr           unknown  -> yes          4
-  lenload-expr   cond     -> cond       101
+  expr           yes      -> cond        20
+  expr           yes      -> unknown      4
+  expr           yes      -> yes          5
+  lenload-expr   cond     -> cond        81
   lenload-expr   cond     -> unknown     86
   lenload-expr   cond     -> yes         20
+  lenload-expr   yes      -> cond        16
+  lenload-expr   yes      -> yes          4
   literal        yes      -> yes        882
-  register       cond     -> cond       250
-  register       cond     -> unknown     61
-  register       unknown  -> unknown    110
-  register       yes      -> yes         11
+  register       cond     -> cond       232
+  register       cond     -> unknown     65
+  register       unknown  -> unknown     86
+  register       yes      -> yes         49
   varying        cond     -> cond        78
   varying        cond     -> unknown    106
   varying        cond     -> yes         22
-  wide-expr      cond     -> cond        28
+  wide-expr      cond     -> cond        24
   wide-expr      cond     -> unknown     36
   wide-expr      cond     -> yes          4
-  wide-expr      unknown  -> unknown     12
+  wide-expr      unknown  -> unknown      8
+  wide-expr      yes      -> cond         4
+  wide-expr      yes      -> yes          4
 
   per SITE (worst operand):
   WBLM  yes         12
   WCMP  cond        37
   WCMP  unknown      1
   WCMP  yes          2
-  WCMV  cond       580
-  WCMV  unknown     71
-  WCMV  yes        986
+  WCMV  cond       549
+  WCMV  unknown     55
+  WCMV  yes       1033
 
 === a003. Movement: syntactic matcher -> algebraic matcher ===
   WCMP s1/ac1 lenload-expr cond               2
   WCMP s1/ac1 register cond                   1
-  WCMV src/ac1 lenload-expr cond             35
-  WCMV src/ac1 register cond                 21
+  WCMV src/ac1 lenload-expr cond             25
+  WCMV src/ac1 lenload-expr yes              10
+  WCMV src/ac1 register cond                 13
+  WCMV src/ac1 register yes                   8
   newly matched operands: 59
   newly matched, listed (pc routine role class verdict | pointer - 2W):
-    7015C90D ALCHEMIST_HOME         src/ac1 lenload-expr cond    | 2
+    7015C90D ALCHEMIST_HOME         src/ac1 lenload-expr yes     | 2
     7015CAC5 ALCHEMIST_HOME         src/ac1 register     cond    | 2
     7015CB46 ALCHEMIST_HOME         src/ac1 register     cond    | 2
-    7015CB51 ALCHEMIST_HOME         src/ac1 lenload-expr cond    | 2
-    7015CE74 ALCHEMIST_HOME.1@7015CC78 src/ac1 lenload-expr cond    | 2
+    7015CB51 ALCHEMIST_HOME         src/ac1 lenload-expr yes     | 2
+    7015CE74 ALCHEMIST_HOME.1@7015CC78 src/ac1 lenload-expr yes     | 2
     7015CF16 ALCHEMIST_HOME.1@7015CC78 src/ac1 register     cond    | 2
-    7015D9DD ATTACK                 src/ac1 lenload-expr cond    | 2
+    7015D9DD ATTACK                 src/ac1 lenload-expr yes     | 2
     7015DA79 ATTACK                 src/ac1 lenload-expr cond    | 2
-    7015DBD8 ATTACK                 src/ac1 lenload-expr cond    | 2
-    7015E155 ATTACK.1@7015E113      src/ac1 register     cond    | 2
+    7015DBD8 ATTACK                 src/ac1 lenload-expr yes     | 2
+    7015E155 ATTACK.1@7015E113      src/ac1 register     yes     | 2
     7015E2A9 ATTACK.2@7015E1F1      src/ac1 lenload-expr cond    | 2
     7015E7B1 ATTACK.2@7015E1F1      src/ac1 lenload-expr cond    | 2
-    7015F972 ATTACK.5@7015F8F6      src/ac1 register     cond    | 2
+    7015F972 ATTACK.5@7015F8F6      src/ac1 register     yes     | 2
     701623E0 CAST                   src/ac1 register     cond    | 2
     70162AAF CAST.2@70162930        s1/ac1  register     cond    | 2
     70163D3C CASTLE_INVENTORY.1@701639BD src/ac1 lenload-expr cond    | 2
     70164071 CAVE_ATTACK            src/ac1 lenload-expr cond    | 2
-    70164159 CAVE_ATTACK            src/ac1 lenload-expr cond    | 2
+    70164159 CAVE_ATTACK            src/ac1 lenload-expr yes     | 2
     7016441E CAVE_ATTACK.1@701643E0 src/ac1 lenload-expr cond    | 2
     70164576 CAVE_ATTACK.1@701643E0 src/ac1 lenload-expr cond    | 2
     70165A94 DEFEND                 src/ac1 lenload-expr cond    | 2
     70165D2A DEFEND                 src/ac1 lenload-expr cond    | 2
     70165DFD DEFEND                 src/ac1 lenload-expr cond    | 2
     70165F5A DEFEND                 src/ac1 register     cond    | 2
-    70166589 DISPLAY_MAGIC          src/ac1 lenload-expr cond    | 2
-    701678C8 DISPLAY_INVENTORY      src/ac1 register     cond    | 2
-    70168136 DISPLAY_INVENTORY      src/ac1 register     cond    | 2
+    70166589 DISPLAY_MAGIC          src/ac1 lenload-expr yes     | 2
+    701678C8 DISPLAY_INVENTORY      src/ac1 register     yes     | 2
+    70168136 DISPLAY_INVENTORY      src/ac1 register     yes     | 2
     70168624 DISPLAY_FLASK          src/ac1 lenload-expr cond    | 2
     7016A134 FIRE                   src/ac1 lenload-expr cond    | 2
     7016A52D FIRE.3@7016A4F8        src/ac1 register     cond    | 2
     7016A694 FIRE.3@7016A4F8        src/ac1 lenload-expr cond    | 2
-    7016B895 GET_QUEST              src/ac1 register     cond    | 2
+    7016B895 GET_QUEST              src/ac1 register     yes     | 2
     7016DC16 HELP.1@7016D570        src/ac1 lenload-expr cond    | 2
     7016EC1C LIST_PLAYERS           src/ac1 lenload-expr cond    | 2
     7016F4DD LIST_PLAYERS.2@7016F1D0 src/ac1 lenload-expr cond    | 2
@@ -863,7 +879,7 @@ wrote docs/Project58/asserts.tsv (1315 operand rows)
     7017037A MOVE_IN_CAVE           src/ac1 register     cond    | 2
     701704E5 MOVE_IN_CAVE           src/ac1 register     cond    | 2
     70170949 MOVE_IN_CAVE           src/ac1 register     cond    | 2
-    701719C5 MOVE_PLAYER            src/ac1 register     cond    | 2
+    701719C5 MOVE_PLAYER            src/ac1 register     yes     | 2
     70172DA8 OBSERVE                s1/ac1  lenload-expr cond    | 2
     70172DF8 OBSERVE                src/ac1 lenload-expr cond    | 2
     70172E18 OBSERVE                src/ac1 lenload-expr cond    | 2
@@ -871,17 +887,17 @@ wrote docs/Project58/asserts.tsv (1315 operand rows)
     70172EC9 OBSERVE                src/ac1 lenload-expr cond    | 2
     70172EE9 OBSERVE                src/ac1 register     cond    | 2
     7017469C OP_EDIT.3@70173DE4     src/ac1 register     cond    | 2
-    70176DFE REPORT                 src/ac1 lenload-expr cond    | 2
-    70176EFA REPORT                 src/ac1 lenload-expr cond    | 2
-    701773A7 SEIGE                  src/ac1 register     cond    | 2
+    70176DFE REPORT                 src/ac1 lenload-expr yes     | 2
+    70176EFA REPORT                 src/ac1 lenload-expr yes     | 2
+    701773A7 SEIGE                  src/ac1 register     yes     | 2
     7017A140 STORE.1@70179BF4       src/ac1 lenload-expr cond    | 2
     7017A4FE STORE.1@70179BF4       src/ac1 lenload-expr cond    | 2
     7017AA10 TAKE                   src/ac1 register     cond    | 2
     7017ABDC TAKE                   src/ac1 lenload-expr cond    | 2
-    7017AC8B TAKE                   src/ac1 register     cond    | 2
+    7017AC8B TAKE                   src/ac1 register     yes     | 2
     7017AEC5 TAKE                   src/ac1 lenload-expr cond    | 2
     7017AF19 TAKE                   src/ac1 lenload-expr cond    | 2
-    7017CA38 TERRAIN                src/ac1 lenload-expr cond    | 2
+    7017CA38 TERRAIN                src/ac1 lenload-expr yes     | 2
 
 === 6. Base-class pattern (count = sx16(M16[A]), pointer = byte 2A+2) ===
   WCMP  s1/ac1   fixed        lenload-expr     2
@@ -915,20 +931,20 @@ wrote docs/Project58/asserts.tsv (1315 operand rows)
     arithmetic: (sx16(M16[wp(ac3, 0xC)]) * 0x1    1
 
 === 7. The residue: operands NOT proven and NOT the base class ===
-  expr           cond     const+lenload                                       391
-  register       cond     const+lenload                                       188
-  lenload-expr   cond     lenload                                             170
-  wide-expr      cond     const+lenload                                        64
-  register       unknown  opaque                                               59
-  register       cond     lenload                                              48
+  expr           cond     const+lenload                                       366
+  register       cond     const+lenload                                       190
+  lenload-expr   cond     lenload                                             160
+  wide-expr      cond     const+lenload                                        60
+  register       cond     lenload                                              40
+  register       unknown  opaque                                               38
   register       cond     residue                                              17
-  expr           unknown  const+lenload                                        10
-  register       unknown  const+lenload                                        10
-  wide-expr      unknown  opaque                                               10
   register       cond     lenload+residue                                       8
   register       unknown  const+lenload+opaque                                  8
+  register       unknown  const+lenload                                         8
   register       cond     const+residue                                         6
-  register       unknown  const+opaque                                          6
+  expr           unknown  const+lenload                                         6
+  wide-expr      unknown  opaque                                                6
+  register       unknown  const+opaque                                          5
   register       unknown  const+lenload+mem:M16                                 4
   register       unknown  const+mem:M32                                         4
   wide-expr      cond     lenload                                               4
@@ -940,7 +956,7 @@ wrote docs/Project58/asserts.tsv (1315 operand rows)
   wide-expr      unknown  const+lenload                                         2
   register       unknown  lenload                                               2
   register       unknown  const+lenload+mem:M32                                 2
-  residue operands: 1028 at 629 sites
+  residue operands: 951 at 582 sites
 
   unknown/no operands, listed:
     7015CB5C ALCHEMIST_HOME WCMV  dst/ac0  ASSIGN-STR-VARYING+CAL opaque: slot 100 clobbered: WCMV destination @7015CB0B:17
@@ -950,60 +966,38 @@ wrote docs/Project58/asserts.tsv (1315 operand rows)
     7015F983 ATTACK.5@7015F8F6 WCMV  dst/ac0  ASSIGN-STR-VARYING     opaque: slot 26 clobbered: WCMV destination @7015F90E:25
     7015F983 ATTACK.5@7015F8F6 WCMV  src/ac1  ASSIGN-STR-VARYING     opaque: slot 26 clobbered: WCMV destination @7015F90E:25
     70162B53 CAST.2@70162930 WCMP  s2/ac0   -                      t1
-    7016566D DISPLAY_MAP WCMV  dst/ac0  COPY-STR-EXACT+SUBSTR  join{constant 2 | subtraction nsub(0x50, {trunc16(sub({add(bp(wp(wfp, 0x14), 2), sx16(M16[wp(wfp, 0x14)])) | 0
-    7016566D DISPLAY_MAP WCMV  src/ac1  COPY-STR-EXACT+SUBSTR  join{constant 2 | subtraction nsub(0x50, {trunc16(sub({add(bp(wp(wfp, 0x14), 2), sx16(M16[wp(wfp, 0x14)])) | 0
+    7016566D DISPLAY_MAP WCMV  dst/ac0  COPY-STR-EXACT+SUBSTR  join{constant 2 | subtraction nsub(0x50, {trunc16(sub({0x27 | add(bp(wp(wfp, 0x14), 2), sx16(M16[wp(wfp, 0x14)
+    7016566D DISPLAY_MAP WCMV  src/ac1  COPY-STR-EXACT+SUBSTR  join{constant 2 | subtraction nsub(0x50, {trunc16(sub({0x27 | add(bp(wp(wfp, 0x14), 2), sx16(M16[wp(wfp, 0x14)
     70166536 DISPLAY_MAGIC WCMV  dst/ac0  ASSIGN-STR-MIN         join{opaque: slot 76 clobbered: WCMV destination @70166514:6 | constant 40}
-    70166591 DISPLAY_MAGIC WCMV  dst/ac0  CONCAT-PIECE           subtraction 0 - sx16(M16[(sx16(M16[wp(wfp, 2)]) * 0x10) - 0xFEAFBB8]) + constant 30
-    70166591 DISPLAY_MAGIC WCMV  src/ac1  CONCAT-PIECE           subtraction 0 - sx16(M16[(sx16(M16[wp(wfp, 2)]) * 0x10) - 0xFEAFBB8]) + constant 30
-    701665E2 DISPLAY_MAGIC WCMV  dst/ac0  ASSIGN-STR-VARYING     length word wp(mul(sx16(M16[wp(wfp, 2)]), 0x10), -0xFEAFBB8) + subtraction sub(0x1E, sx16(M16[wp(mul(sx16(M16[
-    701665E2 DISPLAY_MAGIC WCMV  src/ac1  ASSIGN-STR-VARYING     length word wp(mul(sx16(M16[wp(wfp, 2)]), 0x10), -0xFEAFBB8) + subtraction sub(0x1E, sx16(M16[wp(mul(sx16(M16[
     701667F5 DISPLAY_CAVE WCMV  dst/ac0  ASSIGN-STR-VARYING-PAD join{constant 80 | opaque: slot 96 clobbered: WCMV destination @7016679D:31}
     701667F5 DISPLAY_CAVE WCMV  src/ac1  ASSIGN-STR-VARYING-PAD opaque: slot 96 clobbered: WCMV destination @7016679D:31
-    7016683D DISPLAY_CAVE WCMV  dst/ac0  COPY-STR-EXACT         opaque: slot 50 clobbered: WCMV destination @701667F8:16
-    7016683D DISPLAY_CAVE WCMV  src/ac1  COPY-STR-EXACT         opaque: slot 50 clobbered: WCMV destination @701667F8:16
     7016683D DISPLAY_CAVE WCMV  dst/ac0  COPY-STR-EXACT         opaque: slot 96 clobbered: store M8[ac2] @701667F8:25
     7016683D DISPLAY_CAVE WCMV  src/ac1  COPY-STR-EXACT         opaque: slot 96 clobbered: store M8[ac2] @701667F8:25
-    70166850 DISPLAY_CAVE WCMV  dst/ac0  ASSIGN-STR-VARYING-PAD join{constant 80 | opaque: slot 98 clobbered: store M8[ac2] @701667F8:40}
+    70166850 DISPLAY_CAVE WCMV  dst/ac0  ASSIGN-STR-VARYING-PAD join{opaque: slot 98 clobbered: store M8[ac2] @701667F8:40 | constant 80}
     70166850 DISPLAY_CAVE WCMV  src/ac1  ASSIGN-STR-VARYING-PAD opaque: slot 98 clobbered: store M8[ac2] @701667F8:40
-    7016689E DISPLAY_CAVE WCMV  dst/ac0  COPY-STR-EXACT         opaque: slot 50 clobbered: WCMV destination @70166859:16
-    7016689E DISPLAY_CAVE WCMV  src/ac1  COPY-STR-EXACT         opaque: slot 50 clobbered: WCMV destination @70166859:16
     701668B1 DISPLAY_CAVE WCMV  dst/ac0  ASSIGN-STR-VARYING-PAD join{opaque: slot 96 clobbered: WCMV destination @70166859:31 | constant 80}
     701668B1 DISPLAY_CAVE WCMV  src/ac1  ASSIGN-STR-VARYING-PAD opaque: slot 96 clobbered: WCMV destination @70166859:31
-    701668F9 DISPLAY_CAVE WCMV  dst/ac0  COPY-STR-EXACT         opaque: slot 50 clobbered: WCMV destination @701668B4:16
-    701668F9 DISPLAY_CAVE WCMV  src/ac1  COPY-STR-EXACT         opaque: slot 50 clobbered: WCMV destination @701668B4:16
-    7016690C DISPLAY_CAVE WCMV  dst/ac0  ASSIGN-STR-VARYING-PAD join{opaque: slot 96 clobbered: WCMV destination @701668B4:31 | constant 80}
+    7016690C DISPLAY_CAVE WCMV  dst/ac0  ASSIGN-STR-VARYING-PAD join{constant 80 | opaque: slot 96 clobbered: WCMV destination @701668B4:31}
     7016690C DISPLAY_CAVE WCMV  src/ac1  ASSIGN-STR-VARYING-PAD opaque: slot 96 clobbered: WCMV destination @701668B4:31
-    7016698B DISPLAY_CAVE WCMV  dst/ac0  ASSIGN-STR-VARYING-PAD join{constant 80 | opaque: slot 50 clobbered: WCMV destination @7016693C:8}
-    7016698B DISPLAY_CAVE WCMV  src/ac1  ASSIGN-STR-VARYING-PAD opaque: slot 50 clobbered: WCMV destination @7016693C:8
-    70166FE5 DISPLAY_SCREEN WCMV  dst/ac0  COPY-STR-EXACT+SUBSTR  join{subtraction nsub(0x54, {<opaque slot 998 clobbered: WCMV destination @70166FC4:0> | <opaque slot 998 clob
-    70166FE5 DISPLAY_SCREEN WCMV  src/ac1  COPY-STR-EXACT+SUBSTR  join{subtraction nsub(0x54, {<opaque slot 998 clobbered: WCMV destination @70166FC4:0> | <opaque slot 998 clob
-    70167127 DISPLAY_SCREEN WCMV  dst/ac0  CONCAT-PIECE           join{WCMV residue ac1 = len - min(|n|,|len|) @7016711E:0 (closure: >= 0 iff its len >= 0) | opaque: slot 1046 
-    701671FA DISPLAY_SCREEN WCMV  dst/ac0  CONCAT-PIECE+CALLRESUL join{opaque: slot 1046 clobbered: WCMV destination @701671F1:0 | WCMV residue ac1 = len - min(|n|,|len|) @7016
+    70166FE5 DISPLAY_SCREEN WCMV  dst/ac0  COPY-STR-EXACT+SUBSTR  join{length word wp(wfp, 0xA) | subtraction nsub(0x54, {<opaque slot 998 clobbered: WCMV destination @70166FC4
+    70166FE5 DISPLAY_SCREEN WCMV  src/ac1  COPY-STR-EXACT+SUBSTR  join{length word wp(wfp, 0xA) | subtraction nsub(0x54, {<opaque slot 998 clobbered: WCMV destination @70166FC4
+    70167127 DISPLAY_SCREEN WCMV  dst/ac0  CONCAT-PIECE           join{opaque: slot 1046 clobbered: WCMV destination @7016711E:0 | WCMV residue ac1 = len - min(|n|,|len|) @7016
+    701671FA DISPLAY_SCREEN WCMV  dst/ac0  CONCAT-PIECE+CALLRESUL join{WCMV residue ac1 = len - min(|n|,|len|) @701671F1:0 (closure: >= 0 iff its len >= 0) | opaque: slot 1046 
     701672F4 DISPLAY_SCREEN WCMV  dst/ac0  CONCAT-PIECE           join{WCMV residue ac1 = len - min(|n|,|len|) @701672EB:0 (closure: >= 0 iff its len >= 0) | opaque: slot 1046 
     7016775F DISPLAY_INVENTORY WCMV  dst/ac0  CONCAT-PIECE           subtraction 0 - sx16(M16[wp(wfp, 6)]) + constant 19
     7016775F DISPLAY_INVENTORY WCMV  src/ac1  CONCAT-PIECE           subtraction 0 - sx16(M16[wp(wfp, 6)]) + constant 19
-    70167EE1 DISPLAY_INVENTORY WCMV  dst/ac0  COPY-LIT-EXACT+SUBSTR  join{constant 3 | subtraction nsub(0x1E, {trunc16(add(sx16(M16[wp(wfp, 6)]), {nsub(0x1E, 8) | 5})) | trunc16(a
-    70167EE1 DISPLAY_INVENTORY WCMV  src/ac1  COPY-LIT-EXACT+SUBSTR  join{constant 3 | subtraction nsub(0x1E, {trunc16(add(sx16(M16[wp(wfp, 6)]), {nsub(0x1E, 8) | 5})) | trunc16(a
-    70167F05 DISPLAY_INVENTORY WCMV  dst/ac0  COPY-LIT-EXACT+SUBSTR  join{subtraction nsub(0x1E, {trunc16(add(sx16(M16[wp(wfp, 6)]), {nsub(0x1E, 8) | 5})) | trunc16(add(sx16(M16[w
-    70167F05 DISPLAY_INVENTORY WCMV  src/ac1  COPY-LIT-EXACT+SUBSTR  join{subtraction nsub(0x1E, {trunc16(add(sx16(M16[wp(wfp, 6)]), {nsub(0x1E, 8) | 5})) | trunc16(add(sx16(M16[w
-    70167F29 DISPLAY_INVENTORY WCMV  dst/ac0  COPY-LIT-EXACT+SUBSTR  join{constant 3 | subtraction nsub(0x1E, {8 | <opaque slot 6 clobbered: WCMV destination (frame range unknown)
-    70167F29 DISPLAY_INVENTORY WCMV  src/ac1  COPY-LIT-EXACT+SUBSTR  join{constant 3 | subtraction nsub(0x1E, {8 | <opaque slot 6 clobbered: WCMV destination (frame range unknown)
-    70168143 DISPLAY_INVENTORY WCMV  dst/ac0  ASSIGN-STR-VARYING+CAL opaque: slot 40 clobbered: WCMV destination (frame range unknown) @70168117:15
-    70168143 DISPLAY_INVENTORY WCMV  src/ac1  ASSIGN-STR-VARYING+CAL opaque: slot 40 clobbered: WCMV destination (frame range unknown) @70168117:15
+    70167EE1 DISPLAY_INVENTORY WCMV  dst/ac0  COPY-LIT-EXACT+SUBSTR  join{subtraction nsub(0x1E, {8 | trunc16(add(sx16(M16[wp(wfp, 6)]), {3 | nsub(0x1E, 8)})) | trunc16(add(sx16(M
+    70167EE1 DISPLAY_INVENTORY WCMV  src/ac1  COPY-LIT-EXACT+SUBSTR  join{subtraction nsub(0x1E, {8 | trunc16(add(sx16(M16[wp(wfp, 6)]), {3 | nsub(0x1E, 8)})) | trunc16(add(sx16(M
+    70167F05 DISPLAY_INVENTORY WCMV  dst/ac0  COPY-LIT-EXACT+SUBSTR  join{constant 3 | subtraction nsub(0x1E, {8 | trunc16(add(sx16(M16[wp(wfp, 6)]), {nsub(0x1E, 8) | 5})) | trunc
+    70167F05 DISPLAY_INVENTORY WCMV  src/ac1  COPY-LIT-EXACT+SUBSTR  join{constant 3 | subtraction nsub(0x1E, {8 | trunc16(add(sx16(M16[wp(wfp, 6)]), {nsub(0x1E, 8) | 5})) | trunc
+    70167F29 DISPLAY_INVENTORY WCMV  dst/ac0  COPY-LIT-EXACT+SUBSTR  join{subtraction nsub(0x1E, {<opaque slot 6 clobbered: WCMV destination (frame range unknown) @70167EF9:7> | t
+    70167F29 DISPLAY_INVENTORY WCMV  src/ac1  COPY-LIT-EXACT+SUBSTR  join{subtraction nsub(0x1E, {<opaque slot 6 clobbered: WCMV destination (frame range unknown) @70167EF9:7> | t
     7016A080 FIRE     WCMV  dst/ac0  ASSIGN-STR-VARYING+CAL opaque: slot 42 clobbered: WCMV destination @7016A04F:8
     7016A080 FIRE     WCMV  src/ac1  ASSIGN-STR-VARYING+CAL opaque: slot 42 clobbered: WCMV destination @7016A04F:8
     7016A53E FIRE.3@7016A4F8 WCMV  dst/ac0  ASSIGN-STR-VARYING     opaque: slot 22 clobbered: WCMV destination @7016A501:17
     7016A53E FIRE.3@7016A4F8 WCMV  src/ac1  ASSIGN-STR-VARYING     opaque: slot 22 clobbered: WCMV destination @7016A501:17
-    7016B895 GET_QUEST WCMV  dst/ac0  COPY-STR-EXACT+CALLRES opaque: slot 508 clobbered: WCMV destination (frame range unknown) @7016B860:22
-    7016B895 GET_QUEST WCMV  src/ac1  COPY-STR-EXACT+CALLRES opaque: slot 508 clobbered: WCMV destination (frame range unknown) @7016B860:22
-    7016B8AE GET_QUEST WCMV  dst/ac0  COPY-STR-EXACT+CALLRES opaque: slot 510 clobbered: WCMV destination (frame range unknown) @7016B860:22
-    7016B8AE GET_QUEST WCMV  src/ac1  COPY-STR-EXACT+CALLRES opaque: slot 510 clobbered: WCMV destination (frame range unknown) @7016B860:22
-    7016B8CA GET_QUEST WCMV  dst/ac0  COPY-STR-EXACT+CALLRES opaque: slot 562 clobbered: WCMV destination (frame range unknown) @7016B860:22
-    7016B8CA GET_QUEST WCMV  src/ac1  COPY-STR-EXACT+CALLRES opaque: slot 562 clobbered: WCMV destination (frame range unknown) @7016B860:22
     7016B8EC GET_QUEST WCMV  dst/ac0  ASSIGN-STR-VARYING+CAL opaque: slot 876 clobbered: WCMV destination @7016B860:28
     7016B8EC GET_QUEST WCMV  src/ac1  ASSIGN-STR-VARYING+CAL opaque: slot 876 clobbered: WCMV destination @7016B860:28
-    7016DC1E HELP.1@7016D570 WCMV  dst/ac0  CONCAT-PIECE           subtraction 0 - sx16(M16[(sx16(M16[wp(wfp, 0x10)]) * 0xC) - 0xFFFFD9A]) + constant 30
-    7016DC1E HELP.1@7016D570 WCMV  src/ac1  CONCAT-PIECE           subtraction 0 - sx16(M16[(sx16(M16[wp(wfp, 0x10)]) * 0xC) - 0xFFFFD9A]) + constant 30
     7016DF66 INIT_OBJ_TBL WCMV  dst/ac0  COPY-LIT-EXACT+SUBSTR  join{subtraction sub(add(add(sx16(M16[0x70000216]), sx16(M16[0x70000216])), add(sx16(M16[0x70000216]), sx16(M1
     7016DF66 INIT_OBJ_TBL WCMV  src/ac1  COPY-LIT-EXACT+SUBSTR  join{subtraction sub(add(add(sx16(M16[0x70000216]), sx16(M16[0x70000216])), add(sx16(M16[0x70000216]), sx16(M1
     7016DF95 INIT_OBJ_TBL WCMV  dst/ac0  COPY-STR-EXACT         M32 read M32[wp(<argument (-14, '7016DF39')>, 1)]
@@ -1011,8 +1005,8 @@ wrote docs/Project58/asserts.tsv (1315 operand rows)
     7016DFA9 INIT_OBJ_TBL WCMV  dst/ac0  COPY-STR-EXACT         M32 read M32[wp(<argument (-14, '7016DF39')>, 1)] + constant 1
     7016DFA9 INIT_OBJ_TBL WCMV  src/ac1  COPY-STR-EXACT         M32 read M32[wp(<argument (-14, '7016DF39')>, 1)] + constant 1
     7016DFD6 INIT_OBJ_TBL WCMV  src/ac1  ASSIGN-STR-FIXED+SUBST M32 read M32[wp(<argument (-14, '7016DF39')>, 1)] + constant 1 + constant 1
-    7016E005 INIT_OBJ_TBL WCMV  dst/ac0  COPY-LIT-EXACT+SUBSTR  join{subtraction nsub(0x258, M16[wp(M32[0x70000210], 0x1F0E8)]) | subtraction sub(add(sx16(M16[0x70000216]), s
-    7016E005 INIT_OBJ_TBL WCMV  src/ac1  COPY-LIT-EXACT+SUBSTR  join{subtraction nsub(0x258, M16[wp(M32[0x70000210], 0x1F0E8)]) | subtraction sub(add(sx16(M16[0x70000216]), s
+    7016E005 INIT_OBJ_TBL WCMV  dst/ac0  COPY-LIT-EXACT+SUBSTR  join{subtraction sub(add(sx16(M16[0x70000216]), sx16(M16[0x70000216])), sx16(M16[wp(M32[0x70000210], 0x1F0E8)]
+    7016E005 INIT_OBJ_TBL WCMV  src/ac1  COPY-LIT-EXACT+SUBSTR  join{subtraction sub(add(sx16(M16[0x70000216]), sx16(M16[0x70000216])), sx16(M16[wp(M32[0x70000210], 0x1F0E8)]
     7016E033 INIT_OBJ_TBL WCMV  src/ac1  ASSIGN-STR-FIXED+SUBST M32 read M32[wp(<opaque slot -14 clobbered: WCMV destination (frame range unknown) @7016DFC4:10>, 1)]
     7016F2BE LIST_PLAYERS.2@7016F1D0 WCMV  dst/ac0  COPY-STR-EXACT+CALLRES opaque: slot 666 clobbered: WCMV destination @7016F27B:25
     7016F2BE LIST_PLAYERS.2@7016F1D0 WCMV  src/ac1  COPY-STR-EXACT+CALLRES opaque: slot 666 clobbered: WCMV destination @7016F27B:25
@@ -1024,14 +1018,10 @@ wrote docs/Project58/asserts.tsv (1315 operand rows)
     7016F31D LIST_PLAYERS.2@7016F1D0 WCMV  src/ac1  ASSIGN-STR-VARYING+CAL opaque: slot 668 clobbered: WCMV destination @7016F2E7:21
     7016FF14 MOVE_FAMILIAR WCMV  dst/ac0  ASSIGN-STR-VARYING     opaque: slot 68 clobbered: WCMV destination @7016FE9D:31
     7016FF14 MOVE_FAMILIAR WCMV  src/ac1  ASSIGN-STR-VARYING     opaque: slot 68 clobbered: WCMV destination @7016FE9D:31
-    701719C5 MOVE_PLAYER WCMV  dst/ac0  COPY-STR-EXACT+CALLRES opaque: slot 34 clobbered: WCMV destination (frame range unknown) @7017199A:17
-    701719C5 MOVE_PLAYER WCMV  src/ac1  COPY-STR-EXACT+CALLRES opaque: slot 34 clobbered: WCMV destination (frame range unknown) @7017199A:17
-    701719D6 MOVE_PLAYER WCMV  dst/ac0  ASSIGN-STR-VARYING+CAL opaque: slot 38 clobbered: WCMV destination (frame range unknown) @7017199A:17
-    701719D6 MOVE_PLAYER WCMV  src/ac1  ASSIGN-STR-VARYING+CAL opaque: slot 38 clobbered: WCMV destination (frame range unknown) @7017199A:17
-    70173253 OBSERVE  WCMV  dst/ac0  COPY-LIT-EXACT+SUBSTR  join{subtraction nsub(0x96, {0xC | 0x1F | 0x4D | 0x23 | 0x20 | trunc16(sub(0x96, <residue WCMV.ac1@70172E55:0>
-    70173253 OBSERVE  WCMV  src/ac1  COPY-LIT-EXACT+SUBSTR  join{subtraction nsub(0x96, {0xC | 0x1F | 0x4D | 0x23 | 0x20 | trunc16(sub(0x96, <residue WCMV.ac1@70172E55:0>
-    70173279 OBSERVE  WCMV  dst/ac0  COPY-LIT-EXACT+SUBSTR  join{subtraction nsub(0x96, {0xC | 0x1F | 0x4D | 0x23 | 0x20 | trunc16(sub(0x96, <residue WCMV.ac1@70172E55:0>
-    70173279 OBSERVE  WCMV  src/ac1  COPY-LIT-EXACT+SUBSTR  join{subtraction nsub(0x96, {0xC | 0x1F | 0x4D | 0x23 | 0x20 | trunc16(sub(0x96, <residue WCMV.ac1@70172E55:0>
+    70173253 OBSERVE  WCMV  dst/ac0  COPY-LIT-EXACT+SUBSTR  join{subtraction nsub(0x96, {0x1F | 0x23 | trunc16(sub(<entry 70172CE1>, <entry 70172CE1>)) | 0x49 | 0x20 | 0x
+    70173253 OBSERVE  WCMV  src/ac1  COPY-LIT-EXACT+SUBSTR  join{subtraction nsub(0x96, {0x1F | 0x23 | trunc16(sub(<entry 70172CE1>, <entry 70172CE1>)) | 0x49 | 0x20 | 0x
+    70173279 OBSERVE  WCMV  dst/ac0  COPY-LIT-EXACT+SUBSTR  join{subtraction nsub(0x96, {0x1F | 0x23 | trunc16(sub(<entry 70172CE1>, <entry 70172CE1>)) | 0x49 | 0x20 | 0x
+    70173279 OBSERVE  WCMV  src/ac1  COPY-LIT-EXACT+SUBSTR  join{subtraction nsub(0x96, {0x1F | 0x23 | trunc16(sub(<entry 70172CE1>, <entry 70172CE1>)) | 0x49 | 0x20 | 0x
     70173C27 OP_EDIT.2@7017395B WCMV  dst/ac0  COPY-STR-EXACT+CALLRES opaque: slot 154 clobbered: store M8[ac2] @70173BC7:11
     70173C27 OP_EDIT.2@7017395B WCMV  src/ac1  COPY-STR-EXACT+CALLRES opaque: slot 154 clobbered: store M8[ac2] @70173BC7:11
     70173C39 OP_EDIT.2@7017395B WCMV  dst/ac0  ASSIGN-STR-VARYING+CAL opaque: slot 134 clobbered: store M8[ac2] @70173BC7:11
@@ -1045,12 +1035,6 @@ wrote docs/Project58/asserts.tsv (1315 operand rows)
     7017597B OP_EDIT.9@7017595A WCMV  dst/ac0  ASSIGN-STR-VARYING-PAD join{length word 0x7000021C | M32 read M32[wp(<argument (-18, '70175962')>, 1)]}
     70176D7F REPORT   WCMV  dst/ac0  ASSIGN-STR-VARYING     opaque: slot 42 clobbered: WCMV destination @70176D0E:26
     70176D7F REPORT   WCMV  src/ac1  ASSIGN-STR-VARYING     opaque: slot 42 clobbered: WCMV destination @70176D0E:26
-    70176E5F REPORT   WCMV  dst/ac0  ASSIGN-STR-VARYING     opaque: slot 70 clobbered: WCMV destination @70176DE2:8
-    70176E5F REPORT   WCMV  src/ac1  ASSIGN-STR-VARYING     opaque: slot 70 clobbered: WCMV destination @70176DE2:8
-    70177388 SEIGE    WCMV  dst/ac0  COPY-STR-EXACT+CALLRES opaque: slot 30 clobbered: rt_call ?UNSIGNED_TO_CHAR arg ac2 (frame range unknown) @70177347:12
-    70177388 SEIGE    WCMV  src/ac1  COPY-STR-EXACT+CALLRES opaque: slot 30 clobbered: rt_call ?UNSIGNED_TO_CHAR arg ac2 (frame range unknown) @70177347:12
-    70177397 SEIGE    WCMV  dst/ac0  COPY-STR-EXACT+CALLRES opaque: slot 34 clobbered: rt_call ?UNSIGNED_TO_CHAR arg ac2 (frame range unknown) @70177347:12
-    70177397 SEIGE    WCMV  src/ac1  COPY-STR-EXACT+CALLRES opaque: slot 34 clobbered: rt_call ?UNSIGNED_TO_CHAR arg ac2 (frame range unknown) @70177347:12
     701773B8 SEIGE    WCMV  dst/ac0  ASSIGN-STR-VARYING+CAL opaque: slot 100 clobbered: WCMV destination @70177364:13
     701773B8 SEIGE    WCMV  src/ac1  ASSIGN-STR-VARYING+CAL opaque: slot 100 clobbered: WCMV destination @70177364:13
     7017A15B STORE.1@70179BF4 WCMV  dst/ac0  CONCAT-PIECE           subtraction sub(0x10, sx16(M16[wp(mul(sx16(M16[wp(wfp, 0xC)]), 9), -0xFFFFA73)]))
@@ -1071,32 +1055,31 @@ wrote docs/Project58/asserts.tsv (1315 operand rows)
     7017C2F3 TAKE_OVER_CASTLE WCMV  src/ac1  COPY-STR-EXACT         product sx16(M16[wp(wfp, 0xE)]) * 2 + constant 56
     7017C304 TAKE_OVER_CASTLE WCMV  dst/ac0  ASSIGN-STR-VARYING     product sx16(M16[wp(wfp, 0xE)]) * 2 + constant 59
     7017C304 TAKE_OVER_CASTLE WCMV  src/ac1  ASSIGN-STR-VARYING     product sx16(M16[wp(wfp, 0xE)]) * 2 + constant 59
-    7017CA4A TERRAIN  WCMV  dst/ac0  ASSIGN-STR-VARYING-PAD join{length word wp(mul(sx16(M16[<argument (-20, '7017C877')>]), 0x11), -0xFEA5442) + constant 8 | M32 read M3
-    7017CED6 TERRITORY WCMV  dst/ac0  ASSIGN-STR-VARYING-PAD join{length word wp(add({<opaque slot 12 clobbered: WCMV destination (frame range unknown) @7017CE64:7> | <opa
-    7017CF22 TERRITORY WCMV  dst/ac0  ASSIGN-STR-VARYING-PAD join{M32 read M32[wp({<opaque slot -22 clobbered: WCMV destination (frame range unknown) @7017CE64:7> | <argum
+    7017CA4A TERRAIN  WCMV  dst/ac0  ASSIGN-STR-VARYING-PAD join{M32 read M32[wp(<argument (-28, '7017C877')>, 1)] | length word wp(mul(sx16(M16[<argument (-20, '7017C877
+    7017CED6 TERRITORY WCMV  dst/ac0  ASSIGN-STR-VARYING-PAD join{M32 read M32[wp({<opaque slot -22 clobbered: WCMV destination (frame range unknown) @7017CE9B:7> | <opaqu
+    7017CF22 TERRITORY WCMV  dst/ac0  ASSIGN-STR-VARYING-PAD join{M32 read M32[wp({<opaque slot -22 clobbered: WCMV destination (frame range unknown) @7017CE9B:7> | <opaqu
     7017CF35 TERRITORY WCMV  dst/ac0  ASSIGN-LIT-VARYING-PAD join{M32 read M32[wp(<argument (-22, '7017CD71')>, 1)] | constant 10}
 
 === 7b. Varying reads of FRAME slots: what reaches the length word? (slot model) ===
-  DEFINITE write on every path                                            114
-  definite write missing on some path; a MAY-write covers it               13
+  DEFINITE write on every path                                            115
+  definite write missing on some path; a MAY-write covers it               12
   no write of any kind on SOME path                                         1
   (128 frame-slot varying reads in all)
 
   reads with an UNWRITTEN path (routine, block, role, slot word, status, reaching writes):
     ALLY_PLAYER.1@7015D068 7015D1EA s2/ac0  wp(ac3,516) definite write missing on some path; a M | write16@7015D12A:0
     BARGAIN.2@70160920     701609E2 src/ac1 wp(ac3,18) definite write missing on some path; a M | 
-    BOAT                   701618F0 src/ac1 wp(ac3,18) definite write missing on some path; a M | write16@70161800:0 write16@701617ED:0 write16@70161827:0 write16@70161814:0 write16@701617DD:0
+    BOAT                   701618F0 src/ac1 wp(ac3,18) definite write missing on some path; a M | write16@70161800:0 write16@70161827:0 write16@701617DD:0 write16@70161814:0 write16@701617ED:0
     DISPLAY_SCREEN         701670FF src/ac1 wp(ac3,18) definite write missing on some path; a M | 
-    DISPLAY_INVENTORY      701676C8 src/ac1 wp(ac3,6) definite write missing on some path; a M | write16@701676EC:3 write16@70167734:4
+    DISPLAY_INVENTORY      701676C8 src/ac1 wp(ac3,6) definite write missing on some path; a M | write16@70167734:4 write16@701676EC:3
     DISPLAY_INVENTORY      70167707 src/ac1 wp(ac3,6) definite write missing on some path; a M | write16@70167734:4 write16@701676EC:3
     DISPLAY_INVENTORY      70167744 src/ac1 wp(ac3,6) definite write missing on some path; a M | write16@70167734:4 write16@701676EC:3
-    MOVE_IN_CAVE           70170BCA src/ac1 wp(ac3,10) no write of any kind on SOME path | write16@70170B76:0 write16@70170B84:0
-    SEIGE                  70177364 src/ac1 wp(ac3,50) definite write missing on some path; a M | 
+    MOVE_IN_CAVE           70170BCA src/ac1 wp(ac3,10) no write of any kind on SOME path | write16@70170B84:0 write16@70170B76:0
     SEIGE                  7017758F src/ac1 wp(ac3,8) definite write missing on some path; a M | write16@701772D4:0 write16@701772E0:0
     SEIGE                  7017771A src/ac1 wp(ac3,8) definite write missing on some path; a M | write16@701772D4:0 write16@701772E0:0
     SEIGE                  701777AF src/ac1 wp(ac3,8) definite write missing on some path; a M | write16@701772D4:0 write16@701772E0:0
     SEIGE                  701777F9 src/ac1 wp(ac3,8) definite write missing on some path; a M | write16@701772D4:0 write16@701772E0:0
-    SEIGE                  701778C1 src/ac1 wp(ac3,8) definite write missing on some path; a M | write16@701772E0:0 write16@701772D4:0
+    SEIGE                  701778C1 src/ac1 wp(ac3,8) definite write missing on some path; a M | write16@701772D4:0 write16@701772E0:0
 
 === P6. Residues live after string statements ===
   WBLM  ac1  dead                      11

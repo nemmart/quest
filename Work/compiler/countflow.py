@@ -49,8 +49,14 @@ What it does, in order (docs/Project58/PROMPT.md):
      destination `data + len` is shown not to reach the length word under
      the same invariant.  Proven by dataflow; no assert needed.
      Also: an upper bound per STATIC length word from every writer in the
-     book (`StaticBounds`) — attempted, currently blocked by one copy into
-     IN_BUFFER whose count is an unbounded total; reported, not used.
+     book (`StaticBounds`, two phases): literal assignments, the min shapes
+     (per reaching definition, with the facts at each definition), whole-
+     varying copies, ?READ_SCREEN's max_length, and game callees that clamp
+     an output argument to the caller's DESCRIPTOR capacity (a006).
+ 13. (a006) length words in CONSTANT TABLES of the image: `M16[idx*stride +
+     base]` under the compiler's own DERR index guard is bounded by the max
+     over the reachable entries in quest.mem (`table_bound`), for tables no
+     statement in the book writes.
 
 Register model (the part that carries weight — stated, not inferred):
 
@@ -345,8 +351,13 @@ def parse_stmt(text):
             pass
         elif st.raw_op == 'WRTN':
             pass
+        elif st.raw_op in ('DIVX', 'WDIVS', 'DIV', 'DIVS', 'MUL', 'MULS'):
+            st.defs = {'ac0', 'ac1'}     # the Nova/Eagle divide and multiply write ac0 (rem/high) and ac1 (quot/low) only
+        elif st.raw_op == 'WLOB':
+            m2 = re.match(r'WLOB (\d),(\d)', st.text.split(' ', 2)[2] if len(st.text.split(' ', 2)) > 2 else '')
+            st.defs = {'ac%s' % m2.group(2)} if m2 else set(REGS)
         else:
-            st.defs = set(REGS)          # opaque: DIVX, WLOB, SYSCALL, ...
+            st.defs = set(REGS)          # opaque: SYSCALL, ...
         return st
     if s == 'ret':
         st.kind = 'ret'
@@ -905,6 +916,20 @@ def flatten_union(v):
 
 STATIC_BOUNDS = {}        # word address -> upper bound of the length word
 
+# a006: game callees that write a CHAR(*) VARYING output argument clamped to
+# the capacity the caller passes in a DESCRIPTOR argument (words: type 0xB00,
+# then the capacity as a wide at word+1).  Verified by hand (P58 a006 §2):
+# every write to the output's length word in the callee is the min shape
+# `{M32[wp(desc, 1)] | total}` — TERRITORY 7017CECC / 7017CF1A / 7017CF2D
+# against arg 6, TERRAIN 7017CA42 against arg 9.  (entry pc) -> (output arg,
+# descriptor arg), 1-based.
+CALLEE_CAPPED_OUTPUT = {0x7017C877: (4, 9), 0x7017CD71: (3, 6)}
+# runtime callees that fill a varying up to a max_length argument: callee ->
+# (output arg, max_length arg — a pointer to a 16-bit word).  ?READ_SCREEN
+# sizes its buffer at max_length and floors a negative amount to 0
+# (emu_types/OperatingSystem.cpp:284-296; a006 §4-5).
+RT_CAPPED_OUTPUT = {'?READ_SCREEN': (2, 3)}
+
 
 def load_mem(path):
     mem = {}
@@ -949,6 +974,10 @@ class StaticBounds:
         A = self.static_symbol(v)
         if A is not None:
             return self.bounds.get(A)
+        if is_lenload(v) or (k == 'mem' and v[1] == 'M16'):
+            tb = table_bound(v[2][0][2] if is_lenload(v) else v[2], facts)
+            if tb is not None:
+                return tb
         if k == 'root' and v[1] == 'residue' and v[2][:2] in (('WCMV', 'ac0'), ('WBLM', 'ac1')):
             return 0
         if k == 'union':
@@ -984,6 +1013,16 @@ class StaticBounds:
             if f in ('add', 'nadd'):
                 a, b = self.upper(v[2][0], facts, depth + 1), self.upper(v[2][1], facts, depth + 1)
                 return None if a is None or b is None else a + b
+            if f in ('sub', 'nsub'):
+                if show(strip_paren(v[2][0])) == show(strip_paren(v[2][1])):
+                    return 0                                   # WSUB n,n
+                a = self.upper(v[2][0], facts, depth + 1)
+                b = strip_paren(v[2][1])
+                if a is not None and b[0] == 'const' and to_signed(b[1]) >= 0:
+                    return a - to_signed(b[1])
+                # c - x with x >= 0 known (a length word): <= c
+                if strip_paren(v[2][0])[0] == 'const' and (is_lenload(b) or StaticBounds.static_symbol(b) is not None or slot_symbol(b) is not None):
+                    return to_signed(strip_paren(v[2][0])[1])
             return None
         if k == 'bin' and v[1] == '+':
             a, b = self.upper(v[2], facts, depth + 1), self.upper(v[3], facts, depth + 1)
@@ -1070,6 +1109,7 @@ class StaticBounds:
                                     writers[A].append((st, 'copy-extent', ('extent', b0, d['count'])))
                 elif st.kind == 'rt_call':
                     tab = RT_WRITES.get(st.callee)
+                    capped = RT_CAPPED_OUTPUT.get(st.callee)
                     for i, arg in enumerate(st.args):
                         a = strip_paren(arg)
                         A = None
@@ -1082,20 +1122,40 @@ class StaticBounds:
                         for S in statics:
                             if S <= A <= S + 64:          # the argument points at or into the static
                                 pos = i + 1
-                                if tab is None or pos in tab or 'ac2' in tab and False:
+                                if capped is not None and pos == capped[0] and A == S:
+                                    writers[S].append((st, 'rt_call %s fills arg %d up to max_length' % (st.callee, pos),
+                                                       ('maxlen', ('mem', 'M16', st.args[capped[1] - 1]))))
+                                elif tab is None or pos in tab:
                                     writers[S].append((st, 'rt_call %s arg %d' % (st.callee, pos), None))
                 elif st.kind == 'call':
+                    pushes = {}
                     for j in range(st.idx - 1, -1, -1):
                         s2 = self.blocks[st.blk].stmts[j]
                         if s2.kind in ('call', 'rt_call'):
                             break
                         if s2.kind == 'assign' and s2.lhs[0] == 'mem' and s2.lhs[1] == 'M32' and strip_paren(s2.lhs[2])[0] == 'const':
-                            a = strip_paren(s2.rhs)
-                            A = to_signed(a[1]) & 0xFFFFFFFF if a[0] == 'const' else (a[1] if a[0] == 'bplit' else None)
-                            if A is not None:
-                                for S in statics:
-                                    if S <= A <= S + 64:
-                                        writers[S].append((st, 'call %s by-reference' % st.callee, None))
+                            pushes[to_signed(strip_paren(s2.lhs[2])[1]) & 0xFFFFFFFF] = strip_paren(s2.rhs)
+                    # argument N sits at marker - 2N (the marker slot is the call's marker=)
+                    m = re.search(r'marker=([0-9A-F]{8})', st.text)
+                    marker = int(m.group(1), 16) if m else None
+                    callee = int(st.callee, 16) if re.fullmatch(r'[0-9A-F]{8}', st.callee) else None
+                    capped = CALLEE_CAPPED_OUTPUT.get(callee)
+                    for slot, a in pushes.items():
+                        A = to_signed(a[1]) & 0xFFFFFFFF if a[0] == 'const' else (a[1] if a[0] == 'bplit' else None)
+                        if A is None:
+                            continue
+                        pos = (marker - slot) // 2 if marker is not None else None
+                        for S in statics:
+                            if S <= A <= S + 64:
+                                if capped is not None and pos == capped[0] and A == S:
+                                    desc = pushes.get(marker - 2 * capped[1])
+                                    if desc is not None and desc[0] == 'const' and self.mem:
+                                        d = to_signed(desc[1]) & 0xFFFFFFFF
+                                        cap = ((self.mem.get(d + 1, 0) << 16) | self.mem.get(d + 2, 0))
+                                        writers[S].append((st, 'call %s fills arg %d up to its descriptor capacity' % (ADDRBOOK_NAMES.get(callee, st.callee), pos), ('cap', cap)))
+                                        continue
+                                writers[S].append((st, 'call %s by-reference' % st.callee, None))
+        self.writers = writers
         # fixpoint
         self.bounds = {A: (self.mem.get(A, 0) if self.mem else 0) for A in statics}
         for A in statics:
@@ -1116,6 +1176,19 @@ class StaticBounds:
                         why.append('%s @%s:%d' % (kind, st.blk, st.idx))
                         break
                     facts = self.guards.facts_at(st.blk, st.idx)
+                    if isinstance(val, tuple) and val and val[0] == 'cap':
+                        ub = max(ub, val[1])
+                        why.append('%s @%s:%d <= %d' % (kind, st.blk, st.idx, val[1]))
+                        continue
+                    if isinstance(val, tuple) and val and val[0] == 'maxlen':
+                        u = self.upper(self.tracer.subst(val[1], st.blk, st.idx, frozenset()), facts)
+                        if u is None:
+                            ub = None
+                            why.append('%s @%s:%d: max_length not a constant' % (kind, st.blk, st.idx))
+                            break
+                        ub = max(ub, u)
+                        why.append('%s @%s:%d <= %d' % (kind, st.blk, st.idx, u))
+                        continue
                     if isinstance(val, tuple) and val and val[0] == 'copy-from':
                         _, S, b0, cnt = val
                         us = self.bounds.get(S)
@@ -1128,7 +1201,7 @@ class StaticBounds:
                         continue
                     if isinstance(val, tuple) and val and val[0] == 'extent':
                         _, b0, cnt = val
-                        uc = self.upper(self.tracer.subst(cnt, st.blk, st.idx, frozenset()), facts)
+                        uc = self.upper_rhs(cnt, st.blk, st.idx, facts)
                         if uc is None:
                             ub = None
                             why.append('copy @%s:%d of unbounded count' % (st.blk, st.idx))
@@ -1211,6 +1284,158 @@ def static_upper(v):
         return None if a is None or b is None else a + b
     return None
 
+
+# --------------------------------------------------------------------------
+# a006: length words in CONSTANT TABLES of the program image
+# --------------------------------------------------------------------------
+# `sx16(M16[idx * stride + base])` with `base` in the image (segment 0x7,
+# below the data page) is a read of a table of records the 1986 compiler laid
+# down as constants — the familiar-name table at 0x70150A5A (10 names, 16
+# words each, "Sara" .. "Matilda"), the object and spell name tables.  When
+# the index is guarded by the compiler's own DERR check (`assert(!(i >s K) &&
+# (i >s 0))`) every entry the read can reach is in quest.mem, so the length
+# word's maximum is a NUMBER.  Assumes the image's constant tables are never
+# written (no constant-address store into them exists; a store through a
+# pointer into the code/constant segment is not excluded and is not
+# expected).
+
+TABLE_MEM = {}            # quest.mem, word -> value
+_TABLE_STORES = set()     # constant addresses stored to, program-wide
+
+
+def seg7(w):
+    """A word address folded into segment 0x7 (the book's blocks are all
+    `seg 0x70000000`; displacements are 28-bit ring offsets)."""
+    return (w & 0x0FFFFFFF) | 0x70000000
+
+
+def index_range(T, facts):
+    """Range of the index term T from the facts; a fact about `T + k` (the
+    compiler's DERR check is often on the 1-based index while the address
+    uses it folded) is shifted by k."""
+    lo = hi = None
+    def about(e):
+        l = lin(e)
+        if set(l) == {T} and l[T] == 1:
+            return 0
+        if set(l) == {T, ''} and l[T] == 1:
+            return l['']
+        return None
+    for lhs, op, rhs, where in facts:
+        rc, lc = strip_paren(rhs), strip_paren(lhs)
+        kk = about(lhs) if rc[0] == 'const' else None
+        if rc[0] == 'const' and kk is not None:
+            c = to_signed(rc[1]) - kk
+            if op == '<=s':
+                hi = c if hi is None else min(hi, c)
+            elif op == '<s':
+                hi = c - 1 if hi is None else min(hi, c - 1)
+            elif op == '>=s':
+                lo = c if lo is None else max(lo, c)
+            elif op == '>s':
+                lo = c + 1 if lo is None else max(lo, c + 1)
+            elif op == '==':
+                lo, hi = c, c
+        kk2 = about(rhs) if lc[0] == 'const' else None
+        if lc[0] == 'const' and kk2 is not None:
+            c = to_signed(lc[1]) - kk2
+            if op == '>=s':
+                hi = c if hi is None else min(hi, c)
+            elif op == '>s':
+                hi = c - 1 if hi is None else min(hi, c - 1)
+            elif op == '<=s':
+                lo = c if lo is None else max(lo, c)
+            elif op == '<s':
+                lo = c + 1 if lo is None else max(lo, c + 1)
+    return (lo, hi) if lo is not None and hi is not None and lo <= hi else None
+
+
+def table_bound(A, facts):
+    """Upper bound of the length word at address tree A, or None: the max
+    over the guarded index range of the image table it indexes."""
+    if not TABLE_MEM:
+        return None
+    l = lin(A)
+    c = l.get('', 0)
+    terms = [(t, k) for t, k in l.items() if t]
+    if len(terms) == 0:
+        w = seg7(c)
+        if w in TABLE_MEM and w not in _TABLE_STORES and 0 <= TABLE_MEM[w] <= 2048:
+            return TABLE_MEM[w]
+        return None
+    if len(terms) != 1 or not facts:
+        return None
+    T, stride = terms[0]
+    rg = index_range(T, facts)
+    if rg is None or rg[1] - rg[0] > 4096:
+        return None
+    best = 0
+    for i in range(rg[0], rg[1] + 1):
+        w = seg7(c + stride * i)
+        if w not in TABLE_MEM or w in _TABLE_STORES:
+            return None
+        L = TABLE_MEM[w]
+        if L & 0x8000 or L > 2 * abs(stride):
+            return None                    # not a plausible length word for this stride
+        best = max(best, L)
+    return best
+
+
+def table_upper(v, facts, depth=0):
+    """Upper bound of a count from image tables + static bounds + constants,
+    or a dominating fact about the value itself (the compiler's own DERR
+    check on a SUBSTR position / length)."""
+    v = strip_paren(v)
+    if depth > 40:
+        return None
+    k = v[0]
+    if k == 'const':
+        return to_signed(v[1])
+    if facts and k != 'union':
+        key = canon(v)
+        for lhs, op, rhs, where in facts:
+            rc = strip_paren(rhs)
+            if rc[0] == 'const' and op in ('<=s', '<s') and canon(lhs) == key:
+                return to_signed(rc[1]) - (1 if op == '<s' else 0)
+            lc = strip_paren(lhs)
+            if lc[0] == 'const' and op in ('>=s', '>s') and canon(rhs) == key:
+                return to_signed(lc[1]) - (1 if op == '>s' else 0)
+    if is_lenload(v):
+        A = v[2][0][2]
+        u = table_bound(A, facts)
+        if u is not None:
+            return u
+        S = StaticBounds.static_symbol(v)
+        return STATIC_BOUNDS.get(S) if S is not None else None
+    if k == 'mem' and v[1] == 'M16':
+        u = table_bound(v[2], facts)
+        if u is not None:
+            return u
+        S = StaticBounds.static_symbol(v)
+        return STATIC_BOUNDS.get(S) if S is not None else None
+    if k == 'root' and v[1] == 'residue' and v[2][:2] in (('WCMV', 'ac0'), ('WBLM', 'ac1')):
+        return 0
+    if k == 'union':
+        out = None
+        for x in flatten_union(v):
+            u = table_upper(x, facts, depth + 1)
+            if u is None:
+                return None
+            out = u if out is None else max(out, u)
+        return out
+    if k == 'call' and v[1] in ('add', 'nadd'):
+        a, b = table_upper(v[2][0], facts, depth + 1), table_upper(v[2][1], facts, depth + 1)
+        return None if a is None or b is None else a + b
+    if k == 'call' and v[1] in ('trunc16', 'sx16', 'cvwn'):
+        return table_upper(v[2][0], facts, depth + 1)
+    if k == 'call' and v[1] in ('mul', 'nmul'):
+        a, b = table_upper(v[2][0], facts, depth + 1), table_upper(v[2][1], facts, depth + 1)
+        return None if a is None or b is None or a < 0 or b < 0 else a * b
+    if k == 'bin' and v[1] == '+':
+        a, b = table_upper(v[2], facts, depth + 1), table_upper(v[3], facts, depth + 1)
+        return None if a is None or b is None else a + b
+    return None
+
 # --------------------------------------------------------------------------
 # frame-slot effects (what each statement does to M32/M16[wp(frame, k)])
 # --------------------------------------------------------------------------
@@ -1237,9 +1462,10 @@ ADDRBOOK_NAMES = {}       # entry pc -> name, filled by run()
 
 
 class SlotModel:
-    def __init__(self, blocks, tracer, call_policy='upward', infer_caps=False):
+    def __init__(self, blocks, tracer, call_policy='upward', infer_caps=False, guards=None):
         self.blocks = blocks
         self.tracer = tracer
+        self.guards = guards
         self.call_policy = call_policy
         self.infer_caps = infer_caps      # a001 Q2 policy (a): bound an unbounded copy by the
         self.caps = {}                    # largest CONSTANT copy into the same buffer start
@@ -1428,7 +1654,10 @@ class SlotModel:
                     else:
                         r = (r[0], r[0] + max(nb - 1, 0) // 2)
                 elif r not in (NF, None):
-                    ub = static_upper(self.tracer.subst(d['count'], blk, idx, frozenset())) if STATIC_BOUNDS else None
+                    cv = self.tracer.subst(d['count'], blk, idx, frozenset())
+                    ub = static_upper(cv) if STATIC_BOUNDS else None
+                    if ub is None and self.guards is not None and TABLE_MEM:
+                        ub = table_upper(cv, self.guards.facts_at(blk, idx))
                     if ub is not None and ub >= 0:
                         self.stats['static-bounded:WCMV'] += 1
                         r = (r[0], r[0] + ((ub + 1) // 2 if d['form'] == 'dst-varying' else max(ub - 1, 0) // 2))
@@ -1543,10 +1772,10 @@ def tracked_slots(blocks, names):
     return T
 
 
-def slot_reaching_defs(blocks, tracer, call_policy='upward', infer_caps=False):
+def slot_reaching_defs(blocks, tracer, call_policy='upward', infer_caps=False, guards=None):
     """Per routine: compute slot effects and run RD over ('slot', k) keys.
     -> SIN (block -> key -> defs), model."""
-    model = SlotModel(blocks, tracer, call_policy, infer_caps)
+    model = SlotModel(blocks, tracer, call_policy, infer_caps, guards)
     by_routine = defaultdict(list)
     for n, b in blocks.items():
         by_routine[b.routine].append(n)
@@ -1603,6 +1832,7 @@ def judge(v, closure=True, covered=None):
 
 _COVERED = [None]
 _RANGES = [None]          # a005: canonical slot symbol -> (lo, hi), a VERIFIED invariant
+_FACTS = [None]           # a006: the dominating facts at the site being judged (for image tables)
 
 
 def slot_symbol(v):
@@ -1628,6 +1858,16 @@ def sym_range(v):
 def _judge(v, closure=True):
     v = strip_paren(v)
     k = v[0]
+    # a006: C - x in any spelling, x bounded by an image table / static bound / slot invariant
+    if _FACTS[0] is not None or _RANGES[0] is not None:
+        cx = Guards._as_c_minus_x(v)
+        if cx is not None:
+            C, X = cx
+            X = strip_paren(X)
+            rg = sym_range(X)
+            ub = rg[1] if rg is not None else (table_upper(X, _FACTS[0]) if _FACTS[0] is not None else None)
+            if ub is not None and ub <= C:
+                return ('yes', '%d - x with x <= %d (table / static / invariant)' % (C, ub)), []
     if k == 'const':
         return ('yes' if to_signed(v[1]) >= 0 else 'no', 'constant %d' % to_signed(v[1])), []
     if k == 'union':
@@ -1672,6 +1912,10 @@ def _judge(v, closure=True):
         rg = sym_range(v)
         if rg is not None and rg[0] >= 0:
             return ('yes', 'length word %s in [%d, %d] (slot invariant)' % (show(v[2][0][2]), rg[0], rg[1])), []
+        if _FACTS[0] is not None:
+            tb = table_bound(v[2][0][2], _FACTS[0])
+            if tb is not None:
+                return ('yes', 'length word %s in an image table, <= %d over the guarded index range' % (show(v[2][0][2])[:50], tb)), []
         if _COVERED[0] is not None and canon(v[2][0][2]) in _COVERED[0]:
             return ('yes', 'length word %s covered by a dominating base-class assert' % show(v[2][0][2])), []
         return ('cond', 'length word %s' % show(v[2][0][2])), [('len', v[2][0][2])]
@@ -1699,6 +1943,10 @@ def _judge(v, closure=True):
             rg = sym_range(b0)
             if a0[0] == 'const' and rg is not None and rg[1] <= to_signed(a0[1]):
                 return ('yes', '%d - %s with the slot in [%d, %d] (invariant)' % (to_signed(a0[1]), slot_symbol(b0), rg[0], rg[1])), []
+            if a0[0] == 'const' and _FACTS[0] is not None:
+                tb = table_upper(b0, _FACTS[0])
+                if tb is not None and tb <= to_signed(a0[1]):
+                    return ('yes', '%d - x with x <= %d (image table / static bound)' % (to_signed(a0[1]), tb)), []
             (va, ra), na = judge(v[2][0], closure)
             b = strip_paren(v[2][1])
             if b[0] == 'const' and to_signed(b[1]) <= 0:
@@ -1898,7 +2146,8 @@ def _lin(e):
                 return lin_scale(b, a.get('', 0))
             if set(b) <= {''}:
                 return lin_scale(a, b.get('', 0))
-        return {canon(e): 1}
+            return {'(%s * %s)' % (canon(e[2]), canon(e[3])): 1}
+        return {'(%s %s %s)' % (canon(e[2]), e[1], canon(e[3])): 1}
     return {canon(e): 1}
 
 
@@ -1948,7 +2197,7 @@ def canon(e):
 def _canon(e):
     e = strip_paren(e)
     k = e[0]
-    if k in ('const', 'bplit', 'bin') or (k == 'call' and e[1] in ('wp', 'bp', 'add', 'nadd', 'sub', 'nsub', 'mul', 'nmul')):
+    if k in ('const', 'bplit') or (k == 'bin' and e[1] in ('+', '-', '*')) or (k == 'call' and e[1] in ('wp', 'bp', 'add', 'nadd', 'sub', 'nsub', 'mul', 'nmul')):
         l = lin(e)
         if len(l) == 1 and '' not in l and list(l.values())[0] == 1:
             return list(l)[0]
@@ -1956,6 +2205,8 @@ def _canon(e):
     if k == 'mem':
         return '%s[%s]' % (e[1], canon(e[2]))
     if k == 'call':
+        if e[1] in ('mul', 'nmul') and len(e[2]) == 2:
+            return '(%s * %s)' % (canon(e[2][0]), canon(e[2][1]))
         return '%s(%s)' % (e[1], ', '.join(canon(a) for a in e[2]))
     if k == 'union':
         return '{' + ' | '.join(sorted(canon(x) for x in flatten_union(e))) + '}'
@@ -2773,8 +3024,13 @@ def ptr_tree(opd):
     return opd['addr']
 
 
+_SITE_GUARDS = [None]
+
+
 def analyse_site(st, tracer):
     rows = []
+    facts = _SITE_GUARDS[0].facts_at(st.blk, st.idx) if _SITE_GUARDS[0] is not None else None
+    _FACTS[0] = facts
     for role, opd in site_operands(st):
         cls = operand_count_class(opd)
         ct = count_tree(opd)
@@ -2798,6 +3054,7 @@ def analyse_site(st, tracer):
             'needs': needs, 'pattern': pattern, 'pattern_syntactic': pattern_syntactic,
             'algebra': (lin_text(lin_add(lin(pv), lin_scale(lin(strip_paren(cv)[2][0][2]), -2))) if is_lenload(strip_paren(cv)) and pv[0] != 'union' else ''),
         })
+    _FACTS[0] = None
     return rows
 
 
@@ -2980,23 +3237,73 @@ def run(args):
     tracer0 = Tracer(blocks, IN)
     owner = entry_dom_trees(blocks)
     guards0 = Guards(blocks, tracer0, owner)
-    statics = StaticBounds(blocks, tracer0, guards0, load_mem(args.mem))
+    mem = load_mem(args.mem)
+    TABLE_MEM.clear()
+    TABLE_MEM.update(mem)
+    for b in blocks.values():                  # every constant-address write in the book: a table must not be among them
+        for st in b.stmts:
+            if st.kind == 'assign' and st.lhs[0] == 'mem':
+                la = lin(st.lhs[2])
+                if set(la) <= {''}:
+                    a = seg7(la.get('', 0)) if st.lhs[1] != 'M8' else seg7(la.get('', 0) // 2)
+                    _TABLE_STORES.add(a)
+                    if st.lhs[1] == 'M32':
+                        _TABLE_STORES.add(a + 1)
+            elif st.kind == 'string' and st.op != 'WCMP':
+                d = st.operands['dst']
+                la = lin(d['addr'] if d['form'] == 'dst-varying' else ptr_tree(d))
+                if set(la) <= {''}:
+                    w0 = seg7(la.get('', 0)) if d['form'] == 'dst-varying' else seg7(la.get('', 0) // 2)
+                    cnt = strip_paren(d['count'])
+                    n = (to_signed(cnt[1]) + 3) // 2 + 1 if cnt[0] == 'const' else 4096
+                    if st.op == 'WBLM' and cnt[0] == 'const':
+                        n = to_signed(cnt[1])
+                    for w in range(w0, w0 + n):
+                        _TABLE_STORES.add(w)
+            elif st.kind == 'rt_call':
+                tab = RT_WRITES.get(st.callee)
+                capped = RT_CAPPED_OUTPUT.get(st.callee)
+                for i, a in enumerate(st.args):
+                    pos = i + 1
+                    writes = tab is None or pos in tab or (capped is not None and pos == capped[0])
+                    la = lin(a)
+                    if writes and set(la) <= {''} and strip_paren(a)[0] in ('const', 'bplit'):
+                        w0 = seg7(la.get('', 0) // 2) if strip_paren(a)[0] == 'bplit' else seg7(la.get('', 0))
+                        mode = tab.get(pos) if tab else None
+                        span = 2 if mode == 'wide' else (mode if isinstance(mode, int) else 256)
+                        for w in range(w0, w0 + span):
+                            _TABLE_STORES.add(w)
+            elif st.kind == 'call':
+                for j in range(st.idx - 1, -1, -1):
+                    s2 = b.stmts[j]
+                    if s2.kind in ('call', 'rt_call'):
+                        break
+                    if s2.kind == 'assign' and s2.lhs[0] == 'mem' and s2.lhs[1] == 'M32' and strip_paren(s2.lhs[2])[0] == 'const':
+                        a = strip_paren(s2.rhs)
+                        if a[0] == 'const':               # a word address by reference (a literal 0xW:b is read-only text)
+                            w0 = seg7(to_signed(a[1]))
+                            for w in range(w0, w0 + 256):
+                                _TABLE_STORES.add(w)
+    statics = StaticBounds(blocks, tracer0, guards0, mem)
     statics.run()
-    SIN, SIN_DEF, model = slot_reaching_defs(blocks, tracer0, args.call_policy, args.infer_caps)
+    SIN, SIN_DEF, model = slot_reaching_defs(blocks, tracer0, args.call_policy, args.infer_caps, guards0)
     # phase B (a005): bound the statics again with frame slots traced (a copy's
     # count is often a total kept in a slot), then rebuild the slot model
-    statics = StaticBounds(blocks, Tracer(blocks, IN, SIN), Guards(blocks, Tracer(blocks, IN, SIN), owner), load_mem(args.mem))
+    tracerB = Tracer(blocks, IN, SIN)
+    guardsB = Guards(blocks, tracerB, owner)
+    statics = StaticBounds(blocks, tracerB, guardsB, mem)
     statics.run()
     print('static length words (phase B): %d bounded of %d: %s' % (len(STATIC_BOUNDS), len(statics.bounds), ' '.join('%08X<=%d' % (A, u) for A, u in sorted(STATIC_BOUNDS.items()))))
     for A, u in sorted(statics.bounds.items()):
         if u is None:
             print('   %08X %s' % (A, statics.report.get(A, '')[-160:]))
-    SIN, SIN_DEF, model = slot_reaching_defs(blocks, tracer0, args.call_policy, args.infer_caps)
+    SIN, SIN_DEF, model = slot_reaching_defs(blocks, tracer0, args.call_policy, args.infer_caps, guardsB)
     tracer = Tracer(blocks, IN, SIN)
     tracer_len = Tracer(blocks, IN, SIN, through_len=True)
     tracer_sym = Tracer(blocks, IN, SIN, keep_m16=True)
     print('slot model: call policy %s; clobber-all events: %s' % (args.call_policy, dict(model.stats)))
 
+    _SITE_GUARDS[0] = Guards(blocks, tracer, owner)
     sites = list(string_sites(blocks))
     print('book: %d blocks, %d string sites (WCMV %d, WCMP %d, WBLM %d)' % (
         len(blocks), len(sites), sum(1 for s in sites if s.op == 'WCMV'),

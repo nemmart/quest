@@ -24,13 +24,12 @@ transcription and is called corroboration.
 At every string site, the two counts (`ac0`, `ac1`; `WBLM`'s single `k`) are
 non-negative. 1,689 sites: 1,637 WCMV, 40 WCMP, 12 WBLM; 3,366 count operands.
 
-**Result** (a005's three tiers): **1,022 sites proven** (construction 998,
-guard 8, slot invariant 16 — 14 sites wholly, and the constant folds a005
-opened); **542 sites layout-backed** — every non-proven count is a varying's
+**Result** (a006's three tiers): **1,069 sites proven** (construction,
+guards, slot invariants, image-table bounds); **499 sites layout-backed** — every non-proven count is a varying's
 own length word or monotone arithmetic on such words, discharged by one assert
-per root length word (169 words, 282 root rows); **125 sites asserted only**
-(102 `cond` operands over length words the routine never reads as a piece
-on a dominating path, plus 114 `unknown` operands); **0 sites where a count is
+per root length word (169 words, 282 root rows); **121 sites asserted only**
+(126 `cond` operands over length words the routine never reads as a piece
+on a dominating path, plus 82 `unknown` operands); **0 sites where a count is
 negative by construction.** No `cmp` result ever feeds a count. Verdict tiers
 (a002): 998 / 8 / 611 / 72.
 
@@ -237,7 +236,22 @@ arguments to a non-nested routine cannot write this frame; nested routines,
 pointer loaded from memory does not alias the frame (temptation 8). None of
 the 14 sites has such a statement in its region.
 
-### 3.5 The residue — 64 sites unproven (52 under policy (a)), tier: UNPROVEN
+### 3.4c Image tables and static bounds — tier: PROVENANCE (a006)
+
+A length word `M16[idx·stride + base]` where `base` names a table the 1986
+compiler laid down as constants (the familiar-name table at 0x70150A5A, the
+spell table at 0x70150448, the help lines at 0x70000272, the shop table at
+0x7000058D) under the compiler's own DERR index guard is bounded by the
+maximum over the reachable entries in `Disassembled/quest.mem`, provided no
+statement in the book writes into the table (constant-address stores, string
+destinations, by-reference arguments and callee write positions are all
+censused). 63 sites carry such an operand. A static varying's length word is
+bounded by the census of ALL its writers: IN_BUFFER ≤ 132 (27 writers —
+REPORT §11), 0x70000A4E ≤ 80, 0x70000A78 ≤ 80. Assumptions: the image's
+constant tables are not written through a pointer; no other program writes
+the program's own data page.
+
+### 3.5 The residue — 48 sites unproven (40 under policy (a)), tier: UNPROVEN
 
 Complete per-site list: `countflow.out` §7 (default) and
 `countflow-infercaps.out` §7 (policy (a)). By cause:
@@ -373,13 +387,14 @@ library's own check).
 
 | tier | operands | sites |
 |---|---:|---:|
-| proven (construction 2,047 + guard 18 + slot invariant 29) | 2,094 | 1,022 |
-| layout-backed and asserted (base-class 286 + derived 780; 169 root length words; 276 assert rows) | 1,056 | 542 |
-| asserted only (`cond` 102 + `unknown` 114; 216 assert rows) | 216 | 125 |
+| proven (construction, guard 18, slot invariant 25, image-table / static bounds) | 2,189 | 1,069 |
+| layout-backed and asserted (base-class + derived 711; 258 assert rows) | 969 | 499 |
+| asserted only (`cond` 126 + `unknown` 82; 208 assert rows) | 208 | 121 |
 
-A site is in the tier of its weakest operand. 492 asserts discharge
-everything below "proven"; 780 derived, 25 invariant and 18 guard rows carry
-`needed = no`. (a005; a004: 2,065 / 1,067 / 234 operands, 516 asserts.)
+A site is in the tier of its weakest operand. 466 asserts discharge
+everything below "proven"; 711 derived, 25 invariant and 18 guard rows carry
+`needed = no`. (a006; a005: 2,094 / 1,056 / 234, 492 asserts; a004: 2,065 /
+1,067 / 234, 516.)
 
 ## 7. What every later rewrite may rely on
 

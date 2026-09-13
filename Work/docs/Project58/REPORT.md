@@ -9,20 +9,20 @@ or any artifact was changed; no assert was emitted; nothing executed.
 
 ---
 
-## 1. The answer — three tiers (after a005; a004's and a002's tables follow)
+## 1. The answer — three tiers (after a006; earlier tables follow)
 
 | tier | operands | sites | what it rests on |
 |---|---:|---:|---|
-| **proven** — construction, a dominating guard, or (a005) a slot invariant verified through every writer on the paths to the site | **2,094** (2,047 + 18 + 29 by invariant, 25 of them at sites that were `unknown`/`cond`) | **1,022** | nothing to check |
-| **layout-backed and asserted** — the base class (286 operands, 169 distinct length words) and what is derived from it by `+`, `×`, `min`/`max` (780) | **1,056** | **542** | the structural argument, one assert per root (276 rows) |
-| **asserted only** — 102 `cond` operands over length words with no dominating root, 114 `unknown` | **216** | **125** | the site assert |
+| **proven** — construction, a dominating guard, a slot invariant, or (a006) a length word bounded by an image table / a static's writer census | **2,189** | **1,069** | nothing to check |
+| **layout-backed and asserted** — the base class and what is derived from it | **969** | **499** | one assert per root (258 rows) |
+| **asserted only** — 126 `cond` + 82 `unknown` operands | **208** | **121** | the site assert |
 | negative by construction | 0 | 0 | — |
 
-Asserts to emit: **492** (276 base-class + 102 cond + 114 unknown), from 516
-(a004) and 1,326 (a002). Under policy (a): 104 asserted-only sites.
+Asserts to emit: **466** (258 base-class + 126 cond + 82 unknown); a005: 492,
+a004: 516, a002: 1,326. Under policy (a): 107 asserted-only sites.
 
-a004's table: proven 2,065 / 1,006 · layout-backed 1,067 / 549 · asserted only
-234 / 134. a002's verdict tiers: 998 + 8 / 611 / 72 / 0.
+Earlier: a005 2,094 / 1,056 / 234 operands (1,022 / 542 / 125 sites);
+a004 2,065 / 1,067 / 234; a002's verdict tiers 998 + 8 / 611 / 72 / 0.
 
 ## 2. What could not be proven, and what it would take
 
@@ -377,14 +377,116 @@ game works, so we are probably not reading it carefully enough* — has been
 right every time; the reflex to reach for more analysis when a tier looks too
 large has been wrong every time. Recorded as the method finding.
 
-## 11. Files
+## 11. a006 — IN_BUFFER's capacity, checked end to end (Sep 13 2026)
+
+**The five links, verified — and link 2 is wrong twice.**
+
+1. `quest.symbols`: IN_BUFFER 0x7000021C, next symbol OUT_CHAN 0x70000260 —
+   0x44 words = 134 data bytes. **Holds** (cross-check only).
+2. "Exactly one routine fills it." **False.** The tool's writer census
+   (`StaticBounds`, which now sees game calls' by-reference arguments) finds
+   **27 writers**: `?READ_SCREEN` ×1 (70176716); **TERRAIN ×13 and
+   TERRITORY ×6** — IN_BUFFER is their CHAR(*) VARYING OUTPUT argument (arg 4
+   / arg 3), pushed with a DESCRIPTOR argument (arg 9 / arg 6: words `0xB00,
+   0x0000, 0x0084` at 0x7015BF19, 0x70160B17, … — twelve descriptors, all
+   132 when IN_BUFFER is the target; the one 39 goes with a local buffer);
+   and **DISPLAY_INVENTORY ×7** writing it directly — four literal
+   assignments ("flying on a pegasus" 19, "exploring a cave" 16, "at home
+   in your castle" 22, "sailing a boat" 14), `"carrying " || name` at
+   70168117 (≤ 18, see the table finding below), `x − x = 0` at 70168146 —
+   plus READ_IN.1's zero store. The grep that found two shapes missed the
+   `LPEF [0x7000021C]` argument pushes (`M32[0x74009926] = 0x7000021C`).
+3. The literal 132 at 7017670A → `M16[wp(ac3, 12)]` → arg 3. **Holds**; the
+   tool traces the slot to the constant.
+4./5. `OperatingSystem.cpp:284-296` sizes the buffer at `max_length` and
+   floors; `read_screen.cpp` writes the count into the header in place.
+   **Holds** (read, not re-derived: runtime C++ is outside this tool).
+
+**And the bound survives**, because every one of the 26 other writers is
+clamped to 132 or below: TERRAIN's single write (7017CA42) and TERRITORY's
+three (7017CECC / 7017CF1A / 7017CF2D) are all the min shape
+`{M32[wp(desc, 1)] | total}` against the descriptor's capacity word —
+verified by hand from the traced values, encoded as `CALLEE_CAPPED_OUTPUT`
+and applied at each call site with the descriptor's capacity read from
+`quest.mem` (132) — and DISPLAY_INVENTORY's are ≤ 22.
+
+So: **`0 ≤ len(IN_BUFFER) ≤ 132`, established from all 27 writers**, not from
+one. The `quest.assumptions` row a006 drafted must say so:
+
+    in-buffer-cap-132   0x7000021C   -   compiler/countflow.py (StaticBounds)
+    #   IN_BUFFER (static CHAR VARYING, data at 0x7000021D) has length <= 132 whenever it is read.
+    #   WRITERS (27, all bounded): ?READ_SCREEN @70176716 with max_length the literal 132 (block
+    #   7017670A; the runtime sizes its buffer at max_length and floors a negative amount,
+    #   emu_types/OperatingSystem.cpp:284-296); TERRAIN x13 (arg 4) and TERRITORY x6 (arg 3), each
+    #   clamping its output to the caller's DESCRIPTOR capacity (arg 9 / arg 6; words 0xB00,0,0x84
+    #   in the image), min shapes at 7017CA42, 7017CECC, 7017CF1A, 7017CF2D; DISPLAY_INVENTORY x7
+    #   (four literals <= 22, "carrying " || familiar-name <= 18, x - x = 0); READ_IN.1 x1 (0).
+    #   Cross-check: the object spans 0x7000021C..0x70000260 = 134 data bytes.
+    #   FALSIFIED BY: a 28th writer (countflow.py's census changing); a descriptor with capacity
+    #   > 132 passed with 0x7000021C; a ?READ_SCREEN max_length that is not the literal 132.
+
+**The finding on the way, and it is the bigger one.** DISPLAY_INVENTORY's
+`"carrying " || name` writer is bounded only because the name's length word
+is `M16[idx·16 + 0x70150A5A]` — a **constant table in the program image**
+(the familiar names: "Sara", "Gwendolyn", …, "Matilda"; 10 entries, 16 words
+each), indexed under the compiler's own DERR guard `1 ≤ idx ≤ 10`, whose ten
+length words are all in `quest.mem` (max 9), and which nothing in the book
+writes (a constant-address write census: stores, string destinations, by-
+reference arguments, callee write positions). The same shape is the spell
+table at 0x70150448 (37 entries × 16 words, max 24), the help-line table at
+0x70000272 (12-word records), the shop table at 0x7000058D (9-word records)…
+**This is the "record-field capacity" class of §2 — most of it is not the
+shared page at all; it is constant tables in the image, and the DERR guard
+gives the index range.** A006's question ("is the bound a literal somewhere
+nobody looked?") answered in the affirmative for the class, not just for
+IN_BUFFER: `table_bound()` in `countflow.py` (§13 of its docstring).
+
+**Movement.**
+
+| | sites |
+|---|---:|
+| `unknown` → proven by an image-table bound (`C − len(table)` padding, and copy-out totals `len(table) + k` whose scratch copies no longer clobber the total slot): DISPLAY_CAVE ×4, ALCHEMIST_HOME, ATTACK.1, GET_QUEST ×3, LIST_PLAYERS.2, MOVE_PLAYER ×2, REPORT, SEIGE ×2, DISPLAY_MAGIC, HELP.1 … | **16** (64 → 48 unknown sites) |
+| `cond` → proven by an image-table bound (the length word itself is a constant in the image) | 63 sites carry a table-bounded operand; asserted-only 125 → 121 sites |
+| static length words bounded | IN_BUFFER ≤ 132, 0x70000A4E ≤ 80, 0x70000A78 ≤ 80 (a whole-varying copy of A4E), two zero statics |
+| asserts needed | 492 → **466** |
+
+Two more model fixes fell out (P59-style, one site each): `DIVX` writes ac0
+and ac1 only (the tracer had it clobbering ac3, which hid a whole chain
+behind a divide), and the lin/canon pair looped on non-arithmetic binary
+operators (`&`), so any tree containing one was "too deep" and unmatched.
+
+**What still blocks the statics.** 0x70000C34 / 0x70000AA2 / 0x70000C1E /
+0x70000C44 (DISPLAY_SCREEN's message statics): a copy at 70167085:3 whose
+count is a DISPLAY_SCREEN chain total — the same mutual-invariant knot as
+DISPLAY_SCREEN's four unknown sites.
+
+**The 48 remaining unknown sites** (default policy; 40 under policy (a)):
+scratch-buffer copies of a PLAYER/OBJ **shared-page** record field (ALCHEMIST_HOME
+7015CB5C, ATTACK.5, DISPLAY_CAVE ×4 via `M8[ac2]` cursors, FIRE ×2, GET_QUEST,
+LIST_PLAYERS.2 ×3, MOVE_FAMILIAR, OP_EDIT.2 ×4, OP_EDIT.3, REPORT, SEIGE,
+STORE.1) — the record's declared capacity is in `shared_data_layout.h`
+(`name_length … VARYING(32)`) as an inferred layout, not a checked fact;
+DISPLAY_SCREEN ×4 (mutual invariant); INIT_OBJ_TBL ×6, OP_EDIT.9, TERRAIN,
+TERRITORY ×3 (argument cells — interprocedural); STORE.1 ×3 (`16 −
+len(record field)` on the shared page); TAKE_OVER_CASTLE ×2 (products);
+CAST.2, TERRITORY_MAP ×2 (`t1`); DISPLAY_MAGIC 70166536. The next literal
+nobody looked at is probably the PLAYER record's name field: `VARYING(32)`
+per the layout header, and every writer of it in the book is an
+`assign_varying` — the same census, on the shared page, with the
+NEW_USERS.PR caveat.
+
+**Method, seven for seven** (a006 §4) — recorded. This one was three
+questions and four greps, and the tool then found that the answer was
+incomplete (27 writers, not 1) and still true.
+
+## 12. Files
 
     docs/Project58/q001-plan-gate.md      the gate (unchanged after a001)
     docs/Project58/CountProof.md          the result of record
     docs/Project58/REPORT.md              this
     docs/Project58/sites.tsv              3,366 operand rows, default (sound) policy
     docs/Project58/sites-infercaps.tsv    the same under a001 Q2 policy (a)
-    docs/Project58/asserts.tsv            1,319 rows: site, operand, tier, needed, root, exact assert text (a005: 492 needed; 780 derived, 25 invariant, 18 guard need none)
+    docs/Project58/asserts.tsv            1,226 rows: site, operand, tier, needed, root, exact assert text (a006: 466 needed; 711 derived, 25 invariant, 18 guard need none)
     docs/Project58/countflow.out          console output, default policy (the per-site lists)
     docs/Project58/countflow-infercaps.out
     compiler/countflow.py                 the Stage A tool (new file)
