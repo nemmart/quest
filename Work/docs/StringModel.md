@@ -112,7 +112,20 @@ literal's image address. P56's R4 already does the relocation half.
 4. **Why are `s` and `v` separate classes at all**, if they behave identically
    under these operations? Candidates: no declared capacity on `s`, and a
    different home. Neither has been tested.
-5. **Twin capacity is computed, not fixed**, so a declaration cannot always
+5. **Does an assignment SET the length, or overwrite a span?** They differ,
+   and the positional form makes the difference visible:
+   - `s = "ab"` onto a 10-byte `s` — length 2, or length 10 with the first
+     two bytes replaced?
+   - `s = ""` — a reset to zero length, or a zero-byte write that changes
+     nothing?
+   - if assignment sets the length, then `s + 5 = "ab"` cannot mean the same
+     thing, and one spelling means *assign* at offset 0 and *splice*
+     elsewhere.
+
+   PL/I assignment sets the length, so the first reading is likely — but that
+   is an inference, and the splice case then needs its own justification.
+   **Settle it against a real routine's disassembly.**
+6. **Twin capacity is computed, not fixed**, so a declaration cannot always
    carry a constant — "sized at claim time" may be needed.
 
 ## 6. Also parked with this
