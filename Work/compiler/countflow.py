@@ -30,7 +30,15 @@ What it does, in order (docs/Project58/PROMPT.md):
      either side of the statement;
   7. asks, for every varying read of a frame slot, whether a write of that
      slot's length word DOMINATES the read within the routine (PROMPT §b);
-  8. measures which residues are LIVE after each string statement (P6).
+  8. measures which residues are LIVE after each string statement (P6);
+  9. (Part 2, a001) applies a DOMINATING-GUARD rule — facts from `assert`s and
+     two-way branches every path to the site executes, matched structurally
+     against the traced count; reported separately from dataflow (Q3);
+ 10. (Part 2, a001 Q2 policy (a), `--infer-caps`) optionally bounds an
+     unbounded scratch copy by the largest constant copy into the same buffer
+     — circular by construction, so flagged per row;
+ 11. writes the assert site list (`--asserts`), the deliverable a later project
+     emits from.
 
 Register model (the part that carries weight — stated, not inferred):
 
@@ -512,10 +520,14 @@ def load_split(path):
 
 
 def load_addrbook(path):
+    """(entry pc, name); commented-out rows (nested routines that stay
+    stacked under M4a) are included — they are routines all the same."""
     entries = []
     for line in open(path):
-        if line.startswith('#') or not line.strip():
+        if not line.strip():
             continue
+        if line.startswith('#'):
+            line = line[1:]
         f = line.split()
         if len(f) < 6 or not re.fullmatch(r'[0-9A-F]{8}', f[0]):
             continue
@@ -723,6 +735,8 @@ class Tracer:
             eff = st.sdefs[k]
             if eff[0] == 'clobber':
                 vals.append(('root', 'opaque', 'slot %d clobbered: %s @%s:%d' % (k, eff[1], d[0], d[1])))
+            elif False:
+                pass
             else:
                 v = self.subst(eff[1], d[0], d[1], stack)
                 if eff[2] == 32 and width == 16:
@@ -730,7 +744,7 @@ class Tracer:
                 elif eff[2] == 16 and width == 32:
                     v = ('root', 'opaque', 'wide read of a narrow write @%s:%d' % (d[0], d[1]))
                 vals.append(v)
-        v = vals[0] if len(vals) == 1 else ('union', vals)
+        v = dedupe_union(vals)
         if not any_cycle(v):
             self.memo[mkey] = v
         return v
@@ -748,7 +762,7 @@ class Tracer:
         vals = []
         for d in defs_at(self.blocks, self.IN, blk, idx, reg):
             vals.append(self.value_of_def(reg, d, stack))
-        v = vals[0] if len(vals) == 1 else ('union', vals)
+        v = dedupe_union(vals)
         if not any_cycle(v):
             self.memo[key] = v
         return v
@@ -785,17 +799,18 @@ class Tracer:
             return e
         if k == 'mem':
             if e[1] in ('M32', 'M16') and self.SIN:
-                a = strip_paren(e[2])
+                a = norm_addr(strip_paren(self.subst(e[2], blk, idx, stack)))
                 if a[0] == 'call' and a[1] == 'wp' and len(a[2]) == 2 and strip_paren(a[2][1])[0] == 'const' \
-                        and self.is_frame(a[2][0], blk, idx, stack):
+                        and strip_paren(a[2][0]) == ('sreg', 'wfp'):
                     return self.trace_slot(to_signed(strip_paren(a[2][1])[1]), 32 if e[1] == 'M32' else 16, blk, idx, stack)
+                return ('mem', e[1], a)
             return ('mem', e[1], self.subst(e[2], blk, idx, stack))
         if k == 'call':
             if e[1] == 'sx16' and not self.through_len and len(e[2]) == 1 and strip_paren(e[2][0])[0] == 'mem':
                 # a length-word read stays a length-word read (the base class);
                 # through_len=True traces it like any other slot
                 m = strip_paren(e[2][0])
-                return ('call', 'sx16', [('mem', m[1], self.subst(m[2], blk, idx, stack))])
+                return ('call', 'sx16', [('mem', m[1], norm_addr(strip_paren(self.subst(m[2], blk, idx, stack))))])
             return ('call', e[1], [self.subst(a, blk, idx, stack) for a in e[2]])
         if k == 'bin':
             return ('bin', e[1], self.subst(e[2], blk, idx, stack), self.subst(e[3], blk, idx, stack))
@@ -804,6 +819,31 @@ class Tracer:
         if k == 'union':
             return ('union', [self.subst(x, blk, idx, stack) for x in e[1]])
         raise ValueError(e)
+
+
+def dedupe_union(vals):
+    flat = []
+    seen = set()
+    for v in vals:
+        for x in flatten_union(v):
+            k = show(x)
+            if k not in seen:
+                seen.add(k)
+                flat.append(x)
+    return flat[0] if len(flat) == 1 else ('union', flat)
+
+
+def norm_addr(a):
+    """wp(wp(b, k1), k2) -> wp(b, k1 + k2); bp(bp(b, j1), j2) -> bp(b, j1 + j2);
+    a register base already traced to its value is folded the same way."""
+    a = strip_paren(a)
+    if a[0] == 'call' and a[1] in ('wp', 'bp') and len(a[2]) == 2:
+        base, disp = norm_addr(strip_paren(a[2][0])), strip_paren(a[2][1])
+        if disp[0] == 'const' and base[0] == 'call' and base[1] == a[1] and len(base[2]) == 2 \
+                and strip_paren(base[2][1])[0] == 'const':
+            return ('call', a[1], [base[2][0], ('const', to_signed(strip_paren(base[2][1])[1]) + to_signed(disp[1]))])
+        return ('call', a[1], [base, disp])
+    return a
 
 
 def any_cycle(v):
@@ -856,12 +896,39 @@ NF = 'non-frame'
 
 
 class SlotModel:
-    def __init__(self, blocks, tracer, call_policy='upward'):
+    def __init__(self, blocks, tracer, call_policy='upward', infer_caps=False):
         self.blocks = blocks
         self.tracer = tracer
         self.call_policy = call_policy
+        self.infer_caps = infer_caps      # a001 Q2 policy (a): bound an unbounded copy by the
+        self.caps = {}                    # largest CONSTANT copy into the same buffer start
         self.memo = {}
         self.stats = defaultdict(int)
+
+    def infer_capacities(self, names):
+        """(a001 Q2 (a)) per buffer start word: the largest constant extent any
+        string statement of the routine writes there.  A LOWER bound on the
+        buffer's declared size; using it to bound an unbounded copy into the
+        same buffer is the circular case a001 asked to be marked."""
+        caps = {}
+        for n in names:
+            for st in self.blocks[n].stmts:
+                if st.kind != 'string' or st.op == 'WCMP':
+                    continue
+                d = st.operands['dst']
+                r = self.frame_range(d['addr'], st.blk, st.idx)
+                cnt = strip_paren(d['count'])
+                if r in (NF, None) or cnt[0] != 'const':
+                    continue
+                nb = to_signed(cnt[1])
+                if st.op == 'WBLM':
+                    ext = nb
+                elif d['form'] == 'dst-varying':
+                    ext = (nb + 1) // 2 + 1
+                else:
+                    ext = max(nb - 1, 0) // 2 + 1
+                caps[r[0]] = max(caps.get(r[0], 0), ext)
+        self.caps = caps
 
     def frame_range(self, addr, blk, idx, stack=frozenset()):
         """(start_word, end_word|None) of a frame address tree, NF for an
@@ -973,6 +1040,13 @@ class SlotModel:
         def apply_range(r, why):
             if r == NF:
                 return
+            if r is not None and r[1] is None and self.infer_caps and r[0] in self.caps:
+                # policy (a): a bounded MAY, flagged 'inferred' (circular by construction)
+                for k in tracked:
+                    if r[0] <= k < r[0] + self.caps[r[0]]:
+                        eff.setdefault(k, ('clobber', why + ' [extent INFERRED: %d words, the largest constant copy into this buffer]' % self.caps[r[0]], 'inferred'))
+                self.stats['inferred-bound:' + why.split(' ')[0]] += 1
+                return
             if r is None:
                 self.stats['clobber-all:' + why.split(' ')[0]] += 1
                 for k in tracked:
@@ -1011,6 +1085,12 @@ class SlotModel:
                         r = (r[0], r[0] + max(nb - 1, 0) // 2)
                 elif r not in (NF, None):
                     r = (r[0], None)
+                if d['form'] == 'dst-varying' and r not in (NF, None) and r[0] in tracked:
+                    # assign_varying stores min(len, n) in the length word, and the
+                    # varying destination form is emitted only where the two counts
+                    # are equal (IR.md 5.8, P32), so the length word := the count
+                    eff[r[0]] = ('write', d['count'], 16)
+                    r = (r[0] + 1, r[1])
                 apply_range(r, 'WCMV destination')
             elif st.op == 'WBLM':
                 d = st.operands['dst']
@@ -1102,10 +1182,10 @@ def tracked_slots(blocks, names):
     return T
 
 
-def slot_reaching_defs(blocks, tracer, call_policy='upward'):
+def slot_reaching_defs(blocks, tracer, call_policy='upward', infer_caps=False):
     """Per routine: compute slot effects and run RD over ('slot', k) keys.
     -> SIN (block -> key -> defs), model."""
-    model = SlotModel(blocks, tracer, call_policy)
+    model = SlotModel(blocks, tracer, call_policy, infer_caps)
     by_routine = defaultdict(list)
     for n, b in blocks.items():
         by_routine[b.routine].append(n)
@@ -1113,6 +1193,8 @@ def slot_reaching_defs(blocks, tracer, call_policy='upward'):
     SIN_DEF = {}
     for rname, names in by_routine.items():
         T = tracked_slots(blocks, names)
+        if infer_caps:
+            model.infer_capacities(names)
         for n in names:
             for st in blocks[n].stmts:
                 model.effects(st, T)
@@ -1204,10 +1286,18 @@ def judge(v, closure=True):
             (vb, rb), nb = judge(v[2][1], closure)
             return combine_add(va, ra, vb, rb), na + nb
         if f in ('sub', 'nsub'):
+            if show(strip_paren(v[2][0])) == show(strip_paren(v[2][1])):
+                return ('yes', 'x - x = 0'), []          # WSUB n,n: the zeroing idiom
             (va, ra), na = judge(v[2][0], closure)
             b = strip_paren(v[2][1])
             if b[0] == 'const' and to_signed(b[1]) <= 0:
                 return combine_add(va, ra, 'yes', 'minus %d' % to_signed(b[1])), na
+            a = strip_paren(v[2][0])
+            if a[0] == 'const':
+                members = [strip_paren(x) for x in flatten_union(b)]
+                members = [('const', 0) if (m[0] == 'call' and m[1] in ('sub', 'nsub') and show(strip_paren(m[2][0])) == show(strip_paren(m[2][1]))) else m for m in members]
+                if all(m[0] == 'const' and to_signed(m[1]) <= to_signed(a[1]) for m in members):
+                    return ('yes', '%d - {constants <= %d}' % (to_signed(a[1]), to_signed(a[1]))), []
             return ('unknown', 'subtraction %s' % show(v)), []
         if f in ('zx16', 'zx8'):
             return ('yes', 'zero-extended'), []
@@ -1333,6 +1423,194 @@ def base_class_match(count_v, ptr_v):
             return True
     return False
 
+
+
+# --------------------------------------------------------------------------
+# path sensitivity: dominating guards (a001 Q3) — reported SEPARATELY
+# --------------------------------------------------------------------------
+# A guard is a fact known at a program point: an `assert(cond)` that every path
+# to the site executes, or the outcome of a two-way `goto` whose one edge every
+# path to the site takes.  Facts are traced at the guard point and matched
+# STRUCTURALLY against the site's traced count.  Two caveats, stated: a fact
+# about a record field read (`M16[<non-frame>]`) is trusted across the guard-
+# to-site interval without checking for a store to that field in between;
+# and matching is syntactic, so an equal value spelled differently is missed
+# (sound: a miss is an `unknown`, never a `yes`).
+
+CMP_OPS = {'<s', '<=s', '>s', '>=s', '==', '!=', '<u', '<=u', '>u', '>=u'}
+
+
+def cond_facts(cond, truth):
+    """-> list of (lhs, op, rhs) known TRUE, from a condition tree with a known
+    truth value.  `&&` true gives each conjunct; `||` false gives each disjunct
+    false; `!` flips; a comparison flips its operator."""
+    c = strip_paren(cond)
+    if c[0] == 'not':
+        return cond_facts(c[1], not truth)
+    if c[0] == 'bin' and c[1] == '&&':
+        return (cond_facts(c[2], True) + cond_facts(c[3], True)) if truth else []
+    if c[0] == 'bin' and c[1] == '||':
+        return (cond_facts(c[2], False) + cond_facts(c[3], False)) if not truth else []
+    if c[0] == 'bin' and c[1] in CMP_OPS:
+        op = c[1]
+        if not truth:
+            op = {'<s': '>=s', '<=s': '>s', '>s': '<=s', '>=s': '<s', '==': '!=', '!=': '==',
+                  '<u': '>=u', '<=u': '>u', '>u': '<=u', '>=u': '<u'}[op]
+        return [(c[2], op, c[3])]
+    return []
+
+
+def entry_dom_trees(blocks):
+    """dominator tree per predecessor-less block; -> block -> (idom, entry)."""
+    owner = {}
+    for n, b in blocks.items():
+        if b.pred:
+            continue
+        idom, reach = dominators(blocks, n)
+        for r in reach:
+            owner.setdefault(r, (idom, n))
+    return owner
+
+
+class Guards:
+    def __init__(self, blocks, tracer, owner):
+        self.blocks = blocks
+        self.tracer = tracer
+        self.owner = owner
+
+    def facts_at(self, blk, idx):
+        """Traced facts that hold on every path to statement (blk, idx)."""
+        if blk not in self.owner:
+            return []
+        idom, entry = self.owner[blk]
+        out = []
+        d = blk
+        chain = []
+        while True:
+            chain.append(d)
+            if idom.get(d, d) == d:
+                break
+            d = idom[d]
+        for d in chain:
+            b = self.blocks[d]
+            limit = idx if d == blk else len(b.stmts)
+            for j in range(limit):
+                st = b.stmts[j]
+                if st.kind == 'assert':
+                    for lhs, op, rhs in cond_facts(st.cond, True):
+                        out.append((self.tracer.subst(lhs, d, j, frozenset()), op,
+                                    self.tracer.subst(rhs, d, j, frozenset()), 'assert@%s:%d' % (d, j)))
+            # the edge into d: a unique predecessor ending in a two-way goto
+            preds = b.pred
+            if len(preds) == 1:
+                pb = self.blocks[preds[0]]
+                last = pb.stmts[-1] if pb.stmts else None
+                if last is not None and last.kind == 'goto' and last.cond is not None and len(last.labels) == 2 \
+                        and last.labels.count(d) == 1:
+                    truth = last.labels.index(d) == 1
+                    for lhs, op, rhs in cond_facts(last.cond, truth):
+                        out.append((self.tracer.subst(lhs, pb.name, last.idx, frozenset()), op,
+                                    self.tracer.subst(rhs, pb.name, last.idx, frozenset()), 'edge %s->%s' % (pb.name, d)))
+        return out
+
+    def prove_nonneg(self, v, facts):
+        """-> (True, why) if the facts give v >= 0; (False, None) otherwise."""
+        v = strip_paren(v)
+        if v[0] == 'union':
+            whys = []
+            for x in flatten_union(v):
+                ok, why = self.prove_nonneg(x, facts)
+                if not ok:
+                    return False, None
+                whys.append(why)
+            return True, ' & '.join(whys)
+        (vd, _), _ = judge(v)
+        if vd == 'yes':
+            return True, 'by construction'
+        key = show(v)
+        vcx = self._as_c_minus_x(v)
+        # an UNSIGNED upper bound is a non-negativity proof: v <=u K (K < 2^31)
+        # means 0 <= v <= K as a signed value.  This is the shape of the
+        # compiler's own DERR bounds check on a SUBSTR length.
+        for lhs, op, rhs, where in facts:
+            rc = strip_paren(rhs)
+            if op in ('<=u', '<u') and rc[0] == 'const' and 0 <= to_signed(rc[1]) < 0x80000000:
+                same = show(lhs) == key
+                if not same and vcx is not None:
+                    lcx = self._as_c_minus_x(lhs)
+                    same = lcx is not None and lcx[0] == vcx[0] and show(lcx[1]) == show(vcx[1])
+                if same:
+                    return True, '%s %s %d unsigned (%s)' % (key[:40], op, to_signed(rc[1]), where)
+        # direct lower bound: v >= c, v > c, c <= v, c < v
+        for lhs, op, rhs, where in facts:
+            L, R = show(lhs), show(rhs)
+            rc = strip_paren(rhs)
+            lc = strip_paren(lhs)
+            if L == key and rc[0] == 'const':
+                c = to_signed(rc[1])
+                if (op == '>=s' and c >= 0) or (op == '>s' and c >= -1) or (op == '==' and c >= 0):
+                    return True, '%s %s %d (%s)' % (key[:40], op, c, where)
+            if R == key and lc[0] == 'const':
+                c = to_signed(lc[1])
+                if (op == '<=s' and c >= 0) or (op == '<s' and c >= -1) or (op == '==' and c >= 0):
+                    return True, '%d %s %s (%s)' % (c, op, key[:40], where)
+            if L == key and op in ('>=s', '>s') and self.prove_nonneg(rhs, facts)[0]:
+                return True, '%s %s <non-negative> (%s)' % (key[:40], op, where)
+        # C - X  (sub / nsub / (0 - X) + C): need X <= C
+        cx = self._as_c_minus_x(v)
+        if cx is not None:
+            C, X = cx
+            xk = show(X)
+            for lhs, op, rhs, where in facts:
+                L, R = show(lhs), show(rhs)
+                rc, lc = strip_paren(rhs), strip_paren(lhs)
+                if L == xk and rc[0] == 'const':
+                    c = to_signed(rc[1])
+                    if (op == '<=s' and c <= C) or (op == '<s' and c <= C + 1) or (op == '==' and c <= C):
+                        return True, '%d - X with X %s %d (%s)' % (C, op, c, where)
+                if R == xk and lc[0] == 'const':
+                    c = to_signed(lc[1])
+                    if (op == '>=s' and c <= C) or (op == '>s' and c <= C + 1) or (op == '==' and c <= C):
+                        return True, '%d - X with %d %s X (%s)' % (C, c, op, where)
+        # X + k with k >= 0: need X >= -k
+        if v[0] == 'call' and v[1] in ('add', 'nadd') or (v[0] == 'bin' and v[1] == '+'):
+            a, b = (v[2][0], v[2][1]) if v[0] == 'call' else (v[2], v[3])
+            a, b = strip_paren(a), strip_paren(b)
+            for X, K in ((a, b), (b, a)):
+                if K[0] == 'const' and to_signed(K[1]) >= 0:
+                    xk = show(X)
+                    for lhs, op, rhs, where in facts:
+                        rc = strip_paren(rhs)
+                        if show(lhs) == xk and rc[0] == 'const':
+                            c = to_signed(rc[1])
+                            if (op == '>=s' and c >= -to_signed(K[1])) or (op == '>s' and c >= -to_signed(K[1]) - 1):
+                                return True, 'X + %d with X %s %d (%s)' % (to_signed(K[1]), op, c, where)
+                    ok, why = self.prove_nonneg(X, facts)
+                    if ok:
+                        return True, 'X + %d with X >= 0: %s' % (to_signed(K[1]), why)
+        return False, None
+
+    @staticmethod
+    def _as_c_minus_x(v):
+        v = strip_paren(v)
+        if v[0] == 'call' and v[1] in ('sub', 'nsub'):
+            a, b = strip_paren(v[2][0]), strip_paren(v[2][1])
+            if a[0] == 'const':
+                return to_signed(a[1]), b
+        if v[0] == 'bin' and v[1] == '-':
+            a, b = strip_paren(v[2]), strip_paren(v[3])
+            if a[0] == 'const':
+                return to_signed(a[1]), b
+        # (0 - X) + C  and  C + (0 - X)
+        if (v[0] == 'call' and v[1] in ('add', 'nadd')) or (v[0] == 'bin' and v[1] == '+'):
+            a, b = (v[2][0], v[2][1]) if v[0] == 'call' else (v[2], v[3])
+            a, b = strip_paren(a), strip_paren(b)
+            for X, K in ((a, b), (b, a)):
+                if K[0] == 'const':
+                    inner = Guards._as_c_minus_x(X)
+                    if inner is not None:
+                        return inner[0] + to_signed(K[1]), inner[1]
+        return None
 
 # --------------------------------------------------------------------------
 # per-site census
@@ -1588,7 +1866,7 @@ def run(args):
     unresolved = build_cfg(blocks, split, addrbook)
     IN, OUT = reaching_defs(blocks)
     tracer0 = Tracer(blocks, IN)
-    SIN, SIN_DEF, model = slot_reaching_defs(blocks, tracer0, args.call_policy)
+    SIN, SIN_DEF, model = slot_reaching_defs(blocks, tracer0, args.call_policy, args.infer_caps)
     tracer = Tracer(blocks, IN, SIN)
     tracer_len = Tracer(blocks, IN, SIN, through_len=True)
     print('slot model: call policy %s; clobber-all events: %s' % (args.call_policy, dict(model.stats)))
@@ -1620,11 +1898,31 @@ def run(args):
         led = ledger.get(key)
         results.append((st, rows, led))
 
+    # ---- path sensitivity (a001 Q3), reported separately
+    owner = entry_dom_trees(blocks)
+    guards = Guards(blocks, tracer, owner)
+    gcount = defaultdict(int)
+    for st, rows, led in results:
+        facts = None
+        for r in rows:
+            r['guard'] = ''
+            if r['verdict'] in ('unknown', 'cond'):
+                if facts is None:
+                    facts = guards.facts_at(st.blk, st.idx)
+                v = tracer.subst(count_tree(dict(site_operands(st))[r['role']]), st.blk, st.idx, frozenset())
+                ok, why = guards.prove_nonneg(v, facts)
+                if ok:
+                    r['guard'] = why
+                    gcount[(r['class'], r['verdict'])] += 1
+    print('\n=== Q3. Dominating-guard rule: operands it settles (from unknown / cond) ===')
+    for k, v in sorted(gcount.items()):
+        print('  %-14s %-8s %4d' % (k[0], k[1], v))
+
     # ---- write the ledger
     if args.out:
         with open(args.out, 'w') as f:
             f.write('# docs/Project58/sites.tsv — compiler/countflow.py census of every string count operand\n')
-            f.write('# block\tstmt\tpc\top\troutine\tidiom\trole\tform\tclass\tfed_by_residue\tpattern\tverdict\troots\tcount\treason\tverdict_through_len\troots_through_len\treason_through_len\n')
+            f.write('# block\tstmt\tpc\top\troutine\tidiom\trole\tform\tclass\tfed_by_residue\tpattern\tverdict\troots\tcount\treason\tverdict_through_len\troots_through_len\treason_through_len\tguard\n')
             for st, rows, led in results:
                 for r in rows:
                     f.write('\t'.join([
@@ -1632,8 +1930,12 @@ def run(args):
                         blocks[st.blk].routine or '-', led['idiom'] if led else '-',
                         r['role'], r['form'], r['class'], 'Y' if r['fed_by_residue'] else 'N',
                         'Y' if r['pattern'] else 'N', r['verdict'], ','.join(r['roots']),
-                        r['count'][:120], r['reason'][:200], r['verdict2'], ','.join(r['roots2']), r['reason2'][:200]]) + '\n')
+                        r['count'][:120], r['reason'][:200], r['verdict2'], ','.join(r['roots2']), r['reason2'][:200], r['guard'][:160]]) + '\n')
         print('wrote', args.out)
+
+    # ---- the assert site list
+    if args.asserts:
+        write_asserts(args.asserts, blocks, results)
 
     # ---- summaries
     summarise(blocks, results)
@@ -1647,6 +1949,43 @@ def run(args):
                 for r in rows:
                     for k2, v2 in r.items():
                         print('   %-14s %s' % (k2, v2))
+
+
+def assert_text(st, role, opd, tier, pc):
+    """The exact IR statement that discharges one operand at runtime
+    (IR.md 3: assert(e, "message"); 5.1: `>=s` is the signed comparison)."""
+    ct = count_tree(opd)
+    return 'assert((%s) >=s 0, "P58 %s %s @%s")' % (show(ct) if opd['form'] != 'varying' else 'sx16(M16[%s])' % show(opd['addr']), tier, role.replace('/', '-'), pc)
+
+
+def write_asserts(path, blocks, results):
+    n = 0
+    with open(path, 'w') as f:
+        f.write('# docs/Project58/asserts.tsv — every string count operand NOT proven non-negative by construction,\n')
+        f.write('# with the exact IR assert that discharges it at runtime.  Emit it immediately BEFORE the statement\n')
+        f.write('# (same block; the count expression is evaluated in the statement\'s own context, IR.md 5.8).\n')
+        f.write('# tier: base-class = a varying read (count = length word at A, data at A+1); cond = non-negative iff the\n')
+        f.write('#       named length word(s) are; guard = proven by a dominating guard (no assert NEEDED, listed for completeness);\n')
+        f.write('#       unknown = the tool could not decide (arithmetic / opaque / interprocedural); the assert still discharges it.\n')
+        f.write('# pc\tblock\tstmt\top\troutine\trole\tclass\ttier\tneeded\tassert\n')
+        for st, rows, led in results:
+            pc = led['pc'] if led else st.blk
+            opds = dict(site_operands(st))
+            for r in rows:
+                if r['verdict'] == 'yes':
+                    continue
+                if r.get('guard'):
+                    tier, needed = 'guard', 'no'
+                elif r['pattern']:
+                    tier, needed = 'base-class', 'yes'
+                elif r['verdict'] == 'cond':
+                    tier, needed = 'cond', 'yes'
+                else:
+                    tier, needed = 'unknown', 'yes'
+                f.write('\t'.join([pc, st.blk, str(st.idx), st.op, blocks[st.blk].routine or '-', r['role'], r['class'],
+                                    tier, needed, assert_text(st, r['role'], opds[r['role']], tier, pc)]) + '\n')
+                n += 1
+    print('wrote %s (%d operand rows)' % (path, n))
 
 
 def summarise(blocks, results):
@@ -2049,8 +2388,10 @@ def main():
     ap.add_argument('--ledgers', nargs='*', default=[os.path.join(work, 'docs/Project%d/p%d.tsv' % (n, n)) for n in (31, 32, 33)])
     ap.add_argument('--out', default=None)
     ap.add_argument('--dump-site', default=None)
+    ap.add_argument('--asserts', default=None, help='write the assert site list (a001: a deliverable in its own right)')
     ap.add_argument('--selftest', action='store_true')
     ap.add_argument('--call-policy', default='upward', choices=['upward', 'wide'])
+    ap.add_argument('--infer-caps', action='store_true', help='a001 Q2 policy (a): bound unbounded copies by the largest constant copy into the buffer')
     args = ap.parse_args()
     if args.selftest:
         selftest()
