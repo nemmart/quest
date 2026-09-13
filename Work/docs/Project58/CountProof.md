@@ -24,10 +24,14 @@ transcription and is called corroboration.
 At every string site, the two counts (`ac0`, `ac1`; `WBLM`'s single `k`) are
 non-negative. 1,689 sites: 1,637 WCMV, 40 WCMP, 12 WBLM; 3,366 count operands.
 
-**Result:** 998 sites proven by construction, 8 by a dominating guard, 611
-conditional on the sign of named length words (discharged by an assert at the
-site), 72 unproven (46 under policy (a)); **0 sites where a count is negative
-by construction.** No `cmp` result ever feeds a count.
+**Result** (a004's three tiers): **1,006 sites proven** (construction 998,
+guard 8); **549 sites layout-backed** — every non-proven count is a varying's
+own length word or monotone arithmetic on such words, discharged by one assert
+per root length word (169 words, 282 root rows); **134 sites asserted only**
+(104 `cond` operands over 56 length words the routine never reads as a piece
+on a dominating path, plus 130 `unknown` operands); **0 sites where a count is
+negative by construction.** No `cmp` result ever feeds a count. Verdict tiers
+(a002): 998 / 8 / 611 / 72.
 
 ---
 
@@ -101,7 +105,7 @@ positive constant, so **all 12 fills are forward**; all 12 are the
 self-overlapping smears (`src = dst − 1` ×5, `− 2` ×7) the book annotates —
 well-defined because `block_move` steps one word at a time (IR.md 5.8).
 
-### 3.2 The base class — 266 operands at 251 sites, tier: PROVENANCE, discharged by assert
+### 3.2 The base class — 286 operands at 268 sites, tier: LAYOUT-BACKED, discharged by one assert per length word
 
 An operand whose count is the 16-bit word at word address `W` and whose
 pointer is byte `2W + 2` — the layout of a `CHAR(n) VARYING`, on either side
@@ -115,7 +119,7 @@ indexing through a multiply, by-reference pointers.
 | how recognised | operands |
 |---|---:|
 | by form, `[@A, varying]` (the lifter's rule `string_sites.py:1696/2177`): WCMV src 160, WCMP s1 31, s2 15 | 206 |
-| by dataflow + algebra, a fixed operand whose traced count is `sx16(M16[W])` and traced pointer satisfies the identity: count spelled as an expression (`lenload-expr`) WCMV src 35, WCMP s1 2; count in a register WCMV src 18, WCMP s1 4, s2 1 | 60 |
+| by dataflow + algebra, a fixed operand whose traced count is `sx16(M16[W])` and traced pointer satisfies the identity (modulo 2^32 — a004 §9): count spelled as an expression (`lenload-expr`) WCMV src 35, WCMP s1 2; count in a register WCMV src 38, WCMP s1 4, s2 1 | 80 |
 
 (P58 as accepted in a002 had a SYNTACTIC matcher — a simple base register and
 a constant `k` — and reported 227 / 213. It missed 39 operands whose length
@@ -159,7 +163,7 @@ All six static length words the book reads (0x7000021C, 0x70000A78, 0x70000AA2,
 0x70000C44 — none (they stay 0). None is written by another program (they are
 in the program's own data page, not the shared page).
 
-### 3.3 Counts that are arithmetic on length words — 404 further `cond` sites, tier: dataflow → provenance
+### 3.3 Counts that are arithmetic on length words — DERIVED from their roots (a004), tier: layout-backed via dataflow
 
 The compiler's precomputed concatenation total `len(x) + k` (k the literal
 bytes appended), stored to a frame slot and reloaded (`XWLDA`), or held in a
@@ -170,16 +174,28 @@ are here: `ac1` after the previous copy, `≥ 0` iff that copy's source length
 was — StringsDesign §2.4's "positive when the WCMV runs" re-derived as
 **conditional on the head, by closure**, not as a fact.
 
-The assert for such an operand (tier `cond` in `asserts.tsv`) is on the count
-expression as the IR spells it, e.g.
+**785 such operands are DERIVED** (`asserts.tsv` tier `derived`, `needed =
+no`, the covering root(s) in the `root` column): every length-word leaf has a
+base-class root at the same statement or dominating the site, with no
+statement on any path from the root round to the root or on past the site
+that may write the word, and the operators are `+`, `×`, a diamond's union
+(min/max), `sx16(trunc16(x))`. 206 of them are the destination count of the
+root's own statement (`[@ac2, LEN] = [@W, varying]`); the rest are the
+concatenation totals `LEN + k`, the copy-outs, and the tail splits (`ac1` after
+a WCMV whose source count was itself established — closure, iterated to a
+fixpoint). The root's assert, e.g.
 
-    assert(((sx16(M16[wp(ac3, 60)]) + 0xB)) >=s 0, "P58 cond dst-ac0 @70167FEB")
+    assert((sx16(M16[wp(ac3, 60)])) >=s 0, "P58 base-class src-ac1 @70167FE0")
 
-which is implied by the base-class assert on `wp(ac3, 60)` at the varying read
-in the same block; both are listed so the emitting project can choose the
-minimal set (the base-class assert at the first read of a length word in a
-block dominates the arithmetic ones that follow it, when no intervening write
-touches the word — `countflow.py`'s slot RD can tell it which).
+discharges the whole chain: `LEN + 11 ≥ 0` because `LEN ≥ 0`.
+
+**104 operands at 63 sites stay `cond`** with their own assert: their length
+word has no dominating root — 56 distinct words, 39 of them read as a varying
+elsewhere in the routine (a root on another path, or a call / unbounded copy
+between root and site), 17 never read as a piece at all (e.g. DISPLAY_CAVE's
+static varying 0x70000A4E, only ever appended to as `len + 2`). These are
+"asserted only" in REPORT §1's tiers — but note what they are: length words
+plus constants, not arbitrary memory.
 
 ### 3.4 Dominating guards — 18 operands at 12 sites (8 sites fully), tier: GUARD
 
@@ -330,6 +346,17 @@ library's own check).
 
 ---
 
+## 6b. The three tiers, per operand and per site (a004)
+
+| tier | operands | sites |
+|---|---:|---:|
+| proven (construction 2,047 + guard 18) | 2,065 | 1,006 |
+| layout-backed and asserted (base-class 286 + derived 785; 169 root length words; 282 assert rows) | 1,067 | 549 |
+| asserted only (`cond` 104 + `unknown` 130; 234 assert rows) | 234 | 134 |
+
+A site is in the tier of its weakest operand. 516 asserts discharge
+everything below "proven"; 785 derived rows carry `needed = no`.
+
 ## 7. What every later rewrite may rely on
 
 1. `ac0 = 0` after every WCMV; `ac1 ≥ 0` after a WCMV whose source length was
@@ -338,7 +365,9 @@ library's own check).
 2. At the 998 + 8 proven sites, both counts are ≥ 0 and the copy is forward
    (construction / guard).
 3. At the 611 conditional sites and the 72 unproven, `asserts.tsv` gives the
-   statement that makes the same true at runtime, loudly, at the site.
+   statement that makes the same true at runtime, loudly, at the site — 516
+   asserts in all after a004; a derived operand is covered by the root(s) its
+   row names.
 4. No count is ever a compare result (dataflow, program-wide).
 5. No varying read of an own-frame slot is reachable without a write of its
    length word (dataflow + one path-condition argument).

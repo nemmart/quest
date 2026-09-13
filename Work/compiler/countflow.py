@@ -798,12 +798,14 @@ class Tracer:
         if k in ('const', 'bplit', 'flag', 'sreg', 'name', 't', 'root'):
             return e
         if k == 'mem':
-            if e[1] in ('M32', 'M16') and self.SIN:
+            # `R[a]` is `M32[a]` at every site of the program (docs/Indirection.md 3,
+            # quest.assumptions' three ptr-bit31-clear rows), so trace it the same way
+            if e[1] in ('M32', 'M16', 'R') and self.SIN:
                 a = norm_addr(strip_paren(self.subst(e[2], blk, idx, stack)))
                 if a[0] == 'call' and a[1] == 'wp' and len(a[2]) == 2 and strip_paren(a[2][1])[0] == 'const' \
                         and strip_paren(a[2][0]) == ('sreg', 'wfp'):
-                    return self.trace_slot(to_signed(strip_paren(a[2][1])[1]), 32 if e[1] == 'M32' else 16, blk, idx, stack)
-                return ('mem', e[1], a)
+                    return self.trace_slot(to_signed(strip_paren(a[2][1])[1]), 16 if e[1] == 'M16' else 32, blk, idx, stack)
+                return ('mem', 'M32' if e[1] == 'R' else e[1], a)
             return ('mem', e[1], self.subst(e[2], blk, idx, stack))
         if k == 'call':
             if e[1] == 'sx16' and not self.through_len and len(e[2]) == 1 and strip_paren(e[2][0])[0] == 'mem':
@@ -835,8 +837,11 @@ def dedupe_union(vals):
 
 def norm_addr(a):
     """wp(wp(b, k1), k2) -> wp(b, k1 + k2); bp(bp(b, j1), j2) -> bp(b, j1 + j2);
-    a register base already traced to its value is folded the same way."""
+    `wfp + k` (the raw index spelling of R[ac3 + k]) -> wp(wfp, k)."""
     a = strip_paren(a)
+    if a[0] == 'bin' and a[1] in ('+', '-') and strip_paren(a[2]) == ('sreg', 'wfp') and strip_paren(a[3])[0] == 'const':
+        k = to_signed(strip_paren(a[3])[1])
+        return ('call', 'wp', [('sreg', 'wfp'), ('const', k if a[1] == '+' else -k)])
     if a[0] == 'call' and a[1] in ('wp', 'bp') and len(a[2]) == 2:
         base, disp = norm_addr(strip_paren(a[2][0])), strip_paren(a[2][1])
         if disp[0] == 'const' and base[0] == 'call' and base[1] == a[1] and len(base[2]) == 2 \
@@ -1226,9 +1231,24 @@ def strip_paren(v):
     return v
 
 
-def judge(v, closure=True):
+def judge(v, closure=True, covered=None):
     """-> (verdict, needs) where needs is the list of length-word addresses
-    (as trees) whose non-negativity the verdict is conditional on."""
+    (as trees) whose non-negativity the verdict is conditional on.
+    `covered` (a004): canonical length-word addresses whose non-negativity a
+    dominating base-class assert already establishes; such a leaf is `yes`."""
+    if covered:
+        _COVERED[0] = covered
+    try:
+        return _judge(v, closure)
+    finally:
+        if covered:
+            _COVERED[0] = None
+
+
+_COVERED = [None]
+
+
+def _judge(v, closure=True):
     v = strip_paren(v)
     k = v[0]
     if k == 'const':
@@ -1252,6 +1272,8 @@ def judge(v, closure=True):
             if op == 'WCMV' and reg == 'ac0':
                 return ('yes', 'WCMV residue ac0 = 0 @%s:%d' % (blk, idx)), []
             if op == 'WCMV' and reg == 'ac1':
+                if _COVERED[0] is not None and ('residue', blk, idx) in _COVERED[0]:
+                    return ('yes', 'WCMV residue ac1 @%s:%d, its source length established (closure)' % (blk, idx)), []
                 return ('cond', 'WCMV residue ac1 = len - min(|n|,|len|) @%s:%d (closure: >= 0 iff its len >= 0)' % (blk, idx)), [('residue', blk, idx)]
             if op == 'WCMP' and reg == 'ac0':
                 return ('cond', 'WCMP residue ac0 (dst bytes left) @%s:%d (closure: in [0, n] iff n >= 0)' % (blk, idx)), [('residue', blk, idx)]
@@ -1270,6 +1292,8 @@ def judge(v, closure=True):
             return ('unknown', 'frame slot %d read with no write on some path (entry @%s)' % det), []
         return ('unknown', 'opaque: %s' % (det,)), []
     if is_lenload(v):
+        if _COVERED[0] is not None and canon(v[2][0][2]) in _COVERED[0]:
+            return ('yes', 'length word %s covered by a dominating base-class assert' % show(v[2][0][2])), []
         return ('cond', 'length word %s' % show(v[2][0][2])), [('len', v[2][0][2])]
     if k == 'mem':
         return ('unknown', '%s read %s' % (v[1], show(v))), []
@@ -1494,11 +1518,18 @@ def lin_add(a, b):
     out = dict(a)
     for t, c in b.items():
         out[t] = out.get(t, 0) + c
+    if '' in out:
+        out[''] = to_signed(out[''])          # host arithmetic is 32-bit with wrap (IR.md 5.1)
     return {t: c for t, c in out.items() if c != 0}
 
 
 def lin_scale(a, s):
-    return {t: c * s for t, c in a.items() if c * s != 0}
+    out = {t: c * s for t, c in a.items() if c * s != 0}
+    if '' in out:
+        out[''] = to_signed(out[''])
+        if out[''] == 0:
+            del out['']
+    return out
 
 
 def lin_text(l):
@@ -1747,6 +1778,196 @@ class Guards:
                     if inner is not None:
                         return inner[0] + to_signed(K[1]), inner[1]
         return None
+
+
+# --------------------------------------------------------------------------
+# a004: propagate non-negativity through the arithmetic (chains)
+# --------------------------------------------------------------------------
+# A `cond` operand whose traced count is built from constants and length words
+# by non-negativity-preserving operators (+, x, min/max = a diamond's union,
+# sx16 of a proven 16-bit value; NOT subtraction) is DERIVED from the
+# base-class sites that assert those length words, provided each such root
+# (a) dominates the derived site (same routine, the dominator tree of the
+# routine entry, or earlier in the same block) and (b) no statement on any
+# path from the root back round to the root or on to the site MAY WRITE that
+# length word — so the value the root asserted is the value the derived site
+# reads.  A residue leaf (`ac1` after a WCMV, closure) is covered when that
+# WCMV's own source count is established.  A derived operand needs no assert
+# of its own; its row names the root(s).
+
+class Chains:
+    def __init__(self, blocks, tracer, owner, SIN):
+        self.blocks = blocks
+        self.tracer = tracer
+        self.owner = owner
+        self.SIN = SIN
+        self.roots = defaultdict(list)     # (routine, canonW) -> [(blk, idx, role, W tree)]
+        self.memo = {}
+
+    @staticmethod
+    def lenload_leaves(v, acc):
+        v = strip_paren(v)
+        k = v[0]
+        if is_lenload(v):
+            acc.append(v[2][0][2])
+            return
+        if k == 'root':
+            if v[1] == 'residue' and v[2][0] == 'WCMV' and v[2][1] == 'ac1':
+                acc.append(('residue', v[2][2], v[2][3]))
+            return
+        if k == 'union':
+            for x in v[1]:
+                Chains.lenload_leaves(x, acc)
+        elif k == 'call':
+            for a in v[2]:
+                Chains.lenload_leaves(a, acc)
+        elif k == 'bin':
+            Chains.lenload_leaves(v[2], acc)
+            Chains.lenload_leaves(v[3], acc)
+        elif k in ('paren', 'neg', 'not', 'mem'):
+            Chains.lenload_leaves(v[-1], acc)
+
+    def add_root(self, st, role, W):
+        self.roots[(self.blocks[st.blk].routine, canon(W))].append((st.blk, st.idx, role, W))
+
+    def dominates_stmt(self, rb, ri, sb, si):
+        if rb == sb:
+            return ri <= si           # the same statement: its base-class assert precedes it
+        if sb not in self.owner or rb not in self.owner:
+            return False
+        idom, entry = self.owner[sb]
+        if self.owner[rb][1] != entry:
+            return False
+        return dominates(idom, rb, sb)
+
+    def is_frame_word(self, W):
+        W = norm_addr(strip_paren(W))
+        if W[0] == 'call' and W[1] == 'wp' and len(W[2]) == 2 and strip_paren(W[2][0]) == ('sreg', 'wfp') \
+                and strip_paren(W[2][1])[0] == 'const':
+            return to_signed(strip_paren(W[2][1])[1])
+        return None
+
+    def may_write(self, st, W, wl, wslot):
+        """Could statement st write the word W?  wl = lin(W); wslot = its frame
+        slot number or None."""
+        if wslot is not None:
+            return wslot in st.sdefs
+        # a non-frame word: a store to the same address, a string statement
+        # whose destination could cover it, any call (a callee can write any
+        # record field), any raw instruction
+        if st.kind == 'assign' and st.lhs[0] == 'mem':
+            xl = lin(self.tracer.subst(st.lhs[2], st.blk, st.idx, frozenset()))
+            if st.lhs[1] == 'M32':
+                return xl == wl or lin_add(xl, {'': 1}) == wl
+            if st.lhs[1] == 'M8':
+                xb = xl                       # a byte address: word = floor(b/2); compare 2W and 2W+1
+                return xb == lin_scale(wl, 2) or xb == lin_add(lin_scale(wl, 2), {'': 1})
+            return xl == wl
+        if st.kind == 'string':
+            if st.op == 'WCMP':
+                return False
+            d = st.operands['dst']
+            a = self.tracer.subst(ptr_tree(d) if d['form'] != 'dst-varying' else d['addr'], st.blk, st.idx, frozenset())
+            al = lin(a)
+            nonconst_a = {t: c for t, c in al.items() if t}
+            nonconst_w = {t: c for t, c in wl.items() if t}
+            if d['form'] == 'dst-varying':
+                # word address of the length word; covers [W0, W0 + words]
+                start = al.get('', 0)
+                cnt = strip_paren(d['count'])
+                if nonconst_a != nonconst_w:
+                    return False              # a different base: distinct objects do not overlap
+                if cnt[0] != 'const':
+                    return wl.get('', 0) >= start
+                return start <= wl.get('', 0) <= start + (to_signed(cnt[1]) + 1) // 2
+            # a byte pointer: words [b/2, (b+n-1)/2]
+            if nonconst_a != {t: 2 * c for t, c in nonconst_w.items()}:
+                return False
+            cnt = strip_paren(d['count'])
+            b0 = al.get('', 0)
+            w2 = 2 * wl.get('', 0)
+            if cnt[0] != 'const':
+                return w2 + 1 >= b0
+            return b0 <= w2 + 1 and w2 <= b0 + to_signed(cnt[1]) - 1
+        if st.kind in ('call', 'rt_call'):
+            return True
+        if st.kind == 'raw':
+            return not RAW_NO_DEF.match(st.raw_op)
+        return False
+
+    def value_preserved(self, rb, ri, sb, si, W):
+        """No statement on any path from just after root (rb, ri) — up to the
+        site and round any loop back to the root — may write W."""
+        key = (rb, ri, sb, si, canon(W))
+        if key in self.memo:
+            return self.memo[key]
+        wl = lin(W)
+        wslot = self.is_frame_word(W)
+        ok = True
+        seen = set()
+        # statements after the root in its block
+        rblk = self.blocks[rb]
+        for j in range(ri + 1, len(rblk.stmts)):
+            if (rb == sb and j == si):
+                break
+            if self.may_write(rblk.stmts[j], W, wl, wslot):
+                ok = False
+                break
+        if ok and not (rb == sb and ri < si and True):
+            pass
+        if ok:
+            # the root's block flows on (unless the site was in it and we stopped)
+            work = deque()
+            if not (rb == sb):
+                work.extend(rblk.succ)
+            else:
+                # the site is later in the root's block: paths that leave the
+                # block and come back to it re-execute the root — nothing to check
+                pass
+            while work and ok:
+                n = work.popleft()
+                if n in seen:
+                    continue
+                seen.add(n)
+                b = self.blocks[n]
+                limit = si if n == sb else len(b.stmts)
+                for j in range(limit):
+                    if n == rb and j == ri:
+                        break                 # back at the root: it re-asserts
+                    if self.may_write(b.stmts[j], W, wl, wslot):
+                        ok = False
+                        break
+                if ok and not (n == sb) and not (n == rb):
+                    work.extend(b.succ)
+                elif ok and n == sb:
+                    # beyond the site the value no longer matters for THIS
+                    # instance, but a loop back to the site without passing the
+                    # root would read it again: keep exploring from the site on
+                    for j in range(si, len(b.stmts)):
+                        if self.may_write(b.stmts[j], W, wl, wslot):
+                            ok = False
+                            break
+                    if ok:
+                        work.extend(b.succ)
+        self.memo[key] = ok
+        return ok
+
+    def cover(self, st, leaves):
+        """-> (covered set for judge, [root descriptions]) for the leaves that a
+        dominating, value-preserving root covers."""
+        covered = set()
+        why = []
+        rname = self.blocks[st.blk].routine
+        for W in leaves:
+            if isinstance(W, tuple) and W and W[0] == 'residue':
+                continue
+            cw = canon(W)
+            for rb, ri, role, RW in self.roots.get((rname, cw), []):
+                if (rb, ri) == (st.blk, st.idx) or (self.dominates_stmt(rb, ri, st.blk, st.idx) and self.value_preserved(rb, ri, st.blk, st.idx, W)):
+                    covered.add(cw)
+                    why.append('%s:%d %s' % (rb, ri, role))
+                    break
+        return covered, why
 
 # --------------------------------------------------------------------------
 # per-site census
@@ -2056,11 +2277,88 @@ def run(args):
     for k, v in sorted(gcount.items()):
         print('  %-14s %-8s %4d' % (k[0], k[1], v))
 
+    # ---- a004: chains — derive cond operands from dominating base-class roots
+    chains = Chains(blocks, tracer, owner, SIN)
+    for st, rows, led in results:
+        opds = dict(site_operands(st))
+        for r in rows:
+            r['derived'] = ''
+            if r['pattern'] and r['verdict'] == 'cond':
+                cv = tracer.subst(count_tree(opds[r['role']]), st.blk, st.idx, frozenset())
+                c = strip_paren(cv)
+                if is_lenload(c):
+                    chains.add_root(st, r['role'], c[2][0][2])
+    established = set()       # ('residue', blk, idx) whose source count is established
+    changed = True
+    passes = 0
+    while changed and passes < 6:
+        changed = False
+        passes += 1
+        for st, rows, led in results:
+            opds = dict(site_operands(st))
+            for r in rows:
+                if r['verdict'] != 'cond' or r['pattern'] or r.get('guard') or r['derived']:
+                    continue
+                cv = tracer.subst(count_tree(opds[r['role']]), st.blk, st.idx, frozenset())
+                leaves = []
+                Chains.lenload_leaves(cv, leaves)
+                covered, why = chains.cover(st, leaves)
+                covered |= {x for x in leaves if isinstance(x, tuple) and x and x[0] == 'residue' and x in established}
+                if not covered:
+                    continue
+                (vd, reason), needs = judge(cv, covered=covered)
+                if vd == 'yes':
+                    r['derived'] = ' & '.join(why) if why else 'residue chain'
+                    r['derived_reason'] = reason
+                    changed = True
+            # a WCMV whose source count is now established makes its ac1 residue coverable
+            if st.op == 'WCMV':
+                src = [r for r in rows if r['role'] == 'src/ac1'][0]
+                if (src['verdict'] == 'yes' or src['pattern'] or src.get('guard') or src['derived']) and ('residue', st.blk, st.idx) not in established:
+                    established.add(('residue', st.blk, st.idx))
+                    changed = True
+    dcount = defaultdict(int)
+    for st, rows, led in results:
+        for r in rows:
+            if r['derived']:
+                dcount[(st.op, r['role'], r['class'])] += 1
+    print('\n=== a004. Chains: cond operands DERIVED from a dominating base-class root (%d passes) ===' % passes)
+    for k, v in sorted(dcount.items()):
+        print('  %-5s %-8s %-14s %4d' % (k[0], k[1], k[2], v))
+    print('  derived operands: %d' % sum(dcount.values()))
+    remaining = [(st, r) for st, rows, led in results for r in rows if r['verdict'] == 'cond' and not r['pattern'] and not r.get('guard') and not r['derived']]
+    print('  cond operands NOT derived: %d at %d sites' % (len(remaining), len({(st.blk, st.idx) for st, r in remaining})))
+    rk = defaultdict(int)
+    for st, r in remaining:
+        rk[r['class']] += 1
+    for k, v in sorted(rk.items(), key=lambda kv: -kv[1]):
+        print('    %-14s %4d' % (k, v))
+    # the independent memory-sourced lengths: distinct (routine, length word) among roots and remaining cond leaves
+    indep_roots = set(chains.roots)
+    indep_left = set()
+    for st, r in remaining:
+        cv = tracer.subst(count_tree(dict(site_operands(st))[r['role']]), st.blk, st.idx, frozenset())
+        leaves = []
+        Chains.lenload_leaves(cv, leaves)
+        for W in leaves:
+            if not (isinstance(W, tuple) and W and W[0] == 'residue'):
+                indep_left.add((blocks[st.blk].routine, canon(W)))
+    print('  distinct length words asserted at base-class roots: %d; distinct length words behind the undérived cond operands: %d (%d of them also roots)' % (
+        len(indep_roots), len(indep_left), len(indep_left & indep_roots)))
+    print('  cond operands not derived, listed (pc routine role class | why not):')
+    for st, r in remaining[:400]:
+        led = None
+        for s2, rows2, l2 in results:
+            if s2 is st:
+                led = l2
+                break
+        print('    %s %-22s %-7s %-12s | %s' % (led['pc'] if led else st.blk, blocks[st.blk].routine, r['role'], r['class'], r['reason'][:120]))
+
     # ---- write the ledger
     if args.out:
         with open(args.out, 'w') as f:
             f.write('# docs/Project58/sites.tsv — compiler/countflow.py census of every string count operand\n')
-            f.write('# block\tstmt\tpc\top\troutine\tidiom\trole\tform\tclass\tfed_by_residue\tpattern\tverdict\troots\tcount\treason\tverdict_through_len\troots_through_len\treason_through_len\tguard\n')
+            f.write('# block\tstmt\tpc\top\troutine\tidiom\trole\tform\tclass\tfed_by_residue\tpattern\tverdict\troots\tcount\treason\tverdict_through_len\troots_through_len\treason_through_len\tguard\tderived_from\n')
             for st, rows, led in results:
                 for r in rows:
                     f.write('\t'.join([
@@ -2068,7 +2366,7 @@ def run(args):
                         blocks[st.blk].routine or '-', led['idiom'] if led else '-',
                         r['role'], r['form'], r['class'], 'Y' if r['fed_by_residue'] else 'N',
                         'Y' if r['pattern'] else 'N', r['verdict'], ','.join(r['roots']),
-                        r['count'][:120], r['reason'][:200], r['verdict2'], ','.join(r['roots2']), r['reason2'][:200], r['guard'][:160]]) + '\n')
+                        r['count'][:120], r['reason'][:200], r['verdict2'], ','.join(r['roots2']), r['reason2'][:200], r['guard'][:160], r.get('derived', '')[:160]]) + '\n')
         print('wrote', args.out)
 
     # ---- the assert site list
@@ -2104,8 +2402,10 @@ def write_asserts(path, blocks, results):
         f.write('# (same block; the count expression is evaluated in the statement\'s own context, IR.md 5.8).\n')
         f.write('# tier: base-class = a varying read (count = length word at A, data at A+1); cond = non-negative iff the\n')
         f.write('#       named length word(s) are; guard = proven by a dominating guard (no assert NEEDED, listed for completeness);\n')
-        f.write('#       unknown = the tool could not decide (arithmetic / opaque / interprocedural); the assert still discharges it.\n')
-        f.write('# pc\tblock\tstmt\top\troutine\trole\tclass\ttier\tneeded\tassert\n')
+        f.write('#       unknown = the tool could not decide (arithmetic / opaque / interprocedural); the assert still discharges it;\n')
+        f.write('#       derived (a004) = built from base-class length words by +, x, min/max: covered by the ROOT site\'s assert(s)\n')
+        f.write('#       named in the root column (block:stmt role), which dominate it with the length word unchanged between.\n')
+        f.write('# pc\tblock\tstmt\top\troutine\trole\tclass\ttier\tneeded\troot\tassert\n')
         for st, rows, led in results:
             pc = led['pc'] if led else st.blk
             opds = dict(site_operands(st))
@@ -2113,15 +2413,17 @@ def write_asserts(path, blocks, results):
                 if r['verdict'] == 'yes':
                     continue
                 if r.get('guard'):
-                    tier, needed = 'guard', 'no'
+                    tier, needed, root = 'guard', 'no', ''
                 elif r['pattern']:
-                    tier, needed = 'base-class', 'yes'
+                    tier, needed, root = 'base-class', 'yes', ''
+                elif r.get('derived'):
+                    tier, needed, root = 'derived', 'no', r['derived']
                 elif r['verdict'] == 'cond':
-                    tier, needed = 'cond', 'yes'
+                    tier, needed, root = 'cond', 'yes', ''
                 else:
-                    tier, needed = 'unknown', 'yes'
+                    tier, needed, root = 'unknown', 'yes', ''
                 f.write('\t'.join([pc, st.blk, str(st.idx), st.op, blocks[st.blk].routine or '-', r['role'], r['class'],
-                                    tier, needed, assert_text(st, r['role'], opds[r['role']], tier, pc)]) + '\n')
+                                    tier, needed, root, assert_text(st, r['role'], opds[r['role']], tier, pc)]) + '\n')
                 n += 1
     print('wrote %s (%d operand rows)' % (path, n))
 
@@ -2531,7 +2833,7 @@ def selftest():
     assert not base_class_match(cnt, Parser('bp((sx16(M16[wp(ac3, 2)]) * 9), -0x1FD5F07E)').expr())
     assert base_class_match(('call', 'sx16', [('mem', 'M16', ('const', 0x7000021C))]), ('bplit', 0x7000021D, 0))
     assert base_class_match(('call', 'sx16', [('mem', 'M16', Parser('wp(wfp, 60)').expr())]), Parser('bp(wfp, 122)').expr())
-    assert lin(Parser('ac3*2 + 0x7000068A:0').expr()) == {'ac3': 2, '': 2 * 0x7000068A}
+    assert lin(Parser('ac3*2 + 0x7000068A:0').expr()) == {'ac3': 2, '': to_signed(2 * 0x7000068A)}
     # tokenizer edges
     assert Parser('M32[0x70000210] - 0x280').expr()[0] == 'bin'
     assert Parser('wp(ac3, -12)').expr()[2][1] == ('const', -12)

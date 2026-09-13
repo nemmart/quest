@@ -9,21 +9,22 @@ or any artifact was changed; no assert was emitted; nothing executed.
 
 ---
 
-## 1. The answer in one table
+## 1. The answer — three tiers (a004; the two-tier table of a002 is below it)
 
-| tier | sites | operands | what discharges it |
+| tier | operands | sites | what it rests on |
 |---|---:|---:|---|
-| proven by construction | 998 | 2,047 | nothing to do |
-| proven by a dominating guard (a001 Q3, reported separately) | 8 (18 operands, 12 sites touched) | 18 | nothing to do |
-| conditional on named length words — the assert class | 611 (637 under policy (a)) | 1,171 | `asserts.tsv`, tiers `base-class` (262 rows) and `cond` (909 rows) — after a003's algebraic matcher; 223 / 948 in a002 |
-| unproven | 72 (46 under policy (a)) | 130 | `asserts.tsv`, tier `unknown` (130 rows); the assert still discharges it at runtime |
-| negative by construction | **0** | 0 | — |
+| **proven** — construction (constants, literal byte counts, `ac0 = 0` after a copy, `ac1 = 0` after a fill) or a dominating guard | **2,065** (2,047 + 18) | **1,006** | nothing to check |
+| **layout-backed and asserted** — the count is a varying's own length word (the base class: count = the 16-bit word at `W`, data at `2W + 2`; 286 operands, 169 distinct length words), or is built from such length words by `+`, `×`, `min`/`max` with every root's assert dominating and the word unchanged between (785 derived operands) | **1,067** | **549** | the STRUCTURAL argument — a negative count walks the pointer back over the string's own length word, which no compiler emits — checked by ONE assert per root (282 rows); the 785 derived operands need none |
+| **asserted only** — a length word the routine never reads as a varying piece on a dominating path (104 `cond` operands, 56 distinct words, 39 of them varyings elsewhere in the routine), or arithmetic the tool cannot sign (130 `unknown`) | **234** | **134** (38 routines; 62 of the sites `cond`-only) | the site assert, and nothing else |
+| negative by construction | 0 | 0 | — |
 
-The counts are signed and the direction is decided by them (PROMPT §Why): at
-1,006 sites the copy is forward by proof; at the other 683 it is forward iff
-the site's assert holds — the same condition, stated once, checked at runtime.
+Asserts to emit: **516** (282 base-class + 104 cond + 130 unknown), down from
+1,326 in a002; `asserts.tsv` carries the 785 `derived` rows with `needed = no`
+and the root site(s) that cover each.
 
----
+The a002 two-tier view, for continuity (verdict tiers are unchanged by a003 /
+a004 — they moved the *justification*): proven 998 + 8 guard / conditional 611
+(637 under policy (a)) / unproven 72 (46) / negative 0.
 
 ## 2. What could not be proven, and what it would take
 
@@ -215,8 +216,8 @@ a union-valued pointer must satisfy it in every member; a tree deeper than
 
 | | a002 | a003 |
 |---|---:|---:|
-| base-class operands / sites | 227 / 213 | **266 / 251** |
-| moved `cond → base-class` | | 39 (WCMV src 36, WCMP s1 3) |
+| base-class operands / sites | 227 / 213 | **266 / 251** (286 / 268 after a004's wrap fix, §9) |
+| moved `cond → base-class` | | 39 (WCMV src 36, WCMP s1 3) (59 after the wrap fix) |
 | moved `unknown → base-class` | | 0 (a bare length read is always `cond`, never `unknown`) |
 | previously matched, now lost | | 0 |
 | `asserts.tsv` rows: base-class / cond / guard / unknown | 223 / 948 / 18 / 130 | **262 / 909** / 18 / 130 |
@@ -228,14 +229,81 @@ reader trusts. Accidental matches: none found (CountProof §4.1). Self-test
 extended with 7015C90D's shape, a near miss (`2W + 4`), a static, a frame
 slot, and the `ac3*2 + 0xW:b` byte-pointer spelling.
 
-## 9. Files
+## 9. a004 — propagate non-negativity through the arithmetic (Sep 13 2026)
+
+The rule, as implemented (`Chains` in `countflow.py`): a `cond` operand is
+DERIVED when its traced count is `yes` under `judge()` with every length-word
+leaf `W` treated as non-negative for which a base-class ROOT exists that
+(a) is the same statement or dominates the site within the routine (the
+entry's dominator tree), and (b) is value-preserving: no statement on any
+path from just after the root — on to the site, past it, and round any loop
+back to the root — MAY WRITE `W` (frame word: the slot model's effects;
+other word: a store to the same linear address, a string destination whose
+range covers it, any call, any opaque raw instruction). A WCMV `ac1` residue
+leaf is covered once that WCMV's own source count is established (closure);
+the pass iterates to a fixpoint (2 passes). The operator set is `judge()`'s:
+`+`, `×` of non-negatives, a diamond's union (min/max), `sx16(trunc16(x))`;
+subtraction stays where it was.
+
+**Movement** (of the 909 `cond` rows in a003's `asserts.tsv`):
+
+| | operands |
+|---|---:|
+| derived from a dominating root — assert dropped | **785** (WCMV dst 490, src 295; 206 of them at the ROOT'S OWN SITE: the destination count of `[@ac2, LEN] = [@W, varying]` is the same `LEN`) |
+| still `cond` — assert kept | **104** at 63 sites |
+| distinct length words asserted at base-class roots | **169** |
+| distinct length words behind the 104 | **56**, of which 39 ARE read as a varying somewhere in the same routine (a root exists but does not dominate, or a call / unbounded copy sits between); 17 are never read as a piece (`0x70000A4E + 2`, DISPLAY_CAVE — a static varying only ever appended to) |
+
+So the "genuinely independent memory-sourced lengths" are **169 roots + 56
+uncovered = 225 length words**, not 909 — and 169 of those carry the structural
+argument. The integrator's guess of "low hundreds" was right.
+
+Two corrections found on the way, both to a003's matcher, both sound-side
+(misses, never false matches):
+
+1. **32-bit wrap.** The linear forms compared constants as Python integers;
+   `LNLDA 0,[ac3+0x70151F64]` lifts to `wp(ac3, −267051164)` and the matching
+   `LLEFB` to `ac3*2 + 0x70151F65:0` — the identity `2W + 2` holds modulo 2^32
+   (IR.md 5.1: host arithmetic wraps). Constants now wrap. **Base class 266 →
+   286 operands**; a003's table is corrected in §8 below.
+2. **`R[a]` is `M32[a]`** at every site (Indirection.md §3, the three
+   `ptr-bit31-clear` rows). The tracer now reads `R[wp(wfp, −12)]` as the
+   argument cell it is, so DIED's `sx16(M16[R[ac3 + -12]]) + 3` chain finds
+   its root `[@M32[wp(ac3, −12)], varying]`.
+
+**Dropping the asserts is safe** under exactly the conditions the rule
+checks: the root's assert executes before the derived site on every path
+(dominance, or the same statement — its assert precedes it), the length word
+is the same value (value-preservation), and the arithmetic is monotone. The
+one assumption carried over is `sx16(trunc16(x)) = x` (no 16-bit overflow of
+a stored total; the totals are wide, `XWSTA`/`XWLDA`, so the assumption is
+exercised only where a total was narrowed).
+
+**Method — a004 §4, four for four.** Every enlargement of the strongest tier
+in this project came from looking at ONE concrete site and asking why it did
+not fit, and every fix was to the MODEL, not to the search:
+
+| # | fix | effect |
+|---|---|---|
+| 1 | `assign_varying`'s length store is a write of the count | 7 → 20 operands provable through writers |
+| 2 | algebraic `bytes(ptr) − 2·W = 2` | 227 → 266 base-class operands |
+| 2′ | …with 32-bit wrap, and `R[] = M32[]` | 266 → 286 |
+| 3 | propagate through `+`, `×`, `min`/`max` from dominating roots | 909 `cond` → 104; 785 asserts dropped |
+
+The instinct when a tier is too big is to reach for more analysis; here the
+right move was each time to notice the tool was refusing to see something the
+IR already said. Recorded as the method finding a004 asked for: **a classifier
+that under-reports its best tier is not conservative — it is discarding
+arguments, and the discard is invisible in its output.**
+
+## 10. Files
 
     docs/Project58/q001-plan-gate.md      the gate (unchanged after a001)
     docs/Project58/CountProof.md          the result of record
     docs/Project58/REPORT.md              this
     docs/Project58/sites.tsv              3,366 operand rows, default (sound) policy
     docs/Project58/sites-infercaps.tsv    the same under a001 Q2 policy (a)
-    docs/Project58/asserts.tsv            1,319 rows: site, operand, tier, needed, exact assert text (tiers per a003)
+    docs/Project58/asserts.tsv            1,319 rows: site, operand, tier, needed, root, exact assert text (a004: 516 needed, 785 derived)
     docs/Project58/countflow.out          console output, default policy (the per-site lists)
     docs/Project58/countflow-infercaps.out
     compiler/countflow.py                 the Stage A tool (new file)
