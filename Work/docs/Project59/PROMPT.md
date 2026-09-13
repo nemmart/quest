@@ -1,0 +1,178 @@
+# Project 59 — ONE SITE, PROVEN OR NOT
+
+## GOAL
+
+**Prove `len ≤ 30` at DISPLAY_INVENTORY `70167F05`, or establish exactly what
+stops you.**
+
+One statement. One routine. However deep it takes.
+
+This is deliberately narrow. P58 classified 134 sites as **asserted only** —
+unproven, carried by a runtime assert. We picked one at random and could not
+settle it by reading, twice getting it wrong in opposite directions. So the
+question is whether these sites are **genuinely unprovable** or whether the
+analysis has not been careful enough. **One worked example answers that for the
+class.**
+
+**Success is either outcome**, stated at the right tier:
+
+- **PROVEN** — `len ≤ 30` on every path reaching the site, with the argument
+- **NOT PROVEN** — the specific fact that is missing, why no available evidence
+  supplies it, and what would
+
+**A third outcome is also success: the site is fine for a reason we have not
+considered.** Say so.
+
+---
+
+## The site
+
+`docs/Project58/asserts.tsv`, tier `unknown`, reason `register`:
+
+```
+70167F05   block 70167EF9   WCMV   DISPLAY_INVENTORY   dst/ac0 and src/ac1
+```
+
+### What is established
+
+**Block 70167EF9 — the site:**
+
+```
+ac0 = sx16(M16[wp(ac2, 0)])       ; the string's current length
+ac0 = add(ac0, ac1)               ; new length = old + piece
+M16[wp(ac2, 0)] = trunc16(ac0)    ; store it back
+ac2 = bp(ac2, 2)                  ; the data — 2W+2, the varying layout
+ac2 = add(ac2, ac0)               ; to the new end
+ac2 = sub(ac2, ac1)               ; back off by the piece → the old end
+ac0 = ac1                         ; dst count := piece length
+[@ac2, ac0] = [@0x701673AD:0, ac1] ; WCMV — THE SITE
+```
+
+**Block 70167EEF — the sole writer of `ac1`:**
+
+```
+ac2 = wp(ac3, 6)                            ; the string is frame slot 6
+ac1 = 0x1E                                  ; 30
+ac0 = 0x03                                  ; 3
+ac1 = nsub(ac1, M16[wp(ac2, 0)])            ; ac1 = 30 − len
+goto [70167EF8, 70167EF9] (ac0 >=s ac1)     ; WSGE, SIGNED
+```
+
+**Block 70167EF8** (taken when the guard is FALSE, i.e. `ac1 > 3`):
+`ac1 = ac0` → 3.
+
+So **`ac1 = min(3, 30 − len)`**, and it is **negative iff `len > 30`**.
+
+Label order verified: IR.md §3 — *"a STRICT index into the label list:
+false=0 / true=1"*. Signedness verified: `EagleCompute.cpp:198` casts both
+operands to `int32_t`, and the machine has separate unsigned forms
+(`WUSGT`/`WUSGE`) the compiler did not use.
+
+**So the whole question is: can `len` — the length word at `wp(ac3, 6)` —
+exceed 30?**
+
+### What we found looking for the bound, and where we stopped
+
+`wp(ac3, 6)` in DISPLAY_INVENTORY is written **three times, all bare length
+stores**, never by a varying assignment with a capacity clamp:
+
+```
+556:  M16[wp(ac3, 6)] = trunc16(ac0)
+622:  M16[wp(ac3, 6)] = trunc16(ac0)
+917:  M16[wp(ac3, 6)] = trunc16(ac1)
+```
+
+So **`assign_varying`'s `min(len, cap)` induction does not apply here.** The
+length is maintained by hand — the append primitive above. The bound, if there
+is one, is a property of the program's arithmetic.
+
+**Do not take that as settled.** Two readings of this site were already wrong:
+first the direction of the `min`, then an inferred `CHAR(30)` capacity that
+turned out to be a different slot in a different frame. **Re-derive
+everything.** Trust nothing in this section you have not checked.
+
+---
+
+## What to do
+
+**Trace `len`.** Every write to the length word at `wp(ac3, 6)` on every path
+reaching `70167F05`, what each adds, and what the running total can reach.
+The appends add known pieces; the question is whether the sum is bounded.
+
+Things that may matter, none of them established:
+
+- what slot 6's field actually is, and whether any declaration of it exists
+  anywhere (`game/declarations.json` covers seven translated routines; is
+  DISPLAY_INVENTORY one?)
+- the other bounds in the same routine — line 646 uses `(0 − len + 19)`, a
+  remaining-room subtraction against **19**, not 30. Different fields, or the
+  same one against different limits?
+- whether the appends are guarded by their own tests upstream
+- whether a callee writes the slot through a by-reference argument
+- P58's `<opaque slot 6 clobbered: WCMV destination (frame range unknown)
+  @70167ED5:7>` — is that clobber real, or an over-approximation?
+
+**Use `compiler/countflow.py`.** P58 built it; it does reaching definitions to
+a true fixpoint over ac0–ac3 and frame slots. Extend it if you must (new file),
+but **read `docs/Project58/REPORT.md` §2 first** — it lists what defeated it
+and why.
+
+---
+
+## Rulings
+
+1. **"The game works" is evidence, not a proof**, and it is evidence about
+   **executed paths with real data**. It is worth stating — if the only reason
+   to believe `len ≤ 30` is that the program has never misbehaved, **say that
+   is the reason**. That is a real finding and it is the answer for the whole
+   tier if it is the answer here.
+2. **Name the tier**: proven by construction / by dataflow / by a dominating
+   guard / by provenance / unproven. P58's ruling 1, unchanged.
+3. **Re-derive, do not inherit.** Everything above was worked out in
+   conversation and twice got wrong. The block listings are transcriptions —
+   check them against the book.
+4. **If the site turns out PROVABLE, the finding is about the METHOD**, not
+   about this site: what did P58's analysis miss, and is the miss systematic?
+   That is worth more than the site.
+
+---
+
+## Part 1 — no plan gate
+
+**This project is small enough to run straight through.** Push a question only
+if you are blocked. Report when you have an answer or have established you
+cannot get one.
+
+---
+
+## Deliverable
+
+`docs/Project59/REPORT.md`:
+
+- **the verdict**, at its tier
+- **the trace**: every write to the length word, every path, what bounds each
+- **what P58 missed**, if anything, and whether the miss is systematic — this
+  is ruling 4 and it decides whether the other 133 sites get revisited
+- **what would settle it** if it is not settled
+- anything above that did not survive contact — expect some; two readings
+  already failed
+
+---
+
+## Boundaries — BINDING
+
+1. **You may WRITE:** `docs/Project59/**`, and tooling in `compiler/` (**new
+   files only** — do not modify `countflow.py`).
+2. **Do NOT modify** `emulation/**`, `game/**`, `docs/IR.md`,
+   `docs/Project58/**`, or any artifact. **Regenerate nothing.**
+3. **Nothing executes.**
+
+## Coordination
+
+`docs/Project59/q00N-short-title.md`, push to **main**, then **STOP and tell
+the user**. You own `q*.md`; the integrator owns `a*.md`. SOP:
+`docs/INTEGRATOR.md` §10.
+
+## Delivery
+
+**Push to `p59-onesite`.** One `Work.tgz` with the report.
