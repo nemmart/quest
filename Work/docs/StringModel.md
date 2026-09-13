@@ -61,37 +61,78 @@ piece. Blocks carry **up to 5** twins; there are 57 in total.
 `bound=unbounded` with the real size a runtime expression over a parameter's
 length. Some are `bound=exact size=8`.
 
-## 3. The proposed form
+## 3. The proposed form — three forms, nothing ambiguous
 
-Positional. **There is no separate `s` class** (question 4): a string is a `v`
-with a `string` vtype, so the forms below are one set, not two. `s` is written
-below only where a twin is meant.
+**Revised Sep 13 2026.** The earlier version of this section proposed `+=`
+disambiguated by operand type. **That is withdrawn — see §3.1, which is the
+constraint that shapes everything here.**
 
 ```
-s + <u32> = "literal"        overwrite starting at that byte offset
-v + <u32> = "literal"        same
-s          = "literal"       means  s + 0 = "literal"
-                             so `s = ""` copies ZERO BYTES and does NOT
-                             resize (user's stated preference, Sep 13; this
-                             is the overwrite-span reading of question 5 and
-                             is NOT yet checked against the book). It is
-                             consistent with the machine's own primitive —
-                             the located form `[@a, n] = piece` IS a counted
-                             copy with no length word. A varying assignment
-                             may then be that primitive with a length store
-                             in front, in which case both readings are right
-                             at different layers: the IR primitive overwrites
-                             a span, the STATEMENT sets the length.
-
-s += "literal"               append
-v += "literal"               append
-s += <u32>                   extend the length by N
-v += <u32>                   extend, blank-filling
+v1 + <offset> = <source>     copy content at a byte offset
+|v1|                         the LENGTH — a LOCATION: readable and writable
+cap(v1)                      the CAPACITY — read-only, folds to a literal
 ```
 
-**`+=` is disambiguated by the OPERAND type, not the destination's** — a string
-operand appends, a numeric operand extends. That keeps `s` and `v` coherent
-under the same spelling.
+That is the whole model. `v1 = x` means `v1 + 0 = x`.
+
+**No `+=`.** `|v1| = |v1| + 4` says it with ordinary word arithmetic over an
+rvalue, so there is no compound operator whose meaning has to be inferred.
+
+**Append decomposes** into the two operations it is made of:
+
+```
+v1 + |v1| = "text"
+|v1|      = |v1| + 4
+```
+
+Two statements where an earlier draft had one. **Whether the machine folds
+them is a census question (§5 Q6), and this form does not prejudge it**: if the
+book folds, a rewrite folds; if it does not, we match directly. The naive form
+holds no composite statement whose parts cannot be rewritten independently.
+
+### 3.1 Why: operand-type inference DIES UNDER BINDING
+
+This is the constraint, and it rules out a whole family of otherwise-reasonable
+designs.
+
+An earlier draft had `+=` disambiguated by its operand's type — a string
+operand appends, a numeric operand extends. Then:
+
+```
+naive:       v1 += e3        e3 is declared u32   →  extend by N
+after bind:  v1 += ac1       ac1 is UNTYPED       →  ???
+```
+
+**Registers carry no type.** So binding — a sound, semantics-preserving
+rewrite — *destroys the information the statement's meaning depended on*. The
+transformed IR no longer says what the naive IR said, which breaks the property
+the whole match rests on: that a meaning can be read off the text at every
+step.
+
+**Therefore: no construct's meaning may depend on an operand's declared type.**
+The operation must be in the spelling. `|v1|` and `v1 + n = …` are unambiguous
+whatever their operands turn out to be.
+
+### 3.2 Why `|v1|` and not `len(v1)`
+
+`len(v1) = 12` does not fit the grammar. The IR's operators — `wp`, `bp`,
+`sx16`, `lsh` — are **computations** producing rvalues. The one lvalue-capable
+form, `M32[e]`, is **addressing**: it names a location.
+
+The length word is a location, so it needs a location-flavoured spelling, not a
+function. `|v1|` designates it the way `M32[e]` designates a cell.
+
+`cap(v1)` stays a function because it genuinely is a computation over the
+declaration, never a place — and read-only.
+
+### 3.3 Open, small
+
+- **`|v|` on a fixed `char n`** — probably reads as the constant `n` and
+  refuses assignment, there being no length word. Type-dependent in its
+  LEGALITY but not in its spelling, which is the right way round.
+- **What `|v|` lowers to at placement** — presumably `M16[wp(<placed>, 0)]`. So
+  `|v|` and `cap(v)` are naive-form notation that disappears before the match,
+  the way `e` values do.
 
 ## 4. Dense assignment, located form by rewrite
 
