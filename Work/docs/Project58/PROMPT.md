@@ -84,95 +84,64 @@ regex and the residue class is large.
 ### The 593 are the project
 
 A `varying` length comes from a **length word in memory**, so its sign is a
-property of the DATA, not of the code. `DISPLAY_INVENTORY` is exactly this case
-going wrong.
+property of the DATA, not of the code.
 
-**The induction that might work:** every length word is written by
-`assign_varying`, which stores `min(len, cap)` — and `cap` comes from a
-declaration, so it is non-negative. If every *write* is non-negative, every
-*read* is. Base case: initialised data in `quest.mem`.
+**The assertion worth aiming for** — and the shape of a good answer — is:
 
-**And the counterexample tells you where it breaks:** `DISPLAY_INVENTORY` reads
-a field that **is not a string** as a varying. So the induction holds over
-length words that are genuinely length words, and fails where a site reads
-arbitrary data through a varying accessor.
+> A varying length word **written by `assign_varying`** is non-negative, because
+> it stores `min(len, cap)` and `cap` comes from a declaration. So if every
+> write is non-negative, every read is.
+>
+> **…except at these N enumerated sites**, each a named fact rather than a gap.
 
-**So the shape of the true statement is probably:** *non-negative except at
-sites that read a non-string field as a varying — and here is the enumeration
-of those sites.* **Produce that enumeration.**
+**Produce that enumeration.** It is the project's most valuable output, because
+it is the exception list every later rewrite must respect.
 
----
+Two distinct ways the induction can fail. **Both must be enumerated, and they
+are different problems:**
 
-## Stage A — build the reaching-definitions tool FIRST
+#### (a) A site reads something that was never written as a string
 
-**You cannot prove 1,689 sites by reading them.** P2's 154 register sites and
-most of the 463 need, for a given site, *which blocks define `ac0` and `ac1` on
-the paths reaching it*. That instrument does not exist. Build it before
-proving anything.
-
-`emulation/tools/dataflow.py` exists from an earlier project — **report at the
-gate what it actually does** and whether it is extensible or should be
-replaced.
-
-Two things make this tractable, and one is a trap:
-
-- **the state space is tiny** — four accumulators and a carry, and P52's census
-  found only ac2/ac3 ever serve as an address base (19,344 uses, zero on
-  ac0/ac1)
-- **THE TRAP: string statements define ac0–ac3 INVISIBLY.** `[@a, n] = piece`
-  names two locations and silently redefines four accumulators and `c`
-  (`residues_after_copy`, `EagleString.cpp:152–163`); `cmp` redefines all four;
-  `words(...)` redefines ac1/ac2/ac3. **A naive reaching-definitions pass will
-  trace THROUGH them and give wrong answers.** This is P56's F4, which found
-  82% of `LDAFP`s exist because of these residues. The tool must treat every
-  string statement as a definition of the registers it actually writes.
-
-**The tool is infrastructure, not scaffolding.** DESIGN §5.2's slot bijection
-needs the same analysis over `LDAFP`, and every future binding precondition
-needs it. Build it to be reused, and give it its own correctness check —
-ruling 1 applies to the tool as much as to the proofs.
-
----
-
-## The closure lemma — verify it, then use it
-
-**If `ac0` and `ac1` are non-negative going IN to a `WCMV`, they are
-non-negative coming OUT.**
-
-With `n > 0`, `len > 0`, `t = min(n, len)` (`residues_after_copy`):
+This is the known counterexample and it is **not** a case of "a varying read
+gives a negative number". Read F-B1 precisely:
 
 ```
-ac0 = 0                                    ≥ 0
-ac1 = len − sgn(len)·t = len − min(n, len) ≥ 0
+ac1 = cmp([@record − 62, varying], [@IN_BUFFER, varying])   7016816B
 ```
 
-**Verify this against the implementation rather than taking it from this
-prompt**, including the `t = 0` and `len = 0` edges, and state it for `cmp` and
-`block_move` too.
+The count reaches `ac1` by `XNLDA 1,[ac2+0x7FC2]` — the varying accessor
+loading a length from memory. What sits at `record − 62` is a **game record
+field**, not a string anything ever wrote as one, and it holds `0xFFFF` on the
+login path.
 
-### Why it matters: it collapses the chains
+So the induction is not wrong; the site is reading non-string data through a
+string accessor. **Enumerate every site that does this.** If the list is small
+and every member reads a game record field, that is a strong result.
 
-The tail-split idiom does a copy, then uses the residue `ac1` as the count for
-the next copy. With closure, **you do not need to trace the chain** — establish
-non-negativity at its HEAD and it carries to every link by induction.
+#### (b) An UNINITIALISED varying is read
 
-So the proof restructures:
+This breaks the induction's **base case**, not its step, and it may be the
+larger problem.
 
-1. **find the chain heads** — sites whose counts come from somewhere other than
-   a previous string statement's residue
-2. **prove those** — constants, literal byte counts, varying reads (the 593)
-3. **the rest follows by closure**
+A `CHAR(n) VARYING` local read before it is ever written holds whatever its
+length word happened to contain. **And under M4a those slots are per-routine
+global areas at 0x74 that PERSIST BETWEEN CALLS** — so it is not
+garbage-once, it is the previous call's leftover.
 
-And it narrows what Stage A's tool must answer: not *trace the full definition
-chain*, but **does this count come from a string residue, or from outside?**
-Much cheaper to build and to check.
+Three sub-cases, and they need separating:
 
-It also explains why StringsDesign's tail-split claim felt right — the idiom
-really is safe, for this reason. It was simply never stated as a closure
-property with the arithmetic behind it. **That is the difference between a
-reading and a proof, and it is what this project is for.**
+| case | how to find it | what it means |
+|---|---|---|
+| **written at load** | `quest.mem` holds the image; a static varying's initial length word is knowable | the base case, done properly — **check it** |
+| **written on some paths, read on all** | dataflow: a varying read whose length word has **no dominating write** | the interesting one, and squarely Stage A's tool |
+| **never written, read anyway** | no write anywhere in the routine | a bug in the original — but the original RAN, so either it does not occur or the leftover was always benign. **Say which** |
 
----
+**And name the M4a interaction, because it is a real hazard nobody has
+stated:** a slot that was originally STACK-allocated got a fresh value per
+call; migrated to a global 0x74 area it now carries the previous call's
+length. If the original relied on stack garbage being small and our global slot
+holds a large leftover, behaviour differs. That is an emulator-level concern
+rather than a matching one — **report it, do not chase it.**
 
 ## What to establish
 
@@ -239,8 +208,9 @@ binding precision is recoverable.
    number that sizes the whole project
 4. **Your corrected classification** of the sites, with method
 5. **Your approach to the 593**, and whether the induction looks sound
-6. **A first pass at the exception list** — how many sites read a non-string
-   field as a varying?
+6. **A first pass at BOTH exception lists** — how many sites read a non-string
+   field as a varying (a), and how many read a varying with no dominating
+   write (b)?
 7. **What you expect to be unprovable**, before you try. Pre-registered, so it
    is scoreable — see `docs/Project55/REPORT-2.md` for why this matters
 
