@@ -101,16 +101,28 @@ positive constant, so **all 12 fills are forward**; all 12 are the
 self-overlapping smears (`src = dst − 1` ×5, `− 2` ×7) the book annotates —
 well-defined because `block_move` steps one word at a time (IR.md 5.8).
 
-### 3.2 The base class — 227 operands at 213 sites, tier: PROVENANCE, discharged by assert
+### 3.2 The base class — 266 operands at 251 sites, tier: PROVENANCE, discharged by assert
 
-An operand whose count is the 16-bit word at word address `A` and whose
-pointer is byte `2A + 2` — the layout of a `CHAR(n) VARYING`, on either side
-of the statement (a001 Q1):
+An operand whose count is the 16-bit word at word address `W` and whose
+pointer is byte `2W + 2` — the layout of a `CHAR(n) VARYING`, on either side
+of the statement (a001 Q1). **The test is algebraic** (a003): with both
+operands traced to their roots, `bytes(pointer) − 2·W = 2` must hold as a
+linear identity (`wp(b, d) = b + d`, `bp(b, d) = 2b + d`, `0xW:b = 2W + b`,
+constant multiples fold, everything else is an opaque term by canonical
+spelling), however `W` and the pointer are written — computed bases, record
+indexing through a multiply, by-reference pointers.
 
 | how recognised | operands |
 |---|---:|
 | by form, `[@A, varying]` (the lifter's rule `string_sites.py:1696/2177`): WCMV src 160, WCMP s1 31, s2 15 | 206 |
-| by dataflow, a register operand whose traced count is `sx16(M16[wp(b, k)])` and traced pointer `bp(b, 2k+2)`: WCMV src 17, WCMP s1 3, s2 1 | 21 |
+| by dataflow + algebra, a fixed operand whose traced count is `sx16(M16[W])` and traced pointer satisfies the identity: count spelled as an expression (`lenload-expr`) WCMV src 35, WCMP s1 2; count in a register WCMV src 18, WCMP s1 4, s2 1 | 60 |
+
+(P58 as accepted in a002 had a SYNTACTIC matcher — a simple base register and
+a constant `k` — and reported 227 / 213. It missed 39 operands whose length
+word is a record field reached by index arithmetic, e.g. ALCHEMIST_HOME
+7015C90D, `W = slot2·9 − 0xFEAF841`, pointer `2·(slot2·9) − 0x1FD5F080 =
+2W + 2`. All 39 were `cond`; none was `unknown`; nothing previously matched
+was lost. a003 §4.)
 
 Address shapes of the 206: own-frame slot 128; static word 36 (`IN_BUFFER`
 0x7000021C ×29, 0x70000C34 ×3, four others ×1); SD_PTR / OBJ_PTR / PLAYER-cache
@@ -122,11 +134,12 @@ immediately below the data, so a negative count reads or writes the header
 itself. No compiler emits that deliberately. **Why it is an assumption and not
 a proof:** the length word's writer is, in 111 of 206 cases, a runtime callee
 (`?READ`, `?UNSIGNED_TO_CHAR`), another routine through a by-reference argument,
-or an unbounded copy; in 96 it is outside the routine's frame altogether
-(statics, record fields, arguments); only **20** trace to a provable
-non-negative write on every path (a literal or constant varying assignment).
-The induction "every write is non-negative" is sound where it applies and
-applies to one operand in ten. **The assert is the mechanism.**
+or an unbounded copy; in 135 it is outside the routine's frame altogether
+(statics, record fields, arguments — the algebraic matcher's 39 are all record
+fields); only **20** of the 266 trace to a provable non-negative write on
+every path (a literal or constant varying assignment). The induction "every
+write is non-negative" is sound where it applies and applies to fewer than one
+operand in ten. **The assert is the mechanism.**
 
 The exact assert per operand is in `asserts.tsv` (tier `base-class`):
 
@@ -216,7 +229,9 @@ blindness and min arithmetic over data the routine does not own.
 ### 4.1 Sites reading non-string data through a string accessor (PROMPT §a)
 
 The base-class operands whose length word is a **record field** (18 by form,
-plus 10 through an argument pointer): all are PLAYER / OBJ record fields
+plus 10 through an argument pointer, plus the 39 the algebraic matcher
+recovered — OBJ and PLAYER fields indexed by a multiply): all are PLAYER / OBJ
+record fields
 read as varyings — name, title, spell and object strings the game keeps in
 its records. `7016816B` is one. Whether such a field "was written as a string"
 is a property of every program that writes the shared page; **this project
@@ -224,6 +239,17 @@ enumerates the readers (in `sites.tsv`, address shape `SD_PTR record field`,
 `OBJ_PTR record field`, `PLAYER cache field`) and does not claim the writers.**
 Every member is discharged by the base-class assert; `7016816B` is expected to
 fire on the login path.
+
+**Can the algebraic identity match by accident (a003 §3)?** Only a 16-bit
+integer immediately followed by the bytes it counts satisfies `count =
+M16[W]`, `data = 2W + 2` — which IS a varying, whatever the declaration called
+it; the structural argument (a negative count walks the pointer back over the
+count word) applies to any such pair. I inspected all 39 new matches: 37 are
+`sx16(M16[record + index·stride + field])` with the pointer one word on
+(OBJ/PLAYER name, title and spell fields); 2 are register counts loaded from a
+PLAYER record with the pointer computed from the same record base (CAST.2
+70162AAF, OP_EDIT.3 7017469C). No coincidental match found; a `t1`-scratch or
+union-valued pointer never matches (the identity is required of every member).
 
 ### 4.2 Uninitialised varying reads (PROMPT §b)
 
