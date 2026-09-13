@@ -100,7 +100,61 @@ it is the exception list every later rewrite must respect.
 Two distinct ways the induction can fail. **Both must be enumerated, and they
 are different problems:**
 
+#### The BASE CLASS — the `len → ac0, chars → ac2` pattern, discharged by assertion
+
+**Do this first. It is probably most of the 593.**
+
+A varying at word address `x` has its **length word at `x`** and its **data at
+word `x+1`, i.e. byte address `2x + 2`**. So when a site loads the count from
+`[x]` and sets the pointer to `2x + 2`, the count and the pointer are derived
+from **one address** and the site is reading something laid out as a varying.
+
+That relation is **mechanically recognisable**, and it is the base class.
+
+**Why non-negative can be assumed there** — a structural argument, not an
+aesthetic one. The length word sits immediately BELOW the data, so a negative
+count walks the pointer backward from `2x+2` into the header:
+
+- **destination**: the first bytes written land on the length word — the copy
+  destroys the header `assign_varying` just wrote
+- **source**: the first bytes read ARE the length word, then whatever is below
+
+A negative count is self-destructive with respect to the string's own
+structure. No compiler emits that deliberately.
+
+**Discharge it by ASSERTION, not by argument.** Emit `assert(<count> >= 0)` at
+the site (IR.md §3 has `assert(e)` / `assert(e, "message")`, never a
+terminator). Then:
+
+- the obligation is discharged **at runtime, on every path that actually
+  runs** — stronger than a proof over the paths you analysed
+- the assumption is **visible in the IR text** where a reader meets it
+- every rewrite that wants to drop `sgn` or assume forward direction can rely
+  on it
+- and a violation **stops loudly at the exact site** instead of surfacing as a
+  divergence somewhere else
+
+**This is what makes the unprovable classes tractable.** A player name in
+`SD_PTR` was written by another process, possibly in a prior session, possibly
+by `NEW_USERS.PR` — a different program image. A record read from a file is the
+same. **No induction over writes can ever reach those.** The pattern does not
+care: it only says *this site reads something laid out as a varying*, and the
+assert holds whatever produced it to the invariant.
+
+**`DISPLAY_INVENTORY 7016816B` is expected to FIRE**, and that is the point. It
+has the canonical pattern — `XNLDA 1,[ac2+0x7FC2]` for the count and
+`XLEFB 3,[ac3+0xFF86]` for the pointer, with `ac3` a copy of `ac2`, so the
+pointer is `2·(ac2−62) + 2` exactly — and the field holds `0xFFFF` on the login
+path. So it is a genuine varying read of shared data that is not a plausible
+length. **It is the test that the assert works**, not a counterexample to the
+pattern.
+
+**Report the pattern-match count at the gate.** That number, with the
+chain-head count, sizes everything else.
+
 #### (a) A site reads something that was never written as a string
+
+
 
 This is the known counterexample and it is **not** a case of "a varying read
 gives a negative number". Read F-B1 precisely:
@@ -208,10 +262,12 @@ binding precision is recoverable.
    number that sizes the whole project
 4. **Your corrected classification** of the sites, with method
 5. **Your approach to the 593**, and whether the induction looks sound
-6. **A first pass at BOTH exception lists** — how many sites read a non-string
+6. **THE PATTERN-MATCH COUNT** — how many of the 593 match `len → ac0,
+   chars → ac2`? With the chain-head count this sizes the project
+7. **A first pass at BOTH exception lists** — how many sites read a non-string
    field as a varying (a), and how many read a varying with no dominating
    write (b)?
-7. **What you expect to be unprovable**, before you try. Pre-registered, so it
+8. **What you expect to be unprovable**, before you try. Pre-registered, so it
    is scoreable — see `docs/Project55/REPORT-2.md` for why this matters
 
 STOP. Wait for `a001`.
