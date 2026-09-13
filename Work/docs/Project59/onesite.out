@@ -1,0 +1,267 @@
+== routine DISPLAY_INVENTORY entry 701674B5, slot 6 ==
+blocks attributed: 505  reachable from entry: 505
+unreachable-from-entry blocks: none
+blocks of OTHER routines reachable from entry: none
+edges INTO the routine from other routines: none
+other addrbook entries in the address range: none
+CFG-builder unresolved rows in this routine: none
+
+== 2. calls and their arguments (!! = slot 6) ==
+  701674C8:7 rt_call ?WRITE_SCREEN args=[static, SLOT32, SLOT30, SLOT40, SLOT42]
+  70167595:9 call 701687AD  (call 701687AD args=3 marker=740039E2 site=701675A9 ret=701675AD)
+  70167772:11 rt_call ?WRITE_SCREEN args=[static, REGISTER-DERIVED, SLOT4, SLOT32, SLOT44]
+      register-derived arg: R[ac3 + 0x2A]  (in-block value: R[ac3 + 0x2A])
+  701677C0:12 rt_call ?WRITE_SCREEN args=[static, SLOT44, SLOT30, SLOT40, SLOT42]
+  7016783E:6 rt_call ?WRITE_SCREEN args=[static, SLOT44, SLOT3, SLOT40, SLOT42]
+  701678D1:5 rt_call ?UNSIGNED_TO_CHAR args=[SLOT30]
+  701678E2:23 rt_call ?WRITE_SCREEN args=[static, SLOT136, SLOT30, SLOT42, SLOT32]
+  70167964:2 rt_call ?UNSIGNED_TO_CHAR args=[SLOT30]
+  7016796E:16 rt_call ?WRITE_SCREEN args=[static, SLOT100, SLOT40, SLOT42, SLOT32]
+  701679AB:8 rt_call ?WRITE_SCREEN args=[static, SLOT44, SLOT30, SLOT40, SLOT42]
+  70167A14:7 rt_call ?UNSIGNED_TO_CHAR args=[SLOT30]
+  70167A27:16 rt_call ?WRITE_SCREEN args=[static, SLOT136, SLOT40, SLOT42, SLOT32]
+  70167A89:7 rt_call ?UNSIGNED_TO_CHAR args=[SLOT30]
+  70167A9C:16 rt_call ?WRITE_SCREEN args=[static, SLOT136, SLOT40, SLOT42, SLOT32]
+  70167B20:7 rt_call ?UNSIGNED_TO_CHAR args=[SLOT30]
+  70167B33:16 rt_call ?WRITE_SCREEN args=[static, SLOT100, SLOT40, SLOT42, SLOT32]
+  70167B91:7 rt_call ?UNSIGNED_TO_CHAR args=[SLOT30]
+  70167BA4:10 rt_call ?WRITE_SCREEN args=[static, SLOT136]
+  70167BF6:7 rt_call ?UNSIGNED_TO_CHAR args=[SLOT30]
+  70167C09:16 rt_call ?WRITE_SCREEN args=[static, SLOT136, SLOT40, SLOT42, SLOT32]
+  70167C96:2 rt_call ?UNSIGNED_TO_CHAR args=[SLOT30]
+  70167CA0:16 rt_call ?WRITE_SCREEN args=[static, SLOT136, SLOT40, SLOT42, SLOT32]
+  70167CDD:8 rt_call ?WRITE_SCREEN args=[static, SLOT44, SLOT30, SLOT40, SLOT42]
+  70167D36:2 rt_call ?UNSIGNED_TO_CHAR args=[SLOT30]
+  70167D40:16 rt_call ?WRITE_SCREEN args=[static, SLOT136, SLOT40, SLOT42, SLOT32]
+  70167D7D:8 rt_call ?WRITE_SCREEN args=[static, SLOT44, SLOT30, SLOT40, SLOT42]
+  70167F2B:6 rt_call ?WRITE_SCREEN args=[static, SLOT6!!, SLOT30, SLOT40, SLOT42]
+  70167FB7:2 rt_call ?UNSIGNED_TO_CHAR args=[SLOT30]
+  70167FC1:22 rt_call ?WRITE_SCREEN args=[static, SLOT136, SLOT30, SLOT42, SLOT32]
+  7016800D:8 rt_call ?WRITE_SCREEN args=[static, SLOT30, SLOT40, SLOT42, SLOT32]
+  7016803E:2 rt_call ?UNSIGNED_TO_CHAR args=[SLOT30]
+  70168048:10 rt_call ?WRITE_SCREEN args=[static, SLOT100]
+  70168073:2 rt_call ?WRITE_SCREEN args=[static, SLOT30]
+  7016818C:15 rt_call ?WRITE_SCREEN args=[static, SLOT246, SLOT40, SLOT42, SLOT32]
+  701681CB:8 rt_call ?WRITE_SCREEN args=[static, SLOT30, SLOT40, SLOT42, SLOT32]
+  7016825F:8 rt_call ?WRITE_SCREEN args=[static, SLOT30, SLOT40, SLOT42, SLOT32]
+  70168295:2 rt_call ?WRITE_SCREEN args=[static, SLOT32]
+  701682CA:2 rt_call ?WRITE_SCREEN args=[static, SLOT30]
+  701682D8:2 rt_call ?WRITE_SCREEN args=[static, SLOT32]
+  70168321:2 rt_call ?WRITE_SCREEN args=[static, SLOT30]
+  7016835D:2 rt_call ?WRITE_SCREEN args=[static, SLOT44]
+  70168373:2 rt_call ?WRITE_SCREEN args=[static, SLOT32]
+  70168388:2 rt_call ?WRITE_SCREEN args=[static, SLOT44]
+  701683CF:8 rt_call ?WRITE_SCREEN args=[static, SLOT44, SLOT30, SLOT40, SLOT42]
+  701683F6:8 rt_call ?WRITE_SCREEN args=[static, SLOT30, SLOT40, SLOT42, SLOT32]
+  701684D6:21 rt_call ?WRITE_SCREEN args=[static, SLOT100, SLOT30, SLOT40, SLOT32]
+
+== 3. every statement that may write frame word 6, whole routine ==
+  701674C8:0  WCMV-DST-VARYING             misses  [@wp(ac3, 32), 11 varying] = [@0x70167435:0, "\x14INVENTORY\x15"]
+  70167564:2  STORE-VIA-REGISTER           MAY  M16[ind(ac1) + lsh(ac2, -4)] = M16[ind(ac1) + lsh(ac2, -4)] | lsh(0x8000, 0 - (ac2 & 15))
+  7016756A:0  STORE-VIA-REGISTER           MAY  M16[ind(ac1) + lsh(ac2, -4)] = M16[ind(ac1) + lsh(ac2, -4)] & ~lsh(0x8000, 0 - (ac2 & 15))
+  70167673:6  WCMV-DST(count=expr)         MAY  [@bp(ac3, 12), (sx16(M16[((sx16(M16[wp(ac3, 2)]) * 9) - 0xFFFFCFB)]) + 2)] = [@bp((sx16(M16[wp(ac3, 2)]) * 9),
+  7016768A:6  WCMV-DST(count=expr)         MAY  [@bp(ac3, 12), (sx16(M16[((sx16(M16[wp(ac3, 2)]) * 9) - 0xFFFFA73)]) + 2)] = [@bp((sx16(M16[wp(ac3, 2)]) * 9),
+  701676E5:0  WCMV-DST-VIA-REGISTER        MAY  [@ac2, ac0] = [@ac3, 30]
+  701676EA:0  STORE-VIA-REGISTER           MAY  M8[ac2] = zx8(ac0)
+  701676EC:3  STORE                        WRITES  M16[wp(ac3, 6)] = trunc16(ac0)
+  70167707:11  STORE-VIA-REGISTER           MAY  M8[ac2] = zx8(ac1)
+  70167728:0  WCMV-DST-VIA-REGISTER        MAY  [@ac2, ac0] = [@ac3, 30]
+  70167734:0  WCMV-DST-VIA-REGISTER        MAY  [@ac2, ac0] = [@bp((sx16(M16[0x70000C68]) * 4), -0x1FD5E9E6), ac1]
+  70167734:4  STORE                        WRITES  M16[wp(ac3, 6)] = trunc16(ac0)
+  70167744:13  WCMV-DST-VIA-REGISTER        MAY  [@ac2, (0 - sx16(M16[wp(ac3, 6)]) + 19)] = [@0x7015155A:0, (0 - sx16(M16[wp(ac3, 6)]) + 19)]
+  70167772:0  STORE-VIA-REGISTER           MAY  M16[R[ac3 + 42]] = trunc16(ac0)
+  701677C0:4  WCMV-DST-VARYING             misses  [@wp(ac3, 44), 19 varying] = [@0x70167427:0, "Nothing            "]
+  70167826:0  STORE-VIA-REGISTER           MAY  M16[wp(ac2, -88)] = trunc16(ac1)
+  7016783E:0  WCMV-DST-VARYING             misses  [@wp(ac3, 44), 19 varying] = [@0x7015155A:0, "                   "]
+  70167882:0  STORE-VIA-REGISTER           MAY  M16[wp(ac2, -75)] = trunc16(ac1)
+  7016789B:15  WCMV-DST-VIA-REGISTER        MAY  [@ac2, ac0] = [@ac3, ac1]
+  7016789B:18  STORE                        WRITES  M16[wp(ac3, 6)] = trunc16(ac1)
+  7016789B:25  STORE-VIA-REGISTER           MAY  M8[ac2] = zx8(ac1)
+  701678CE:1  STORE                        WRITES  M16[wp(ac3, 6)] = trunc16(ac0)
+  701678E2:10  WCMV-DST-VIA-REGISTER        MAY  [@ac2, sx16(M16[wp(ac3, 60)])] = [@wp(ac3, 60), varying]
+  701678E2:14  WCMV-DST-VIA-REGISTER        MAY  [@ac2, sx16(M16[wp(ac3, 6)])] = [@wp(ac3, 6), varying]
+  701678E2:16  WCMV-DST-VARYING(len=expr)   MAY  [@wp(ac3, 136), (sx16(M16[wp(ac3, 60)]) + sx16(M16[wp(ac3, 6)]) + 10) varying] = [@bp(ac3, 200), (sx16(M16[wp(
+  70167951:0  STORE-VIA-REGISTER           MAY  M16[wp(ac2, -71)] = trunc16(ac1)
+  7016796E:6  WCMV-DST-VIA-REGISTER        MAY  [@ac2, sx16(M16[wp(ac3, 60)])] = [@wp(ac3, 60), varying]
+  7016796E:8  WCMV-DST-VARYING(len=expr)   MAY  [@wp(ac3, 100), (sx16(M16[wp(ac3, 60)]) + 8) varying] = [@bp(ac3, 156), (sx16(M16[wp(ac3, 60)]) + 8)]
+  701679AB:0  WCMV-DST-VARYING             misses  [@wp(ac3, 44), 19 varying] = [@0x70167411:0, "Thy purse is empty\x0B"]
+  70167A01:6  STORE-VIA-REGISTER           MAY  M16[wp(ac2, -76)] = trunc16(ac1)
+  70167A27:6  WCMV-DST-VIA-REGISTER        MAY  [@ac2, sx16(M16[wp(ac3, 60)])] = [@wp(ac3, 60), varying]
+  70167A27:8  WCMV-DST-VARYING(len=expr)   MAY  [@wp(ac3, 136), (sx16(M16[wp(ac3, 60)]) + 18) varying] = [@bp(ac3, 200), (sx16(M16[wp(ac3, 60)]) + 18)]
+  70167A81:0  STORE-VIA-REGISTER           MAY  M16[wp(ac2, -77)] = trunc16(ac1)
+  70167A9C:6  WCMV-DST-VIA-REGISTER        MAY  [@ac2, sx16(M16[wp(ac3, 60)])] = [@wp(ac3, 60), varying]
+  70167A9C:8  WCMV-DST-VARYING(len=expr)   MAY  [@wp(ac3, 136), (sx16(M16[wp(ac3, 60)]) + 20) varying] = [@bp(ac3, 200), (sx16(M16[wp(ac3, 60)]) + 20)]
+  70167B12:3  STORE-VIA-REGISTER           MAY  M16[wp(ac2, -73)] = trunc16(ac0)
+  70167B33:6  WCMV-DST-VIA-REGISTER        MAY  [@ac2, sx16(M16[wp(ac3, 60)])] = [@wp(ac3, 60), varying]
+  70167B33:8  WCMV-DST-VARYING(len=expr)   MAY  [@wp(ac3, 100), (sx16(M16[wp(ac3, 60)]) + 8) varying] = [@bp(ac3, 156), (sx16(M16[wp(ac3, 60)]) + 8)]
+  70167B75:10  STORE-VIA-REGISTER           MAY  M16[wp(ac2, -72)] = trunc16(ac1)
+  70167BA4:6  WCMV-DST-VIA-REGISTER        MAY  [@ac2, sx16(M16[wp(ac3, 60)])] = [@wp(ac3, 60), varying]
+  70167BA4:8  WCMV-DST-VARYING(len=expr)   MAY  [@wp(ac3, 136), (sx16(M16[wp(ac3, 60)]) + 14) varying] = [@bp(ac3, 200), (sx16(M16[wp(ac3, 60)]) + 14)]
+  70167BEE:0  STORE-VIA-REGISTER           MAY  M16[wp(ac2, -67)] = trunc16(ac1)
+  70167C09:6  WCMV-DST-VIA-REGISTER        MAY  [@ac2, sx16(M16[wp(ac3, 60)])] = [@wp(ac3, 60), varying]
+  70167C09:8  WCMV-DST-VARYING(len=expr)   MAY  [@wp(ac3, 136), (sx16(M16[wp(ac3, 60)]) + 13) varying] = [@bp(ac3, 200), (sx16(M16[wp(ac3, 60)]) + 13)]
+  70167C6F:10  STORE-VIA-REGISTER           MAY  M16[wp(ac2, -66)] = trunc16(ac1)
+  70167CA0:6  WCMV-DST-VIA-REGISTER        MAY  [@ac2, sx16(M16[wp(ac3, 60)])] = [@wp(ac3, 60), varying]
+  70167CA0:8  WCMV-DST-VARYING(len=expr)   MAY  [@wp(ac3, 136), (sx16(M16[wp(ac3, 60)]) + 19) varying] = [@bp(ac3, 200), (sx16(M16[wp(ac3, 60)]) + 19)]
+  70167CDD:0  WCMV-DST-VARYING             misses  [@wp(ac3, 44), 24 varying] = [@0x701673D3:0, "You have no castles yet\x0B"]
+  70167D23:0  STORE-VIA-REGISTER           MAY  M16[wp(ac2, -70)] = trunc16(ac1)
+  70167D40:6  WCMV-DST-VIA-REGISTER        MAY  [@ac2, sx16(M16[wp(ac3, 60)])] = [@wp(ac3, 60), varying]
+  70167D40:8  WCMV-DST-VARYING(len=expr)   MAY  [@wp(ac3, 136), (sx16(M16[wp(ac3, 60)]) + 15) varying] = [@bp(ac3, 200), (sx16(M16[wp(ac3, 60)]) + 15)]
+  70167D7D:0  WCMV-DST-VARYING             misses  [@wp(ac3, 44), 30 varying] = [@0x701673BB:0, "You havn't slain a dragon yet\x0B"]
+  70167E18:3  STORE-VIA-REGISTER           MAY  M16[ind(ac1) + lsh(ac2, -4)] = M16[ind(ac1) + lsh(ac2, -4)] | lsh(0x8000, 0 - (ac2 & 15))
+  70167E20:0  STORE-VIA-REGISTER           MAY  M16[ind(ac1) + lsh(ac2, -4)] = M16[ind(ac1) + lsh(ac2, -4)] & ~lsh(0x8000, 0 - (ac2 & 15))
+  70167E28:3  STORE-VIA-REGISTER           MAY  M16[ind(ac1) + lsh(ac2, -4)] = M16[ind(ac1) + lsh(ac2, -4)] | lsh(0x8000, 0 - (ac2 & 15))
+  70167E2F:0  STORE-VIA-REGISTER           MAY  M16[ind(ac1) + lsh(ac2, -4)] = M16[ind(ac1) + lsh(ac2, -4)] & ~lsh(0x8000, 0 - (ac2 & 15))
+  70167E37:3  STORE-VIA-REGISTER           MAY  M16[ind(ac1) + lsh(ac2, -4)] = M16[ind(ac1) + lsh(ac2, -4)] | lsh(0x8000, 0 - (ac2 & 15))
+  70167E3E:0  STORE-VIA-REGISTER           MAY  M16[ind(ac1) + lsh(ac2, -4)] = M16[ind(ac1) + lsh(ac2, -4)] & ~lsh(0x8000, 0 - (ac2 & 15))
+  70167E46:3  STORE-VIA-REGISTER           MAY  M16[ind(ac1) + lsh(ac2, -4)] = M16[ind(ac1) + lsh(ac2, -4)] | lsh(0x8000, 0 - (ac2 & 15))
+  70167E4D:0  STORE-VIA-REGISTER           MAY  M16[ind(ac1) + lsh(ac2, -4)] = M16[ind(ac1) + lsh(ac2, -4)] & ~lsh(0x8000, 0 - (ac2 & 15))
+  70167E5B:9  STORE-VIA-REGISTER           MAY  M16[ind(ac1) + lsh(ac2, -4)] = M16[ind(ac1) + lsh(ac2, -4)] | lsh(0x8000, 0 - (ac2 & 15))
+  70167E6D:0  STORE-VIA-REGISTER           MAY  M16[ind(ac1) + lsh(ac2, -4)] = M16[ind(ac1) + lsh(ac2, -4)] & ~lsh(0x8000, 0 - (ac2 & 15))
+  70167E6E:0  WCMV-DST-VARYING             WRITES  [@wp(ac3, 6), 8 varying] = [@0x701673B7:0, "Rings: \x0B"]
+  70167E98:2  STORE-VIA-REGISTER           MAY  M16[wp(ac2, 0)] = trunc16(ac0)
+  70167EB1:2  STORE-VIA-REGISTER           MAY  M16[wp(ac2, 0)] = trunc16(ac0)
+  70167ED5:2  STORE-VIA-REGISTER           MAY  M16[wp(ac2, 0)] = trunc16(ac0)
+  70167ED5:7  WCMV-DST-VIA-REGISTER        MAY  [@ac2, ac0] = [@0x701673AF:0, ac1]
+  70167EF9:2  STORE-VIA-REGISTER           MAY  M16[wp(ac2, 0)] = trunc16(ac0)
+  70167EF9:7  WCMV-DST-VIA-REGISTER        MAY  [@ac2, ac0] = [@0x701673AD:0, ac1]
+  70167F1D:2  STORE-VIA-REGISTER           MAY  M16[wp(ac2, 0)] = trunc16(ac0)
+  70167F1D:7  WCMV-DST-VIA-REGISTER        MAY  [@ac2, ac0] = [@0x701673AB:0, ac1]
+  70167F80:3  STORE-VIA-REGISTER           MAY  M16[wp(ac2, -69)] = trunc16(ac0)
+  70167F8E:10  STORE-VIA-REGISTER           MAY  M16[wp(ac2, -68)] = trunc16(ac1)
+  70167FC1:8  WCMV-DST-VIA-REGISTER        MAY  [@ac2, sx16(M16[wp(ac3, 60)])] = [@wp(ac3, 60), varying]
+  70167FC1:12  STORE-VIA-REGISTER           MAY  M8[ac2] = zx8(ac1)
+  70167FC1:14  WCMV-DST-VARYING(len=expr)   MAY  [@wp(ac3, 136), (sx16(M16[wp(ac3, 60)]) + 11) varying] = [@bp(ac3, 200), (sx16(M16[wp(ac3, 60)]) + 11)]
+  70168048:6  WCMV-DST-VIA-REGISTER        MAY  [@ac2, sx16(M16[wp(ac3, 60)])] = [@wp(ac3, 60), varying]
+  70168048:8  WCMV-DST-VARYING(len=expr)   MAY  [@wp(ac3, 100), (sx16(M16[wp(ac3, 60)]) + 10) varying] = [@bp(ac3, 156), (sx16(M16[wp(ac3, 60)]) + 10)]
+  70168107:3  RAW                          MAY  @7016810D DIVX;
+  70168117:15  WCMV-DST-VIA-REGISTER        MAY  [@ac2, ac0] = [@ac3, ac1]
+  70168176:0  WCMV-DST-VIA-REGISTER        MAY  [@((sx16(M16[R[wp(ac3, -12)]]) * 686) + M32[0x70000210] - 62), 130 varying] = [@0x7000021C, varying]
+  7016818C:5  WCMV-DST-VIA-REGISTER        MAY  [@ac2, sx16(M16[0x7000021C])] = [@0x7000021C, varying]
+  7016818C:7  WCMV-DST-VARYING(len=expr)   MAY  [@wp(ac3, 246), (sx16(M16[0x7000021C]) + 9) varying] = [@bp(ac3, 0x15C), (sx16(M16[0x7000021C]) + 9)]
+  70168238:3  STORE-VIA-REGISTER           MAY  M16[ind(ac1) + lsh(ac2, -4)] = M16[ind(ac1) + lsh(ac2, -4)] | lsh(0x8000, 0 - (ac2 & 15))
+  70168240:0  STORE-VIA-REGISTER           MAY  M16[ind(ac1) + lsh(ac2, -4)] = M16[ind(ac1) + lsh(ac2, -4)] & ~lsh(0x8000, 0 - (ac2 & 15))
+  70168248:3  STORE-VIA-REGISTER           MAY  M16[ind(ac1) + lsh(ac2, -4)] = M16[ind(ac1) + lsh(ac2, -4)] | lsh(0x8000, 0 - (ac2 & 15))
+  7016824F:0  STORE-VIA-REGISTER           MAY  M16[ind(ac1) + lsh(ac2, -4)] = M16[ind(ac1) + lsh(ac2, -4)] & ~lsh(0x8000, 0 - (ac2 & 15))
+  70168257:3  STORE-VIA-REGISTER           MAY  M16[ind(ac1) + lsh(ac2, -4)] = M16[ind(ac1) + lsh(ac2, -4)] | lsh(0x8000, 0 - (ac2 & 15))
+  7016825E:0  STORE-VIA-REGISTER           MAY  M16[ind(ac1) + lsh(ac2, -4)] = M16[ind(ac1) + lsh(ac2, -4)] & ~lsh(0x8000, 0 - (ac2 & 15))
+  70168295:0  WCMV-DST-VARYING             misses  [@wp(ac3, 32), 5 varying] = [@0x70167369:0, "Boots"]
+  701682D8:0  WCMV-DST-VARYING             misses  [@wp(ac3, 32), 5 varying] = [@0x70167365:0, "Armor"]
+  7016835D:0  WCMV-DST-VARYING             misses  [@wp(ac3, 44), 16 varying] = [@0x7016735D:0, "Sceptor of Loric"]
+  70168373:0  WCMV-DST-VARYING             misses  [@wp(ac3, 32), 13 varying] = [@0x70167355:0, "A magic shard"]
+  70168388:0  WCMV-DST-VARYING             misses  [@wp(ac3, 44), 17 varying] = [@0x7016734B:0, "Dark Lord's Staff"]
+  701683BF:2  STORE-VIA-REGISTER           MAY  M16[ind(ac1) + lsh(ac2, -4)] = M16[ind(ac1) + lsh(ac2, -4)] | lsh(0x8000, 0 - (ac2 & 15))
+  701683C5:0  STORE-VIA-REGISTER           MAY  M16[ind(ac1) + lsh(ac2, -4)] = M16[ind(ac1) + lsh(ac2, -4)] & ~lsh(0x8000, 0 - (ac2 & 15))
+  701683CF:0  WCMV-DST-VARYING             misses  [@wp(ac3, 44), 27 varying] = [@0x7016733D:0, "You have a catapult in tow\x0B"]
+  70168446:3  STORE-VIA-REGISTER           MAY  M16[wp(ac2, -65)] = trunc16(ac0)
+  70168456:8  STORE-VIA-REGISTER           MAY  M16[wp(ac2, -64)] = trunc16(ac1)
+  70168472:0  WCMV-DST-VARYING             WRITES  [@wp(ac3, 6), 5 varying] = [@0x70167339:0, "North"]
+  70168481:1  STORE                        WRITES  M16[wp(ac3, 6)] = trunc16(ac1)
+  7016848D:0  WCMV-DST-VARYING             WRITES  [@wp(ac3, 6), 5 varying] = [@0x70167333:0, "South"]
+  70168499:1  STORE                        WRITES  M16[wp(ac3, 6)] = trunc16(ac0)
+  701684A1:10  WCMV-DST-VIA-REGISTER        MAY  [@ac2, sx16(M16[wp(ac3, 6)])] = [@wp(ac3, 6), varying]
+  701684A1:13  WCMV-DST-VIA-REGISTER        MAY  [@ac2, 3] = [@0x70167329:0, " - "]
+  701684D6:11  WCMV-DST-VIA-REGISTER        MAY  [@ac2, 20] = [@(0x70151578:0 + (sx16(M16[(M32[0x70000212] + 0x10221C)]) * 20)), 20]
+  701684D6:13  WCMV-DST-VARYING(len=expr)   MAY  [@wp(ac3, 100), (sx16(M16[wp(ac3, 6)]) + 34) varying] = [@bp(ac3, 0x110), (sx16(M16[wp(ac3, 6)]) + 34)]
+
+== 4. the site: block 70167EF9, slot 6 ==
+nearest dominating varying assignment of slot 6: block 70167E6E
+   ['[@wp(ac3, 6), 8 varying] = [@0x701673B7:0, "Rings: \\x0B"]']
+A dominates S: True
+blocks on paths A -> S: 27 : 70167E6E 70167E82 70167E83 70167E84 70167E85 70167E8B 70167E8C 70167E8D 70167E8E 70167E97 70167E98 70167EA7 70167EB0 70167EB1 70167EBF 70167EC8 70167EC9 70167ECA 70167ECB 70167ED4 70167ED5 70167EE3 70167EEC 70167EED 70167EEF 70167EF8 70167EF9
+region acyclic: True
+predecessors of S: ['70167EEF', '70167EF8']
+predecessors of A: ['70167E5B', '70167E6D']
+writers of word 6 inside the region (excluding A itself):
+  70167E98:2 STORE-VIA-REGISTER       M16[wp(ac2, 0)] = trunc16(ac0)
+  70167EB1:2 STORE-VIA-REGISTER       M16[wp(ac2, 0)] = trunc16(ac0)
+  70167ED5:2 STORE-VIA-REGISTER       M16[wp(ac2, 0)] = trunc16(ac0)
+  70167ED5:7 WCMV-DST-VIA-REGISTER    [@ac2, ac0] = [@0x701673AF:0, ac1]
+  70167EF9:2 STORE-VIA-REGISTER       M16[wp(ac2, 0)] = trunc16(ac0)
+  70167EF9:7 WCMV-DST-VIA-REGISTER    [@ac2, ac0] = [@0x701673AD:0, ac1]
+calls inside the region: none
+append heads recognised in the region (head: cap, k, F, T; T's predecessors):
+  70167E8E: cap=30 k=3 F=70167E97 T=70167E98  pred(T)=['70167E8E', '70167E97'] pred(F)=['70167E8E']
+  70167EA7: cap=30 k=5 F=70167EB0 T=70167EB1  pred(T)=['70167EA7', '70167EB0'] pred(F)=['70167EA7']
+  70167ECB: cap=30 k=3 F=70167ED4 T=70167ED5  pred(T)=['70167ECB', '70167ED4'] pred(F)=['70167ECB']
+  70167EEF: cap=30 k=3 F=70167EF8 T=70167EF9  pred(T)=['70167EEF', '70167EF8'] pred(F)=['70167EEF']
+region statements that write memory / call and are NOT inside a recognised append (A excluded):
+  none
+initial len at A: 8  ([@wp(ac3, 6), 8 varying] = [@0x701673B7:0, "Rings: \x0B"])
+CFG paths A -> S: 432
+CFG paths whose clamp arm contradicts the computed length (infeasible): 352 ; feasible: 80
+(len before site append, ac1 = piece at site, len after) -> append sequences:
+  (8, 3, 11) : [('70167EEF',)]
+  (11, 3, 14) : [('70167E8E', '70167EEF'), ('70167ECB', '70167EEF')]
+  (13, 3, 16) : [('70167EA7', '70167EEF')]
+  (14, 3, 17) : [('70167E8E', '70167ECB', '70167EEF')]
+  (16, 3, 19) : [('70167EA7', '70167ECB', '70167EEF')]
+len at site in [8, 11, 13, 14, 16] ; ac1 at site in [3] ; max len after site 19
+
+== 4. the site: block 70167ED5, slot 6 ==
+nearest dominating varying assignment of slot 6: block 70167E6E
+   ['[@wp(ac3, 6), 8 varying] = [@0x701673B7:0, "Rings: \\x0B"]']
+A dominates S: True
+blocks on paths A -> S: 20 : 70167E6E 70167E82 70167E83 70167E84 70167E85 70167E8B 70167E8C 70167E8D 70167E8E 70167E97 70167E98 70167EA7 70167EB0 70167EB1 70167EBF 70167EC8 70167EC9 70167ECB 70167ED4 70167ED5
+region acyclic: True
+predecessors of S: ['70167ECB', '70167ED4']
+predecessors of A: ['70167E5B', '70167E6D']
+writers of word 6 inside the region (excluding A itself):
+  70167E98:2 STORE-VIA-REGISTER       M16[wp(ac2, 0)] = trunc16(ac0)
+  70167EB1:2 STORE-VIA-REGISTER       M16[wp(ac2, 0)] = trunc16(ac0)
+  70167ED5:2 STORE-VIA-REGISTER       M16[wp(ac2, 0)] = trunc16(ac0)
+  70167ED5:7 WCMV-DST-VIA-REGISTER    [@ac2, ac0] = [@0x701673AF:0, ac1]
+calls inside the region: none
+append heads recognised in the region (head: cap, k, F, T; T's predecessors):
+  70167E8E: cap=30 k=3 F=70167E97 T=70167E98  pred(T)=['70167E8E', '70167E97'] pred(F)=['70167E8E']
+  70167EA7: cap=30 k=5 F=70167EB0 T=70167EB1  pred(T)=['70167EA7', '70167EB0'] pred(F)=['70167EA7']
+  70167ECB: cap=30 k=3 F=70167ED4 T=70167ED5  pred(T)=['70167ECB', '70167ED4'] pred(F)=['70167ECB']
+region statements that write memory / call and are NOT inside a recognised append (A excluded):
+  none
+initial len at A: 8  ([@wp(ac3, 6), 8 varying] = [@0x701673B7:0, "Rings: \x0B"])
+CFG paths A -> S: 72
+CFG paths whose clamp arm contradicts the computed length (infeasible): 52 ; feasible: 20
+(len before site append, ac1 = piece at site, len after) -> append sequences:
+  (8, 3, 11) : [('70167ECB',)]
+  (11, 3, 14) : [('70167E8E', '70167ECB')]
+  (13, 3, 16) : [('70167EA7', '70167ECB')]
+len at site in [8, 11, 13] ; ac1 at site in [3] ; max len after site 16
+
+== 4. the site: block 70167F1D, slot 6 ==
+nearest dominating varying assignment of slot 6: block 70167E6E
+   ['[@wp(ac3, 6), 8 varying] = [@0x701673B7:0, "Rings: \\x0B"]']
+A dominates S: True
+blocks on paths A -> S: 34 : 70167E6E 70167E82 70167E83 70167E84 70167E85 70167E8B 70167E8C 70167E8D 70167E8E 70167E97 70167E98 70167EA7 70167EB0 70167EB1 70167EBF 70167EC8 70167EC9 70167ECA 70167ECB 70167ED4 70167ED5 70167EE3 70167EEC 70167EED 70167EEE 70167EEF 70167EF8 70167EF9 70167F07 70167F10 70167F11 70167F13 70167F1C 70167F1D
+region acyclic: True
+predecessors of S: ['70167F13', '70167F1C']
+predecessors of A: ['70167E5B', '70167E6D']
+writers of word 6 inside the region (excluding A itself):
+  70167E98:2 STORE-VIA-REGISTER       M16[wp(ac2, 0)] = trunc16(ac0)
+  70167EB1:2 STORE-VIA-REGISTER       M16[wp(ac2, 0)] = trunc16(ac0)
+  70167ED5:2 STORE-VIA-REGISTER       M16[wp(ac2, 0)] = trunc16(ac0)
+  70167ED5:7 WCMV-DST-VIA-REGISTER    [@ac2, ac0] = [@0x701673AF:0, ac1]
+  70167EF9:2 STORE-VIA-REGISTER       M16[wp(ac2, 0)] = trunc16(ac0)
+  70167EF9:7 WCMV-DST-VIA-REGISTER    [@ac2, ac0] = [@0x701673AD:0, ac1]
+  70167F1D:2 STORE-VIA-REGISTER       M16[wp(ac2, 0)] = trunc16(ac0)
+  70167F1D:7 WCMV-DST-VIA-REGISTER    [@ac2, ac0] = [@0x701673AB:0, ac1]
+calls inside the region: none
+append heads recognised in the region (head: cap, k, F, T; T's predecessors):
+  70167E8E: cap=30 k=3 F=70167E97 T=70167E98  pred(T)=['70167E8E', '70167E97'] pred(F)=['70167E8E']
+  70167EA7: cap=30 k=5 F=70167EB0 T=70167EB1  pred(T)=['70167EA7', '70167EB0'] pred(F)=['70167EA7']
+  70167ECB: cap=30 k=3 F=70167ED4 T=70167ED5  pred(T)=['70167ECB', '70167ED4'] pred(F)=['70167ECB']
+  70167EEF: cap=30 k=3 F=70167EF8 T=70167EF9  pred(T)=['70167EEF', '70167EF8'] pred(F)=['70167EEF']
+  70167F13: cap=30 k=3 F=70167F1C T=70167F1D  pred(T)=['70167F13', '70167F1C'] pred(F)=['70167F13']
+region statements that write memory / call and are NOT inside a recognised append (A excluded):
+  none
+initial len at A: 8  ([@wp(ac3, 6), 8 varying] = [@0x701673B7:0, "Rings: \x0B"])
+CFG paths A -> S: 2592
+CFG paths whose clamp arm contradicts the computed length (infeasible): 2272 ; feasible: 320
+(len before site append, ac1 = piece at site, len after) -> append sequences:
+  (8, 3, 11) : [('70167F13',)]
+  (11, 3, 14) : [('70167E8E', '70167F13'), ('70167ECB', '70167F13'), ('70167EEF', '70167F13')]
+  (13, 3, 16) : [('70167EA7', '70167F13')]
+  (14, 3, 17) : [('70167E8E', '70167ECB', '70167F13'), ('70167E8E', '70167EEF', '70167F13'), ('70167ECB', '70167EEF', '70167F13')]
+  (16, 3, 19) : [('70167EA7', '70167ECB', '70167F13'), ('70167EA7', '70167EEF', '70167F13')]
+  (17, 3, 20) : [('70167E8E', '70167ECB', '70167EEF', '70167F13')]
+  (19, 3, 22) : [('70167EA7', '70167ECB', '70167EEF', '70167F13')]
+len at site in [8, 11, 13, 14, 16, 17, 19] ; ac1 at site in [3] ; max len after site 22
