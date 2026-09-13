@@ -130,6 +130,34 @@ and why.
 
 ---
 
+## What you may assume — and the exception that matters
+
+**A routine's frame is private.** Nothing in the outside world writes it: no
+other process, no interrupt, no other routine reaching in. So the writers of
+`wp(ac3, 6)` are the statements in DISPLAY_INVENTORY itself —
+
+**…UNLESS the routine handed a pointer to that slot out.** Three ways, and all
+three must be checked rather than assumed away:
+
+1. **a game call** taking `wp(ac3, 6)` — or any pointer derived from it — as an
+   argument; the callee writes through it
+2. **a runtime call** doing the same. `?READ` filling a buffer is exactly this
+   shape, and DISPLAY_INVENTORY is on the login path
+3. **uplevel access** — a nested `.N@` entry reaching this frame through the
+   static link (Salvage F1/F2). DISPLAY_INVENTORY's family, if it has one
+
+So the assumption is **"only this routine writes its frame, unless it passed a
+pointer to that slot out"**, and the second clause is the work: enumerate every
+`call` and `rt_call` in the routine, and check whether any argument is slot 6
+or derived from it.
+
+**If none is, the slot has exactly the three writers already found** — and
+that also settles P58's `<opaque slot 6 clobbered>` from the other direction:
+not by bounding the scratch buffer, but by showing nothing outside the routine
+can reach the slot at all.
+
+---
+
 ## Rulings
 
 1. **"The game works" is evidence, not a proof**, and it is evidence about
