@@ -1401,10 +1401,9 @@ def word_addr_key(e):
     return ('expr:' + show(e), 0)
 
 
-def base_class_match(count_v, ptr_v):
-    """count_v is the TRACED count value, ptr_v the traced pointer.  True when
-    count_v is sx16(M16[A]) and ptr_v is bp(base, 2*off+2) for A = wp(base, off)
-    (or the literal constant-address forms)."""
+def base_class_match_syntactic(count_v, ptr_v):
+    """The P58 Part-1/2 matcher (a003: SYNTACTIC — a simple base register and a
+    constant k).  Kept only to measure the movement; not used for the tiers."""
     c = strip_paren(count_v)
     if not is_lenload(c):
         return False
@@ -1416,13 +1415,150 @@ def base_class_match(count_v, ptr_v):
         return ak[0] == pk[0] and pk[1] == 2 * ak[1] + 2 and not ak[0].startswith('expr:')
     if p[0] == 'bplit' and ak[0] == 'abs':
         return p[1] == ak[1] + 1 and p[2] == 0
-    # general: A + 1 as a byte pointer of a computed word address
     if p[0] == 'call' and p[1] == 'bp' and len(p[2]) == 2:
         pb, pd = strip_paren(p[2][0]), strip_paren(p[2][1])
         if pd[0] == 'const' and to_signed(pd[1]) == 2 and show(pb) == show(A):
             return True
     return False
 
+
+# ---- linear forms (a003: the algebraic matcher) ------------------------------
+# An expression as {term: coefficient}, term '' for the constant.  Units are the
+# reader's: `wp(b, d)` is `b + d` (words), `bp(b, d)` is `2·b + d` (bytes), a
+# `0xW:b` literal is `2W + b` (bytes), `add/sub/mul-by-constant` and the `+ - *`
+# chains fold; everything else is an opaque term keyed by its CANONICAL text
+# (subtrees normalised the same way), so `M16[wp(wfp, 2)]` spelled two ways is
+# one term.
+
+_LIN_MEMO = {}
+_CANON_MEMO = {}
+_LIN_DEPTH = [0]
+
+
+def lin(e):
+    key = id(e)
+    hit = _LIN_MEMO.get(key)
+    if hit is not None and hit[0] is e:          # the memo keeps e alive, so an id cannot be reused
+        return hit[1]
+    _LIN_DEPTH[0] += 1
+    try:
+        if _LIN_DEPTH[0] > 400:
+            return {'<too deep>': 1}         # never matches: a miss, not a false positive
+        r = _lin(e)
+    finally:
+        _LIN_DEPTH[0] -= 1
+    _LIN_MEMO[key] = (e, r)
+    return r
+
+
+def _lin(e):
+    e = strip_paren(e)
+    k = e[0]
+    if k == 'const':
+        return {'': to_signed(e[1])}
+    if k == 'bplit':
+        return {'': 2 * e[1] + e[2]}
+    if k == 'call':
+        f = e[1]
+        if f == 'wp' and len(e[2]) == 2:
+            return lin_add(lin(e[2][0]), lin(e[2][1]))
+        if f == 'bp' and len(e[2]) == 2:
+            return lin_add(lin_scale(lin(e[2][0]), 2), lin(e[2][1]))
+        if f in ('add', 'nadd') and len(e[2]) == 2:
+            return lin_add(lin(e[2][0]), lin(e[2][1]))
+        if f in ('sub', 'nsub') and len(e[2]) == 2:
+            return lin_add(lin(e[2][0]), lin_scale(lin(e[2][1]), -1))
+        if f in ('mul', 'nmul') and len(e[2]) == 2:
+            a, b = lin(e[2][0]), lin(e[2][1])
+            if set(a) <= {''}:
+                return lin_scale(b, a.get('', 0))
+            if set(b) <= {''}:
+                return lin_scale(a, b.get('', 0))
+        return {canon(e): 1}
+    if k == 'bin':
+        if e[1] == '+':
+            return lin_add(lin(e[2]), lin(e[3]))
+        if e[1] == '-':
+            return lin_add(lin(e[2]), lin_scale(lin(e[3]), -1))
+        if e[1] == '*':
+            a, b = lin(e[2]), lin(e[3])
+            if set(a) <= {''}:
+                return lin_scale(b, a.get('', 0))
+            if set(b) <= {''}:
+                return lin_scale(a, b.get('', 0))
+        return {canon(e): 1}
+    return {canon(e): 1}
+
+
+def lin_add(a, b):
+    out = dict(a)
+    for t, c in b.items():
+        out[t] = out.get(t, 0) + c
+    return {t: c for t, c in out.items() if c != 0}
+
+
+def lin_scale(a, s):
+    return {t: c * s for t, c in a.items() if c * s != 0}
+
+
+def lin_text(l):
+    parts = []
+    for t in sorted(l):
+        c = l[t]
+        parts.append(('%d' % c) if t == '' else ('%d*%s' % (c, t) if c != 1 else t))
+    return ' + '.join(parts) if parts else '0'
+
+
+def canon(e):
+    """Canonical text of a tree with every arithmetic subtree in linear form."""
+    key = id(e)
+    hit = _CANON_MEMO.get(key)
+    if hit is not None and hit[0] is e:
+        return hit[1]
+    _LIN_DEPTH[0] += 1
+    try:
+        if _LIN_DEPTH[0] > 400:
+            return '<too deep>'
+        r = _canon(e)
+    finally:
+        _LIN_DEPTH[0] -= 1
+    _CANON_MEMO[key] = (e, r)
+    return r
+
+
+def _canon(e):
+    e = strip_paren(e)
+    k = e[0]
+    if k in ('const', 'bplit', 'bin') or (k == 'call' and e[1] in ('wp', 'bp', 'add', 'nadd', 'sub', 'nsub', 'mul', 'nmul')):
+        l = lin(e)
+        if len(l) == 1 and '' not in l and list(l.values())[0] == 1:
+            return list(l)[0]
+        return '{' + lin_text(l) + '}'
+    if k == 'mem':
+        return '%s[%s]' % (e[1], canon(e[2]))
+    if k == 'call':
+        return '%s(%s)' % (e[1], ', '.join(canon(a) for a in e[2]))
+    if k == 'union':
+        return '{' + ' | '.join(sorted(canon(x) for x in flatten_union(e))) + '}'
+    if k in ('neg', 'not'):
+        return ('~' if k == 'neg' else '!') + canon(e[1])
+    return show(e)
+
+
+def base_class_match(count_v, ptr_v):
+    """a003: ALGEBRAIC.  The count is a 16-bit read `sx16(M16[W])` and the
+    pointer satisfies  bytes(pointer) - 2·W == 2  as a linear identity — the
+    data of a CHAR(n) VARYING starts at word W+1 — however W and the pointer
+    are spelled (computed bases, multiplies, record indexing)."""
+    c = strip_paren(count_v)
+    if not is_lenload(c):
+        return False
+    W = c[2][0][2]
+    p = strip_paren(ptr_v)
+    if p[0] == 'union' or W[0] == 'union':
+        return all(base_class_match(count_v, x) for x in flatten_union(p)) if p[0] == 'union' else False
+    diff = lin_add(lin(p), lin_scale(lin(W), -2))
+    return diff == {'': 2}
 
 
 # --------------------------------------------------------------------------
@@ -1679,13 +1815,15 @@ def analyse_site(st, tracer):
             rootkinds |= root_kinds(r)
         fed_by_residue = bool(rootkinds) and rootkinds <= {'residue'}
         pattern = base_class_match(cv, pv)
+        pattern_syntactic = base_class_match_syntactic(cv, pv)
         if opd['form'] == 'varying':
-            pattern = True      # by the lifter's own recognition rule (string_sites.py:1696/2177)
+            pattern = pattern_syntactic = True      # by the lifter's own recognition rule (string_sites.py:1696/2177)
         rows.append({
             'role': role, 'form': opd['form'], 'class': cls,
             'count': show(ct), 'traced': show(cv), 'roots': sorted(rootkinds),
             'fed_by_residue': fed_by_residue, 'verdict': verdict, 'reason': reason,
-            'needs': needs, 'pattern': pattern,
+            'needs': needs, 'pattern': pattern, 'pattern_syntactic': pattern_syntactic,
+            'algebra': (lin_text(lin_add(lin(pv), lin_scale(lin(strip_paren(cv)[2][0][2]), -2))) if is_lenload(strip_paren(cv)) and pv[0] != 'union' else ''),
         })
     return rows
 
@@ -2062,6 +2200,22 @@ def summarise(blocks, results):
     for k in sorted(sv):
         print('  %-5s %-8s %5d' % (k[0], k[1], sv[k]))
 
+    print('\n=== a003. Movement: syntactic matcher -> algebraic matcher ===')
+    mv = defaultdict(int)
+    for st, rows, led in results:
+        for r in rows:
+            if r['pattern'] and not r['pattern_syntactic']:
+                mv[(st.op, r['role'], r['class'], r['verdict'])] += 1
+            if r['pattern_syntactic'] and not r['pattern']:
+                mv[('LOST', st.op, r['role'], r['class'])] += 1
+    for k, v in sorted(mv.items()):
+        print('  %-40s %4d' % (' '.join(k), v))
+    print('  newly matched operands: %d' % sum(v for k, v in mv.items() if k[0] != 'LOST'))
+    print('  newly matched, listed (pc routine role class verdict | pointer - 2W):')
+    for st, rows, led in results:
+        for r in rows:
+            if r['pattern'] and not r['pattern_syntactic']:
+                print('    %s %-22s %-7s %-12s %-7s | %s' % (led['pc'] if led else st.blk, blocks[st.blk].routine, r['role'], r['class'], r['verdict'], r['algebra']))
     print('\n=== 6. Base-class pattern (count = sx16(M16[A]), pointer = byte 2A+2) ===')
     pat = defaultdict(int)
     for st, rows, led in results:
@@ -2369,6 +2523,15 @@ def selftest():
     # dominators: 70000030 is dominated by 70000000, not by 70000010
     idom, reach = dominators(blocks, '70000000')
     assert dominates(idom, '70000000', '70000030') and not dominates(idom, '70000010', '70000030')
+    # a003: the algebraic matcher — ALCHEMIST_HOME 7015C90D's shape, and a near miss
+    W = Parser('((sx16(M16[wp(ac3, 2)]) * 9) - 0xFEAF841)').expr()
+    cnt = ('call', 'sx16', [('mem', 'M16', W)])
+    ptr = Parser('bp((sx16(M16[wp(ac3, 2)]) * 9), -0x1FD5F080)').expr()
+    assert base_class_match(cnt, ptr) and not base_class_match_syntactic(cnt, ptr)
+    assert not base_class_match(cnt, Parser('bp((sx16(M16[wp(ac3, 2)]) * 9), -0x1FD5F07E)').expr())
+    assert base_class_match(('call', 'sx16', [('mem', 'M16', ('const', 0x7000021C))]), ('bplit', 0x7000021D, 0))
+    assert base_class_match(('call', 'sx16', [('mem', 'M16', Parser('wp(wfp, 60)').expr())]), Parser('bp(wfp, 122)').expr())
+    assert lin(Parser('ac3*2 + 0x7000068A:0').expr()) == {'ac3': 2, '': 2 * 0x7000068A}
     # tokenizer edges
     assert Parser('M32[0x70000210] - 0x280').expr()[0] == 'bin'
     assert Parser('wp(ac3, -12)').expr()[2][1] == ('const', -12)

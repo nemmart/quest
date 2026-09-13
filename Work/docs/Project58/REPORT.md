@@ -15,7 +15,7 @@ or any artifact was changed; no assert was emitted; nothing executed.
 |---|---:|---:|---|
 | proven by construction | 998 | 2,047 | nothing to do |
 | proven by a dominating guard (a001 Q3, reported separately) | 8 (18 operands, 12 sites touched) | 18 | nothing to do |
-| conditional on named length words — the assert class | 611 (637 under policy (a)) | 1,171 | `asserts.tsv`, tiers `base-class` (223 rows) and `cond` (948 rows) |
+| conditional on named length words — the assert class | 611 (637 under policy (a)) | 1,171 | `asserts.tsv`, tiers `base-class` (262 rows) and `cond` (909 rows) — after a003's algebraic matcher; 223 / 948 in a002 |
 | unproven | 72 (46 under policy (a)) | 130 | `asserts.tsv`, tier `unknown` (130 rows); the assert still discharges it at runtime |
 | negative by construction | **0** | 0 | — |
 
@@ -76,6 +76,17 @@ obligation with that tier.
 Four right, three wrong. The two wrong ones that matter (1 and 4) were both
 over-optimistic about what the tool would resolve and about the original
 program being buggy; the pre-registration is what makes that visible.
+
+**Prediction 6, re-scored after a003.** It said the base class would not grow
+without interprocedural work. It has now grown twice, and both times by a
+*modelling* fix rather than more analysis: (i) treating `assign_varying`'s
+length-word store as a write of the count, 7 → 20 operands provable through
+their writers; (ii) replacing the syntactic `bp(b, 2k+2)` matcher by the
+algebraic identity `bytes(pointer) − 2·W = 2`, 227 → 266 base-class operands
+(213 → 251 sites), all 39 moving from `cond`, none from `unknown`, none lost.
+Two-for-two: the tool's model, not its search, was the binding constraint —
+and a classifier that under-reports its strongest tier looks conservative
+while it is discarding arguments (a003).
 
 ---
 
@@ -191,14 +202,40 @@ Every place I wanted to call something proven and did not:
 
 ---
 
-## 8. Files
+## 8. a003 reopening — the algebraic matcher (Sep 13 2026)
+
+One bounded fix, no new proof work. `countflow.py` now decides the base class
+by the linear identity `bytes(pointer) − 2·W = 2` over the traced operands
+(`lin()` / `canon()`: `wp(b, d) = b + d`, `bp(b, d) = 2b + d`, `0xW:b = 2W + b`,
+constant multiples fold, anything else an opaque term by canonical spelling;
+a union-valued pointer must satisfy it in every member; a tree deeper than
+400 nodes is a miss, never a match). The old matcher is kept as
+`base_class_match_syntactic` only to measure the movement (`countflow.out`
+§a003, which lists every moved operand with its `pointer − 2W`).
+
+| | a002 | a003 |
+|---|---:|---:|
+| base-class operands / sites | 227 / 213 | **266 / 251** |
+| moved `cond → base-class` | | 39 (WCMV src 36, WCMP s1 3) |
+| moved `unknown → base-class` | | 0 (a bare length read is always `cond`, never `unknown`) |
+| previously matched, now lost | | 0 |
+| `asserts.tsv` rows: base-class / cond / guard / unknown | 223 / 948 / 18 / 130 | **262 / 909** / 18 / 130 |
+| per-site tiers (yes / guard / cond / unknown) | 998 / 8 / 611 / 72 | unchanged — a tier of the *justification*, not of the verdict |
+
+The asserted expression at each of the 39 is the same as before; the tier
+line in the message changes (`"P58 base-class …"`), which is what a later
+reader trusts. Accidental matches: none found (CountProof §4.1). Self-test
+extended with 7015C90D's shape, a near miss (`2W + 4`), a static, a frame
+slot, and the `ac3*2 + 0xW:b` byte-pointer spelling.
+
+## 9. Files
 
     docs/Project58/q001-plan-gate.md      the gate (unchanged after a001)
     docs/Project58/CountProof.md          the result of record
     docs/Project58/REPORT.md              this
     docs/Project58/sites.tsv              3,366 operand rows, default (sound) policy
     docs/Project58/sites-infercaps.tsv    the same under a001 Q2 policy (a)
-    docs/Project58/asserts.tsv            1,319 rows: site, operand, tier, needed, exact assert text
+    docs/Project58/asserts.tsv            1,319 rows: site, operand, tier, needed, exact assert text (tiers per a003)
     docs/Project58/countflow.out          console output, default policy (the per-site lists)
     docs/Project58/countflow-infercaps.out
     compiler/countflow.py                 the Stage A tool (new file)
