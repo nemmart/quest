@@ -24,12 +24,13 @@ transcription and is called corroboration.
 At every string site, the two counts (`ac0`, `ac1`; `WBLM`'s single `k`) are
 non-negative. 1,689 sites: 1,637 WCMV, 40 WCMP, 12 WBLM; 3,366 count operands.
 
-**Result** (a004's three tiers): **1,006 sites proven** (construction 998,
-guard 8); **549 sites layout-backed** — every non-proven count is a varying's
+**Result** (a005's three tiers): **1,022 sites proven** (construction 998,
+guard 8, slot invariant 16 — 14 sites wholly, and the constant folds a005
+opened); **542 sites layout-backed** — every non-proven count is a varying's
 own length word or monotone arithmetic on such words, discharged by one assert
-per root length word (169 words, 282 root rows); **134 sites asserted only**
-(104 `cond` operands over 56 length words the routine never reads as a piece
-on a dominating path, plus 130 `unknown` operands); **0 sites where a count is
+per root length word (169 words, 282 root rows); **125 sites asserted only**
+(102 `cond` operands over length words the routine never reads as a piece
+on a dominating path, plus 114 `unknown` operands); **0 sites where a count is
 negative by construction.** No `cmp` result ever feeds a count. Verdict tiers
 (a002): 998 / 8 / 611 / 72.
 
@@ -214,7 +215,29 @@ field's value is trusted across the guard-to-site interval). Two rules fired:
 
 These need no assert (`needed = no` in `asserts.tsv`).
 
-### 3.5 The residue — 72 sites unproven (46 under policy (a)), tier: UNPROVEN
+### 3.4b Slot invariants — 29 operands at 14 sites, tier: DATAFLOW (a005 / P59)
+
+A count that reads a frame slot's length word — as `len`, or as `C − len`
+after a clamp — is proven when the nearest dominating definite write of the
+slot and every writer on every path from it to the site (and round any loop
+back to the site) keep `len ∈ [0, C]`: literal and constant assignments, the
+clamped append `len + min(k, C − len) = min(len + k, C)` (the same guarantee
+as `assign_varying`'s `min(len, cap)`, written out in instructions — P59),
+the single-character append `len + 1` under its `len < C` guard, a pointer
+difference `cursor − data`. The string destinations in the region are shown
+not to reach the length word under the same invariant. Sites: DISPLAY_INVENTORY
+70167EE1 / 70167F05 / 70167F29 (P59's exhaustive walk agrees: the count is 3
+on every path), OBSERVE 70172DED / 70172EBE / 70173253 / 70173279, DISPLAY_MAP
+7016566D, STORE.1 7017A176, TERRITORY 7017CE4D / 7017CE84 / 7017CEB0 /
+7017CEF1 / 7017CF04. No assert needed (`asserts.tsv` tier `invariant`).
+
+Assumptions carried: frame privacy — a raw `LCALL`/`XCALL` with zero
+arguments to a non-nested routine cannot write this frame; nested routines,
+`LJSR` (the condition-system entries) and calls with arguments stay opaque; a
+pointer loaded from memory does not alias the frame (temptation 8). None of
+the 14 sites has such a statement in its region.
+
+### 3.5 The residue — 64 sites unproven (52 under policy (a)), tier: UNPROVEN
 
 Complete per-site list: `countflow.out` §7 (default) and
 `countflow-infercaps.out` §7 (policy (a)). By cause:
@@ -350,12 +373,13 @@ library's own check).
 
 | tier | operands | sites |
 |---|---:|---:|
-| proven (construction 2,047 + guard 18) | 2,065 | 1,006 |
-| layout-backed and asserted (base-class 286 + derived 785; 169 root length words; 282 assert rows) | 1,067 | 549 |
-| asserted only (`cond` 104 + `unknown` 130; 234 assert rows) | 234 | 134 |
+| proven (construction 2,047 + guard 18 + slot invariant 29) | 2,094 | 1,022 |
+| layout-backed and asserted (base-class 286 + derived 780; 169 root length words; 276 assert rows) | 1,056 | 542 |
+| asserted only (`cond` 102 + `unknown` 114; 216 assert rows) | 216 | 125 |
 
-A site is in the tier of its weakest operand. 516 asserts discharge
-everything below "proven"; 785 derived rows carry `needed = no`.
+A site is in the tier of its weakest operand. 492 asserts discharge
+everything below "proven"; 780 derived, 25 invariant and 18 guard rows carry
+`needed = no`. (a005; a004: 2,065 / 1,067 / 234 operands, 516 asserts.)
 
 ## 7. What every later rewrite may rely on
 

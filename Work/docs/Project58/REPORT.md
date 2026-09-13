@@ -9,22 +9,20 @@ or any artifact was changed; no assert was emitted; nothing executed.
 
 ---
 
-## 1. The answer — three tiers (a004; the two-tier table of a002 is below it)
+## 1. The answer — three tiers (after a005; a004's and a002's tables follow)
 
 | tier | operands | sites | what it rests on |
 |---|---:|---:|---|
-| **proven** — construction (constants, literal byte counts, `ac0 = 0` after a copy, `ac1 = 0` after a fill) or a dominating guard | **2,065** (2,047 + 18) | **1,006** | nothing to check |
-| **layout-backed and asserted** — the count is a varying's own length word (the base class: count = the 16-bit word at `W`, data at `2W + 2`; 286 operands, 169 distinct length words), or is built from such length words by `+`, `×`, `min`/`max` with every root's assert dominating and the word unchanged between (785 derived operands) | **1,067** | **549** | the STRUCTURAL argument — a negative count walks the pointer back over the string's own length word, which no compiler emits — checked by ONE assert per root (282 rows); the 785 derived operands need none |
-| **asserted only** — a length word the routine never reads as a varying piece on a dominating path (104 `cond` operands, 56 distinct words, 39 of them varyings elsewhere in the routine), or arithmetic the tool cannot sign (130 `unknown`) | **234** | **134** (38 routines; 62 of the sites `cond`-only) | the site assert, and nothing else |
+| **proven** — construction, a dominating guard, or (a005) a slot invariant verified through every writer on the paths to the site | **2,094** (2,047 + 18 + 29 by invariant, 25 of them at sites that were `unknown`/`cond`) | **1,022** | nothing to check |
+| **layout-backed and asserted** — the base class (286 operands, 169 distinct length words) and what is derived from it by `+`, `×`, `min`/`max` (780) | **1,056** | **542** | the structural argument, one assert per root (276 rows) |
+| **asserted only** — 102 `cond` operands over length words with no dominating root, 114 `unknown` | **216** | **125** | the site assert |
 | negative by construction | 0 | 0 | — |
 
-Asserts to emit: **516** (282 base-class + 104 cond + 130 unknown), down from
-1,326 in a002; `asserts.tsv` carries the 785 `derived` rows with `needed = no`
-and the root site(s) that cover each.
+Asserts to emit: **492** (276 base-class + 102 cond + 114 unknown), from 516
+(a004) and 1,326 (a002). Under policy (a): 104 asserted-only sites.
 
-The a002 two-tier view, for continuity (verdict tiers are unchanged by a003 /
-a004 — they moved the *justification*): proven 998 + 8 guard / conditional 611
-(637 under policy (a)) / unproven 72 (46) / negative 0.
+a004's table: proven 2,065 / 1,006 · layout-backed 1,067 / 549 · asserted only
+234 / 134. a002's verdict tiers: 998 + 8 / 611 / 72 / 0.
 
 ## 2. What could not be proven, and what it would take
 
@@ -296,14 +294,97 @@ IR already said. Recorded as the method finding a004 asked for: **a classifier
 that under-reports its best tier is not conservative — it is discarding
 arguments, and the discard is invisible in its output.**
 
-## 10. Files
+## 10. a005 — the clamped append is `assign_varying` in disguise (Sep 13 2026)
+
+**What was done.** P59's mechanism was merged into `countflow.py` (one tool;
+`compiler/onesite.py` stays as the exhaustive path-walk corroboration for the
+three DISPLAY_INVENTORY sites — its 80-path enumeration agrees with the
+invariant). The new pass, per site and per frame slot read by the count:
+
+1. **the nearest dominating DEFINITE write** of the slot (dominator tree of
+   the routine entry; a same-block earlier statement counts);
+2. **the region**: every statement on a path from that write to the site
+   that does not pass the write again — including paths that go past the
+   site and loop back to it;
+3. **every writer of the slot in the region maps `[0, C]` into `[0, C]`**,
+   `C` the clamp constant the routine subtracts the length from (32767 when
+   it never clamps). Interval evaluation of the traced value with the slot
+   read kept SYMBOLIC (a third tracer mode), plus three shapes named by
+   P59: the clamped append `len + min(k, C − len)` rewritten to
+   `min(len + k, C)`; the single-character append `len + 1` narrowed by the
+   `len < C` guard on its edge; and a pointer difference `cursor − data`
+   folded by the linear form. A string destination `data + len` is shown to
+   write words `≥ data` under the same invariant, so it never covers the
+   length word (P59's "the pointer came from the slot itself");
+4. `judge()` then signs `C′ − len` (`C′ ≥ C`) and `len` itself.
+
+Three model gaps closed on the way, all P59's §2: a store through a
+register whose reaching definition is `wp(ac3, k)` is now an exact write of
+slot `k` (the register RD and the slot RD are joined); a raw `LCALL`/`XCALL`
+with **zero** arguments to a non-nested routine is not a frame clobber (151
+of the 206 raw-call clobbers — the callee has no pointer into this frame;
+nested routines, which reach the parent frame through the static link, and
+`LJSR` (the O.ON/O.REVERT/I.PROLOG/I.EPILOG condition-system entries, which
+write the caller frame at places `docs/O_ON.md` does not pin down) stay
+opaque); `x & 0xFFFF` is the 16-bit store's own truncation.
+
+**Movement.**
+
+| | operands | sites |
+|---|---:|---:|
+| `unknown` → proven by invariant | 16 | 8: DISPLAY_INVENTORY 70167EE1 / 70167F05 / 70167F29 (P59's three, re-derived by the tool), OBSERVE 70173253 / 70173279, DISPLAY_MAP 7016566D; and TERRITORY 7017CE70 / 7017CEA7 by a constant fold (`9 − {0, 5}`, the `x − x` arm) |
+| `cond` → proven by invariant (adjacent shape: a length word whose every writer in the region is a constant or a clamped append, no clamp at the site) | 13 | 6: OBSERVE 70172DED / 70172EBE, STORE.1 7017A176, TERRITORY 7017CE4D / 7017CE84 / 7017CEB0 (WCMP), 7017CEF1 / 7017CF04 |
+| `asserts.tsv` rows: base-class / cond / derived / invariant / unknown | 276 / 102 / 780 / 25 / 114 | asserts needed **492** |
+
+P59's table, scored: DISPLAY_INVENTORY 3 → **proven**; OBSERVE 2 →
+**proven**; DISPLAY_MAP 1 → **proven** (the fourth writer form, the
+single-character append, verified by the edge guard); TERRITORY 2 →
+**proven** (not by the invariant — the `nsub(9, {5 | x − x})` was a constant
+fold the tool had refused to make); DISPLAY_SCREEN 1 → **still unknown**:
+its append's piece length is slot 10's length word, and slot 10 is
+`min(len(slot 1042), 10)` where slot 1042's writers are totals of other
+length words — it needs slot 1042's own invariant first, i.e. the pass run to
+a fixpoint over several slots (the machinery is per site, per slot; making it
+mutual is the next step, not done); INIT_OBJ_TBL 2 → **still unknown**: the
+destination is a shared-page record field (`wp(M32[0x70000210], 0x1EFBA)`);
+the invariant needs every writer of that field in every program, which frame
+privacy does not give.
+
+**Adjacent shapes — checked.** The remaining 64 `unknown` sites (114
+operands), by what blocks each:
+
+| cause | sites | is it an inline invariant? |
+|---|---:|---|
+| a total slot clobbered by a copy into a scratch buffer whose count is a STATIC varying's length (+k): DISPLAY_CAVE ×9 (`0x70000A4E`), ALCHEMIST_HOME, ATTACK.1/.5, DISPLAY_MAGIC, FIRE, FIRE.3, GET_QUEST ×4, LIST_PLAYERS.2 ×3, MOVE_FAMILIAR, MOVE_PLAYER ×2, REPORT ×2, SEIGE ×3, STORE.1, OP_EDIT.3 | 30 | **yes, of a static**: the static's length word is written only by literal assignments and clamped min shapes (`0x70000A4E`: 11 writers, all ≤ 80). A `StaticBounds` pass was built for exactly this (`countflow.py`, phase A/B) and bounds every writer — and is defeated by ONE statement, `[@0x7000021D:0, ac0] = …` at 70168117:20 in DISPLAY_INVENTORY: a copy into IN_BUFFER's data whose count is a chain total the slot model cannot bound, which — with no declared size for IN_BUFFER — the pass must treat as possibly reaching every static above 0x7000021D. What would settle all 30: **IN_BUFFER's capacity** (one declaration), or the compiler-correctness assumption that a copy into a variable's data never exceeds the variable (the temporal-extent point of a002, made spatial for statics because statics are not reused). Not assumed here |
+| `M8[ac2]` cursor stores into a scratch chain that my slot model clobbers upward: OP_EDIT.2 ×4, DISPLAY_CAVE (part) | 5 | the same extent question, for a frame buffer |
+| `capacity − len(record field)`: DISPLAY_MAGIC ×2, HELP.1, STORE.1 ×3, INIT_OBJ_TBL ×2 | 8 | a record-field capacity: the writers are in every program |
+| argument cells (INIT_OBJ_TBL ×3, OP_EDIT.9, TERRAIN, TERRITORY ×3) | 8 | interprocedural |
+| DISPLAY_SCREEN ×4 (slot 1042 / 998 / 1046 — the appends whose piece length is another varying's length) | 4 | yes — a MUTUAL invariant over three slots; the pass is per slot |
+| products (TAKE_OVER_CASTLE ×2), a `t1` scratch (CAST.2, TERRITORY_MAP ×2), UNSIGNED_TO_CHAR's ac2 through a loop (SEIGE ×2), DISPLAY_INVENTORY 70168143 | 9 | small, listed |
+
+So P59's judgement from one routine holds in shape but not in size: the
+biggest remaining class IS an inline invariant — of a static, not a frame
+slot — and it is blocked by one declaration this book does not carry, not by
+analysis.
+
+**Method — six for six** (a005 §4): the fixes were (1) the length store is a
+write of the count, (2) the algebraic layout test, (3) its 32-bit wrap and
+`R[] = M32[]`, (4) propagation through arithmetic, (5) the clamped append is
+capacity-preserving, and on the way (6) a zero-argument raw call cannot reach
+the frame. Each was found at one concrete site by asking why the tool did not
+see what the IR said, and none was a better algorithm. The user's reflex — *the
+game works, so we are probably not reading it carefully enough* — has been
+right every time; the reflex to reach for more analysis when a tier looks too
+large has been wrong every time. Recorded as the method finding.
+
+## 11. Files
 
     docs/Project58/q001-plan-gate.md      the gate (unchanged after a001)
     docs/Project58/CountProof.md          the result of record
     docs/Project58/REPORT.md              this
     docs/Project58/sites.tsv              3,366 operand rows, default (sound) policy
     docs/Project58/sites-infercaps.tsv    the same under a001 Q2 policy (a)
-    docs/Project58/asserts.tsv            1,319 rows: site, operand, tier, needed, root, exact assert text (a004: 516 needed, 785 derived)
+    docs/Project58/asserts.tsv            1,319 rows: site, operand, tier, needed, root, exact assert text (a005: 492 needed; 780 derived, 25 invariant, 18 guard need none)
     docs/Project58/countflow.out          console output, default policy (the per-site lists)
     docs/Project58/countflow-infercaps.out
     compiler/countflow.py                 the Stage A tool (new file)
