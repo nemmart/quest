@@ -103,7 +103,80 @@ of those sites.* **Produce that enumeration.**
 
 ---
 
+## Stage A — build the reaching-definitions tool FIRST
+
+**You cannot prove 1,689 sites by reading them.** P2's 154 register sites and
+most of the 463 need, for a given site, *which blocks define `ac0` and `ac1` on
+the paths reaching it*. That instrument does not exist. Build it before
+proving anything.
+
+`emulation/tools/dataflow.py` exists from an earlier project — **report at the
+gate what it actually does** and whether it is extensible or should be
+replaced.
+
+Two things make this tractable, and one is a trap:
+
+- **the state space is tiny** — four accumulators and a carry, and P52's census
+  found only ac2/ac3 ever serve as an address base (19,344 uses, zero on
+  ac0/ac1)
+- **THE TRAP: string statements define ac0–ac3 INVISIBLY.** `[@a, n] = piece`
+  names two locations and silently redefines four accumulators and `c`
+  (`residues_after_copy`, `EagleString.cpp:152–163`); `cmp` redefines all four;
+  `words(...)` redefines ac1/ac2/ac3. **A naive reaching-definitions pass will
+  trace THROUGH them and give wrong answers.** This is P56's F4, which found
+  82% of `LDAFP`s exist because of these residues. The tool must treat every
+  string statement as a definition of the registers it actually writes.
+
+**The tool is infrastructure, not scaffolding.** DESIGN §5.2's slot bijection
+needs the same analysis over `LDAFP`, and every future binding precondition
+needs it. Build it to be reused, and give it its own correctness check —
+ruling 1 applies to the tool as much as to the proofs.
+
+---
+
+## The closure lemma — verify it, then use it
+
+**If `ac0` and `ac1` are non-negative going IN to a `WCMV`, they are
+non-negative coming OUT.**
+
+With `n > 0`, `len > 0`, `t = min(n, len)` (`residues_after_copy`):
+
+```
+ac0 = 0                                    ≥ 0
+ac1 = len − sgn(len)·t = len − min(n, len) ≥ 0
+```
+
+**Verify this against the implementation rather than taking it from this
+prompt**, including the `t = 0` and `len = 0` edges, and state it for `cmp` and
+`block_move` too.
+
+### Why it matters: it collapses the chains
+
+The tail-split idiom does a copy, then uses the residue `ac1` as the count for
+the next copy. With closure, **you do not need to trace the chain** — establish
+non-negativity at its HEAD and it carries to every link by induction.
+
+So the proof restructures:
+
+1. **find the chain heads** — sites whose counts come from somewhere other than
+   a previous string statement's residue
+2. **prove those** — constants, literal byte counts, varying reads (the 593)
+3. **the rest follows by closure**
+
+And it narrows what Stage A's tool must answer: not *trace the full definition
+chain*, but **does this count come from a string residue, or from outside?**
+Much cheaper to build and to check.
+
+It also explains why StringsDesign's tail-split claim felt right — the idiom
+really is safe, for this reason. It was simply never stated as a closure
+property with the arithmetic behind it. **That is the difference between a
+reading and a proof, and it is what this project is for.**
+
+---
+
 ## What to establish
+
+
 
 **P1 — the constant sites.** Prove them. Report the count. Trivial, and it
 fixes the classification.
@@ -158,11 +231,17 @@ binding precision is recoverable.
 
 `docs/Project58/q001-plan-gate.md`, push to main, **STOP**. Report:
 
-1. **Your corrected classification** of the sites, with method
-2. **Your approach to the 593**, and whether the induction looks sound
-3. **A first pass at the exception list** — how many sites read a non-string
+1. **What `emulation/tools/dataflow.py` does**, and your plan for the Stage A
+   tool — extend or replace, with reasons, and how you will check it is right
+2. **The closure lemma verified** against `EagleString.cpp`, including the
+   edges, and stated for `cmp` and `block_move`
+3. **How many sites are chain heads** versus fed by a residue — this is the
+   number that sizes the whole project
+4. **Your corrected classification** of the sites, with method
+5. **Your approach to the 593**, and whether the induction looks sound
+6. **A first pass at the exception list** — how many sites read a non-string
    field as a varying?
-4. **What you expect to be unprovable**, before you try. Pre-registered, so it
+7. **What you expect to be unprovable**, before you try. Pre-registered, so it
    is scoreable — see `docs/Project55/REPORT-2.md` for why this matters
 
 STOP. Wait for `a001`.
