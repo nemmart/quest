@@ -9,11 +9,17 @@ The obligation, as it stands:
 
 > at every string site, `ac0 ≥ 0` and `ac1 ≥ 0`
 
-**It is already known to be FALSE**, and that is the starting point rather than
-a problem: `DISPLAY_INVENTORY 7016816B` runs `cmp` with a source length of −1,
-because the record field holds `0xFFFF` and the compiler reads length words
-**sign-extended** (P31 Census F-B1). So the real question is not *is it true*
-but **what is the true statement, and what does it rest on.**
+**A negative count is already known to OCCUR**, so the question is not *is the
+obligation true* but **what is the true statement, what discharges it, and what
+does the residue rest on.**
+
+`DISPLAY_INVENTORY 7016816B` runs `cmp` with a source length of −1: the record
+field holds `0xFFFF` and length words are read **sign-extended** (P31 Census
+F-B1, and there is a comment at `EagleString.cpp:30` about this very site).
+**That site has the canonical varying layout** — it is a genuine string read of
+shared data that happens to hold an implausible length, not a misuse of the
+accessor. It is therefore discharged by the base class below, and is **expected
+to trip its assert**.
 
 This is a **proof and census project**. You write no compiler code and change
 no artifact.
@@ -52,7 +58,7 @@ But do not assume this one lands the same way — the distribution is worse (§3
 
 | path | why |
 |---|---|
-| `emulation/hw/strings/EagleString.cpp` | **the implementation.** `copy()` :60–90, `residues_after_copy()` :152–163, `compare()` :~190–205, `block_move()` :111–130 |
+| `emulation/hw/strings/EagleString.cpp` | **the implementation.** `copy()` :60–90, `residues_after_copy()` :152–163, `residues_after_compare()` :167, `block_move()` :111–130 |
 | `docs/IR.md` §5.8 | the string statements and their documented residues |
 | `docs/Project29/StringsDesign.md` | the claims you are testing, especially the tail-split argument |
 | `docs/Project31/Census.md` §10 F-B1 | **the known counterexample**, in full |
@@ -267,10 +273,6 @@ proof, and is what this project is for.**
 
 ## What to establish
 
-
-
-
-
 **P1 — the constant sites.** Prove them. Report the count. Trivial, and it
 fixes the classification.
 
@@ -281,10 +283,16 @@ arithmetic, and is positive when the WCMV runs"* — is a **reachability
 argument made by reading**. Re-derive it mechanically or mark it as one
 witness.
 
-**P3 — the varying sites (593).** Attempt the induction. Enumerate every site
-where a non-string field is read as a varying. **That enumeration is the
-project's most valuable output**, because it is the exception list every later
-rewrite must respect.
+**P3 — the varying sites (593). THE BASE CLASS COMES FIRST** — see above.
+Match `len → ac0, chars → ac2` mechanically, emit the assert, report the count.
+
+Then, for whatever does NOT match the pattern: attempt the induction, and
+enumerate the residue. **That enumeration is the project's most valuable
+output**, because it is the list every later rewrite must respect.
+
+**Do not expect the residue to be the SD_PTR and file-read cases** — those
+have the canonical pattern and are discharged by the base class. The residue is
+sites that read a length from somewhere the pattern does not recognise.
 
 **P4 — `WBLM` (12).** Single count `k`, all constants in the book as far as we
 have seen. Confirm, and confirm the self-overlapping fills (`src = dst − 1` or
@@ -310,7 +318,10 @@ binding precision is recoverable.
    provenance** (like `quest.assumptions`' three statics), or **unproven**.
    An honest *unproven* is worth more than a confident assertion.
 2. **The known counterexample is a fact to characterise, not to explain away.**
-   If the induction needs an exception list, produce the list.
+   `DISPLAY_INVENTORY` has the canonical layout, so it is discharged by the
+   base class and is **expected to trip its assert** — that is the test that
+   the mechanism works, not a hole. If anything else needs an exception list,
+   produce the list.
 3. **Dynamic evidence proves executed paths only.** The battery reaches ~15.9%
    of statements, and coverage deltas under a few hundred statements are noise
    (`NextSession.md`). Instrumenting `copy()` is legitimate as *corroboration*
@@ -334,9 +345,9 @@ binding precision is recoverable.
 5. **Your approach to the 593**, and whether the induction looks sound
 6. **THE PATTERN-MATCH COUNT** — how many of the 593 match `len → ac0,
    chars → ac2`? With the chain-head count this sizes the project
-7. **A first pass at BOTH exception lists** — how many sites read a non-string
-   field as a varying (a), and how many read a varying with no dominating
-   write (b)?
+7. **A first pass at the RESIDUE** — of the 593, how many do NOT match the
+   pattern, and what do those look like? Plus the uninitialised-varying
+   question (§b): how many varying reads have **no dominating write**?
 8. **What you expect to be unprovable**, before you try. Pre-registered, so it
    is scoreable — see `docs/Project55/REPORT-2.md` for why this matters
 
@@ -359,10 +370,19 @@ not).
 
 1. **You may WRITE:** `docs/Project58/**`, and analysis tooling in `compiler/`
    (**new files only**).
-2. **Do NOT modify** `emulation/**` (including `quest.assumptions` — recommend
+2. **The Stage A tool goes in `compiler/` as a NEW FILE**, even if it borrows
+   from `emulation/tools/dataflow.py`. Read that file, say what it does, copy
+   what is useful — but **do not modify it**, because `emulation/` is not
+   yours.
+3. **Do NOT modify** `emulation/**` (including `quest.assumptions` — recommend
    rows, do not write them), `compiler/lower_c.py`, `game/**`, `docs/IR.md`,
    `docs/StringModel.md`, `docs/Project44/DESIGN.md`, or any artifact.
-3. **Nothing executes**, except instrumentation you build for corroboration —
+4. **You SPECIFY the asserts; you do not emit them.** The base class is
+   discharged by an `assert` at each site, but emitting one means changing
+   either the lifter (an artifact) or the compiler — neither is yours.
+   **Deliver the site list and the exact assert text**; a later project emits
+   them. Say in the REPORT which project should.
+5. **Nothing executes**, except instrumentation you build for corroboration —
    and say plainly that it corroborates rather than proves.
 
 ---
