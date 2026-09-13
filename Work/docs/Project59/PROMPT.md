@@ -2,26 +2,36 @@
 
 ## GOAL
 
-**Prove `len ≤ 30` at DISPLAY_INVENTORY `70167F05`, or establish exactly what
-stops you.**
+**The real question: is `ac1` non-negative at DISPLAY_INVENTORY's `WCMV`
+`70167F05`?**
 
-One statement. One routine. However deep it takes.
+That is the obligation. Everything else here is how far we got tracing it.
 
-This is deliberately narrow. P58 classified 134 sites as **asserted only** —
-unproven, carried by a runtime assert. We picked one at random and could not
-settle it by reading, twice getting it wrong in opposite directions. So the
-question is whether these sites are **genuinely unprovable** or whether the
-analysis has not been careful enough. **One worked example answers that for the
-class.**
+We traced `ac1` back to its sole writer and reduced the obligation to a single
+condition:
 
-**Success is either outcome**, stated at the right tier:
+> **`ac1 ≥ 0` at the site  ⟺  `len ≤ 30`**, where `len` is the length word at
+> frame slot 6.
 
-- **PROVEN** — `len ≤ 30` on every path reaching the site, with the argument
-- **NOT PROVEN** — the specific fact that is missing, why no available evidence
+**So the job is: check that reduction, then settle `len ≤ 30`.** Both halves
+matter, and the first is not to be taken on trust — see ruling 3.
+
+**Success is any of three outcomes**, stated at the right tier:
+
+- **PROVEN** — `ac1 ≥ 0` on every path, with the argument
+- **NOT PROVEN** — the specific missing fact, why no available evidence
   supplies it, and what would
+- **THE REDUCTION IS WRONG** — `ac1 ≥ 0` holds (or fails) for a reason other
+  than `len ≤ 30`. **This is a real possibility and would be the most useful
+  outcome**, because two readings of this site have already been wrong.
 
-**A third outcome is also success: the site is fine for a reason we have not
-considered.** Say so.
+### Why one site
+
+P58 classified 134 sites as **asserted only** — unproven, carried by a runtime
+assert. We picked this one at random and could not settle it by reading. So:
+are those sites **genuinely unprovable**, or has the analysis not been careful
+enough? **One worked example answers that for the class**, which is worth more
+than the site.
 
 ---
 
@@ -68,8 +78,9 @@ false=0 / true=1"*. Signedness verified: `EagleCompute.cpp:198` casts both
 operands to `int32_t`, and the machine has separate unsigned forms
 (`WUSGT`/`WUSGE`) the compiler did not use.
 
-**So the whole question is: can `len` — the length word at `wp(ac3, 6)` —
-exceed 30?**
+**So the reduction is: `ac1 ≥ 0` ⟺ `len ≤ 30`.** Check that derivation
+independently, then answer the second half: **can `len` — the length word at
+`wp(ac3, 6)` — exceed 30?**
 
 ### What we found looking for the bound, and where we stopped
 
