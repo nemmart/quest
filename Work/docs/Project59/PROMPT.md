@@ -183,6 +183,41 @@ enumerable.
 
 ---
 
+## Putting it together — the procedure the assumptions license
+
+Frame privacy and a closed CFG together make this a **bounded, finite
+problem**. Concretely:
+
+1. **Confirm the two assumptions** for this routine (both already checked
+   above — re-confirm cheaply, they are the foundation).
+2. **Enumerate pointer escapes.** Every `call` and `rt_call` in
+   DISPLAY_INVENTORY: is any argument `wp(ac3, 6)`, or a pointer derived from
+   it? If none, **the slot's only writers are the three bare length stores
+   already found** — and P58's `<opaque slot 6 clobbered>` is an
+   over-approximation, not a real hazard.
+3. **Enumerate the routine's own copies that could reach slot 6.** With
+   nothing external able to write the frame, these are the *only* remaining
+   clobber candidates. Each has a destination; bound them.
+4. **Walk the length arithmetic.** From the WSAVS entry, every path to
+   `70167F05`: what does `len` start at, what does each of the three stores
+   add, and what can the running total reach? The appends add known pieces.
+5. **Answer both halves**: is the reduction (`ac1 ≥ 0` ⟺ `len ≤ 30`) right,
+   and does `len ≤ 30` hold?
+
+**Steps 2 and 3 are where P58 stopped**, and they are the reason this project
+exists. P58's slot model had to assume an unbounded copy *might* reach slot 6,
+because it could not bound the scratch buffer. **Frame privacy attacks that
+from the other side**: if nothing outside the routine can write the frame, the
+question is not "how big is the buffer" but "which of this routine's own copies
+can land on slot 6" — a much smaller question, with a finite answer.
+
+**If that is what unlocks it, it is ruling 4's systematic miss**, and it
+applies to every one of the other 133 sites: P58's slot model was conservative
+about a threat that frame privacy rules out. **Say so explicitly** — that
+finding is worth more than this site.
+
+---
+
 ## Rulings
 
 1. **"The game works" is evidence, not a proof**, and it is evidence about
