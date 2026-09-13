@@ -158,6 +158,31 @@ can reach the slot at all.
 
 ---
 
+## The CFG is closed — verified for this routine
+
+**Nothing jumps into a routine's blocks except through its WSAVS entry.** Two
+exceptions exist in general, and **both are absent here — checked**:
+
+| exception | status for DISPLAY_INVENTORY |
+|---|---|
+| the routine's own `.N@` nested entries (separate WSAVS frames; P47 found three `I.GOTO` edges landing in sibling pieces — DROP.1→DROP, ATTACK.4→ATTACK.3, KILL_PLAYER.1/.4→KILL_PLAYER.2) | **none.** Zero `DISPLAY_INVENTORY.N@` rows in `quest.addrbook`; it sits alone between DISPLAY_SCREEN and DISPLAY_FLASK, one entry, argc 1, frame 0x9E |
+| an ON-unit body it establishes (a signal enters mid-routine; DESIGN §11) | **none.** Zero mentions in `docs/ON_ERROR_CATALOG.md`, no establisher address in its range |
+
+*(The third general case — hand-assembled code branching across ranges, R39's
+LOCK_FILE/UNLOCK_FILE — is a named pair elsewhere and does not touch this
+routine.)*
+
+**So entry is via WSAVS at `701674B5` only, and every path to the site starts
+there.** "Every write to the length word on every path" is a **finite walk**,
+not an open-ended search. Re-confirm both rows cheaply, then rely on them.
+
+**This is a better position than P58 worked from.** P58 had to assume an
+unbounded copy *might* reach slot 6. With the CFG closed and the frame private,
+the only clobber candidates are **this routine's own copies** — and those are
+enumerable.
+
+---
+
 ## Rulings
 
 1. **"The game works" is evidence, not a proof**, and it is evidence about
