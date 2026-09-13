@@ -24,12 +24,13 @@ transcription and is called corroboration.
 At every string site, the two counts (`ac0`, `ac1`; `WBLM`'s single `k`) are
 non-negative. 1,689 sites: 1,637 WCMV, 40 WCMP, 12 WBLM; 3,366 count operands.
 
-**Result** (a006's three tiers): **1,069 sites proven** (construction,
-guards, slot invariants, image-table bounds); **499 sites layout-backed** — every non-proven count is a varying's
+**Result** (a007's three tiers): **1,092 sites proven** (construction,
+guards, slot invariants, image-table / static bounds, descriptor census);
+**481 sites layout-backed** — every non-proven count is a varying's
 own length word or monotone arithmetic on such words, discharged by one assert
-per root length word (169 words, 282 root rows); **121 sites asserted only**
+per root length word (169 words, 282 root rows); **116 sites asserted only**
 (126 `cond` operands over length words the routine never reads as a piece
-on a dominating path, plus 82 `unknown` operands); **0 sites where a count is
+on a dominating path, plus 75 `unknown` operands); **0 sites where a count is
 negative by construction.** No `cmp` result ever feeds a count. Verdict tiers
 (a002): 998 / 8 / 611 / 72.
 
@@ -251,7 +252,7 @@ REPORT §11), 0x70000A4E ≤ 80, 0x70000A78 ≤ 80. Assumptions: the image's
 constant tables are not written through a pointer; no other program writes
 the program's own data page.
 
-### 3.5 The residue — 48 sites unproven (40 under policy (a)), tier: UNPROVEN
+### 3.5 The residue — 43 sites unproven (36 under policy (a)), tier: UNPROVEN (REPORT §12 has the final list)
 
 Complete per-site list: `countflow.out` §7 (default) and
 `countflow-infercaps.out` §7 (policy (a)). By cause:
@@ -387,14 +388,14 @@ library's own check).
 
 | tier | operands | sites |
 |---|---:|---:|
-| proven (construction, guard 18, slot invariant 25, image-table / static bounds) | 2,189 | 1,069 |
-| layout-backed and asserted (base-class + derived 711; 258 assert rows) | 969 | 499 |
-| asserted only (`cond` 126 + `unknown` 82; 208 assert rows) | 208 | 121 |
+| proven (construction, guard 18, slot invariant 67, image-table / static bounds, descriptor census) | 2,233 | 1,092 |
+| layout-backed and asserted (base-class + derived 680; 252 assert rows) | 932 | 481 |
+| asserted only (`cond` 126 + `unknown` 75; 201 assert rows) | 201 | 116 |
 
-A site is in the tier of its weakest operand. 466 asserts discharge
-everything below "proven"; 711 derived, 25 invariant and 18 guard rows carry
-`needed = no`. (a006; a005: 2,094 / 1,056 / 234, 492 asserts; a004: 2,065 /
-1,067 / 234, 516.)
+A site is in the tier of its weakest operand. 453 asserts discharge
+everything below "proven"; 680 derived, 67 invariant and 18 guard rows carry
+`needed = no`. (a007; a006: 2,189 / 969 / 208, 466 asserts; a005: 2,094 /
+1,056 / 234, 492; a004: 2,065 / 1,067 / 234, 516.)
 
 ## 7. What every later rewrite may rely on
 

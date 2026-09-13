@@ -53,6 +53,11 @@ What it does, in order (docs/Project58/PROMPT.md):
      (per reaching definition, with the facts at each definition), whole-
      varying copies, ?READ_SCREEN's max_length, and game callees that clamp
      an output argument to the caller's DESCRIPTOR capacity (a006).
+ 13a. (a007) t-places substituted in count values; a callee's `M32[wp(arg,
+     1)]` read of a DESCRIPTOR argument bounded by the census of what every
+     call site pushes (`descriptor_census`); the slot invariant proven by
+     induction over the writers that REACH the site (closure over their own
+     reaching definitions), with the dominating-write form as a fallback.
  13. (a006) length words in CONSTANT TABLES of the image: `M16[idx*stride +
      base]` under the compiler's own DERR index guard is bounded by the max
      over the reachable entries in quest.mem (`table_bound`), for tables no
@@ -715,13 +720,14 @@ def defs_at(blocks, IN, blk, idx, key, definite=False):
 #   union        ('union', [values])                    several reaching definitions
 
 class Tracer:
-    def __init__(self, blocks, IN, SIN=None, through_len=False, keep_m16=False):
+    def __init__(self, blocks, IN, SIN=None, through_len=False, keep_m16=False, expand_t=False):
         self.blocks = blocks
         self.IN = IN
         self.SIN = SIN or {}        # block -> {('slot', k): defs}
         self.through_len = through_len
         self.keep_m16 = keep_m16    # a005: every 16-bit frame-slot read stays a SYMBOL (for invariants)
-        self.memo = {}
+        self.expand_t = expand_t    # a007: substitute block-local t-places (count values only — the
+        self.memo = {}              # Nova test decompositions in every goto would blow the guard traces up)
 
     # -- frame identity ----------------------------------------------------
     def is_frame(self, base, blk, idx, stack):
@@ -819,7 +825,16 @@ class Tracer:
         k = e[0]
         if k == 'reg':
             return self.trace_reg(e[1], blk, idx, stack)
-        if k in ('const', 'bplit', 'flag', 'sreg', 'name', 't', 'root'):
+        if k == 't' and self.expand_t:
+            # a t-place is block-local and single-assignment (IR.md 5.4): its
+            # value is the one statement `tN = e` earlier in the block
+            b = self.blocks[blk]
+            for j in range(idx - 1, -1, -1):
+                st = b.stmts[j]
+                if st.kind == 'assign' and st.lhs == e:
+                    return self.subst(st.rhs, blk, j, stack)
+            return ('root', 'opaque', 't-place %s without a definition in block %s' % (e[1], blk))
+        if k in ('const', 'bplit', 'flag', 'sreg', 'name', 'root', 't'):
             return e
         if k == 'mem':
             # `R[a]` is `M32[a]` at every site of the program (docs/Indirection.md 3,
@@ -1415,6 +1430,9 @@ def table_upper(v, facts, depth=0):
         return STATIC_BOUNDS.get(S) if S is not None else None
     if k == 'root' and v[1] == 'residue' and v[2][:2] in (('WCMV', 'ac0'), ('WBLM', 'ac1')):
         return 0
+    dc = descriptor_capacity(v)
+    if dc is not None:
+        return max(dc)
     if k == 'union':
         out = None
         for x in flatten_union(v):
@@ -1459,6 +1477,62 @@ RT_WRITES = {
 }
 NF = 'non-frame'
 ADDRBOOK_NAMES = {}       # entry pc -> name, filled by run()
+ARG_DESCRIPTORS = {}      # (callee entry hex8, arg cell offset) -> sorted list of descriptor capacities, one per call site
+ARG_CALLSITES = {}        # (callee entry hex8) -> number of decorated call sites
+ARG_CONSTS = {}           # (callee entry hex8, arg cell offset) -> sorted list of constant values pushed (all sites) or None
+
+
+def descriptor_census(blocks, mem):
+    """a007: every decorated `call` pushes its arguments as `M32[argslot] =
+    <ea>` in its block; argument N sits at marker - 2N and lands in the
+    callee's cell wfp-10-2N.  When every call site of a routine pushes a
+    CONSTANT word address whose image words are a PL/I string descriptor
+    (0xB00, then the capacity as a wide at word+1), the callee's
+    `M32[wp(arg, 1)]` is one of a known set of capacities."""
+    per = defaultdict(list)
+    sites = defaultdict(int)
+    for b in blocks.values():
+        for st in b.stmts:
+            if st.kind != 'call':
+                continue
+            m = re.search(r'marker=([0-9A-F]{8})', st.text)
+            if not m:
+                continue
+            marker = int(m.group(1), 16)
+            sites[st.callee] += 1
+            pushes = {}
+            for j in range(st.idx - 1, -1, -1):
+                s2 = b.stmts[j]
+                if s2.kind in ('call', 'rt_call'):
+                    break
+                if s2.kind == 'assign' and s2.lhs[0] == 'mem' and s2.lhs[1] == 'M32' and strip_paren(s2.lhs[2])[0] == 'const':
+                    pushes[to_signed(strip_paren(s2.lhs[2])[1]) & 0xFFFFFFFF] = strip_paren(s2.rhs)
+            for slot, val in pushes.items():
+                N = (marker - slot) // 2
+                per[(st.callee, -10 - 2 * N)].append(val)
+    for key, vals in per.items():
+        callee = key[0]
+        if len(vals) != sites[callee]:
+            continue                               # a site did not push this argument as a plain store
+        caps = []
+        consts = []
+        for v in vals:
+            if v[0] == 'const':
+                d = to_signed(v[1]) & 0xFFFFFFFF
+                consts.append(to_signed(v[1]))
+                if mem.get(d) == 0xB00 and d + 2 in mem:
+                    caps.append(to_signed((mem[d + 1] << 16) | mem[d + 2]))
+                    continue
+            caps = None
+            if v[0] != 'const':
+                consts = None
+            if caps is None and consts is None:
+                break
+        if caps is not None and len(caps) == len(vals):
+            ARG_DESCRIPTORS[key] = sorted(set(caps))
+        if consts is not None and len(consts) == len(vals):
+            ARG_CONSTS[key] = sorted(set(consts))
+    ARG_CALLSITES.update(sites)
 
 
 class SlotModel:
@@ -1848,6 +1922,20 @@ def slot_symbol(v):
     return None
 
 
+def descriptor_capacity(v):
+    """`M32[wp(<argument (-k, entry)>, 1)]` -> the list of capacities the
+    call sites' descriptors carry, or None."""
+    v = strip_paren(v)
+    if v[0] != 'mem' or v[1] != 'M32':
+        return None
+    a = strip_paren(v[2])
+    if a[0] == 'call' and a[1] == 'wp' and len(a[2]) == 2 and strip_paren(a[2][1]) == ('const', 1):
+        base = strip_paren(a[2][0])
+        if base[0] == 'root' and base[1] == 'argument':
+            return ARG_DESCRIPTORS.get((base[2][1], base[2][0]))
+    return None
+
+
 def sym_range(v):
     if _RANGES[0] is None:
         return None
@@ -1904,6 +1992,9 @@ def _judge(v, closure=True):
         if kind == 'entry':
             return ('unknown', 'routine entry value @%s' % det), []
         if kind == 'argument':
+            key = (det[1], det[0])
+            if key in ARG_CONSTS and all(c >= 0 for c in ARG_CONSTS[key]):
+                return ('yes', 'argument cell wp(wfp, %d): every call site (%d) pushes a constant in %s' % (det[0], ARG_CALLSITES.get(det[1], 0), ARG_CONSTS[key][:6])), []
             return ('unknown', 'argument cell wp(wfp, %d) (caller-supplied)' % det[0]), []
         if kind == 'slot-entry':
             return ('unknown', 'frame slot %d read with no write on some path (entry @%s)' % det), []
@@ -1923,6 +2014,9 @@ def _judge(v, closure=True):
         rg = sym_range(v)
         if rg is not None and rg[0] >= 0:
             return ('yes', '%s in [%d, %d] (slot invariant)' % (slot_symbol(v), rg[0], rg[1])), []
+        dc = descriptor_capacity(v)
+        if dc is not None:
+            return ('yes' if min(dc) >= 0 else 'no', 'M32[descriptor + 1]: every call site passes a descriptor with capacity in %s' % dc), []
         return ('unknown', '%s read %s' % (v[1], show(v))), []
     if k == 'call':
         f = v[1]
@@ -2904,9 +2998,77 @@ class SlotInvariants:
         return (lo // 2, None if cnt is None else (hi + cnt[1] - 1) // 2)
 
     def verify_site(self, st, k, C):
+        """len(slot k) in [0, C] at the site, by induction over the WRITERS
+        THAT REACH IT: the slot's reaching definitions at the site, plus —
+        for every writer whose value reads the slot — that writer's own
+        reaching definitions, to a closure.  Every member must be a definite
+        write whose value, evaluated with the slot read as [0, C] and the facts
+        at the writer, stays in [0, C]; an entry (unwritten path) or a clobber
+        fails.  (a007: replaces the dominating-write + region form, which could
+        not see a slot assigned on both arms of an if.)"""
         key = (st.blk, st.idx, k, C)
         if key in self.report:
             return self.report[key][0]
+        sym = 'slot%d' % k
+        env = {sym: (0, C)}
+        seen = set()
+        work = deque(defs_at(self.blocks, self.SIN, st.blk, st.idx, ('slot', k)))
+        why = []
+        ok = True
+        n = 0
+        while work and ok:
+            d = work.popleft()
+            if d in seen:
+                continue
+            seen.add(d)
+            if d[0] == 'entry':
+                ok = False
+                why.append('unwritten on a path from %s' % d[1])
+                break
+            stw = self.blocks[d[0]].stmts[d[1]]
+            eff = stw.sdefs[k]
+            if eff[0] != 'write':
+                wr = self.dest_word_range(stw, env)
+                if wr is not None and (wr[0] > k or (wr[1] is not None and wr[1] < k)):
+                    why.append('@%s:%d writes words [%s, %s] (not %d)' % (d[0], d[1], wr[0], wr[1], k))
+                    # the write did not touch the slot: what reaches it is what reached this statement
+                    work.extend(defs_at(self.blocks, self.SIN, d[0], d[1], ('slot', k)))
+                    continue
+                ok = False
+                why.append('clobber @%s:%d %s' % (d[0], d[1], eff[1][:50]))
+                break
+            val = self.tracer.subst(eff[1], d[0], d[1], frozenset())
+            facts = self.guards.facts_at(d[0], d[1])
+            r = self.eval(val, env, facts)
+            if r is None or r[0] < 0 or r[1] > C:
+                ok = False
+                why.append('writer @%s:%d = %s -> %s' % (d[0], d[1], show(val)[:70], r))
+                break
+            why.append('@%s:%d in [%d,%d]' % (d[0], d[1], r[0], r[1]))
+            syms = set()
+            collect_slot_symbols(val, syms)
+            if sym in syms:
+                work.extend(defs_at(self.blocks, self.SIN, d[0], d[1], ('slot', k)))
+            n += 1
+            if n > 200:
+                ok = False
+                why.append('more than 200 writers')
+                break
+        text = ('holds [0, %d] over %d writers: ' % (C, len(seen)) if ok else 'FAILS: ') + '; '.join(why)[:220]
+        if not ok:
+            # fall back to the dominating-write + region form (a005), which
+            # starts the induction at a write the site cannot be reached without
+            self.report[key] = (None, text)
+            rg = self.verify_site_dom(st, k, C)
+            if rg is not None:
+                self.report[key] = (rg, self.report[(st.blk, st.idx, k, C, 'dom')][1])
+            return self.report[key][0]
+        self.report[key] = ((0, C), text)
+        return self.report[key][0]
+
+
+    def verify_site_dom(self, st, k, C):
+        key = (st.blk, st.idx, k, C, 'dom')
         sym = 'slot%d' % k
         rname = self.blocks[st.blk].routine
         D = self.dominating_write(st, k)
@@ -3284,6 +3446,8 @@ def run(args):
                             w0 = seg7(to_signed(a[1]))
                             for w in range(w0, w0 + 256):
                                 _TABLE_STORES.add(w)
+    descriptor_census(blocks, mem)
+    print('descriptor census: %d (callee, arg) pairs with a descriptor at every call site; %d with a constant at every site' % (len(ARG_DESCRIPTORS), len(ARG_CONSTS)))
     statics = StaticBounds(blocks, tracer0, guards0, mem)
     statics.run()
     SIN, SIN_DEF, model = slot_reaching_defs(blocks, tracer0, args.call_policy, args.infer_caps, guards0)
@@ -3301,9 +3465,10 @@ def run(args):
     tracer = Tracer(blocks, IN, SIN)
     tracer_len = Tracer(blocks, IN, SIN, through_len=True)
     tracer_sym = Tracer(blocks, IN, SIN, keep_m16=True)
+    tracer_t = Tracer(blocks, IN, SIN, expand_t=True)
     print('slot model: call policy %s; clobber-all events: %s' % (args.call_policy, dict(model.stats)))
 
-    _SITE_GUARDS[0] = Guards(blocks, tracer, owner)
+    _SITE_GUARDS[0] = Guards(blocks, tracer_t, owner)
     sites = list(string_sites(blocks))
     print('book: %d blocks, %d string sites (WCMV %d, WCMP %d, WBLM %d)' % (
         len(blocks), len(sites), sum(1 for s in sites if s.op == 'WCMV'),
@@ -3321,7 +3486,7 @@ def run(args):
     # ---- per-site analysis
     results = []
     for st in sites:
-        rows = analyse_site(st, tracer)
+        rows = analyse_site(st, tracer_t)
         rows2 = analyse_site(st, tracer_len)
         for r, r2 in zip(rows, rows2):
             r['verdict2'] = r2['verdict']

@@ -9,20 +9,20 @@ or any artifact was changed; no assert was emitted; nothing executed.
 
 ---
 
-## 1. The answer — three tiers (after a006; earlier tables follow)
+## 1. The answer — three tiers (after a007's cheap round; earlier tables follow)
 
 | tier | operands | sites | what it rests on |
 |---|---:|---:|---|
-| **proven** — construction, a dominating guard, a slot invariant, or (a006) a length word bounded by an image table / a static's writer census | **2,189** | **1,069** | nothing to check |
-| **layout-backed and asserted** — the base class and what is derived from it | **969** | **499** | one assert per root (258 rows) |
-| **asserted only** — 126 `cond` + 82 `unknown` operands | **208** | **121** | the site assert |
+| **proven** — construction, a dominating guard, a slot invariant, an image-table / static bound, a descriptor census | **2,233** | **1,092** | nothing to check |
+| **layout-backed and asserted** — the base class and what is derived from it | **932** | **481** | one assert per root (252 rows) |
+| **asserted only** — 126 `cond` + 75 `unknown` operands | **201** | **116** | the site assert |
 | negative by construction | 0 | 0 | — |
 
-Asserts to emit: **466** (258 base-class + 126 cond + 82 unknown); a005: 492,
-a004: 516, a002: 1,326. Under policy (a): 107 asserted-only sites.
+Asserts to emit: **453** (252 base-class + 126 cond + 75 unknown); a006: 466,
+a005: 492, a004: 516, a002: 1,326. Under policy (a): 102 asserted-only sites.
 
-Earlier: a005 2,094 / 1,056 / 234 operands (1,022 / 542 / 125 sites);
-a004 2,065 / 1,067 / 234; a002's verdict tiers 998 + 8 / 611 / 72 / 0.
+Earlier: a006 2,189 / 969 / 208 operands (1,069 / 499 / 121 sites); a005
+2,094 / 1,056 / 234; a004 2,065 / 1,067 / 234; a002 998 + 8 / 611 / 72 / 0.
 
 ## 2. What could not be proven, and what it would take
 
@@ -479,14 +479,53 @@ NEW_USERS.PR caveat.
 questions and four greps, and the tool then found that the answer was
 incomplete (27 writers, not 1) and still true.
 
-## 12. Files
+## 12. a007 — the cheap round (Sep 13 2026), and where it lands
+
+Three small model fixes, as forecast:
+
+- **t-places** are substituted in count values (a WXCH swap's `t1 = ac1`);
+  CAST.2's and TERRITORY_MAP's `t1` counts now trace (TERRITORY_MAP's turn
+  out to be `x / y + 1` divisions and stay unknown honestly).
+- **A descriptor census**: every decorated call site pushes its arguments as
+  `M32[argslot] = <ea>`; where every site of a routine pushes a constant
+  whose image words are a PL/I string descriptor (`0xB00`, capacity at
+  word+1), the callee's `M32[wp(arg, 1)]` is one of a known set of
+  capacities — 6 (callee, argument) pairs, all non-negative; 25 more
+  arguments are constants at every site. TERRAIN's and TERRITORY's
+  `min(k, cap)` counts are proven.
+- **The slot invariant by induction over the writers that reach the site**
+  (the reaching definitions, closed over each writer's own reaching
+  definitions), with the a005 dominating-write form as the fallback. A slot
+  assigned on both arms of an `if` (TAKE_OVER_CASTLE's "citadel"/"castle")
+  has no dominating write and was unprovable before; now its products
+  `len × 2 + 56` are proven. 67 operands at 35 sites rest on invariants
+  (from 25 at 14).
+
+Movement: unknown sites **48 → 43**; proven sites 1,069 → **1,092**; asserts
+466 → **453**.
+
+**Where it lands, and the recommendation to stop here.** The 43:
+
+| class | sites | why the tool stops |
+|---|---:|---|
+| scratch copies of a PLAYER / OBJ / CASTLE **shared-page** record field whose length caps the total slot (ALCHEMIST_HOME, ATTACK.1/.5, DISPLAY_CAVE ×5, FIRE ×2, GET_QUEST, LIST_PLAYERS.2 ×4, MOVE_FAMILIAR, OP_EDIT.2 ×4, OP_EDIT.3, REPORT, SEIGE, STORE.1 ×4, DISPLAY_MAGIC) | 27 | the field's capacity: `shared_data_layout.h` says `VARYING(32)` for the name, but it is an inferred layout and the fields are written by other programs (NEW_USERS.PR). The same structural argument as the base class, and the same assert; a proof needs the other programs |
+| DISPLAY_SCREEN ×4 | 4 | a mutual invariant over three slots (the appends' piece length is another slot's length); half a day of tool work, four sites |
+| INIT_OBJ_TBL ×6, OP_EDIT.9, TERRITORY ×2 | 9 | argument cells whose call sites push computed values, and shared-page fields; interprocedural |
+| TERRITORY_MAP ×2 | 2 | `x / y + 1` — the sign of a quotient; would need the divisor's sign |
+| DISPLAY_MAGIC 70166536 | 1 | `min(40, len)` where the slot's writer is a scratch copy of a shared-page field — the first class again |
+
+Every one is a varying's length word (or arithmetic on one) with a runtime
+assert on it. None is a random word. The floor is the shared page, and it is
+not a tool problem. **Recommendation: stop here.**
+
+## 13. Files
 
     docs/Project58/q001-plan-gate.md      the gate (unchanged after a001)
     docs/Project58/CountProof.md          the result of record
     docs/Project58/REPORT.md              this
     docs/Project58/sites.tsv              3,366 operand rows, default (sound) policy
     docs/Project58/sites-infercaps.tsv    the same under a001 Q2 policy (a)
-    docs/Project58/asserts.tsv            1,226 rows: site, operand, tier, needed, root, exact assert text (a006: 466 needed; 711 derived, 25 invariant, 18 guard need none)
+    docs/Project58/asserts.tsv            1,219 rows: site, operand, tier, needed, root, exact assert text (a007: 453 needed; 680 derived, 67 invariant, 18 guard need none)
     docs/Project58/countflow.out          console output, default policy (the per-site lists)
     docs/Project58/countflow-infercaps.out
     compiler/countflow.py                 the Stage A tool (new file)
