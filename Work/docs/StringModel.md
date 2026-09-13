@@ -1,0 +1,136 @@
+# The string model — DESIGN, NOT BUILT
+
+**Status: PARKED DESIGN.** Worked out in design discussion Sep 13 2026.
+**Nothing here is implemented and none of it is validated against a routine.**
+
+**Why it is parked:** none of P51's seven routines concatenates. HIT_ANY_CHAR
+passes two literals as arguments; GET_INPUT passes a `char buf[144]` by
+address; the other five have no strings. So there is no `v = <string
+expression>`, no `WCMV` with a computed count, and no twin anywhere in the
+work that is live.
+
+**What would unpark it:** C written for a routine that concatenates — DIED,
+REFRESH_SCREEN or RETURN_MESSAGE. **Validate this model against that C before
+building any of it.** The forms below are reasoned from the artifacts, not
+derived from a routine.
+
+---
+
+## 1. The principle: twinning is a CLONE ARTIFACT, not a program feature
+
+This is the load-bearing idea and it should survive even if every spelling
+below changes.
+
+The master evaluates `A || B || C` by pushing each intermediate onto its stack
+with `WMSP`. The clone cannot push the master's stack, so **every claim needs a
+fixed shadow address** — hence `s@<block>.<k>`, `quest.arena`, `claim` /
+`release`, and the slot arithmetic asserted at release. That is an entire
+subsystem built to make the clone track the master's stack allocation.
+
+**A compiled routine has no such problem.** Its storage is in cells. There is
+no WMSP to shadow, so there is nothing to twin.
+
+**Therefore the naive form should model PL/I concatenation, not the clone's
+twinning of it.** Our compiler should not inherit an artifact of the lockstep
+mechanism.
+
+**The consequence for matching**, which is where the difficulty actually sits:
+the book's intermediate addresses have to come from somewhere. Either a rewrite
+materialises them from `quest.arena` — derived data we already have, with the
+size expressions in it — or those sites are normalised. **This reframes the
+arena from "a thing the compiler must reproduce" into "a table the matcher
+consults", the same category shift the addrbook made.**
+
+## 2. What the arena actually shows
+
+DIED's group at block 70166144, three twins, same base with a climbing
+constant:
+
+```
+s@70166144.1   cap=8192  bound=unbounded  size = >>2((N[W[fp-12]] +  6))
+s@70166144.2   cap=8192  bound=unbounded  size = >>2((N[W[fp-12]] + 29))
+s@70166144.3   cap=8192  bound=unbounded  size = >>2((N[W[fp-12]] + 31))
+```
+
+An accumulating concatenation — `X || lit6`, then `|| lit23`, then `|| lit2` —
+built as **three separate allocations at three distinct arena addresses**
+(75000000, 75002000, 75004000), each copying the previous result plus the new
+piece. Blocks carry **up to 5** twins; there are 57 in total.
+
+`cap=8192` is a **provisional number somebody picked**, not a derived maximum:
+`bound=unbounded` with the real size a runtime expression over a parameter's
+length. Some are `bound=exact size=8`.
+
+## 3. The proposed form
+
+Positional, and identical for `s` and `v` — they differ in capacity and home,
+not in how you write into them:
+
+```
+s + <u32> = "literal"        overwrite starting at that byte offset
+v + <u32> = "literal"        same
+s          = "literal"       means  s + 0 = "literal"
+
+s += "literal"               append
+v += "literal"               append
+s += <u32>                   extend the length by N
+v += <u32>                   extend, blank-filling
+```
+
+**`+=` is disambiguated by the OPERAND type, not the destination's** — a string
+operand appends, a numeric operand extends. That keeps `s` and `v` coherent
+under the same spelling.
+
+## 4. Dense assignment, located form by rewrite
+
+The naive form says what the C says; the machine's spelling is earned by a
+rule — the same principle as dropping `ac` staging (§ P57).
+
+```
+naive:    v2 = "\vHit any character to continue"
+matched:  [@0x740056FA, 0x1E varying] = [@0x7016DE07:0, "\vHit…"]
+```
+
+Two oracle-supplied facts and nothing else: `place v2 → frame+4`, and the
+literal's image address. P56's R4 already does the relocation half.
+
+## 5. Open questions — ALL need evidence, none should be guessed
+
+1. **Does the destination's declared type alone select the semantics?**
+   Plausible: `varying n` stores a length word then moves `min(len, n)`;
+   `char n` has no length word so pads or truncates to a fixed field. **Check
+   whether the book shows different instruction shapes for the two.**
+   HIT_ANY_CHAR may already contain the contrast — a 30-byte literal into a
+   varying temp, and `ch` as `CHAR(1)`.
+2. **Is a count ever needed independently of the destination type?** If yes,
+   two forms are needed (assignment and a counted move); if no, one.
+3. **What is `n` in `[@dst, n varying]` at a given site?** IR.md §5.8 says
+   capacity, with `min(len, n)` semantics; P51's evidence (27/17/16 at one
+   frame slot) suggests the compiler **folds** `min(len, cap)` for a constant
+   source. If it is the folded value, the rewrite computes it; if it is the
+   capacity, the declaration supplies it.
+4. **Why are `s` and `v` separate classes at all**, if they behave identically
+   under these operations? Candidates: no declared capacity on `s`, and a
+   different home. Neither has been tested.
+5. **Twin capacity is computed, not fixed**, so a declaration cannot always
+   carry a constant — "sized at claim time" may be needed.
+
+## 6. Also parked with this
+
+**`s@<block>.<k>` → `<ENTRY>.s<n>`.** Everything else is entry-qualified
+(`QUEST.v0`, `QUEST.a1`, `QUEST.b3`); `s@` is keyed on a block address, which
+is position-dependent in the way DESIGN §7.4 warns about. **But the `.k`
+carries the group structure**, and the group matters for the sizing arithmetic
+— so the rename needs the arena file to carry grouping first. Same shape as
+P52's `t@` → `s@` (236 tokens, proven token-only by reverse substitution);
+57 twins here.
+
+---
+
+## Cross-references
+
+`docs/IR.md` §5.8 (string statements), §5.9 (arena twins, claim/release) ·
+`emulation/quest.arena` · `docs/Project29/StringsDesign.md` (design of record
+for the string family) · `docs/Salvage.md` F16 (twin sizing) ·
+`docs/Project51/REPORT.md` §2 (what the seven do and do not need) ·
+`docs/Project56/Rewrites.md` R3, R4
