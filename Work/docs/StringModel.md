@@ -70,6 +70,17 @@ not in how you write into them:
 s + <u32> = "literal"        overwrite starting at that byte offset
 v + <u32> = "literal"        same
 s          = "literal"       means  s + 0 = "literal"
+                             so `s = ""` copies ZERO BYTES and does NOT
+                             resize (user's stated preference, Sep 13; this
+                             is the overwrite-span reading of question 5 and
+                             is NOT yet checked against the book). It is
+                             consistent with the machine's own primitive —
+                             the located form `[@a, n] = piece` IS a counted
+                             copy with no length word. A varying assignment
+                             may then be that primitive with a length store
+                             in front, in which case both readings are right
+                             at different layers: the IR primitive overwrites
+                             a span, the STATEMENT sets the length.
 
 s += "literal"               append
 v += "literal"               append
@@ -125,7 +136,37 @@ literal's image address. P56's R4 already does the relocation half.
    PL/I assignment sets the length, so the first reading is likely — but that
    is an inference, and the splice case then needs its own justification.
    **Settle it against a real routine's disassembly.**
-6. **Twin capacity is computed, not fixed**, so a declaration cannot always
+6. **PADDING FOR FIXED-SIZE DESTINATIONS — check this, do not assume it.**
+   A wrong pad byte is **invisible until it is not**: a blank-padded and a
+   zero-padded field compare equal on every prefix operation and differ only
+   when something reads past the source length. That is P48 F6's class of bug
+   — unobservable at L1 on realistic data, caught at L2 only if the
+   instruction does not match.
+
+   **Six combinations**, three fill bytes × two sides:
+
+   | fill | side | where it would come from |
+   |---|---|---|
+   | blank `0x20` | right | PL/I fixed `CHARACTER` — the default rule |
+   | `0x00` | right | a buffer being cleared rather than a field being filled |
+   | `'0'` `0x30` | **left** | a PL/I numeric PICTURE, e.g. `PICTURE '9999'` |
+
+   **These may not be options within one construct — they may BE three
+   different constructs.** `CHAR(n)` blank-right, a picture zero-left, a
+   buffer 0x00 or unpadded. If so the question is not "which padding did the
+   compiler choose" but "which of these does the program contain", and that is
+   a census rather than a design decision.
+
+   **If it is always one, we are fine and the model needs nothing.** The point
+   is that nobody has looked.
+
+   What would settle it: a `[@a, n]` site — **non-varying** — whose source is
+   shorter than `n`, and what the bytes past the source become; whether
+   `WCMV`'s two counts ever differ in the book and what the executor does with
+   the gap; and `HIT_ANY_CHAR`'s `ch`, a `CHAR(1)` that already matched — if
+   padding never arose at n=1 that tells us nothing, and knowing which is
+   which matters.
+7. **Twin capacity is computed, not fixed**, so a declaration cannot always
    carry a constant — "sized at claim time" may be needed.
 
 ## 6. Also parked with this
