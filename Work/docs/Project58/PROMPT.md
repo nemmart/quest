@@ -197,7 +197,77 @@ length. If the original relied on stack garbage being small and our global slot
 holds a large leftover, behaviour differs. That is an emulator-level concern
 rather than a matching one — **report it, do not chase it.**
 
+## Stage A — build the reaching-definitions tool FIRST
+
+**You cannot prove 1,689 sites by reading them.** For a given site you need
+*which blocks define `ac0` and `ac1` on the paths reaching it*. That instrument
+does not exist. Build it before proving anything.
+
+`emulation/tools/dataflow.py` exists from an earlier project — **report at the
+gate what it actually does** and whether to extend or replace it.
+
+Two things make this tractable, and one is a trap:
+
+- **the state space is tiny** — four accumulators and a carry, and P52's census
+  found only ac2/ac3 ever serve as an address base (19,344 uses, zero on
+  ac0/ac1)
+- **THE TRAP: string statements define ac0–ac3 INVISIBLY.** `[@a, n] = piece`
+  names two locations and silently redefines four accumulators and `c`
+  (`residues_after_copy`, `EagleString.cpp:152–163`); `cmp` redefines all four;
+  `words(...)` redefines ac1/ac2/ac3. **A naive pass will trace THROUGH them
+  and give wrong answers.** This is P56's F4 — the reason 82% of `LDAFP`s
+  exist. The tool must treat every string statement as a definition of the
+  registers it actually writes.
+
+**The tool is infrastructure, not scaffolding.** DESIGN §5.2's slot bijection
+needs the same analysis over `LDAFP`, and every future binding precondition
+needs it. Give it its own correctness check — ruling 1 applies to the tool as
+much as to the proofs.
+
+---
+
+## The closure lemma — verify it, then use it
+
+**If `ac0` and `ac1` are non-negative going IN to a `WCMV`, they are
+non-negative coming OUT.**
+
+With `n > 0`, `len > 0`, `t = min(n, len)` (`residues_after_copy`):
+
+```
+ac0 = 0                                    ≥ 0
+ac1 = len − sgn(len)·t = len − min(n, len) ≥ 0
+```
+
+**Verify against the implementation rather than taking it from this prompt**,
+including the `t = 0` and `len = 0` edges, and state it for `cmp` and
+`block_move` too.
+
+### It collapses the chains
+
+The tail-split idiom does a copy, then uses the residue `ac1` as the count for
+the next copy. With closure you **do not need to trace the chain** — establish
+non-negativity at its HEAD and it carries to every link by induction.
+
+So the proof restructures:
+
+1. **find the chain heads** — sites whose counts come from somewhere other than
+   a previous string statement's residue
+2. **prove those** — constants, literal byte counts, and the base class above
+3. **the rest follows by closure**
+
+And it narrows what Stage A must answer: not *trace the full definition chain*,
+but **does this count come from a string residue, or from outside?**
+
+It also explains why StringsDesign's tail-split claim felt right — the idiom
+really is safe, for this reason. It was never stated as a closure property with
+the arithmetic behind it, **which is the difference between a reading and a
+proof, and is what this project is for.**
+
+---
+
 ## What to establish
+
+
 
 
 
