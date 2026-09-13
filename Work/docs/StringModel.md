@@ -63,8 +63,9 @@ length. Some are `bound=exact size=8`.
 
 ## 3. The proposed form
 
-Positional, and identical for `s` and `v` — they differ in capacity and home,
-not in how you write into them:
+Positional. **There is no separate `s` class** (question 4): a string is a `v`
+with a `string` vtype, so the forms below are one set, not two. `s` is written
+below only where a twin is meant.
 
 ```
 s + <u32> = "literal"        overwrite starting at that byte offset
@@ -120,7 +121,26 @@ literal's image address. P56's R4 already does the relocation half.
    frame slot) suggests the compiler **folds** `min(len, cap)` for a constant
    source. If it is the folded value, the rewrite computes it; if it is the
    capacity, the declaration supplies it.
-4. **Why are `s` and `v` separate classes at all**, if they behave identically
+4. **~~Why are `s` and `v` separate classes at all~~ — SETTLED (Sep 13): use
+   `v` with a `string` vtype, not a separate `s` class.**
+
+   Everything else in ir 8 follows *one storage class, the type says what it
+   is* — `v QUEST.v0 i16`, `*char`, `char 30`, `varying 27`, `words 12`. A
+   separate `s` would make strings the only thing whose CLASS encodes its
+   nature rather than its type, and by §3's model `s` and `v` take the same
+   operations with the same disambiguation. The remaining differences are no
+   declared capacity, and a different home — and the home is a PLACEMENT
+   fact, which the design already treats as separate from the class
+   (§5.1's place-vs-eliminate split).
+
+   **So the real distinction is fixed capacity vs COMPUTED capacity**, which
+   is the twins' `size=>>2((N[W[fp-12]]+6))` case that no current vtype can
+   express. A `string` vtype carrying a size EXPRESSION rather than a constant
+   covers twins without a new class.
+
+   *Still to check:* whether a size expression in a declaration is workable at
+   all, given it references a parameter's runtime length.
+5. ~~(was: why separate classes)~~ **Does an assignment SET the length, or overwrite a span?**, if they behave identically
    under these operations? Candidates: no declared capacity on `s`, and a
    different home. Neither has been tested.
 5. **Does an assignment SET the length, or overwrite a span?** They differ,
@@ -171,7 +191,8 @@ literal's image address. P56's R4 already does the relocation half.
 
 ## 6. Also parked with this
 
-**`s@<block>.<k>` → `<ENTRY>.s<n>`.** Everything else is entry-qualified
+**`s@<block>.<k>` → an entry-qualified `v` with a `string` vtype** (question 4
+settles the class; this is the spelling). Everything else is entry-qualified
 (`QUEST.v0`, `QUEST.a1`, `QUEST.b3`); `s@` is keyed on a block address, which
 is position-dependent in the way DESIGN §7.4 warns about. **But the `.k`
 carries the group structure**, and the group matters for the sizing arithmetic
