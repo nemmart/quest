@@ -3,15 +3,24 @@ rustc 1.95.0 (59807616e 2026-04-14)
 Python 3.12.3
 
 ===== python venv (0s) =====
-The virtual environment was not created successfully because ensurepip is not
-available.  On Debian/Ubuntu systems, you need to install the python3-venv
-package using the following command.
+/tmp/jolt-venv/bin/python: No module named pip
 
-    apt install python3.12-venv
-
-You may need to use sudo with that command.  After installing the python3-venv
-package, recreate your virtual environment.
-
-Failing command: /tmp/jolt-venv/bin/python3
-
-venv creation failed (python3-venv missing?)
+===== download_gpt2.py (optimum export; big pip install on first run) (0s) =====
+/tmp/jolt-venv/bin/python: No module named pip
+Ensuring required Python packages are installed …
+Traceback (most recent call last):
+  File "/tmp/jolt-atlas/scripts/download_gpt2.py", line 76, in <module>
+    main()
+  File "/tmp/jolt-atlas/scripts/download_gpt2.py", line 69, in main
+    ensure_packages()
+  File "/tmp/jolt-atlas/scripts/download_gpt2.py", line 24, in ensure_packages
+    subprocess.check_call(
+  File "/usr/lib/python3.12/subprocess.py", line 413, in check_call
+    raise CalledProcessError(retcode, cmd)
+subprocess.CalledProcessError: Command '['/tmp/jolt-venv/bin/python', '-m', 'pip', 'install', '--quiet', 'optimum[exporters]', 'optimum[onnxruntime]']' returned non-zero exit status 1.
+download exit=1 seconds=0
+ls: cannot access 'atlas-onnx-tracer/models/gpt2/': No such file or directory
+DOWNLOAD FAILED
+Traceback (most recent call last):
+    raise CalledProcessError(retcode, cmd)
+subprocess.CalledProcessError: Command '['/tmp/jolt-venv/bin/python', '-m', 'pip', 'install', '--quiet', 'optimum[exporters]', 'optimum[onnxruntime]']' returned non-zero exit status 1.

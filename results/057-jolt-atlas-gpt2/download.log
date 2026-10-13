@@ -1,0 +1,12 @@
+/tmp/jolt-venv/bin/python: No module named pip
+Ensuring required Python packages are installed …
+Traceback (most recent call last):
+  File "/tmp/jolt-atlas/scripts/download_gpt2.py", line 76, in <module>
+    main()
+  File "/tmp/jolt-atlas/scripts/download_gpt2.py", line 69, in main
+    ensure_packages()
+  File "/tmp/jolt-atlas/scripts/download_gpt2.py", line 24, in ensure_packages
+    subprocess.check_call(
+  File "/usr/lib/python3.12/subprocess.py", line 413, in check_call
+    raise CalledProcessError(retcode, cmd)
+subprocess.CalledProcessError: Command '['/tmp/jolt-venv/bin/python', '-m', 'pip', 'install', '--quiet', 'optimum[exporters]', 'optimum[onnxruntime]']' returned non-zero exit status 1.
