@@ -24,18 +24,18 @@ pip seconds=1
   not self.key_cache[layer_idx].numel()  # prefers not t.numel() to len(t) == 0 to export the model
 Weight deduplication check in the ONNX export requires accelerate. Please install accelerate to run it.
 attn impl: eager
-export seconds=11
+export seconds=12
 total 643108
-drwxrwxr-x  2 questrunner questrunner      4096 Oct 13 08:03 .
-drwxrwxr-x 38 questrunner questrunner      4096 Oct 13 08:03 ..
--rw-rw-r--  1 questrunner questrunner       880 Oct 13 08:03 config.json
--rw-rw-r--  1 questrunner questrunner       119 Oct 13 08:03 generation_config.json
--rw-rw-r--  1 questrunner questrunner    456318 Oct 13 08:03 merges.txt
--rw-rw-r--  1 questrunner questrunner 653699524 Oct 13 08:03 network.onnx
--rw-rw-r--  1 questrunner questrunner        99 Oct 13 08:03 special_tokens_map.json
--rw-rw-r--  1 questrunner questrunner       475 Oct 13 08:03 tokenizer_config.json
--rw-rw-r--  1 questrunner questrunner   3557680 Oct 13 08:03 tokenizer.json
--rw-rw-r--  1 questrunner questrunner    798156 Oct 13 08:03 vocab.json
+drwxrwxr-x  2 questrunner questrunner      4096 Oct 13 08:04 .
+drwxrwxr-x 38 questrunner questrunner      4096 Oct 13 08:04 ..
+-rw-rw-r--  1 questrunner questrunner       880 Oct 13 08:04 config.json
+-rw-rw-r--  1 questrunner questrunner       119 Oct 13 08:04 generation_config.json
+-rw-rw-r--  1 questrunner questrunner    456318 Oct 13 08:04 merges.txt
+-rw-rw-r--  1 questrunner questrunner 653699524 Oct 13 08:04 network.onnx
+-rw-rw-r--  1 questrunner questrunner        99 Oct 13 08:04 special_tokens_map.json
+-rw-rw-r--  1 questrunner questrunner       475 Oct 13 08:04 tokenizer_config.json
+-rw-rw-r--  1 questrunner questrunner   3557680 Oct 13 08:04 tokenizer.json
+-rw-rw-r--  1 questrunner questrunner    798156 Oct 13 08:04 vocab.json
 onnx opset: [('', 14)]
 op census: Add:128 Cast:47 Concat:175 Constant:1317 ConstantOfShape:18 Div:37 Equal:6 Expand:6 Gather:192 Gemm:48 Greater:1 MatMul:25 Mul:79 Pow:49 Range:6 ReduceMean:50 Reshape:153 ScatterND:1 Shape:283 Slice:126 Softmax:12 Split:12 Sqrt:25 Squeeze:85 Sub:37 Tanh:12 Transpose:60 Trilu:1 Unsqueeze:307 Where:18
 
@@ -45,22 +45,22 @@ op census: Add:128 Cast:47 Concat:175 Constant:1317 ConstantOfShape:18 Div:37 Eq
 === nanoGPT ONNX Proof (Terminal Tracing enabled) ===
 Log level: Set via RUST_LOG environment variable (default: info)
 
-2026-10-13T08:04:00.871658Z  INFO Model::load:Model::load_onnx_model:ModelLoader::load_onnx_using_tract:TractModelLoader::build:TractModelLoader::load_onnx_file: atlas_onnx_tracer::model::load: close time.busy=518ms time.idle=699ns
-2026-10-13T08:04:00.871744Z  INFO Model::load:Model::load_onnx_model:ModelLoader::load_onnx_using_tract:TractModelLoader::build:ModelLoader::build_symbol_values_from_run_args: atlas_onnx_tracer::model::load: close time.busy=944ns time.idle=526ns
-2026-10-13T08:04:00.872480Z  INFO Model::load:Model::load_onnx_model:ModelLoader::load_onnx_using_tract:TractModelLoader::build:TractModelLoader::concretize_input_dimensions: atlas_onnx_tracer::model::load: close time.busy=731µs time.idle=388ns
-2026-10-13T08:04:00.978532Z  INFO Model::load:Model::load_onnx_model:ModelLoader::load_onnx_using_tract:TractModelLoader::build:TractModelLoader::convert_to_typed:ModelLoader::model_into_typed: atlas_onnx_tracer::model::load: close time.busy=105ms time.idle=638ns
-2026-10-13T08:04:00.978737Z  INFO Model::load:Model::load_onnx_model:ModelLoader::load_onnx_using_tract:TractModelLoader::build:TractModelLoader::convert_to_typed: atlas_onnx_tracer::model::load: close time.busy=106ms time.idle=328ns
-2026-10-13T08:04:00.978742Z  INFO Model::load:Model::load_onnx_model:ModelLoader::load_onnx_using_tract:TractModelLoader::build: atlas_onnx_tracer::model::load: close time.busy=625ms time.idle=172ns
-2026-10-13T08:04:00.978745Z  INFO Model::load:Model::load_onnx_model:ModelLoader::load_onnx_using_tract: atlas_onnx_tracer::model::load: close time.busy=625ms time.idle=186ns
+2026-10-13T08:04:18.333095Z  INFO Model::load:Model::load_onnx_model:ModelLoader::load_onnx_using_tract:TractModelLoader::build:TractModelLoader::load_onnx_file: atlas_onnx_tracer::model::load: close time.busy=516ms time.idle=564ns
+2026-10-13T08:04:18.333203Z  INFO Model::load:Model::load_onnx_model:ModelLoader::load_onnx_using_tract:TractModelLoader::build:ModelLoader::build_symbol_values_from_run_args: atlas_onnx_tracer::model::load: close time.busy=1.02µs time.idle=527ns
+2026-10-13T08:04:18.333962Z  INFO Model::load:Model::load_onnx_model:ModelLoader::load_onnx_using_tract:TractModelLoader::build:TractModelLoader::concretize_input_dimensions: atlas_onnx_tracer::model::load: close time.busy=755µs time.idle=205ns
+2026-10-13T08:04:18.440546Z  INFO Model::load:Model::load_onnx_model:ModelLoader::load_onnx_using_tract:TractModelLoader::build:TractModelLoader::convert_to_typed:ModelLoader::model_into_typed: atlas_onnx_tracer::model::load: close time.busy=106ms time.idle=676ns
+2026-10-13T08:04:18.440780Z  INFO Model::load:Model::load_onnx_model:ModelLoader::load_onnx_using_tract:TractModelLoader::build:TractModelLoader::convert_to_typed: atlas_onnx_tracer::model::load: close time.busy=106ms time.idle=261ns
+2026-10-13T08:04:18.440786Z  INFO Model::load:Model::load_onnx_model:ModelLoader::load_onnx_using_tract:TractModelLoader::build: atlas_onnx_tracer::model::load: close time.busy=623ms time.idle=173ns
+2026-10-13T08:04:18.440789Z  INFO Model::load:Model::load_onnx_model:ModelLoader::load_onnx_using_tract: atlas_onnx_tracer::model::load: close time.busy=623ms time.idle=206ns
 
-thread 'main' (32130) panicked at atlas-onnx-tracer/src/utils/parser.rs:277:32:
+thread 'main' (32457) panicked at atlas-onnx-tracer/src/utils/parser.rs:277:32:
 not implemented: Unimplemented ONNX operator: ==
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
-2026-10-13T08:04:01.201068Z  INFO Model::load:Model::load_onnx_model:ModelLoader::parse_nodes:ModelLoader::nodes_from_graph:GraphParser::parse: atlas_onnx_tracer::utils::parser: close time.busy=222ms time.idle=526ns
-2026-10-13T08:04:01.201085Z  INFO Model::load:Model::load_onnx_model:ModelLoader::parse_nodes:ModelLoader::nodes_from_graph: atlas_onnx_tracer::model::load: close time.busy=222ms time.idle=221ns
-2026-10-13T08:04:01.201088Z  INFO Model::load:Model::load_onnx_model:ModelLoader::parse_nodes: atlas_onnx_tracer::model::load: close time.busy=222ms time.idle=508ns
-2026-10-13T08:04:01.211744Z  INFO Model::load:Model::load_onnx_model: atlas_onnx_tracer::model::load: close time.busy=858ms time.idle=290ns
-2026-10-13T08:04:01.211758Z  INFO Model::load: atlas_onnx_tracer::model: close time.busy=858ms time.idle=911ns
+2026-10-13T08:04:18.733989Z  INFO Model::load:Model::load_onnx_model:ModelLoader::parse_nodes:ModelLoader::nodes_from_graph:GraphParser::parse: atlas_onnx_tracer::utils::parser: close time.busy=293ms time.idle=801ns
+2026-10-13T08:04:18.734009Z  INFO Model::load:Model::load_onnx_model:ModelLoader::parse_nodes:ModelLoader::nodes_from_graph: atlas_onnx_tracer::model::load: close time.busy=293ms time.idle=189ns
+2026-10-13T08:04:18.734012Z  INFO Model::load:Model::load_onnx_model:ModelLoader::parse_nodes: atlas_onnx_tracer::model::load: close time.busy=293ms time.idle=439ns
+2026-10-13T08:04:18.743557Z  INFO Model::load:Model::load_onnx_model: atlas_onnx_tracer::model::load: close time.busy=926ms time.idle=195ns
+2026-10-13T08:04:18.743576Z  INFO Model::load: atlas_onnx_tracer::model: close time.busy=926ms time.idle=26.6µs
 prove exit=101 seconds=1
 
 ===== summary (14s) =====
