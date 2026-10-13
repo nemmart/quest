@@ -1,0 +1,52 @@
+WARNING: optimum 2.3.0 does not provide the extra 'exporters'
+WARNING: optimum 2.3.0 does not provide the extra 'exporters'
+WARNING: optimum 2.2.0 does not provide the extra 'exporters'
+WARNING: optimum 2.2.0 does not provide the extra 'exporters'
+  error: subprocess-exited-with-error
+  
+  × Getting requirements to build wheel did not run successfully.
+  │ exit code: 1
+  ╰─> [28 lines of output]
+      Traceback (most recent call last):
+        File "<string>", line 7, in <module>
+      FileNotFoundError: [Errno 2] No such file or directory: 'optimum/version.py'
+      
+      During handling of the above exception, another exception occurred:
+      
+      Traceback (most recent call last):
+        File "/tmp/jolt-venv/lib/python3.12/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 389, in <module>
+          main()
+        File "/tmp/jolt-venv/lib/python3.12/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 373, in main
+          json_out["return_val"] = hook(**hook_input["kwargs"])
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        File "/tmp/jolt-venv/lib/python3.12/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 143, in get_requires_for_build_wheel
+          return hook(config_settings)
+                 ^^^^^^^^^^^^^^^^^^^^^
+        File "/tmp/pip-build-env-8rebd54z/overlay/lib/python3.12/site-packages/setuptools/build_meta.py", line 333, in get_requires_for_build_wheel
+          return self._get_build_requires(config_settings, requirements=[])
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        File "/tmp/pip-build-env-8rebd54z/overlay/lib/python3.12/site-packages/setuptools/build_meta.py", line 301, in _get_build_requires
+          self.run_setup()
+        File "/tmp/pip-build-env-8rebd54z/overlay/lib/python3.12/site-packages/setuptools/build_meta.py", line 520, in run_setup
+          super().run_setup(setup_script=setup_script)
+        File "/tmp/pip-build-env-8rebd54z/overlay/lib/python3.12/site-packages/setuptools/build_meta.py", line 317, in run_setup
+          exec(code, locals())  # noqa: S102 # exec is intentional here
+          ^^^^^^^^^^^^^^^^^^^^
+        File "<string>", line 10, in <module>
+      AssertionError: Error: Could not open 'optimum/version.py' due [Errno 2] No such file or directory: 'optimum/version.py'
+      
+      [end of output]
+  
+  note: This error originates from a subprocess, and is likely not a problem with pip.
+ERROR: Failed to build 'optimum' when getting requirements to build wheel
+Ensuring required Python packages are installed …
+Traceback (most recent call last):
+  File "/tmp/jolt-atlas/scripts/download_gpt2.py", line 76, in <module>
+    main()
+  File "/tmp/jolt-atlas/scripts/download_gpt2.py", line 69, in main
+    ensure_packages()
+  File "/tmp/jolt-atlas/scripts/download_gpt2.py", line 24, in ensure_packages
+    subprocess.check_call(
+  File "/usr/lib/python3.12/subprocess.py", line 413, in check_call
+    raise CalledProcessError(retcode, cmd)
+subprocess.CalledProcessError: Command '['/tmp/jolt-venv/bin/python', '-m', 'pip', 'install', '--quiet', 'optimum[exporters]', 'optimum[onnxruntime]']' returned non-zero exit status 1.
