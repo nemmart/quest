@@ -39,22 +39,22 @@ trace exit=101 seconds=0
 === nanoGPT ONNX Proof (Terminal Tracing enabled) ===
 Log level: Set via RUST_LOG environment variable (default: info)
 
-2026-10-13T07:05:12.889363Z  INFO Model::load:Model::load_onnx_model:ModelLoader::load_onnx_using_tract:TractModelLoader::build:TractModelLoader::load_onnx_file: atlas_onnx_tracer::model::load: close time.busy=514ms time.idle=833ns
-2026-10-13T07:05:12.889439Z  INFO Model::load:Model::load_onnx_model:ModelLoader::load_onnx_using_tract:TractModelLoader::build:ModelLoader::build_symbol_values_from_run_args: atlas_onnx_tracer::model::load: close time.busy=1.08µs time.idle=432ns
-2026-10-13T07:05:12.890059Z  INFO Model::load:Model::load_onnx_model:ModelLoader::load_onnx_using_tract:TractModelLoader::build:TractModelLoader::concretize_input_dimensions: atlas_onnx_tracer::model::load: close time.busy=616µs time.idle=186ns
-2026-10-13T07:05:12.992305Z  INFO Model::load:Model::load_onnx_model:ModelLoader::load_onnx_using_tract:TractModelLoader::build:TractModelLoader::convert_to_typed:ModelLoader::model_into_typed: atlas_onnx_tracer::model::load: close time.busy=102ms time.idle=613ns
-2026-10-13T07:05:12.992503Z  INFO Model::load:Model::load_onnx_model:ModelLoader::load_onnx_using_tract:TractModelLoader::build:TractModelLoader::convert_to_typed: atlas_onnx_tracer::model::load: close time.busy=102ms time.idle=292ns
-2026-10-13T07:05:12.992510Z  INFO Model::load:Model::load_onnx_model:ModelLoader::load_onnx_using_tract:TractModelLoader::build: atlas_onnx_tracer::model::load: close time.busy=617ms time.idle=169ns
-2026-10-13T07:05:12.992512Z  INFO Model::load:Model::load_onnx_model:ModelLoader::load_onnx_using_tract: atlas_onnx_tracer::model::load: close time.busy=617ms time.idle=197ns
+2026-10-13T07:05:18.439817Z  INFO Model::load:Model::load_onnx_model:ModelLoader::load_onnx_using_tract:TractModelLoader::build:TractModelLoader::load_onnx_file: atlas_onnx_tracer::model::load: close time.busy=513ms time.idle=608ns
+2026-10-13T07:05:18.439896Z  INFO Model::load:Model::load_onnx_model:ModelLoader::load_onnx_using_tract:TractModelLoader::build:ModelLoader::build_symbol_values_from_run_args: atlas_onnx_tracer::model::load: close time.busy=1.03µs time.idle=364ns
+2026-10-13T07:05:18.440518Z  INFO Model::load:Model::load_onnx_model:ModelLoader::load_onnx_using_tract:TractModelLoader::build:TractModelLoader::concretize_input_dimensions: atlas_onnx_tracer::model::load: close time.busy=618µs time.idle=238ns
+2026-10-13T07:05:18.542997Z  INFO Model::load:Model::load_onnx_model:ModelLoader::load_onnx_using_tract:TractModelLoader::build:TractModelLoader::convert_to_typed:ModelLoader::model_into_typed: atlas_onnx_tracer::model::load: close time.busy=102ms time.idle=520ns
+2026-10-13T07:05:18.543191Z  INFO Model::load:Model::load_onnx_model:ModelLoader::load_onnx_using_tract:TractModelLoader::build:TractModelLoader::convert_to_typed: atlas_onnx_tracer::model::load: close time.busy=102ms time.idle=348ns
+2026-10-13T07:05:18.543197Z  INFO Model::load:Model::load_onnx_model:ModelLoader::load_onnx_using_tract:TractModelLoader::build: atlas_onnx_tracer::model::load: close time.busy=616ms time.idle=218ns
+2026-10-13T07:05:18.543200Z  INFO Model::load:Model::load_onnx_model:ModelLoader::load_onnx_using_tract: atlas_onnx_tracer::model::load: close time.busy=616ms time.idle=267ns
 
-thread 'main' (24552) panicked at atlas-onnx-tracer/src/utils/parser.rs:277:32:
+thread 'main' (24837) panicked at atlas-onnx-tracer/src/utils/parser.rs:277:32:
 not implemented: Unimplemented ONNX operator: ==
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
-2026-10-13T07:05:13.283761Z  INFO Model::load:Model::load_onnx_model:ModelLoader::parse_nodes:ModelLoader::nodes_from_graph:GraphParser::parse: atlas_onnx_tracer::utils::parser: close time.busy=291ms time.idle=860ns
-2026-10-13T07:05:13.283777Z  INFO Model::load:Model::load_onnx_model:ModelLoader::parse_nodes:ModelLoader::nodes_from_graph: atlas_onnx_tracer::model::load: close time.busy=291ms time.idle=182ns
-2026-10-13T07:05:13.283780Z  INFO Model::load:Model::load_onnx_model:ModelLoader::parse_nodes: atlas_onnx_tracer::model::load: close time.busy=291ms time.idle=459ns
-2026-10-13T07:05:13.294359Z  INFO Model::load:Model::load_onnx_model: atlas_onnx_tracer::model::load: close time.busy=919ms time.idle=198ns
-2026-10-13T07:05:13.294371Z  INFO Model::load: atlas_onnx_tracer::model: close time.busy=919ms time.idle=785ns
+2026-10-13T07:05:18.835985Z  INFO Model::load:Model::load_onnx_model:ModelLoader::parse_nodes:ModelLoader::nodes_from_graph:GraphParser::parse: atlas_onnx_tracer::utils::parser: close time.busy=293ms time.idle=641ns
+2026-10-13T07:05:18.836002Z  INFO Model::load:Model::load_onnx_model:ModelLoader::parse_nodes:ModelLoader::nodes_from_graph: atlas_onnx_tracer::model::load: close time.busy=293ms time.idle=248ns
+2026-10-13T07:05:18.836004Z  INFO Model::load:Model::load_onnx_model:ModelLoader::parse_nodes: atlas_onnx_tracer::model::load: close time.busy=293ms time.idle=486ns
+2026-10-13T07:05:18.848073Z  INFO Model::load:Model::load_onnx_model: atlas_onnx_tracer::model::load: close time.busy=921ms time.idle=272ns
+2026-10-13T07:05:18.848090Z  INFO Model::load: atlas_onnx_tracer::model: close time.busy=921ms time.idle=924ns
 prove exit=101 seconds=1
 
 ===== summary (2s) =====
