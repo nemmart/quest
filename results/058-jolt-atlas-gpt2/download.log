@@ -22,14 +22,14 @@ WARNING: optimum 2.2.0 does not provide the extra 'exporters'
         File "/tmp/jolt-venv/lib/python3.12/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 143, in get_requires_for_build_wheel
           return hook(config_settings)
                  ^^^^^^^^^^^^^^^^^^^^^
-        File "/tmp/pip-build-env-8rebd54z/overlay/lib/python3.12/site-packages/setuptools/build_meta.py", line 333, in get_requires_for_build_wheel
+        File "/tmp/pip-build-env-fmv7mr76/overlay/lib/python3.12/site-packages/setuptools/build_meta.py", line 333, in get_requires_for_build_wheel
           return self._get_build_requires(config_settings, requirements=[])
                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        File "/tmp/pip-build-env-8rebd54z/overlay/lib/python3.12/site-packages/setuptools/build_meta.py", line 301, in _get_build_requires
+        File "/tmp/pip-build-env-fmv7mr76/overlay/lib/python3.12/site-packages/setuptools/build_meta.py", line 301, in _get_build_requires
           self.run_setup()
-        File "/tmp/pip-build-env-8rebd54z/overlay/lib/python3.12/site-packages/setuptools/build_meta.py", line 520, in run_setup
+        File "/tmp/pip-build-env-fmv7mr76/overlay/lib/python3.12/site-packages/setuptools/build_meta.py", line 520, in run_setup
           super().run_setup(setup_script=setup_script)
-        File "/tmp/pip-build-env-8rebd54z/overlay/lib/python3.12/site-packages/setuptools/build_meta.py", line 317, in run_setup
+        File "/tmp/pip-build-env-fmv7mr76/overlay/lib/python3.12/site-packages/setuptools/build_meta.py", line 317, in run_setup
           exec(code, locals())  # noqa: S102 # exec is intentional here
           ^^^^^^^^^^^^^^^^^^^^
         File "<string>", line 10, in <module>
