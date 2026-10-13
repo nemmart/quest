@@ -1,0 +1,68 @@
+e6cadf160dc8b6fa8b7a183ff24ce71b6ef84518 Tue Sep 22 10:11:50 2026 +0200 Perf/round 2 (#288)
+rustc 1.95.0 (59807616e 2026-04-14)
+Python 3.12.3
+
+===== python venv (0s) =====
+pip 26.2.1 from /tmp/jolt-venv/lib/python3.12/site-packages/pip (python 3.12)
+
+===== pip: cpu torch + optimum 1.27 (058: the script's optimum[exporters] no longer resolves; 2.x dropped the extra) (1s) =====
+onnx               1.23.2
+onnxruntime        1.31.0
+optimum            1.27.0
+torch              2.8.0+cpu
+transformers       4.52.4
+pip seconds=6
+
+===== export gpt2 -> onnx (the script's export_model + rename_network, by hand) (7s) =====
+/tmp/jolt-venv/lib/python3.12/site-packages/torch/onnx/_internal/registration.py:162: OnnxExporterWarning: Symbolic function 'aten::scaled_dot_product_attention' already registered for opset 14. Replacing the existing function with new function. This is unexpected. Please report it on https://github.com/pytorch/pytorch/issues.
+  warnings.warn(
+/tmp/jolt-venv/lib/python3.12/site-packages/transformers/cache_utils.py:556: TracerWarning: Converting a tensor to a Python boolean might cause the trace to be incorrect. We can't record the data flow of Python values, so this value will be treated as a constant in the future. This means that the trace might not generalize to other inputs!
+  or not self.key_cache[layer_idx].numel()  # the layer has no cache
+/tmp/jolt-venv/lib/python3.12/site-packages/transformers/models/gpt2/modeling_gpt2.py:1096: TracerWarning: Converting a tensor to a Python boolean might cause the trace to be incorrect. We can't record the data flow of Python values, so this value will be treated as a constant in the future. This means that the trace might not generalize to other inputs!
+  if sequence_length != 1:
+/tmp/jolt-venv/lib/python3.12/site-packages/transformers/cache_utils.py:540: TracerWarning: Converting a tensor to a Python boolean might cause the trace to be incorrect. We can't record the data flow of Python values, so this value will be treated as a constant in the future. This means that the trace might not generalize to other inputs!
+  not self.key_cache[layer_idx].numel()  # prefers not t.numel() to len(t) == 0 to export the model
+Weight deduplication check in the ONNX export requires accelerate. Please install accelerate to run it.
+export seconds=17
+total 642024
+drwxrwxr-x  2 questrunner questrunner      4096 Oct 13 07:58 .
+drwxrwxr-x 38 questrunner questrunner      4096 Oct 13 07:58 ..
+-rw-rw-r--  1 questrunner questrunner       880 Oct 13 07:58 config.json
+-rw-rw-r--  1 questrunner questrunner       119 Oct 13 07:58 generation_config.json
+-rw-rw-r--  1 questrunner questrunner    456318 Oct 13 07:58 merges.txt
+-rw-rw-r--  1 questrunner questrunner 652590096 Oct 13 07:58 network.onnx
+-rw-rw-r--  1 questrunner questrunner        99 Oct 13 07:58 special_tokens_map.json
+-rw-rw-r--  1 questrunner questrunner       475 Oct 13 07:58 tokenizer_config.json
+-rw-rw-r--  1 questrunner questrunner   3557680 Oct 13 07:58 tokenizer.json
+-rw-rw-r--  1 questrunner questrunner    798156 Oct 13 07:58 vocab.json
+onnx opset: [('', 14)]
+op census: Add:116 Cast:35 Concat:175 Constant:1076 ConstantOfShape:6 Div:37 Equal:6 Expand:6 Gather:192 Gemm:48 Greater:1 MatMul:25 Mul:103 Pow:37 Range:6 ReduceMean:50 Reshape:153 ScatterND:1 Shape:259 Slice:78 Softmax:12 Split:12 Sqrt:61 Squeeze:49 Sub:25 Tanh:12 Transpose:60 Trilu:1 Unsqueeze:271 Where:6
+
+===== run: jolt-atlas-core/gpt2 --trace-terminal (25s) =====
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.11s
+     Running `target/release/examples/gpt2 --trace-terminal`
+=== nanoGPT ONNX Proof (Terminal Tracing enabled) ===
+Log level: Set via RUST_LOG environment variable (default: info)
+
+2026-10-13T07:58:36.821341Z  INFO Model::load:Model::load_onnx_model:ModelLoader::load_onnx_using_tract:TractModelLoader::build:TractModelLoader::load_onnx_file: atlas_onnx_tracer::model::load: close time.busy=517ms time.idle=605ns
+2026-10-13T07:58:36.821420Z  INFO Model::load:Model::load_onnx_model:ModelLoader::load_onnx_using_tract:TractModelLoader::build:ModelLoader::build_symbol_values_from_run_args: atlas_onnx_tracer::model::load: close time.busy=884ns time.idle=485ns
+2026-10-13T07:58:36.822040Z  INFO Model::load:Model::load_onnx_model:ModelLoader::load_onnx_using_tract:TractModelLoader::build:TractModelLoader::concretize_input_dimensions: atlas_onnx_tracer::model::load: close time.busy=616µs time.idle=265ns
+2026-10-13T07:58:36.924388Z  INFO Model::load:Model::load_onnx_model:ModelLoader::load_onnx_using_tract:TractModelLoader::build:TractModelLoader::convert_to_typed:ModelLoader::model_into_typed: atlas_onnx_tracer::model::load: close time.busy=102ms time.idle=581ns
+2026-10-13T07:58:36.924579Z  INFO Model::load:Model::load_onnx_model:ModelLoader::load_onnx_using_tract:TractModelLoader::build:TractModelLoader::convert_to_typed: atlas_onnx_tracer::model::load: close time.busy=102ms time.idle=342ns
+2026-10-13T07:58:36.924585Z  INFO Model::load:Model::load_onnx_model:ModelLoader::load_onnx_using_tract:TractModelLoader::build: atlas_onnx_tracer::model::load: close time.busy=621ms time.idle=166ns
+2026-10-13T07:58:36.924587Z  INFO Model::load:Model::load_onnx_model:ModelLoader::load_onnx_using_tract: atlas_onnx_tracer::model::load: close time.busy=621ms time.idle=223ns
+
+thread 'main' (30390) panicked at atlas-onnx-tracer/src/utils/parser.rs:277:32:
+not implemented: Unimplemented ONNX operator: ==
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+2026-10-13T07:58:37.149033Z  INFO Model::load:Model::load_onnx_model:ModelLoader::parse_nodes:ModelLoader::nodes_from_graph:GraphParser::parse: atlas_onnx_tracer::utils::parser: close time.busy=224ms time.idle=932ns
+2026-10-13T07:58:37.149049Z  INFO Model::load:Model::load_onnx_model:ModelLoader::parse_nodes:ModelLoader::nodes_from_graph: atlas_onnx_tracer::model::load: close time.busy=224ms time.idle=236ns
+2026-10-13T07:58:37.149052Z  INFO Model::load:Model::load_onnx_model:ModelLoader::parse_nodes: atlas_onnx_tracer::model::load: close time.busy=224ms time.idle=443ns
+2026-10-13T07:58:37.164300Z  INFO Model::load:Model::load_onnx_model: atlas_onnx_tracer::model::load: close time.busy=860ms time.idle=440ns
+2026-10-13T07:58:37.164313Z  INFO Model::load: atlas_onnx_tracer::model: close time.busy=860ms time.idle=845ns
+prove exit=101 seconds=1
+
+===== summary (26s) =====
+wall_clock_seconds=26
+prove exit=101 seconds=1
+TASK 061 RED (1 fails)
