@@ -1,0 +1,191 @@
+
+===== host (0s) =====
+Linux godspeed 6.8.0-138-generic #138-Ubuntu SMP PREEMPT_DYNAMIC Fri Jul 31 22:41:49 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
+16
+               total        used        free      shared  buff/cache   available
+Mem:              62           0          61           0           0          61
+/dev/nvme0n1p2  457G   84G  350G  20% /
+
+===== toolchain (0s) =====
+no rustup; installing to /tmp/jolt-rustup / /tmp/jolt-cargo
+info: downloading installer
+info: profile set to minimal
+info: default host tuple is x86_64-unknown-linux-gnu
+info: skipping toolchain installation
+
+
+Rust is installed now. Great!
+
+To get started you need Cargo's bin directory (/tmp/jolt-cargo/bin) in your 
+PATH
+environment variable. This has not been done automatically.
+
+To configure your current shell, you need to source
+the corresponding env file under /tmp/jolt-cargo.
+
+Consider running the right command for your shell (note the leading DOT):
+. "/tmp/jolt-cargo/env" # For sh/ash/dash/pdksh/bash
+cargo:rerun-if-env-changed=CC_x86_64-unknown-linux-gnu
+CC_x86_64-unknown-linux-gnu = None
+cargo:rerun-if-env-changed=CC_x86_64_unknown_linux_gnu
+CC_x86_64_unknown_linux_gnu = None
+cargo:rerun-if-env-changed=HOST_CC
+HOST_CC = None
+cargo:rerun-if-env-changed=CC
+CC = None
+cargo:rerun-if-env-changed=CC_ENABLE_DEBUG_OUTPUT
+cargo:rerun-if-env-changed=CRATE_CC_NO_DEFAULTS
+CRATE_CC_NO_DEFAULTS = None
+cargo:rerun-if-env-changed=CFLAGS
+CFLAGS = None
+cargo:rerun-if-env-changed=HOST_CFLAGS
+HOST_CFLAGS = None
+cargo:rerun-if-env-changed=CFLAGS_x86_64_unknown_linux_gnu
+CFLAGS_x86_64_unknown_linux_gnu = None
+cargo:rerun-if-env-changed=CFLAGS_x86_64-unknown-linux-gnu
+CFLAGS_x86_64-unknown-linux-gnu = None
+rustup 1.29.1 (d95a37b6a 2026-08-13)
+info: This is the version for the rustup toolchain manager, not the rustc compiler.
+info: no `rustc` is currently active
+no installed toolchains
+warn: no toolchain installed and no default toolchain set
+help: run 'rustup default stable' to download the latest stable release of Rust and set it as your default toolchain.
+
+===== clone (1s) =====
+Cloning into '/tmp/jolt-atlas'...
+e6cadf160dc8b6fa8b7a183ff24ce71b6ef84518 Tue Sep 22 10:11:50 2026 +0200 Perf/round 2 (#288)
+[toolchain]
+channel = "1.95"
+targets = ["riscv32im-unknown-none-elf"]
+profile = "minimal"
+components = ["cargo", "rustc", "clippy", "rustfmt", "rust-analyzer"]
+
+===== rustc version (rust-toolchain.toml should auto-install 1.95) (17s) =====
+info: syncing channel updates for 1.95-x86_64-unknown-linux-gnu
+info: latest update on 2026-04-16 for version 1.95.0 (59807616e 2026-04-14)
+info: downloading 7 components
+warn: the missing active toolchain `1.95-x86_64-unknown-linux-gnu` has been auto-installed
+warn: this might cause rustup commands to take longer time to finish than expected
+info: you may opt out with `RUSTUP_AUTO_INSTALL=0` or `rustup set auto-install disable`
+rustc 1.95.0 (59807616e 2026-04-14)
+cargo 1.95.0 (f2d3ce0bd 2026-03-21)
+
+===== cargo build --release --workspace (35s) =====
+   Compiling colored v2.2.0
+   Compiling keccak v0.1.6
+   Compiling virtue v0.0.18
+   Compiling sha3 v0.10.8
+   Compiling ark-std v0.5.0
+   Compiling rand_distr v0.4.3
+   Compiling ark-serialize v0.5.0 (https://github.com/a16z/arkworks-algebra?branch=dev%2Ftwist-shout#76bb3a45)
+   Compiling derive_more v2.1.1
+   Compiling num v0.4.3
+   Compiling serial_test v3.3.1
+   Compiling strum_macros v0.26.4
+   Compiling num-derive v0.4.2
+   Compiling memory-stats v1.2.0
+   Compiling ark-ff v0.5.0 (https://github.com/a16z/arkworks-algebra?branch=dev%2Ftwist-shout#76bb3a45)
+   Compiling common v0.1.0 (/tmp/jolt-atlas/common)
+   Compiling bincode_derive v2.0.1
+   Compiling unty v0.0.4
+   Compiling liquid v0.26.11
+   Compiling strum v0.26.3
+   Compiling fixedbitset v0.5.7
+   Compiling bincode v2.0.1
+   Compiling tract-linalg v0.22.1-pre (https://github.com/sonos/tract/#c484b3ee)
+   Compiling tract-core v0.22.1-pre (https://github.com/sonos/tract/#c484b3ee)
+   Compiling ark-poly v0.5.0 (https://github.com/a16z/arkworks-algebra?branch=dev%2Ftwist-shout#76bb3a45)
+   Compiling ark-ec v0.5.0 (https://github.com/a16z/arkworks-algebra?branch=dev%2Ftwist-shout#76bb3a45)
+   Compiling tract-nnef v0.22.1-pre (https://github.com/sonos/tract/#c484b3ee)
+   Compiling tract-hir v0.22.1-pre (https://github.com/sonos/tract/#c484b3ee)
+   Compiling ark-bn254 v0.5.0 (https://github.com/a16z/arkworks-algebra?branch=dev%2Ftwist-shout#76bb3a45)
+   Compiling dory-pcs v0.4.0
+   Compiling jolt-optimizations v0.5.0 (https://github.com/a16z/arkworks-algebra?branch=dev%2Ftwist-shout#76bb3a45)
+   Compiling tract-pulse-opl v0.22.1-pre (https://github.com/sonos/tract/#c484b3ee)
+   Compiling tract-pulse v0.22.1-pre (https://github.com/sonos/tract/#c484b3ee)
+   Compiling tract-extra v0.22.1-pre (https://github.com/sonos/tract/#c484b3ee)
+   Compiling tract-onnx-opl v0.22.1-pre (https://github.com/sonos/tract/#c484b3ee)
+   Compiling tract-onnx v0.22.1-pre (https://github.com/sonos/tract/#c484b3ee)
+   Compiling atlas-onnx-tracer v0.1.0 (/tmp/jolt-atlas/atlas-onnx-tracer)
+   Compiling joltworks v0.1.0 (/tmp/jolt-atlas/joltworks)
+   Compiling jolt-atlas-core v0.1.0 (/tmp/jolt-atlas/jolt-atlas-core)
+   Compiling jolt-atlas v0.1.0 (/tmp/jolt-atlas)
+    Finished `release` profile [optimized + debuginfo] target(s) in 1m 39s
+build exit=0 seconds=100
+
+===== examples available (135s) =====
+bge.rs
+cos_bench.rs
+gpt2.rs
+gpt2_zk_bench.rs
+microgpt.rs
+minigpt.rs
+nanoGPT.rs
+qwen.rs
+transformer.rs
+
+===== run: microgpt example (smallest; no model download) (135s) =====
+   Compiling itertools v0.14.0
+   Compiling itertools v0.12.1
+   Compiling itertools v0.13.0
+   Compiling darling_core v0.20.11
+   Compiling nom v7.1.3
+   Compiling itertools v0.10.5
+   Compiling monostate v0.1.18
+   Compiling macro_rules_attribute v0.2.2
+   Compiling rand_core v0.9.5
+   Compiling onig_sys v69.9.1
+   Compiling hashbrown v0.14.5
+   Compiling rand_chacha v0.9.0
+   Compiling rand v0.9.2
+   Compiling regex-automata v0.4.14
+   Compiling string-interner v0.15.0
+   Compiling spm_precompiled v0.1.4
+   Compiling darling_macro v0.20.11
+   Compiling darling v0.20.11
+   Compiling derive_builder_core v0.20.2
+   Compiling ark-std v0.5.0
+   Compiling maybe-rayon v0.1.1
+   Compiling rayon-cond v0.4.0
+   Compiling ark-serialize v0.5.0 (https://github.com/a16z/arkworks-algebra?branch=dev%2Ftwist-shout#76bb3a45)
+   Compiling derive_builder_macro v0.20.2
+   Compiling derive_builder v0.20.2
+   Compiling ark-ff v0.5.0 (https://github.com/a16z/arkworks-algebra?branch=dev%2Ftwist-shout#76bb3a45)
+   Compiling regex v1.12.3
+   Compiling matchers v0.2.0
+   Compiling tracing-subscriber v0.3.22
+   Compiling scan_fmt v0.2.6
+   Compiling liquid-core v0.26.11
+   Compiling tract-data v0.22.1-pre (https://github.com/sonos/tract/#c484b3ee)
+   Compiling liquid-lib v0.26.11
+   Compiling tracing-chrome v0.7.2
+   Compiling common v0.1.0 (/tmp/jolt-atlas/common)
+   Compiling tract-linalg v0.22.1-pre (https://github.com/sonos/tract/#c484b3ee)
+   Compiling liquid v0.26.11
+   Compiling tract-core v0.22.1-pre (https://github.com/sonos/tract/#c484b3ee)
+   Compiling onig v6.5.1
+   Compiling tokenizers v0.21.4
+   Compiling ark-poly v0.5.0 (https://github.com/a16z/arkworks-algebra?branch=dev%2Ftwist-shout#76bb3a45)
+   Compiling ark-ec v0.5.0 (https://github.com/a16z/arkworks-algebra?branch=dev%2Ftwist-shout#76bb3a45)
+   Compiling ark-bn254 v0.5.0 (https://github.com/a16z/arkworks-algebra?branch=dev%2Ftwist-shout#76bb3a45)
+   Compiling dory-pcs v0.4.0
+   Compiling jolt-optimizations v0.5.0 (https://github.com/a16z/arkworks-algebra?branch=dev%2Ftwist-shout#76bb3a45)
+   Compiling tract-nnef v0.22.1-pre (https://github.com/sonos/tract/#c484b3ee)
+   Compiling tract-hir v0.22.1-pre (https://github.com/sonos/tract/#c484b3ee)
+   Compiling tract-pulse-opl v0.22.1-pre (https://github.com/sonos/tract/#c484b3ee)
+   Compiling tract-pulse v0.22.1-pre (https://github.com/sonos/tract/#c484b3ee)
+   Compiling tract-extra v0.22.1-pre (https://github.com/sonos/tract/#c484b3ee)
+   Compiling tract-onnx-opl v0.22.1-pre (https://github.com/sonos/tract/#c484b3ee)
+   Compiling tract-onnx v0.22.1-pre (https://github.com/sonos/tract/#c484b3ee)
+   Compiling atlas-onnx-tracer v0.1.0 (/tmp/jolt-atlas/atlas-onnx-tracer)
+   Compiling joltworks v0.1.0 (/tmp/jolt-atlas/joltworks)
+   Compiling jolt-atlas-core v0.1.0 (/tmp/jolt-atlas/jolt-atlas-core)
+    Finished `release` profile [optimized + debuginfo] target(s) in 3m 28s
+     Running `target/release/examples/microgpt`
+=== microGPT ONNX Proof ===
+(Run with --trace for JSON output or --trace-terminal for terminal output)
+
+microgpt exit=0 seconds=208
+
+wall_clock_seconds=343
+TASK 055 GREEN
