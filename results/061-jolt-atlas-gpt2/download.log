@@ -7,3 +7,7 @@
 /tmp/jolt-venv/lib/python3.12/site-packages/transformers/cache_utils.py:540: TracerWarning: Converting a tensor to a Python boolean might cause the trace to be incorrect. We can't record the data flow of Python values, so this value will be treated as a constant in the future. This means that the trace might not generalize to other inputs!
   not self.key_cache[layer_idx].numel()  # prefers not t.numel() to len(t) == 0 to export the model
 Weight deduplication check in the ONNX export requires accelerate. Please install accelerate to run it.
+		-[x] values not close enough, max diff: 0.00067901611328125 (atol: 1e-05)
+The ONNX export succeeded with the warning: The maximum absolute difference between the output of the reference model and the ONNX exported model is not within the set tolerance 1e-05:
+- logits: max diff = 0.00067901611328125.
+ The exported model was saved at: atlas-onnx-tracer/models/gpt2
