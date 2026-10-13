@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/tmp/jolt-venv/lib/python3.12/site-packages/optimum/exporters/onnx/__main__.py", line 37, in <module>
+    from .convert import onnx_export_from_model
+  File "/tmp/jolt-venv/lib/python3.12/site-packages/optimum/exporters/onnx/convert.py", line 51, in <module>
+    from .base import OnnxConfig
+  File "/tmp/jolt-venv/lib/python3.12/site-packages/optimum/exporters/onnx/base.py", line 52, in <module>
+    from .model_patcher import DecoderModelPatcher, ModelPatcher, Seq2SeqModelPatcher
+  File "/tmp/jolt-venv/lib/python3.12/site-packages/optimum/exporters/onnx/model_patcher.py", line 346, in <module>
+    from torch.onnx.symbolic_opset14 import (  # noqa: E402
+ImportError: cannot import name '_attention_scale' from 'torch.onnx.symbolic_opset14' (/tmp/jolt-venv/lib/python3.12/site-packages/torch/onnx/symbolic_opset14.py)

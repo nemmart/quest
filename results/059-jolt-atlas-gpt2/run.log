@@ -1,0 +1,33 @@
+e6cadf160dc8b6fa8b7a183ff24ce71b6ef84518 Tue Sep 22 10:11:50 2026 +0200 Perf/round 2 (#288)
+rustc 1.95.0 (59807616e 2026-04-14)
+Python 3.12.3
+
+===== python venv (0s) =====
+pip 26.2.1 from /tmp/jolt-venv/lib/python3.12/site-packages/pip (python 3.12)
+
+===== pip: cpu torch + optimum 1.27 (058: the script's optimum[exporters] no longer resolves; 2.x dropped the extra) (0s) =====
+onnx               1.23.2
+onnxruntime        1.31.0
+optimum            1.27.0
+torch              2.14.1+cpu
+transformers       4.53.3
+pip seconds=47
+
+===== export gpt2 -> onnx (the script's export_model + rename_network, by hand) (47s) =====
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/tmp/jolt-venv/lib/python3.12/site-packages/optimum/exporters/onnx/__main__.py", line 37, in <module>
+    from .convert import onnx_export_from_model
+  File "/tmp/jolt-venv/lib/python3.12/site-packages/optimum/exporters/onnx/convert.py", line 51, in <module>
+    from .base import OnnxConfig
+  File "/tmp/jolt-venv/lib/python3.12/site-packages/optimum/exporters/onnx/base.py", line 52, in <module>
+    from .model_patcher import DecoderModelPatcher, ModelPatcher, Seq2SeqModelPatcher
+  File "/tmp/jolt-venv/lib/python3.12/site-packages/optimum/exporters/onnx/model_patcher.py", line 346, in <module>
+    from torch.onnx.symbolic_opset14 import (  # noqa: E402
+ImportError: cannot import name '_attention_scale' from 'torch.onnx.symbolic_opset14' (/tmp/jolt-venv/lib/python3.12/site-packages/torch/onnx/symbolic_opset14.py)
+export seconds=2
+ls: cannot access 'atlas-onnx-tracer/models/gpt2/': No such file or directory
+EXPORT FAILED
+Traceback (most recent call last):
+ImportError: cannot import name '_attention_scale' from 'torch.onnx.symbolic_opset14' (/tmp/jolt-venv/lib/python3.12/site-packages/torch/onnx/symbolic_opset14.py)
