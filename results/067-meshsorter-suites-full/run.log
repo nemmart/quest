@@ -1,0 +1,20 @@
+runner.tgz sha256 e0e646e76c5862a4cf36b8ab6271defec834307d2a8ffb575254eab3514fa533
+data sha256 295b68e3dd5504f2c6ddbd6b3c44ffe9a68c40a7c642cd97b8e064ae03accc16
+total 52
+-rw-rw-r-- 1 questrunner questrunner  8866 Oct 12 15:39 one99.txt
+-rw-rw-r-- 1 questrunner questrunner 16753 Oct 12 15:39 trace.txt
+-rw-rw-r-- 1 questrunner questrunner 18493 Oct 12 15:39 zipfraw.txt
+start Tue Oct 27 05:30:13 PM UTC 2026 on godspeed, 16 threads
+openjdk version "21.0.12.1" 2026-08-18
+openjdk version "21.0.12.1" 2026-08-18
+17:33:08 skewtable: exit 0, 175 s; NetTest skewtable: 0 passed, 0 failed
+17:34:15 ctrl-full: exit 0, 242 s; CtrlTest: 7167 passed, 0 failed
+17:36:07 engine-full: exit 0, 354 s; EngineTest full: 383 passed, 0 failed
+17:49:27 sweep-full: exit 0, 1154 s;     one-command round trip   default        41; min        36 (-12.20%), max        65 (+58.54%)
+== 4 suites, 0 failed, 1154 s
+run_suites.sh exit 0 at Tue Oct 27 05:49:27 PM UTC 2026
+ok   ctrl-full: CtrlTest: 7167 passed, 0 failed
+ok   engine-full: EngineTest full: 383 passed, 0 failed
+ok   skewtable: NetTest skewtable: 0 passed, 0 failed
+ok   sweep-full:     one-command round trip   default        41; min        36 (-12.20%), max        65 (+58.54%)
+== 4 suites, 0 failed, 1154 s
