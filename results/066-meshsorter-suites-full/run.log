@@ -1,0 +1,15 @@
+runner.tgz sha256 e0e646e76c5862a4cf36b8ab6271defec834307d2a8ffb575254eab3514fa533
+start Tue Oct 27 05:22:38 PM UTC 2026 on godspeed, 16 threads
+openjdk version "21.0.12.1" 2026-08-18
+openjdk version "21.0.12.1" 2026-08-18
+17:22:38 sweep-full: exit 1, 0 s; 	at Sweep.main(Sweep.java:27)
+17:22:40 ctrl-full: exit 1, 2 s; 	... 1 more
+17:22:50 engine-full: exit 1, 12 s; 	at EngineTest.main(EngineTest.java:18)
+17:25:07 skewtable: exit 0, 149 s; NetTest skewtable: 0 passed, 0 failed
+== 4 suites, 3 failed, 149 s
+run_suites.sh exit 1 at Tue Oct 27 05:25:07 PM UTC 2026
+FAIL ctrl-full: exit 1; 	... 1 more
+FAIL engine-full: exit 1; 	at EngineTest.main(EngineTest.java:18)
+ok   skewtable: NetTest skewtable: 0 passed, 0 failed
+FAIL sweep-full: exit 1; 	at Sweep.main(Sweep.java:27)
+== 4 suites, 3 failed, 149 s

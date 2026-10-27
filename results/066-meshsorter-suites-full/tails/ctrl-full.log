@@ -1,0 +1,30 @@
+  GO 0: all READY at 239, GO stored at 240, seen by tiles at 241-242
+  GO 1: all READY at 282, GO stored at 283, seen by tiles at 284-285
+  GO 2: all READY at 324, GO stored at 325, seen by tiles at 326-327
+  GO 3: all READY at 366, GO stored at 367, seen by tiles at 368-369
+  GO 4: all READY at 932, GO stored at 933, seen by tiles at 934-935
+  two-command phase: start store 28 cycles after GO on every tile; local copy of 512 records, start -> READY 535 cycles
+  the next command, sent right after GO: its first mailbox write lands 6 cycles after the tile saw GO at the earliest (tile 0), into the other argument block;
+  its slot 0 (zero-argument commands) 6 cycles after GO at the earliest, after the woken tile read the previous command word (the simulator checks every slot-0 landing)
+WFI [meas: CtrlTest wfi]: counters done before WFI falls through in 1 cycle and wfi()'s load returns it; done clears it; GO is sticky (a WFI after a missed GO falls through); READY fires at done when the command landed first; uncounted packets made 256 counters-done edges that the qualifier kept from setting it
+faults [meas: CtrlTest faults]: store to MASTER_STATUS, load from instruction memory, sub-word register store, the table window's gap and a misaligned load are bus errors; div and a CSR read are illegal; ecall halts; each cause logged, its condition set, no READY; HALT clears the conditions and HALT -> RUN restarts every core at the loader
+invariants [meas: CtrlTest invariants]: 4 (done before arrivals), 5 (a mode-0 packet sent), 7 (packet in flight at a line change), 8 (reply overwritten unread), 9 (unexpected arrival: its condition set; a store to the reserved MASTER_PULSE[3] ignored and flagged; M14) and the table-window check each fire on a bad program
+block copy [meas: CtrlTest block copy]: 1,024 words (256 128-bit mode-5 packets, v1.1) big SRAM -> instruction memory by the 6.5 sequence, from the start store to the first instruction after WFI: 271 cycles (spec 4.2: about 256 plus the stream's start; v1.0's 512 64-bit packets took 527)
+Exception in thread "main" java.lang.RuntimeException: java.nio.file.NoSuchFileException: data/zipfraw.txt
+	at CtrlTest.allToAll(CtrlTest.java:329)
+	at CtrlTest.main(CtrlTest.java:26)
+Caused by: java.nio.file.NoSuchFileException: data/zipfraw.txt
+	at java.base/sun.nio.fs.UnixException.translateToIOException(UnixException.java:92)
+	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:106)
+	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:111)
+	at java.base/sun.nio.fs.UnixFileSystemProvider.newByteChannel(UnixFileSystemProvider.java:261)
+	at java.base/java.nio.file.Files.newByteChannel(Files.java:380)
+	at java.base/java.nio.file.Files.newByteChannel(Files.java:432)
+	at java.base/java.nio.file.spi.FileSystemProvider.newInputStream(FileSystemProvider.java:420)
+	at java.base/java.nio.file.Files.newInputStream(Files.java:160)
+	at java.base/java.nio.file.Files.newBufferedReader(Files.java:2910)
+	at java.base/java.nio.file.Files.readAllLines(Files.java:3405)
+	at java.base/java.nio.file.Files.readAllLines(Files.java:3446)
+	at A2A.<init>(A2A.java:38)
+	at CtrlTest.allToAll(CtrlTest.java:328)
+	... 1 more
