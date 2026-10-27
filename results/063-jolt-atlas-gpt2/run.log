@@ -1,0 +1,129 @@
+
+===== toolchain gone; reinstalling (0s) =====
+info: downloading installer
+info: profile set to minimal
+info: default host tuple is x86_64-unknown-linux-gnu
+info: skipping toolchain installation
+
+
+Rust is installed now. Great!
+
+To get started you need Cargo's bin directory (/tmp/jolt-cargo/bin) in your 
+PATH
+environment variable. This has not been done automatically.
+
+To configure your current shell, you need to source
+the corresponding env file under /tmp/jolt-cargo.
+
+Consider running the right command for your shell (note the leading DOT):
+. "/tmp/jolt-cargo/env" # For sh/ash/dash/pdksh/bash
+cargo:rerun-if-env-changed=CC_x86_64-unknown-linux-gnu
+CC_x86_64-unknown-linux-gnu = None
+cargo:rerun-if-env-changed=CC_x86_64_unknown_linux_gnu
+CC_x86_64_unknown_linux_gnu = None
+cargo:rerun-if-env-changed=HOST_CC
+HOST_CC = None
+cargo:rerun-if-env-changed=CC
+CC = None
+cargo:rerun-if-env-changed=CC_ENABLE_DEBUG_OUTPUT
+cargo:rerun-if-env-changed=CRATE_CC_NO_DEFAULTS
+CRATE_CC_NO_DEFAULTS = None
+cargo:rerun-if-env-changed=CFLAGS
+CFLAGS = None
+cargo:rerun-if-env-changed=HOST_CFLAGS
+HOST_CFLAGS = None
+cargo:rerun-if-env-changed=CFLAGS_x86_64_unknown_linux_gnu
+CFLAGS_x86_64_unknown_linux_gnu = None
+cargo:rerun-if-env-changed=CFLAGS_x86_64-unknown-linux-gnu
+CFLAGS_x86_64-unknown-linux-gnu = None
+
+===== source gone; recloning (3s) =====
+Cloning into '/tmp/jolt-atlas'...
+38f4d598da8c5af947199b92a82fc502d4ceb1b4 Sun Oct 25 18:23:34 2026 +0200 SDD: require named mechanisms, PR-scoped criteria, and cross-spec hygiene (#398)
+info: syncing channel updates for 1.95-x86_64-unknown-linux-gnu
+info: latest update on 2026-04-16 for version 1.95.0 (59807616e 2026-04-14)
+info: downloading 7 components
+warn: the missing active toolchain `1.95-x86_64-unknown-linux-gnu` has been auto-installed
+warn: this might cause rustup commands to take longer time to finish than expected
+info: you may opt out with `RUSTUP_AUTO_INSTALL=0` or `rustup set auto-install disable`
+rustc 1.95.0 (59807616e 2026-04-14)
+Python 3.12.3
+
+===== python venv (19s) =====
+pip 26.2.2 from /tmp/jolt-venv/lib/python3.12/site-packages/pip (python 3.12)
+
+===== pip: cpu torch + optimum 1.27 (058: the script's optimum[exporters] no longer resolves; 2.x dropped the extra) (21s) =====
+onnx               1.23.2
+onnxruntime        1.31.1
+optimum            1.27.0
+torch              2.8.0+cpu
+transformers       4.51.3
+pip seconds=47
+
+===== export gpt2 -> onnx (the script's export_model + rename_network, by hand) (68s) =====
+/tmp/jolt-venv/lib/python3.12/site-packages/torch/onnx/_internal/registration.py:162: OnnxExporterWarning: Symbolic function 'aten::scaled_dot_product_attention' already registered for opset 14. Replacing the existing function with new function. This is unexpected. Please report it on https://github.com/pytorch/pytorch/issues.
+  warnings.warn(
+Weight deduplication check in the ONNX export requires accelerate. Please install accelerate to run it.
+attn impl: eager
+export seconds=35
+total 643076
+drwxrwxr-x 2 questrunner questrunner      4096 Oct 27 15:53 .
+drwxrwxr-x 3 questrunner questrunner      4096 Oct 27 15:53 ..
+-rw-rw-r-- 1 questrunner questrunner       920 Oct 27 15:53 config.json
+-rw-rw-r-- 1 questrunner questrunner       119 Oct 27 15:53 generation_config.json
+-rw-rw-r-- 1 questrunner questrunner    456318 Oct 27 15:53 merges.txt
+-rw-rw-r-- 1 questrunner questrunner 653664468 Oct 27 15:53 network.onnx
+-rw-rw-r-- 1 questrunner questrunner        99 Oct 27 15:53 special_tokens_map.json
+-rw-rw-r-- 1 questrunner questrunner       475 Oct 27 15:53 tokenizer_config.json
+-rw-rw-r-- 1 questrunner questrunner   3557680 Oct 27 15:53 tokenizer.json
+-rw-rw-r-- 1 questrunner questrunner    798156 Oct 27 15:53 vocab.json
+onnx opset: [('', 14)]
+op census: Add:123 Cast:38 Concat:171 Constant:1196 ConstantOfShape:12 Div:37 Gather:172 Gemm:48 MatMul:25 Mul:74 Pow:49 ReduceMean:50 Reshape:147 Shape:255 Slice:109 Softmax:12 Split:12 Sqrt:25 Squeeze:85 Sub:38 Tanh:12 Transpose:60 Unsqueeze:282 Where:12
+
+===== run: jolt-atlas-core/gpt2 --trace-terminal (104s) =====
+  Downloaded shlex v1.3.0
+  Downloaded semver v1.0.27
+  Downloaded thiserror-impl v1.0.69
+  Downloaded thiserror v2.0.18
+  Downloaded zeroize v1.8.2
+  Downloaded tracing-log v0.2.0
+  Downloaded strum_macros v0.26.4
+  Downloaded smallvec v1.15.1
+  Downloaded virtue v0.0.18
+  Downloaded tracing-attributes v0.1.31
+  Downloaded slab v0.4.12
+  Downloaded ryu v1.0.23
+  Downloaded tracing-core v0.1.36
+  Downloaded serde_core v1.0.228
+  Downloaded serde_derive v1.0.228
+  Downloaded sharded-slab v0.1.7
+  Downloaded thiserror v1.0.69
+  Downloaded typenum v1.19.0
+  Downloaded unicode-ident v1.0.24
+  Downloaded unicode-normalization-alignments v0.1.12
+  Downloaded serde v1.0.228
+  Downloaded unicode_categories v0.1.1
+  Downloaded unicode-segmentation v1.12.0
+  Downloaded regex v1.12.3
+  Downloaded scc v2.4.0
+  Downloaded rayon v1.11.0
+  Downloaded serde_json v1.0.149
+  Downloaded tokenizers v0.21.4
+  Downloaded tracing-subscriber v0.3.22
+  Downloaded syn v1.0.109
+  Downloaded zerocopy v0.8.39
+  Downloaded syn v2.0.116
+  Downloaded regex-syntax v0.8.9
+  Downloaded tracing v0.1.44
+  Downloaded spm_precompiled v0.1.4
+  Downloaded regex-automata v0.4.14
+  Downloaded sha3 v0.10.8
+error: no example target named `gpt2` in `jolt-atlas-core` package
+help: available example targets:
+    prove
+prove exit=101 seconds=16
+
+===== summary (120s) =====
+wall_clock_seconds=120
+prove exit=101 seconds=16
+TASK 063 RED (1 fails)

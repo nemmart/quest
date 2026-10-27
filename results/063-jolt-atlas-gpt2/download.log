@@ -1,0 +1,4 @@
+/tmp/jolt-venv/lib/python3.12/site-packages/torch/onnx/_internal/registration.py:162: OnnxExporterWarning: Symbolic function 'aten::scaled_dot_product_attention' already registered for opset 14. Replacing the existing function with new function. This is unexpected. Please report it on https://github.com/pytorch/pytorch/issues.
+  warnings.warn(
+Weight deduplication check in the ONNX export requires accelerate. Please install accelerate to run it.
+attn impl: eager
