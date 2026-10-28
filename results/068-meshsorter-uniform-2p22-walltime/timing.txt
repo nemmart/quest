@@ -1,0 +1,6 @@
+run: p4/uniform-kv32, 2^22 records (64 x 65,536), 32-bit keys and values, -j 1, fresh unpack
+host: godspeed, 16 threads
+unpack:                              0.0 s
+key generation + setup + sort:      79.0 s
+total wall time:                    79.0 s
+run_p4.sh exit 0

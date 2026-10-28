@@ -1,0 +1,24 @@
+start Wed Oct 28 05:41:13 AM UTC 2026 on godspeed, 16 threads
+openjdk version "21.0.12.1" 2026-08-18
+openjdk version "21.0.12.1" 2026-08-18
+== generating key sets into keys-65536: uniform
+keys-65536/uniform.keys: 64 x 65536
+== inputs: 9 files match HASHES
+== 1 runs to do (1 selected), 1 at a time, heap 3g each; logs in /tmp/ms-068/out/
+05:42:32 p4/uniform-kv32: exit 0, 79 s; SortTest: 12 passed, 0 failed
+wrote /tmp/ms-068/out/SUMMARY.md and /tmp/ms-068/out/all.csv (1 runs)
+== 1 runs, 0 failed, 79 s
+run: p4/uniform-kv32, 2^22 records (64 x 65,536), 32-bit keys and values, -j 1, fresh unpack
+host: godspeed, 16 threads
+unpack:                              0.0 s
+key generation + setup + sort:      79.0 s
+total wall time:                    79.0 s
+run_p4.sh exit 0
+all.csv
+p4_uniform-kv32.csv
+p4_uniform-kv32.log
+p4_uniform-kv32.phases.csv
+SUMMARY.md
+VERDICT.txt
+ok   p4/uniform-kv32: TOTAL 900,296 cycles (L1 GO -> L2 all READY; real split), of
+== 1 runs, 0 failed, 79 s
