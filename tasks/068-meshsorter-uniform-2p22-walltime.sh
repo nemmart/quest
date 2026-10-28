@@ -23,9 +23,9 @@ T2=$(now)
 {
   echo "run: p4/uniform-kv32, 2^22 records (64 x 65,536), 32-bit keys and values, -j 1, fresh unpack"
   echo "host: $(hostname), $(nproc) threads"
-  printf 'unpack:                         %8.1f s\n' "$(echo "$T1 - $T0" | bc)"
-  printf 'key generation + setup + sort:  %8.1f s\n' "$(echo "$T2 - $T1" | bc)"
-  printf 'total wall time:                %8.1f s\n' "$(echo "$T2 - $T0" | bc)"
+  printf 'unpack:                         %8.1f s\n' "$(awk -v a=$T1 -v b=$T0 'BEGIN{print a-b}')"
+  printf 'key generation + setup + sort:  %8.1f s\n' "$(awk -v a=$T2 -v b=$T1 'BEGIN{print a-b}')"
+  printf 'total wall time:                %8.1f s\n' "$(awk -v a=$T2 -v b=$T0 'BEGIN{print a-b}')"
   echo "run_p4.sh exit $RC"
 } | tee "$RES/timing.txt"
 cp "$W/out/VERDICT.txt" "$W/out/SUMMARY.md" "$W/out/all.csv" "$RES/" 2>/dev/null
