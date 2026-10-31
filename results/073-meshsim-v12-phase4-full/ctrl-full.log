@@ -1,0 +1,18 @@
+Exception in thread "main" java.lang.RuntimeException: java.nio.file.NoSuchFileException: hops.txt
+	at Config.defaults(Config.java:95)
+	at Config.machine(Config.java:91)
+	at Mach.cfg(Mach.java:19)
+	at CtrlTest.boot(CtrlTest.java:394)
+	at CtrlTest.main(CtrlTest.java:19)
+Caused by: java.nio.file.NoSuchFileException: hops.txt
+	at java.base/sun.nio.fs.UnixException.translateToIOException(UnixException.java:92)
+	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:106)
+	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:111)
+	at java.base/sun.nio.fs.UnixFileSystemProvider.newByteChannel(UnixFileSystemProvider.java:261)
+	at java.base/java.nio.file.Files.newByteChannel(Files.java:380)
+	at java.base/java.nio.file.Files.newByteChannel(Files.java:432)
+	at java.base/java.nio.file.Files.readAllBytes(Files.java:3281)
+	at java.base/java.nio.file.Files.readString(Files.java:3359)
+	at java.base/java.nio.file.Files.readString(Files.java:3318)
+	at Hops.load(Hops.java:10)
+	... 5 more
