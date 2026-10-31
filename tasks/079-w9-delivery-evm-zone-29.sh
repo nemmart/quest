@@ -1,5 +1,5 @@
 #!/bin/bash
-# Task 079 -- meshsim WORKER9 part 3: the full-program replay delivery of cyclone-29 (jolt-cpp 821e1bd), written by
+# Task 079 -- meshsim WORKER9 part 3: the full-program replay delivery of evm-zone-29 (jolt-cpp 821e1bd), written by
 # delivery_writer (jolt-asic-planning tracer-standalone-main 5ba7f0c: the box's tarball at 121c271 plus the imm_signed
 # patch below) and proven window by window by its functional replay from the delivered files (all three variants).
 # Outputs stay on the box (nothing large is committed):
@@ -8,13 +8,13 @@
 # results/ gets the logs, sizes, run time and the manifests' SHA-256. Input: /tmp/w9-delivery.tgz (by hand, SHA-256 checked).
 set -u
 cd "$(dirname "$0")/.."
-RES=$PWD/results/079-w9-delivery-cyclone-29; mkdir -p "$RES"
+RES=$PWD/results/079-w9-delivery-evm-zone-29; mkdir -p "$RES"
 AV=$(df -BG --output=avail /tmp | tail -1 | tr -dc 0-9); echo "free in /tmp: ${AV} GB"
 [ "$AV" -ge 40 ] || { echo "need about 31 GB for the delivery plus margin; only ${AV} GB free"; exit 4; }
 SRC=/tmp/w9-delivery.tgz; WANT=4000c1acf70e6d3795a345b592fa7d7987a23e4230631e456c8d472c3da1ce10
 [ -f "$SRC" ] || { echo "missing $SRC"; exit 2; }
 GOT=$(sha256sum "$SRC" | cut -d' ' -f1); echo "sha256 $GOT"; [ "$GOT" = "$WANT" ] || { echo "sha256 mismatch"; exit 2; }
-W=/tmp/w9-079; rm -rf "$W"; mkdir -p "$W"; tar -xzf "$SRC" -C "$W" || exit 2
+W=/tmp/w9-078; rm -rf "$W"; mkdir -p "$W"; tar -xzf "$SRC" -C "$W" || exit 2
 cd "$W/w9" || exit 2
 patch -p1 > "$RES/patch.log" 2>&1 <<'PATCH_EOF' || { cat "$RES/patch.log"; exit 2; }
 diff --git a/tracer/delivery/delivery_writer.cpp b/tracer/delivery/delivery_writer.cpp
@@ -90,20 +90,20 @@ json.dump(base, open(os.path.join(root, 'manifest.json'), 'w'), indent=1)
 print('root manifest:', [p['name'] for p in progs])
 PY
 }
-OUT=/tmp/w9-deliveries; mkdir -p "$OUT"; rm -rf "$OUT/cyclone-29" "$OUT/cyclone-29.manifest.json"
+OUT=/tmp/w9-deliveries; mkdir -p "$OUT"; rm -rf "$OUT/evm-zone-29" "$OUT/evm-zone-29.manifest.json"
 T0=$(date +%s)
-"$W/dw" cyclone cyclone/input/29/input-15961266 "$TAB" "$OUT" cyclone-29 --windows=all --keep=all > "$RES/delivery.log" 2>&1; RC=$?
+"$W/dw" evm-zone-4e3451c1d8c5 evm-zone-4e3451c1d8c5/inputs/trace-29-4599adc50712 "$TAB" "$OUT" evm-zone-29 --windows=all --keep=all > "$RES/delivery.log" 2>&1; RC=$?
 echo "full delivery: delivery_writer exit $RC after $(( $(date +%s) - T0 )) s"
 grep -v INFO "$RES/delivery.log" | tail -4
-cp "$TAB"/*.bin "$OUT/cyclone-29/"; merge "$OUT"
-du -sb "$OUT/cyclone-29" | tee "$RES/size.txt"; du -sh "$OUT/cyclone-29" | tee -a "$RES/size.txt"
-sha256sum "$OUT/cyclone-29.manifest.json" "$OUT/manifest.json" | tee "$RES/manifest.sha256"
-python3 -c "import json;W=json.load(open('$OUT/cyclone-29.manifest.json'))['programs'][0]['window_entries'];print(len(W),'windows,',sum(w['replay']=='ok' for w in W),'replayed ok')" | tee "$RES/summary.txt"
+cp "$TAB"/*.bin "$OUT/evm-zone-29/"; merge "$OUT"
+du -sb "$OUT/evm-zone-29" | tee "$RES/size.txt"; du -sh "$OUT/evm-zone-29" | tee -a "$RES/size.txt"
+sha256sum "$OUT/evm-zone-29.manifest.json" "$OUT/manifest.json" | tee "$RES/manifest.sha256"
+python3 -c "import json;W=json.load(open('$OUT/evm-zone-29.manifest.json'))['programs'][0]['window_entries'];print(len(W),'windows,',sum(w['replay']=='ok' for w in W),'replayed ok')" | tee "$RES/summary.txt"
 # the selected windows
-SELD=/tmp/w9-deliveries-selected; mkdir -p "$SELD"; rm -rf "$SELD/cyclone-29" "$SELD/cyclone-29.manifest.json"
-"$W/dw" cyclone cyclone/input/29/input-15961266 "$TAB" "$SELD" cyclone-29 --windows=0,1,2,4,964,965,988,1295,4803,5222,5669,5670,8191 --keep=all > "$RES/selected.log" 2>&1 || RC=5
+SELD=/tmp/w9-deliveries-selected; mkdir -p "$SELD"; rm -rf "$SELD/evm-zone-29" "$SELD/evm-zone-29.manifest.json"
+"$W/dw" evm-zone-4e3451c1d8c5 evm-zone-4e3451c1d8c5/inputs/trace-29-4599adc50712 "$TAB" "$SELD" evm-zone-29 --windows=0,1,2,7,12,21,22,34,35,5414,5415,8191 --keep=all > "$RES/selected.log" 2>&1 || RC=5
 grep -v INFO "$RES/selected.log" | tail -2
-cp "$TAB"/*.bin "$SELD/cyclone-29/"; merge "$SELD"
+cp "$TAB"/*.bin "$SELD/evm-zone-29/"; merge "$SELD"
 tar -czf /tmp/w9-selected-windows.tgz -C /tmp w9-deliveries-selected && sha256sum /tmp/w9-selected-windows.tgz | tee -a "$RES/manifest.sha256"
 df -h /tmp | tail -1
 echo "end $(date -u), exit $RC"
