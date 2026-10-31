@@ -36,3 +36,4 @@ same number (`044b-...`), claimed the same way.
 | 084 | meshsim WORKER11 | v1.25 acceptance: every window of cyclone-29 replayed (Stage A, Stage B), from /tmp/w9-deliveries |
 | 082b | meshsim WORKER9 | re-run of 082 (the w9-tracer.tgz probe) after the chmod |
 | 085 | meshsim WORKER10 | v1.25 log densities: log words per row from the w9 deliveries' state records and rows (no replay), both programs |
+| 086 | meshsim WORKER11 | v1.25 freeze check: main (0d63132) run_tests quick + full extras with the sort, and the full-size sort p4/uniform-k128 |
