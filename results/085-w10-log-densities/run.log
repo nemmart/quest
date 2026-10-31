@@ -1,0 +1,40 @@
+LogDensity.java sha256 725e9f6fcc956a90facffc1275d39efc8d889f52c1c1c6e7f94dbd433731f4b4
+start Sat Oct 31 10:42:56 AM UTC 2026 on godspeed, 16 threads
+openjdk version "21.0.12.1" 2026-08-18
+evm-zone-29: manifest sha256 ok; reading 8192 windows at 10:42:57
+evm-zone-29: 1024 windows read
+evm-zone-29: 2048 windows read
+evm-zone-29: 3072 windows read
+evm-zone-29: 4096 windows read
+evm-zone-29: 5120 windows read
+evm-zone-29: 6144 windows read
+evm-zone-29: 7168 windows read
+evm-zone-29: 8192 windows read
+evm-zone-29: 8192 windows, 8192 checked against the state records, 0 mismatches or errors
+evm-zone-29: real rows 354861942; log words: loads 64229138, stores 55254496, advice 3782, non-sequential 4055168
+evm-zone-29: density per real row: load 0.1810 / store 0.1557 / advice 0.00001 / non-sequential 0.0114, total 0.3481 (read log 0.1924, write log 0.1557)
+evm-zone-29: per full real window (5414): total density median 0.3658, min 0.1716, max 0.4180
+evm-zone-29: worst 512-row span: total 0.7813, read 0.4453, write 0.4082 words per row
+evm-zone-29: worst 1024-row span: total 0.6826, read 0.4102, write 0.3594 words per row
+evm-zone-29: worst 4096-row span: total 0.6001, read 0.4001, write 0.2761 words per row
+evm-zone-29: log bytes, all windows: raw 988.3 MB, each stream's smaller form 801.8 MB; per 64-window pass (128 passes) 7.72 MB raw, 6.26 MB smaller form
+evm-zone-29: done at 10:43:45
+cyclone-29: manifest sha256 ok; reading 8192 windows at 10:43:45
+cyclone-29: 1024 windows read
+cyclone-29: 2048 windows read
+cyclone-29: 3072 windows read
+cyclone-29: 4096 windows read
+cyclone-29: 5120 windows read
+cyclone-29: 6144 windows read
+cyclone-29: 7168 windows read
+cyclone-29: 8192 windows read
+cyclone-29: 8192 windows, 8192 checked against the state records, 0 mismatches or errors
+cyclone-29: real rows 371526406; log words: loads 60395486, stores 37036072, advice 96687, non-sequential 16039068
+cyclone-29: density per real row: load 0.1626 / store 0.0997 / advice 0.00026 / non-sequential 0.0432, total 0.3057 (read log 0.2060, write log 0.0997)
+cyclone-29: per full real window (5669): total density median 0.3299, min 0.1066, max 0.8333
+cyclone-29: worst 512-row span: total 0.8379, read 0.4727, write 0.7539 words per row
+cyclone-29: worst 1024-row span: total 0.8359, read 0.4590, write 0.7471 words per row
+cyclone-29: worst 4096-row span: total 0.8340, read 0.4497, write 0.7419 words per row
+cyclone-29: log bytes, all windows: raw 908.5 MB, each stream's smaller form 364.7 MB; per 64-window pass (128 passes) 7.10 MB raw, 2.85 MB smaller form
+cyclone-29: done at 10:44:20
+exit 0 at Sat Oct 31 10:44:20 AM UTC 2026
