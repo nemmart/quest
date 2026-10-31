@@ -1,0 +1,4 @@
+program synthetic, windows 8..39 (32), stages AB, 4 JVMs, wall 5 s
+stage A: 32 windows OK, 2097152 rows, 1.0 JVM-s, 2012622 rows per JVM-second, 0.03 s per window
+stage B: 32 windows OK, 2097152 rows, 19.8 JVM-s, 105725 rows per JVM-second, 0.62 s per window
+throughput: 23040 windows per hour (all stages)

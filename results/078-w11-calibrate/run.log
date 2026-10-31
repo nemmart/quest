@@ -1,0 +1,39 @@
+kit sha256 ca5bc4aa691ffd275b7333e8eddf563dbcc0c2ef03e96cad53c57464c5daa78e
+start Sat Oct 31 06:42:32 AM UTC 2026 on godspeed, 16 threads
+openjdk version "21.0.12.1" 2026-08-18
+               total        used        free      shared  buff/cache   available
+Mem:              62           1          60           0           1          61
+generated 128 windows in 5 s; 653M
+== 1 JVMs, windows 0..7, stages AB
+program synthetic, windows 0..7 (8), stages AB, 1 JVMs, wall 4 s
+stage A: 8 windows OK, 524288 rows, 0.2 JVM-s, 3426719 rows per JVM-second, 0.02 s per window
+stage B: 8 windows OK, 524288 rows, 4.0 JVM-s, 132597 rows per JVM-second, 0.49 s per window
+throughput: 7200 windows per hour (all stages)
+ok   stage A: 8 of 8 windows matched
+ok   stage B: 8 of 8 windows matched
+PASS: synthetic windows 0..7
+== 4 JVMs, windows 8..39, stages AB
+program synthetic, windows 8..39 (32), stages AB, 4 JVMs, wall 5 s
+stage A: 32 windows OK, 2097152 rows, 1.0 JVM-s, 2012622 rows per JVM-second, 0.03 s per window
+stage B: 32 windows OK, 2097152 rows, 19.8 JVM-s, 105725 rows per JVM-second, 0.62 s per window
+throughput: 23040 windows per hour (all stages)
+ok   stage A: 32 of 32 windows matched
+ok   stage B: 32 of 32 windows matched
+PASS: synthetic windows 8..39
+== 8 JVMs, windows 40..71, stages ABF
+stage B: 32 windows OK, 2097152 rows, 37.2 JVM-s, 56331 rows per JVM-second, 1.16 s per window
+stage F: 32 windows OK, 2097152 rows, 458.4 JVM-s, 4575 rows per JVM-second, 14.32 s per window
+throughput: 1623 windows per hour (all stages)
+ok   stage A: 32 of 32 windows matched
+ok   stage B: 32 of 32 windows matched
+ok   stage F: 32 of 32 windows matched
+PASS: synthetic windows 40..71
+== 16 JVMs, windows 0..127, stages AB
+program synthetic, windows 0..127 (128), stages AB, 16 JVMs, wall 20 s
+stage A: 128 windows OK, 8388608 rows, 20.1 JVM-s, 416701 rows per JVM-second, 0.16 s per window
+stage B: 128 windows OK, 8388608 rows, 268.5 JVM-s, 31241 rows per JVM-second, 2.10 s per window
+throughput: 23040 windows per hour (all stages)
+ok   stage A: 128 of 128 windows matched
+ok   stage B: 128 of 128 windows matched
+PASS: synthetic windows 0..127
+exit 0 at Sat Oct 31 06:44:18 AM UTC 2026
