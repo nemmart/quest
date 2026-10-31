@@ -1,0 +1,61 @@
+make: Entering directory '/tmp/w9-069b/w9/tracer/build'
+make[1]: Entering directory '/tmp/w9-069b/w9/tracer/build'
+make[2]: Entering directory '/tmp/w9-069b/w9/tracer/build'
+make[3]: Entering directory '/tmp/w9-069b/w9/tracer/build'
+make[3]: Leaving directory '/tmp/w9-069b/w9/tracer/build'
+[ 12%] Built target fmt
+make[3]: Entering directory '/tmp/w9-069b/w9/tracer/build'
+make[3]: Leaving directory '/tmp/w9-069b/w9/tracer/build'
+[ 83%] Built target tracer
+make[3]: Entering directory '/tmp/w9-069b/w9/tracer/build'
+make[3]: Leaving directory '/tmp/w9-069b/w9/tracer/build'
+[ 91%] Built target capture_writes
+make[3]: Entering directory '/tmp/w9-069b/w9/tracer/build'
+make[3]: Leaving directory '/tmp/w9-069b/w9/tracer/build'
+make[3]: Entering directory '/tmp/w9-069b/w9/tracer/build'
+[ 95%] capture_writes cyclone-29 -> /tmp/w9-069b/w9/tracer/build/out/cyclone-29.{bin,json,csv}
+00:00.460678 [INFO] Compiled program in 456 ms
+00:01.008232 [INFO] Compressed trace: 371526406 cycles, 1027.85 Mb in 547 ms
+00:11.442784 [INFO] Captured 37036072 writes (28284220 SD) and 60395486 loads (33729842 LD) in 10385 ms -> /tmp/w9-069b/w9/tracer/build/out/cyclone-29.bin (847.69 Mb)
+00:11.442791 [INFO] ram_K = 16777216 words (2^24), lowest_address = 0x7e000000
+make[3]: Leaving directory '/tmp/w9-069b/w9/tracer/build'
+[ 95%] Built target run-cyclone-29
+make[3]: Entering directory '/tmp/w9-069b/w9/tracer/build'
+make[3]: Leaving directory '/tmp/w9-069b/w9/tracer/build'
+make[3]: Entering directory '/tmp/w9-069b/w9/tracer/build'
+[100%] capture_writes evm-zone-29 -> /tmp/w9-069b/w9/tracer/build/out/evm-zone-29.{bin,json,csv}
+00:00.487478 [INFO] Compiled program in 487 ms
+00:01.320034 [INFO] Compressed trace: 354861942 cycles, 1181.30 Mb in 832 ms
+00:14.172136 [INFO] Captured 55254496 writes (54411302 SD) and 64229138 loads (61455842 LD) in 12802 ms -> /tmp/w9-069b/w9/tracer/build/out/evm-zone-29.bin (1264.68 Mb)
+00:14.172143 [INFO] ram_K = 8388608 words (2^23), lowest_address = 0x7e000000
+make[3]: Leaving directory '/tmp/w9-069b/w9/tracer/build'
+[100%] Built target run-evm-zone-29
+make[3]: Entering directory '/tmp/w9-069b/w9/tracer/build'
+make[3]: Leaving directory '/tmp/w9-069b/w9/tracer/build'
+[100%] Built target runs
+make[2]: Leaving directory '/tmp/w9-069b/w9/tracer/build'
+make[1]: Leaving directory '/tmp/w9-069b/w9/tracer/build'
+make: Leaving directory '/tmp/w9-069b/w9/tracer/build'
+	Command being timed: "make -C build runs"
+	User time (seconds): 38.98
+	System time (seconds): 2.76
+	Percent of CPU this job got: 160%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:25.98
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 1836352
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 1
+	Minor (reclaiming a frame) page faults: 913930
+	Voluntary context switches: 174
+	Involuntary context switches: 2968
+	Swaps: 0
+	File system inputs: 184
+	File system outputs: 11718112
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

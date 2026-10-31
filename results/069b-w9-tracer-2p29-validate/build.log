@@ -1,0 +1,45 @@
+[  4%] Building CXX object _deps/fmt-build/CMakeFiles/fmt.dir/src/format.cc.o
+[  8%] Building CXX object _deps/fmt-build/CMakeFiles/fmt.dir/src/os.cc.o
+[ 12%] Linking CXX static library libfmt.a
+[ 12%] Built target fmt
+[ 20%] Building CXX object CMakeFiles/tracer.dir/src/tracer/device_context.cpp.o
+[ 20%] Building CXX object CMakeFiles/tracer.dir/src/tracer/host_io_encoding.cpp.o
+[ 25%] Building CXX object CMakeFiles/tracer.dir/src/tracer/inlines/secp256k1.cpp.o
+[ 29%] Building C object CMakeFiles/tracer.dir/src/tracer/inlines/secp256k1_inverse.c.o
+[ 33%] Building CXX object CMakeFiles/tracer.dir/src/tracer/isa/virtual.cpp.o
+[ 41%] Building CXX object CMakeFiles/tracer.dir/src/tracer/code_cache.cpp.o
+[ 41%] Building CXX object CMakeFiles/tracer.dir/src/tracer/compressed_trace_gen.cpp.o
+[ 45%] Building CXX object CMakeFiles/tracer.dir/src/tracer/isa/decoder.cpp.o
+[ 50%] Building CXX object CMakeFiles/tracer.dir/src/tracer/loader.cpp.o
+[ 54%] Building CXX object CMakeFiles/tracer.dir/src/tracer/syscalls.cpp.o
+[ 58%] Building CXX object CMakeFiles/tracer.dir/src/tracer/trace_expander.cpp.o
+/tmp/w9-069b/w9/tracer/src/tracer/isa/virtual.cpp: In static member function ‘static tracer::isa::virt::VirtualBytecode tracer::isa::virt::VirtualBytecode::from_riscv_code(RiscAddr, std::span<const unsigned char>, tracer::HostIoEncoding)’:
+/tmp/w9-069b/w9/tracer/src/tracer/isa/virtual.cpp:1364:15: warning: unused variable ‘needed’ [-Wunused-variable]
+ 1364 |     const u64 needed = virt::num_cycles(risc_instr);
+      |               ^~~~~~
+/tmp/w9-069b/w9/tracer/src/tracer/isa/virtual.cpp:1365:15: warning: unused variable ‘remaining’ [-Wunused-variable]
+ 1365 |     const u64 remaining = (required_expanded_instrs + 1) - ret.num_instrs;
+      |               ^~~~~~~~~
+[ 62%] Building CXX object CMakeFiles/tracer.dir/src/tracer/trace_owner.cpp.o
+In file included from /tmp/w9-069b/w9/tracer/src/tracer/syscalls.hpp:3,
+                 from /tmp/w9-069b/w9/tracer/src/tracer/syscalls.cpp:1:
+/tmp/w9-069b/w9/tracer/src/tracer/vm.hpp: In instantiation of ‘void tracer::RiscV::write_slice(RiscAddr, std::span<_Type, 18446744073709551615>) [with T = long unsigned int; RiscAddr = long unsigned int]’:
+/tmp/w9-069b/w9/tracer/src/tracer/syscalls.cpp:130:27:   required from here
+/tmp/w9-069b/w9/tracer/src/tracer/vm.hpp:153:8: warning: unused variable ‘end_src’ [-Wunused-variable]
+  153 |     T *end_src = src.data() + src.size();
+      |        ^~~~~~~
+/tmp/w9-069b/w9/tracer/src/tracer/vm.hpp: In instantiation of ‘void tracer::RiscV::write_slice(RiscAddr, std::span<_Type, 18446744073709551615>) [with T = unsigned int; RiscAddr = long unsigned int]’:
+/tmp/w9-069b/w9/tracer/src/tracer/syscalls.cpp:152:27:   required from here
+/tmp/w9-069b/w9/tracer/src/tracer/vm.hpp:153:8: warning: unused variable ‘end_src’ [-Wunused-variable]
+[ 66%] Building CXX object CMakeFiles/tracer.dir/src/tracer/transcode.cpp.o
+[ 70%] Building CXX object CMakeFiles/tracer.dir/src/tracer/vm.cpp.o
+[ 75%] Building CXX object CMakeFiles/tracer.dir/src/utils/elf_helper.cpp.o
+[ 79%] Building CXX object CMakeFiles/tracer.dir/src/utils/mem.cpp.o
+[ 83%] Linking CXX static library libtracer.a
+[ 83%] Built target tracer
+[ 87%] Building CXX object CMakeFiles/trace_elf.dir/src/trace_elf.cpp.o
+[ 91%] Building CXX object CMakeFiles/capture_writes.dir/src/capture_writes.cpp.o
+[ 95%] Linking CXX executable trace_elf
+[ 95%] Built target trace_elf
+[100%] Linking CXX executable capture_writes
+[100%] Built target capture_writes

@@ -1,0 +1,57 @@
+w9-tracer.tgz sha256 0d46b00806b9529cb1d4e65b7354c5aab3fc54b1ba0db9bcc05ecf83b347f8df
+start Sat Oct 31 09:11:17 AM UTC 2026 on godspeed, 16 threads
+               total        used        free      shared  buff/cache   available
+Mem:              62           1          17           0          44          61
+      1 /tmp/w9-069b/w9/tracer/src/tracer/isa/virtual.cpp:1364:15: warning: unused variable ‘needed’ [-Wunused-variable]
+      1 /tmp/w9-069b/w9/tracer/src/tracer/isa/virtual.cpp:1365:15: warning: unused variable ‘remaining’ [-Wunused-variable]
+      2 /tmp/w9-069b/w9/tracer/src/tracer/vm.hpp:153:8: warning: unused variable ‘end_src’ [-Wunused-variable]
+00:01.008232 [INFO] Compressed trace: 371526406 cycles, 1027.85 Mb in 547 ms
+00:11.442784 [INFO] Captured 37036072 writes (28284220 SD) and 60395486 loads (33729842 LD) in 10385 ms -> /tmp/w9-069b/w9/tracer/build/out/cyclone-29.bin (847.69 Mb)
+00:11.442791 [INFO] ram_K = 16777216 words (2^24), lowest_address = 0x7e000000
+00:01.320034 [INFO] Compressed trace: 354861942 cycles, 1181.30 Mb in 832 ms
+00:14.172136 [INFO] Captured 55254496 writes (54411302 SD) and 64229138 loads (61455842 LD) in 12802 ms -> /tmp/w9-069b/w9/tracer/build/out/evm-zone-29.bin (1264.68 Mb)
+00:14.172143 [INFO] ram_K = 8388608 words (2^23), lowest_address = 0x7e000000
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:25.98
+	Maximum resident set size (kbytes): 1836352
+make-runs exit 0
+total 5858328
+drwxrwxr-x 2 questrunner questrunner       4096 Oct 31 09:12 .
+drwxrwxr-x 5 questrunner questrunner       4096 Oct 31 09:11 ..
+-rw-rw-r-- 1 questrunner questrunner  888865728 Oct 31 09:12 cyclone-29.bin
+-rw-rw-r-- 1 questrunner questrunner 1518478972 Oct 31 09:12 cyclone-29.csv
+-rw-rw-r-- 1 questrunner questrunner        701 Oct 31 09:12 cyclone-29.json
+-rw-rw-r-- 1 questrunner questrunner 1326107904 Oct 31 09:12 evm-zone-29.bin
+-rw-rw-r-- 1 questrunner questrunner 2265434356 Oct 31 09:12 evm-zone-29.csv
+-rw-rw-r-- 1 questrunner questrunner        700 Oct 31 09:12 evm-zone-29.json
+00:01.311132 [INFO] Compressed trace: 354861942 cycles, 1181.30 Mb in 817 ms
+00:09.040452 [INFO] Captured 55254496 writes (54411302 SD) and 64229138 loads (61455842 LD) in 7696 ms -> /tmp/w9-069b/validate/evm-zone-29.bin (1264.68 Mb)
+00:09.040461 [INFO] ram_K = 8388608 words (2^23), lowest_address = 0x7e000000
+00:09.040505 [INFO] validating against full expansion of 354861942 cycles
+00:22.579369 [INFO] VALIDATION OK: 55254496 writes, hash 0x5094e2f40c3e2729
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:23.18
+	Maximum resident set size (kbytes): 29231716
+validate-evm-zone-29 exit 0
+00:00.999207 [INFO] Compressed trace: 371526406 cycles, 1027.85 Mb in 529 ms
+00:07.916267 [INFO] Captured 37036072 writes (28284220 SD) and 60395486 loads (33729842 LD) in 6883 ms -> /tmp/w9-069b/validate/cyclone-29.bin (847.69 Mb)
+00:07.916276 [INFO] ram_K = 16777216 words (2^24), lowest_address = 0x7e000000
+00:07.916313 [INFO] validating against full expansion of 371526406 cycles
+00:20.254951 [INFO] VALIDATION OK: 37036072 writes, hash 0xeecfc9850cd093b4
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:20.86
+	Maximum resident set size (kbytes): 30715024
+validate-cyclone-29 exit 0
+00:01.468172 [INFO] Compressed trace: 246549649 cycles, 786.16 Mb in 426 ms
+00:06.141947 [INFO] Captured 31683025 writes (26166540 SD) and 46797908 loads (29284686 LD) in 4640 ms -> /tmp/w9-069b/validate/old-evm-zone-29.bin (725.17 Mb)
+00:06.141955 [INFO] ram_K = 8388608 words (2^23), lowest_address = 0x7e000000
+00:06.141994 [INFO] validating against full expansion of 246549649 cycles
+00:14.235898 [INFO] VALIDATION OK: 31683025 writes, hash 0x94a703b04e7b5b65
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:14.65
+	Maximum resident set size (kbytes): 20698412
+validate-old-evm-zone-29 exit 0
+evm-zone-29: validate run .bin == make runs .bin
+cyclone-29: validate run .bin == make runs .bin
+734368ad68d57a9108f7fd121299fef0367722eb9d60f71980de073e67f103cc  build/out/cyclone-29.bin
+a5568ea0943cfa6b89f2643888ee99693b31286429784268e29dc511e77586ee  build/out/evm-zone-29.bin
+734368ad68d57a9108f7fd121299fef0367722eb9d60f71980de073e67f103cc  /tmp/w9-069b/validate/cyclone-29.bin
+a5568ea0943cfa6b89f2643888ee99693b31286429784268e29dc511e77586ee  /tmp/w9-069b/validate/evm-zone-29.bin
+65a3cacfa6a8ce2a06b8b44f66bbf1df9d6d9641a11aad94c441ed2c0ca37eae  /tmp/w9-069b/validate/old-evm-zone-29.bin
+end Sat Oct 31 09:13:22 AM UTC 2026, exit 0

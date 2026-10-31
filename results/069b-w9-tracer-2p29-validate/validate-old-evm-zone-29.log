@@ -1,0 +1,29 @@
+00:01.041415 [INFO] Compiled program in 1040 ms
+00:01.468172 [INFO] Compressed trace: 246549649 cycles, 786.16 Mb in 426 ms
+00:06.141947 [INFO] Captured 31683025 writes (26166540 SD) and 46797908 loads (29284686 LD) in 4640 ms -> /tmp/w9-069b/validate/old-evm-zone-29.bin (725.17 Mb)
+00:06.141955 [INFO] ram_K = 8388608 words (2^23), lowest_address = 0x7e000000
+00:06.141994 [INFO] validating against full expansion of 246549649 cycles
+00:14.235898 [INFO] VALIDATION OK: 31683025 writes, hash 0x94a703b04e7b5b65
+	Command being timed: "build/capture_writes ../old-evm-zone ../old-evm-zone/inputs/trace-29-e23d2a1c5937 /tmp/w9-069b/validate/old-evm-zone-29 --validate"
+	User time (seconds): 14.63
+	System time (seconds): 4.49
+	Percent of CPU this job got: 130%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:14.65
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 20698412
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 5213911
+	Voluntary context switches: 22
+	Involuntary context switches: 600
+	Swaps: 0
+	File system inputs: 10952
+	File system outputs: 1485160
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
