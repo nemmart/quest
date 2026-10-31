@@ -1,0 +1,93 @@
+param,value,workload,cycles,delta,violations,peak_link,peak_eject,peak_area,peak_weIn
+default,,a2a uniform 4096,3463,0,0,1,1,0,0
+default,,gather 4096 k=2,50,0,0,1,1,0,0
+default,,63 searches (read port),1717,0,0,1,1,1,0
+default,,one-command round trip,42,0,0,1,1,0,0
+array read latency,1,a2a uniform 4096,3463,0,0,1,1,0,0
+array read latency,1,gather 4096 k=2,50,0,0,1,1,0,0
+array read latency,1,63 searches (read port),1716,-1,0,1,1,1,0
+array read latency,1,one-command round trip,42,0,0,1,1,0,0
+array read latency,3,a2a uniform 4096,3463,0,0,1,1,0,0
+array read latency,3,gather 4096 k=2,50,0,0,1,1,0,0
+array read latency,3,63 searches (read port),1718,1,0,1,1,1,0
+array read latency,3,one-command round trip,42,0,0,1,1,0,0
+array read latency,4,a2a uniform 4096,3463,0,0,1,1,0,0
+array read latency,4,gather 4096 k=2,50,0,0,1,1,0,0
+array read latency,4,63 searches (read port),1719,2,0,1,1,1,0
+array read latency,4,one-command round trip,42,0,0,1,1,0,0
+area queue depth,4,a2a uniform 4096,3463,0,0,1,1,0,0
+area queue depth,4,gather 4096 k=2,50,0,0,1,1,0,0
+area queue depth,4,63 searches (read port),1717,0,0,1,1,1,0
+area queue depth,4,one-command round trip,42,0,0,1,1,0,0
+area queue depth,16,a2a uniform 4096,3463,0,0,1,1,0,0
+area queue depth,16,gather 4096 k=2,50,0,0,1,1,0,0
+area queue depth,16,63 searches (read port),1717,0,0,1,1,1,0
+area queue depth,16,one-command round trip,42,0,0,1,1,0,0
+ts_engine_latency,2,a2a uniform 4096,3463,0,0,1,1,0,0
+ts_engine_latency,2,gather 4096 k=2,50,0,0,1,1,0,0
+ts_engine_latency,2,63 searches (read port),1719,2,0,1,1,1,0
+ts_engine_latency,2,one-command round trip,42,0,0,1,1,0,0
+ts_engine_latency,3,a2a uniform 4096,3463,0,0,1,1,0,0
+ts_engine_latency,3,gather 4096 k=2,50,0,0,1,1,0,0
+ts_engine_latency,3,63 searches (read port),1722,5,0,1,1,1,0
+ts_engine_latency,3,one-command round trip,42,0,0,1,1,0,0
+ts_engine_latency,4,a2a uniform 4096,3463,0,0,1,1,0,0
+ts_engine_latency,4,gather 4096 k=2,50,0,0,1,1,0,0
+ts_engine_latency,4,63 searches (read port),1726,9,0,1,1,1,0
+ts_engine_latency,4,one-command round trip,42,0,0,1,1,0,0
+ready_latency,4,a2a uniform 4096,3466,3,0,1,1,0,0
+ready_latency,4,gather 4096 k=2,53,3,0,1,1,0,0
+ready_latency,4,63 searches (read port),1720,3,0,1,1,1,0
+ready_latency,4,one-command round trip,45,3,0,1,1,0,0
+ready_latency,8,a2a uniform 4096,3470,7,0,1,1,0,0
+ready_latency,8,gather 4096 k=2,57,7,0,1,1,0,0
+ready_latency,8,63 searches (read port),1724,7,0,1,1,1,0
+ready_latency,8,one-command round trip,49,7,0,1,1,0,0
+go/run latency,4,a2a uniform 4096,3466,3,0,1,1,0,0
+go/run latency,4,gather 4096 k=2,53,3,0,1,1,0,0
+go/run latency,4,63 searches (read port),1720,3,0,1,1,1,0
+go/run latency,4,one-command round trip,45,3,0,1,1,0,0
+go/run latency,8,a2a uniform 4096,3470,7,0,1,1,0,0
+go/run latency,8,gather 4096 k=2,57,7,0,1,1,0,0
+go/run latency,8,63 searches (read port),1724,7,0,1,1,1,0
+go/run latency,8,one-command round trip,49,7,0,1,1,0,0
+link latency,2,a2a uniform 4096,3463,0,0,1,1,0,0
+link latency,2,gather 4096 k=2,50,0,0,1,1,0,0
+link latency,2,63 searches (read port),1717,0,0,1,1,1,0
+link latency,2,one-command round trip,36,-6,0,1,1,0,0
+link latency,4,a2a uniform 4096,3463,0,0,1,1,0,0
+link latency,4,gather 4096 k=2,50,0,0,1,1,0,0
+link latency,4,63 searches (read port),1717,0,0,1,1,1,0
+link latency,4,one-command round trip,50,8,0,1,1,0,0
+start skew,off,a2a uniform 4096,3462,-1,0,1,1,0,0
+start skew,off,gather 4096 k=2,49,-1,0,1,1,0,0
+start skew,off,63 searches (read port),1716,-1,0,1,1,1,0
+start skew,off,one-command round trip,42,0,0,1,1,0,0
+start skew,seed 2,a2a uniform 4096,3463,0,0,1,1,0,0
+start skew,seed 2,gather 4096 k=2,50,0,0,1,1,0,0
+start skew,seed 2,63 searches (read port),1717,0,0,1,1,1,0
+start skew,seed 2,one-command round trip,42,0,0,1,1,0,0
+start skew,seed 3,a2a uniform 4096,3463,0,0,1,1,0,0
+start skew,seed 3,gather 4096 k=2,50,0,0,1,1,0,0
+start skew,seed 3,63 searches (read port),1717,0,0,1,1,1,0
+start skew,seed 3,one-command round trip,42,0,0,1,1,0,0
+start skew,seed 4,a2a uniform 4096,3463,0,0,1,1,0,0
+start skew,seed 4,gather 4096 k=2,50,0,0,1,1,0,0
+start skew,seed 4,63 searches (read port),1717,0,0,1,1,1,0
+start skew,seed 4,one-command round trip,42,0,0,1,1,0,0
+start skew,seed 5,a2a uniform 4096,3463,0,0,1,1,0,0
+start skew,seed 5,gather 4096 k=2,50,0,0,1,1,0,0
+start skew,seed 5,63 searches (read port),1717,0,0,1,1,1,0
+start skew,seed 5,one-command round trip,42,0,0,1,1,0,0
+start skew,seed 6,a2a uniform 4096,3463,0,0,1,1,0,0
+start skew,seed 6,gather 4096 k=2,50,0,0,1,1,0,0
+start skew,seed 6,63 searches (read port),1717,0,0,1,1,1,0
+start skew,seed 6,one-command round trip,42,0,0,1,1,0,0
+cm_latency,4,a2a uniform 4096,3463,0,0,1,1,0,0
+cm_latency,4,gather 4096 k=2,50,0,0,1,1,0,0
+cm_latency,4,63 searches (read port),1717,0,0,1,1,1,0
+cm_latency,4,one-command round trip,44,2,0,1,1,0,0
+corner (all pessimistic),,a2a uniform 4096,3477,14,0,1,1,0,0
+corner (all pessimistic),,gather 4096 k=2,65,15,0,1,1,0,0
+corner (all pessimistic),,63 searches (read port),1742,25,0,1,1,1,0
+corner (all pessimistic),,one-command round trip,66,24,0,1,1,0,0
