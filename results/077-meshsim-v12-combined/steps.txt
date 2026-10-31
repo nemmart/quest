@@ -1,0 +1,34 @@
+bus|BusTest
+net|NetTest -1 quick
+net-shuf|NetTest 5 quick
+net-shuf2|NetTest 11 quick
+mem|MemTest -1
+mem-shuf|MemTest 3
+mem-shuf2|MemTest 8
+engine|EngineTest -1
+eng-shuf|EngineTest 4
+ctrl|CtrlTest -1
+ctrl-shuf|CtrlTest 4
+riscv|RiscvTest
+rdport|ReadPortGatherTest -1
+accounting|AccountingTest -1
+searchbench|SearchBench
+rdport-shuf|ReadPortGatherTest 4
+agtest|AgTest -1
+agtest-shuf|AgTest 4
+recipes|RecipeTest -1
+recipes-shuf|RecipeTest 4
+cond|CondTest -1
+cond-shuf|CondTest 4
+regdoc|RegDocTest
+hooks|HooksTest -1
+hooks-shuf|HooksTest 4
+periph|PeripheralSlotTest -1
+periph-shuf|PeripheralSlotTest 4
+reqbus|RequestBusTest -1
+reqbus-shuf|RequestBusTest 4
+stageb|StageB synthetic
+replayer|ReplayerTest ../tools/replayer-opcodes/vec.tsv
+sort-p1|SortTest -1 p1
+sort|SortTest -1 sort
+sort-shuf|SortTest 4 sort
