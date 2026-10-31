@@ -34,3 +34,4 @@ same number (`044b-...`), claimed the same way.
 | 082 | meshsim WORKER9 | probe: /tmp/w9-tracer.tgz present and its SHA-256, before 069b |
 | 083 | meshsim WORKER11 | v1.25 acceptance: every window of evm-zone-29 replayed (Stage A, Stage B), from /tmp/w9-deliveries |
 | 084 | meshsim WORKER11 | v1.25 acceptance: every window of cyclone-29 replayed (Stage A, Stage B), from /tmp/w9-deliveries |
+| 082b | meshsim WORKER9 | re-run of 082 (the w9-tracer.tgz probe) after the chmod |
