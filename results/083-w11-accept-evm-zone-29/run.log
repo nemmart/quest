@@ -1,0 +1,16 @@
+kit sha256 9a1acd8895705d04a120645773dcd068613cdc0ecb2ea46d12d20937379a72cd
+start Sat Oct 31 08:14:02 AM UTC 2026 on godspeed, 16 threads
+openjdk version "21.0.12.1" 2026-08-18
+               total        used        free      shared  buff/cache   available
+Mem:              62           1           2           0          59          61
+shard: evm-zone-29 windows 0..8191 of /tmp/w9-deliveries, stages AB, 16 JVMs, start Sat Oct 31 08:14:03 AM UTC 2026
+program evm-zone-29, windows 0..8191 (8192), stages ABF, 16 JVMs, wall 1722 s
+stage A: 8192 windows OK, 536870912 rows, 333.9 JVM-s, 1608115 rows per JVM-second, 0.04 s per window
+stage B: 8192 windows OK, 536870912 rows, 11671.8 JVM-s, 45997 rows per JVM-second, 1.42 s per window
+stage F: 128 windows OK, 8388608 rows, 1342.7 JVM-s, 6247 rows per JVM-second, 10.49 s per window
+throughput: 11507 windows per hour (all stages)
+ok   stage A: 8192 of 8192 windows matched
+ok   stage B: 8192 of 8192 windows matched
+ok   stage F: 128 of 128 windows matched
+PASS: evm-zone-29 windows 0..8191
+exit 0 at Sat Oct 31 08:42:45 AM UTC 2026
