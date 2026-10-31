@@ -14,7 +14,7 @@ AV=$(df -BG --output=avail /tmp | tail -1 | tr -dc 0-9); echo "free in /tmp: ${A
 SRC=/tmp/w9-delivery.tgz; WANT=4000c1acf70e6d3795a345b592fa7d7987a23e4230631e456c8d472c3da1ce10
 [ -f "$SRC" ] || { echo "missing $SRC"; exit 2; }
 GOT=$(sha256sum "$SRC" | cut -d' ' -f1); echo "sha256 $GOT"; [ "$GOT" = "$WANT" ] || { echo "sha256 mismatch"; exit 2; }
-W=/tmp/w9-079; rm -rf "$W"; mkdir -p "$W"; tar -xzf "$SRC" -C "$W" || exit 2
+W=/tmp/w9-080; rm -rf "$W"; mkdir -p "$W"; tar -xzf "$SRC" -C "$W" || exit 2
 cd "$W/w9" || exit 2
 patch -p1 > "$RES/patch.log" 2>&1 <<'PATCH_EOF' || { cat "$RES/patch.log"; exit 2; }
 diff --git a/tracer/delivery/delivery_writer.cpp b/tracer/delivery/delivery_writer.cpp
