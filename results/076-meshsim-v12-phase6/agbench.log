@@ -1,0 +1,102 @@
+AgBench on M8 (read-ahead)
+
+== ag_lookahead: cycles lost to the read-ahead (run cycles above ag_lookahead 64), by ag_lookahead 1..12 (searched to 20); min = the smallest from which no more groups start late and no more visits wait for an entry than at ag_lookahead 64 (group starts late + underrun cycles + stream-run table waits) [meas: AgBench lookahead]
+
+-- no stalls
+  shape                                        L cycles  lost at ag_lookahead 1..12                    min  2L+2
+  16 groups t=4 R=1 (the sort's shortest)      1     71  234 62 21 0 0 0 0 0 0 0 0 0                     4     4
+  16 groups t=4 R=1 (the sort's shortest)      2     75  390 124 63 30 12 0 0 0 0 0 0 0                  6     6
+  16 groups t=4 R=1 (the sort's shortest)      3     79  546 186 105 60 36 20 9 0 0 0 0 0                8     8
+  16 groups t=4 R=1 (the sort's shortest)      4     83  702 248 147 90 60 40 27 14 7 0 0 0             10    10
+  64 groups t=1 R=1 (one visit per group)      1     71  378 155 84 45 24 10 0 0 0 0 0 0                 7     4
+  64 groups t=1 R=1 (one visit per group)      2     75  630 279 168 105 72 50 36 21 14 6 0 0           11     6
+  64 groups t=1 R=1 (one visit per group)      3     79  882 403 252 165 120 90 72 49 42 30 20 15       15     8
+  64 groups t=1 R=1 (one visit per group)      4     83  1134 527 336 225 168 130 108 77 70 54 40 35    19    10
+  64 groups t=2 R=1                            1    135  570 126 47 0 0 0 0 0 0 0 0 0                    4     4
+  64 groups t=2 R=1                            2    139  950 252 141 62 27 0 0 0 0 0 0 0                 6     6
+  64 groups t=2 R=1                            3    143  1330 378 235 124 81 42 19 0 0 0 0 0             8     8
+  64 groups t=2 R=1                            4    147  1710 504 329 186 135 84 57 30 14 0 0 0         10    10
+  16 groups t=16 R=1                           1    263  810 254 85 0 0 0 0 0 0 0 0 0                    4     4
+  16 groups t=16 R=1                           2    267  1350 508 255 126 51 0 0 0 0 0 0 0               6     6
+  16 groups t=16 R=1                           3    271  1890 762 425 252 153 84 36 0 0 0 0 0            8     8
+  16 groups t=16 R=1                           4    275  2430 1016 595 378 255 168 108 62 28 0 0 0      10    10
+  16 groups t=4 R=1, 128-bit                   1     71  234 62 21 0 0 0 0 0 0 0 0 0                     4     4
+  16 groups t=4 R=1, 128-bit                   2     75  390 124 63 30 12 0 0 0 0 0 0 0                  6     6
+  16 groups t=4 R=1, 128-bit                   3     79  546 186 105 60 36 20 9 0 0 0 0 0                8     8
+  16 groups t=4 R=1, 128-bit                   4     83  702 248 147 90 60 40 27 14 7 0 0 0             10    10
+  16 groups t=4 R=3,1,0,2                      1    107  330 106 28 0 0 0 0 0 0 0 0 0                    4     4
+  16 groups t=4 R=3,1,0,2                      2    111  550 208 90 42 16 0 0 0 0 0 0 0                  6     6
+  16 groups t=4 R=3,1,0,2                      3    115  770 310 152 88 53 27 12 0 0 0 0 0               8     8
+  16 groups t=4 R=3,1,0,2                      4    119  990 412 214 134 91 57 37 18 7 0 0 0            10    10
+  stream run 63 x count 1, gap 0               1     67  186 62 20 0 0 0 0 0 0 0 0 0                     4     4
+  stream run 63 x count 1, gap 0               2     69  310 124 60 30 12 0 0 0 0 0 0 0                  6     6
+  stream run 63 x count 1, gap 0               3     71  434 186 100 60 36 20 8 0 0 0 0 0                8     8
+  stream run 63 x count 1, gap 0               4     73  558 248 140 90 60 40 24 14 6 0 0 0             10    10
+  stream run 63 x count 1, gap 4               1    315  0 0 0 0 0 0 0 0 0 0 0 0                         1     4
+  stream run 63 x count 1, gap 4               2    317  62 0 0 0 0 0 0 0 0 0 0 0                        2     6
+  stream run 63 x count 1, gap 4               3    319  186 0 0 0 0 0 0 0 0 0 0 0                       2     8
+  stream run 63 x count 1, gap 4               4    321  310 0 0 0 0 0 0 0 0 0 0 0                       2    10
+  stream run 32 x count 3, gap 0               1    100  31 0 0 0 0 0 0 0 0 0 0 0                        2     4
+  stream run 32 x count 3, gap 0               2    102  93 0 0 0 0 0 0 0 0 0 0 0                        2     6
+  stream run 32 x count 3, gap 0               3    104  155 30 0 0 0 0 0 0 0 0 0 0                      3     8
+  stream run 32 x count 3, gap 0               4    106  217 60 10 0 0 0 0 0 0 0 0 0                     4    10
+
+-- with read-queue stalls (writes land in the source area and win ties)
+  shape                                        L cycles  lost at ag_lookahead 1..12                    min  2L+2
+  (cycles: start to rd_done at ag_lookahead 64, stalls included)
+  16 groups t=4 R=1 (the sort's shortest)      1    119  186 14 1 0 0 0 0 0 0 0 0 0                      4     4  (stall cycles 48)
+    read-ahead events above ag_lookahead 64              158 46 6 0 0 0 0 0 0 0 0 0                  
+Exception in thread "main" java.lang.IllegalStateException: violations:
+violations: 48
+  cycle 38: tile 0: big SRAM chunk 0x1000b complete 13 cycles after acceptance, past K = 8 (invariant 24)
+  cycle 40: tile 0: big SRAM chunk 0x1000d complete 14 cycles after acceptance, past K = 8 (invariant 24)
+  cycle 41: tile 0: big SRAM chunk 0x1000f complete 14 cycles after acceptance, past K = 8 (invariant 24)
+  cycle 42: tile 0: big SRAM chunk 0x10011 complete 14 cycles after acceptance, past K = 8 (invariant 24)
+  cycle 43: tile 0: big SRAM chunk 0x10013 complete 14 cycles after acceptance, past K = 8 (invariant 24)
+  cycle 43 tile 0: address generator: a rotation started late (invariant 3; drift, see agReport)
+  cycle 44: tile 0: big SRAM chunk 0x10015 complete 14 cycles after acceptance, past K = 8 (invariant 24)
+  cycle 45: tile 0: big SRAM chunk 0x10017 complete 14 cycles after acceptance, past K = 8 (invariant 24)
+  cycle 46: tile 0: big SRAM chunk 0x10019 complete 14 cycles after acceptance, past K = 8 (invariant 24)
+  cycle 47: tile 0: big SRAM chunk 0x1001b complete 14 cycles after acceptance, past K = 8 (invariant 24)
+  cycle 49: tile 0: big SRAM chunk 0x1001d complete 14 cycles after acceptance, past K = 8 (invariant 24)
+  cycle 51: tile 0: big SRAM chunk 0x1001f complete 14 cycles after acceptance, past K = 8 (invariant 24)
+  cycle 53: tile 0: big SRAM chunk 0x10021 complete 14 cycles after acceptance, past K = 8 (invariant 24)
+  cycle 55: tile 0: big SRAM chunk 0x10023 complete 14 cycles after acceptance, past K = 8 (invariant 24)
+  cycle 57: tile 0: big SRAM chunk 0x10025 complete 14 cycles after acceptance, past K = 8 (invariant 24)
+  cycle 59: tile 0: big SRAM chunk 0x10027 complete 14 cycles after acceptance, past K = 8 (invariant 24)
+  cycle 68: tile 0: big SRAM chunk 0x10029 complete 14 cycles after acceptance, past K = 8 (invariant 24)
+  cycle 70: tile 0: big SRAM chunk 0x1002b complete 14 cycles after acceptance, past K = 8 (invariant 24)
+  cycle 72: tile 0: big SRAM chunk 0x1002d complete 14 cycles after acceptance, past K = 8 (invariant 24)
+  cycle 74: tile 0: big SRAM chunk 0x1002f complete 14 cycles after acceptance, past K = 8 (invariant 24)
+  cycle 76: tile 0: big SRAM chunk 0x10031 complete 14 cycles after acceptance, past K = 8 (invariant 24)
+  cycle 78: tile 0: big SRAM chunk 0x10033 complete 14 cycles after acceptance, past K = 8 (invariant 24)
+  cycle 80: tile 0: big SRAM chunk 0x10035 complete 14 cycles after acceptance, past K = 8 (invariant 24)
+  cycle 81: tile 0: big SRAM chunk 0x10037 complete 14 cycles after acceptance, past K = 8 (invariant 24)
+  cycle 82: tile 0: big SRAM chunk 0x10039 complete 14 cycles after acceptance, past K = 8 (invariant 24)
+  cycle 83: tile 0: big SRAM chunk 0x1003b complete 14 cycles after acceptance, past K = 8 (invariant 24)
+  cycle 84: tile 0: big SRAM chunk 0x1003d complete 14 cycles after acceptance, past K = 8 (invariant 24)
+  cycle 85: tile 0: big SRAM chunk 0x1003f complete 14 cycles after acceptance, past K = 8 (invariant 24)
+  cycle 86: tile 0: big SRAM chunk 0x10041 complete 14 cycles after acceptance, past K = 8 (invariant 24)
+  cycle 87: tile 0: big SRAM chunk 0x10043 complete 14 cycles after acceptance, past K = 8 (invariant 24)
+  cycle 89: tile 0: big SRAM chunk 0x10045 complete 14 cycles after acceptance, past K = 8 (invariant 24)
+  cycle 91: tile 0: big SRAM chunk 0x10047 complete 14 cycles after acceptance, past K = 8 (invariant 24)
+  cycle 93: tile 0: big SRAM chunk 0x10049 complete 14 cycles after acceptance, past K = 8 (invariant 24)
+  cycle 95: tile 0: big SRAM chunk 0x1004b complete 14 cycles after acceptance, past K = 8 (invariant 24)
+  cycle 97: tile 0: big SRAM chunk 0x1004d complete 14 cycles after acceptance, past K = 8 (invariant 24)
+  cycle 99: tile 0: big SRAM chunk 0x1004f complete 14 cycles after acceptance, past K = 8 (invariant 24)
+  cycle 108: tile 0: big SRAM chunk 0x10051 complete 14 cycles after acceptance, past K = 8 (invariant 24)
+  cycle 110: tile 0: big SRAM chunk 0x10053 complete 14 cycles after acceptance, past K = 8 (invariant 24)
+  cycle 112: tile 0: big SRAM chunk 0x10055 complete 14 cycles after acceptance, past K = 8 (invariant 24)
+  cycle 114: tile 0: big SRAM chunk 0x10057 complete 14 cycles after acceptance, past K = 8 (invariant 24)
+  cycle 116: tile 0: big SRAM chunk 0x10059 complete 14 cycles after acceptance, past K = 8 (invariant 24)
+  cycle 118: tile 0: big SRAM chunk 0x1005b complete 14 cycles after acceptance, past K = 8 (invariant 24)
+  cycle 120: tile 0: big SRAM chunk 0x1005d complete 14 cycles after acceptance, past K = 8 (invariant 24)
+  cycle 121: tile 0: big SRAM chunk 0x1005f complete 14 cycles after acceptance, past K = 8 (invariant 24)
+  cycle 122: tile 0: big SRAM chunk 0x10061 complete 14 cycles after acceptance, past K = 8 (invariant 24)
+  cycle 123: tile 0: big SRAM chunk 0x10063 complete 14 cycles after acceptance, past K = 8 (invariant 24)
+  cycle 124: tile 0: big SRAM chunk 0x10065 complete 14 cycles after acceptance, past K = 8 (invariant 24)
+  cycle 125: tile 0: big SRAM chunk 0x10067 complete 14 cycles after acceptance, past K = 8 (invariant 24)
+
+	at AgBench.run(AgBench.java:58)
+	at AgBench.lookahead(AgBench.java:115)
+	at AgBench.main(AgBench.java:21)
