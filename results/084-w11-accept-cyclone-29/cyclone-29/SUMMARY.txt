@@ -1,0 +1,5 @@
+program cyclone-29, windows 0..8191 (8192), stages ABF, 16 JVMs, wall 1688 s
+stage A: 8192 windows OK, 536870912 rows, 325.2 JVM-s, 1650783 rows per JVM-second, 0.04 s per window
+stage B: 8192 windows OK, 536870912 rows, 11445.9 JVM-s, 46905 rows per JVM-second, 1.40 s per window
+stage F: 128 windows OK, 8388608 rows, 1318.9 JVM-s, 6360 rows per JVM-second, 10.30 s per window
+throughput: 11738 windows per hour (all stages)
