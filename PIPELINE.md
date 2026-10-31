@@ -17,7 +17,8 @@ results/       runner output: results/NNN-name/{run.log, DONE|FAILED, artifacts.
 
 ## Protocol
 
-1. A session (working or planning) pushes `tasks/NNN-name.sh`.
+1. A session (working or planning) **claims its number in `NUMBERS.md`** (append, commit, push; on a rejected push,
+   pull and take the next), then pushes `tasks/NNN-name.sh`. Never pick a number without claiming it there.
 2. The runner box (10+ core Linux server, dedicated non-sudo user,
    systemd unit in runner.sh's header) polls every 60 s, runs the oldest
    unresulted task under a timeout, commits `results/NNN-name/`, pushes.
