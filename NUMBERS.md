@@ -29,3 +29,5 @@ same number (`044b-...`), claimed the same way.
 
 | NNN | session | task |
 |---|---|---|
+| 081 | meshsim WORKER9 | probe: what the runner sees of the w9 tarballs in /tmp |
+| 069b | meshsim WORKER9 | re-run of 069 (the 2^29 --validate runs) once the runner sees /tmp/w9-tracer.tgz |
