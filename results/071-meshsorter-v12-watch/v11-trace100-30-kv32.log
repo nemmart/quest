@@ -1,6 +1,0 @@
-inputs: meshsim.jar=df19d050fcff82b8de31b04f89efd4fde6cf7161f65f3e08bf094d09e12b04c8 image/loader.bin=7a98846a920bc60c8d530d9901b6b46a38c4ef1e02b8e5888f09ca27e885848c image/sort.code.bin=55e6dd09d4e588e5091d418643fde42ad37a8341f3b9662357737c7342fb8d4b image/sort.data.bin=88a4d480891db5d0162772002f62e18890fdb74c0e67d0b51c3cedd9a1c73552 image/sort.ovinit.bin=89164ab7f7379239b3af0518bd9dace1fb32423555144791596a48eb393ce44b image/sort.stage.bin=f605670fbc9abe345ab7957989a98e302160b6fa5be3935b6cddb4c8daf36924 image/sort.sym=3e292ddff08ac03e2274b58c6c734b60b1e853217542f66b53fc281997a3a634 hops.txt=a3b90f3c2fbc64f1a93c8c0ff916cfbaf40823aae38c4540811482873741d3da keys-65536/trace100-30.keys=937e92a2f8080a27cfa87ccd45a61b66ec71c224f9ea5859f6ce4cc6f7fbf24c
-Exception in thread "main" java.lang.IllegalArgumentException: no symbol count_round
-	at SortTest$Image.sym(SortTest.java:101)
-	at SortTest$Machine.<init>(SortTest.java:134)
-	at SortTest.sortRun(SortTest.java:410)
-	at SortTest.main(SortTest.java:596)

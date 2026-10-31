@@ -1,6 +1,0 @@
-inputs: meshsim.jar=a2aebd6cdd4f7747f74d3e49fcad0836875f11830756bfe3293e9d0de9e48221 image/loader.bin=8e4b8898df976fe97f1871cbbf57cd380bfd38180890234014a014ea273552eb image/sort.code.bin=60060d9cf9447de464764d4905f19e16f955abedb17784b7ffe25da912ca9437 image/sort.data.bin=412d9f3fa18dac9d629472b3935d12acd529a0725f39f848ae270d71fc5c31f7 image/sort.sym=b46445aa2230f47f1b296fbccf101f985a03f3da1fbf6d891bf6f8336c654750 hops.txt=a3b90f3c2fbc64f1a93c8c0ff916cfbaf40823aae38c4540811482873741d3da keys-16384/trace10-10.keys=112436cd5dd7cabef0618c39dda6901c92a77ffdee4ded22fc0897e2c2aed193
-Exception in thread "main" java.lang.IllegalArgumentException: no symbol bt_config
-	at SortTest$Image.sym(SortTest.java:101)
-	at SortTest$Machine.<init>(SortTest.java:134)
-	at SortTest.sortRun(SortTest.java:392)
-	at SortTest.main(SortTest.java:577)
