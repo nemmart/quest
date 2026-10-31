@@ -1,15 +1,15 @@
 kit sha256 a2c699fb3fc50bf80a6fc7126e559a3371bc0624cec0d73407ad58259e4d640f
-start Sat Oct 31 06:13:19 AM UTC 2026 on godspeed, 16 threads
+start Sat Oct 31 06:28:08 AM UTC 2026 on godspeed, 16 threads
 openjdk version "21.0.12.1" 2026-08-18
 openjdk version "21.0.12.1" 2026-08-18
 == generating key sets into keys-65536: uniform
 keys-65536/uniform.keys: 64 x 65536
 == inputs: 8 files match HASHES
 == 1 runs to do (1 selected), 1 at a time, heap 6g each; logs in /tmp/ms-077/p4/
-06:27:36 p4/uniform-k128: exit 0, 119 s; SortTest: 11 passed, 0 failed
+06:42:11 p4/uniform-k128: exit 0, 118 s; SortTest: 11 passed, 0 failed
 wrote /tmp/ms-077/p4/SUMMARY.md and /tmp/ms-077/p4/all.csv (1 runs)
-== 1 runs, 0 failed, 119 s
-run_quick.sh exit 0, run_full.sh exit 0, run_p4.sh exit 0 at Sat Oct 31 06:27:36 AM UTC 2026
+== 1 runs, 0 failed, 118 s
+run_quick.sh exit 0, run_full.sh exit 0, run_p4.sh exit 0 at Sat Oct 31 06:42:11 AM UTC 2026
 accounting rc=0
 agtest rc=0
 agtest-shuf rc=0
@@ -91,7 +91,7 @@ sort-bt-kv32 rc=0
 sweep-quick rc=0
 10 full steps; nonzero exits 0
 ok   p4/uniform-k128: TOTAL 1,360,082 cycles (L1 GO -> L2 all READY; real split), 
-== 1 runs, 0 failed, 119 s
+== 1 runs, 0 failed, 118 s
 tasks/077-meshsim-v12-combined.sh: line 30: __KIT_BEGIN__: command not found
 tasks/077-meshsim-v12-combined.sh: line 31: H4sIAAAAAAAAA+z963YbV5Iuivbveoo0e5SVsAAYAC+SAUluiqQktilSRVJW1WJxcyWBJIkibkIC: command not found
 tasks/077-meshsim-v12-combined.sh: line 32: pNi2euyf+/zd44xxXuC8yXmT9SQnvoiYt8wESLlU7rXWLgxbBPIy7zNmXL+47U++/5d/8KdBnyfr: No such file or directory
