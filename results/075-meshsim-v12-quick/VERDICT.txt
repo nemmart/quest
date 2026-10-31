@@ -1,0 +1,59 @@
+accounting rc=0
+agtest rc=0
+agtest-shuf rc=0
+bus rc=0
+cond rc=0
+cond-shuf rc=0
+ctrl rc=0
+ctrl-shuf rc=0
+engine rc=0
+eng-shuf rc=0
+hooks rc=0
+hooks-shuf rc=0
+mem rc=0
+mem-shuf2 rc=0
+mem-shuf rc=0
+net rc=0
+net-shuf2 rc=0
+net-shuf rc=0
+periph rc=0
+periph-shuf rc=0
+rdport rc=0
+rdport-shuf rc=0
+regdoc rc=0
+replayer rc=0
+reqbus rc=0
+reqbus-shuf rc=0
+riscv rc=0
+searchbench rc=0
+stageb rc=0
+accounting.log: AccountingTest: 12 passed, 0 failed
+agtest.log: AgTest: 239 passed, 0 failed
+agtest-shuf.log: AgTest (shuffled, seed 4): 239 passed, 0 failed
+bus.log: BusTest: 154 passed, 0 failed
+cond.log: CondTest: 141 passed, 0 failed
+cond-shuf.log: CondTest (shuffled, seed 4): 141 passed, 0 failed
+ctrl.log: CtrlTest: 6893 passed, 0 failed
+ctrl-shuf.log: CtrlTest (shuffled, seed 4): 6893 passed, 0 failed
+engine.log: EngineTest: 371 passed, 0 failed
+eng-shuf.log: EngineTest (shuffled, seed 4): 371 passed, 0 failed
+hooks.log: HooksTest: 142 passed, 0 failed
+hooks-shuf.log: HooksTest (shuffled, seed 4): 142 passed, 0 failed
+mem.log: MemTest: 177 passed, 0 failed
+mem-shuf2.log: MemTest (shuffled, seed 8): 177 passed, 0 failed
+mem-shuf.log: MemTest (shuffled, seed 3): 177 passed, 0 failed
+net.log: NetTest: 31329 passed, 0 failed
+net-shuf2.log: NetTest (shuffled, seed 11): 31329 passed, 0 failed
+net-shuf.log: NetTest (shuffled, seed 5): 31329 passed, 0 failed
+periph.log: PeripheralSlotTest: 92 passed, 0 failed
+periph-shuf.log: PeripheralSlotTest (shuffled, seed 4): 92 passed, 0 failed
+rdport.log: ReadPortGatherTest: 562 passed, 0 failed
+rdport-shuf.log: ReadPortGatherTest (shuffled, seed 4): 562 passed, 0 failed
+regdoc.log: RegDocTest: 269 passed, 0 failed
+replayer.log: ReplayerTest: 1188 passed, 0 failed
+reqbus.log: RequestBusTest: 50 passed, 0 failed
+reqbus-shuf.log: RequestBusTest (shuffled, seed 4): 50 passed, 0 failed
+riscv.log: RiscvTest: 96 passed, 0 failed
+searchbench.log: SearchBench: 56 passed, 0 failed
+stageb.log: StageB synthetic: 18 windows, 0 failed
+29 steps; nonzero exits 0, logs with FAIL 0
