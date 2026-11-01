@@ -41,3 +41,4 @@ same number (`044b-...`), claimed the same way.
 | 088 | meshsim WORKER15 | v1.2.1 verification: branch v1.2.1 (090fc40) run_tests quick + full extras with the sort, and the full-size sort p4/uniform-k128 |
 | 089 | meshsim WORKER11 | v1.25 section 8 (branch s8): run_tests quick + full extras with the sort, and p4/uniform-k128 against 1,360,082 cycles |
 | 090 | meshsim WORKER14 | cc-cores (5cd78a2): run_tests quick + full extras (with CcBench), C&C 1-3 as cores behind Config.ccCores, the switch off elsewhere |
+| 091 | meshsim WORKER11 | v1.25 section 8e (branch s8): run_tests quick suite + full extras |
