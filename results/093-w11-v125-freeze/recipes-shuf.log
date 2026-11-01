@@ -1,0 +1,11 @@
+shuffled child order, seed 4
+snippets: 47 code blocks in RECIPES.md, 47 RECIPE regions in wip/sw/recipes/
+status: PARAMS' endpoint id, size and peripherals, and STATUS, read on every tile
+rules: the right form of each rule (rule_wait, rule_disjoint, rule_start, rule_align) runs clean on every tile
+  sync: the shortest start path's counter store, from C&C's GO store: cycle +8..+9 over the 64 tiles [meas: RecipeTest sync]
+blocks [meas: RecipeTest blocks]: cycles per 64-bit record, marginal (the difference of two sizes over their difference): write_block 7.20 (256 records, not marginal), fill 23.00, hash 36.44 (18.22 per 32-bit word read)
+selftest [meas: RecipeTest selftest]: fill from the index seed, a uniform all-to-all (16 records per pair), hash, signatures to C&C 1 as requests (answered): all 64 equal the simulator's; one corrupted record changes exactly its receiver's
+Exception in thread "main" java.lang.RuntimeException: image cc_rcp (run sw/build.sh): sw/build/cc_rcp.code.bin
+	at Mach$Image.<init>(Mach.java:33)
+	at RecipeTest.cc1(RecipeTest.java:699)
+	at RecipeTest.main(RecipeTest.java:31)

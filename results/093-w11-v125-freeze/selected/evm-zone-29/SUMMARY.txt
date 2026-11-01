@@ -1,0 +1,5 @@
+program evm-zone-29, windows 0..11 (12, all the manifest lists), stages ABF, 16 JVMs, wall 23 s
+stage A: 12 windows OK, 786432 rows, 4.2 JVM-s, 187201 rows per JVM-second, 0.35 s per window
+stage B: 12 windows OK, 786432 rows, 32.3 JVM-s, 24345 rows per JVM-second, 2.69 s per window
+stage F: 12 windows OK, 786432 rows, 196.4 JVM-s, 4004 rows per JVM-second, 16.37 s per window
+throughput: 1878 windows per hour (all stages)

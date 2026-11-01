@@ -1,0 +1,5 @@
+Exception in thread "main" java.lang.RuntimeException: image cc1 (run sw/build.sh): sw/build/cc1.code.bin
+	at Mach$Image.<init>(Mach.java:33)
+	at Mach.bootCores(Mach.java:73)
+	at CcBench.boot(CcBench.java:21)
+	at CcBench.main(CcBench.java:10)
