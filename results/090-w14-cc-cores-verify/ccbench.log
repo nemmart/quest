@@ -1,0 +1,15 @@
+boot 'rcp_boot' (62 + 0 packets to each tile): the Java model 120 cycles; cores 901 cycles
+  the host lands C&C 1's image (230 packets) and CMD_JUMP: C&C 1 running at 248
+  C&C 1 stages the commands and streams C&C 2/3's images: both running at 595 (+347)
+  both "started" requests served by 703 (+108)
+  the tiles' image streamed, all READY at 864 (+161); GO at 884 (+20); all 64 running at 901 (+17)
+  from C&C 1 running: 653 cycles; violations 0
+boot 'cmd' (25 + 0 packets to each tile): the Java model 83 cycles; cores 864 cycles
+  the host lands C&C 1's image (230 packets) and CMD_JUMP: C&C 1 running at 248
+  C&C 1 stages the commands and streams C&C 2/3's images: both running at 595 (+347)
+  both "started" requests served by 703 (+108)
+  the tiles' image streamed, all READY at 827 (+124); GO at 847 (+20); all 64 running at 864 (+17)
+  from C&C 1 running: 616 cycles; violations 0
+phase: 32 back-to-back broadcast commands (cmd type 1, one argument), READY then GO each
+  GO to GO, steady state (the last 16): the Java model 43.0 (43-43); cores 88.0 (88-88)
+  violations: model 0, cores 0

@@ -1,0 +1,105 @@
+kit sha256 d51bfc894234631f5a3c74f560267a64cb2a749ecad92330c0a8086cb947be1e
+start Sun Nov  1 10:31:32 AM UTC 2026 on godspeed, 16 threads
+openjdk version "21.0.12.1" 2026-08-18
+run_quick.sh exit 0, run_full.sh exit 0 at Sun Nov  1 10:43:55 AM UTC 2026
+accounting rc=0
+agtest rc=0
+agtest-shuf rc=0
+bus rc=0
+cccores rc=0
+cccores-shuf rc=0
+cond rc=0
+cond-shuf rc=0
+ctrl rc=0
+ctrl-shuf rc=0
+engine rc=0
+eng-shuf rc=0
+hooks rc=0
+hooks-shuf rc=0
+mem rc=0
+mem-shuf2 rc=0
+mem-shuf rc=0
+net rc=0
+net-shuf2 rc=0
+net-shuf rc=0
+periph rc=0
+periph-shuf rc=0
+rdport rc=0
+rdport-shuf rc=0
+recipes rc=0
+recipes-shuf rc=0
+regdoc rc=0
+replayer rc=0
+reqbus rc=0
+reqbus-shuf rc=0
+riscv rc=0
+searchbench rc=0
+sort-p1 rc=0
+sort rc=0
+sort-shuf rc=0
+stageb rc=0
+accounting.log: AccountingTest: 12 passed, 0 failed
+agtest.log: AgTest: 239 passed, 0 failed
+agtest-shuf.log: AgTest (shuffled, seed 4): 239 passed, 0 failed
+bus.log: BusTest: 154 passed, 0 failed
+cccores.log: CcCoresTest: 61 passed, 0 failed
+cccores-shuf.log: CcCoresTest (shuffled, seed 4): 61 passed, 0 failed
+cond.log: CondTest: 141 passed, 0 failed
+cond-shuf.log: CondTest (shuffled, seed 4): 141 passed, 0 failed
+ctrl.log: CtrlTest: 6893 passed, 0 failed
+ctrl-shuf.log: CtrlTest (shuffled, seed 4): 6893 passed, 0 failed
+engine.log: EngineTest: 371 passed, 0 failed
+eng-shuf.log: EngineTest (shuffled, seed 4): 371 passed, 0 failed
+hooks.log: HooksTest: 142 passed, 0 failed
+hooks-shuf.log: HooksTest (shuffled, seed 4): 142 passed, 0 failed
+mem.log: MemTest: 177 passed, 0 failed
+mem-shuf2.log: MemTest (shuffled, seed 8): 177 passed, 0 failed
+mem-shuf.log: MemTest (shuffled, seed 3): 177 passed, 0 failed
+net.log: NetTest: 31330 passed, 0 failed
+net-shuf2.log: NetTest (shuffled, seed 11): 31330 passed, 0 failed
+net-shuf.log: NetTest (shuffled, seed 5): 31330 passed, 0 failed
+periph.log: PeripheralSlotTest: 92 passed, 0 failed
+periph-shuf.log: PeripheralSlotTest (shuffled, seed 4): 92 passed, 0 failed
+rdport.log: ReadPortGatherTest: 562 passed, 0 failed
+rdport-shuf.log: ReadPortGatherTest (shuffled, seed 4): 562 passed, 0 failed
+recipes.log: RecipeTest: 2042 passed, 0 failed
+recipes-shuf.log: RecipeTest (shuffled, seed 4): 2042 passed, 0 failed
+regdoc.log: RegDocTest: 269 passed, 0 failed
+replayer.log: ReplayerTest: 1468 passed, 0 failed
+reqbus.log: RequestBusTest: 50 passed, 0 failed
+reqbus-shuf.log: RequestBusTest (shuffled, seed 4): 50 passed, 0 failed
+riscv.log: RiscvTest: 96 passed, 0 failed
+searchbench.log: SearchBench: 56 passed, 0 failed
+sort.log: SortTest: 104 passed, 0 failed
+sort-p1.log: SortTest: 42 passed, 0 failed
+sort-shuf.log: SortTest (shuffled, seed 4): 104 passed, 0 failed
+stageb.log: StageB synthetic: 19 windows, 0 failed
+36 steps; nonzero exits 0, logs with FAIL 0
+accounting-full rc=0
+agbench rc=0
+ccbench rc=0
+ctrl-full rc=0
+engine-full rc=0
+rdport-full rc=0
+s1bench rc=0
+skewtable rc=0
+sort-bt-k128 rc=0
+sort-bt-kv32 rc=0
+sweep-quick rc=0
+11 full steps; nonzero exits 0
+--- CcBench
+boot 'rcp_boot' (62 + 0 packets to each tile): the Java model 120 cycles; cores 901 cycles
+  the host lands C&C 1's image (230 packets) and CMD_JUMP: C&C 1 running at 248
+  C&C 1 stages the commands and streams C&C 2/3's images: both running at 595 (+347)
+  both "started" requests served by 703 (+108)
+  the tiles' image streamed, all READY at 864 (+161); GO at 884 (+20); all 64 running at 901 (+17)
+  from C&C 1 running: 653 cycles; violations 0
+boot 'cmd' (25 + 0 packets to each tile): the Java model 83 cycles; cores 864 cycles
+  the host lands C&C 1's image (230 packets) and CMD_JUMP: C&C 1 running at 248
+  C&C 1 stages the commands and streams C&C 2/3's images: both running at 595 (+347)
+  both "started" requests served by 703 (+108)
+  the tiles' image streamed, all READY at 827 (+124); GO at 847 (+20); all 64 running at 864 (+17)
+  from C&C 1 running: 616 cycles; violations 0
+phase: 32 back-to-back broadcast commands (cmd type 1, one argument), READY then GO each
+  GO to GO, steady state (the last 16): the Java model 43.0 (43-43); cores 88.0 (88-88)
+  violations: model 0, cores 0
