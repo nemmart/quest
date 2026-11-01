@@ -38,3 +38,4 @@ same number (`044b-...`), claimed the same way.
 | 085 | meshsim WORKER10 | v1.25 log densities: log words per row from the w9 deliveries' state records and rows (no replay), both programs |
 | 086 | meshsim WORKER11 | v1.25 freeze check: main (0d63132) run_tests quick + full extras with the sort, and the full-size sort p4/uniform-k128 |
 | 087 | meshsim WORKER11 | v1.25 CL1 re-verification: main (ba7a97c) quick suite + full extras + p4/uniform-k128, and the selected windows (w9-selected-windows.tgz) replayed |
+| 088 | meshsim WORKER15 | v1.2.1 verification: branch v1.2.1 (090fc40) run_tests quick + full extras with the sort, and the full-size sort p4/uniform-k128 |
