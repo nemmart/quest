@@ -43,3 +43,4 @@ same number (`044b-...`), claimed the same way.
 | 090 | meshsim WORKER14 | cc-cores (5cd78a2): run_tests quick + full extras (with CcBench), C&C 1-3 as cores behind Config.ccCores, the switch off elsewhere |
 | 091 | meshsim WORKER11 | v1.25 section 8e (branch s8): run_tests quick suite + full extras |
 | 092 | meshsim WORKER14 | cc-cores (ba34cbf, main 9133397 merged): run_tests quick + p4/uniform-k128 against 1,229,008 cycles |
+| 093 | meshsim WORKER11 | v1.25 freeze check: main (922b835) quick suite + full extras + p4/uniform-k128, and the selected windows (w9-selected-windows.tgz) in stages A, B and F |
