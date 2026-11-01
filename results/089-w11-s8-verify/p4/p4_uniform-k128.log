@@ -1,0 +1,6 @@
+inputs: meshsim.jar=f75e2d2ace252a75acf81ed1efceb13a0118aa6db373b2e5317a646ad6d004b3 sw/bootrom.hex=b2165425aef54cb357cf2c1a82e3a5bc7965392c60a4e0c2b92b7f9f060855af image/sort.code.bin=2ab3c746aa6bf2f8d41a637a5ee4bda514754ea54fc3445beab59a50e5762f99 image/sort.data.bin=412d9f3fa18dac9d629472b3935d12acd529a0725f39f848ae270d71fc5c31f7 image/sort.sym=4a742353a535f95a0e2c501743393b55955fed701a12c2edf3f60c006b943a90 hops.txt=a3b90f3c2fbc64f1a93c8c0ff916cfbaf40823aae38c4540811482873741d3da keys-65536/uniform.keys=a7636b687a6db39cac8fbf63c2f16f686fd1ce858fe8a7ed5d98621e452c9b7a
+sort p4/uniform-k128 128-bit values [meas: SortTest]: path direct; steps (GO -> next GO): L1 465,530; SPLIT 206,079; XB 8,294; RED 5,464; K 71,812; V 71,150; L2 399,479; 24 empty commands 1,200
+    TOTAL 1,229,008 cycles (L1 GO -> L2 all READY; real split), of which C&C turnaround 96; ready_latency 8; direct-path bound 4*sum(R) = 71,088, V 8*sum(R) = 142,176; GATHER queue peak 1 of 16; stack headroom 20540 B
+    address generator: 4193920 request stall cycles; rotations late 0 on 0 tiles (max 0 cycles); group starts waiting for read-ahead 0 (max 0, timetable); drift between tiles at a group start 0
+    M14: zero-length groups 0 (summed over tiles), of which with a gap 0 (1 + gap since 10 October); group-run stall cycles 0 (drift)
+SortTest: 11 passed, 0 failed
