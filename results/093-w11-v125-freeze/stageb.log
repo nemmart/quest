@@ -21,5 +21,5 @@ synthetic old queue map (CL4: must fail) FAIL     0 rows  pass   50001 cycles  5
     rows: tile 0, Stage A 600
     replayer: violations [t0 @24390: queue 2 pushed past the credits taken for it: 1 entries, 0 credits (4.19.8; invariant 16), t0 @24391: queue 2 pushed past the credits taken for it: 2 entries, 0 credits (4.19.8; invariant 16), t0 @24392: queue 2 pushed past the credits taken for it: 3 entries, 0 credits (4.19.8; invariant 16)] ... (256 in all), overruns [], bad writes [], invalid []
     meshsim: violations: 256;   cycle 24391 tile 0: queue 2 pushed past the credits taken for it: 1 entries, 0 credits (4.19.8; invariant 16);   cycle 24392 tile 0: queue 2 pushed past the credits taken for it: 2 entries, 0 credits (4.19.8; invariant 16);   cycle 24393 tile 0: queue 2 pushed past the credits taken for it: 3 entries, 0 credits (4.19.8; invariant 16);   cycle 24394 tile 0: queue 2 pushed past the credits taken for it: 4 entries, 0 credits (4.19.8; invariant 16);   cycle 24395 tile 0: queue 2 pushed past the credits taken for it: 5 entries, 0 credits (4.19.8; invariant 16);   cycle 24396 tile ... (5708 chars)
-synthetic old queue map (CL4)            OK   the window failed as starved in 3.7 s
+synthetic old queue map (CL4)            OK   the window failed as starved in 3.4 s
 StageB synthetic: 19 windows, 0 failed

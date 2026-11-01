@@ -1,37 +1,37 @@
 kit sha256 2410b0bb9c1af64df3454f6cbed10fc813df95b2a009c98c3ab57f713dc89a70
-start Sun Nov  1 12:22:55 PM UTC 2026 on godspeed, 16 threads
+start Sun Nov  1 12:35:33 PM UTC 2026 on godspeed, 16 threads
 openjdk version "21.0.12.1" 2026-08-18
 openjdk version "21.0.12.1" 2026-08-18
 == generating key sets into keys-65536: uniform
 keys-65536/uniform.keys: 64 x 65536
 == inputs: 8 files match HASHES
 == 1 runs to do (1 selected), 1 at a time, heap 6g each; logs in /tmp/w11-093/p4/
-12:34:30 p4/uniform-k128: exit 0, 107 s; SortTest: 11 passed, 0 failed
+12:46:30 p4/uniform-k128: exit 0, 106 s; SortTest: 11 passed, 0 failed
 wrote /tmp/w11-093/p4/SUMMARY.md and /tmp/w11-093/p4/all.csv (1 runs)
 == 1 runs, 0 failed, 107 s
 == selected windows of evm-zone-29: /tmp/w11-093/sel/w9-deliveries-selected (evm-zone-29.manifest.json)
-shard: evm-zone-29 windows all of /tmp/w11-093/sel/w9-deliveries-selected, stages AB, 16 JVMs, no-row limit 50000 cycles, start Sun Nov  1 12:34:30 PM UTC 2026
-program evm-zone-29, windows 0..11 (12, all the manifest lists), stages ABF, 16 JVMs, wall 25 s
-stage A: 12 windows OK, 786432 rows, 4.0 JVM-s, 195679 rows per JVM-second, 0.33 s per window
-stage B: 12 windows OK, 786432 rows, 32.6 JVM-s, 24143 rows per JVM-second, 2.71 s per window
-stage F: 12 windows OK, 786432 rows, 193.9 JVM-s, 4055 rows per JVM-second, 16.16 s per window
-throughput: 1728 windows per hour (all stages)
+shard: evm-zone-29 windows all of /tmp/w11-093/sel/w9-deliveries-selected, stages AB, 16 JVMs, no-row limit 50000 cycles, start Sun Nov  1 12:46:30 PM UTC 2026
+program evm-zone-29, windows 0..11 (12, all the manifest lists), stages ABF, 16 JVMs, wall 23 s
+stage A: 12 windows OK, 786432 rows, 4.2 JVM-s, 188142 rows per JVM-second, 0.35 s per window
+stage B: 12 windows OK, 786432 rows, 33.2 JVM-s, 23656 rows per JVM-second, 2.77 s per window
+stage F: 12 windows OK, 786432 rows, 195.8 JVM-s, 4016 rows per JVM-second, 16.32 s per window
+throughput: 1878 windows per hour (all stages)
 ok   stage A: 12 of 12 windows matched
 ok   stage B: 12 of 12 windows matched
 ok   stage F: 12 of 12 windows matched
 PASS: evm-zone-29 windows (all 12 listed)
 == selected windows of cyclone-29: /tmp/w11-093/sel/w9-deliveries-selected (cyclone-29.manifest.json)
-shard: cyclone-29 windows all of /tmp/w11-093/sel/w9-deliveries-selected, stages AB, 16 JVMs, no-row limit 50000 cycles, start Sun Nov  1 12:34:55 PM UTC 2026
-program cyclone-29, windows 0..12 (13, all the manifest lists), stages ABF, 16 JVMs, wall 25 s
-stage A: 13 windows OK, 851968 rows, 5.9 JVM-s, 143622 rows per JVM-second, 0.46 s per window
-stage B: 13 windows OK, 851968 rows, 38.1 JVM-s, 22356 rows per JVM-second, 2.93 s per window
-stage F: 13 windows OK, 851968 rows, 235.9 JVM-s, 3611 rows per JVM-second, 18.15 s per window
-throughput: 1872 windows per hour (all stages)
+shard: cyclone-29 windows all of /tmp/w11-093/sel/w9-deliveries-selected, stages AB, 16 JVMs, no-row limit 50000 cycles, start Sun Nov  1 12:46:53 PM UTC 2026
+program cyclone-29, windows 0..12 (13, all the manifest lists), stages ABF, 16 JVMs, wall 26 s
+stage A: 13 windows OK, 851968 rows, 5.5 JVM-s, 154650 rows per JVM-second, 0.42 s per window
+stage B: 13 windows OK, 851968 rows, 39.0 JVM-s, 21858 rows per JVM-second, 3.00 s per window
+stage F: 13 windows OK, 851968 rows, 239.7 JVM-s, 3555 rows per JVM-second, 18.44 s per window
+throughput: 1800 windows per hour (all stages)
 ok   stage A: 13 of 13 windows matched
 ok   stage B: 13 of 13 windows matched
 ok   stage F: 13 of 13 windows matched
 PASS: cyclone-29 windows (all 13 listed)
-run_quick.sh exit 1, run_full.sh exit 1, run_p4.sh exit 0, selected windows exit 0 at Sun Nov  1 12:35:20 PM UTC 2026
+run_quick.sh exit 1, run_full.sh exit 1, run_p4.sh exit 0, selected windows exit 0 at Sun Nov  1 12:47:19 PM UTC 2026
 p4 (expected 1,229,008 cycles): ok   p4/uniform-k128: TOTAL 1,229,008 cycles (L1 GO -> L2 all READY; real split), 
 accounting rc=0
 agtest rc=0
