@@ -1,37 +1,37 @@
 kit sha256 2410b0bb9c1af64df3454f6cbed10fc813df95b2a009c98c3ab57f713dc89a70
-start Sun Nov  1 12:11:18 PM UTC 2026 on godspeed, 16 threads
+start Sun Nov  1 12:22:55 PM UTC 2026 on godspeed, 16 threads
 openjdk version "21.0.12.1" 2026-08-18
 openjdk version "21.0.12.1" 2026-08-18
 == generating key sets into keys-65536: uniform
 keys-65536/uniform.keys: 64 x 65536
 == inputs: 8 files match HASHES
 == 1 runs to do (1 selected), 1 at a time, heap 6g each; logs in /tmp/w11-093/p4/
-12:22:02 p4/uniform-k128: exit 0, 108 s; SortTest: 11 passed, 0 failed
+12:34:30 p4/uniform-k128: exit 0, 107 s; SortTest: 11 passed, 0 failed
 wrote /tmp/w11-093/p4/SUMMARY.md and /tmp/w11-093/p4/all.csv (1 runs)
-== 1 runs, 0 failed, 108 s
+== 1 runs, 0 failed, 107 s
 == selected windows of evm-zone-29: /tmp/w11-093/sel/w9-deliveries-selected (evm-zone-29.manifest.json)
-shard: evm-zone-29 windows all of /tmp/w11-093/sel/w9-deliveries-selected, stages AB, 16 JVMs, no-row limit 50000 cycles, start Sun Nov  1 12:22:03 PM UTC 2026
-program evm-zone-29, windows 0..11 (12, all the manifest lists), stages ABF, 16 JVMs, wall 23 s
-stage A: 12 windows OK, 786432 rows, 4.2 JVM-s, 187201 rows per JVM-second, 0.35 s per window
-stage B: 12 windows OK, 786432 rows, 32.3 JVM-s, 24345 rows per JVM-second, 2.69 s per window
-stage F: 12 windows OK, 786432 rows, 196.4 JVM-s, 4004 rows per JVM-second, 16.37 s per window
-throughput: 1878 windows per hour (all stages)
+shard: evm-zone-29 windows all of /tmp/w11-093/sel/w9-deliveries-selected, stages AB, 16 JVMs, no-row limit 50000 cycles, start Sun Nov  1 12:34:30 PM UTC 2026
+program evm-zone-29, windows 0..11 (12, all the manifest lists), stages ABF, 16 JVMs, wall 25 s
+stage A: 12 windows OK, 786432 rows, 4.0 JVM-s, 195679 rows per JVM-second, 0.33 s per window
+stage B: 12 windows OK, 786432 rows, 32.6 JVM-s, 24143 rows per JVM-second, 2.71 s per window
+stage F: 12 windows OK, 786432 rows, 193.9 JVM-s, 4055 rows per JVM-second, 16.16 s per window
+throughput: 1728 windows per hour (all stages)
 ok   stage A: 12 of 12 windows matched
 ok   stage B: 12 of 12 windows matched
 ok   stage F: 12 of 12 windows matched
 PASS: evm-zone-29 windows (all 12 listed)
 == selected windows of cyclone-29: /tmp/w11-093/sel/w9-deliveries-selected (cyclone-29.manifest.json)
-shard: cyclone-29 windows all of /tmp/w11-093/sel/w9-deliveries-selected, stages AB, 16 JVMs, no-row limit 50000 cycles, start Sun Nov  1 12:22:26 PM UTC 2026
-program cyclone-29, windows 0..12 (13, all the manifest lists), stages ABF, 16 JVMs, wall 26 s
-stage A: 13 windows OK, 851968 rows, 6.2 JVM-s, 137570 rows per JVM-second, 0.48 s per window
-stage B: 13 windows OK, 851968 rows, 38.5 JVM-s, 22115 rows per JVM-second, 2.96 s per window
-stage F: 13 windows OK, 851968 rows, 235.6 JVM-s, 3616 rows per JVM-second, 18.12 s per window
-throughput: 1800 windows per hour (all stages)
+shard: cyclone-29 windows all of /tmp/w11-093/sel/w9-deliveries-selected, stages AB, 16 JVMs, no-row limit 50000 cycles, start Sun Nov  1 12:34:55 PM UTC 2026
+program cyclone-29, windows 0..12 (13, all the manifest lists), stages ABF, 16 JVMs, wall 25 s
+stage A: 13 windows OK, 851968 rows, 5.9 JVM-s, 143622 rows per JVM-second, 0.46 s per window
+stage B: 13 windows OK, 851968 rows, 38.1 JVM-s, 22356 rows per JVM-second, 2.93 s per window
+stage F: 13 windows OK, 851968 rows, 235.9 JVM-s, 3611 rows per JVM-second, 18.15 s per window
+throughput: 1872 windows per hour (all stages)
 ok   stage A: 13 of 13 windows matched
 ok   stage B: 13 of 13 windows matched
 ok   stage F: 13 of 13 windows matched
 PASS: cyclone-29 windows (all 13 listed)
-run_quick.sh exit 1, run_full.sh exit 1, run_p4.sh exit 0, selected windows exit 0 at Sun Nov  1 12:22:52 PM UTC 2026
+run_quick.sh exit 1, run_full.sh exit 1, run_p4.sh exit 0, selected windows exit 0 at Sun Nov  1 12:35:20 PM UTC 2026
 p4 (expected 1,229,008 cycles): ok   p4/uniform-k128: TOTAL 1,229,008 cycles (L1 GO -> L2 all READY; real split), 
 accounting rc=0
 agtest rc=0
@@ -119,7 +119,7 @@ sort-bt-kv32 rc=0
 sweep-quick rc=0
 11 full steps; nonzero exits 1
 ok   p4/uniform-k128: TOTAL 1,229,008 cycles (L1 GO -> L2 all READY; real split), 
-== 1 runs, 0 failed, 108 s
+== 1 runs, 0 failed, 107 s
 ok   stage A: 13 of 13 windows matched
 ok   stage B: 13 of 13 windows matched
 ok   stage F: 13 of 13 windows matched
