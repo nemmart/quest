@@ -1,15 +1,15 @@
 kit sha256 02209700db9f44c97c4aac8d461c3cb81d99c20de01584fd45e9713e7b577e00
-start Sun Nov  1 06:39:24 AM UTC 2026 on godspeed, 16 threads
+start Sun Nov  1 06:50:03 AM UTC 2026 on godspeed, 16 threads
 openjdk version "21.0.12.1" 2026-08-18
 openjdk version "21.0.12.1" 2026-08-18
 == generating key sets into keys-65536: uniform
 keys-65536/uniform.keys: 64 x 65536
 == inputs: 8 files match HASHES
 == 1 runs to do (1 selected), 1 at a time, heap 6g each; logs in /tmp/w11-089/p4/
-06:49:59 p4/uniform-k128: exit 0, 105 s; SortTest: 11 passed, 0 failed
+07:01:33 p4/uniform-k128: exit 0, 108 s; SortTest: 11 passed, 0 failed
 wrote /tmp/w11-089/p4/SUMMARY.md and /tmp/w11-089/p4/all.csv (1 runs)
-== 1 runs, 0 failed, 106 s
-run_quick.sh exit 1, run_full.sh exit 0, run_p4.sh exit 0 at Sun Nov  1 06:49:59 AM UTC 2026
+== 1 runs, 0 failed, 109 s
+run_quick.sh exit 1, run_full.sh exit 0, run_p4.sh exit 0 at Sun Nov  1 07:01:33 AM UTC 2026
 p4 (was 1,360,082 cycles): ok   p4/uniform-k128: TOTAL 1,229,008 cycles (L1 GO -> L2 all READY; real split), 
 accounting rc=0
 agtest rc=0
@@ -92,4 +92,4 @@ sort-bt-kv32 rc=0
 sweep-quick rc=0
 10 full steps; nonzero exits 0
 ok   p4/uniform-k128: TOTAL 1,229,008 cycles (L1 GO -> L2 all READY; real split), 
-== 1 runs, 0 failed, 106 s
+== 1 runs, 0 failed, 109 s
