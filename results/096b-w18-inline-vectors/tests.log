@@ -1,0 +1,521 @@
+== jolt-inlines-secp256k1
+info: syncing channel updates for 1.95-x86_64-unknown-linux-gnu
+info: latest update on 2026-04-16 for version 1.95.0 (59807616e 2026-04-14)
+info: downloading 7 components
+warn: the missing active toolchain `1.95-x86_64-unknown-linux-gnu` has been auto-installed
+warn: this might cause rustup commands to take longer time to finish than expected
+info: you may opt out with `RUSTUP_AUTO_INSTALL=0` or `rustup set auto-install disable`
+warning: /tmp/w18-096b/jolt/crates/jolt-kernels/Cargo.toml: `default-features` is ignored for jolt-poly, since `default-features` was not specified for `workspace.dependencies.jolt-poly`, this could become a hard error in the future
+warning: /tmp/w18-096b/jolt/crates/jolt-prover/Cargo.toml: `default-features` is ignored for jolt-kernels, since `default-features` was not specified for `workspace.dependencies.jolt-kernels`, this could become a hard error in the future
+warning: /tmp/w18-096b/jolt/crates/jolt-prover/Cargo.toml: `default-features` is ignored for jolt-poly, since `default-features` was not specified for `workspace.dependencies.jolt-poly`, this could become a hard error in the future
+warning: /tmp/w18-096b/jolt/crates/jolt-prover/Cargo.toml: `default-features` is ignored for jolt-profiling, since `default-features` was not specified for `workspace.dependencies.jolt-profiling`, this could become a hard error in the future
+    Updating git repository `https://github.com/a16z/arkworks-algebra`
+    Updating crates.io index
+    Updating git repository `https://github.com/LayerZero-Labs/akita.git`
+    Updating git submodule `https://github.com/malb/lattice-estimator.git`
+    Updating git repository `https://github.com/LayerZero-Labs/ZeroOS.git`
+    Updating git repository `https://github.com/paradigmxyz/reth`
+    Updating git repository `https://github.com/arkworks-rs/spongefish`
+ Downloading crates ...
+  Downloaded allocative_derive v0.3.6
+  Downloaded anstream v1.0.0
+  Downloaded adler2 v2.0.1
+  Downloaded anstyle v1.0.14
+  Downloaded allocator-api2 v0.2.21
+  Downloaded ahash v0.8.12
+  Downloaded allocative v0.3.6
+  Downloaded addr2line v0.27.1
+  Downloaded thread_local v1.1.9
+  Downloaded aho-corasick v1.1.4
+  Downloaded crypto-common v0.1.7
+  Downloaded anstyle-parse v1.0.0
+  Downloaded colorchoice v1.0.4
+  Downloaded crc32fast v1.5.0
+  Downloaded pin-project-lite v0.2.17
+  Downloaded rustc_version v0.4.1
+  Downloaded link-section v0.18.2
+  Downloaded crossbeam-epoch v0.9.20
+  Downloaded stable_deref_trait v1.2.1
+  Downloaded itoa v1.0.17
+  Downloaded lazy_static v1.5.0
+  Downloaded rand_chacha v0.3.1
+  Downloaded typed-arena v2.0.2
+  Downloaded inventory v0.3.25
+  Downloaded utf8parse v0.2.2
+  Downloaded embedded-io v0.4.0
+  Downloaded strum v0.28.0
+  Downloaded cobs v0.3.0
+  Downloaded tracing-log v0.2.0
+  Downloaded thiserror v2.0.20
+  Downloaded heck v0.5.0
+  Downloaded matchers v0.2.0
+  Downloaded fnv v1.0.7
+  Downloaded enum-ordinalize v4.3.2
+  Downloaded equivalent v1.0.2
+  Downloaded fallible-iterator v0.3.0
+  Downloaded num-integer v0.1.47
+  Downloaded strum_macros v0.28.0
+  Downloaded strsim v0.11.1
+  Downloaded is_terminal_polyfill v1.70.2
+  Downloaded cfg-if v1.0.5
+  Downloaded clap_lex v1.0.0
+  Downloaded generic-array v0.14.7
+  Downloaded arrayvec v0.7.6
+  Downloaded nu-ansi-term v0.50.3
+  Downloaded semver v1.0.27
+  Downloaded zeroize_derive v1.4.3
+  Downloaded paste v1.0.15
+  Downloaded ppv-lite86 v0.2.21
+  Downloaded once_cell v1.21.3
+  Downloaded version_check v0.9.5
+  Downloaded simd-adler32 v0.3.8
+  Downloaded quote v1.0.47
+  Downloaded tracing-attributes v0.1.31
+  Downloaded rand_core v0.6.4
+  Downloaded digest v0.10.7
+  Downloaded crossbeam-utils v0.8.21
+  Downloaded crossbeam-deque v0.8.6
+  Downloaded enum-ordinalize-derive v4.3.2
+  Downloaded derive_more v2.1.1
+  Downloaded zeroize v1.8.2
+  Downloaded zmij v1.0.21
+  Downloaded getrandom v0.2.17
+  Downloaded smallvec v1.15.2
+  Downloaded postcard v1.1.3
+  Downloaded thiserror-impl v2.0.20
+  Downloaded ctor v1.0.7
+  Downloaded getrandom v0.3.4
+  Downloaded memmap2 v0.9.11
+  Downloaded rustc-demangle v0.1.27
+  Downloaded miniz_oxide v0.8.9
+  Downloaded twox-hash v2.1.2
+  Downloaded linktime-proc-macro v0.2.0
+  Downloaded clap_derive v4.6.7
+  Downloaded educe v0.6.0
+  Downloaded foldhash v0.2.0
+  Downloaded embedded-io v0.6.1
+  Downloaded unicode-ident v1.0.24
+  Downloaded clap v4.6.7
+  Downloaded tracing-core v0.1.36
+  Downloaded sharded-slab v0.1.7
+  Downloaded proc-macro2 v1.0.107
+  Downloaded serde_derive v1.0.229
+  Downloaded rayon-core v1.13.0
+  Downloaded rand v0.8.7
+  Downloaded memchr v2.8.0
+  Downloaded derive_more-impl v2.1.1
+  Downloaded indexmap v2.14.0
+  Downloaded hashbrown v0.17.0
+  Downloaded serde v1.0.229
+  Downloaded ruzstd v0.9.1
+  Downloaded typenum v1.20.1
+  Downloaded clap_builder v4.6.7
+  Downloaded serde_json v1.0.154
+  Downloaded itertools v0.13.0
+  Downloaded num-bigint v0.4.6
+  Downloaded hashbrown v0.15.5
+  Downloaded itertools v0.15.0
+  Downloaded rayon v1.12.0
+  Downloaded tracing-subscriber v0.3.23
+  Downloaded log v0.4.34
+  Downloaded flate2 v1.1.9
+  Downloaded num-traits v0.2.19
+  Downloaded zerocopy v0.8.40
+  Downloaded syn v2.0.119
+  Downloaded cpp_demangle v0.5.1
+  Downloaded syn v3.0.9
+  Downloaded serde_core v1.0.229
+  Downloaded either v1.15.0
+  Downloaded regex-syntax v0.8.11
+  Downloaded gimli v0.34.0
+  Downloaded tracing v0.1.44
+  Downloaded object v0.40.0
+  Downloaded autocfg v1.5.0
+  Downloaded ark-std v0.5.0
+  Downloaded anstyle-query v1.1.5
+  Downloaded regex-automata v0.4.18
+  Downloaded libc v0.2.190
+   Compiling proc-macro2 v1.0.107
+   Compiling unicode-ident v1.0.24
+   Compiling quote v1.0.47
+   Compiling autocfg v1.5.0
+   Compiling zerocopy v0.8.40
+   Compiling version_check v0.9.5
+   Compiling cfg-if v1.0.5
+   Compiling rand_core v0.6.4
+   Compiling typenum v1.20.1
+   Compiling once_cell v1.21.3
+   Compiling serde_core v1.0.229
+   Compiling arrayvec v0.7.6
+   Compiling either v1.15.0
+   Compiling libc v0.2.190
+   Compiling thiserror v2.0.20
+   Compiling heck v0.5.0
+   Compiling paste v1.0.15
+   Compiling crc32fast v1.5.0
+   Compiling crossbeam-utils v0.8.21
+   Compiling serde v1.0.229
+   Compiling foldhash v0.2.0
+   Compiling adler2 v2.0.1
+   Compiling crossbeam-epoch v0.9.20
+   Compiling generic-array v0.14.7
+   Compiling simd-adler32 v0.3.8
+   Compiling num-traits v0.2.19
+   Compiling hashbrown v0.17.0
+   Compiling memchr v2.8.0
+   Compiling utf8parse v0.2.2
+   Compiling link-section v0.18.2
+   Compiling linktime-proc-macro v0.2.0
+   Compiling miniz_oxide v0.8.9
+   Compiling twox-hash v2.1.2
+   Compiling equivalent v1.0.2
+   Compiling syn v2.0.119
+   Compiling syn v3.0.9
+   Compiling allocative v0.3.6
+   Compiling ruzstd v0.9.1
+   Compiling indexmap v2.14.0
+   Compiling num-integer v0.1.47
+   Compiling ctor v1.0.7
+   Compiling flate2 v1.1.9
+   Compiling num-bigint v0.4.6
+   Compiling crypto-common v0.1.7
+   Compiling digest v0.10.7
+   Compiling anstyle-parse v1.0.0
+   Compiling ahash v0.8.12
+   Compiling tracing-core v0.1.36
+   Compiling is_terminal_polyfill v1.70.2
+   Compiling anstyle-query v1.1.5
+   Compiling cpp_demangle v0.5.1
+   Compiling rayon-core v1.13.0
+   Compiling regex-syntax v0.8.11
+   Compiling zmij v1.0.21
+   Compiling colorchoice v1.0.4
+   Compiling anstyle v1.0.14
+   Compiling getrandom v0.3.4
+   Compiling anstream v1.0.0
+   Compiling object v0.40.0
+   Compiling crossbeam-deque v0.8.6
+   Compiling itertools v0.13.0
+   Compiling allocator-api2 v0.2.21
+   Compiling strsim v0.11.1
+   Compiling lazy_static v1.5.0
+   Compiling log v0.4.34
+   Compiling smallvec v1.15.2
+   Compiling clap_lex v1.0.0
+   Compiling serde_json v1.0.154
+   Compiling pin-project-lite v0.2.17
+   Compiling tracing-log v0.2.0
+   Compiling sharded-slab v0.1.7
+   Compiling clap_builder v4.6.7
+   Compiling hashbrown v0.15.5
+   Compiling regex-automata v0.4.18
+   Compiling memmap2 v0.9.11
+   Compiling getrandom v0.2.17
+   Compiling thread_local v1.1.9
+   Compiling nu-ansi-term v0.50.3
+   Compiling fallible-iterator v0.3.0
+   Compiling embedded-io v0.6.1
+   Compiling itoa v1.0.17
+   Compiling rustc-demangle v0.1.27
+   Compiling typed-arena v2.0.2
+   Compiling gimli v0.34.0
+   Compiling rayon v1.12.0
+   Compiling itertools v0.15.0
+   Compiling ppv-lite86 v0.2.21
+   Compiling serde_derive v1.0.229
+   Compiling thiserror-impl v2.0.20
+   Compiling clap_derive v4.6.7
+   Compiling fnv v1.0.7
+   Compiling inventory v0.3.25
+   Compiling rand_chacha v0.3.1
+   Compiling rand v0.8.7
+   Compiling ark-serialize-derive v0.5.0 (https://github.com/a16z/arkworks-algebra?branch=dev%2Ftwist-shout#b8f0f512)
+   Compiling ark-std v0.5.0
+   Compiling enum-ordinalize-derive v4.3.2
+   Compiling strum_macros v0.28.0
+   Compiling ark-serialize v0.5.0 (https://github.com/a16z/arkworks-algebra?branch=dev%2Ftwist-shout#b8f0f512)
+   Compiling zeroize_derive v1.4.3
+   Compiling allocative_derive v0.3.6
+   Compiling ark-ff-asm v0.5.0 (https://github.com/a16z/arkworks-algebra?branch=dev%2Ftwist-shout#b8f0f512)
+   Compiling enum-ordinalize v4.3.2
+   Compiling educe v0.6.0
+   Compiling ark-ff-macros v0.5.0 (https://github.com/a16z/arkworks-algebra?branch=dev%2Ftwist-shout#b8f0f512)
+   Compiling tracing-attributes v0.1.31
+   Compiling cobs v0.3.0
+   Compiling zeroize v1.8.2
+   Compiling matchers v0.2.0
+   Compiling derive_more-impl v2.1.1
+   Compiling clap v4.6.7
+   Compiling jolt-platform v0.1.0 (/tmp/w18-096b/jolt/jolt-platform)
+   Compiling tracing v0.1.44
+   Compiling strum v0.28.0
+   Compiling tracing-subscriber v0.3.23
+   Compiling common v0.2.0 (/tmp/w18-096b/jolt/common)
+   Compiling jolt-riscv v0.1.0 (/tmp/w18-096b/jolt/crates/jolt-riscv)
+   Compiling derive_more v2.1.1
+   Compiling postcard v1.1.3
+   Compiling ark-ff v0.5.0 (https://github.com/a16z/arkworks-algebra?branch=dev%2Ftwist-shout#b8f0f512)
+   Compiling addr2line v0.27.1
+   Compiling jolt-program v0.1.0 (/tmp/w18-096b/jolt/crates/jolt-program)
+   Compiling tracer v0.2.0 (/tmp/w18-096b/jolt/tracer)
+   Compiling jolt-inlines-sdk v0.1.0 (/tmp/w18-096b/jolt/jolt-inlines/sdk)
+   Compiling ark-poly v0.5.0 (https://github.com/a16z/arkworks-algebra?branch=dev%2Ftwist-shout#b8f0f512)
+   Compiling ark-ec v0.5.0 (https://github.com/a16z/arkworks-algebra?branch=dev%2Ftwist-shout#b8f0f512)
+   Compiling ark-secp256k1 v0.5.0 (https://github.com/a16z/arkworks-algebra?branch=dev%2Ftwist-shout#b8f0f512)
+   Compiling jolt-inlines-secp256k1 v0.1.0 (/tmp/w18-096b/jolt/jolt-inlines/secp256k1)
+    Finished `test` profile [optimized] target(s) in 4m 34s
+     Running unittests src/lib.rs (target/debug/deps/jolt_inlines_secp256k1-cf758b02e9f5e848)
+
+running 15 tests
+test tests::sequence_tests::test_decode_glv_sign_word ... ok
+test tests::sequence_tests::test_ecdsa_verify ... ok
+test tests::sequence_tests::test_ecdsa_verify_rejects_invalid ... ok
+test tests::sequence_tests::test_ecdsa_verify_rejects_zero_hash_forgery ... ok
+test tests::sequence_tests::test_endomorphism_consistency ... ok
+test tests::sequence_tests::test_glv_decomposition ... ok
+test tests::sequence_tests::test_modulus_limb_assumptions ... ok
+test tests::sequence_tests::test_secp256k1_div_aliased_dividend_and_result ... ok
+test tests::sequence_tests::test_secp256k1_divq_direct_execution ... ok
+test tests::sequence_tests::test_secp256k1_divr_direct_execution ... ok
+test tests::sequence_tests::test_secp256k1_double_and_add_infinity ... ok
+test tests::sequence_tests::test_secp256k1_mulq_direct_execution ... ok
+test tests::sequence_tests::test_secp256k1_mulr_direct_execution ... ok
+test tests::sequence_tests::test_secp256k1_squareq_direct_execution ... ok
+test tests::sequence_tests::test_secp256k1_squarer_direct_execution ... ok
+
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+   Doc-tests jolt_inlines_secp256k1
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+== jolt-inlines-sha2
+warning: /tmp/w18-096b/jolt/crates/jolt-kernels/Cargo.toml: `default-features` is ignored for jolt-poly, since `default-features` was not specified for `workspace.dependencies.jolt-poly`, this could become a hard error in the future
+warning: /tmp/w18-096b/jolt/crates/jolt-prover/Cargo.toml: `default-features` is ignored for jolt-kernels, since `default-features` was not specified for `workspace.dependencies.jolt-kernels`, this could become a hard error in the future
+warning: /tmp/w18-096b/jolt/crates/jolt-prover/Cargo.toml: `default-features` is ignored for jolt-poly, since `default-features` was not specified for `workspace.dependencies.jolt-poly`, this could become a hard error in the future
+warning: /tmp/w18-096b/jolt/crates/jolt-prover/Cargo.toml: `default-features` is ignored for jolt-profiling, since `default-features` was not specified for `workspace.dependencies.jolt-profiling`, this could become a hard error in the future
+ Downloading crates ...
+  Downloaded crypto-common v0.2.2
+  Downloaded cpufeatures v0.3.0
+  Downloaded block-buffer v0.12.0
+  Downloaded sha2 v0.11.1
+  Downloaded digest v0.11.3
+  Downloaded hybrid-array v0.4.15
+  Downloaded const-oid v0.10.2
+   Compiling syn v2.0.119
+   Compiling typenum v1.20.1
+   Compiling getrandom v0.2.17
+   Compiling ppv-lite86 v0.2.21
+   Compiling const-oid v0.10.2
+   Compiling cpufeatures v0.3.0
+   Compiling rand_core v0.6.4
+   Compiling rand_chacha v0.3.1
+   Compiling rand v0.8.7
+   Compiling generic-array v0.14.7
+   Compiling hybrid-array v0.4.15
+   Compiling ark-std v0.5.0
+   Compiling jolt-platform v0.1.0 (/tmp/w18-096b/jolt/jolt-platform)
+   Compiling crypto-common v0.2.2
+   Compiling block-buffer v0.12.0
+   Compiling crypto-common v0.1.7
+   Compiling digest v0.10.7
+   Compiling digest v0.11.3
+   Compiling sha2 v0.11.1
+   Compiling ark-serialize-derive v0.5.0 (https://github.com/a16z/arkworks-algebra?branch=dev%2Ftwist-shout#b8f0f512)
+   Compiling allocative_derive v0.3.6
+   Compiling strum_macros v0.28.0
+   Compiling tracing-attributes v0.1.31
+   Compiling derive_more-impl v2.1.1
+   Compiling ark-serialize v0.5.0 (https://github.com/a16z/arkworks-algebra?branch=dev%2Ftwist-shout#b8f0f512)
+   Compiling allocative v0.3.6
+   Compiling common v0.2.0 (/tmp/w18-096b/jolt/common)
+   Compiling tracing v0.1.44
+   Compiling tracing-subscriber v0.3.23
+   Compiling derive_more v2.1.1
+   Compiling strum v0.28.0
+   Compiling jolt-riscv v0.1.0 (/tmp/w18-096b/jolt/crates/jolt-riscv)
+   Compiling jolt-program v0.1.0 (/tmp/w18-096b/jolt/crates/jolt-program)
+   Compiling tracer v0.2.0 (/tmp/w18-096b/jolt/tracer)
+   Compiling jolt-inlines-sdk v0.1.0 (/tmp/w18-096b/jolt/jolt-inlines/sdk)
+   Compiling jolt-inlines-sha2 v0.1.0 (/tmp/w18-096b/jolt/jolt-inlines/sha2)
+    Finished `test` profile [optimized] target(s) in 9.27s
+     Running unittests src/lib.rs (target/debug/deps/jolt_inlines_sha2-a11a215e45faa4da)
+
+running 9 tests
+test tests::exec_functions::test_exec_sha256_multi_block ... ok
+test tests::sdk_tests::test_sha256_aligned_vs_unaligned ... ok
+test tests::sdk_tests::test_sha256_sdk_digest ... ok
+test tests::sdk_tests::test_sha256_sdk_update_finalize ... ok
+test tests::sequence_tests::test_sha256_direct_execution ... ok
+test tests::sequence_tests::test_sha256_inline_rows_per_block ... ok
+test tests::sequence_tests::test_sha256_random_direct_execution ... ok
+test tests::sequence_tests::test_sha256init_direct_execution ... ok
+test tests::sequence_tests::test_sha256init_random_direct_execution ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+   Doc-tests jolt_inlines_sha2
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+== jolt-inlines-keccak256
+warning: /tmp/w18-096b/jolt/crates/jolt-kernels/Cargo.toml: `default-features` is ignored for jolt-poly, since `default-features` was not specified for `workspace.dependencies.jolt-poly`, this could become a hard error in the future
+warning: /tmp/w18-096b/jolt/crates/jolt-prover/Cargo.toml: `default-features` is ignored for jolt-kernels, since `default-features` was not specified for `workspace.dependencies.jolt-kernels`, this could become a hard error in the future
+warning: /tmp/w18-096b/jolt/crates/jolt-prover/Cargo.toml: `default-features` is ignored for jolt-poly, since `default-features` was not specified for `workspace.dependencies.jolt-poly`, this could become a hard error in the future
+warning: /tmp/w18-096b/jolt/crates/jolt-prover/Cargo.toml: `default-features` is ignored for jolt-profiling, since `default-features` was not specified for `workspace.dependencies.jolt-profiling`, this could become a hard error in the future
+ Downloading crates ...
+  Downloaded tiny-keccak v2.0.2
+  Downloaded keccak v0.2.0
+  Downloaded hex-literal v1.1.0
+  Downloaded crunchy v0.2.4
+  Downloaded sponge-cursor v0.1.0
+  Downloaded sha3 v0.12.0
+   Compiling crunchy v0.2.4
+   Compiling tiny-keccak v2.0.2
+   Compiling keccak v0.2.0
+   Compiling sponge-cursor v0.1.0
+   Compiling hex-literal v1.1.0
+   Compiling digest v0.11.3
+   Compiling jolt-inlines-keccak256 v0.1.0 (/tmp/w18-096b/jolt/jolt-inlines/keccak256)
+   Compiling sha3 v0.12.0
+    Finished `test` profile [optimized] target(s) in 0.81s
+     Running unittests src/lib.rs (target/debug/deps/jolt_inlines_keccak256-28425fb3700e4738)
+
+running 6 tests
+test sdk::tests::test_keccak256_aligned_vs_unaligned ... ok
+test tests::exec::test_execute_keccak256 ... ok
+test tests::exec::test_keccak256_absorb_permute_direct_execution ... ok
+test tests::exec::test_keccak256_direct_execution ... ok
+test tests::exec_trace_equivalence::test_keccak_against_reference ... ok
+test tests::exec_unit::test_step_by_step_round_1 ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/differential_fuzz.rs (target/debug/deps/differential_fuzz-7e852cde58e9d095)
+
+running 4 tests
+test fuzz_absorb_permute_inline_vs_tiny_keccak ... ok
+test fuzz_chunked_update_vs_tiny_keccak ... ok
+test fuzz_digest_vs_tiny_keccak ... ok
+test fuzz_inline_sequence_vs_tiny_keccak ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.91s
+
+   Doc-tests jolt_inlines_keccak256
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+== jolt-inlines-blake2
+warning: /tmp/w18-096b/jolt/crates/jolt-kernels/Cargo.toml: `default-features` is ignored for jolt-poly, since `default-features` was not specified for `workspace.dependencies.jolt-poly`, this could become a hard error in the future
+warning: /tmp/w18-096b/jolt/crates/jolt-prover/Cargo.toml: `default-features` is ignored for jolt-kernels, since `default-features` was not specified for `workspace.dependencies.jolt-kernels`, this could become a hard error in the future
+warning: /tmp/w18-096b/jolt/crates/jolt-prover/Cargo.toml: `default-features` is ignored for jolt-poly, since `default-features` was not specified for `workspace.dependencies.jolt-poly`, this could become a hard error in the future
+warning: /tmp/w18-096b/jolt/crates/jolt-prover/Cargo.toml: `default-features` is ignored for jolt-profiling, since `default-features` was not specified for `workspace.dependencies.jolt-profiling`, this could become a hard error in the future
+ Downloading crates ...
+  Downloaded cmov v0.5.4
+  Downloaded blake2 v0.11.0
+  Downloaded ctutils v0.4.6
+   Compiling cmov v0.5.4
+   Compiling ctutils v0.4.6
+   Compiling digest v0.11.3
+   Compiling blake2 v0.11.0
+   Compiling jolt-inlines-blake2 v0.1.0 (/tmp/w18-096b/jolt/jolt-inlines/blake2)
+    Finished `test` profile [optimized] target(s) in 0.91s
+     Running unittests src/lib.rs (target/debug/deps/jolt_inlines_blake2-fb22376d12f4fed2)
+
+running 14 tests
+test digest_adapter::tests::adapter_matches_blake2_crate ... ok
+test sdk::digest_tests::test_blake2b_compress_eip152_vectors ... ok
+test sdk::digest_tests::test_blake2b_variable_input_lengths ... ok
+test sdk::params_tests::test_blake2b_finalize_into_rejects_truncation - should panic ... ok
+test sdk::params_tests::test_blake2b_finalize_rejects_short_digest - should panic ... ok
+test sdk::params_tests::test_blake2b_oversized_persona_panics - should panic ... ok
+test sdk::params_tests::test_blake2b_oversized_salt_panics - should panic ... ok
+test sdk::params_tests::test_blake2b_params_against_reference ... ok
+test sdk::streaming_tests::test_blake2b_aligned_vs_unaligned ... ok
+test sdk::streaming_tests::test_blake2b_streaming_against_reference ... ok
+test sdk::streaming_tests::test_blake2b_streaming_empty_updates ... ok
+test sdk::streaming_tests::test_blake2b_streaming_incremental_updates ... ok
+test sequence_builder::tests::test_trace_result_with_edge_cases ... ok
+test sequence_builder::tests::test_trace_result_with_random_inputs ... ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+   Doc-tests jolt_inlines_blake2
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+== jolt-inlines-blake3
+warning: /tmp/w18-096b/jolt/crates/jolt-prover/Cargo.toml: `default-features` is ignored for jolt-kernels, since `default-features` was not specified for `workspace.dependencies.jolt-kernels`, this could become a hard error in the future
+warning: /tmp/w18-096b/jolt/crates/jolt-prover/Cargo.toml: `default-features` is ignored for jolt-poly, since `default-features` was not specified for `workspace.dependencies.jolt-poly`, this could become a hard error in the future
+warning: /tmp/w18-096b/jolt/crates/jolt-prover/Cargo.toml: `default-features` is ignored for jolt-profiling, since `default-features` was not specified for `workspace.dependencies.jolt-profiling`, this could become a hard error in the future
+warning: /tmp/w18-096b/jolt/crates/jolt-kernels/Cargo.toml: `default-features` is ignored for jolt-poly, since `default-features` was not specified for `workspace.dependencies.jolt-poly`, this could become a hard error in the future
+ Downloading crates ...
+  Downloaded shlex v2.0.1
+  Downloaded find-msvc-tools v0.1.15
+  Downloaded constant_time_eq v0.4.2
+  Downloaded cc v1.10.0
+  Downloaded blake3 v1.8.7
+   Compiling digest v0.10.7
+   Compiling find-msvc-tools v0.1.15
+   Compiling shlex v2.0.1
+   Compiling constant_time_eq v0.4.2
+   Compiling ark-serialize v0.5.0 (https://github.com/a16z/arkworks-algebra?branch=dev%2Ftwist-shout#b8f0f512)
+   Compiling cc v1.10.0
+   Compiling jolt-riscv v0.1.0 (/tmp/w18-096b/jolt/crates/jolt-riscv)
+   Compiling common v0.2.0 (/tmp/w18-096b/jolt/common)
+   Compiling blake3 v1.8.7
+   Compiling jolt-program v0.1.0 (/tmp/w18-096b/jolt/crates/jolt-program)
+   Compiling tracer v0.2.0 (/tmp/w18-096b/jolt/tracer)
+   Compiling jolt-inlines-sdk v0.1.0 (/tmp/w18-096b/jolt/jolt-inlines/sdk)
+   Compiling jolt-inlines-blake3 v0.1.0 (/tmp/w18-096b/jolt/jolt-inlines/blake3)
+    Finished `test` profile [optimized] target(s) in 7.29s
+     Running unittests src/lib.rs (target/debug/deps/jolt_inlines_blake3-a54a5099a000d48b)
+
+running 7 tests
+test sdk::tests::test_blake3_aligned_vs_unaligned ... ok
+test sdk::tests::test_blake3_keyed64_matches_reference ... ok
+test sdk::tests::test_digest_matches_standard ... ok
+test sdk::tests::test_panics_on_larger_than_block_input - should panic ... ok
+test sdk::tests::test_streaming_update_finalize_matches_standard ... ok
+test sequence_builder::tests::test_trace_keyed64_matches_blake3_keyed_hash ... ok
+test sequence_builder::tests::test_trace_result_equals_blake3_compress_reference ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+
+   Doc-tests jolt_inlines_blake3
+
+running 2 tests
+test jolt-inlines/blake3/src/sdk.rs - sdk::blake3_keyed64 (line 432) ... ignored
+test jolt-inlines/blake3/src/sdk.rs - sdk::compress_direct (line 242) ... ignored
+
+test result: ok. 0 passed; 0 failed; 2 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+== jolt-inlines-bigint
+warning: /tmp/w18-096b/jolt/crates/jolt-kernels/Cargo.toml: `default-features` is ignored for jolt-poly, since `default-features` was not specified for `workspace.dependencies.jolt-poly`, this could become a hard error in the future
+warning: /tmp/w18-096b/jolt/crates/jolt-prover/Cargo.toml: `default-features` is ignored for jolt-kernels, since `default-features` was not specified for `workspace.dependencies.jolt-kernels`, this could become a hard error in the future
+warning: /tmp/w18-096b/jolt/crates/jolt-prover/Cargo.toml: `default-features` is ignored for jolt-poly, since `default-features` was not specified for `workspace.dependencies.jolt-poly`, this could become a hard error in the future
+warning: /tmp/w18-096b/jolt/crates/jolt-prover/Cargo.toml: `default-features` is ignored for jolt-profiling, since `default-features` was not specified for `workspace.dependencies.jolt-profiling`, this could become a hard error in the future
+   Compiling jolt-inlines-bigint v0.1.0 (/tmp/w18-096b/jolt/jolt-inlines/bigint)
+    Finished `test` profile [optimized] target(s) in 0.32s
+     Running unittests src/lib.rs (target/debug/deps/jolt_inlines_bigint-78ba0bff94b0e81b)
+
+running 2 tests
+test multiplication::tests::bigint256_multiplication::test_bigint256_mul_edge_cases ... ok
+test multiplication::tests::bigint256_multiplication::test_bigint256_mul_random ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+   Doc-tests jolt_inlines_bigint
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
