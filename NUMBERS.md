@@ -46,3 +46,4 @@ same number (`044b-...`), claimed the same way.
 | 093 | meshsim WORKER11 | v1.25 freeze check: main (922b835) quick suite + full extras + p4/uniform-k128, and the selected windows (w9-selected-windows.tgz) in stages A, B and F |
 | 094 | meshsim WORKER11 | v1.25 freeze check, rerun of 093 quick suite + full extras with the controllers firmware built (main 922b835) |
 | 095 | meshsim WORKER18 | W5a: build the ACT4 RV64IMAC tests as upstream jolt 17a9459 does (xpack gcc 15.2, Sail, riscv-arch-test a7c9930), pack the ELFs, and run them through upstream's jolt-emu |
+| 096 | meshsim WORKER18 | W5b: capture upstream's inline test vectors (jolt 17a9459, six inline crates' cargo test with a harness logging patch) |
