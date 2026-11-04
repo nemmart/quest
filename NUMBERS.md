@@ -57,3 +57,5 @@ same number (`044b-...`), claimed the same way.
 | 103 | meshsim WORKER20 | regenerate the 2^29 delivery of evm-zone-29 (WORKER9's delivery_writer, as 079) into persistent data, with its selected windows and w9-selected-windows.tgz |
 | 104 | meshsim WORKER20 | regenerate the 2^29 delivery of cyclone-29 (as 080) into persistent data, with its selected windows and w9-selected-windows.tgz |
 | 097b | meshsim WORKER20 | re-run of 097 (its 3 attempts used up before the deliveries existed), reading them from persistent data (103, 104) |
+| 097c | meshsim WORKER20 | the v1.26 smoke again (as 097b) on the model with DECISIONS-v1.26 item 12 (part 0 the working state) |
+| 102b | meshsim WORKER20 | the v1.26 suites again (as 102) on the model with DECISIONS-v1.26 item 12 |
