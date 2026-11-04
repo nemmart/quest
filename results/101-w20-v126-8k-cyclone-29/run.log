@@ -1,0 +1,18 @@
+kit sha256 9829fc3e4fa8059d705576791cbee2c8784384ff92cd29158bc1b6eeff7065f9
+start Wed Nov  4 12:37:29 PM UTC 2026 on godspeed, 16 threads
+openjdk version "21.0.12.1" 2026-08-18
+               total        used        free      shared  buff/cache   available
+Mem:              62           1           9           0          52          61
+deliveries: /home/questrunner/data/w9-deliveries
+ConvertDelivery cyclone-29: 8192 windows, 32768 records converted, 57348 links; OK
+values out: code 431011038, read log 76531241, write log 37036072; words raw 164541759, as picked 84064558 (5.7 s)
+manifest /tmp/w11-101-w20-v126-8k-cyclone-29/v126/cyclone-29.manifest.json sha256 d43f6e1c02cf5d6e3896ba3a6f17316f62aa63f3ee2f1666e997120b2ffe2e02
+shard: cyclone-29 windows --first 0 --count 8192 of /tmp/w11-101-w20-v126-8k-cyclone-29/v126, stages B, 16 JVMs, no-row limit 50000 cycles, log queues 512 entries (replay-8k), start Wed Nov  4 12:37:35 PM UTC 2026
+program cyclone-29, windows 0..8191 (8192), stages B, 16 JVMs, wall 802 s
+stage B: 8192 windows OK, 536870912 rows, 12384.7 JVM-s, 43350 rows per JVM-second, 1.51 s per window
+stage B stalls, cycles per window over 8192 windows (log queues 512 entries): image 0.0 (max 0), code 165.1 (max 199), newexp 521.7 (max 25148), exp 46.1 (max 1486), rlog 43.5 (max 127), wlog 153.6 (max 383), outq 0.0 (max 0)
+stage B log waits: read log 43.5, write log 153.6 cycles per window; windows with any: read 2986, write 4562
+throughput: 36772 windows per hour (all stages)
+ok   stage B: 8192 of 8192 windows matched
+PASS: cyclone-29 windows 0..8191
+exit 0 at Wed Nov  4 12:50:56 PM UTC 2026
