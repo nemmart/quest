@@ -1,0 +1,57 @@
+kit sha256 9829fc3e4fa8059d705576791cbee2c8784384ff92cd29158bc1b6eeff7065f9
+start Wed Nov  4 11:25:05 AM UTC 2026 on godspeed, 16 threads
+openjdk version "21.0.12.1" 2026-08-18
+               total        used        free      shared  buff/cache   available
+Mem:              62           1           8           0          53          61
+deliveries: /home/questrunner/data/w9-deliveries
+ConvertDelivery evm-zone-29: 8192 windows, 32768 records converted, 57348 links; OK
+values out: code 528509713, read log 68288088, write log 55254496; words raw 193902855, as picked 142467921 (2.7 s)
+manifest /tmp/w11-097c-w20-v126-smoke/v126/evm-zone-29.manifest.json sha256 707340a8a3e411caaabc45318e16d3c98d0698863677275ccdef89f2e7147699
+ConvertDelivery cyclone-29: 8192 windows, 32768 records converted, 57348 links; OK
+values out: code 431011038, read log 76531241, write log 37036072; words raw 164541759, as picked 84064558 (2.3 s)
+manifest /tmp/w11-097c-w20-v126-smoke/v126/cyclone-29.manifest.json sha256 e04003b29c7bdf62825896edf0997251ae6d3416120e204fbae14ebac2dc17ed
+shard: evm-zone-29 windows --first 0 --count 64 of /tmp/w11-097c-w20-v126-smoke/v126, stages AB, 16 JVMs, no-row limit 50000 cycles, log queues 256 entries (replay), start Wed Nov  4 11:25:10 AM UTC 2026
+program evm-zone-29, windows 0..63 (64), stages ABF, 16 JVMs, wall 38 s
+stage A: 64 windows OK, 4194304 rows, 12.6 JVM-s, 333357 rows per JVM-second, 0.20 s per window
+stage B: 64 windows OK, 4194304 rows, 121.2 JVM-s, 34595 rows per JVM-second, 1.89 s per window
+stage F: 4 windows OK, 262144 rows, 31.8 JVM-s, 8248 rows per JVM-second, 7.95 s per window
+stage B stalls, cycles per window over 64 windows (log queues 256 entries): image 0.0 (max 0), code 184.2 (max 188), newexp 973.5 (max 21078), exp 4.4 (max 100), rlog 85.7 (max 127), wlog 111.5 (max 255), outq 0.0 (max 0)
+stage B log waits: read log 85.7, write log 111.5 cycles per window; windows with any: read 46, write 48
+stage F stalls, cycles per window over 4 windows (log queues 256 entries): image 0.0 (max 0), code 188.0 (max 188), newexp 0.0 (max 0), exp 0.0 (max 0), rlog 88.5 (max 124), wlog 147.0 (max 252), outq 0.0 (max 0)
+stage F log waits: read log 88.5, write log 147.0 cycles per window; windows with any: read 3, write 4
+throughput: 4168 windows per hour (all stages)
+ok   stage A: 64 of 64 windows matched
+ok   stage B: 64 of 64 windows matched
+ok   stage F: 4 of 4 windows matched
+PASS: evm-zone-29 windows 0..63
+shard: cyclone-29 windows --first 0 --count 64 of /tmp/w11-097c-w20-v126-smoke/v126, stages AB, 16 JVMs, no-row limit 50000 cycles, log queues 256 entries (replay), start Wed Nov  4 11:25:48 AM UTC 2026
+program cyclone-29, windows 0..63 (64), stages ABF, 16 JVMs, wall 38 s
+stage A: 64 windows OK, 4194304 rows, 13.0 JVM-s, 322020 rows per JVM-second, 0.20 s per window
+stage B: 64 windows OK, 4194304 rows, 130.0 JVM-s, 32264 rows per JVM-second, 2.03 s per window
+stage F: 4 windows OK, 262144 rows, 32.1 JVM-s, 8176 rows per JVM-second, 8.02 s per window
+stage B stalls, cycles per window over 64 windows (log queues 256 entries): image 0.0 (max 0), code 188.0 (max 188), newexp 172.3 (max 10710), exp 0.0 (max 0), rlog 51.3 (max 127), wlog 192.0 (max 255), outq 0.0 (max 0)
+stage B log waits: read log 51.3, write log 192.0 cycles per window; windows with any: read 26, write 64
+stage F stalls, cycles per window over 4 windows (log queues 256 entries): image 0.0 (max 0), code 188.0 (max 188), newexp 2677.5 (max 10710), exp 0.0 (max 0), rlog 90.8 (max 127), wlog 146.2 (max 249), outq 0.0 (max 0)
+stage F log waits: read log 90.8, write log 146.2 cycles per window; windows with any: read 3, write 4
+throughput: 4168 windows per hour (all stages)
+ok   stage A: 64 of 64 windows matched
+ok   stage B: 64 of 64 windows matched
+ok   stage F: 4 of 4 windows matched
+PASS: cyclone-29 windows 0..63
+shard: evm-zone-29 windows --first 0 --count 64 of /tmp/w11-097c-w20-v126-smoke/v126, stages B, 16 JVMs, no-row limit 50000 cycles, log queues 512 entries (replay-8k), start Wed Nov  4 11:26:26 AM UTC 2026
+program evm-zone-29, windows 0..63 (64), stages B, 16 JVMs, wall 11 s
+stage B: 64 windows OK, 4194304 rows, 136.7 JVM-s, 30682 rows per JVM-second, 2.14 s per window
+stage B stalls, cycles per window over 64 windows (log queues 512 entries): image 0.0 (max 0), code 187.1 (max 191), newexp 977.7 (max 21194), exp 22.9 (max 653), rlog 85.7 (max 127), wlog 209.0 (max 383), outq 0.0 (max 0)
+stage B log waits: read log 85.7, write log 209.0 cycles per window; windows with any: read 46, write 49
+throughput: 20945 windows per hour (all stages)
+ok   stage B: 64 of 64 windows matched
+PASS: evm-zone-29 windows 0..63
+shard: cyclone-29 windows --first 0 --count 64 of /tmp/w11-097c-w20-v126-smoke/v126, stages B, 16 JVMs, no-row limit 50000 cycles, log queues 512 entries (replay-8k), start Wed Nov  4 11:26:37 AM UTC 2026
+program cyclone-29, windows 0..63 (64), stages B, 16 JVMs, wall 10 s
+stage B: 64 windows OK, 4194304 rows, 130.7 JVM-s, 32086 rows per JVM-second, 2.04 s per window
+stage B stalls, cycles per window over 64 windows (log queues 512 entries): image 0.0 (max 0), code 191.0 (max 191), newexp 176.1 (max 10956), exp 0.0 (max 0), rlog 51.3 (max 127), wlog 320.0 (max 383), outq 0.0 (max 0)
+stage B log waits: read log 51.3, write log 320.0 cycles per window; windows with any: read 26, write 64
+throughput: 23040 windows per hour (all stages)
+ok   stage B: 64 of 64 windows matched
+PASS: cyclone-29 windows 0..63
+exit 0 at Wed Nov  4 11:26:47 AM UTC 2026

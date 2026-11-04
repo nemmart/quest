@@ -1,0 +1,5 @@
+program cyclone-29, windows 0..63 (64), stages B, 16 JVMs, wall 10 s
+stage B: 64 windows OK, 4194304 rows, 130.7 JVM-s, 32086 rows per JVM-second, 2.04 s per window
+stage B stalls, cycles per window over 64 windows (log queues 512 entries): image 0.0 (max 0), code 191.0 (max 191), newexp 176.1 (max 10956), exp 0.0 (max 0), rlog 51.3 (max 127), wlog 320.0 (max 383), outq 0.0 (max 0)
+stage B log waits: read log 51.3, write log 320.0 cycles per window; windows with any: read 26, write 64
+throughput: 23040 windows per hour (all stages)
