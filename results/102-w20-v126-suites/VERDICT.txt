@@ -1,4 +1,4 @@
-accounting rc=1
+accounting rc=0
 agtest rc=0
 agtest-shuf rc=0
 bus rc=0
@@ -18,8 +18,8 @@ mem-shuf rc=0
 net rc=0
 net-shuf2 rc=0
 net-shuf rc=0
-periph rc=1
-periph-shuf rc=1
+periph rc=0
+periph-shuf rc=0
 rdport rc=0
 rdport-shuf rc=0
 recipes rc=0
@@ -34,7 +34,7 @@ sort-p1 rc=0
 sort rc=0
 sort-shuf rc=0
 stageb rc=0
-accounting.log: 
+accounting.log: AccountingTest: 12 passed, 0 failed
 agtest.log: AgTest: 240 passed, 0 failed
 agtest-shuf.log: AgTest (shuffled, seed 4): 240 passed, 0 failed
 bus.log: BusTest: 154 passed, 0 failed
@@ -54,8 +54,8 @@ mem-shuf.log: MemTest (shuffled, seed 3): 171 passed, 0 failed
 net.log: NetTest: 31328 passed, 0 failed
 net-shuf2.log: NetTest (shuffled, seed 11): 31328 passed, 0 failed
 net-shuf.log: NetTest (shuffled, seed 5): 31328 passed, 0 failed
-periph.log: PeripheralSlotTest: 91 passed, 1 failed
-periph-shuf.log: PeripheralSlotTest (shuffled, seed 4): 91 passed, 1 failed
+periph.log: PeripheralSlotTest: 93 passed, 0 failed
+periph-shuf.log: PeripheralSlotTest (shuffled, seed 4): 93 passed, 0 failed
 rdport.log: ReadPortGatherTest: 587 passed, 0 failed
 rdport-shuf.log: ReadPortGatherTest (shuffled, seed 4): 587 passed, 0 failed
 recipes.log: RecipeTest: 2056 passed, 0 failed
@@ -70,4 +70,4 @@ sort.log: SortTest: 104 passed, 0 failed
 sort-p1.log: SortTest: 42 passed, 0 failed
 sort-shuf.log: SortTest (shuffled, seed 4): 104 passed, 0 failed
 stageb.log: StageB synthetic: 19 windows, 0 failed
-36 steps; nonzero exits 3, logs with FAIL 2
+36 steps; nonzero exits 0, logs with FAIL 0
