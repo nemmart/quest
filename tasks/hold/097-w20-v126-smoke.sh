@@ -15,13 +15,22 @@ tar -xzf "$W/kit.tgz" -C "$W" || exit 2
 cd "$W/w11-kit" || exit 2
 sha256sum -c --quiet HASHES || { echo "kit files differ from HASHES"; exit 2; }
 echo "start $(date -u) on $(hostname), $(nproc) threads"; java -version 2>&1 | head -1; free -g | head -2
-# v1.26 (WORKER20): WORKER9's v1.25 deliveries (Quest 079, 080) converted into scratch by ConvertDelivery: the state records
-# rewritten to 68 words (DECISIONS-v1.26 items 1, 2, 8), every other file a link to /tmp/w9-deliveries (only read).
-SRC=/tmp/w9-deliveries
+REPO=${RES%/results/*}
+# Persistent runner data (Quest PIPELINE.md, "Persistent data on the runner"): ~/data if this unit may write there, else
+# the git-ignored data/ in the queue checkout (inside ReadWritePaths under ProtectHome=read-only). Never /tmp (wiped at boot).
+DATA=$HOME/data
+{ mkdir -p "$DATA" && touch "$DATA/.writable" && rm -f "$DATA/.writable"; } 2>/dev/null || DATA=$REPO/data
+mkdir -p "$DATA" || { echo "no writable persistent data directory ($HOME/data, $REPO/data)"; exit 4; }
+# v1.26 (WORKER20): WORKER9's v1.25 deliveries, regenerated into persistent data by tasks 103/104 (079/080's writer and
+# inputs), converted into scratch by ConvertDelivery: the state records rewritten to 68 words (DECISIONS-v1.26 items 1, 2,
+# 8), every other file a link (the delivery is only read). Scratch is rm -rf'ed at the start: safe to re-run after a reboot.
+SRC=$DATA/w9-deliveries
+echo "deliveries: $SRC"
 for PS in evm-zone-29:7142e894c80a0c9d491f21c852a942885e0abd97cfe6aefd0101d716824e138f cyclone-29:f8a0622e144a944c51386b5b36f81101dcdeb16e5a8d950c1e9ca0e3097f8982; do
   P=${PS%%:*}; SM=${PS#*:}
+  [ -f "$SRC/$P.COMPLETE" ] || { echo "$SRC/$P.COMPLETE missing: run tasks 103/104 (the deliveries) first"; rm -rf "$W"; exit 2; }
   GOT=$(sha256sum "$SRC/$P.manifest.json" 2>/dev/null | cut -d' ' -f1)
-  [ "$GOT" = "$SM" ] || { echo "$SRC/$P.manifest.json sha256 '$GOT', expected $SM"; rm -rf "$W"; exit 2; }
+  [ "$GOT" = "$SM" ] && [ "$GOT" = "$(cat "$SRC/$P.COMPLETE")" ] || { echo "$SRC/$P.manifest.json sha256 '$GOT', expected $SM"; rm -rf "$W"; exit 2; }
   java -Xmx2g -cp meshsim.jar ConvertDelivery "$SRC" "$W/v126" "$P" > "$RES/convert-$P.log" 2>&1; CRC=$?
   cat "$RES/convert-$P.log"; [ $CRC = 0 ] || { echo "conversion of $P failed"; rm -rf "$W"; exit 1; }
 done
