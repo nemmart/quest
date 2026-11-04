@@ -67,15 +67,19 @@ the runner box and restarting the systemd unit.
 `/tmp` is wiped when the box reboots (a power bump on Nov 4 lost `/tmp/w9-deliveries`, the selected-windows tarball and
 the hand-copied `/tmp/w9-delivery.tgz`). **Large inputs that later tasks read go to persistent data, never `/tmp`:**
 
-- **`$DATA` = `~/data`** (`/home/questrunner/data`) when the runner's unit lets tasks write there; under the hardened unit in
-  `bin/runner.sh`'s header (`ProtectHome=read-only`, `ReadWritePaths=/home/questrunner/queue /tmp`) it doesn't, and tasks use
-  **`~/queue/data`**, git-ignored inside the checkout (the runner's resets and `git clean results/` leave it alone). Every task
-  resolves it with the same lines (meshsim `WORKER20/tasks/data_dir.inc`), and the task that writes it records which one
-  in its `results/.../data_path.txt`. To make `~/data` the one place, add it to `ReadWritePaths` and restart the unit.
+- **The location (owner, Nov 4): `~questrunner/data`** (`/home/questrunner/data`). Under the hardened unit in
+  `bin/runner.sh`'s header (`ProtectHome=read-only`) it is writable only once the unit's `ReadWritePaths` lists
+  `/home/questrunner/data`. Until then tasks fall back to **`~/queue/data`**, git-ignored inside the checkout (inside
+  `ReadWritePaths`; the runner's resets and `git clean results/` leave it alone). Every task resolves `$DATA` with the
+  same write check (meshsim `WORKER20/tasks/data_dir.inc`), and the task that writes the data records which directory
+  was used in its `results/.../data_path.txt`.
 - **Current contents** (meshsim WORKER20, tasks 103 and 104): `w9-deliveries/` (the 2^29 replay deliveries of evm-zone-29
   and cyclone-29, about 90 GB, with `<program>.COMPLETE` holding each per-program manifest's SHA-256),
   `w9-deliveries-selected/` and `w9-selected-windows.tgz`. The SHA-256s are in those tasks' `manifest.sha256`.
-- **Write it reboot-safely:** into a staging directory beside the target, moved into place only when complete, with a
-  completion marker; a re-run starts from scratch or skips what is already complete. Readers check the marker or the
-  SHA-256 and fail at once if it is missing. Scratch that a reboot may lose stays in `/tmp` and is `rm -rf`ed at the
-  start of every task, so an interrupted task is safe to re-run (the runner retries it, `MAX_ATTEMPTS`).
+- **The runner is started by hand (owner, Nov 4):** it is not set to autostart, so after a power bump it stays down until
+  the owner restarts it, and whatever task was running was cut off mid-way. **Every task must be safe to re-run from
+  the start after an interruption** (the runner retries an unfinished task, up to `MAX_ATTEMPTS`):
+  - persistent data is written into a staging directory beside the target and moved into place only when complete, with
+    a completion marker; a re-run removes stale staging, and starts from scratch or skips what is already complete;
+  - readers check the marker or the SHA-256 and fail at once if the data is missing;
+  - scratch stays in `/tmp` and is `rm -rf`ed at the start of every task; results go only to `results/<task>/`.
