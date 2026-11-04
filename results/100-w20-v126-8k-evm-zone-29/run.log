@@ -1,0 +1,18 @@
+kit sha256 9829fc3e4fa8059d705576791cbee2c8784384ff92cd29158bc1b6eeff7065f9
+start Wed Nov  4 12:23:52 PM UTC 2026 on godspeed, 16 threads
+openjdk version "21.0.12.1" 2026-08-18
+               total        used        free      shared  buff/cache   available
+Mem:              62           1          15           0          46          61
+deliveries: /home/questrunner/data/w9-deliveries
+ConvertDelivery evm-zone-29: 8192 windows, 32768 records converted, 57348 links; OK
+values out: code 528509713, read log 68288088, write log 55254496; words raw 193902855, as picked 142467921 (2.7 s)
+manifest /tmp/w11-100-w20-v126-8k-evm-zone-29/v126/evm-zone-29.manifest.json sha256 ceb043e55ed6392ebec0235b4d016954016fbf2d2c3a0bfcb4283098c3a92068
+shard: evm-zone-29 windows --first 0 --count 8192 of /tmp/w11-100-w20-v126-8k-evm-zone-29/v126, stages B, 16 JVMs, no-row limit 50000 cycles, log queues 512 entries (replay-8k), start Wed Nov  4 12:23:54 PM UTC 2026
+program evm-zone-29, windows 0..8191 (8192), stages B, 16 JVMs, wall 810 s
+stage B: 8192 windows OK, 536870912 rows, 12496.7 JVM-s, 42961 rows per JVM-second, 1.53 s per window
+stage B stalls, cycles per window over 8192 windows (log queues 512 entries): image 0.0 (max 0), code 162.5 (max 191), newexp 7.6 (max 21194), exp 0.2 (max 653), rlog 39.2 (max 127), wlog 176.2 (max 383), outq 0.0 (max 0)
+stage B log waits: read log 39.2, write log 176.2 cycles per window; windows with any: read 2716, write 4984
+throughput: 36409 windows per hour (all stages)
+ok   stage B: 8192 of 8192 windows matched
+PASS: evm-zone-29 windows 0..8191
+exit 0 at Wed Nov  4 12:37:24 PM UTC 2026
