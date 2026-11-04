@@ -54,3 +54,5 @@ same number (`044b-...`), claimed the same way.
 | 100 | meshsim WORKER20 | v1.26 stall control: every window of evm-zone-29 in Stage B with v1.25's 8 KB log queues |
 | 101 | meshsim WORKER20 | v1.26 stall control: every window of cyclone-29 in Stage B with v1.25's 8 KB log queues |
 | 102 | meshsim WORKER20 | v1.26 suites: branch v1.26-meshsim run_tests quick + full extras with the sort, and p4/uniform-k128 against 1,229,008 cycles |
+| 103 | meshsim WORKER20 | regenerate the 2^29 delivery of evm-zone-29 (WORKER9's delivery_writer, as 079) into persistent data, with its selected windows and w9-selected-windows.tgz |
+| 104 | meshsim WORKER20 | regenerate the 2^29 delivery of cyclone-29 (as 080) into persistent data, with its selected windows and w9-selected-windows.tgz |

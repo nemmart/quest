@@ -61,3 +61,21 @@ dir. Each attempt count is tracked in `results/<name>/ATTEMPTS`
 of a task that hit the attempt cap, delete its `results/<name>` dir and
 push. NOTE: deploying this requires copying the updated bin/runner.sh to
 the runner box and restarting the systemd unit.
+
+## Persistent data on the runner (Nov 4 2026)
+
+`/tmp` is wiped when the box reboots (a power bump on Nov 4 lost `/tmp/w9-deliveries`, the selected-windows tarball and
+the hand-copied `/tmp/w9-delivery.tgz`). **Large inputs that later tasks read go to persistent data, never `/tmp`:**
+
+- **`$DATA` = `~/data`** (`/home/questrunner/data`) when the runner's unit lets tasks write there; under the hardened unit in
+  `bin/runner.sh`'s header (`ProtectHome=read-only`, `ReadWritePaths=/home/questrunner/queue /tmp`) it doesn't, and tasks use
+  **`~/queue/data`**, git-ignored inside the checkout (the runner's resets and `git clean results/` leave it alone). Every task
+  resolves it with the same lines (meshsim `WORKER20/tasks/data_dir.inc`), and the task that writes it records which one
+  in its `results/.../data_path.txt`. To make `~/data` the one place, add it to `ReadWritePaths` and restart the unit.
+- **Current contents** (meshsim WORKER20, tasks 103 and 104): `w9-deliveries/` (the 2^29 replay deliveries of evm-zone-29
+  and cyclone-29, about 90 GB, with `<program>.COMPLETE` holding each per-program manifest's SHA-256),
+  `w9-deliveries-selected/` and `w9-selected-windows.tgz`. The SHA-256s are in those tasks' `manifest.sha256`.
+- **Write it reboot-safely:** into a staging directory beside the target, moved into place only when complete, with a
+  completion marker; a re-run starts from scratch or skips what is already complete. Readers check the marker or the
+  SHA-256 and fail at once if it is missing. Scratch that a reboot may lose stays in `/tmp` and is `rm -rf`ed at the
+  start of every task, so an interrupted task is safe to re-run (the runner retries it, `MAX_ATTEMPTS`).
