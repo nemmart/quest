@@ -1,0 +1,9 @@
+program cyclone-29, windows 0..8191 (8192), stages ABF, 16 JVMs, wall 1677 s
+stage A: 8192 windows OK, 536870912 rows, 321.0 JVM-s, 1672568 rows per JVM-second, 0.04 s per window
+stage B: 8192 windows OK, 536870912 rows, 11373.3 JVM-s, 47205 rows per JVM-second, 1.39 s per window
+stage F: 128 windows OK, 8388608 rows, 1308.0 JVM-s, 6414 rows per JVM-second, 10.22 s per window
+stage B stalls, cycles per window over 8192 windows (log queues 256 entries): image 0.0 (max 0), code 162.8 (max 194), newexp 509.0 (max 26073), exp 31.3 (max 1326), rlog 43.5 (max 127), wlog 84.5 (max 255), outq 0.0 (max 0)
+stage B log waits: read log 43.5, write log 84.5 cycles per window; windows with any: read 2986, write 4253
+stage F stalls, cycles per window over 128 windows (log queues 256 entries): image 0.0 (max 0), code 163.0 (max 188), newexp 594.6 (max 12835), exp 28.8 (max 902), rlog 42.8 (max 127), wlog 82.9 (max 255), outq 0.0 (max 0)
+stage F log waits: read log 42.8, write log 82.9 cycles per window; windows with any: read 46, write 62
+throughput: 11815 windows per hour (all stages)
