@@ -1,0 +1,9 @@
+program evm-zone-29, windows 0..8191 (8192), stages ABF, 16 JVMs, wall 1727 s
+stage A: 8192 windows OK, 536870912 rows, 348.8 JVM-s, 1539340 rows per JVM-second, 0.04 s per window
+stage B: 8192 windows OK, 536870912 rows, 11862.2 JVM-s, 45259 rows per JVM-second, 1.45 s per window
+stage F: 128 windows OK, 8388608 rows, 1351.6 JVM-s, 6206 rows per JVM-second, 10.56 s per window
+stage B stalls, cycles per window over 8192 windows (log queues 256 entries): image 0.0 (max 0), code 160.2 (max 188), newexp 7.6 (max 21078), exp 0.0 (max 100), rlog 39.2 (max 127), wlog 100.0 (max 255), outq 0.0 (max 0)
+stage B log waits: read log 39.2, write log 100.0 cycles per window; windows with any: read 2716, write 4752
+stage F stalls, cycles per window over 128 windows (log queues 256 entries): image 0.0 (max 0), code 160.5 (max 188), newexp 0.0 (max 0), exp 0.0 (max 0), rlog 42.1 (max 127), wlog 101.1 (max 255), outq 0.0 (max 0)
+stage F log waits: read log 42.1, write log 101.1 cycles per window; windows with any: read 45, write 76
+throughput: 11473 windows per hour (all stages)
