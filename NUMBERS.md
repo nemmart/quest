@@ -64,3 +64,4 @@ same number (`044b-...`), claimed the same way.
 | 107 | meshsim WORKER25 | v1.26.1 acceptance: every window of cyclone-29 (converted in scratch) in Stage A and B, F every 64th, compared with 099 |
 | 108 | meshsim WORKER25 | v1.26.1 suites: branch v1.26.1 run_tests quick + full extras with the sort, and p4/uniform-k128 against 1,229,008 cycles |
 | 109 | meshsim WORKER26 | the Tracer's host-side inputs at 2^29 into persistent data ($DATA/w26-jumpmap): gold's segment file, the jump table (map.lines, frame6.bin), initial.pages, per-segment pages written, proof.json; for evm-zone-29 and cyclone-29 |
+| 110 | meshsim WORKER22 | B1 T1 at 2^29: the Tracer model on every segment of evm-zone-29 and cyclone-29 in order on one memory, WORKER26's map and initial image (109), every window against w9-deliveries and Stage A, raw and LRU; cycles per row, stalls, shared-cache hit rates, the walk, a separate-map-cache control |
