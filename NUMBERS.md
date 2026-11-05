@@ -70,3 +70,4 @@ same number (`044b-...`), claimed the same way.
 | 111 | meshsim WORKER27 | the input pipeline (meshsim inputs-pipeline, wip/inputs/) at 2^29 for evm-zone-29: deliveries at jolt-asic-planning fa59d9a, the v1.26.1 conversion, gold's segment file, jumpmap's outputs, into $DATA/w27-inputs; every checksum against the runner's copies (103, 106, 109); deleted after a pass |
 | 112 | meshsim WORKER27 | the same for cyclone-29 (against 104, 107, 109) |
 | 110d | meshsim WORKER22 | B1 T1 at 2^29 through milestone 2's output path (queues 0-3, credits, service flags, the drain, 128-bit DMA words): every window and boundary of both workloads, raw, LRU with Stage A, separate-map control; the drain's cycles |
+| 110e | meshsim WORKER22 | B1 T2 at 2^29: segment 0 of evm-zone-29 and cyclone-29 on the full chip (C&C 3's tracer_ctl, the Tracer's DMA into the 64 tiles, every tile replaying), raw and LRU; the time per segment |
