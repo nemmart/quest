@@ -1,0 +1,63 @@
+persistent data: /home/questrunner/data
+kit sha256 3ddbcebf08ff8cf3aaf75c1b88fd5eceb93a2a62ce2c942b42ef55f14c0a00b3
+meshsim 7464b84 (inputs-pipeline), gold 7ef9039, jolt-asic-planning fa59d9a0e336088ee4940bb96a2c622ab362b3ea, built 2026-11-05
+start Thu Nov  5 02:19:51 PM UTC 2026 on godspeed, 16 threads
+openjdk version "21.0.12.1" 2026-08-18
+input pipeline dependencies (Ubuntu 24.04.3 LTS, 16 threads, 62 GB)
+  ok       java                     /usr/bin/java
+           java 21
+  ok       cmake                    /usr/bin/cmake
+           cmake 3.28.3
+  ok       g++                      /usr/bin/g++
+  ok       python3                  /usr/bin/python3
+  ok       sha256sum                /usr/bin/sha256sum
+  ok       libelf (system)
+  ok       memory reservation (overcommit 0, commit limit 39 GB)
+disk:  free at /home/questrunner/data/w27-inputs (small runs ~2 GB; one 2^29 workload ~47 GB of deliveries, ~0.5 GB more)
+all dependencies present
+free at /home/questrunner/data/w27-inputs: 260 GB
+[cyclone-29 14:19:51] build: tools deliveries convert gold jumpmap into /home/questrunner/data/w27-inputs (jolt-asic-planning fa59d9a, meshsim 7464b84)
+[cyclone-29 14:19:51] tracer: cmake (FetchContent: fmt, nlohmann_json, xbyak) and build, 16 jobs
+[cyclone-29 14:20:50] delivery_writer /home/questrunner/data/w27-inputs/build/delivery_writer (jolt-asic-planning fa59d9a)
+[cyclone-29 14:20:50] classes /tmp/w27-112/k/classes; gold 7ef9039
+[cyclone-29 14:27:31] delivery.log: delivery_writer done in 401 s: cyclone-29: 8192 windows replayed OK, 0 failed; 1114579218 rows replayed (3 variants)
+8192 windows, 8192 replayed ok
+[cyclone-29 14:27:32] deliveries: /home/questrunner/data/w27-inputs/w9-deliveries/cyclone-29.manifest.json f8a0622e144a944c51386b5b36f81101dcdeb16e5a8d950c1e9ca0e3097f8982
+[cyclone-29 14:27:41] selected.log: delivery_writer done in 9 s: cyclone-29: 13 windows replayed OK, 0 failed; 1974546 rows replayed (3 variants)
+13 windows, 13 replayed ok
+[cyclone-29 14:27:42] selected windows: /home/questrunner/data/w27-inputs/w9-deliveries-selected/cyclone-29.manifest.json bb95a88f2c3aea5b9f8c564c84444ebde3b477b0e7f4b2698e4b78e0700eb63d; w9-selected-windows.tgz repacked
+ConvertDelivery cyclone-29: 8192 windows, 32768 records converted, 57348 links; OK
+values out: code 431011038, read log 76531241, write log 37036072; words raw 164541759, as picked 84064558 (3.3 s)
+[cyclone-29 14:27:46] v1.26.1: /home/questrunner/data/w27-inputs/v1261/cyclone-29.manifest.json 2d5e368e5721dcc0b07997a76a1834b98b998ad1d49bfed9a27ee42ede333bd5 (canonical key order)
+371526406 rows, 128 segments, file 10334580 bytes, SHA-256 f45f71b6e5359960829a901aacf08569e690fc3d8139dc17858fb0df8aa64070; 96687 advice words, 2208186 update words; 6.8 s
+[cyclone-29 14:27:52] gold (v1.2): /home/questrunner/data/w27-inputs/gold/cyclone-29/segments.seg f45f71b6e5359960829a901aacf08569e690fc3d8139dc17858fb0df8aa64070
+run: 371526406 rows, 16039067 jumps (lookups), 0 self-jumps, 1 program end; 11.0 s
+table: 42388 entries (42388 static, 4240 run, 0 run-only), k=13 (8192 lines, 1024 KB), load 0.323, fullest line 15, placed 0/1/2 steps 42388/0/0; p1=0x9e3779b1 p3=10368899
+acceptance: 16039067 jumps through frame6.bin's table: 0 map errors, 0 wrong bases; lines read 1/2/3: 16039067/0/0
+word 66: log2 K 24 (run 24, image floor 23), lowest_address 0x7e000000; OK; 13.3 s
+[cyclone-29 14:28:06] jumpmap: gold_check ok at all 128 segments
+[cyclone-29 14:28:06] jumpmap: /home/questrunner/data/w27-inputs/w26-jumpmap/cyclone-29/manifest.sha256 a918ac95f480e0ea9106ad118bff905de393d34fb10d1357777610c732923b64
+[cyclone-29 14:28:06] done: tools deliveries convert gold jumpmap
+build exit 0 after 495 s
+ok    w9-deliveries/cyclone-29.manifest.json f8a0622e144a944c51386b5b36f81101dcdeb16e5a8d950c1e9ca0e3097f8982 (= 10x's, = the runner's)
+      cyclone-29: 90112 files checked against cyclone-29.manifest.json, 0 differ
+ok    w9-deliveries-selected/cyclone-29.manifest.json bb95a88f2c3aea5b9f8c564c84444ebde3b477b0e7f4b2698e4b78e0700eb63d (= 10x's, = the runner's)
+      cyclone-29: 143 files checked against cyclone-29.manifest.json, 0 differ
+ok    tables: decode_table.bin
+ok    tables: rom.bin
+ok    tables: template_index.bin
+ok    tables: templates.bin
+ok    v1261/cyclone-29.manifest.json 2d5e368e5721dcc0b07997a76a1834b98b998ad1d49bfed9a27ee42ede333bd5 (canonical); in a key order equal to task 107: 105:'s
+      cyclone-29: 90112 files checked against cyclone-29.manifest.json, 0 differ
+ok    w26-jumpmap/cyclone-29: the same 266 files
+ok    proof.json equal (without input, a path)
+ok    segments.seg.json equal (without program, input: paths)
+ok    w26-jumpmap/cyclone-29: 263 files byte for byte (segments.seg, map.lines, frame6.bin, initial.pages, seg/*, segments.csv, run_only.csv, .cuts)
+ok    gold/cyclone-29/segments.seg = the jumpmap directory's
+cyclone-29 against the runner's copies: PASS
+/tmp/w27-112/k/meshsim/wip/inputs/record.sh: line 18: /usr/bin/sha256sum: Argument list too long
+recorded 271 checksums in /tmp/w27-112/k/meshsim/wip/inputs/manifest/cyclone-29.sha256
+cyclone-29: PASS
+45G	/home/questrunner/data/w27-inputs
+PASS: /home/questrunner/data/w27-inputs deleted (the runner's originals stay)
+end Thu Nov  5 02:36:02 PM UTC 2026, exit 0
