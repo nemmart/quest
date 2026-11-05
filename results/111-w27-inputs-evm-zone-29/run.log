@@ -1,0 +1,63 @@
+persistent data: /home/questrunner/data
+kit sha256 3ddbcebf08ff8cf3aaf75c1b88fd5eceb93a2a62ce2c942b42ef55f14c0a00b3
+meshsim 7464b84 (inputs-pipeline), gold 7ef9039, jolt-asic-planning fa59d9a0e336088ee4940bb96a2c622ab362b3ea, built 2026-11-05
+start Thu Nov  5 02:02:23 PM UTC 2026 on godspeed, 16 threads
+openjdk version "21.0.12.1" 2026-08-18
+input pipeline dependencies (Ubuntu 24.04.3 LTS, 16 threads, 62 GB)
+  ok       java                     /usr/bin/java
+           java 21
+  ok       cmake                    /usr/bin/cmake
+           cmake 3.28.3
+  ok       g++                      /usr/bin/g++
+  ok       python3                  /usr/bin/python3
+  ok       sha256sum                /usr/bin/sha256sum
+  ok       libelf (system)
+  ok       memory reservation (overcommit 0, commit limit 39 GB)
+disk:  free at /home/questrunner/data/w27-inputs (small runs ~2 GB; one 2^29 workload ~47 GB of deliveries, ~0.5 GB more)
+all dependencies present
+free at /home/questrunner/data/w27-inputs: 260 GB
+[evm-zone-29 14:02:23] build: tools deliveries convert gold jumpmap into /home/questrunner/data/w27-inputs (jolt-asic-planning fa59d9a, meshsim 7464b84)
+[evm-zone-29 14:02:23] tracer: cmake (FetchContent: fmt, nlohmann_json, xbyak) and build, 16 jobs
+[evm-zone-29 14:03:17] delivery_writer /home/questrunner/data/w27-inputs/build/delivery_writer (jolt-asic-planning fa59d9a)
+[evm-zone-29 14:03:17] classes /tmp/w27-111/k/classes; gold 7ef9039
+[evm-zone-29 14:11:10] delivery.log: delivery_writer done in 473 s: evm-zone-29: 8192 windows replayed OK, 0 failed; 1064585826 rows replayed (3 variants)
+8192 windows, 8192 replayed ok
+[evm-zone-29 14:11:11] deliveries: /home/questrunner/data/w27-inputs/w9-deliveries/evm-zone-29.manifest.json 7142e894c80a0c9d491f21c852a942885e0abd97cfe6aefd0101d716824e138f
+[evm-zone-29 14:11:22] selected.log: delivery_writer done in 11 s: evm-zone-29: 12 windows replayed OK, 0 failed; 1919586 rows replayed (3 variants)
+12 windows, 12 replayed ok
+[evm-zone-29 14:11:22] selected windows: /home/questrunner/data/w27-inputs/w9-deliveries-selected/evm-zone-29.manifest.json 7d87890335d04d02e47b4720cbcf86d93a115d38a029d8329b02a90ff4134d75; w9-selected-windows.tgz repacked
+ConvertDelivery evm-zone-29: 8192 windows, 32768 records converted, 57348 links; OK
+values out: code 528509713, read log 68288088, write log 55254496; words raw 193902855, as picked 142467921 (2.5 s)
+[evm-zone-29 14:11:25] v1.26.1: /home/questrunner/data/w27-inputs/v1261/evm-zone-29.manifest.json 5bffa524ed8901f1957e546385697e463bc2ddce5b00d81d698ad8cb4078a0aa (canonical key order)
+354861942 rows, 128 segments, file 1747828 bytes, SHA-256 208520ece5475cafff6e89caffe716be3346eb45f3189b0383e6f1668aa17d18; 3782 advice words, 323176 update words; 7.6 s
+[evm-zone-29 14:11:33] gold (v1.2): /home/questrunner/data/w27-inputs/gold/evm-zone-29/segments.seg 208520ece5475cafff6e89caffe716be3346eb45f3189b0383e6f1668aa17d18
+run: 354861942 rows, 4055167 jumps (lookups), 0 self-jumps, 1 program end; 9.3 s
+table: 49772 entries (49770 static, 6195 run, 2 run-only), k=13 (8192 lines, 1024 KB), load 0.380, fullest line 15, placed 0/1/2 steps 49772/0/0; p1=0x6c442cb7 p3=10368899
+acceptance: 4055167 jumps through frame6.bin's table: 0 map errors, 0 wrong bases; lines read 1/2/3: 4055167/0/0
+word 66: log2 K 23 (run 23, image floor 23), lowest_address 0x7e000000; OK; 10.7 s
+[evm-zone-29 14:11:44] jumpmap: gold_check ok at all 128 segments
+[evm-zone-29 14:11:44] jumpmap: /home/questrunner/data/w27-inputs/w26-jumpmap/evm-zone-29/manifest.sha256 edc3ae2eb2cf0a5db277a33149ef4f26bfa6509a59081ca03de242c4d79474a7
+[evm-zone-29 14:11:44] done: tools deliveries convert gold jumpmap
+build exit 0 after 561 s
+ok    w9-deliveries/evm-zone-29.manifest.json 7142e894c80a0c9d491f21c852a942885e0abd97cfe6aefd0101d716824e138f (= 10x's, = the runner's)
+      evm-zone-29: 90112 files checked against evm-zone-29.manifest.json, 0 differ
+ok    w9-deliveries-selected/evm-zone-29.manifest.json 7d87890335d04d02e47b4720cbcf86d93a115d38a029d8329b02a90ff4134d75 (= 10x's, = the runner's)
+      evm-zone-29: 132 files checked against evm-zone-29.manifest.json, 0 differ
+ok    tables: decode_table.bin
+ok    tables: rom.bin
+ok    tables: template_index.bin
+ok    tables: templates.bin
+ok    v1261/evm-zone-29.manifest.json 5bffa524ed8901f1957e546385697e463bc2ddce5b00d81d698ad8cb4078a0aa (canonical); in a key order equal to task 106: 105:'s
+      evm-zone-29: 90112 files checked against evm-zone-29.manifest.json, 0 differ
+ok    w26-jumpmap/evm-zone-29: the same 266 files
+ok    proof.json equal (without input, a path)
+ok    segments.seg.json equal (without program, input: paths)
+ok    w26-jumpmap/evm-zone-29: 263 files byte for byte (segments.seg, map.lines, frame6.bin, initial.pages, seg/*, segments.csv, run_only.csv, .cuts)
+ok    gold/evm-zone-29/segments.seg = the jumpmap directory's
+evm-zone-29 against the runner's copies: PASS
+/tmp/w27-111/k/meshsim/wip/inputs/record.sh: line 18: /usr/bin/sha256sum: Argument list too long
+recorded 271 checksums in /tmp/w27-111/k/meshsim/wip/inputs/manifest/evm-zone-29.sha256
+evm-zone-29: PASS
+46G	/home/questrunner/data/w27-inputs
+PASS: /home/questrunner/data/w27-inputs deleted (the runner's originals stay)
+end Thu Nov  5 02:19:47 PM UTC 2026, exit 0

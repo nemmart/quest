@@ -1,0 +1,12 @@
+input pipeline dependencies (Ubuntu 24.04.3 LTS, 16 threads, 62 GB)
+  ok       java                     /usr/bin/java
+           java 21
+  ok       cmake                    /usr/bin/cmake
+           cmake 3.28.3
+  ok       g++                      /usr/bin/g++
+  ok       python3                  /usr/bin/python3
+  ok       sha256sum                /usr/bin/sha256sum
+  ok       libelf (system)
+  ok       memory reservation (overcommit 0, commit limit 39 GB)
+disk:  free at /home/questrunner/data/w27-inputs (small runs ~2 GB; one 2^29 workload ~47 GB of deliveries, ~0.5 GB more)
+all dependencies present

@@ -1,0 +1,12 @@
+evm-zone-29: lowest_address 0x7e000000, code 0x80000000-0x801d32b0, 616231 instructions (790242 bytecode rows), 128 segments in segments.seg
+cycle-0 image: 496 pages of 4 KB
+run: 354861942 rows, 4055167 jumps (lookups), 0 self-jumps, 1 program end; 9.3 s
+table: 49772 entries (49770 static, 6195 run, 2 run-only), k=13 (8192 lines, 1024 KB), load 0.380, fullest line 15, placed 0/1/2 steps 49772/0/0; p1=0x6c442cb7 p3=10368899
+acceptance: 4055167 jumps through frame6.bin's table: 0 map errors, 0 wrong bases; lines read 1/2/3: 4055167/0/0
+  direct       static   32559, run targets missed  2893 of 6195, jumps missed 1882703
+  +return      static   48190, run targets missed   312 of 6195, jumps missed 973780
+  +auipc_call  static   48800, run targets missed   107 of 6195, jumps missed 3929
+  +auipc_addr  static   48825, run targets missed   106 of 6195, jumps missed 3928
+  +data        static   49770, run targets missed     2 of 6195, jumps missed 1746
+  +after_ecall static   49770, run targets missed     2 of 6195, jumps missed 1746
+word 66: log2 K 23 (run 23, image floor 23), lowest_address 0x7e000000; OK; 10.7 s
