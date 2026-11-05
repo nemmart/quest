@@ -1,0 +1,10 @@
+cyclone-29: WORKER26's inputs: image 1519 pages, map 2^13 lines (p1 0x9e3779b1, p3 10368899), log2 K 24, lowest 0x7e000000
+cyclone-29 segment 10 LRU (T2, 64 windows): FAIL  C&C 3 55330884 cycles (trace rows 0, drain 0), 0 transfers, 0 DMA packets; replay max 0 cycles; 0 rows checked; 2648 s
+    C&C 3 didn't exit by cycle 55331648: tile 66: running at pc=0x0 instr=0x00000000 pc 0x1000048 (WFI)
+    tr_results: status 0, windows 0, ERRORS 0x0, advice left 0, end-state word -1
+cyclone-29 segment 14 (T2, 64 windows): FAIL  C&C 3 55330884 cycles (trace rows 0, drain 0), 0 transfers, 0 DMA packets; replay max 0 cycles; 0 rows checked; 2646 s
+    C&C 3 didn't exit by cycle 55331648: tile 66: running at pc=0x0 instr=0x00000000 pc 0x1000048 (WFI)
+    tr_results: status 0, windows 0, ERRORS 0x0, advice left 0, end-state word -1
+cyclone-29 segment 16 (T2, 64 windows): FAIL  C&C 3 55330884 cycles (trace rows 0, drain 0), 0 transfers, 0 DMA packets; replay max 0 cycles; 0 rows checked; 2668 s
+    C&C 3 didn't exit by cycle 55331648: tile 66: running at pc=0x0 instr=0x00000000 pc 0x1000048 (WFI)
+    tr_results: status 0, windows 0, ERRORS 0x0, advice left 0, end-state word -1
