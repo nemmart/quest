@@ -1,0 +1,18 @@
+== evm-zone-29: 354,861,942 real rows, 528,509,583 instructions; verdicts 128 OK of 128
+instruction-fetch stalls: 108,653,532 cycles, 0.3062 per real row; 5,709,591 misses, 78,209 of them reaching LPDDR; 2,785,870 straddling instructions (0.53% of instructions)
+  cold, first half                       52,200 misses      4,885,762 cycles  0.0138 per row    4.5%  (93.6 per miss)
+  cold, straddling second half           25,717 misses      2,369,550 cycles  0.0067 per row    2.2%  (92.1 per miss)
+  capacity, first half                3,560,965 misses     64,120,598 cycles  0.1807 per row   59.0%  (18.0 per miss)
+  capacity, straddling second half    2,070,709 misses     37,277,622 cycles  0.1050 per row   34.3%  (18.0 per miss)
+core cycles per real row: 4.6497 at 128 lines (16 KB)
+    256 lines (32 KB): 4.3678 per real row, instruction-fetch stalls 0.0243 per row (capacity misses 75,349); verdicts 128 OK
+   1024 lines (128 KB): 4.3639 per real row, instruction-fetch stalls 0.0205 per row (capacity misses 51); verdicts 128 OK
+== cyclone-29: 371,526,406 real rows, 431,009,230 instructions; verdicts 128 OK of 128
+instruction-fetch stalls: 26,630,342 cycles, 0.0717 per real row; 990,792 misses, 115,575 of them reaching LPDDR; 1,228,719 straddling instructions (0.29% of instructions)
+  cold, first half                       52,599 misses      4,953,912 cycles  0.0133 per row   18.6%  (94.2 per miss)
+  cold, straddling second half           15,408 misses      1,427,486 cycles  0.0038 per row    5.4%  (92.6 per miss)
+  capacity, first half                  774,127 misses     16,665,600 cycles  0.0449 per row   62.6%  (21.5 per miss)
+  capacity, straddling second half      148,658 misses      3,583,344 cycles  0.0096 per row   13.5%  (24.1 per miss)
+core cycles per real row: 4.4800 at 128 lines (16 KB)
+    256 lines (32 KB): 4.4633 per real row, instruction-fetch stalls 0.0553 per row (capacity misses 577,410); verdicts 128 OK
+   1024 lines (128 KB): 4.4336 per real row, instruction-fetch stalls 0.0308 per row (capacity misses 126,504); verdicts 128 OK
