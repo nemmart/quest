@@ -1,0 +1,24 @@
+kit sha256 8aa265ce9772719678de08e0cef116caf05bc4838c0240bbffc7fa3dc0475ab2
+start Thu Nov  5 07:10:45 AM UTC 2026 on godspeed, 16 threads
+openjdk version "21.0.12.1" 2026-08-18
+               total        used        free      shared  buff/cache   available
+Mem:              62           1           9           0          51          60
+deliveries: /home/questrunner/data/w9-deliveries
+ConvertDelivery evm-zone-29: 8192 windows, 32768 records converted, 57348 links; OK
+values out: code 528509713, read log 68288088, write log 55254496; words raw 193902855, as picked 142467921 (1.9 s)
+manifest /tmp/w11-106-w25-v1261-accept-evm-zone-29/v1261/evm-zone-29.manifest.json sha256 e077ae1d61bd9c9d1a81f24bf578c45b0eba40e63bdd0923460d2b39daaa3b9b
+shard: evm-zone-29 windows --first 0 --count 8192 of /tmp/w11-106-w25-v1261-accept-evm-zone-29/v1261, stages AB, 16 JVMs, no-row limit 50000 cycles, log queues 256 entries (replay), start Thu Nov  5 07:10:47 AM UTC 2026
+program evm-zone-29, windows 0..8191 (8192), stages ABF, 16 JVMs, wall 1717 s
+stage A: 8192 windows OK, 536870912 rows, 345.9 JVM-s, 1552296 rows per JVM-second, 0.04 s per window
+stage B: 8192 windows OK, 536870912 rows, 11831.0 JVM-s, 45378 rows per JVM-second, 1.44 s per window
+stage F: 128 windows OK, 8388608 rows, 1333.0 JVM-s, 6293 rows per JVM-second, 10.41 s per window
+stage B stalls, cycles per window over 8192 windows (log queues 256 entries): image 0.0 (max 0), code 160.2 (max 188), newexp 7.6 (max 21078), exp 0.0 (max 100), rlog 39.2 (max 127), wlog 100.0 (max 255), outq 0.0 (max 0)
+stage B log waits: read log 39.2, write log 100.0 cycles per window; windows with any: read 2716, write 4752
+stage F stalls, cycles per window over 128 windows (log queues 256 entries): image 0.0 (max 0), code 160.5 (max 188), newexp 0.0 (max 0), exp 0.0 (max 0), rlog 42.1 (max 127), wlog 101.1 (max 255), outq 0.0 (max 0)
+stage F log waits: read log 42.1, write log 101.1 cycles per window; windows with any: read 45, write 76
+throughput: 11540 windows per hour (all stages)
+ok   stage A: 8192 of 8192 windows matched
+ok   stage B: 8192 of 8192 windows matched
+ok   stage F: 128 of 128 windows matched
+PASS: evm-zone-29 windows 0..8191
+exit 0 at Thu Nov  5 07:39:24 AM UTC 2026
