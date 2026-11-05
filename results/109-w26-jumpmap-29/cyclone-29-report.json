@@ -1,0 +1,41 @@
+{
+  "name": "cyclone-29",
+  "rows": 371526406,
+  "jumps": 16039067,
+  "self_jumps": 0,
+  "instructions": 545760,
+  "bytecode_rows": 661492,
+  "static": {"entries": 42388, "direct": 25680, "return": 16502, "data": 3557, "auipc_call": 8, "auipc_addr": 14, "direct_only": 22825, "return_only": 13194, "data_only": 2896, "auipc_call_only": 5, "auipc_addr_only": 12, "direct_refs": 40251, "return_refs": 16522, "auipc_call_refs": 9, "auipc_addr_refs": 15, "data_words_scanned": 191771, "data_in_code_not_start": 27, "bad_direct": 108, "bad_return": 20, "bad_auipc_call": 0, "after_ecall": 46, "after_ecall_only": 40, "ecall_refs": 46, "bad_after_ecall": 0},
+  "run": {"distinct_targets": 4240, "run_only": 0},
+  "cumulative": [
+    {"kinds": "direct", "static_entries": 25680, "run_targets_covered": 2279, "run_targets_missed": 1961, "jumps_missed": 2267575},
+    {"kinds": "+return", "static_entries": 39435, "run_targets_covered": 3840, "run_targets_missed": 400, "jumps_missed": 540983},
+    {"kinds": "+auipc_call", "static_entries": 39440, "run_targets_covered": 3845, "run_targets_missed": 395, "jumps_missed": 540977},
+    {"kinds": "+auipc_addr", "static_entries": 39452, "run_targets_covered": 3850, "run_targets_missed": 390, "jumps_missed": 539587},
+    {"kinds": "+data", "static_entries": 42348, "run_targets_covered": 4232, "run_targets_missed": 8, "jumps_missed": 875},
+    {"kinds": "+after_ecall", "static_entries": 42388, "run_targets_covered": 4240, "run_targets_missed": 0, "jumps_missed": 0}
+  ],
+  "table": {"entries": 42388, "k": 13, "lines": 8192, "bytes": 1048576, "load": 0.3234, "fullest_line": 15, "placed_0_1_2": [42388, 0, 0], "p1": "0x9e3779b1", "p3": 10368899},
+  "table_static_only": {"entries": 42388, "k": 13, "lines": 8192, "bytes": 1048576, "load": 0.3234, "fullest_line": 15, "placed_0_1_2": [42388, 0, 0], "p1": "0x9e3779b1", "p3": 10368899},
+  "table_run_only": {"entries": 4240, "k": 10, "lines": 1024, "bytes": 131072, "load": 0.2588, "fullest_line": 14, "placed_0_1_2": [4240, 0, 0], "p1": "0x9e3779b1", "p3": 10368899},
+  "table_all_starts": {"entries": 545760, "k": 17, "lines": 131072, "bytes": 16777216, "load": 0.2602, "fullest_line": 8, "placed_0_1_2": [545760, 0, 0], "p1": "0x9e3779b1", "p3": 10368899},
+  "acceptance": {"jumps": 16039067, "map_errors": 0, "wrong_bases": 0, "lines_read": [16039067, 0, 0], "longest_probe": 1},
+  "lru64_misses": 3044851,
+  "per_segment": {
+    "rows": {"segments_with_rows": 89, "min": 2427654, "median": 4194304, "mean": 4174454.0, "max": 4194304},
+    "jumps": {"segments_with_rows": 89, "min": 41783, "median": 209715, "mean": 180214.2, "max": 380271},
+    "distinct_targets": {"segments_with_rows": 89, "min": 1, "median": 1235, "mean": 1120.0, "max": 2489},
+    "run_only_targets": {"segments_with_rows": 89, "min": 0, "median": 0, "mean": 0.0, "max": 0},
+    "lru64_misses": {"segments_with_rows": 89, "min": 1, "median": 32742, "mean": 34211.8, "max": 87700},
+    "lines_all": {"segments_with_rows": 89, "min": 1, "median": 1155, "mean": 998.2, "max": 2160},
+    "lines_misses": {"segments_with_rows": 89, "min": 1, "median": 1155, "mean": 998.2, "max": 2160},
+    "allstarts_lines_all": {"segments_with_rows": 89, "min": 1, "median": 1228, "mean": 1112.4, "max": 2468},
+    "allstarts_lines_misses": {"segments_with_rows": 89, "min": 1, "median": 1228, "mean": 1112.4, "max": 2468},
+    "image_pages": {"segments_with_rows": 89, "min": 1519, "median": 3443, "mean": 3265.7, "max": 3503},
+    "pages_written": {"segments_with_rows": 89, "min": 6, "median": 45, "mean": 68.5, "max": 1048}
+  },
+  "word66": {"log2_k": 24, "log2_k_run": 24, "log2_k_image_floor": 23, "max_address": "0x84ae3008", "image_words": 414012, "lowest_address": "0x7e000000"},
+  "images": "write",
+  "seconds": 13.0,
+  "ok": true
+}

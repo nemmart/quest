@@ -1,0 +1,34 @@
+persistent data: /home/questrunner/data
+kit sha256 7c0216c76c85fce2e51cd3d8f7bd67dcd59761beb52e79710903e5b5bee4b98f
+meshsim v1.3-jumpmap 7a91438 (gold 7ef9039); jolt-asic-planning tracer-standalone-main fa59d9a
+start Thu Nov  5 11:09:54 AM UTC 2026 on godspeed, 16 threads
+openjdk version "21.0.12.1" 2026-08-18
+354861942 rows, 128 segments, file 1747828 bytes, SHA-256 208520ece5475cafff6e89caffe716be3346eb45f3189b0383e6f1668aa17d18; 3782 advice words, 323176 update words; 7.7 s
+evm-zone-29: lowest_address 0x7e000000, code 0x80000000-0x801d32b0, 616231 instructions (790242 bytecode rows), 128 segments in segments.seg
+cycle-0 image: 496 pages of 4 KB
+run: 354861942 rows, 4055167 jumps (lookups), 0 self-jumps, 1 program end; 9.3 s
+table: 49772 entries (49770 static, 6195 run, 2 run-only), k=13 (8192 lines, 1024 KB), load 0.380, fullest line 15, placed 0/1/2 steps 49772/0/0; p1=0x6c442cb7 p3=10368899
+acceptance: 4055167 jumps through frame6.bin's table: 0 map errors, 0 wrong bases; lines read 1/2/3: 4055167/0/0
+word 66: log2 K 23 (run 23, image floor 23), lowest_address 0x7e000000; OK; 10.7 s
+evm-zone-29: segments.seg ok (208520ece5475cafff6e89caffe716be3346eb45f3189b0383e6f1668aa17d18)
+evm-zone-29: map.lines ok (10c146d0380f690b24959e4c0bc8d94f45439258c6facf2f5d0b3e170fe09a6c)
+evm-zone-29: frame6.bin ok (d3e646b2329ed07b2cc45abb003b265f28154b39c08a3ed87b030add0225eac6)
+evm-zone-29: initial.pages ok (51aaea2f2be6f892a75fa509a2e1a67aca4ce02c9fb5a4e1d695e9efaaa29401)
+evm-zone-29: seg/*.pages (concatenated) ok (56b63dd683f960e21e05ad29d916765baf7feddc83267f548b6ce5bb48b44b94)
+evm-zone-29: gold_check ok at all 128 segments
+evm-zone-29: in place at /home/questrunner/data/w26-jumpmap/evm-zone-29 (6.6M), COMPLETE 57dc0ffe7574ab3e11f79f8414501bd1ceb2fd75faab0b03f3b4a6c2c61cad2d
+371526406 rows, 128 segments, file 10334580 bytes, SHA-256 f45f71b6e5359960829a901aacf08569e690fc3d8139dc17858fb0df8aa64070; 96687 advice words, 2208186 update words; 6.7 s
+cyclone-29: lowest_address 0x7e000000, code 0x80000000-0x801afe4c, 545760 instructions (661492 bytecode rows), 128 segments in segments.seg
+cycle-0 image: 1519 pages of 4 KB
+run: 371526406 rows, 16039067 jumps (lookups), 0 self-jumps, 1 program end; 10.8 s
+table: 42388 entries (42388 static, 4240 run, 0 run-only), k=13 (8192 lines, 1024 KB), load 0.323, fullest line 15, placed 0/1/2 steps 42388/0/0; p1=0x9e3779b1 p3=10368899
+acceptance: 16039067 jumps through frame6.bin's table: 0 map errors, 0 wrong bases; lines read 1/2/3: 16039067/0/0
+word 66: log2 K 24 (run 24, image floor 23), lowest_address 0x7e000000; OK; 13.0 s
+cyclone-29: segments.seg ok (f45f71b6e5359960829a901aacf08569e690fc3d8139dc17858fb0df8aa64070)
+cyclone-29: map.lines ok (ef286e0c9d0c96dcab628bf2a3e6c3975f4ab5f680ee737dabbec2025df1a68e)
+cyclone-29: frame6.bin ok (1a0c646e58a994b697f860f0fe4aedda36834e63a0ae91e00d24565460962464)
+cyclone-29: initial.pages ok (6f7438cd73cae839a80173d20cc80e353cf490301441e9a385cd252ff164932a)
+cyclone-29: seg/*.pages (concatenated) ok (d7679f6f63a4ed734e966b8c72e22e5b46126a82baf3403c3e85d3b4d826dc84)
+cyclone-29: gold_check ok at all 128 segments
+cyclone-29: in place at /home/questrunner/data/w26-jumpmap/cyclone-29 (19M), COMPLETE ace78f61efbb9c0e418a0b1d7f54a79f6e299b7ff45ad7f09537b11961b95fba
+end Thu Nov  5 11:10:33 AM UTC 2026, exit 0
