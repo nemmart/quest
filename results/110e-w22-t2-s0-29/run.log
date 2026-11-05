@@ -1,0 +1,18 @@
+persistent data: /home/questrunner/data
+kit sha256 57ecc978bd892f46ed8b17badec4eb69fbaae4dab3cc89bf8ecac8cee20cf9ac
+meshsim 51cb34e (v1.3-tracer), gold eeb64b5, built 2026-11-05
+start Thu Nov  5 02:53:26 PM UTC 2026 on godspeed, 16 threads
+openjdk version "21.0.12.1" 2026-08-18
+               total        used        free      shared  buff/cache   available
+Mem:              62           1          48           0          13          61
+evm-zone-29: inputs checked (delivery 7142e894c80a0c9d491f21c852a942885e0abd97cfe6aefd0101d716824e138f, w26 57dc0ffe7574ab3e11f79f8414501bd1ceb2fd75faab0b03f3b4a6c2c61cad2d)
+cyclone-29: inputs checked (delivery f8a0622e144a944c51386b5b36f81101dcdeb16e5a8d950c1e9ca0e3097f8982, w26 ace78f61efbb9c0e418a0b1d7f54a79f6e299b7ff45ad7f09537b11961b95fba)
+evm-zone-29-s0raw: exit 0, evm-zone-29: T2 on 1 segment(s), 0 failed, 1228 s
+evm-zone-29-s0lru: exit 0, evm-zone-29: T2 on 1 segment(s), 0 failed, 1185 s
+cyclone-29-s0raw: exit 0, cyclone-29: T2 on 1 segment(s), 0 failed, 1218 s
+cyclone-29-s0lru: exit 0, cyclone-29: T2 on 1 segment(s), 0 failed, 1180 s
+evm-zone-29 segment 0 (s0lru, 64 windows): OK; C&C 3 20,959,304 cycles = 20.96 ms at 1 GHz (Tracer rows 17,848,648, drain 3,091,224); 5102 transfers, 613,317 packets; tiles' replay max 234,744 cycles; 4,194,304 rows checked; wall 1184 s
+evm-zone-29 segment 0 (s0raw, 64 windows): OK; C&C 3 20,983,165 cycles = 20.98 ms at 1 GHz (Tracer rows 17,848,648, drain 3,114,872); 11552 transfers, 1,436,964 packets; tiles' replay max 235,712 cycles; 4,194,304 rows checked; wall 1228 s
+cyclone-29 segment 0 (s0lru, 64 windows): OK; C&C 3 20,724,771 cycles = 20.72 ms at 1 GHz (Tracer rows 17,892,530, drain 2,811,108); 2792 transfers, 314,471 packets; tiles' replay max 211,443 cycles; 4,194,304 rows checked; wall 1180 s
+cyclone-29 segment 0 (s0raw, 64 windows): OK; C&C 3 20,891,294 cycles = 20.89 ms at 1 GHz (Tracer rows 17,892,530, drain 2,979,535); 12722 transfers, 1,585,999 packets; tiles' replay max 211,642 cycles; 4,194,304 rows checked; wall 1218 s
+verdict: PASS; exit 0 at Thu Nov  5 03:13:54 PM UTC 2026
