@@ -74,3 +74,7 @@ same number (`044b-...`), claimed the same way.
 | 110f | meshsim WORKER22 | B1 T2 at 2^29 with Q15's handshake: evm-zone-29 segments 16, 32, 48, 64, 80 (1 in 16) and the heaviest, 37 and 84, raw, and 37 LRU, on the full chip |
 | 110g | meshsim WORKER22 | B1 T2 at 2^29 with Q15's handshake: cyclone-29 segments 16, 32, 48, 64, 80 (1 in 16) and the heaviest, 10 and 14, raw, and 10 LRU, on the full chip |
 | 110h | meshsim WORKER22 | B1's full regression on v1.3-tracer: run_tests quick + full extras (the B1 suites included), the full-size sort p4/uniform-k128 against 1,229,008 cycles, the 64-window Stage B smoke of both workloads (as 105) |
+| 110i | meshsim WORKER22 | B1 T2 at 2^29, evm-zone-29 segments 16, 32, 37, 48 (110f split): one JVM, the memory carried once, each segment's full chip in a thread |
+| 110j | meshsim WORKER22 | B1 T2 at 2^29, evm-zone-29 segments 37 (LRU), 64, 80, 84 (110f split) |
+| 110k | meshsim WORKER22 | B1 T2 at 2^29, cyclone-29 segments 10, 10 (LRU), 14, 16 (110g split) |
+| 110l | meshsim WORKER22 | B1 T2 at 2^29, cyclone-29 segments 32, 48, 64, 80 (110g split) |
