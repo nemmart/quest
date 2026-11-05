@@ -59,3 +59,7 @@ same number (`044b-...`), claimed the same way.
 | 097b | meshsim WORKER20 | re-run of 097 (its 3 attempts used up before the deliveries existed), reading them from persistent data (103, 104) |
 | 097c | meshsim WORKER20 | the v1.26 smoke again (as 097b) on the model with DECISIONS-v1.26 item 12 (part 0 the working state) |
 | 102b | meshsim WORKER20 | the v1.26 suites again (as 102) on the model with DECISIONS-v1.26 item 12 |
+| 105 | meshsim WORKER25 | v1.26.1 smoke: convert both w9 deliveries (v1.25) to v1.26.1 records in scratch, replay windows 0-63 of each (A, B, F every 16th), RUN_CONFIG rows | store log | rd_prev |
+| 106 | meshsim WORKER25 | v1.26.1 acceptance: every window of evm-zone-29 (converted in scratch) in Stage A and B, F every 64th, compared with 098 |
+| 107 | meshsim WORKER25 | v1.26.1 acceptance: every window of cyclone-29 (converted in scratch) in Stage A and B, F every 64th, compared with 099 |
+| 108 | meshsim WORKER25 | v1.26.1 suites: branch v1.26.1 run_tests quick + full extras with the sort, and p4/uniform-k128 against 1,229,008 cycles |
