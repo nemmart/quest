@@ -73,3 +73,4 @@ same number (`044b-...`), claimed the same way.
 | 110e | meshsim WORKER22 | B1 T2 at 2^29: segment 0 of evm-zone-29 and cyclone-29 on the full chip (C&C 3's tracer_ctl, the Tracer's DMA into the 64 tiles, every tile replaying), raw and LRU; the time per segment |
 | 110f | meshsim WORKER22 | B1 T2 at 2^29 with Q15's handshake: evm-zone-29 segments 16, 32, 48, 64, 80 (1 in 16) and the heaviest, 37 and 84, raw, and 37 LRU, on the full chip |
 | 110g | meshsim WORKER22 | B1 T2 at 2^29 with Q15's handshake: cyclone-29 segments 16, 32, 48, 64, 80 (1 in 16) and the heaviest, 10 and 14, raw, and 10 LRU, on the full chip |
+| 110h | meshsim WORKER22 | B1's full regression on v1.3-tracer: run_tests quick + full extras (the B1 suites included), the full-size sort p4/uniform-k128 against 1,229,008 cycles, the 64-window Stage B smoke of both workloads (as 105) |
