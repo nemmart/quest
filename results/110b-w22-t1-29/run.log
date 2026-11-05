@@ -1,0 +1,42 @@
+persistent data: /home/questrunner/data
+kit sha256 3eb8c73ba4d5b64492563263e913f54b6ab5f517de09cd30bd23ca754f43d7b2
+meshsim 37fb37e (v1.3-tracer), gold 7ef9039, built 2026-11-05
+start Thu Nov  5 12:06:08 PM UTC 2026 on godspeed, 16 threads
+openjdk version "21.0.12.1" 2026-08-18
+               total        used        free      shared  buff/cache   available
+Mem:              62           1           2           0          59          61
+evm-zone-29: inputs checked (delivery 7142e894c80a0c9d491f21c852a942885e0abd97cfe6aefd0101d716824e138f, w26 57dc0ffe7574ab3e11f79f8414501bd1ceb2fd75faab0b03f3b4a6c2c61cad2d)
+cyclone-29: inputs checked (delivery f8a0622e144a944c51386b5b36f81101dcdeb16e5a8d950c1e9ca0e3097f8982, w26 ace78f61efbb9c0e418a0b1d7f54a79f6e299b7ff45ad7f09537b11961b95fba)
+evm-zone-29-raw: exit 0, evm-zone-29: 8192 windows checked (536870912 rows), 0 failed, 94.1 s
+evm-zone-29-lru: exit 0, evm-zone-29: 8192 windows checked (536870912 rows), 0 failed, 168.4 s
+evm-zone-29-sep: exit 0, evm-zone-29: 8192 windows checked (536870912 rows), 0 failed, 94.6 s
+cyclone-29-raw: exit 0, cyclone-29: 8192 windows checked (536870912 rows), 0 failed, 110.9 s
+cyclone-29-lru: exit 0, cyclone-29: 8192 windows checked (536870912 rows), 0 failed, 220.3 s
+cyclone-29-sep: exit 0, cyclone-29: 8192 windows checked (536870912 rows), 0 failed, 110.9 s
+== evm-zone-29: 128 segments (85 with real rows), 536,870,912 rows (354,861,942 real), verdicts: 128 OK of 128
+core: 4.6497 cycles per real row (target 4); 4.4294 over every row, padding at 4
+  per segment with real rows: min 4.2306, median 4.6563, max 4.7064
+all-in per segment (rows only; the drain isn't modelled until milestone 2): median 19.50 ms, max 19.66 ms at 1 GHz, against 100 ms (segment 1)
+stalls, cycles per real row: ifetch 0.3062, dmiss 0.0084, bus 0.0000, probe 0.0221, advice 0.0000, newexp 0.0000, exp 0.0000; rows alone 4.3130
+  shared cache, mem index lines: 11,550,806 accesses, 99.99% hits
+  shared cache, mem data lines: 5,774,923 accesses, 98.15% hits
+  shared cache, map index lines: 153,132 accesses, 99.56% hits
+  shared cache, map data lines: 153,132 accesses, 50.40% hits
+the walk: 70,400,488 cycles, 58.9% of the memory system's cycles, 4.27% of the real rows' cycles (0.1984 per real row)
+write buffer: 1,502 early evictions, 556 read waits (25,850 cycles; worst segment 11,018)
+jumps: 3,902,035 LRU hits, 153,132 misses, 153,132 map lines read
+the map's effect on the data: data-line hits 98.15% shared, 98.16% with the map's own cache; real-row cycles 1,649,992,010 against 1,649,899,978 (+0.006%); the control's map LPDDR reads 76,141
+== cyclone-29: 128 segments (89 with real rows), 536,870,912 rows (371,526,406 real), verdicts: 128 OK of 128
+core: 4.4800 cycles per real row (target 4); 4.3321 over every row, padding at 4
+  per segment with real rows: min 4.0721, median 4.5219, max 5.6751
+all-in per segment (rows only; the drain isn't modelled until milestone 2): median 18.39 ms, max 23.80 ms at 1 GHz, against 100 ms (segment 10)
+stalls, cycles per real row: ifetch 0.0717, dmiss 0.1202, bus 0.0003, probe 0.1460, advice 0.0000, newexp 0.0005, exp 0.0000; rows alone 4.1413
+  shared cache, mem index lines: 4,471,554 accesses, 99.94% hits
+  shared cache, mem data lines: 2,235,777 accesses, 77.79% hits
+  shared cache, map index lines: 3,044,851 accesses, 99.98% hits
+  shared cache, map data lines: 3,044,851 accesses, 95.05% hits
+the walk: 45,346,142 cycles, 35.9% of the memory system's cycles, 2.72% of the real rows' cycles (0.1221 per real row)
+write buffer: 154,343 early evictions, 28,107 read waits (1,336,090 cycles; worst segment 786,908)
+jumps: 12,994,216 LRU hits, 3,044,851 misses, 3,044,851 map lines read
+the map's effect on the data: data-line hits 77.79% shared, 80.93% with the map's own cache; real-row cycles 1,664,424,671 against 1,654,334,981 (+0.610%); the control's map LPDDR reads 89,500
+verdict: PASS; exit 0 at Thu Nov  5 12:09:48 PM UTC 2026
