@@ -1,24 +1,24 @@
-# meshsim time probe (WORKER28): 1 chip(s) in this JVM, Fri Nov 06 04:20:33 UTC 2026
+# meshsim time probe (WORKER28): 1 chip(s) in this JVM, Fri Nov 06 04:29:38 UTC 2026
 TIME 1 (pool-1-thread-1, full+cc): 11399160 cycles, 712447 sampled (1 in 16); nanoTime() costs 41 ns, subtracted per section
-TIME 1 (pool-1-thread-1, full+cc) section request bus                              0.588 us/cycle
-TIME 1 (pool-1-thread-1, full+cc) section C&C endpoints                           -0.006 us/cycle
-TIME 1 (pool-1-thread-1, full+cc) section the 64 tiles (unsampled cycles)         38.668 us/cycle
-TIME 1 (pool-1-thread-1, full+cc) section CnC model                                0.022 us/cycle
-TIME 1 (pool-1-thread-1, full+cc) section CcCores (C&C 1-3)                        3.305 us/cycle
-TIME 1 (pool-1-thread-1, full+cc) section READY and error lines                    1.255 us/cycle
-TIME 1 (pool-1-thread-1, full+cc) section the cycle's tail                         0.096 us/cycle
-TIME 1 (pool-1-thread-1, full+cc) section checkInvariants                          1.875 us/cycle
-TIME 1 (pool-1-thread-1, full+cc) section total                                   45.802 us/cycle
+TIME 1 (pool-1-thread-1, full+cc) section request bus                              0.590 us/cycle
+TIME 1 (pool-1-thread-1, full+cc) section C&C endpoints                           -0.000 us/cycle
+TIME 1 (pool-1-thread-1, full+cc) section the 64 tiles (unsampled cycles)         34.272 us/cycle
+TIME 1 (pool-1-thread-1, full+cc) section CnC model                                0.010 us/cycle
+TIME 1 (pool-1-thread-1, full+cc) section CcCores (C&C 1-3)                        3.413 us/cycle
+TIME 1 (pool-1-thread-1, full+cc) section READY and error lines                    1.241 us/cycle
+TIME 1 (pool-1-thread-1, full+cc) section the cycle's tail                         0.097 us/cycle
+TIME 1 (pool-1-thread-1, full+cc) section checkInvariants                          1.752 us/cycle
+TIME 1 (pool-1-thread-1, full+cc) section total                                   41.374 us/cycle
 TIME 1 (pool-1-thread-1, full+cc) sampled tile-cycles by class: count, ns per tile-cycle (the children summed), then per child
 TIME 1 (pool-1-thread-1, full+cc) child       router   srq+inj  director      cmem      sram    writer        ag    tables      hist  readport    gather      core      slot  slot.end   ctl.end
-TIME 1 (pool-1-thread-1, full+cc) idle    44850049 232.3 |      36.1      94.3       1.1       1.9      14.5       1.5       8.1      18.5       4.0     -16.7      -8.3      -0.1      14.5     -24.1      86.9
-TIME 1 (pool-1-thread-1, full+cc) router  178793 353.0 |     130.8      98.6       2.3       5.3      15.5       0.7       7.4      21.3      10.9     -13.4      -7.8      -5.6      18.8     -23.0      91.2
-TIME 1 (pool-1-thread-1, full+cc) engines 412972 726.2 |      71.2     162.7      45.2       2.8      96.7      24.8      10.8      21.6       6.2     -15.1      -7.2     108.7     123.0     -23.9      98.8
-TIME 1 (pool-1-thread-1, full+cc) core    154794 423.8 |      40.5     110.0       3.1       4.2      19.3       3.5      11.8      22.4       5.7     -15.5      -7.3      89.2      63.9     -23.4      96.4
-TIME 1 (pool-1-thread-1, full+cc) mesh cores' step by state (ns per core-cycle, count): halted -9.3 (32688352) wfi 27.1 (12753462) stalled 17.9 (32143) running 107.9 (122651)
-TIME 1 (pool-1-thread-1, full+cc) cc1 per child (ns/cycle): router 47.1 srq+inj 107.9 director 3.2 cmem 6.4 sram 21.6 writer 12.8 ag 11.9 tables 25.9 hist 11.1 readport -13.5 gather -12.8 core 120.5 slot 104.4 slot.end -25.5 ctl.end 78.6; total 499.7; the slot: peripheral 88.2, DMA 14.4
-TIME 1 (pool-1-thread-1, full+cc) cc1 core by state (ns per cycle in it, cycles): wfi 120.4 (11398613) stalled 1399.3 (68) running 3015.5 (479)
-TIME 1 (pool-1-thread-1, full+cc) cc2 per child (ns/cycle): router 44.1 srq+inj 95.0 director 0.8 cmem -1.2 sram 13.9 writer 13.2 ag 2.3 tables 16.6 hist 0.2 readport -16.2 gather -10.7 core 94.2 slot 58.3 slot.end -25.6 ctl.end 83.6; total 368.4; the slot: peripheral 32.0, DMA 18.5
-TIME 1 (pool-1-thread-1, full+cc) cc2 core by state (ns per cycle in it, cycles): wfi 94.1 (11399098) stalled 1365.9 (8) running 4020.9 (54)
-TIME 1 (pool-1-thread-1, full+cc) cc3 per child (ns/cycle): router 51.0 srq+inj 99.7 director 1.2 cmem -2.1 sram 26.5 writer 4.8 ag 8.8 tables 23.7 hist -2.3 readport -17.8 gather -10.8 core 110.6 slot 159.0 slot.end -25.3 ctl.end 78.5; total 505.4; the slot: peripheral 130.5, DMA 27.2
-TIME 1 (pool-1-thread-1, full+cc) cc3 core by state (ns per cycle in it, cycles): halted -10.2 (212690) wfi 113.6 (9827974) stalled 16.8 (219317) running 125.2 (1139179)
+TIME 1 (pool-1-thread-1, full+cc) idle    44850049 264.8 |      36.9      98.5       1.9       4.2      15.6       4.2       8.2      21.5       6.6     -15.1      -8.7      -0.0      15.2     -23.8      99.6
+TIME 1 (pool-1-thread-1, full+cc) router  178793 366.0 |     134.4     100.4       3.3       5.8      17.8       6.4      10.6      20.0       8.2     -13.3      -8.9      -7.2      18.9     -23.5      93.1
+TIME 1 (pool-1-thread-1, full+cc) engines 412972 759.9 |      74.1     160.7      36.3       3.8     105.3      30.4      10.8      24.6       5.3     -14.3      -6.9     110.1     136.2     -24.0     107.6
+TIME 1 (pool-1-thread-1, full+cc) core    154794 474.9 |      42.5     117.2       5.2       7.1      21.6       7.4      13.8      26.0       8.5     -14.0      -7.5      87.9      71.5     -23.0     110.8
+TIME 1 (pool-1-thread-1, full+cc) mesh cores' step by state (ns per core-cycle, count): halted -10.0 (32688352) wfi 29.0 (12753462) stalled 17.1 (32143) running 106.4 (122651)
+TIME 1 (pool-1-thread-1, full+cc) cc1 per child (ns/cycle): router 43.3 srq+inj 120.8 director 1.4 cmem -5.6 sram 3.3 writer 11.5 ag 6.0 tables 24.7 hist 10.6 readport -14.3 gather -1.1 core 128.2 slot 101.4 slot.end -25.2 ctl.end 89.1; total 494.0; the slot: peripheral 85.3, DMA 14.3
+TIME 1 (pool-1-thread-1, full+cc) cc1 core by state (ns per cycle in it, cycles): wfi 128.1 (11398613) stalled 1165.8 (68) running 3286.5 (479)
+TIME 1 (pool-1-thread-1, full+cc) cc2 per child (ns/cycle): router 45.2 srq+inj 101.2 director -2.0 cmem -6.5 sram 21.7 writer 11.7 ag 7.1 tables 22.2 hist 9.2 readport -17.0 gather 5.6 core 114.0 slot 50.1 slot.end -25.4 ctl.end 92.2; total 429.3; the slot: peripheral 32.2, DMA 18.7
+TIME 1 (pool-1-thread-1, full+cc) cc2 core by state (ns per cycle in it, cycles): wfi 114.0 (11399098) stalled 1213.3 (8) running 3264.8 (54)
+TIME 1 (pool-1-thread-1, full+cc) cc3 per child (ns/cycle): router 52.7 srq+inj 112.4 director 4.7 cmem -13.7 sram 13.4 writer -2.2 ag 10.5 tables 27.9 hist 2.6 readport -16.4 gather 0.8 core 120.3 slot 159.8 slot.end -25.2 ctl.end 108.6; total 556.2; the slot: peripheral 135.0, DMA 26.9
+TIME 1 (pool-1-thread-1, full+cc) cc3 core by state (ns per cycle in it, cycles): halted -6.3 (212690) wfi 124.3 (9827974) stalled 37.3 (219317) running 125.3 (1139179)
