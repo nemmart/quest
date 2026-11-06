@@ -50,6 +50,13 @@ results/       runner output: results/NNN-name/{run.log, DONE|FAILED, artifacts.
   through review; current posture is trust-with-audit.
 
 
+## Queue order: letter suffixes sort first (Nov 6 2026)
+
+The runner orders `tasks/` with a locale-aware `sort`, so a task whose number has a letter suffix runs **before** the plain
+number: `113b` and `113c` run ahead of `113`, `110b` ahead of `110`. Found by WORKER28, whose 113 waited behind its 113b-113d.
+**When order matters, claim plain numbers** (a fresh number for a re-run, not a suffix), or expect suffixed tasks to go first.
+(The runner could sort with `LC_ALL=C sort` to fix it; not changed.)
+
 ## Runner retry behaviour (Aug 23 2026)
 
 A task is considered handled only when `results/<name>/DONE` exists. A
