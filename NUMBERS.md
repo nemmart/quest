@@ -101,3 +101,4 @@ same number (`044b-...`), claimed the same way.
 | 116b | meshsim WORKER28 | latency 8: T2 segment 0 of both workloads and Stage B/F windows 0-63, stage 1 off and on (fingerprints, logs, CSVs, speed) |
 | 117 | meshsim WORKER28 | stage 1 on main (sim-idle-skip fec569c: main merged forward, GO/READY/error 8, stage_delay 64, the Tracer's counters in the fingerprint): T2 segment 0 and Stage B/F windows 0-63 of both workloads, off and on |
 | 117b | meshsim WORKER28 | the same commit: the quick suite off and on, the sort included; shuffled on against unshuffled off |
+| 118 | meshsim WORKER28 | the full regression on main 2d8d9c1 (stage 1 merged, GO/READY/error 8, stage_delay 64; stage 1 on): quick and full suites, the full-size sort p4/uniform-k128, the 64-window Stage B smoke, T2 segment 0 of both workloads; the baselines for BASELINES-8.md |
