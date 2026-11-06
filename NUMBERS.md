@@ -99,3 +99,5 @@ same number (`044b-...`), claimed the same way.
 | 116 | meshsim WORKER29 | P2 step 1, the profile of a busy chip (sim-step-cost 2ccc514, engine unchanged): the full-size sort p4/uniform-k128, ReplayBench (all 64 tiles replaying, segment 0 of both workloads, 5 repeats) and its synthetic run, T2 segment 0 evm-zone-29 with stage 1 on; each under JFR and plain |
 | 116 (duplicate of WORKER29's; WORKER28's baselines) | meshsim WORKER28 | the baselines at GO/READY/error latency 8 (sim-idle-skip, the latency commit e8b18e6): quick and full suites, the full-size sort p4/uniform-k128, the 64-window Stage B smoke (WORKER22's 110v regression, rerun) |
 | 116b | meshsim WORKER28 | latency 8: T2 segment 0 of both workloads and Stage B/F windows 0-63, stage 1 off and on (fingerprints, logs, CSVs, speed) |
+| 117 | meshsim WORKER28 | stage 1 on main (sim-idle-skip fec569c: main merged forward, GO/READY/error 8, stage_delay 64, the Tracer's counters in the fingerprint): T2 segment 0 and Stage B/F windows 0-63 of both workloads, off and on |
+| 117b | meshsim WORKER28 | the same commit: the quick suite off and on, the sort included; shuffled on against unshuffled off |
