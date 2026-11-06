@@ -1,7 +1,7 @@
 persistent data: /home/questrunner/data
 kit sha256 29aa1755bfcb9f1eb2a53615b49333f1ef222e4be5149c6659f5fe64c06dcbf4
 meshsim 982d026 (sim-idle-profile), gold eeb64b5, built 2026-11-06
-start Fri Nov  6 06:54:02 AM UTC 2026 on godspeed, 16 threads
+start Fri Nov  6 07:15:09 AM UTC 2026 on godspeed, 16 threads
 openjdk version "21.0.12.1" 2026-08-18
                total        used        free      shared  buff/cache   available
 Mem:              62           1          42           0          19          61
@@ -9,68 +9,68 @@ evm-zone-29: inputs checked
 cyclone-29: inputs checked
 manifest /tmp/w28-profile/v1261/evm-zone-29.manifest.json sha256 5bffa524ed8901f1957e546385697e463bc2ddce5b00d81d698ad8cb4078a0aa
 manifest /tmp/w28-profile/v1261/cyclone-29.manifest.json sha256 2d5e368e5721dcc0b07997a76a1834b98b998ad1d49bfed9a27ee42ede333bd5
-jfr-t2-evm-zone-29: exit 0; evm-zone-29: T2 on 1 run(s), 0 failed, 1253 s 
-probe-t2-evm-zone-29: exit 0; evm-zone-29: T2 on 1 run(s), 0 failed, 1066 s 
+jfr-t2-evm-zone-29: exit 0; evm-zone-29: T2 on 1 run(s), 0 failed, 1273 s 
+probe-t2-evm-zone-29: exit 0; evm-zone-29: T2 on 1 run(s), 0 failed, 1108 s 
 jfr-sb-evm-zone-29: exit 1; 
 probe-sb-evm-zone-29: exit 1; 
-jfr-t2-cyclone-29: exit 0; cyclone-29: T2 on 1 run(s), 0 failed, 1252 s 
-probe-t2-cyclone-29: exit 0; cyclone-29: T2 on 1 run(s), 0 failed, 1165 s 
+jfr-t2-cyclone-29: exit 0; cyclone-29: T2 on 1 run(s), 0 failed, 1231 s 
+probe-t2-cyclone-29: exit 0; cyclone-29: T2 on 1 run(s), 0 failed, 1139 s 
 jfr-sb-cyclone-29: exit 1; 
 probe-sb-cyclone-29: exit 1; 
-/tmp/w28-profile/jfr-sb-cyclone-29.jfr: 17 execution samples, 0 (0.0%) inside Chip.runCycle
+/tmp/w28-profile/jfr-sb-cyclone-29.jfr: 23 execution samples, 0 (0.0%) inside Chip.runCycle
 == unit (innermost runCycle/endCycle; share of the simulation's samples)
 == self (top frame's class)
-/tmp/w28-profile/jfr-sb-evm-zone-29.jfr: 15 execution samples, 0 (0.0%) inside Chip.runCycle
+/tmp/w28-profile/jfr-sb-evm-zone-29.jfr: 21 execution samples, 0 (0.0%) inside Chip.runCycle
 == unit (innermost runCycle/endCycle; share of the simulation's samples)
 == self (top frame's class)
-/tmp/w28-profile/jfr-t2-cyclone-29.jfr: 105187 execution samples, 105094 (99.9%) inside Chip.runCycle
+/tmp/w28-profile/jfr-t2-cyclone-29.jfr: 105748 execution samples, 105620 (99.9%) inside Chip.runCycle
 == unit (innermost runCycle/endCycle; share of the simulation's samples)
-   20.65%     21703  SRAMReadQueue
-   19.96%     20981  TileControl.endCycle
-    7.63%      8019  Router
-    6.83%      7174  TableStore
-    4.82%      5063  Replayer
-    4.21%      4422  AddressGenerator
-    3.80%      3992  Controller
-    3.73%      3924  HistStore
-    3.70%      3884  BigSRAM
-    3.64%      3825  Chip (own loop)
-    3.35%      3519  Chip.checkInvariants
-    2.64%      2772  PeripheralSlot
-    2.32%      2435  WriteEngine
-    2.07%      2175  TrafficDirector
-    2.06%      2168  GatherEngine
-    1.69%      1781  Tile
-    1.67%      1753  InjectionPath
-    1.51%      1583  RequestBus
-    1.09%      1148  ControllerMemories
-    0.90%       945  Chip.scanOverflows
-    0.53%       557  PeripheralSlot.endCycle
-    0.41%       427  PeripheralSlot$Dma
-/tmp/w28-profile/jfr-t2-evm-zone-29.jfr: 105417 execution samples, 105277 (99.9%) inside Chip.runCycle
+   19.79%     20907  TileControl.endCycle
+   19.19%     20265  SRAMReadQueue
+    7.54%      7968  Router
+    6.46%      6822  TableStore
+    4.80%      5071  Replayer
+    4.37%      4619  Controller
+    4.02%      4244  AddressGenerator
+    3.87%      4086  HistStore
+    3.73%      3937  BigSRAM
+    3.52%      3723  Chip.checkInvariants
+    2.82%      2976  Tile
+    2.67%      2816  PeripheralSlot
+    2.28%      2406  WriteEngine
+    2.15%      2275  TrafficDirector
+    2.03%      2148  Chip (own loop)
+    1.92%      2024  GatherEngine
+    1.88%      1990  CcCores.endCycle
+    1.52%      1602  RequestBus
+    1.50%      1585  InjectionPath
+    1.09%      1152  ControllerMemories
+    0.94%       994  Chip.scanOverflows
+    0.63%       662  PeripheralSlot.endCycle
+/tmp/w28-profile/jfr-t2-evm-zone-29.jfr: 106921 execution samples, 106808 (99.9%) inside Chip.runCycle
 == unit (innermost runCycle/endCycle; share of the simulation's samples)
-   20.80%     21902  SRAMReadQueue
-   19.65%     20688  TileControl.endCycle
-    7.68%      8082  Router
-    5.86%      6172  TableStore
-    4.90%      5154  Replayer
-    4.64%      4887  AddressGenerator
-    3.84%      4039  Controller
-    3.76%      3954  BigSRAM
-    3.52%      3707  Chip.checkInvariants
-    3.50%      3686  HistStore
-    2.60%      2733  WriteEngine
-    2.47%      2597  PeripheralSlot
-    2.06%      2173  Chip (own loop)
-    1.99%      2095  CcCores.endCycle
-    1.98%      2085  InjectionPath
-    1.91%      2009  TrafficDirector
-    1.88%      1982  GatherEngine
-    1.82%      1912  Tile
-    1.58%      1660  RequestBus
-    0.96%      1012  Chip.scanOverflows
-    0.80%       839  ControllerMemories
-    0.57%       596  PeripheralSlot.endCycle
+   20.44%     21829  TileControl.endCycle
+   20.27%     21652  SRAMReadQueue
+    8.13%      8680  Router
+    7.06%      7537  TableStore
+    5.01%      5346  Replayer
+    4.15%      4428  AddressGenerator
+    3.58%      3823  Chip.checkInvariants
+    3.51%      3747  Chip (own loop)
+    3.51%      3745  Controller
+    3.35%      3577  BigSRAM
+    3.23%      3455  HistStore
+    2.50%      2665  WriteEngine
+    2.48%      2647  PeripheralSlot
+    2.07%      2210  InjectionPath
+    2.06%      2199  GatherEngine
+    1.75%      1868  TrafficDirector
+    1.67%      1786  Tile
+    1.59%      1696  RequestBus
+    1.14%      1217  ControllerMemories
+    1.04%      1112  Chip.scanOverflows
+    0.39%       419  PeripheralSlot$Dma
+    0.30%       324  ReadPort
 == probe-t2-cyclone-29.txt
 AGG full+cc: 1 chips, 11399160 cycles; tiles (unparked) 729546240 unit-cycles, parked 0
 AGG full+cc   idle      98.36%
@@ -113,4 +113,4 @@ Exception in thread "main" java.nio.file.NoSuchFileException: /tmp/w28-profile/k
 	at java.base/sun.nio.fs.UnixException.translateToIOException(UnixException.java:92)
 	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:106)
 	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:111)
-verdict: FAIL; exit 1 at Fri Nov  6 07:15:03 AM UTC 2026
+verdict: FAIL; exit 1 at Fri Nov  6 07:36:29 AM UTC 2026
