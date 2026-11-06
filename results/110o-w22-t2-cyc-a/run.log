@@ -1,0 +1,14 @@
+persistent data: /home/questrunner/data
+kit sha256 0334e64ebc34e8a81b0b9841a37af02767ab4f8f39cf3c2059b4e7cc61cee995
+meshsim 515c11a (v1.3-tracer), gold eeb64b5, built 2026-11-06
+start Fri Nov  6 03:16:39 AM UTC 2026 on godspeed, 16 threads
+openjdk version "21.0.12.1" 2026-08-18
+               total        used        free      shared  buff/cache   available
+Mem:              62           1          44           0          17          61
+cyclone-29: inputs checked (delivery f8a0622e144a944c51386b5b36f81101dcdeb16e5a8d950c1e9ca0e3097f8982, w26 ace78f61efbb9c0e418a0b1d7f54a79f6e299b7ff45ad7f09537b11961b95fba)
+cyclone-29-t: exit 0, cyclone-29: T2 on 4 run(s), 0 failed, 1298 s
+cyclone-29 segment 16 (t, 64 windows): OK; C&C 3 18,928,138 cycles = 18.93 ms at 1 GHz (Tracer rows 17,808,969, drain 1,086,269); 4045 transfers, 479,020 packets; tiles' replay max 210,175 cycles; 4,194,304 rows checked; wall 904 s
+cyclone-29 segment 10c (t, 64 windows): OK; C&C 3 27,233,105 cycles = 27.23 ms at 1 GHz (Tracer rows 23,810,201, drain 3,387,372); 3522 transfers, 408,322 packets; tiles' replay max 200,712 cycles; 4,194,304 rows checked; wall 1262 s
+cyclone-29 segment 10 (t, 64 windows): OK; C&C 3 28,154,425 cycles = 28.15 ms at 1 GHz (Tracer rows 23,810,201, drain 4,311,668); 15716 transfers, 1,974,150 packets; tiles' replay max 200,588 cycles; 4,194,304 rows checked; wall 1280 s
+cyclone-29 segment 14 (t, 64 windows): OK; C&C 3 27,400,298 cycles = 27.40 ms at 1 GHz (Tracer rows 23,079,946, drain 4,287,847); 15626 transfers, 1,963,341 packets; tiles' replay max 198,628 cycles; 4,194,304 rows checked; wall 1286 s
+verdict: PASS; exit 0 at Fri Nov  6 03:38:17 AM UTC 2026
