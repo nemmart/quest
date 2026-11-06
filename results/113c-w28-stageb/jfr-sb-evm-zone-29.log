@@ -1,6 +1,6 @@
-[1.140s][info][jfr,startup] Started recording 1. No limit specified, using maxsize=250MB as default.
-[1.140s][info][jfr,startup] 
-[1.140s][info][jfr,startup] Use jcmd 502508 JFR.dump name=1 to copy recording data to file.
+[0.583s][info][jfr,startup] Started recording 1. No limit specified, using maxsize=250MB as default.
+[0.583s][info][jfr,startup] 
+[0.583s][info][jfr,startup] Use jcmd 503494 JFR.dump name=1 to copy recording data to file.
 evm-zone-29  window     0  state-pick OK     65536 rows  pass   197047 cycles  3.007 cycles/row  newexp 0 (served 0, slow path 0), refills 26, stalls [0, 184, 0, 0, 109, 98, 0]  [meas: StageB]
 evm-zone-29  window     0  state-pick OK     65536 rows  pass   197047 cycles  3.007 cycles/row  newexp 0 (served 0, slow path 0), refills 26, stalls [0, 184, 0, 0, 109, 98, 0]  [meas: StageB]
 evm-zone-29  window     1  state-pick OK     65536 rows  pass   197047 cycles  3.007 cycles/row  newexp 0 (served 0, slow path 0), refills 23, stalls [0, 184, 0, 0, 0, 255, 0]  [meas: StageB]
@@ -34,4 +34,4 @@ evm-zone-29  window    14  state-pick OK     65536 rows  pass   197038 cycles  3
 evm-zone-29  window    15  state-pick OK     65536 rows  pass   197041 cycles  3.007 cycles/row  newexp 0 (served 0, slow path 0), refills 23, stalls [0, 184, 0, 0, 0, 249, 0]  [meas: StageB]
 evm-zone-29  window    15  state-pick OK     65536 rows  pass   197041 cycles  3.007 cycles/row  newexp 0 (served 0, slow path 0), refills 23, stalls [0, 184, 0, 0, 0, 249, 0]  [meas: StageB]
 ReplayShard evm-zone-29 B phase 0/1: 32 runs, 0 failed
-jfr-sb-evm-zone-29: exit 0, 191 s
+jfr-sb-evm-zone-29: exit 0, 190 s

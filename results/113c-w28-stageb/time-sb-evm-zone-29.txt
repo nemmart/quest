@@ -1,409 +1,409 @@
-# meshsim time probe (WORKER28): 24 chip(s) in this JVM, Fri Nov 06 04:33:02 UTC 2026
-TIME 1 (main, lone): 226557 cycles, 14159 sampled (1 in 16); nanoTime() costs 53 ns, subtracted per section
-TIME 1 (main, lone) section request bus                              1.023 us/cycle
-TIME 1 (main, lone) section C&C endpoints                            0.017 us/cycle
-TIME 1 (main, lone) section the 64 tiles (unsampled cycles)          2.657 us/cycle
-TIME 1 (main, lone) section CnC model                               -0.002 us/cycle
-TIME 1 (main, lone) section CcCores (C&C 1-3)                       -0.053 us/cycle
-TIME 1 (main, lone) section READY and error lines                    1.362 us/cycle
-TIME 1 (main, lone) section the cycle's tail                         0.137 us/cycle
-TIME 1 (main, lone) section checkInvariants                          2.353 us/cycle
-TIME 1 (main, lone) section total                                    7.494 us/cycle
+# meshsim time probe (WORKER28): 24 chip(s) in this JVM, Fri Nov 06 04:37:41 UTC 2026
+TIME 1 (main, lone): 226557 cycles, 14159 sampled (1 in 16); nanoTime() costs 61 ns, subtracted per section
+TIME 1 (main, lone) section request bus                              0.874 us/cycle
+TIME 1 (main, lone) section C&C endpoints                           -0.007 us/cycle
+TIME 1 (main, lone) section the 64 tiles (unsampled cycles)          2.165 us/cycle
+TIME 1 (main, lone) section CnC model                                0.002 us/cycle
+TIME 1 (main, lone) section CcCores (C&C 1-3)                       -0.061 us/cycle
+TIME 1 (main, lone) section READY and error lines                    1.165 us/cycle
+TIME 1 (main, lone) section the cycle's tail                         0.132 us/cycle
+TIME 1 (main, lone) section checkInvariants                          1.877 us/cycle
+TIME 1 (main, lone) section total                                    6.149 us/cycle
 TIME 1 (main, lone) sampled tile-cycles by class: count, ns per tile-cycle (the children summed), then per child
 TIME 1 (main, lone) child       router   srq+inj  director      cmem      sram    writer        ag    tables      hist  readport    gather      core      slot  slot.end   ctl.end
-TIME 1 (main, lone) idle    1 37547.0 |    3549.0    8338.0    1536.0     783.0    1169.0    1197.0    2126.0    2342.0    1269.0     363.0     464.0    3758.0    3171.0     470.0    7012.0
-TIME 1 (main, lone) router  1 6144.0 |    3511.0     572.0      51.0      57.0     162.0      64.0     111.0     197.0      47.0      32.0      41.0     450.0     324.0     132.0     393.0
-TIME 1 (main, lone) engines 12216 1337.5 |      49.5     177.3      37.5      13.3      33.1       6.0      23.1      28.5      49.8       1.8       5.4      54.3     761.8     -14.7     110.9
-TIME 1 (main, lone) core    1941 5668.7 |     697.4     956.0      77.8      58.1     137.5      66.2     131.2     183.7     308.4      37.5      40.7    2279.5     258.7      43.6     392.3
-TIME 1 (main, lone) mesh cores' step by state (ns per core-cycle, count): wfi 54.6 (12218) stalled 102.1 (235) running 2579.4 (1706)
-TIME 2 (main, full): 226557 cycles, 14159 sampled (1 in 16); nanoTime() costs 53 ns, subtracted per section
-TIME 2 (main, full) section request bus                              0.735 us/cycle
-TIME 2 (main, full) section C&C endpoints                            0.026 us/cycle
-TIME 2 (main, full) section the 64 tiles (unsampled cycles)         51.156 us/cycle
-TIME 2 (main, full) section CnC model                                0.032 us/cycle
-TIME 2 (main, full) section CcCores (C&C 1-3)                       -0.053 us/cycle
-TIME 2 (main, full) section READY and error lines                    0.974 us/cycle
+TIME 1 (main, lone) idle    1 33194.0 |    3370.0    7400.0    1177.0     415.0     902.0     912.0    1459.0    2792.0    1166.0     537.0     309.0    3469.0    2676.0     485.0    6125.0
+TIME 1 (main, lone) router  1 3754159.0 |    3397.0     497.0      87.0      30.0     148.0      57.0     118.0     177.0      51.0      20.0      28.0 3744218.0    1989.0     332.0    3010.0
+TIME 1 (main, lone) engines 12216 1010.0 |      34.6     145.6      24.0       4.4      29.8       4.3       4.4      12.4       9.3      -5.8     -10.1      45.9     635.0     -20.3      96.4
+TIME 1 (main, lone) core    1941 14205.5 |     213.5     268.2      55.1      25.7    1999.3      56.9    6895.2     134.7    1611.0      38.3      37.6    2179.0     257.7      45.4     388.1
+TIME 1 (main, lone) mesh cores' step by state (ns per core-cycle, count): wfi 352.6 (12218) stalled 96.1 (235) running 2465.9 (1706)
+TIME 2 (main, full): 226557 cycles, 14159 sampled (1 in 16); nanoTime() costs 61 ns, subtracted per section
+TIME 2 (main, full) section request bus                              0.763 us/cycle
+TIME 2 (main, full) section C&C endpoints                            0.003 us/cycle
+TIME 2 (main, full) section the 64 tiles (unsampled cycles)         52.562 us/cycle
+TIME 2 (main, full) section CnC model                                0.030 us/cycle
+TIME 2 (main, full) section CcCores (C&C 1-3)                       -0.061 us/cycle
+TIME 2 (main, full) section READY and error lines                    1.225 us/cycle
 TIME 2 (main, full) section the cycle's tail                         0.085 us/cycle
-TIME 2 (main, full) section checkInvariants                          2.058 us/cycle
-TIME 2 (main, full) section total                                   55.014 us/cycle
+TIME 2 (main, full) section checkInvariants                          2.169 us/cycle
+TIME 2 (main, full) section total                                   56.775 us/cycle
 TIME 2 (main, full) sampled tile-cycles by class: count, ns per tile-cycle (the children summed), then per child
 TIME 2 (main, full) child       router   srq+inj  director      cmem      sram    writer        ag    tables      hist  readport    gather      core      slot  slot.end   ctl.end
-TIME 2 (main, full) idle    891985 402.5 |      59.1     164.5      12.0       8.2      26.0       5.5      18.8      41.6       9.5     -20.4     -10.8      27.1     -33.2     -34.3     128.9
-TIME 2 (main, full) router  1 2218.0 |     718.0     430.0      36.0      26.0      66.0      53.0      15.0     238.0     179.0       6.0      31.0      39.0     304.0     -33.0     110.0
-TIME 2 (main, full) engines 12249 1747.2 |     153.5     261.0      94.5      63.7      88.2      91.0      35.3      96.3      57.4      29.4      27.7      71.3     400.2       0.7     276.9
-TIME 2 (main, full) core    1941 1522.4 |     145.4     214.8      82.3      56.9      90.5      85.4      43.6      98.7      56.0      26.1      26.5     284.7     120.2       3.1     188.2
-TIME 2 (main, full) mesh cores' step by state (ns per core-cycle, count): wfi 27.7 (904235) stalled 57.5 (235) running 316.0 (1706)
-TIME 3 (main, lone): 226557 cycles, 14159 sampled (1 in 16); nanoTime() costs 53 ns, subtracted per section
-TIME 3 (main, lone) section request bus                              0.411 us/cycle
-TIME 3 (main, lone) section C&C endpoints                           -0.023 us/cycle
-TIME 3 (main, lone) section the 64 tiles (unsampled cycles)          0.537 us/cycle
-TIME 3 (main, lone) section CnC model                               -0.018 us/cycle
-TIME 3 (main, lone) section CcCores (C&C 1-3)                       -0.053 us/cycle
-TIME 3 (main, lone) section READY and error lines                    0.604 us/cycle
-TIME 3 (main, lone) section the cycle's tail                         0.032 us/cycle
-TIME 3 (main, lone) section checkInvariants                          1.061 us/cycle
-TIME 3 (main, lone) section total                                    2.552 us/cycle
+TIME 2 (main, full) idle    891985 299.7 |      53.1     164.1       6.0      -1.8      23.2      -4.6      11.7      37.7      -0.8     -27.4     -18.8      15.7     -40.1     -41.6     123.3
+TIME 2 (main, full) router  1 2166.0 |     704.0     416.0     169.0     124.0      72.0      86.0     -20.0      46.0     106.0      48.0     -17.0      91.0      81.0     -42.0     302.0
+TIME 2 (main, full) engines 12249 2053.2 |     133.9     315.1     128.3     153.9      94.6      65.1      21.6      81.3      61.2      63.1      20.4      71.5     439.3      -8.8     412.8
+TIME 2 (main, full) core    1941 2268.9 |     188.7     332.5     158.6     134.6     127.2     101.2      56.0     123.7      84.9      81.1      38.9     343.6     141.7       2.3     354.0
+TIME 2 (main, full) mesh cores' step by state (ns per core-cycle, count): wfi 16.4 (904235) stalled 134.3 (235) running 372.4 (1706)
+TIME 3 (main, lone): 226557 cycles, 14159 sampled (1 in 16); nanoTime() costs 61 ns, subtracted per section
+TIME 3 (main, lone) section request bus                              0.347 us/cycle
+TIME 3 (main, lone) section C&C endpoints                           -0.030 us/cycle
+TIME 3 (main, lone) section the 64 tiles (unsampled cycles)          0.457 us/cycle
+TIME 3 (main, lone) section CnC model                               -0.031 us/cycle
+TIME 3 (main, lone) section CcCores (C&C 1-3)                       -0.061 us/cycle
+TIME 3 (main, lone) section READY and error lines                    0.507 us/cycle
+TIME 3 (main, lone) section the cycle's tail                         0.020 us/cycle
+TIME 3 (main, lone) section checkInvariants                          0.925 us/cycle
+TIME 3 (main, lone) section total                                    2.133 us/cycle
 TIME 3 (main, lone) sampled tile-cycles by class: count, ns per tile-cycle (the children summed), then per child
 TIME 3 (main, lone) child       router   srq+inj  director      cmem      sram    writer        ag    tables      hist  readport    gather      core      slot  slot.end   ctl.end
-TIME 3 (main, lone) idle    1 13360.0 |     381.0     310.0     848.0     269.0     271.0      84.0      67.0     222.0     125.0      34.0     108.0     173.0     105.0      -5.0   10368.0
-TIME 3 (main, lone) router  1 758.0 |     178.0     208.0      50.0       8.0      20.0      47.0      17.0      50.0      -8.0      -1.0       3.0     114.0     -12.0     -28.0     112.0
-TIME 3 (main, lone) engines 12231 -13.3 |      -3.0      40.9      -4.5      -9.7      -2.4      -8.9     -13.3     -12.7     -13.3     -18.8     -20.2       3.1      52.1     -34.6      32.0
-TIME 3 (main, lone) core    1926 444.3 |      16.7      78.3      43.9       8.1      20.3      13.3       8.5      12.6      -2.1       1.8       1.8     141.3      10.0     -23.4     113.2
-TIME 3 (main, lone) mesh cores' step by state (ns per core-cycle, count): wfi 3.2 (12233) stalled 59.2 (240) running 153.0 (1686)
-TIME 4 (main, full): 226557 cycles, 14159 sampled (1 in 16); nanoTime() costs 53 ns, subtracted per section
-TIME 4 (main, full) section request bus                              0.769 us/cycle
-TIME 4 (main, full) section C&C endpoints                            0.025 us/cycle
-TIME 4 (main, full) section the 64 tiles (unsampled cycles)         48.729 us/cycle
-TIME 4 (main, full) section CnC model                                0.022 us/cycle
-TIME 4 (main, full) section CcCores (C&C 1-3)                       -0.053 us/cycle
-TIME 4 (main, full) section READY and error lines                    0.990 us/cycle
-TIME 4 (main, full) section the cycle's tail                         0.111 us/cycle
-TIME 4 (main, full) section checkInvariants                          2.031 us/cycle
-TIME 4 (main, full) section total                                   52.625 us/cycle
+TIME 3 (main, lone) idle    1 18175.0 |     524.0     750.0     157.0    1215.0     401.0     214.0     226.0     341.0     267.0     165.0     157.0     598.0      77.0     141.0   12942.0
+TIME 3 (main, lone) router  1 80.0 |     184.0      88.0       8.0      -2.0     -14.0     -20.0     -21.0     -23.0     -21.0     -27.0     -32.0     -18.0     -14.0     -42.0      34.0
+TIME 3 (main, lone) engines 12231 -175.5 |     -16.6      29.2     -16.5     -17.7     -12.3     -21.5     -22.4     -21.5     -20.7     -26.9     -28.9     -10.2      36.7     -42.1      16.1
+TIME 3 (main, lone) core    1926 -20.7 |     -11.4      40.2     -11.0      -1.4       3.0     -13.6     -10.6      -2.6     -16.5     -19.4     -23.3      25.4     -16.8     -35.5      72.7
+TIME 3 (main, lone) mesh cores' step by state (ns per core-cycle, count): wfi -10.2 (12233) stalled -5.5 (240) running 29.8 (1686)
+TIME 4 (main, full): 226557 cycles, 14159 sampled (1 in 16); nanoTime() costs 61 ns, subtracted per section
+TIME 4 (main, full) section request bus                              0.702 us/cycle
+TIME 4 (main, full) section C&C endpoints                            0.017 us/cycle
+TIME 4 (main, full) section the 64 tiles (unsampled cycles)         52.174 us/cycle
+TIME 4 (main, full) section CnC model                               -0.007 us/cycle
+TIME 4 (main, full) section CcCores (C&C 1-3)                       -0.061 us/cycle
+TIME 4 (main, full) section READY and error lines                    1.107 us/cycle
+TIME 4 (main, full) section the cycle's tail                         0.128 us/cycle
+TIME 4 (main, full) section checkInvariants                          2.110 us/cycle
+TIME 4 (main, full) section total                                   56.171 us/cycle
 TIME 4 (main, full) sampled tile-cycles by class: count, ns per tile-cycle (the children summed), then per child
 TIME 4 (main, full) child       router   srq+inj  director      cmem      sram    writer        ag    tables      hist  readport    gather      core      slot  slot.end   ctl.end
-TIME 4 (main, full) idle    891985 372.3 |      54.7     151.9      12.4       8.4      32.4       4.6      18.5      37.5       8.7     -21.1     -11.6      22.6     -33.4     -34.7     121.4
-TIME 4 (main, full) router  1 1627.0 |     435.0     219.0     134.0      41.0     144.0      44.0      34.0      41.0     155.0      22.0       8.0      44.0      87.0     -35.0     254.0
-TIME 4 (main, full) engines 12264 1757.7 |     115.6     264.3      77.2      70.9      86.9      87.8      50.4      74.5      88.3      52.7      27.2     112.9     324.3     -15.4     340.1
-TIME 4 (main, full) core    1926 1381.3 |     116.8     208.2      61.5      45.6      79.0      86.7      56.5      74.2      80.2      27.3      16.8     218.3      87.8      -9.5     231.8
-TIME 4 (main, full) mesh cores' step by state (ns per core-cycle, count): wfi 23.8 (904250) stalled 59.8 (240) running 240.8 (1686)
-TIME 5 (main, lone): 226512 cycles, 14157 sampled (1 in 16); nanoTime() costs 53 ns, subtracted per section
-TIME 5 (main, lone) section request bus                              0.340 us/cycle
-TIME 5 (main, lone) section C&C endpoints                           -0.025 us/cycle
-TIME 5 (main, lone) section the 64 tiles (unsampled cycles)          0.478 us/cycle
-TIME 5 (main, lone) section CnC model                               -0.023 us/cycle
-TIME 5 (main, lone) section CcCores (C&C 1-3)                       -0.053 us/cycle
-TIME 5 (main, lone) section READY and error lines                    0.486 us/cycle
-TIME 5 (main, lone) section the cycle's tail                         0.025 us/cycle
-TIME 5 (main, lone) section checkInvariants                          0.890 us/cycle
-TIME 5 (main, lone) section total                                    2.118 us/cycle
+TIME 4 (main, full) idle    891985 323.1 |      53.2     157.6       8.2       5.2      22.8       0.7      14.4      39.8       6.0     -28.4     -17.0      20.4     -41.0     -42.3     123.5
+TIME 4 (main, full) router  1 2283.0 |     609.0     702.0      23.0     201.0     248.0       4.0      87.0      56.0     119.0      28.0     -29.0      95.0      65.0     -39.0     114.0
+TIME 4 (main, full) engines 12264 1643.2 |      80.8     284.1      76.0      51.6     166.2      35.8      44.4      57.8      58.0      27.1      11.3     108.9     312.6     -29.6     358.2
+TIME 4 (main, full) core    1926 1482.2 |      90.5     259.8      70.0      48.3     169.2      31.6      46.7      61.7      60.8      28.7      18.5     248.7      72.6     -25.5     300.6
+TIME 4 (main, full) mesh cores' step by state (ns per core-cycle, count): wfi 21.6 (904250) stalled 110.2 (240) running 268.4 (1686)
+TIME 5 (main, lone): 226512 cycles, 14157 sampled (1 in 16); nanoTime() costs 61 ns, subtracted per section
+TIME 5 (main, lone) section request bus                              0.353 us/cycle
+TIME 5 (main, lone) section C&C endpoints                           -0.029 us/cycle
+TIME 5 (main, lone) section the 64 tiles (unsampled cycles)          0.458 us/cycle
+TIME 5 (main, lone) section CnC model                               -0.032 us/cycle
+TIME 5 (main, lone) section CcCores (C&C 1-3)                       -0.061 us/cycle
+TIME 5 (main, lone) section READY and error lines                    0.500 us/cycle
+TIME 5 (main, lone) section the cycle's tail                         0.016 us/cycle
+TIME 5 (main, lone) section checkInvariants                          0.947 us/cycle
+TIME 5 (main, lone) section total                                    2.152 us/cycle
 TIME 5 (main, lone) sampled tile-cycles by class: count, ns per tile-cycle (the children summed), then per child
 TIME 5 (main, lone) child       router   srq+inj  director      cmem      sram    writer        ag    tables      hist  readport    gather      core      slot  slot.end   ctl.end
-TIME 5 (main, lone) idle    1 2217.0 |     177.0     479.0      99.0      83.0     318.0     103.0      34.0     157.0      24.0       3.0      73.0     173.0     134.0     -32.0     392.0
-TIME 5 (main, lone) router  1 109.0 |     167.0      32.0     -11.0     -11.0      -7.0      -7.0      -8.0      -7.0     -11.0     -13.0     -19.0      -3.0       6.0     -33.0      34.0
-TIME 5 (main, lone) engines 12233 -49.5 |      -3.4      34.5     -11.4     -14.5      -7.9     -13.1     -12.2     -11.3     -14.5     -17.3     -22.0       0.2      56.9     -35.9      22.3
-TIME 5 (main, lone) core    1922 20.3 |       1.0      28.5      -7.5     -10.7      -3.4      -6.8      -0.9      -5.8     -10.8     -13.4     -18.5      74.3      -3.3     -33.2      30.9
-TIME 5 (main, lone) mesh cores' step by state (ns per core-cycle, count): wfi 0.3 (12235) stalled -7.5 (232) running 85.5 (1690)
-TIME 6 (main, full): 226512 cycles, 14157 sampled (1 in 16); nanoTime() costs 53 ns, subtracted per section
-TIME 6 (main, full) section request bus                              0.750 us/cycle
-TIME 6 (main, full) section C&C endpoints                            0.021 us/cycle
-TIME 6 (main, full) section the 64 tiles (unsampled cycles)         51.889 us/cycle
-TIME 6 (main, full) section CnC model                                0.030 us/cycle
-TIME 6 (main, full) section CcCores (C&C 1-3)                       -0.053 us/cycle
-TIME 6 (main, full) section READY and error lines                    1.100 us/cycle
-TIME 6 (main, full) section the cycle's tail                         0.182 us/cycle
-TIME 6 (main, full) section checkInvariants                          2.202 us/cycle
-TIME 6 (main, full) section total                                   56.121 us/cycle
+TIME 5 (main, lone) idle    1 2222.0 |     189.0     467.0      70.0      84.0     475.0      21.0      53.0      73.0      14.0      77.0     -25.0     148.0      73.0      -6.0     509.0
+TIME 5 (main, lone) router  1 32.0 |     159.0      93.0     -20.0     -22.0      -4.0     -20.0     -20.0     -16.0     -21.0     -22.0     -27.0     -15.0     -19.0     -42.0      28.0
+TIME 5 (main, lone) engines 12233 -108.1 |      -1.9      34.6     -19.8     -20.5     -11.3     -20.4     -20.7     -17.8     -21.2     -23.9     -28.4      -7.2      73.7     -42.8      19.6
+TIME 5 (main, lone) core    1922 -105.8 |      -4.5      17.9     -19.8     -19.8     -10.1     -19.2      -8.0     -16.0     -20.1     -22.9     -27.2      70.3      -7.1     -42.6      23.4
+TIME 5 (main, lone) mesh cores' step by state (ns per core-cycle, count): wfi -7.2 (12235) stalled -17.0 (232) running 82.3 (1690)
+TIME 6 (main, full): 226512 cycles, 14157 sampled (1 in 16); nanoTime() costs 61 ns, subtracted per section
+TIME 6 (main, full) section request bus                              0.765 us/cycle
+TIME 6 (main, full) section C&C endpoints                            0.003 us/cycle
+TIME 6 (main, full) section the 64 tiles (unsampled cycles)         52.831 us/cycle
+TIME 6 (main, full) section CnC model                                0.011 us/cycle
+TIME 6 (main, full) section CcCores (C&C 1-3)                       -0.061 us/cycle
+TIME 6 (main, full) section READY and error lines                    1.105 us/cycle
+TIME 6 (main, full) section the cycle's tail                         0.104 us/cycle
+TIME 6 (main, full) section checkInvariants                          2.105 us/cycle
+TIME 6 (main, full) section total                                   56.864 us/cycle
 TIME 6 (main, full) sampled tile-cycles by class: count, ns per tile-cycle (the children summed), then per child
 TIME 6 (main, full) child       router   srq+inj  director      cmem      sram    writer        ag    tables      hist  readport    gather      core      slot  slot.end   ctl.end
-TIME 6 (main, full) idle    891859 390.7 |      58.0     167.5       7.2      -0.0      18.2       0.7      17.5      44.6       1.8     -15.9     -13.3      31.2     -32.9     -34.4     140.6
-TIME 6 (main, full) router  1 942.0 |     225.0     195.0      27.0      26.0      28.0      12.0      14.0      83.0      12.0      18.0      62.0      52.0      71.0     -24.0     141.0
-TIME 6 (main, full) engines 12266 1628.8 |      90.4     225.9      96.4      56.6      84.0      35.3      48.4      87.1      68.6      66.7      40.5     155.4     335.4     -15.6     253.7
-TIME 6 (main, full) core    1922 1300.6 |      81.7     170.5      57.2      46.1      69.7      26.3      63.1      89.9      60.5      56.3      33.2     310.0      93.2     -32.0     174.9
-TIME 6 (main, full) mesh cores' step by state (ns per core-cycle, count): wfi 32.9 (904126) stalled 92.6 (232) running 339.8 (1690)
-TIME 7 (main, lone): 226515 cycles, 14157 sampled (1 in 16); nanoTime() costs 53 ns, subtracted per section
-TIME 7 (main, lone) section request bus                              0.382 us/cycle
-TIME 7 (main, lone) section C&C endpoints                           -0.021 us/cycle
-TIME 7 (main, lone) section the 64 tiles (unsampled cycles)          0.473 us/cycle
-TIME 7 (main, lone) section CnC model                               -0.018 us/cycle
-TIME 7 (main, lone) section CcCores (C&C 1-3)                       -0.053 us/cycle
-TIME 7 (main, lone) section READY and error lines                    0.529 us/cycle
-TIME 7 (main, lone) section the cycle's tail                         0.041 us/cycle
-TIME 7 (main, lone) section checkInvariants                          0.983 us/cycle
-TIME 7 (main, lone) section total                                    2.317 us/cycle
+TIME 6 (main, full) idle    891859 267.0 |      50.1     156.2       0.0      -6.2      11.2      -8.2      13.3      35.4      -6.4     -26.0     -22.6      24.1     -40.8     -42.2     129.1
+TIME 6 (main, full) router  1 1214.0 |     327.0     344.0      19.0      25.0      -4.0      30.0      76.0      56.0      46.0      31.0     -12.0      69.0     109.0     -23.0     121.0
+TIME 6 (main, full) engines 12266 1392.6 |      99.7     249.4      47.4      43.8      64.2      44.2      36.8      86.0      27.1      22.7      -5.2     105.4     309.5     -17.2     278.9
+TIME 6 (main, full) core    1922 1305.7 |      99.0     224.5      48.4      43.2      68.9      54.8      61.4      98.3      29.4      27.9      -0.8     298.3      87.4     -33.8     199.0
+TIME 6 (main, full) mesh cores' step by state (ns per core-cycle, count): wfi 25.2 (904126) stalled 96.1 (232) running 326.0 (1690)
+TIME 7 (main, lone): 226515 cycles, 14157 sampled (1 in 16); nanoTime() costs 61 ns, subtracted per section
+TIME 7 (main, lone) section request bus                              0.457 us/cycle
+TIME 7 (main, lone) section C&C endpoints                           -0.028 us/cycle
+TIME 7 (main, lone) section the 64 tiles (unsampled cycles)          0.554 us/cycle
+TIME 7 (main, lone) section CnC model                               -0.025 us/cycle
+TIME 7 (main, lone) section CcCores (C&C 1-3)                       -0.061 us/cycle
+TIME 7 (main, lone) section READY and error lines                    0.680 us/cycle
+TIME 7 (main, lone) section the cycle's tail                         0.029 us/cycle
+TIME 7 (main, lone) section checkInvariants                          1.115 us/cycle
+TIME 7 (main, lone) section total                                    2.721 us/cycle
 TIME 7 (main, lone) sampled tile-cycles by class: count, ns per tile-cycle (the children summed), then per child
 TIME 7 (main, lone) child       router   srq+inj  director      cmem      sram    writer        ag    tables      hist  readport    gather      core      slot  slot.end   ctl.end
-TIME 7 (main, lone) idle    1 7123.0 |     889.0     770.0     422.0     407.0     659.0     394.0     215.0     446.0     364.0     210.0     343.0     902.0     256.0     114.0     732.0
-TIME 7 (main, lone) router  1 66.0 |     156.0      51.0     -12.0     -14.0      -9.0      -6.0     -13.0      -7.0      -8.0     -18.0     -22.0      -1.0      -8.0     -34.0      11.0
-TIME 7 (main, lone) engines 12229 -35.8 |      -4.7      37.4      -9.5     -12.8      -7.4      -9.8     -13.5      -6.8     -10.3     -18.6     -20.8       3.8      51.7     -34.3      19.6
-TIME 7 (main, lone) core    1926 138.1 |       6.0      55.5       4.2      -4.0       4.1       2.3       2.3       4.2       1.6      -7.1      -8.1      35.2       4.2     -18.3      56.1
-TIME 7 (main, lone) mesh cores' step by state (ns per core-cycle, count): wfi 3.9 (12231) stalled 4.4 (237) running 39.5 (1689)
-TIME 8 (main, full): 226515 cycles, 14157 sampled (1 in 16); nanoTime() costs 53 ns, subtracted per section
-TIME 8 (main, full) section request bus                              0.789 us/cycle
-TIME 8 (main, full) section C&C endpoints                            0.018 us/cycle
-TIME 8 (main, full) section the 64 tiles (unsampled cycles)         51.343 us/cycle
+TIME 7 (main, lone) idle    1 2190.0 |     400.0     543.0     188.0     136.0     139.0      34.0      56.0      87.0      32.0      45.0     -23.0     125.0      19.0     -30.0     439.0
+TIME 7 (main, lone) router  1 36.0 |     142.0      71.0     -14.0     -16.0     -11.0     -14.0     -19.0     -14.0     -17.0     -21.0     -27.0      -7.0     -11.0     -40.0      34.0
+TIME 7 (main, lone) engines 12229 6.0 |      -3.4      53.5      -0.1     -11.4      -7.2      -1.2     -16.4     -12.4     -15.0     -17.9     -22.9      11.7      59.3     -40.1      29.5
+TIME 7 (main, lone) core    1926 -70.9 |      -5.3      34.0     -11.7     -14.8      -8.2      -7.1      -7.5     -12.6     -14.2     -19.2     -23.8      25.4      -5.3     -25.3      24.6
+TIME 7 (main, lone) mesh cores' step by state (ns per core-cycle, count): wfi 11.7 (12231) stalled -0.2 (237) running 29.0 (1689)
+TIME 8 (main, full): 226515 cycles, 14157 sampled (1 in 16); nanoTime() costs 61 ns, subtracted per section
+TIME 8 (main, full) section request bus                              0.761 us/cycle
+TIME 8 (main, full) section C&C endpoints                            0.004 us/cycle
+TIME 8 (main, full) section the 64 tiles (unsampled cycles)         52.981 us/cycle
 TIME 8 (main, full) section CnC model                                0.039 us/cycle
-TIME 8 (main, full) section CcCores (C&C 1-3)                       -0.053 us/cycle
-TIME 8 (main, full) section READY and error lines                    1.003 us/cycle
-TIME 8 (main, full) section the cycle's tail                         0.109 us/cycle
-TIME 8 (main, full) section checkInvariants                          2.105 us/cycle
-TIME 8 (main, full) section total                                   55.353 us/cycle
+TIME 8 (main, full) section CcCores (C&C 1-3)                       -0.061 us/cycle
+TIME 8 (main, full) section READY and error lines                    1.106 us/cycle
+TIME 8 (main, full) section the cycle's tail                         0.101 us/cycle
+TIME 8 (main, full) section checkInvariants                          2.222 us/cycle
+TIME 8 (main, full) section total                                   57.153 us/cycle
 TIME 8 (main, full) sampled tile-cycles by class: count, ns per tile-cycle (the children summed), then per child
 TIME 8 (main, full) child       router   srq+inj  director      cmem      sram    writer        ag    tables      hist  readport    gather      core      slot  slot.end   ctl.end
-TIME 8 (main, full) idle    891859 360.8 |      56.0     159.1       5.9      -1.6      17.2      -1.0      17.1      44.4      -0.8     -18.7     -14.9      27.7     -33.6     -35.0     139.1
-TIME 8 (main, full) router  1 1730.0 |     501.0     231.0      47.0      27.0      86.0     115.0      15.0      29.0     129.0       2.0      -4.0      78.0      90.0       1.0     383.0
-TIME 8 (main, full) engines 12262 1568.6 |     128.1     264.0      75.8      49.3      95.6      62.4      35.4      65.0      34.1      28.5      16.2     104.2     357.3      -8.1     261.1
-TIME 8 (main, full) core    1926 1465.2 |     110.4     235.0      72.5      41.5      82.3      99.1      87.9      80.0      54.8      55.0      32.2     268.4      72.7     -10.7     184.2
-TIME 8 (main, full) mesh cores' step by state (ns per core-cycle, count): wfi 28.7 (904122) stalled 98.3 (237) running 292.2 (1689)
-TIME 9 (main, lone): 226518 cycles, 14157 sampled (1 in 16); nanoTime() costs 53 ns, subtracted per section
-TIME 9 (main, lone) section request bus                              0.378 us/cycle
-TIME 9 (main, lone) section C&C endpoints                           -0.023 us/cycle
-TIME 9 (main, lone) section the 64 tiles (unsampled cycles)          0.510 us/cycle
-TIME 9 (main, lone) section CnC model                               -0.023 us/cycle
-TIME 9 (main, lone) section CcCores (C&C 1-3)                       -0.053 us/cycle
-TIME 9 (main, lone) section READY and error lines                    0.538 us/cycle
-TIME 9 (main, lone) section the cycle's tail                         0.027 us/cycle
-TIME 9 (main, lone) section checkInvariants                          1.008 us/cycle
-TIME 9 (main, lone) section total                                    2.363 us/cycle
+TIME 8 (main, full) idle    891859 313.2 |      57.0     169.8       1.9      -7.3      14.5      -7.3      12.7      42.5      -5.2     -23.1     -20.9      24.5     -39.8     -41.2     135.2
+TIME 8 (main, full) router  1 1508.0 |     338.0     373.0      33.0      51.0     102.0       0.0      16.0      28.0      64.0      77.0     -17.0     162.0     101.0     -31.0     211.0
+TIME 8 (main, full) engines 12262 1659.3 |     116.8     262.3      59.1      37.4     106.4      36.2      40.6      57.9     138.2      46.2       8.1     138.3     347.1     -20.8     285.8
+TIME 8 (main, full) core    1926 1172.6 |     107.1     211.8      51.3      16.0      82.1      19.8      49.8      37.0     106.1      23.3      11.9     206.5      72.5     -20.5     197.9
+TIME 8 (main, full) mesh cores' step by state (ns per core-cycle, count): wfi 26.1 (904122) stalled 64.4 (237) running 226.4 (1689)
+TIME 9 (main, lone): 226518 cycles, 14157 sampled (1 in 16); nanoTime() costs 61 ns, subtracted per section
+TIME 9 (main, lone) section request bus                              0.356 us/cycle
+TIME 9 (main, lone) section C&C endpoints                           -0.032 us/cycle
+TIME 9 (main, lone) section the 64 tiles (unsampled cycles)          0.487 us/cycle
+TIME 9 (main, lone) section CnC model                               -0.030 us/cycle
+TIME 9 (main, lone) section CcCores (C&C 1-3)                       -0.061 us/cycle
+TIME 9 (main, lone) section READY and error lines                    0.507 us/cycle
+TIME 9 (main, lone) section the cycle's tail                         0.019 us/cycle
+TIME 9 (main, lone) section checkInvariants                          0.937 us/cycle
+TIME 9 (main, lone) section total                                    2.183 us/cycle
 TIME 9 (main, lone) sampled tile-cycles by class: count, ns per tile-cycle (the children summed), then per child
 TIME 9 (main, lone) child       router   srq+inj  director      cmem      sram    writer        ag    tables      hist  readport    gather      core      slot  slot.end   ctl.end
-TIME 9 (main, lone) idle    1 1852.0 |     101.0     286.0      25.0     340.0     275.0     117.0      38.0     119.0      24.0       9.0      59.0     148.0      29.0       1.0     281.0
-TIME 9 (main, lone) router  1 -37.0 |      55.0      51.0     -12.0     -14.0      -9.0     -13.0     -10.0     -13.0     -10.0     -16.0     -20.0       2.0      -8.0     -34.0      14.0
-TIME 9 (main, lone) engines 12228 27.0 |       1.0      42.7      -8.8     -11.3      -4.1     -10.2     -11.3     -11.1     -10.1     -14.3     -18.1       6.6      83.9     -33.7      26.0
-TIME 9 (main, lone) core    1927 -67.4 |      -1.5      24.2     -12.1     -12.5      -4.8     -11.4      -9.8      -8.6     -11.0     -15.0     -19.9      24.6      -1.0     -32.8      24.2
-TIME 9 (main, lone) mesh cores' step by state (ns per core-cycle, count): wfi 6.6 (12230) stalled -8.2 (237) running 29.2 (1690)
-TIME 10 (main, full): 226518 cycles, 14157 sampled (1 in 16); nanoTime() costs 53 ns, subtracted per section
-TIME 10 (main, full) section request bus                              0.870 us/cycle
-TIME 10 (main, full) section C&C endpoints                            0.011 us/cycle
-TIME 10 (main, full) section the 64 tiles (unsampled cycles)         48.600 us/cycle
-TIME 10 (main, full) section CnC model                                0.010 us/cycle
-TIME 10 (main, full) section CcCores (C&C 1-3)                       -0.053 us/cycle
-TIME 10 (main, full) section READY and error lines                    1.222 us/cycle
-TIME 10 (main, full) section the cycle's tail                         0.143 us/cycle
-TIME 10 (main, full) section checkInvariants                          2.287 us/cycle
-TIME 10 (main, full) section total                                   53.089 us/cycle
+TIME 9 (main, lone) idle    1 1500.0 |      85.0     222.0     111.0      45.0     227.0     146.0      52.0       6.0      -7.0     108.0     -22.0     222.0      71.0      21.0     213.0
+TIME 9 (main, lone) router  1 -60.0 |      59.0      91.0     -21.0     -21.0     -15.0     -20.0     -22.0     -18.0     -18.0     -21.0     -31.0      -7.0      -5.0     -43.0      32.0
+TIME 9 (main, lone) engines 12228 -105.2 |      -6.3      32.4     -17.4     -19.6     -13.1     -19.0     -20.0     -19.3     -19.3     -21.2     -27.6       0.9      69.0     -41.9      17.2
+TIME 9 (main, lone) core    1927 -189.9 |      -7.4      17.4     -19.4     -20.3     -13.2     -19.8     -17.9     -17.9     -19.9     -21.1     -28.7      13.7      -8.2     -41.1      13.9
+TIME 9 (main, lone) mesh cores' step by state (ns per core-cycle, count): wfi 0.9 (12230) stalled -16.9 (237) running 18.0 (1690)
+TIME 10 (main, full): 226518 cycles, 14157 sampled (1 in 16); nanoTime() costs 61 ns, subtracted per section
+TIME 10 (main, full) section request bus                              0.801 us/cycle
+TIME 10 (main, full) section C&C endpoints                            0.006 us/cycle
+TIME 10 (main, full) section the 64 tiles (unsampled cycles)         54.090 us/cycle
+TIME 10 (main, full) section CnC model                                0.017 us/cycle
+TIME 10 (main, full) section CcCores (C&C 1-3)                       -0.061 us/cycle
+TIME 10 (main, full) section READY and error lines                    1.109 us/cycle
+TIME 10 (main, full) section the cycle's tail                         0.178 us/cycle
+TIME 10 (main, full) section checkInvariants                          2.170 us/cycle
+TIME 10 (main, full) section total                                   58.311 us/cycle
 TIME 10 (main, full) sampled tile-cycles by class: count, ns per tile-cycle (the children summed), then per child
 TIME 10 (main, full) child       router   srq+inj  director      cmem      sram    writer        ag    tables      hist  readport    gather      core      slot  slot.end   ctl.end
-TIME 10 (main, full) idle    891859 383.6 |      59.4     157.3       9.7       8.9      22.5       0.8      13.5      38.6       6.7     -17.4     -10.5      30.4     -32.1     -32.9     128.7
-TIME 10 (main, full) router  1 1103.0 |     491.0     133.0      14.0      39.0      32.0      15.0       7.0      80.0       7.0      29.0       8.0      35.0     121.0     -26.0     118.0
-TIME 10 (main, full) engines 12261 1669.6 |     106.4     282.7     137.4     104.5     139.9      72.2      37.3      47.9      42.1      25.3      29.1      84.6     323.1     -17.8     254.9
-TIME 10 (main, full) core    1927 805.8 |      56.8     164.3      31.1      30.0      63.0      27.1      23.8      62.7      18.5      24.0      12.0     143.0      41.6     -12.7     120.5
-TIME 10 (main, full) mesh cores' step by state (ns per core-cycle, count): wfi 31.1 (904121) stalled 57.5 (237) running 155.0 (1690)
-TIME 11 (main, lone): 226521 cycles, 14157 sampled (1 in 16); nanoTime() costs 53 ns, subtracted per section
-TIME 11 (main, lone) section request bus                              0.352 us/cycle
-TIME 11 (main, lone) section C&C endpoints                           -0.021 us/cycle
-TIME 11 (main, lone) section the 64 tiles (unsampled cycles)          0.438 us/cycle
-TIME 11 (main, lone) section CnC model                               -0.024 us/cycle
-TIME 11 (main, lone) section CcCores (C&C 1-3)                       -0.053 us/cycle
-TIME 11 (main, lone) section READY and error lines                    0.496 us/cycle
-TIME 11 (main, lone) section the cycle's tail                         0.025 us/cycle
-TIME 11 (main, lone) section checkInvariants                          0.911 us/cycle
-TIME 11 (main, lone) section total                                    2.125 us/cycle
+TIME 10 (main, full) idle    891859 330.6 |      57.6     165.3       3.4       0.2      16.2      -4.5      14.0      42.1       1.9     -24.7     -19.8      22.3     -40.0     -41.5     138.0
+TIME 10 (main, full) router  1 2770.0 |     550.0     362.0      63.0     115.0     110.0     103.0     159.0     183.0     387.0     156.0       7.0      94.0      27.0     -40.0     494.0
+TIME 10 (main, full) engines 12261 1724.0 |     127.0     278.2      70.3     100.9      97.3      58.4      49.6      80.3      88.7      75.7       2.0     114.9     333.1     -26.8     274.3
+TIME 10 (main, full) core    1927 1439.7 |     139.1     244.7      63.7      91.4      90.9      58.3      54.9      74.3      76.1      68.8       1.1     239.1      71.1     -33.5     199.6
+TIME 10 (main, full) mesh cores' step by state (ns per core-cycle, count): wfi 23.5 (904121) stalled 123.2 (237) running 255.4 (1690)
+TIME 11 (main, lone): 226521 cycles, 14157 sampled (1 in 16); nanoTime() costs 61 ns, subtracted per section
+TIME 11 (main, lone) section request bus                              0.358 us/cycle
+TIME 11 (main, lone) section C&C endpoints                           -0.032 us/cycle
+TIME 11 (main, lone) section the 64 tiles (unsampled cycles)          0.464 us/cycle
+TIME 11 (main, lone) section CnC model                               -0.027 us/cycle
+TIME 11 (main, lone) section CcCores (C&C 1-3)                       -0.061 us/cycle
+TIME 11 (main, lone) section READY and error lines                    0.511 us/cycle
+TIME 11 (main, lone) section the cycle's tail                         0.022 us/cycle
+TIME 11 (main, lone) section checkInvariants                          0.952 us/cycle
+TIME 11 (main, lone) section total                                    2.188 us/cycle
 TIME 11 (main, lone) sampled tile-cycles by class: count, ns per tile-cycle (the children summed), then per child
 TIME 11 (main, lone) child       router   srq+inj  director      cmem      sram    writer        ag    tables      hist  readport    gather      core      slot  slot.end   ctl.end
-TIME 11 (main, lone) idle    1 1839.0 |      83.0     372.0     176.0     277.0      62.0     116.0      69.0       9.0     154.0       1.0       2.0     183.0      88.0     -20.0     267.0
-TIME 11 (main, lone) router  1 56.0 |      60.0      92.0      -7.0       6.0      -4.0     -13.0      -9.0     -14.0     -14.0     -18.0     -12.0       5.0     -12.0     -35.0      31.0
-TIME 11 (main, lone) engines 12232 -43.8 |      -2.6      38.5      -7.1     -13.4      -7.4     -11.2     -10.8     -13.0     -13.6     -18.2     -17.1       5.4      42.5     -34.7      19.0
-TIME 11 (main, lone) core    1923 -89.5 |      -2.6      23.7      -7.1      -9.3      -6.3     -10.8      -8.7     -12.3     -13.1     -18.1     -17.0      17.7     -10.5     -31.6      16.4
-TIME 11 (main, lone) mesh cores' step by state (ns per core-cycle, count): wfi 5.4 (12234) stalled -10.2 (234) running 21.6 (1689)
-TIME 12 (main, full): 226521 cycles, 14157 sampled (1 in 16); nanoTime() costs 53 ns, subtracted per section
-TIME 12 (main, full) section request bus                              0.835 us/cycle
-TIME 12 (main, full) section C&C endpoints                            0.018 us/cycle
-TIME 12 (main, full) section the 64 tiles (unsampled cycles)         48.543 us/cycle
-TIME 12 (main, full) section CnC model                                0.039 us/cycle
-TIME 12 (main, full) section CcCores (C&C 1-3)                       -0.053 us/cycle
-TIME 12 (main, full) section READY and error lines                    1.173 us/cycle
-TIME 12 (main, full) section the cycle's tail                         0.106 us/cycle
-TIME 12 (main, full) section checkInvariants                          2.200 us/cycle
-TIME 12 (main, full) section total                                   52.862 us/cycle
+TIME 11 (main, lone) idle    1 1909.0 |      61.0     375.0     221.0      77.0     215.0     155.0     108.0      86.0      59.0      37.0     -12.0     171.0      32.0     -10.0     334.0
+TIME 11 (main, lone) router  1 35.0 |     122.0     103.0     -18.0     -18.0     -14.0     -13.0     -19.0     -16.0     -21.0     -24.0     -27.0       2.0      -6.0     -42.0      26.0
+TIME 11 (main, lone) engines 12232 -119.5 |      -8.3      35.6     -18.9     -17.3     -12.7     -13.6     -19.6     -16.1     -20.2     -22.1     -27.2      -2.1      43.9     -41.7      20.8
+TIME 11 (main, lone) core    1923 -177.1 |      -9.0      22.0     -19.0     -19.4     -13.4     -13.7     -17.4     -14.9     -19.8     -22.3     -27.7      17.4     -17.8     -38.8      16.9
+TIME 11 (main, lone) mesh cores' step by state (ns per core-cycle, count): wfi -2.1 (12234) stalled -17.2 (234) running 22.2 (1689)
+TIME 12 (main, full): 226521 cycles, 14157 sampled (1 in 16); nanoTime() costs 61 ns, subtracted per section
+TIME 12 (main, full) section request bus                              0.754 us/cycle
+TIME 12 (main, full) section C&C endpoints                            0.031 us/cycle
+TIME 12 (main, full) section the 64 tiles (unsampled cycles)         52.566 us/cycle
+TIME 12 (main, full) section CnC model                                0.041 us/cycle
+TIME 12 (main, full) section CcCores (C&C 1-3)                       -0.061 us/cycle
+TIME 12 (main, full) section READY and error lines                    1.002 us/cycle
+TIME 12 (main, full) section the cycle's tail                         0.136 us/cycle
+TIME 12 (main, full) section checkInvariants                          2.142 us/cycle
+TIME 12 (main, full) section total                                   56.611 us/cycle
 TIME 12 (main, full) sampled tile-cycles by class: count, ns per tile-cycle (the children summed), then per child
 TIME 12 (main, full) child       router   srq+inj  director      cmem      sram    writer        ag    tables      hist  readport    gather      core      slot  slot.end   ctl.end
-TIME 12 (main, full) idle    891859 408.2 |      53.1     152.9      11.4       8.9      32.7       9.8      20.1      41.9      17.0     -18.6      -7.2      24.6     -31.6     -32.8     126.0
-TIME 12 (main, full) router  1 1843.0 |     618.0     270.0     290.0      59.0      44.0      55.0      50.0      76.0      49.0      30.0      -1.0      46.0     115.0     -34.0     176.0
-TIME 12 (main, full) engines 12265 1840.0 |     198.1     258.6      84.8      74.4      71.0      90.8      53.6      71.3      62.5      41.3      16.4     116.1     365.9     -24.5     359.8
-TIME 12 (main, full) core    1923 1533.7 |     191.6     232.4      92.6      72.6      68.0      79.8      57.8      76.8      62.2      47.3      24.8     255.1      74.0     -19.4     218.3
-TIME 12 (main, full) mesh cores' step by state (ns per core-cycle, count): wfi 25.8 (904125) stalled 72.8 (234) running 280.3 (1689)
-TIME 13 (main, lone): 226524 cycles, 14157 sampled (1 in 16); nanoTime() costs 53 ns, subtracted per section
-TIME 13 (main, lone) section request bus                              0.537 us/cycle
-TIME 13 (main, lone) section C&C endpoints                           -0.019 us/cycle
-TIME 13 (main, lone) section the 64 tiles (unsampled cycles)          0.609 us/cycle
-TIME 13 (main, lone) section CnC model                               -0.019 us/cycle
-TIME 13 (main, lone) section CcCores (C&C 1-3)                       -0.053 us/cycle
-TIME 13 (main, lone) section READY and error lines                    0.808 us/cycle
-TIME 13 (main, lone) section the cycle's tail                         0.039 us/cycle
-TIME 13 (main, lone) section checkInvariants                          1.427 us/cycle
-TIME 13 (main, lone) section total                                    3.330 us/cycle
+TIME 12 (main, full) idle    891859 350.1 |      58.5     154.4       6.6       5.4      26.9       4.6      14.5      39.6      15.1     -27.6     -13.1      19.0     -40.7     -42.1     129.0
+TIME 12 (main, full) router  1 1914.0 |     308.0     495.0      49.0      35.0     119.0      53.0      95.0      37.0     142.0     103.0     -17.0     105.0     231.0     -41.0     200.0
+TIME 12 (main, full) engines 12265 1958.8 |     126.4     279.3      73.8      87.4     139.8     105.6      60.2      94.8      78.5      63.2       9.4     153.2     443.4     -29.1     272.9
+TIME 12 (main, full) core    1923 1474.0 |     124.4     228.3      66.6      62.5     114.2      86.1      61.0      96.4      72.4      62.5       7.5     233.8     122.1     -27.1     163.2
+TIME 12 (main, full) mesh cores' step by state (ns per core-cycle, count): wfi 20.9 (904125) stalled 118.4 (234) running 249.8 (1689)
+TIME 13 (main, lone): 226524 cycles, 14157 sampled (1 in 16); nanoTime() costs 61 ns, subtracted per section
+TIME 13 (main, lone) section request bus                              0.367 us/cycle
+TIME 13 (main, lone) section C&C endpoints                           -0.031 us/cycle
+TIME 13 (main, lone) section the 64 tiles (unsampled cycles)          0.467 us/cycle
+TIME 13 (main, lone) section CnC model                               -0.029 us/cycle
+TIME 13 (main, lone) section CcCores (C&C 1-3)                       -0.061 us/cycle
+TIME 13 (main, lone) section READY and error lines                    0.504 us/cycle
+TIME 13 (main, lone) section the cycle's tail                         0.022 us/cycle
+TIME 13 (main, lone) section checkInvariants                          0.957 us/cycle
+TIME 13 (main, lone) section total                                    2.196 us/cycle
 TIME 13 (main, lone) sampled tile-cycles by class: count, ns per tile-cycle (the children summed), then per child
 TIME 13 (main, lone) child       router   srq+inj  director      cmem      sram    writer        ag    tables      hist  readport    gather      core      slot  slot.end   ctl.end
-TIME 13 (main, lone) idle    1 4274.0 |     360.0     776.0     237.0     267.0     558.0     262.0     180.0     155.0     210.0     193.0     103.0     262.0     136.0      76.0     499.0
-TIME 13 (main, lone) router  1 563.0 |     184.0     182.0       4.0      11.0      19.0       6.0       7.0      17.0      19.0       8.0       5.0      43.0       4.0     -26.0      80.0
-TIME 13 (main, lone) engines 12230 83.1 |       3.0      58.2      -3.1      -5.7       5.5      -4.2      -8.4      -1.7      -7.1     -11.7     -14.3      12.3      55.5     -32.4      37.1
-TIME 13 (main, lone) core    1925 318.0 |      13.9      90.2       5.6       8.2      25.0      11.4      11.6      17.5       8.9      12.1       4.5      52.5       7.1     -25.9      75.3
-TIME 13 (main, lone) mesh cores' step by state (ns per core-cycle, count): wfi 12.3 (12232) stalled 26.7 (235) running 56.1 (1690)
-TIME 14 (main, full): 226524 cycles, 14157 sampled (1 in 16); nanoTime() costs 53 ns, subtracted per section
-TIME 14 (main, full) section request bus                              0.731 us/cycle
-TIME 14 (main, full) section C&C endpoints                            0.015 us/cycle
-TIME 14 (main, full) section the 64 tiles (unsampled cycles)         54.255 us/cycle
-TIME 14 (main, full) section CnC model                                0.039 us/cycle
-TIME 14 (main, full) section CcCores (C&C 1-3)                       -0.053 us/cycle
-TIME 14 (main, full) section READY and error lines                    1.163 us/cycle
-TIME 14 (main, full) section the cycle's tail                         0.135 us/cycle
-TIME 14 (main, full) section checkInvariants                          2.378 us/cycle
-TIME 14 (main, full) section total                                   58.664 us/cycle
+TIME 13 (main, lone) idle    1 2158.0 |     135.0     445.0     129.0     199.0     265.0     183.0      91.0     112.0      74.0      70.0      -8.0     161.0      19.0     -10.0     293.0
+TIME 13 (main, lone) router  1 -42.0 |     107.0      79.0     -17.0     -20.0     -12.0     -16.0     -20.0     -22.0     -21.0     -27.0     -28.0     -16.0      -9.0     -42.0      22.0
+TIME 13 (main, lone) engines 12230 -123.4 |     -13.1      37.3     -15.7     -17.1      -9.1     -16.0     -18.1     -16.2     -20.2     -24.8     -26.9      -3.6      43.3     -41.3      18.1
+TIME 13 (main, lone) core    1925 -171.4 |     -13.1      19.5     -14.8     -15.6      -8.6     -14.2     -12.5     -16.6     -19.2     -24.6     -24.5      14.6     -18.0     -40.6      16.7
+TIME 13 (main, lone) mesh cores' step by state (ns per core-cycle, count): wfi -3.6 (12232) stalled -8.6 (235) running 17.8 (1690)
+TIME 14 (main, full): 226524 cycles, 14157 sampled (1 in 16); nanoTime() costs 61 ns, subtracted per section
+TIME 14 (main, full) section request bus                              0.743 us/cycle
+TIME 14 (main, full) section C&C endpoints                            0.019 us/cycle
+TIME 14 (main, full) section the 64 tiles (unsampled cycles)         54.328 us/cycle
+TIME 14 (main, full) section CnC model                                0.032 us/cycle
+TIME 14 (main, full) section CcCores (C&C 1-3)                       -0.061 us/cycle
+TIME 14 (main, full) section READY and error lines                    1.026 us/cycle
+TIME 14 (main, full) section the cycle's tail                         0.119 us/cycle
+TIME 14 (main, full) section checkInvariants                          2.177 us/cycle
+TIME 14 (main, full) section total                                   58.383 us/cycle
 TIME 14 (main, full) sampled tile-cycles by class: count, ns per tile-cycle (the children summed), then per child
 TIME 14 (main, full) child       router   srq+inj  director      cmem      sram    writer        ag    tables      hist  readport    gather      core      slot  slot.end   ctl.end
-TIME 14 (main, full) idle    891859 406.1 |      59.8     170.8       8.3       1.3      21.5       0.4      19.2      42.2       1.8     -14.8     -11.8      30.9     -31.6     -33.0     141.0
-TIME 14 (main, full) router  1 1691.0 |     375.0     184.0       8.0      27.0      45.0      61.0      20.0     165.0      21.0      19.0      91.0     241.0      42.0     -20.0     412.0
-TIME 14 (main, full) engines 12263 1803.6 |     111.8     290.5      70.5      64.6      84.2      73.0      45.4      83.5      80.7      64.4      22.8     149.8     370.4      -9.7     301.8
-TIME 14 (main, full) core    1925 1367.4 |     118.5     222.0      46.7      56.6      77.0      72.7      43.7      79.6      58.2      54.3      14.1     227.5      58.3     -25.4     263.8
-TIME 14 (main, full) mesh cores' step by state (ns per core-cycle, count): wfi 32.5 (904123) stalled 85.7 (235) running 247.2 (1690)
-TIME 15 (main, lone): 226527 cycles, 14157 sampled (1 in 16); nanoTime() costs 53 ns, subtracted per section
-TIME 15 (main, lone) section request bus                              0.349 us/cycle
-TIME 15 (main, lone) section C&C endpoints                           -0.024 us/cycle
-TIME 15 (main, lone) section the 64 tiles (unsampled cycles)          0.472 us/cycle
-TIME 15 (main, lone) section CnC model                               -0.023 us/cycle
-TIME 15 (main, lone) section CcCores (C&C 1-3)                       -0.053 us/cycle
-TIME 15 (main, lone) section READY and error lines                    0.506 us/cycle
-TIME 15 (main, lone) section the cycle's tail                         0.026 us/cycle
-TIME 15 (main, lone) section checkInvariants                          0.915 us/cycle
-TIME 15 (main, lone) section total                                    2.168 us/cycle
+TIME 14 (main, full) idle    891859 319.5 |      57.7     172.3       2.1      -5.3      16.4      -8.1      12.7      41.6      -6.7     -25.5     -21.1      25.0     -40.4     -42.0     140.8
+TIME 14 (main, full) router  1 2088.0 |     319.0     508.0      35.0      28.0      52.0      90.0      -1.0      47.0     289.0      29.0     -18.0     318.0      26.0     -38.0     404.0
+TIME 14 (main, full) engines 12263 1639.3 |     177.8     249.8      67.5      50.9      67.7      86.8      51.9      82.2      57.2      28.6      13.8     110.5     342.0     -30.0     282.7
+TIME 14 (main, full) core    1925 1630.2 |     187.4     224.1      65.1      55.9      89.2     136.9      60.7     107.1      95.3      35.4      15.3     287.2      63.0     -29.4     237.1
+TIME 14 (main, full) mesh cores' step by state (ns per core-cycle, count): wfi 26.2 (904123) stalled 180.7 (235) running 302.0 (1690)
+TIME 15 (main, lone): 226527 cycles, 14157 sampled (1 in 16); nanoTime() costs 61 ns, subtracted per section
+TIME 15 (main, lone) section request bus                              0.366 us/cycle
+TIME 15 (main, lone) section C&C endpoints                           -0.030 us/cycle
+TIME 15 (main, lone) section the 64 tiles (unsampled cycles)          0.498 us/cycle
+TIME 15 (main, lone) section CnC model                               -0.028 us/cycle
+TIME 15 (main, lone) section CcCores (C&C 1-3)                       -0.061 us/cycle
+TIME 15 (main, lone) section READY and error lines                    0.523 us/cycle
+TIME 15 (main, lone) section the cycle's tail                         0.022 us/cycle
+TIME 15 (main, lone) section checkInvariants                          0.967 us/cycle
+TIME 15 (main, lone) section total                                    2.258 us/cycle
 TIME 15 (main, lone) sampled tile-cycles by class: count, ns per tile-cycle (the children summed), then per child
 TIME 15 (main, lone) child       router   srq+inj  director      cmem      sram    writer        ag    tables      hist  readport    gather      core      slot  slot.end   ctl.end
-TIME 15 (main, lone) idle    1 1335.0 |     151.0     360.0      12.0      78.0      91.0     196.0      37.0      86.0      23.0      25.0      -3.0      57.0      51.0     -28.0     199.0
-TIME 15 (main, lone) router  1 12.0 |      95.0      47.0     -10.0     -11.0      -4.0     -12.0     -15.0      -6.0     -14.0     -19.0     -19.0      -8.0     -10.0     -34.0      32.0
-TIME 15 (main, lone) engines 12230 -15.0 |      -1.1      41.3      -8.8     -10.5      -5.9     -11.2     -12.9      -7.7     -13.3     -18.5     -20.0       2.2      67.0     -35.1      19.7
-TIME 15 (main, lone) core    1925 -76.4 |      -2.6      27.1      -8.1     -10.7      -5.7     -11.0     -10.7      -6.9     -13.1     -18.3     -18.0      20.9      -7.5     -32.8      20.9
-TIME 15 (main, lone) mesh cores' step by state (ns per core-cycle, count): wfi 2.2 (12232) stalled 3.7 (238) running 23.3 (1687)
-TIME 16 (main, full): 226527 cycles, 14157 sampled (1 in 16); nanoTime() costs 53 ns, subtracted per section
-TIME 16 (main, full) section request bus                              0.753 us/cycle
-TIME 16 (main, full) section C&C endpoints                            0.005 us/cycle
-TIME 16 (main, full) section the 64 tiles (unsampled cycles)         48.531 us/cycle
-TIME 16 (main, full) section CnC model                                0.042 us/cycle
-TIME 16 (main, full) section CcCores (C&C 1-3)                       -0.053 us/cycle
-TIME 16 (main, full) section READY and error lines                    1.012 us/cycle
-TIME 16 (main, full) section the cycle's tail                         0.152 us/cycle
-TIME 16 (main, full) section checkInvariants                          2.153 us/cycle
-TIME 16 (main, full) section total                                   52.594 us/cycle
+TIME 15 (main, lone) idle    1 2091.0 |     316.0     357.0     102.0     408.0     268.0      58.0      23.0       7.0      58.0       2.0     -26.0     154.0       7.0       8.0     349.0
+TIME 15 (main, lone) router  1 88.0 |     217.0      65.0     -16.0     -19.0     -11.0     -16.0     -16.0     -15.0     -19.0     -26.0     -26.0     -11.0      -8.0     -42.0      31.0
+TIME 15 (main, lone) engines 12230 -92.9 |      -5.5      36.5     -14.7     -18.8     -12.5     -15.8     -19.2     -13.2     -18.9     -25.0     -26.7      -3.6      68.0     -41.6      18.0
+TIME 15 (main, lone) core    1925 -158.1 |      -5.9      21.6     -15.4     -18.7     -11.8     -15.0     -16.6     -11.2     -16.1     -24.2     -26.9      15.9     -10.8     -39.5      16.5
+TIME 15 (main, lone) mesh cores' step by state (ns per core-cycle, count): wfi -3.6 (12232) stalled -1.3 (238) running 18.3 (1687)
+TIME 16 (main, full): 226527 cycles, 14157 sampled (1 in 16); nanoTime() costs 61 ns, subtracted per section
+TIME 16 (main, full) section request bus                              0.775 us/cycle
+TIME 16 (main, full) section C&C endpoints                            0.016 us/cycle
+TIME 16 (main, full) section the 64 tiles (unsampled cycles)         53.355 us/cycle
+TIME 16 (main, full) section CnC model                                0.027 us/cycle
+TIME 16 (main, full) section CcCores (C&C 1-3)                       -0.061 us/cycle
+TIME 16 (main, full) section READY and error lines                    1.033 us/cycle
+TIME 16 (main, full) section the cycle's tail                         0.087 us/cycle
+TIME 16 (main, full) section checkInvariants                          2.157 us/cycle
+TIME 16 (main, full) section total                                   57.389 us/cycle
 TIME 16 (main, full) sampled tile-cycles by class: count, ns per tile-cycle (the children summed), then per child
 TIME 16 (main, full) child       router   srq+inj  director      cmem      sram    writer        ag    tables      hist  readport    gather      core      slot  slot.end   ctl.end
-TIME 16 (main, full) idle    891859 420.8 |      61.3     155.7      12.6       9.5      33.2       9.3      18.7      39.6      14.4     -19.4      -6.1      28.0     -32.3     -33.8     130.1
-TIME 16 (main, full) router  1 1602.0 |     333.0     441.0      33.0      27.0      49.0      63.0     126.0      35.0      29.0      -2.0     -21.0     102.0     266.0     -32.0     153.0
-TIME 16 (main, full) engines 12263 1981.8 |     125.9     283.1      95.0      61.4      90.7     143.6      89.6      78.9     112.3      20.3      -9.9     130.2     438.7      -6.5     328.4
-TIME 16 (main, full) core    1925 1559.1 |     122.3     270.2      92.3      77.6      89.4      84.3      89.8      76.6      90.7      35.2      -1.1     255.9      90.1      -3.7     189.4
-TIME 16 (main, full) mesh cores' step by state (ns per core-cycle, count): wfi 29.4 (904123) stalled 150.9 (238) running 270.7 (1687)
-TIME 17 (main, lone): 226530 cycles, 14158 sampled (1 in 16); nanoTime() costs 53 ns, subtracted per section
-TIME 17 (main, lone) section request bus                              0.375 us/cycle
-TIME 17 (main, lone) section C&C endpoints                           -0.021 us/cycle
-TIME 17 (main, lone) section the 64 tiles (unsampled cycles)          0.515 us/cycle
-TIME 17 (main, lone) section CnC model                               -0.018 us/cycle
-TIME 17 (main, lone) section CcCores (C&C 1-3)                       -0.053 us/cycle
-TIME 17 (main, lone) section READY and error lines                    0.539 us/cycle
-TIME 17 (main, lone) section the cycle's tail                         0.030 us/cycle
-TIME 17 (main, lone) section checkInvariants                          0.991 us/cycle
-TIME 17 (main, lone) section total                                    2.357 us/cycle
+TIME 16 (main, full) idle    891859 393.3 |      61.1     167.7      10.5       8.1      24.5       6.4      19.3      37.7      15.2     -26.1     -13.4      22.1     -39.6     -41.3     141.0
+TIME 16 (main, full) router  1 1484.0 |     316.0     329.0      55.0      69.0     123.0      46.0     130.0      42.0      31.0      41.0     -13.0      78.0      95.0     -42.0     184.0
+TIME 16 (main, full) engines 12263 1945.8 |     133.8     303.1      68.7      92.5      88.5      78.7      84.7      61.5      61.2      30.3      11.3     117.3     454.7     -17.7     377.1
+TIME 16 (main, full) core    1925 1437.1 |     138.3     249.7      65.5      80.0      86.0      80.7      93.8      61.8      54.2      27.5      13.2     196.5      99.3     -26.6     217.1
+TIME 16 (main, full) mesh cores' step by state (ns per core-cycle, count): wfi 23.4 (904123) stalled 69.2 (238) running 214.4 (1687)
+TIME 17 (main, lone): 226530 cycles, 14158 sampled (1 in 16); nanoTime() costs 61 ns, subtracted per section
+TIME 17 (main, lone) section request bus                              0.370 us/cycle
+TIME 17 (main, lone) section C&C endpoints                           -0.031 us/cycle
+TIME 17 (main, lone) section the 64 tiles (unsampled cycles)          0.503 us/cycle
+TIME 17 (main, lone) section CnC model                               -0.028 us/cycle
+TIME 17 (main, lone) section CcCores (C&C 1-3)                       -0.061 us/cycle
+TIME 17 (main, lone) section READY and error lines                    0.527 us/cycle
+TIME 17 (main, lone) section the cycle's tail                         0.022 us/cycle
+TIME 17 (main, lone) section checkInvariants                          0.972 us/cycle
+TIME 17 (main, lone) section total                                    2.275 us/cycle
 TIME 17 (main, lone) sampled tile-cycles by class: count, ns per tile-cycle (the children summed), then per child
 TIME 17 (main, lone) child       router   srq+inj  director      cmem      sram    writer        ag    tables      hist  readport    gather      core      slot  slot.end   ctl.end
-TIME 17 (main, lone) idle    1 1689.0 |     168.0     366.0      37.0     115.0     128.0      52.0      87.0      55.0      82.0     116.0     112.0      66.0      25.0      15.0     265.0
-TIME 17 (main, lone) router  1 130.0 |     155.0      32.0      -6.0      -8.0      -1.0      -5.0     -10.0      -5.0      -6.0      -6.0     -16.0      -5.0       5.0     -32.0      38.0
-TIME 17 (main, lone) engines 12231 40.9 |      -1.8      43.1      -8.5     -11.2       0.5      -9.0     -13.5      -8.0      -8.0     -11.9     -19.1       3.4      93.8     -32.9      23.9
-TIME 17 (main, lone) core    1925 -7.0 |       1.8      35.6      -7.9      -8.7       3.6      -5.8      -9.8      -3.7      -5.0      -8.6     -17.0      28.4      -6.5     -31.0      27.6
-TIME 17 (main, lone) mesh cores' step by state (ns per core-cycle, count): wfi 3.4 (12233) stalled 8.3 (236) running 31.3 (1689)
-TIME 18 (main, full): 226530 cycles, 14158 sampled (1 in 16); nanoTime() costs 53 ns, subtracted per section
-TIME 18 (main, full) section request bus                              0.898 us/cycle
-TIME 18 (main, full) section C&C endpoints                            0.029 us/cycle
-TIME 18 (main, full) section the 64 tiles (unsampled cycles)         56.978 us/cycle
-TIME 18 (main, full) section CnC model                                0.025 us/cycle
-TIME 18 (main, full) section CcCores (C&C 1-3)                       -0.053 us/cycle
-TIME 18 (main, full) section READY and error lines                    1.272 us/cycle
-TIME 18 (main, full) section the cycle's tail                         0.206 us/cycle
-TIME 18 (main, full) section checkInvariants                          2.375 us/cycle
-TIME 18 (main, full) section total                                   61.730 us/cycle
+TIME 17 (main, lone) idle    1 2301.0 |     202.0     275.0     185.0     168.0     451.0     107.0      95.0     141.0      26.0      35.0     -16.0     139.0     -11.0     -32.0     536.0
+TIME 17 (main, lone) router  1 25.0 |     129.0     104.0     -16.0     -19.0     -13.0     -16.0     -19.0     -11.0     -16.0     -24.0     -30.0     -12.0     -19.0     -42.0      29.0
+TIME 17 (main, lone) engines 12231 -95.9 |      -6.1      36.7     -12.8     -18.6     -11.6     -17.8     -19.2     -14.0     -18.3     -23.6     -26.8      -5.9      66.3     -42.1      17.9
+TIME 17 (main, lone) core    1925 -149.7 |      -6.1      21.9     -13.4     -17.6     -10.6     -16.7     -16.0     -11.9     -13.7     -22.3     -26.2      13.9     -10.5     -39.5      19.0
+TIME 17 (main, lone) mesh cores' step by state (ns per core-cycle, count): wfi -5.9 (12233) stalled -4.4 (236) running 16.4 (1689)
+TIME 18 (main, full): 226530 cycles, 14158 sampled (1 in 16); nanoTime() costs 61 ns, subtracted per section
+TIME 18 (main, full) section request bus                              0.700 us/cycle
+TIME 18 (main, full) section C&C endpoints                           -0.002 us/cycle
+TIME 18 (main, full) section the 64 tiles (unsampled cycles)         57.365 us/cycle
+TIME 18 (main, full) section CnC model                                0.005 us/cycle
+TIME 18 (main, full) section CcCores (C&C 1-3)                       -0.061 us/cycle
+TIME 18 (main, full) section READY and error lines                    1.061 us/cycle
+TIME 18 (main, full) section the cycle's tail                         0.082 us/cycle
+TIME 18 (main, full) section checkInvariants                          2.254 us/cycle
+TIME 18 (main, full) section total                                   61.404 us/cycle
 TIME 18 (main, full) sampled tile-cycles by class: count, ns per tile-cycle (the children summed), then per child
 TIME 18 (main, full) child       router   srq+inj  director      cmem      sram    writer        ag    tables      hist  readport    gather      core      slot  slot.end   ctl.end
-TIME 18 (main, full) idle    891922 479.0 |      69.0     179.2      15.1       9.3      29.2       8.5      23.1      47.9      10.0     -15.0      -8.3      30.4     -31.5     -32.8     144.8
-TIME 18 (main, full) router  1 1165.0 |     352.0     193.0      89.0      52.0      39.0      25.0      33.0      32.0      47.0       4.0      -1.0      45.0     145.0     -35.0     145.0
-TIME 18 (main, full) engines 12264 1842.9 |     135.6     277.2      78.5     103.0      87.8      61.4      51.8      68.1      69.4      42.9      16.0     127.6     356.5       0.8     366.1
-TIME 18 (main, full) core    1925 1595.5 |     132.6     262.9      87.3      77.8      78.2      66.4      74.8      83.2      85.0      40.9      20.5     256.0      96.4      -4.8     238.1
-TIME 18 (main, full) mesh cores' step by state (ns per core-cycle, count): wfi 31.7 (904187) stalled 110.2 (236) running 276.4 (1689)
-TIME 19 (main, lone): 226533 cycles, 14158 sampled (1 in 16); nanoTime() costs 53 ns, subtracted per section
-TIME 19 (main, lone) section request bus                              0.384 us/cycle
-TIME 19 (main, lone) section C&C endpoints                           -0.021 us/cycle
-TIME 19 (main, lone) section the 64 tiles (unsampled cycles)          0.504 us/cycle
-TIME 19 (main, lone) section CnC model                               -0.020 us/cycle
-TIME 19 (main, lone) section CcCores (C&C 1-3)                       -0.053 us/cycle
-TIME 19 (main, lone) section READY and error lines                    0.551 us/cycle
-TIME 19 (main, lone) section the cycle's tail                         0.035 us/cycle
-TIME 19 (main, lone) section checkInvariants                          0.984 us/cycle
-TIME 19 (main, lone) section total                                    2.364 us/cycle
+TIME 18 (main, full) idle    891922 384.9 |      62.4     176.7       6.8       3.6      25.9       0.6      17.6      48.6       1.2     -26.2     -18.3      25.0     -39.3     -40.9     141.1
+TIME 18 (main, full) router  1 2082.0 |     617.0     429.0     123.0      43.0     168.0      69.0      28.0      48.0     267.0      20.0      -2.0      49.0      75.0     -42.0     190.0
+TIME 18 (main, full) engines 12264 1809.1 |     114.6     283.1      78.1     108.6     133.9      60.8      45.8      75.0     103.7      22.3      14.0      90.1     365.0     -14.3     328.3
+TIME 18 (main, full) core    1925 1535.2 |     110.7     234.5      73.7     104.7     107.6      72.7      67.2      81.8     136.4      35.9      12.0     255.7      55.6     -22.6     209.2
+TIME 18 (main, full) mesh cores' step by state (ns per core-cycle, count): wfi 25.9 (904187) stalled 103.1 (236) running 277.0 (1689)
+TIME 19 (main, lone): 226533 cycles, 14158 sampled (1 in 16); nanoTime() costs 61 ns, subtracted per section
+TIME 19 (main, lone) section request bus                              0.370 us/cycle
+TIME 19 (main, lone) section C&C endpoints                           -0.029 us/cycle
+TIME 19 (main, lone) section the 64 tiles (unsampled cycles)          0.490 us/cycle
+TIME 19 (main, lone) section CnC model                               -0.029 us/cycle
+TIME 19 (main, lone) section CcCores (C&C 1-3)                       -0.061 us/cycle
+TIME 19 (main, lone) section READY and error lines                    0.531 us/cycle
+TIME 19 (main, lone) section the cycle's tail                         0.022 us/cycle
+TIME 19 (main, lone) section checkInvariants                          0.973 us/cycle
+TIME 19 (main, lone) section total                                    2.267 us/cycle
 TIME 19 (main, lone) sampled tile-cycles by class: count, ns per tile-cycle (the children summed), then per child
 TIME 19 (main, lone) child       router   srq+inj  director      cmem      sram    writer        ag    tables      hist  readport    gather      core      slot  slot.end   ctl.end
-TIME 19 (main, lone) idle    1 1560.0 |     160.0     407.0     111.0     151.0     228.0      50.0      38.0      67.0      78.0       3.0      -1.0      97.0      60.0     -33.0     144.0
-TIME 19 (main, lone) router  1 63.0 |     159.0      32.0      -9.0     -12.0      -6.0     -12.0     -11.0      -9.0     -12.0     -19.0     -19.0      -6.0     -12.0     -35.0      34.0
-TIME 19 (main, lone) engines 12231 21.9 |       2.1      44.5      -5.8     -10.1      -0.1      -9.5     -10.6      -7.2     -10.5     -16.4     -18.4       6.5      68.9     -33.9      22.4
-TIME 19 (main, lone) core    1925 -58.5 |       0.4      29.8      -8.0     -11.3      -1.0     -11.0     -10.6      -8.0     -11.0     -16.7     -18.1      22.5      -7.2     -33.1      24.8
-TIME 19 (main, lone) mesh cores' step by state (ns per core-cycle, count): wfi 6.5 (12233) stalled 11.2 (236) running 24.1 (1689)
-TIME 20 (main, full): 226533 cycles, 14158 sampled (1 in 16); nanoTime() costs 53 ns, subtracted per section
-TIME 20 (main, full) section request bus                              0.784 us/cycle
-TIME 20 (main, full) section C&C endpoints                            0.014 us/cycle
-TIME 20 (main, full) section the 64 tiles (unsampled cycles)         53.582 us/cycle
-TIME 20 (main, full) section CnC model                                0.035 us/cycle
-TIME 20 (main, full) section CcCores (C&C 1-3)                       -0.053 us/cycle
-TIME 20 (main, full) section READY and error lines                    1.140 us/cycle
-TIME 20 (main, full) section the cycle's tail                         0.150 us/cycle
-TIME 20 (main, full) section checkInvariants                          2.190 us/cycle
-TIME 20 (main, full) section total                                   57.842 us/cycle
+TIME 19 (main, lone) idle    1 4851.0 |     467.0     683.0     253.0     213.0     489.0     201.0     132.0     171.0     246.0     485.0      51.0     594.0     219.0       0.0     647.0
+TIME 19 (main, lone) router  1 73.0 |     155.0      78.0     -12.0     -17.0     -10.0     -17.0     -18.0     -14.0     -18.0     -20.0     -26.0       2.0      -1.0     -40.0      31.0
+TIME 19 (main, lone) engines 12231 -102.2 |      -6.1      36.9     -14.7     -18.3     -10.6     -17.7     -18.6     -15.6     -18.9     -21.6     -26.6      -3.2      56.2     -41.3      17.9
+TIME 19 (main, lone) core    1925 -141.3 |      -2.7      26.1     -14.3     -17.2      -8.1     -14.0     -16.6     -12.7     -17.0     -19.9     -25.6      14.4     -17.5     -40.0      23.7
+TIME 19 (main, lone) mesh cores' step by state (ns per core-cycle, count): wfi -3.2 (12233) stalled -5.3 (236) running 17.1 (1689)
+TIME 20 (main, full): 226533 cycles, 14158 sampled (1 in 16); nanoTime() costs 61 ns, subtracted per section
+TIME 20 (main, full) section request bus                              0.727 us/cycle
+TIME 20 (main, full) section C&C endpoints                            0.007 us/cycle
+TIME 20 (main, full) section the 64 tiles (unsampled cycles)         52.205 us/cycle
+TIME 20 (main, full) section CnC model                                0.033 us/cycle
+TIME 20 (main, full) section CcCores (C&C 1-3)                       -0.061 us/cycle
+TIME 20 (main, full) section READY and error lines                    1.014 us/cycle
+TIME 20 (main, full) section the cycle's tail                         0.081 us/cycle
+TIME 20 (main, full) section checkInvariants                          2.125 us/cycle
+TIME 20 (main, full) section total                                   56.131 us/cycle
 TIME 20 (main, full) sampled tile-cycles by class: count, ns per tile-cycle (the children summed), then per child
 TIME 20 (main, full) child       router   srq+inj  director      cmem      sram    writer        ag    tables      hist  readport    gather      core      slot  slot.end   ctl.end
-TIME 20 (main, full) idle    891922 510.1 |      72.6     170.9      17.2      14.6      39.8      13.3      25.8      52.3      22.5     -18.6      -5.0      32.8     -32.2     -33.3     137.4
-TIME 20 (main, full) router  1 1006.0 |     429.0     164.0      16.0      12.0      29.0      15.0      13.0      39.0      18.0      24.0       4.0      26.0      47.0     -28.0     198.0
-TIME 20 (main, full) engines 12264 1996.9 |     161.9     306.4     108.6     100.8      98.1     105.3      81.4      77.4      77.6      46.3      46.2     185.8     347.3     -22.9     276.7
-TIME 20 (main, full) core    1925 1135.8 |     103.8     224.6      54.4      73.4      53.7      63.6      40.7      57.2      45.0      34.4      21.9     192.4      70.3     -26.9     127.2
-TIME 20 (main, full) mesh cores' step by state (ns per core-cycle, count): wfi 34.9 (904187) stalled 76.2 (236) running 208.6 (1689)
-TIME 21 (main, lone): 226536 cycles, 14158 sampled (1 in 16); nanoTime() costs 53 ns, subtracted per section
-TIME 21 (main, lone) section request bus                              0.367 us/cycle
-TIME 21 (main, lone) section C&C endpoints                           -0.022 us/cycle
-TIME 21 (main, lone) section the 64 tiles (unsampled cycles)          0.494 us/cycle
-TIME 21 (main, lone) section CnC model                               -0.021 us/cycle
-TIME 21 (main, lone) section CcCores (C&C 1-3)                       -0.053 us/cycle
-TIME 21 (main, lone) section READY and error lines                    0.519 us/cycle
-TIME 21 (main, lone) section the cycle's tail                         0.029 us/cycle
-TIME 21 (main, lone) section checkInvariants                          0.953 us/cycle
-TIME 21 (main, lone) section total                                    2.266 us/cycle
+TIME 20 (main, full) idle    891922 329.1 |      57.9     153.1       6.4       4.8      23.5       1.5      13.6      39.1      10.1     -27.7     -13.9      20.6     -40.4     -41.7     122.4
+TIME 20 (main, full) router  1 1764.0 |     736.0     271.0      39.0      29.0      30.0      64.0      81.0      74.0      34.0      52.0     -19.0     101.0     109.0     -43.0     206.0
+TIME 20 (main, full) engines 12264 1625.8 |     195.6     250.1      75.9      48.7      68.4      71.9      53.4      55.7      54.8      34.3       1.9     157.7     309.3     -21.7     269.7
+TIME 20 (main, full) core    1925 1512.6 |     229.5     241.3      53.7      48.4      77.9      74.6      63.8      65.9      74.2      42.5      -0.6     261.2      96.8     -26.8     210.2
+TIME 20 (main, full) mesh cores' step by state (ns per core-cycle, count): wfi 22.4 (904187) stalled 139.5 (236) running 278.2 (1689)
+TIME 21 (main, lone): 226536 cycles, 14158 sampled (1 in 16); nanoTime() costs 61 ns, subtracted per section
+TIME 21 (main, lone) section request bus                              0.359 us/cycle
+TIME 21 (main, lone) section C&C endpoints                           -0.031 us/cycle
+TIME 21 (main, lone) section the 64 tiles (unsampled cycles)          0.469 us/cycle
+TIME 21 (main, lone) section CnC model                               -0.033 us/cycle
+TIME 21 (main, lone) section CcCores (C&C 1-3)                       -0.061 us/cycle
+TIME 21 (main, lone) section READY and error lines                    0.496 us/cycle
+TIME 21 (main, lone) section the cycle's tail                         0.020 us/cycle
+TIME 21 (main, lone) section checkInvariants                          0.940 us/cycle
+TIME 21 (main, lone) section total                                    2.159 us/cycle
 TIME 21 (main, lone) sampled tile-cycles by class: count, ns per tile-cycle (the children summed), then per child
 TIME 21 (main, lone) child       router   srq+inj  director      cmem      sram    writer        ag    tables      hist  readport    gather      core      slot  slot.end   ctl.end
-TIME 21 (main, lone) idle    1 1818.0 |     215.0     365.0      58.0     237.0     334.0      80.0       0.0     134.0      62.0      18.0      34.0      85.0       7.0     -34.0     223.0
-TIME 21 (main, lone) router  1 31.0 |      82.0      63.0     -10.0     -15.0      20.0     -13.0     -17.0     -11.0      -9.0     -14.0     -20.0      -9.0      -9.0     -35.0      28.0
-TIME 21 (main, lone) engines 12232 11.5 |      -2.1      49.7      -7.5     -11.1      -0.9     -10.3     -12.2      -5.8      -8.2     -15.0     -19.2       8.7      53.9     -33.2      24.7
-TIME 21 (main, lone) core    1924 -82.0 |      -3.7      27.2     -11.7     -11.9       0.3      -9.7     -14.1      -7.5      -8.7     -14.2     -21.8      20.9     -13.5     -33.9      20.3
-TIME 21 (main, lone) mesh cores' step by state (ns per core-cycle, count): wfi 8.7 (12234) stalled -7.7 (237) running 24.9 (1687)
-TIME 22 (main, full): 226536 cycles, 14158 sampled (1 in 16); nanoTime() costs 53 ns, subtracted per section
-TIME 22 (main, full) section request bus                              0.756 us/cycle
-TIME 22 (main, full) section C&C endpoints                            0.004 us/cycle
-TIME 22 (main, full) section the 64 tiles (unsampled cycles)         53.728 us/cycle
+TIME 21 (main, lone) idle    1 1599.0 |      89.0     274.0     196.0     229.0     145.0      -4.0      20.0      23.0      78.0      80.0     -27.0     186.0      50.0     -42.0     302.0
+TIME 21 (main, lone) router  1 -86.0 |     128.0      38.0     -18.0     -21.0     -10.0     -21.0     -21.0     -18.0     -19.0     -23.0     -31.0     -18.0     -17.0     -42.0       7.0
+TIME 21 (main, lone) engines 12232 -126.7 |      -9.0      39.5     -16.1     -19.9     -10.3     -16.9     -20.5     -13.0     -19.8     -25.3     -27.3      -3.6      41.0     -41.6      16.0
+TIME 21 (main, lone) core    1924 -203.3 |      -9.5      15.8     -19.7     -20.2      -7.6     -17.8     -21.4     -15.0     -17.6     -22.8     -30.5      12.5     -19.6     -42.3      12.3
+TIME 21 (main, lone) mesh cores' step by state (ns per core-cycle, count): wfi -3.6 (12234) stalled -16.8 (237) running 16.6 (1687)
+TIME 22 (main, full): 226536 cycles, 14158 sampled (1 in 16); nanoTime() costs 61 ns, subtracted per section
+TIME 22 (main, full) section request bus                              0.744 us/cycle
+TIME 22 (main, full) section C&C endpoints                            0.015 us/cycle
+TIME 22 (main, full) section the 64 tiles (unsampled cycles)         51.979 us/cycle
 TIME 22 (main, full) section CnC model                                0.012 us/cycle
-TIME 22 (main, full) section CcCores (C&C 1-3)                       -0.053 us/cycle
-TIME 22 (main, full) section READY and error lines                    1.123 us/cycle
-TIME 22 (main, full) section the cycle's tail                         0.122 us/cycle
-TIME 22 (main, full) section checkInvariants                          2.223 us/cycle
-TIME 22 (main, full) section total                                   57.915 us/cycle
+TIME 22 (main, full) section CcCores (C&C 1-3)                       -0.061 us/cycle
+TIME 22 (main, full) section READY and error lines                    1.023 us/cycle
+TIME 22 (main, full) section the cycle's tail                         0.111 us/cycle
+TIME 22 (main, full) section checkInvariants                          2.215 us/cycle
+TIME 22 (main, full) section total                                   56.038 us/cycle
 TIME 22 (main, full) sampled tile-cycles by class: count, ns per tile-cycle (the children summed), then per child
 TIME 22 (main, full) child       router   srq+inj  director      cmem      sram    writer        ag    tables      hist  readport    gather      core      slot  slot.end   ctl.end
-TIME 22 (main, full) idle    891922 430.7 |      64.1     167.6       9.7       3.8      25.1       3.2      21.0      44.0       5.3     -15.5     -11.6      32.7     -32.1     -33.8     147.2
-TIME 22 (main, full) router  1 1192.0 |     252.0     220.0      35.0      25.0      61.0      14.0      38.0     119.0      11.0      86.0      84.0      56.0      29.0       7.0     155.0
-TIME 22 (main, full) engines 12265 1716.2 |     156.7     281.8      96.3      66.0      88.6      51.9      46.7      70.0      67.4      30.2      26.9     147.3     326.1     -26.6     286.7
-TIME 22 (main, full) core    1924 1294.1 |     113.8     240.4      72.2      55.1      75.1      49.7      71.4      79.7      48.7      39.1      28.0     197.5      66.9     -23.0     179.5
-TIME 22 (main, full) mesh cores' step by state (ns per core-cycle, count): wfi 34.3 (904188) stalled 85.4 (237) running 213.3 (1687)
-TIME 23 (main, lone): 226539 cycles, 14158 sampled (1 in 16); nanoTime() costs 53 ns, subtracted per section
-TIME 23 (main, lone) section request bus                              0.377 us/cycle
-TIME 23 (main, lone) section C&C endpoints                           -0.022 us/cycle
-TIME 23 (main, lone) section the 64 tiles (unsampled cycles)          0.923 us/cycle
-TIME 23 (main, lone) section CnC model                               -0.021 us/cycle
-TIME 23 (main, lone) section CcCores (C&C 1-3)                       -0.053 us/cycle
-TIME 23 (main, lone) section READY and error lines                    0.515 us/cycle
-TIME 23 (main, lone) section the cycle's tail                         0.025 us/cycle
-TIME 23 (main, lone) section checkInvariants                          0.953 us/cycle
-TIME 23 (main, lone) section total                                    2.696 us/cycle
+TIME 22 (main, full) idle    891922 290.8 |      51.3     158.2       1.2      -3.9      17.2      -5.6      11.8      35.1      -1.3     -25.5     -19.5      22.5     -40.7     -42.2     132.2
+TIME 22 (main, full) router  1 1237.0 |     285.0     235.0      31.0      12.0      24.0      38.0      77.0      45.0     139.0      17.0     -27.0     116.0      20.0     -43.0     268.0
+TIME 22 (main, full) engines 12265 1995.9 |     129.8     272.2     116.9      68.9     107.9      73.5      55.7      64.5      44.7      14.6      -6.7     100.6     698.7     -34.8     289.4
+TIME 22 (main, full) core    1924 1167.2 |     126.8     226.8      80.2      49.7      70.9      60.6      67.4      68.1      24.7      23.7       3.5     186.9      56.2     -36.1     157.8
+TIME 22 (main, full) mesh cores' step by state (ns per core-cycle, count): wfi 23.6 (904188) stalled 71.5 (237) running 203.1 (1687)
+TIME 23 (main, lone): 226539 cycles, 14158 sampled (1 in 16); nanoTime() costs 61 ns, subtracted per section
+TIME 23 (main, lone) section request bus                              0.390 us/cycle
+TIME 23 (main, lone) section C&C endpoints                           -0.029 us/cycle
+TIME 23 (main, lone) section the 64 tiles (unsampled cycles)          0.488 us/cycle
+TIME 23 (main, lone) section CnC model                               -0.028 us/cycle
+TIME 23 (main, lone) section CcCores (C&C 1-3)                       -0.061 us/cycle
+TIME 23 (main, lone) section READY and error lines                    0.526 us/cycle
+TIME 23 (main, lone) section the cycle's tail                         0.022 us/cycle
+TIME 23 (main, lone) section checkInvariants                          0.992 us/cycle
+TIME 23 (main, lone) section total                                    2.301 us/cycle
 TIME 23 (main, lone) sampled tile-cycles by class: count, ns per tile-cycle (the children summed), then per child
 TIME 23 (main, lone) child       router   srq+inj  director      cmem      sram    writer        ag    tables      hist  readport    gather      core      slot  slot.end   ctl.end
-TIME 23 (main, lone) idle    1 1818.0 |     176.0     371.0      63.0     148.0     183.0      41.0      69.0      82.0      69.0      22.0      -4.0     217.0      21.0       8.0     352.0
-TIME 23 (main, lone) router  1 142.0 |     155.0      86.0      -3.0     -13.0       4.0      -6.0     -16.0     -10.0      -7.0      -9.0     -23.0      -4.0     -21.0     -35.0      44.0
-TIME 23 (main, lone) engines 12231 0.0 |      -2.3      46.4      -4.6     -12.1      -1.5      -6.0     -13.8      -9.4     -12.6     -13.8     -17.2      -0.3      51.9     -34.4      29.8
-TIME 23 (main, lone) core    1925 -38.2 |      -1.4      28.9      -2.7     -10.5       0.5      -4.7      -9.6      -9.3     -10.3     -12.0     -19.0      27.0      -8.1     -32.7      25.6
-TIME 23 (main, lone) mesh cores' step by state (ns per core-cycle, count): wfi -0.3 (12233) stalled -11.2 (232) running 32.3 (1693)
-TIME 24 (main, full): 226539 cycles, 14158 sampled (1 in 16); nanoTime() costs 53 ns, subtracted per section
+TIME 23 (main, lone) idle    1 1613.0 |     176.0     360.0      60.0     109.0     119.0      -2.0      50.0      64.0      40.0      26.0      17.0     107.0       6.0     -21.0     502.0
+TIME 23 (main, lone) router  1 111.0 |     205.0      54.0     -13.0      -5.0     -12.0     -17.0     -17.0     -13.0     -16.0     -19.0     -22.0      -2.0      -9.0     -41.0      38.0
+TIME 23 (main, lone) engines 12231 7261.4 |      -8.2      38.9     -14.6     -14.0     -10.7     -17.6     -18.9     -16.7     -18.5     -21.8     -26.2       0.5    7405.1     -41.1      25.0
+TIME 23 (main, lone) core    1925 -117.7 |      -5.7      27.0      -9.7     -12.0      -8.3     -14.8     -14.6     -12.1     -16.5     -18.7     -26.6      20.9     -11.7     -39.4      24.5
+TIME 23 (main, lone) mesh cores' step by state (ns per core-cycle, count): wfi 0.5 (12233) stalled -13.4 (232) running 25.6 (1693)
+TIME 24 (main, full): 226539 cycles, 14158 sampled (1 in 16); nanoTime() costs 61 ns, subtracted per section
 TIME 24 (main, full) section request bus                              0.791 us/cycle
-TIME 24 (main, full) section C&C endpoints                            0.014 us/cycle
-TIME 24 (main, full) section the 64 tiles (unsampled cycles)         56.881 us/cycle
-TIME 24 (main, full) section CnC model                               -0.001 us/cycle
-TIME 24 (main, full) section CcCores (C&C 1-3)                       -0.053 us/cycle
-TIME 24 (main, full) section READY and error lines                    1.209 us/cycle
-TIME 24 (main, full) section the cycle's tail                         0.118 us/cycle
-TIME 24 (main, full) section checkInvariants                          2.348 us/cycle
-TIME 24 (main, full) section total                                   61.307 us/cycle
+TIME 24 (main, full) section C&C endpoints                            0.015 us/cycle
+TIME 24 (main, full) section the 64 tiles (unsampled cycles)         56.613 us/cycle
+TIME 24 (main, full) section CnC model                                0.035 us/cycle
+TIME 24 (main, full) section CcCores (C&C 1-3)                       -0.061 us/cycle
+TIME 24 (main, full) section READY and error lines                    1.126 us/cycle
+TIME 24 (main, full) section the cycle's tail                         0.085 us/cycle
+TIME 24 (main, full) section checkInvariants                          2.186 us/cycle
+TIME 24 (main, full) section total                                   60.788 us/cycle
 TIME 24 (main, full) sampled tile-cycles by class: count, ns per tile-cycle (the children summed), then per child
 TIME 24 (main, full) child       router   srq+inj  director      cmem      sram    writer        ag    tables      hist  readport    gather      core      slot  slot.end   ctl.end
-TIME 24 (main, full) idle    891922 437.2 |      62.3     176.6       8.8       0.7      24.9       2.8      22.2      46.8       4.3     -14.3     -13.3      29.3     -31.7     -33.1     151.1
-TIME 24 (main, full) router  1 1483.0 |     542.0     298.0      26.0      25.0      43.0      25.0      84.0     141.0      20.0      21.0     -21.0      54.0      80.0     -33.0     178.0
-TIME 24 (main, full) engines 12264 1853.3 |     184.6     324.4      41.5      51.3      86.4      40.9      46.7      87.1      60.4      51.3      -7.3     145.4     392.7      -9.3     357.4
-TIME 24 (main, full) core    1925 1386.5 |     153.6     264.0      44.6      35.0      78.9      41.0      57.1      75.1      48.6      37.5      -7.7     246.0      76.8     -19.8     255.8
-TIME 24 (main, full) mesh cores' step by state (ns per core-cycle, count): wfi 30.9 (904187) stalled 77.0 (232) running 269.2 (1693)
+TIME 24 (main, full) idle    891922 317.1 |      57.6     168.9       1.9      -6.7      14.0      -6.3      13.2      38.3      -4.8     -23.7     -20.3      20.9     -39.4     -40.9     144.4
+TIME 24 (main, full) router  1 1332.0 |     428.0     201.0      90.0      23.0      32.0     104.0      36.0      44.0      23.0      19.0     -15.0      39.0     104.0     -40.0     244.0
+TIME 24 (main, full) engines 12264 1748.3 |     207.2     300.4     100.8      55.4      71.7      66.5      25.0      81.1      34.0      32.1       6.0     111.0     326.0     -29.1     360.2
+TIME 24 (main, full) core    1925 1249.0 |     183.9     226.1      69.0      41.8      61.8      66.0      32.6      67.4      31.3      31.0       0.5     186.8      61.2     -28.4     218.1
+TIME 24 (main, full) mesh cores' step by state (ns per core-cycle, count): wfi 22.2 (904187) stalled 61.1 (232) running 204.0 (1693)

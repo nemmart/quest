@@ -1,6 +1,6 @@
-[1.136s][info][jfr,startup] Started recording 1. No limit specified, using maxsize=250MB as default.
-[1.136s][info][jfr,startup] 
-[1.136s][info][jfr,startup] Use jcmd 502509 JFR.dump name=1 to copy recording data to file.
+[0.489s][info][jfr,startup] Started recording 1. No limit specified, using maxsize=250MB as default.
+[0.489s][info][jfr,startup] 
+[0.489s][info][jfr,startup] Use jcmd 503493 JFR.dump name=1 to copy recording data to file.
 cyclone-29   window     0  state-pick OK     65536 rows  pass   207967 cycles  3.173 cycles/row  newexp 69 (served 69, slow path 1), refills 42, stalls [0, 184, 10572, 0, 109, 122, 0]  [meas: StageB]
 cyclone-29   window     0  state-pick OK     65536 rows  pass   207967 cycles  3.173 cycles/row  newexp 69 (served 69, slow path 1), refills 42, stalls [0, 184, 10572, 0, 109, 122, 0]  [meas: StageB]
 cyclone-29   window     1  state-pick OK     65536 rows  pass   197047 cycles  3.007 cycles/row  newexp 0 (served 0, slow path 0), refills 33, stalls [0, 184, 0, 0, 0, 255, 0]  [meas: StageB]
@@ -34,4 +34,4 @@ cyclone-29   window    14  state-pick OK     65536 rows  pass   197047 cycles  3
 cyclone-29   window    15  state-pick OK     65536 rows  pass   197035 cycles  3.007 cycles/row  newexp 0 (served 0, slow path 0), refills 39, stalls [0, 184, 0, 0, 0, 243, 0]  [meas: StageB]
 cyclone-29   window    15  state-pick OK     65536 rows  pass   197035 cycles  3.007 cycles/row  newexp 0 (served 0, slow path 0), refills 39, stalls [0, 184, 0, 0, 0, 243, 0]  [meas: StageB]
 ReplayShard cyclone-29 B phase 0/1: 32 runs, 0 failed
-jfr-sb-cyclone-29: exit 0, 190 s
+jfr-sb-cyclone-29: exit 0, 193 s
