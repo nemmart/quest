@@ -1,0 +1,10 @@
+sort: SAME; chips 11; sort.base: exit 0, 143 s sort.new: exit 0, 138 s 
+t2-evm-zone-29: SAME; chips 1; t2-evm-zone-29.base: exit 0, 66 s t2-evm-zone-29.new: exit 0, 60 s 
+t2-cyclone-29: SAME; chips 1; t2-cyclone-29.base: exit 0, 60 s t2-cyclone-29.new: exit 0, 63 s 
+rb-evm-zone-29: SAME; chips 1; rb-evm-zone-29.base: exit 0, 22 s rb-evm-zone-29.new: exit 0, 24 s 
+rb-cyclone-29: SAME; chips 1; rb-cyclone-29.base: exit 0, 36 s rb-cyclone-29.new: exit 0, 39 s 
+    TOTAL 1,229,687 cycles (L1 GO -> L2 all READY; real split), of which C&C turnaround 96
+cyclone-29: T2 on 1 run(s), 0 failed, 64 s
+evm-zone-29: T2 on 1 run(s), 0 failed, 60 s
+repeat 0: OK, chip 239,517 cycles, replay 209,959 cycles (first start 29510, last end 239469), 4,194,304 rows, 0 of 64 tiles failed, violations 0; wall 37.6 s; the replay from cycle 31298: 32.8 s, 157
+repeat 0: OK, chip 265,494 cycles, replay 235,848 cycles (first start 29510, last end 265358), 4,194,304 rows, 0 of 64 tiles failed, violations 0; wall 22.8 s; the replay from cycle 29781: 17.5 s, 74.

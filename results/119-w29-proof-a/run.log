@@ -1,0 +1,65 @@
+kit sha256 dea387344e98be1459ed7822c620061a7338780f0208752efb758d6ef14f9c8f
+base: meshsim 2d8d9c1 (HEAD)
+new:  meshsim 7606a9e (sim-step-cost), built 2026-11-06
+start Fri Nov  6 11:25:15 AM UTC 2026 on godspeed, 16 threads
+openjdk version "21.0.12.1" 2026-08-18
+               total        used        free      shared  buff/cache   available
+Mem:              62           1          42           0          19          61
+evm-zone-29: inputs checked
+cyclone-29: inputs checked
+manifest /tmp/w29-proof/v1261/evm-zone-29.manifest.json sha256 5bffa524ed8901f1957e546385697e463bc2ddce5b00d81d698ad8cb4078a0aa
+manifest /tmp/w29-proof/v1261/cyclone-29.manifest.json sha256 2d5e368e5721dcc0b07997a76a1834b98b998ad1d49bfed9a27ee42ede333bd5
+accounting     SAME  exit 1/1  base 2.8 s  new 2.3 s  chips 1
+agtest         SAME  exit 0/0  base 4.3 s  new 4.0 s  chips 48
+agtest-shuf    SAME  exit 0/0  base 4.5 s  new 4.4 s  chips 48
+bus            SAME  exit 0/0  base 0.1 s  new 0.1 s  chips 0
+cccores        SAME  exit 0/0  base 7.2 s  new 7.8 s  chips 7
+cccores-shuf   SAME  exit 0/0  base 7.0 s  new 8.3 s  chips 7
+cond           SAME  exit 0/0  base 1.7 s  new 1.5 s  chips 1
+cond-shuf      SAME  exit 0/0  base 1.9 s  new 1.8 s  chips 1
+ctrl           SAME  exit 0/0  base 6.6 s  new 6.1 s  chips 16
+ctrl-shuf      SAME  exit 0/0  base 8.4 s  new 7.4 s  chips 16
+engine         SAME  exit 0/0  base 13.2 s  new 11.9 s  chips 23
+eng-shuf       SAME  exit 0/0  base 16.4 s  new 15.2 s  chips 23
+hooks          SAME  exit 0/0  base 0.7 s  new 1.0 s  chips 6
+hooks-shuf     SAME  exit 0/0  base 0.8 s  new 0.7 s  chips 6
+mem            SAME  exit 0/0  base 4.1 s  new 3.8 s  chips 23
+mem-shuf2      SAME  exit 0/0  base 4.8 s  new 5.5 s  chips 23
+mem-shuf       SAME  exit 0/0  base 4.8 s  new 5.5 s  chips 23
+memsys         SAME  exit 0/0  base 0.2 s  new 0.1 s  chips 0
+net            SAME  exit 0/0  base 11.0 s  new 11.1 s  chips 171
+net-shuf2      SAME  exit 0/0  base 13.4 s  new 12.6 s  chips 171
+net-shuf       SAME  exit 0/0  base 12.5 s  new 13.0 s  chips 171
+periph         SAME  exit 0/0  base 1.0 s  new 0.9 s  chips 11
+periph-shuf    SAME  exit 0/0  base 0.9 s  new 0.8 s  chips 11
+rdport         SAME  exit 0/0  base 23.3 s  new 23.8 s  chips 42
+rdport-shuf    SAME  exit 0/0  base 29.1 s  new 24.4 s  chips 42
+recipes        SAME  exit 0/0  base 29.0 s  new 27.8 s  chips 21
+recipes-shuf   SAME  exit 0/0  base 40.3 s  new 33.3 s  chips 21
+regdoc         SAME  exit 0/0  base 15.9 s  new 15.8 s  chips 1
+replayer       SAME  exit 0/0  base 1.3 s  new 1.2 s  chips 0
+reqbus         SAME  exit 0/0  base 1.2 s  new 1.5 s  chips 7
+reqbus-shuf    SAME  exit 0/0  base 1.6 s  new 1.7 s  chips 7
+riscv          SAME  exit 0/0  base 3.4 s  new 3.2 s  chips 48
+rvc            SAME  exit 0/0  base 0.5 s  new 0.7 s  chips 0
+searchbench    SAME  exit 0/0  base 47.5 s  new 31.5 s  chips 2
+sort-p1        SAME  exit 0/0  base 28.6 s  new 19.6 s  chips 6
+sort           SAME  exit 0/0  base 135.7 s  new 109.4 s  chips 10
+sort-shuf      SAME  exit 0/0  base 183.0 s  new 143.2 s  chips 10
+stageb         SAME  exit 0/0  base 3.4 s  new 3.3 s  chips 19
+tracer         SAME  exit 0/0  base 0.7 s  new 0.5 s  chips 0
+sort: SAME; chips 11; sort.base: exit 0, 143 s sort.new: exit 0, 138 s 
+t2-evm-zone-29: SAME; chips 1; t2-evm-zone-29.base: exit 0, 66 s t2-evm-zone-29.new: exit 0, 60 s 
+t2-cyclone-29: SAME; chips 1; t2-cyclone-29.base: exit 0, 60 s t2-cyclone-29.new: exit 0, 63 s 
+rb-evm-zone-29: SAME; chips 1; rb-evm-zone-29.base: exit 0, 22 s rb-evm-zone-29.new: exit 0, 24 s 
+rb-cyclone-29: SAME; chips 1; rb-cyclone-29.base: exit 0, 36 s rb-cyclone-29.new: exit 0, 39 s 
+    TOTAL 1,229,687 cycles (L1 GO -> L2 all READY; real split), of which C&C turnaround 96
+cyclone-29: T2 on 1 run(s), 0 failed, 64 s
+evm-zone-29: T2 on 1 run(s), 0 failed, 60 s
+repeat 0: OK, chip 239,517 cycles, replay 209,959 cycles (first start 29510, last end 239469), 4,194,304 rows, 0 of 64 tiles failed, violations 0; wall 37.6 s; the replay from cycle 31298: 32.8 s, 157
+repeat 0: OK, chip 265,494 cycles, replay 235,848 cycles (first start 29510, last end 265358), 4,194,304 rows, 0 of 64 tiles failed, violations 0; wall 22.8 s; the replay from cycle 29781: 17.5 s, 74.
+rb evm-zone-29 base: the replay from cycle 29781: 12.1 s, 51.31 us/cycle;the replay from cycle 29781: 11.4 s, 48.37 us/cycle;the replay from cycle 29781: 11.7 s, 49.75 us/cycle;
+sort base: 109.131369590 s, 1 passed line
+rb evm-zone-29 new: the replay from cycle 29781: 11.8 s, 49.92 us/cycle;the replay from cycle 29781: 11.4 s, 48.21 us/cycle;the replay from cycle 29781: 11.9 s, 50.61 us/cycle;
+sort new: 100.491022793 s, 1 passed line
+quick suite: 39 of 39 the same; big runs: 5 of 5 the same; Fri Nov  6 11:39:05 AM UTC 2026
