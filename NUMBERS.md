@@ -78,3 +78,7 @@ same number (`044b-...`), claimed the same way.
 | 110j | meshsim WORKER22 | B1 T2 at 2^29, evm-zone-29 segments 37 (LRU), 64, 80, 84 (110f split) |
 | 110k | meshsim WORKER22 | B1 T2 at 2^29, cyclone-29 segments 10, 10 (LRU), 14, 16 (110g split) |
 | 110l | meshsim WORKER22 | B1 T2 at 2^29, cyclone-29 segments 32, 48, 64, 80 (110g split) |
+| 110m | meshsim WORKER22 | B1 T2 at 2^29, evm-zone-29 segments 16, 32, 37, 48 (replaces 110i: 'booted' up the request tree, the fan-in that hung 110f and 110i-110l; fail-fast) |
+| 110n | meshsim WORKER22 | B1 T2 at 2^29, evm-zone-29 segments 37 (LRU), 64, 80, 84 (replaces 110j) |
+| 110o | meshsim WORKER22 | B1 T2 at 2^29, cyclone-29 segments 10, 10 (LRU), 14, 16 (replaces 110k) |
+| 110p | meshsim WORKER22 | B1 T2 at 2^29, cyclone-29 segments 32, 48, 64, 80 (replaces 110l) |
