@@ -1,0 +1,59 @@
+kit sha256 1caa3cb896878d469978ab3e01d0aff7a863de71c360016ced433abeaad3a570
+meshsim fec569c (sim-idle-skip), built 2026-11-06
+start Fri Nov  6 10:33:27 AM UTC 2026 on godspeed, 16 threads
+openjdk version "21.0.12.1" 2026-08-18
+accounting     SAME  exit 1/1  off 3.0 s  on 2.6 s
+agtest         SAME  exit 0/0  off 3.8 s  on 3.8 s
+agtest-shuf    SAME  exit 0/0  off 3.9 s  on 5.4 s
+bus            SAME  exit 0/0  off 0.1 s  on 0.1 s
+cccores        SAME  exit 0/0  off 63.1 s  on 4.6 s
+cccores-shuf   SAME  exit 0/0  off 76.3 s  on 4.7 s
+cond           SAME  exit 0/0  off 1.5 s  on 1.4 s
+cond-shuf      SAME  exit 0/0  off 2.0 s  on 1.8 s
+ctrl           SAME  exit 0/0  off 5.6 s  on 6.0 s
+ctrl-shuf      SAME  exit 0/0  off 7.0 s  on 7.7 s
+engine         SAME  exit 0/0  off 11.6 s  on 12.9 s
+eng-shuf       SAME  exit 0/0  off 15.2 s  on 15.1 s
+hooks          SAME  exit 0/0  off 0.9 s  on 0.7 s
+hooks-shuf     SAME  exit 0/0  off 0.9 s  on 0.7 s
+mem            SAME  exit 0/0  off 4.0 s  on 3.6 s
+mem-shuf2      SAME  exit 0/0  off 4.2 s  on 3.9 s
+mem-shuf       SAME  exit 0/0  off 4.7 s  on 4.6 s
+memsys         SAME  exit 0/0  off 0.1 s  on 0.1 s
+net            SAME  exit 0/0  off 8.8 s  on 10.5 s
+net-shuf2      SAME  exit 0/0  off 10.7 s  on 11.7 s
+net-shuf       SAME  exit 0/0  off 11.0 s  on 12.0 s
+periph         SAME  exit 0/0  off 0.9 s  on 0.8 s
+periph-shuf    SAME  exit 0/0  off 1.0 s  on 1.0 s
+rdport         SAME  exit 0/0  off 24.6 s  on 18.6 s
+rdport-shuf    SAME  exit 0/0  off 26.7 s  on 28.1 s
+recipes        SAME  exit 0/0  off 35.1 s  on 36.7 s
+recipes-shuf   SAME  exit 0/0  off 45.0 s  on 38.6 s
+regdoc         SAME  exit 0/0  off 15.1 s  on 13.7 s
+replayer       SAME  exit 0/0  off 1.0 s  on 1.1 s
+reqbus         SAME  exit 0/0  off 3.8 s  on 1.0 s
+reqbus-shuf    SAME  exit 0/0  off 7.5 s  on 1.4 s
+riscv          SAME  exit 0/0  off 3.3 s  on 2.6 s
+rvc            SAME  exit 0/0  off 0.4 s  on 0.3 s
+searchbench    SAME  exit 0/0  off 44.1 s  on 39.1 s
+sort-p1        SAME  exit 0/0  off 34.2 s  on 22.6 s
+sort           SAME  exit 0/0  off 141.0 s  on 117.4 s
+sort-shuf      SAME  exit 0/0  off 186.5 s  on 155.6 s
+stageb         SAME  exit 0/0  off 28.0 s  on 2.3 s
+tracer         SAME  exit 0/0  off 0.9 s  on 0.9 s
+net-shuf (on) vs net (off): SAME
+net-shuf2 (on) vs net (off): SAME
+mem-shuf (on) vs mem (off): SAME
+mem-shuf2 (on) vs mem (off): SAME
+eng-shuf (on) vs engine (off): SAME
+ctrl-shuf (on) vs ctrl (off): SAME
+rdport-shuf (on) vs rdport (off): SAME
+agtest-shuf (on) vs agtest (off): SAME
+recipes-shuf (on) vs recipes (off): SAME
+cond-shuf (on) vs cond (off): SAME
+hooks-shuf (on) vs hooks (off): SAME
+periph-shuf (on) vs periph (off): SAME
+reqbus-shuf (on) vs reqbus (off): SAME
+cccores-shuf (on) vs cccores (off): SAME
+sort-shuf (on) vs sort (off): SAME
+on/off: 39 of 39 same, 0 different; shuffled-on vs unshuffled-off: 15 of 15 same; Fri Nov  6 10:40:39 AM UTC 2026
