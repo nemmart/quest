@@ -93,3 +93,4 @@ same number (`044b-...`), claimed the same way.
 | 114 | meshsim WORKER28 | stage 1 (sim-idle-skip): T2 segment 0 of evm-zone-29 and cyclone-29 (64 windows, raw) and Stage B/F on windows 0-63 of both, stage 1 off and on; every chip's fingerprint, the logs and CSVs compared; us per cycle against 113b's 46.9 |
 | 114b | meshsim WORKER28 | stage 1 (sim-idle-skip): the quick suite on and off, every step compared, the sort included; shuffled steps on against unshuffled off |
 | 113d | meshsim WORKER28 | the short probe run on WORKER22's READY/GO barriers (sim-idle-profile merged with v1.3-tracer a326fbd): the activity probe on T2 segment 0 of both workloads, first 32 windows |
+| 110v | meshsim WORKER22 | B1's final regression at v1.3-tracer 0d023ba (what merges): run_tests quick + full extras, the full-size sort p4/uniform-k128 against 1,229,008 cycles, the 64-window Stage B smoke of both workloads (as 110h) |
