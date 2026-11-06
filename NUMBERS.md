@@ -85,3 +85,7 @@ same number (`044b-...`), claimed the same way.
 | 113 | meshsim WORKER28 | idle-skipping step 1, the profile (branch sim-idle-profile): T2 segment 0 of evm-zone-29 and cyclone-29 raw under JFR (64 windows) and the per-unit probe (32 windows); Stage B and F on windows 0-15 of both under JFR and the probe |
 | 113b | meshsim WORKER28 | idle-skipping step 1, the time probe (sim-idle-profile): ns per cycle by chip section, by tile class and child, C&C 3 per unit (the Tracer against its slot and DMA), the cores by state (the interpreter); T2 segment 0 (32 windows) and Stage B/F windows 0-15 of both workloads |
 | 113c | meshsim WORKER28 | idle-skipping step 1: Stage B and F on windows 0-15 of both workloads under JFR, the activity probe and the time probe (113 and 113b lacked the tables manifest for Stage B) |
+| 110q | meshsim WORKER22 | B1 T2 at 2^29 on the READY/GO barriers (Q15, Q17 as ruled, 7c53209), evm-zone-29 segments 16, 32, 37, 48 |
+| 110r | meshsim WORKER22 | B1 T2 at 2^29, READY/GO, evm-zone-29 segments 37 (LRU), 64, 80, 84 |
+| 110s | meshsim WORKER22 | B1 T2 at 2^29, READY/GO, cyclone-29 segments 10, 10 (LRU), 14, 16 |
+| 110t | meshsim WORKER22 | B1 T2 at 2^29, READY/GO, cyclone-29 segments 32, 48, 64, 80 |
