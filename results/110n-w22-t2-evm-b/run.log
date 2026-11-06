@@ -1,0 +1,14 @@
+persistent data: /home/questrunner/data
+kit sha256 c385da9f2fdf1c3994f6a4c2395c1b9584c7cc897328143e09a8d34020dbd20a
+meshsim 515c11a (v1.3-tracer), gold eeb64b5, built 2026-11-06
+start Fri Nov  6 02:53:12 AM UTC 2026 on godspeed, 16 threads
+openjdk version "21.0.12.1" 2026-08-18
+               total        used        free      shared  buff/cache   available
+Mem:              62           1          45           0          16          61
+evm-zone-29: inputs checked (delivery 7142e894c80a0c9d491f21c852a942885e0abd97cfe6aefd0101d716824e138f, w26 57dc0ffe7574ab3e11f79f8414501bd1ceb2fd75faab0b03f3b4a6c2c61cad2d)
+evm-zone-29-t: exit 0, evm-zone-29: T2 on 4 run(s), 0 failed, 1403 s
+evm-zone-29 segment 84 (t, 64 windows): OK; C&C 3 22,640,091 cycles = 22.64 ms at 1 GHz (Tracer rows 18,571,806, drain 4,035,273); 11478 transfers, 1,433,179 packets; tiles' replay max 231,901 cycles; 4,194,304 rows checked; wall 1267 s
+evm-zone-29 segment 37c (t, 64 windows): OK; C&C 3 23,713,599 cycles = 23.71 ms at 1 GHz (Tracer rows 19,552,528, drain 4,128,094); 13027 transfers, 1,627,257 packets; tiles' replay max 232,285 cycles; 4,194,304 rows checked; wall 1337 s
+evm-zone-29 segment 80 (t, 64 windows): OK; C&C 3 23,693,794 cycles = 23.69 ms at 1 GHz (Tracer rows 19,531,476, drain 4,129,165); 14159 transfers, 1,772,054 packets; tiles' replay max 229,430 cycles; 4,194,304 rows checked; wall 1295 s
+evm-zone-29 segment 64 (t, 64 windows): OK; C&C 3 23,648,440 cycles = 23.65 ms at 1 GHz (Tracer rows 19,498,536, drain 4,116,693); 14057 transfers, 1,758,947 packets; tiles' replay max 231,273 cycles; 4,194,304 rows checked; wall 1343 s
+verdict: PASS; exit 0 at Fri Nov  6 03:16:36 AM UTC 2026
