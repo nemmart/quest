@@ -1,0 +1,242 @@
+persistent data: /home/questrunner/data
+kit sha256 2736fbe8fe97f9e3900e270f5cab3175209f5b4827fd07e18c1003212a9e791a
+meshsim f6bb7c0 (sim-idle-profile), gold eeb64b5, built 2026-11-06
+start Fri Nov  6 04:29:57 AM UTC 2026 on godspeed, 16 threads
+openjdk version "21.0.12.1" 2026-08-18
+               total        used        free      shared  buff/cache   available
+Mem:              62           1          43           0          18          61
+evm-zone-29: inputs checked
+cyclone-29: inputs checked
+manifest /tmp/w28-profile/v1261/evm-zone-29.manifest.json sha256 5bffa524ed8901f1957e546385697e463bc2ddce5b00d81d698ad8cb4078a0aa
+manifest /tmp/w28-profile/v1261/cyclone-29.manifest.json sha256 2d5e368e5721dcc0b07997a76a1834b98b998ad1d49bfed9a27ee42ede333bd5
+jfr-sb-evm-zone-29: exit 0; 
+probe-sb-evm-zone-29: exit 1; 
+time-sb-evm-zone-29: exit 1; 
+jfr-sb-cyclone-29: exit 0; 
+probe-sb-cyclone-29: exit 1; 
+time-sb-cyclone-29: exit 1; 
+/tmp/w28-profile/jfr-sb-cyclone-29.jfr: 16167 execution samples, 16108 (99.6%) inside Chip.runCycle
+== unit (innermost runCycle/endCycle; share of the simulation's samples)
+   22.33%      3597  SRAMReadQueue
+   21.66%      3489  TileControl.endCycle
+    8.77%      1413  Router
+    5.83%       939  TableStore
+    5.49%       884  Chip.checkInvariants
+    4.03%       649  AddressGenerator
+    3.80%       612  Controller
+    3.34%       538  Cnc1Peripheral
+    3.31%       533  Replayer
+    3.00%       483  HistStore
+    2.94%       473  WriteEngine
+    2.86%       461  BigSRAM
+    2.58%       416  RequestBus
+    2.49%       401  TrafficDirector
+    1.74%       280  InjectionPath
+    1.63%       263  Chip.scanOverflows
+    1.19%       192  ControllerMemories
+    0.76%       123  Tile
+    0.72%       116  GatherEngine
+    0.42%        68  Chip (own loop)
+    0.27%        44  Chip.tailLines
+    0.22%        36  ReadPort
+/tmp/w28-profile/jfr-sb-evm-zone-29.jfr: 16294 execution samples, 16240 (99.7%) inside Chip.runCycle
+== unit (innermost runCycle/endCycle; share of the simulation's samples)
+   22.28%      3619  SRAMReadQueue
+   21.45%      3484  TileControl.endCycle
+    8.00%      1300  Router
+    5.84%       948  Chip.checkInvariants
+    5.54%       899  TableStore
+    4.11%       668  Controller
+    3.90%       634  AddressGenerator
+    3.62%       588  Cnc1Peripheral
+    3.49%       567  Replayer
+    3.24%       526  WriteEngine
+    3.17%       514  HistStore
+    2.99%       486  BigSRAM
+    2.49%       404  RequestBus
+    2.42%       393  TrafficDirector
+    1.82%       295  InjectionPath
+    1.64%       267  Chip.scanOverflows
+    1.02%       165  ControllerMemories
+    0.84%       137  Tile
+    0.73%       118  GatherEngine
+    0.38%        61  Chip (own loop)
+    0.31%        50  Chip.tailLines
+    0.28%        45  ReadPort
+== probe-sb-cyclone-29.txt
+AGG full: 12 chips, 2731703 cycles; tiles (unparked) 174828992 unit-cycles, parked 0
+AGG full   idle      98.43%
+AGG full   router     0.00%
+AGG full   engines    1.33%
+AGG full   core       0.24%
+AGG full   idle with a word in flight towards the tile 0.00%
+AGG full   core disabled   0.00%
+AGG full   core halted     0.00%
+AGG full   core wfi       99.76%
+AGG full   core stalled    0.05%
+AGG full   core running    0.19%
+AGG full   idle cycles by run length (2^k: share): 1:0.00% 7:0.10% 17:99.90%
+AGG lone: 12 chips, 2731703 cycles; tiles (unparked) 2731703 unit-cycles, parked 172097289
+AGG lone   idle       0.00%
+AGG lone   router     0.00%
+AGG lone   engines   85.41%
+AGG lone   core      14.59%
+AGG lone   idle with a word in flight towards the tile 0.00%
+AGG lone   core disabled   0.00%
+AGG lone   core halted     0.00%
+AGG lone   core wfi       85.41%
+AGG lone   core stalled    2.87%
+AGG lone   core running   11.72%
+AGG lone   idle cycles by run length (2^k: share): 1:100.00%
+== probe-sb-evm-zone-29.txt
+AGG full: 12 chips, 2718369 cycles; tiles (unparked) 173975616 unit-cycles, parked 0
+AGG full   idle      98.43%
+AGG full   router     0.00%
+AGG full   engines    1.35%
+AGG full   core       0.22%
+AGG full   idle with a word in flight towards the tile 0.00%
+AGG full   core disabled   0.00%
+AGG full   core halted     0.00%
+AGG full   core wfi       99.78%
+AGG full   core stalled    0.04%
+AGG full   core running    0.18%
+AGG full   idle cycles by run length (2^k: share): 1:0.00% 7:0.10% 17:99.90%
+AGG lone: 12 chips, 2718369 cycles; tiles (unparked) 2718369 unit-cycles, parked 171257247
+AGG lone   idle       0.00%
+AGG lone   router     0.00%
+AGG lone   engines   86.39%
+AGG lone   core      13.61%
+AGG lone   idle with a word in flight towards the tile 0.00%
+AGG lone   core disabled   0.00%
+AGG lone   core halted     0.00%
+AGG lone   core wfi       86.39%
+AGG lone   core stalled    2.75%
+AGG lone   core running   10.86%
+AGG lone   idle cycles by run length (2^k: share): 1:100.00%
+== time-sb-cyclone-29.txt
+TIME 1 (main, lone): 239263 cycles, 14953 sampled (1 in 16); nanoTime() costs 42 ns, subtracted per section
+TIME 1 (main, lone) section request bus                              0.903 us/cycle
+TIME 1 (main, lone) section C&C endpoints                            0.007 us/cycle
+TIME 1 (main, lone) section the 64 tiles (unsampled cycles)          2.230 us/cycle
+TIME 1 (main, lone) section CnC model                                0.006 us/cycle
+TIME 1 (main, lone) section CcCores (C&C 1-3)                       -0.042 us/cycle
+TIME 1 (main, lone) section READY and error lines                    1.171 us/cycle
+TIME 1 (main, lone) section the cycle's tail                         0.154 us/cycle
+TIME 1 (main, lone) section checkInvariants                          1.992 us/cycle
+TIME 1 (main, lone) section total                                    6.422 us/cycle
+TIME 1 (main, lone) child       router   srq+inj  director      cmem      sram    writer        ag    tables      hist  readport    gather      core      slot  slot.end   ctl.end
+TIME 1 (main, lone) idle    1 31132.0 |    2789.0    6753.0     838.0     494.0    1112.0    1264.0    1641.0    2321.0     992.0     226.0     304.0    3389.0    2643.0     443.0    5923.0
+TIME 1 (main, lone) router  1 27927.0 |    5300.0    1551.0     121.0      60.0     208.0      90.0     232.0     394.0      30.0      95.0      80.0   18897.0      59.0      72.0     738.0
+TIME 1 (main, lone) engines 12038 1147.5 |      45.5     127.4      35.6      16.4     145.4      12.5      14.7      20.3      11.3       4.8       6.8      74.0     209.2     -12.0     435.4
+TIME 1 (main, lone) core    2913 8785.3 |    1241.4     277.4     864.7      36.9    1104.8     337.6     120.5     108.0     447.5      21.7      25.9     896.4    2891.6      51.2     359.7
+TIME 2 (main, full): 239263 cycles, 14953 sampled (1 in 16); nanoTime() costs 42 ns, subtracted per section
+TIME 2 (main, full) section request bus                              0.763 us/cycle
+TIME 2 (main, full) section C&C endpoints                            0.035 us/cycle
+TIME 2 (main, full) section the 64 tiles (unsampled cycles)         51.296 us/cycle
+TIME 2 (main, full) section CnC model                                0.031 us/cycle
+TIME 2 (main, full) section CcCores (C&C 1-3)                       -0.042 us/cycle
+TIME 2 (main, full) section READY and error lines                    1.134 us/cycle
+TIME 2 (main, full) section the cycle's tail                         0.144 us/cycle
+TIME 2 (main, full) section checkInvariants                          2.196 us/cycle
+TIME 2 (main, full) section total                                   55.557 us/cycle
+TIME 2 (main, full) child       router   srq+inj  director      cmem      sram    writer        ag    tables      hist  readport    gather      core      slot  slot.end   ctl.end
+TIME 2 (main, full) idle    942007 620.3 |      76.6     184.0      23.0      25.1      40.1      15.8      31.0      58.7      22.8      -6.7       1.7      42.6     -21.8     -22.9     150.3
+TIME 2 (main, full) router  1 1732.0 |     338.0     347.0     203.0      24.0      48.0     112.0     105.0      61.0      53.0      20.0      93.0     201.0       3.0     -26.0     150.0
+TIME 2 (main, full) engines 12071 2126.6 |     168.3     327.6     129.8      67.5      84.3     100.5      68.5     124.7      87.7      67.3      56.7     168.4     352.3      -0.6     323.4
+TIME 2 (main, full) core    2913 2193.1 |     220.7     309.8     123.3      63.6      90.7     114.3     100.2     141.3      86.0      69.1      56.6     327.3     194.5      11.3     284.2
+TIME 3 (main, lone): 226557 cycles, 14159 sampled (1 in 16); nanoTime() costs 42 ns, subtracted per section
+TIME 3 (main, lone) section request bus                              0.355 us/cycle
+TIME 3 (main, lone) section C&C endpoints                           -0.012 us/cycle
+TIME 3 (main, lone) section the 64 tiles (unsampled cycles)          0.464 us/cycle
+TIME 3 (main, lone) section CnC model                               -0.012 us/cycle
+TIME 3 (main, lone) section CcCores (C&C 1-3)                       -0.042 us/cycle
+TIME 3 (main, lone) section READY and error lines                    0.488 us/cycle
+TIME 3 (main, lone) section the cycle's tail                         0.034 us/cycle
+TIME 3 (main, lone) section checkInvariants                          0.908 us/cycle
+TIME 3 (main, lone) section total                                    2.182 us/cycle
+TIME 3 (main, lone) child       router   srq+inj  director      cmem      sram    writer        ag    tables      hist  readport    gather      core      slot  slot.end   ctl.end
+TIME 3 (main, lone) idle    1 9198.0 |     331.0     390.0     805.0     325.0     178.0     145.0      42.0     110.0      92.0      60.0     174.0     240.0      78.0      -2.0    6230.0
+TIME 3 (main, lone) router  1 318.0 |     187.0      81.0      23.0       1.0       6.0      -3.0      -5.0       6.0      -5.0      -4.0     -10.0      15.0     -11.0     -23.0      60.0
+TIME 3 (main, lone) engines 12165 124.6 |       1.3      50.4       1.0       1.3       7.5      -2.3      -5.8       1.1      -3.7      -6.0      -8.3      11.3      54.8     -23.3      45.3
+TIME 3 (main, lone) core    1992 155.2 |       1.5      37.8       6.1       7.4       7.4      -1.5      -1.3       4.1      -3.3      -5.2      -7.9      53.4       6.2     -23.7      74.1
+TIME 4 (main, full): 226557 cycles, 14159 sampled (1 in 16); nanoTime() costs 42 ns, subtracted per section
+TIME 4 (main, full) section request bus                              0.719 us/cycle
+TIME 4 (main, full) section C&C endpoints                            0.046 us/cycle
+TIME 4 (main, full) section the 64 tiles (unsampled cycles)         51.656 us/cycle
+TIME 4 (main, full) section CnC model                                0.027 us/cycle
+TIME 4 (main, full) section CcCores (C&C 1-3)                       -0.042 us/cycle
+TIME 4 (main, full) section READY and error lines                    1.068 us/cycle
+TIME 4 (main, full) section the cycle's tail                         0.106 us/cycle
+TIME 4 (main, full) section checkInvariants                          2.105 us/cycle
+TIME 4 (main, full) section total                                   55.685 us/cycle
+TIME 4 (main, full) child       router   srq+inj  director      cmem      sram    writer        ag    tables      hist  readport    gather      core      slot  slot.end   ctl.end
+TIME 4 (main, full) idle    891985 589.1 |      76.5     175.6      24.5      22.7      43.3      17.7      30.7      53.1      22.4     -10.8       0.9      40.8     -22.3     -23.6     137.6
+TIME 4 (main, full) router  1 2206.0 |     491.0     301.0      45.0      49.0      91.0      55.0      83.0     243.0     338.0      53.0      10.0     209.0     109.0     -23.0     152.0
+TIME 4 (main, full) engines 12198 2090.7 |     182.1     351.7      90.7     103.5     120.3      76.9      59.7      79.4      83.7      60.1      79.3     173.8     347.5     -10.4     292.4
+TIME 4 (main, full) core    1992 1762.5 |     177.1     255.7      79.3     104.6     106.5      79.5      78.0      85.7      93.0      66.8      87.2     270.4      98.5      -6.9     187.0
+== time-sb-evm-zone-29.txt
+TIME 1 (main, lone): 226557 cycles, 14159 sampled (1 in 16); nanoTime() costs 53 ns, subtracted per section
+TIME 1 (main, lone) section request bus                              1.023 us/cycle
+TIME 1 (main, lone) section C&C endpoints                            0.017 us/cycle
+TIME 1 (main, lone) section the 64 tiles (unsampled cycles)          2.657 us/cycle
+TIME 1 (main, lone) section CnC model                               -0.002 us/cycle
+TIME 1 (main, lone) section CcCores (C&C 1-3)                       -0.053 us/cycle
+TIME 1 (main, lone) section READY and error lines                    1.362 us/cycle
+TIME 1 (main, lone) section the cycle's tail                         0.137 us/cycle
+TIME 1 (main, lone) section checkInvariants                          2.353 us/cycle
+TIME 1 (main, lone) section total                                    7.494 us/cycle
+TIME 1 (main, lone) child       router   srq+inj  director      cmem      sram    writer        ag    tables      hist  readport    gather      core      slot  slot.end   ctl.end
+TIME 1 (main, lone) idle    1 37547.0 |    3549.0    8338.0    1536.0     783.0    1169.0    1197.0    2126.0    2342.0    1269.0     363.0     464.0    3758.0    3171.0     470.0    7012.0
+TIME 1 (main, lone) router  1 6144.0 |    3511.0     572.0      51.0      57.0     162.0      64.0     111.0     197.0      47.0      32.0      41.0     450.0     324.0     132.0     393.0
+TIME 1 (main, lone) engines 12216 1337.5 |      49.5     177.3      37.5      13.3      33.1       6.0      23.1      28.5      49.8       1.8       5.4      54.3     761.8     -14.7     110.9
+TIME 1 (main, lone) core    1941 5668.7 |     697.4     956.0      77.8      58.1     137.5      66.2     131.2     183.7     308.4      37.5      40.7    2279.5     258.7      43.6     392.3
+TIME 2 (main, full): 226557 cycles, 14159 sampled (1 in 16); nanoTime() costs 53 ns, subtracted per section
+TIME 2 (main, full) section request bus                              0.735 us/cycle
+TIME 2 (main, full) section C&C endpoints                            0.026 us/cycle
+TIME 2 (main, full) section the 64 tiles (unsampled cycles)         51.156 us/cycle
+TIME 2 (main, full) section CnC model                                0.032 us/cycle
+TIME 2 (main, full) section CcCores (C&C 1-3)                       -0.053 us/cycle
+TIME 2 (main, full) section READY and error lines                    0.974 us/cycle
+TIME 2 (main, full) section the cycle's tail                         0.085 us/cycle
+TIME 2 (main, full) section checkInvariants                          2.058 us/cycle
+TIME 2 (main, full) section total                                   55.014 us/cycle
+TIME 2 (main, full) child       router   srq+inj  director      cmem      sram    writer        ag    tables      hist  readport    gather      core      slot  slot.end   ctl.end
+TIME 2 (main, full) idle    891985 402.5 |      59.1     164.5      12.0       8.2      26.0       5.5      18.8      41.6       9.5     -20.4     -10.8      27.1     -33.2     -34.3     128.9
+TIME 2 (main, full) router  1 2218.0 |     718.0     430.0      36.0      26.0      66.0      53.0      15.0     238.0     179.0       6.0      31.0      39.0     304.0     -33.0     110.0
+TIME 2 (main, full) engines 12249 1747.2 |     153.5     261.0      94.5      63.7      88.2      91.0      35.3      96.3      57.4      29.4      27.7      71.3     400.2       0.7     276.9
+TIME 2 (main, full) core    1941 1522.4 |     145.4     214.8      82.3      56.9      90.5      85.4      43.6      98.7      56.0      26.1      26.5     284.7     120.2       3.1     188.2
+TIME 3 (main, lone): 226557 cycles, 14159 sampled (1 in 16); nanoTime() costs 53 ns, subtracted per section
+TIME 3 (main, lone) section request bus                              0.411 us/cycle
+TIME 3 (main, lone) section C&C endpoints                           -0.023 us/cycle
+TIME 3 (main, lone) section the 64 tiles (unsampled cycles)          0.537 us/cycle
+TIME 3 (main, lone) section CnC model                               -0.018 us/cycle
+TIME 3 (main, lone) section CcCores (C&C 1-3)                       -0.053 us/cycle
+TIME 3 (main, lone) section READY and error lines                    0.604 us/cycle
+TIME 3 (main, lone) section the cycle's tail                         0.032 us/cycle
+TIME 3 (main, lone) section checkInvariants                          1.061 us/cycle
+TIME 3 (main, lone) section total                                    2.552 us/cycle
+TIME 3 (main, lone) child       router   srq+inj  director      cmem      sram    writer        ag    tables      hist  readport    gather      core      slot  slot.end   ctl.end
+TIME 3 (main, lone) idle    1 13360.0 |     381.0     310.0     848.0     269.0     271.0      84.0      67.0     222.0     125.0      34.0     108.0     173.0     105.0      -5.0   10368.0
+TIME 3 (main, lone) router  1 758.0 |     178.0     208.0      50.0       8.0      20.0      47.0      17.0      50.0      -8.0      -1.0       3.0     114.0     -12.0     -28.0     112.0
+TIME 3 (main, lone) engines 12231 -13.3 |      -3.0      40.9      -4.5      -9.7      -2.4      -8.9     -13.3     -12.7     -13.3     -18.8     -20.2       3.1      52.1     -34.6      32.0
+TIME 3 (main, lone) core    1926 444.3 |      16.7      78.3      43.9       8.1      20.3      13.3       8.5      12.6      -2.1       1.8       1.8     141.3      10.0     -23.4     113.2
+TIME 4 (main, full): 226557 cycles, 14159 sampled (1 in 16); nanoTime() costs 53 ns, subtracted per section
+TIME 4 (main, full) section request bus                              0.769 us/cycle
+TIME 4 (main, full) section C&C endpoints                            0.025 us/cycle
+TIME 4 (main, full) section the 64 tiles (unsampled cycles)         48.729 us/cycle
+TIME 4 (main, full) section CnC model                                0.022 us/cycle
+TIME 4 (main, full) section CcCores (C&C 1-3)                       -0.053 us/cycle
+TIME 4 (main, full) section READY and error lines                    0.990 us/cycle
+TIME 4 (main, full) section the cycle's tail                         0.111 us/cycle
+TIME 4 (main, full) section checkInvariants                          2.031 us/cycle
+TIME 4 (main, full) section total                                   52.625 us/cycle
+TIME 4 (main, full) child       router   srq+inj  director      cmem      sram    writer        ag    tables      hist  readport    gather      core      slot  slot.end   ctl.end
+TIME 4 (main, full) idle    891985 372.3 |      54.7     151.9      12.4       8.4      32.4       4.6      18.5      37.5       8.7     -21.1     -11.6      22.6     -33.4     -34.7     121.4
+TIME 4 (main, full) router  1 1627.0 |     435.0     219.0     134.0      41.0     144.0      44.0      34.0      41.0     155.0      22.0       8.0      44.0      87.0     -35.0     254.0
+TIME 4 (main, full) engines 12264 1757.7 |     115.6     264.3      77.2      70.9      86.9      87.8      50.4      74.5      88.3      52.7      27.2     112.9     324.3     -15.4     340.1
+TIME 4 (main, full) core    1926 1381.3 |     116.8     208.2      61.5      45.6      79.0      86.7      56.5      74.2      80.2      27.3      16.8     218.3      87.8      -9.5     231.8
+Exception in thread "main" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "main" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "main" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "main" java.lang.OutOfMemoryError: Java heap space
+verdict: FAIL; exit 1 at Fri Nov  6 04:34:26 AM UTC 2026
