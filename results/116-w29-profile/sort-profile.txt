@@ -1,0 +1,340 @@
+/tmp/w29-prof/sort.jfr: 15216 execution samples, 14993 (98.5%) inside Chip.runCycle
+== threads (all samples)
+   98.53%     14993  main (sim)
+    1.45%       221  main
+    0.01%         2  JFR Periodic Tasks
+== unit (innermost runCycle/endCycle; share of the simulation's samples)
+   17.36%      2603  SRAMReadQueue
+   16.51%      2475  BigSRAM
+   12.39%      1858  WriteEngine
+   11.51%      1725  Router
+    8.06%      1208  TableStore
+    7.97%      1195  TileControl.endCycle
+    4.68%       702  TrafficDirector
+    4.62%       693  HistStore
+    2.23%       335  Controller
+    2.17%       326  Tile
+    2.13%       319  Chip.checkInvariants
+    1.55%       232  Chip.sleepCheck
+    1.48%       222  InjectionPath
+    1.23%       185  Chip (own loop)
+    1.16%       174  Cnc1Peripheral
+    1.11%       166  Replayer
+    1.04%       156  AddressGenerator
+    0.67%       100  RequestBus
+    0.53%        79  Chip.scanOverflows
+    0.45%        67  PeripheralSlot
+    0.31%        47  GatherEngine
+    0.29%        43  ControllerMemories
+    0.22%        33  PeripheralSlot.endCycle
+    0.11%        16  Chip.wake
+    0.07%        11  CnC
+    0.06%         9  PeripheralSlot$Dma
+    0.06%         9  ReadPort
+    0.03%         4  Tile$lambda
+    0.01%         1  Endpoint
+== self (top frame's class)
+   31.07%      4659  BusBase
+    6.99%      1048  Tile
+    6.07%       910  SRAMMacro
+    5.34%       800  java.util.ArrayDeque
+    5.10%       764  java.lang.Integer
+    5.00%       749  SRAMReadQueue
+    4.26%       639  WordFIFO
+    3.89%       583  Router
+    3.54%       531  Replayer
+    2.99%       448  WordDelayLine
+    2.93%       439  TileControl
+    2.85%       428  TableStore
+    2.84%       426  Chip
+    2.29%       344  LinkWord
+    2.21%       331  RmwPipe
+    2.19%       329  WriteEngine
+    2.03%       305  java.util.HashMap
+    1.44%       216  BigSRAM
+    1.37%       205  PeripheralSlot
+    1.16%       174  Cnc1Peripheral
+    1.07%       160  Controller
+    0.91%       136  AddressGenerator
+    0.65%        98  RequestBus
+    0.44%        66  java.util.Arrays
+    0.37%        55  TrafficDirector
+    0.25%        37  java.util.AbstractMap
+    0.23%        35  InjectionPath
+    0.13%        20  ControllerMemories
+    0.10%        15  WordHold
+    0.06%         9  PeripheralSlot$Dma
+    0.06%         9  ReadPort
+    0.03%         5  CnC
+    0.03%         5  HistStore
+    0.03%         4  SortTest$Machine
+    0.01%         2  PhaseLog
+    0.01%         2  Registers
+    0.01%         2  GatherEngine
+    0.01%         1  RequestBus$Buf
+    0.01%         1  Endpoint
+    0.01%         1  java.lang.Long
+== method (top frame)
+   21.69%      3252  BusBase.enter
+    8.46%      1269  BusBase.enterSlow
+    5.30%       794  java.util.ArrayDeque.addLast
+    4.73%       709  Tile.eventCounts
+    4.62%       693  SRAMMacro.writeCheck
+    3.51%       527  java.lang.Integer.valueOf
+    3.22%       483  SRAMReadQueue.ready
+    2.92%       438  WordDelayLine.commit
+    2.87%       430  TileControl.advance
+    2.85%       428  TableStore.runCycle
+    2.85%       427  WordFIFO.commit
+    2.19%       329  WriteEngine.runCycle
+    2.17%       326  Tile.runCycle
+    2.13%       319  Chip.checkInvariants
+    2.12%       318  RmwPipe.current
+    1.57%       235  java.lang.Integer.equals
+    1.51%       226  Router.route
+    1.45%       217  Router.select
+    1.45%       217  SRAMMacro.commitAll
+    1.41%       212  WordFIFO.check
+    1.37%       205  SRAMReadQueue.runCycle
+    1.30%       195  Replayer.idle
+    1.30%       195  LinkWord.aligned
+    1.16%       174  Cnc1Peripheral.errors
+    1.05%       158  Replayer.settle
+    0.96%       144  Replayer.errors
+    0.93%       140  java.util.HashMap.newNode
+    0.89%       134  BusBase.noteTake
+    0.89%       133  Router.runCycle
+    0.83%       125  BigSRAM.enqueue
+    0.77%       115  LinkWord.badPacket
+    0.73%       109  java.util.HashMap.putVal
+    0.70%       105  PeripheralSlot.liveEvents
+    0.64%        96  Controller.step
+    0.59%        89  BigSRAM.runCycle
+    0.53%        79  Chip.scanOverflows
+    0.45%        67  PeripheralSlot.runCycle
+    0.44%        66  java.util.Arrays.fill
+    0.44%        66  RequestBus.runCycle
+    0.37%        56  java.util.HashMap.getNode
+== inclusive (class anywhere on the stack)
+  100.00%     14993  SortTest
+  100.00%     14993  Chip
+  100.00%     14993  SortTest$Machine
+   94.12%     14112  Tile
+   36.94%      5538  BusBase
+   26.14%      3919  WordDelayLine
+   18.87%      2829  Tile$lambda
+   18.16%      2723  SRAMReadQueue
+   16.85%      2526  BigSRAM
+   12.42%      1862  WriteEngine
+   11.51%      1725  Router
+   10.12%      1517  TileControl
+    8.12%      1218  TableStore
+    7.86%      1178  RmwPipe
+    7.00%      1049  WordFIFO
+    6.07%       910  SRAMMacro
+    5.40%       809  WordHold
+    5.34%       800  java.util.ArrayDeque
+    5.10%       764  java.lang.Integer
+    4.97%       745  PeripheralSlot
+    4.72%       708  TrafficDirector
+    4.62%       693  HistStore
+    3.60%       540  java.util.HashMap
+    3.54%       531  Replayer
+    2.29%       344  LinkWord
+    2.23%       335  Controller
+    1.48%       222  InjectionPath
+    1.17%       176  Cnc1Peripheral
+    1.05%       157  AddressGenerator
+    0.67%       100  RequestBus
+    0.57%        86  GatherEngine
+    0.44%        66  java.util.Arrays
+    0.29%        43  ControllerMemories
+    0.27%        40  java.util.TreeSet
+    0.25%        37  java.util.AbstractMap
+    0.18%        27  BankedMemory
+    0.07%        11  CnC
+    0.07%        10  CnC$lambda
+    0.06%         9  PeripheralSlot$Dma
+    0.06%         9  ReadPort
+== inclusive methods (Controller.step: the interpreter executing; anywhere on the stack)
+  100.00%     14993  Chip.runUntil
+  100.00%     14993  Chip.step
+  100.00%     14993  SortTest.sortRun
+  100.00%     14993  SortTest.main
+  100.00%     14993  Chip.runCycle
+   99.29%     14886  SortTest$Machine.finish
+   92.66%     13892  Tile.runCycle
+   36.02%      5400  BusBase.enter
+   18.87%      2829  Tile$lambda.runCycle
+   18.87%      2829  Tile.lambda$new$0
+   17.36%      2603  SRAMReadQueue.runCycle
+   16.51%      2475  BigSRAM.runCycle
+   15.22%      2282  WordDelayLine.ready
+   14.33%      2148  BusBase.enterSlow
+   14.32%      2147  BusBase.notePut
+   12.39%      1858  WriteEngine.runCycle
+   11.51%      1725  Router.runCycle
+   10.79%      1618  BigSRAM.serve
+    9.89%      1483  WordDelayLine.put
+    8.12%      1218  TableStore.runCycle
+    7.97%      1195  TileControl.endCycle
+    5.52%       827  SRAMMacro.writeCheck
+    5.52%       827  SRAMMacro.write32
+    5.42%       813  RmwPipe.writeBack
+    5.32%       798  java.util.ArrayDeque.add
+    5.30%       794  java.util.ArrayDeque.addLast
+    5.07%       760  Router.select
+    4.74%       710  TileControl.conditionEvents
+    4.73%       709  Tile.eventCounts
+    4.72%       708  TrafficDirector.runCycle
+    4.62%       693  HistStore.runCycle
+    3.98%       597  SRAMReadQueue.issue
+    3.51%       527  java.lang.Integer.valueOf
+    3.24%       486  SRAMReadQueue.ready
+    2.92%       438  WordDelayLine.commit
+    2.87%       430  TileControl.advance
+    2.85%       427  WordFIFO.commit
+    2.85%       427  Router.selectEject
+    2.65%       398  Chip.checkInvariants
+    2.59%       388  WordFIFO.ready
+    2.48%       372  WordFIFO.put
+    2.47%       371  Router.route
+    2.35%       353  RmwPipe.current
+    2.23%       335  Controller.runCycle
+    2.15%       323  WordDelayLine.check
+    2.05%       308  WordHold.put
+    1.94%       291  java.util.HashMap.get
+    1.94%       291  WordHold.ready
+    1.94%       291  java.util.HashMap.getNode
+    1.91%       286  WordDelayLine.peekA
+    1.66%       249  java.util.HashMap.putVal
+    1.66%       249  java.util.HashMap.put
+    1.61%       242  PeripheralSlot.runCycle
+    1.57%       235  java.lang.Integer.equals
+    1.55%       232  Chip.sleepCheck
+    1.53%       229  WordFIFO.check
+    1.48%       222  InjectionPath.runCycle
+    1.47%       220  SRAMReadQueue.release
+    1.45%       218  Tile.canSleep
+    1.45%       217  SRAMMacro.enter
+
+/tmp/w29-prof/sort.jfr: jdk.ExecutionSample 15216, matching 'BusBase.enterSlow' 2148
+   5.38%  BusBase.enterSlow:43 <- BusBase.enter:39 <- WordDelayLine.ready:62 <- WriteEngine.runCycle:62
+   2.46%  BusBase.enterSlow:43 <- BusBase.enter:39 <- WordDelayLine.ready:62 <- SRAMReadQueue.runCycle:126
+   1.66%  BusBase.enterSlow:43 <- BusBase.enter:39 <- WordFIFO.ready:115 <- Router.select:161
+   1.24%  BusBase.enterSlow:43 <- BusBase.enter:39 <- BusBase.notePut:52 <- WordFIFO.put:114
+   1.01%  BusBase.enterSlow:43 <- BusBase.enter:39 <- BusBase.notePut:52 <- WordDelayLine.put:61
+   0.99%  BusBase.enterSlow:43 <- BusBase.enter:39 <- WordDelayLine.ready:62 <- WordDelayLine.check:63
+   0.41%  BusBase.enterSlow:43 <- BusBase.enter:39 <- WordDelayLine.ready:62 <- Router.runCycle:128
+   0.23%  BusBase.enterSlow:43 <- BusBase.enter:39 <- WordDelayLine.ready:62 <- Router.runCycle:125
+   0.17%  BusBase.enterSlow:43 <- BusBase.enter:39 <- WordHold.refused:170 <- GatherEngine.runCycle:35
+   0.09%  BusBase.enterSlow:43 <- BusBase.enter:39 <- WordHold.ready:176 <- SRAMReadQueue.runCycle:140
+   0.07%  BusBase.enterSlow:43 <- BusBase.enter:39 <- WordHold.ready:176 <- BigSRAM.runCycle:78
+   0.05%  BusBase.enterSlow:43 <- BusBase.enter:39 <- WordDelayLine.inFlight:73 <- Tile.quiescent:248
+
+/tmp/w29-prof/sort.jfr: jdk.ExecutionSample 15216, matching 'java.util.Arrays.fill' 119
+   0.35%  java.util.Arrays.fill:3147 <- BigSRAM.newPhase:159 <- SortTest$Machine.monitor:157 <- SortTest$Machine.lambda$finish$3:153
+   0.22%  java.util.Arrays.fill:3147 <- BigSRAM.newPhase:159 <- TileControl.counterEvents:279 <- TileControl.endCycle:253
+   0.12%  java.util.Arrays.fill:3147 <- BigSRAM.newPhase:159 <- TileControl.endCycle:235 <- Tile.runCycle:134
+   0.10%  java.util.Arrays.fill:3182 <- Chip.runCycle:238 <- Chip.step:246 <- Chip.runUntil:254
+
+/tmp/w29-prof/sort.jfr: jdk.ExecutionSample 15216, matching 'java.util.HashMap' 560
+   1.54%  java.util.HashMap.getNode:578 <- java.util.HashMap.get:564 <- BigSRAM.runCycle:90 <- Tile.runCycle:131
+   0.92%  java.util.HashMap.newNode:1909 <- java.util.HashMap.putVal:637 <- java.util.HashMap.put:618 <- WriteEngine.runCycle:83
+   0.47%  java.util.HashMap.putVal:635 <- java.util.HashMap.put:618 <- WriteEngine.runCycle:83 <- Tile.runCycle:131
+   0.37%  java.util.HashMap.getNode:585 <- java.util.HashMap.get:564 <- BigSRAM.runCycle:90 <- Tile.runCycle:131
+   0.24%  java.util.HashMap.putVal:649 <- java.util.HashMap.put:618 <- WriteEngine.runCycle:83 <- Tile.runCycle:131
+   0.05%  java.util.HashMap.merge:1391 <- SortTest$Machine.monitor:173 <- SortTest$Machine.lambda$finish$3:153 <- SortTest$Machine$$Lambda.0x0000753a4009cec8.getAsBoolean:-1
+   0.04%  java.util.HashMap.hash:338 <- java.util.HashMap.merge:1364 <- SortTest$Machine.monitor:173 <- SortTest$Machine.lambda$finish$3:153
+   0.01%  java.util.HashMap.merge:1409 <- SortTest$Machine.monitor:173 <- SortTest$Machine.lambda$finish$3:153 <- SortTest$Machine$$Lambda.0x0000753a4009cec8.getAsBoolean:-1
+   0.01%  java.util.HashMap.hash:338 <- java.util.HashMap.computeIfAbsent:1199 <- SortTest$Machine.monitor:174 <- SortTest$Machine.lambda$finish$3:153
+   0.01%  java.util.HashMap.hash:338 <- java.util.HashMap.merge:1364 <- SortTest$Machine.monitor:174 <- SortTest$Machine.lambda$finish$3:153
+   0.01%  java.util.HashMap.merge:1391 <- SortTest$Machine.monitor:174 <- SortTest$Machine.lambda$finish$3:153 <- SortTest$Machine$$Lambda.0x0000753a4009cec8.getAsBoolean:-1
+
+/tmp/w29-prof/sort.jfr: jdk.ExecutionSample 15216, matching 'java.lang.Integer.valueOf' 527
+   2.77%  java.lang.Integer.valueOf:1083 <- BigSRAM.serve:138 <- BigSRAM.runCycle:75 <- Tile.runCycle:131
+   0.69%  java.lang.Integer.valueOf:1083 <- WriteEngine.runCycle:83 <- Tile.runCycle:131 <- Chip.runCycle:215
+
+/tmp/w29-prof/sort.jfr: jdk.ExecutionSample 15216, matching 'java.lang.Long.valueOf' 3
+   0.01%  java.lang.Long.valueOf:1207 <- SortTest$Machine$$Lambda.0x0000753a4009d0f0.apply:-1 <- java.util.HashMap.merge:1391 <- SortTest$Machine.monitor:173
+   0.01%  java.lang.Long.valueOf:1207 <- SortTest$Machine$$Lambda.0x0000753a4009d0f0.apply:-1 <- java.util.HashMap.merge:1391 <- SortTest$Machine.monitor:174
+   0.01%  java.lang.Long.valueOf:1207 <- WriteEngine.runCycle:104 <- Tile.runCycle:131 <- Chip.runCycle:215
+
+/tmp/w29-prof/sort.jfr: jdk.ExecutionSample 15216, matching 'TileControl.computeStatus' 43
+   0.28%  TileControl.computeStatus:382 <- TileControl.endCycle:254 <- Tile.runCycle:134 <- Chip.runCycle:215
+
+/tmp/w29-prof/sort.jfr: jdk.ExecutionSample 15216, matching 'TileControl.endCycle' 1195
+   4.67%  TileControl.endCycle:240 <- Tile.runCycle:134 <- Chip.runCycle:215 <- Chip.step:246
+   2.56%  TileControl.endCycle:228 <- Tile.runCycle:134 <- Chip.runCycle:215 <- Chip.step:246
+   0.28%  TileControl.endCycle:254 <- Tile.runCycle:134 <- Chip.runCycle:215 <- Chip.step:246
+   0.22%  TileControl.endCycle:253 <- Tile.runCycle:134 <- Chip.runCycle:215 <- Chip.step:246
+   0.12%  TileControl.endCycle:235 <- Tile.runCycle:134 <- Chip.runCycle:215 <- Chip.step:246
+   0.01%  TileControl.endCycle:238 <- Tile.runCycle:134 <- Chip.runCycle:215 <- Chip.step:246
+
+/tmp/w29-prof/sort.jfr: jdk.ExecutionSample 15216, matching 'SRAMReadQueue.runCycle' 2603
+   5.19%  SRAMReadQueue.runCycle:143 <- Tile.lambda$new$0:118 <- Tile$$Lambda.0x0000753a4008ebb8.runCycle:-1 <- Tile.runCycle:131
+   4.78%  SRAMReadQueue.runCycle:126 <- Tile.lambda$new$0:118 <- Tile$$Lambda.0x0000753a4008ebb8.runCycle:-1 <- Tile.runCycle:131
+   3.21%  SRAMReadQueue.runCycle:131 <- Tile.lambda$new$0:118 <- Tile$$Lambda.0x0000753a4008ebb8.runCycle:-1 <- Tile.runCycle:131
+   1.45%  SRAMReadQueue.runCycle:134 <- Tile.lambda$new$0:118 <- Tile$$Lambda.0x0000753a4008ebb8.runCycle:-1 <- Tile.runCycle:131
+   0.89%  SRAMReadQueue.runCycle:128 <- Tile.lambda$new$0:118 <- Tile$$Lambda.0x0000753a4008ebb8.runCycle:-1 <- Tile.runCycle:131
+   0.64%  SRAMReadQueue.runCycle:127 <- Tile.lambda$new$0:118 <- Tile$$Lambda.0x0000753a4008ebb8.runCycle:-1 <- Tile.runCycle:131
+   0.39%  SRAMReadQueue.runCycle:140 <- Tile.lambda$new$0:118 <- Tile$$Lambda.0x0000753a4008ebb8.runCycle:-1 <- Tile.runCycle:131
+   0.32%  SRAMReadQueue.runCycle:130 <- Tile.lambda$new$0:118 <- Tile$$Lambda.0x0000753a4008ebb8.runCycle:-1 <- Tile.runCycle:131
+   0.21%  SRAMReadQueue.runCycle:136 <- Tile.lambda$new$0:118 <- Tile$$Lambda.0x0000753a4008ebb8.runCycle:-1 <- Tile.runCycle:131
+   0.03%  SRAMReadQueue.runCycle:141 <- Tile.lambda$new$0:118 <- Tile$$Lambda.0x0000753a4008ebb8.runCycle:-1 <- Tile.runCycle:131
+
+/tmp/w29-prof/sort.jfr: jdk.ExecutionSample 15216, matching 'Router.runCycle' 1725
+   3.01%  Router.runCycle:110 <- Tile.runCycle:131 <- Chip.runCycle:215 <- Chip.step:246
+   3.01%  Router.runCycle:125 <- Tile.runCycle:131 <- Chip.runCycle:215 <- Chip.step:246
+   2.87%  Router.runCycle:111 <- Tile.runCycle:131 <- Chip.runCycle:215 <- Chip.step:246
+   0.92%  Router.runCycle:132 <- Tile.runCycle:131 <- Chip.runCycle:215 <- Chip.step:246
+   0.70%  Router.runCycle:115 <- Tile.runCycle:131 <- Chip.runCycle:215 <- Chip.step:246
+   0.43%  Router.runCycle:128 <- Tile.runCycle:131 <- Chip.runCycle:215 <- Chip.step:246
+   0.14%  Router.runCycle:135 <- Tile.runCycle:131 <- Chip.runCycle:215 <- Chip.step:246
+   0.11%  Router.runCycle:130 <- Tile.runCycle:131 <- Chip.runCycle:215 <- Chip.step:246
+   0.11%  Router.runCycle:129 <- Tile.runCycle:131 <- Chip.runCycle:215 <- Chip.step:246
+   0.03%  Router.runCycle:136 <- Tile.runCycle:131 <- Chip.runCycle:215 <- Chip.step:246
+   0.01%  Router.runCycle:124 <- Tile.runCycle:131 <- Chip.runCycle:215 <- Chip.step:246
+
+/tmp/w29-prof/sort.jfr: jdk.ExecutionSample 15216, matching 'Controller.step' 173
+   1.06%  Controller.step:141 <- Controller.runCycle:122 <- Tile.runCycle:131 <- Chip.runCycle:215
+   0.08%  Controller.step:138 <- Controller.runCycle:122 <- Tile.runCycle:131 <- Chip.runCycle:215
+
+/tmp/w29-prof/sort.jfr: jdk.ExecutionSample 15216, matching 'Replayer.runCycle' 166
+   1.09%  Replayer.runCycle:440 <- PeripheralSlot.runCycle:100 <- Tile.runCycle:132 <- Chip.runCycle:215
+
+/tmp/w29-prof/sort.jfr: jdk.ObjectAllocationSample 26567613280, matching '' 26567613280
+  20.15%  [B @ jdk.internal.misc.Unsafe.allocateUninitializedArray:1380 <- java.lang.StringConcatHelper.newArray:511 <- java.lang.StringConcatHelper.simpleConcat:435
+  14.10%  java.util.HashMap$Node @ java.util.HashMap.newNode:1909 <- java.util.HashMap.putVal:637 <- java.util.HashMap.put:618
+  12.93%  java.lang.Long @ java.lang.Long.valueOf:1207 <- WriteEngine.runCycle:83 <- Tile.runCycle:131
+   9.48%  [B @ java.lang.Integer.toUnsignedString0:367 <- java.lang.Integer.toHexString:286 <- BigSRAM.runCycle:90
+   9.36%  java.lang.Integer @ java.lang.Integer.valueOf:1083 <- BigSRAM.serve:138 <- BigSRAM.runCycle:75
+   9.34%  java.lang.Integer @ java.lang.Integer.valueOf:1083 <- BigSRAM.runCycle:90 <- Tile.runCycle:131
+   8.47%  java.lang.Integer @ java.lang.Integer.valueOf:1083 <- WriteEngine.runCycle:83 <- Tile.runCycle:131
+   5.48%  java.lang.Long @ java.lang.Long.valueOf:1207 <- TrafficDirector.runCycle:114 <- Tile.runCycle:131
+   5.17%  java.lang.Long @ java.lang.Long.valueOf:1207 <- WriteEngine.runCycle:104 <- Tile.runCycle:131
+   1.76%  java.lang.Long @ java.lang.Long.valueOf:1207 <- WriteEngine.runCycle:107 <- Tile.runCycle:131
+   1.59%  java.util.HashMap$Node @ java.util.HashMap.newNode:1909 <- java.util.HashMap.putVal:648 <- java.util.HashMap.put:618
+   0.63%  [I @ BigSRAM.store:162 <- BigSRAM.serve:137 <- BigSRAM.runCycle:75
+   0.25%  [J @ SortTest$Oracle.<init>:330 <- SortTest.sortRun:386 <- SortTest.main:572
+   0.18%  java.lang.Long @ java.lang.Long.valueOf:1207 <- SortTest$Machine$$Lambda.0x0000753a4009d560.apply:-1 <- java.util.HashMap.merge:1391
+   0.18%  java.lang.Integer @ java.lang.Integer.valueOf:1083 <- Controller.load:351 <- Controller.execute:215
+   0.15%  [I @ BigSRAM.store:162 <- BigSRAM.poke:167 <- BigSRAM.poke64:168
+   0.13%  [J @ SortTest$Oracle.<init>:318 <- SortTest.sortRun:386 <- SortTest.main:572
+   0.09%  java.lang.Integer @ java.lang.Integer.valueOf:1083 <- SortTest$Machine.monitor:172 <- SortTest$Machine.lambda$finish$3:153
+   0.09%  [I @ BigSRAM.store:162 <- BigSRAM.poke:167 <- SortTest.loadInput:351
+   0.08%  java.util.Formatter @ java.lang.String.format:4379 <- Inputs.sha256:34 <- Inputs.hash:63
+   0.06%  [B @ java.nio.file.Files.read:3231 <- java.nio.file.Files.readAllBytes:3288 <- SortTest.readKeys:230
+   0.06%  [I @ SortTest.readKeys:233 <- SortTest.main:566
+   0.04%  java.lang.Long @ java.lang.Long.valueOf:1207 <- SortTest$Machine$$Lambda.0x0000753a4009d0f0.apply:-1 <- java.util.HashMap.merge:1391
+   0.03%  [I @ SRAMMacro.<init>:26 <- BankedMemory.<init>:16 <- ControllerMemories.<init>:25
+   0.02%  [J @ BigSRAM.<init>:51 <- Tile.<init>:79 <- Tile.<init>:52
+
+ jdk.ExecutionSample                     15216        179573
+ jdk.GarbageCollection                      27           630
+ jdk.YoungGarbageCollection                 27           366
+ jdk.G1GarbageCollection                    27           366
+ jdk.ParallelOldGarbageCollection            0             0
+ jdk.OldGarbageCollection                    0             0
+ jdk.ZYoungGarbageCollection                 0             0
+ jdk.ZOldGarbageCollection                   0             0

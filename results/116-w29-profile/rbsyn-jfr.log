@@ -1,0 +1,11 @@
+[0.935s][info][jfr,startup] Started recording 1. No limit specified, using maxsize=250MB as default.
+[0.935s][info][jfr,startup] 
+[0.935s][info][jfr,startup] Use jcmd 548292 JFR.dump name=1 to copy recording data to file.
+ReplayBench: synthetic, 64 x 300 rows on every tile, 5 repeat(s)
+repeat 0: OK, chip 85,646 cycles, replay 62,015 cycles (first start 23583, last end 85598), 1,228,800 rows, 0 of 64 tiles failed, violations 0; wall 9.0 s; the replay from cycle 23585: 6.0 s, 95.93 us/cycle  [meas: ReplayBench]
+repeat 1: OK, chip 85,646 cycles, replay 62,015 cycles (first start 23583, last end 85598), 1,228,800 rows, 0 of 64 tiles failed, violations 0; wall 8.7 s; the replay from cycle 23585: 6.6 s, 106.95 us/cycle  [meas: ReplayBench]
+repeat 2: OK, chip 85,646 cycles, replay 62,015 cycles (first start 23583, last end 85598), 1,228,800 rows, 0 of 64 tiles failed, violations 0; wall 8.5 s; the replay from cycle 23585: 6.8 s, 109.08 us/cycle  [meas: ReplayBench]
+repeat 3: OK, chip 85,646 cycles, replay 62,015 cycles (first start 23583, last end 85598), 1,228,800 rows, 0 of 64 tiles failed, violations 0; wall 8.4 s; the replay from cycle 23585: 6.4 s, 103.64 us/cycle  [meas: ReplayBench]
+repeat 4: OK, chip 85,646 cycles, replay 62,015 cycles (first start 23583, last end 85598), 1,228,800 rows, 0 of 64 tiles failed, violations 0; wall 7.2 s; the replay from cycle 23585: 5.5 s, 88.57 us/cycle  [meas: ReplayBench]
+ReplayBench: 5 repeat(s), 0 tile replays failed
+rbsyn-jfr: exit 0, 44 s

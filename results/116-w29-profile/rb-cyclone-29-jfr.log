@@ -1,0 +1,11 @@
+[0.635s][info][jfr,startup] Started recording 1. No limit specified, using maxsize=250MB as default.
+[0.635s][info][jfr,startup] 
+[0.635s][info][jfr,startup] Use jcmd 548287 JFR.dump name=1 to copy recording data to file.
+ReplayBench: cyclone-29 windows 0..63 (state), 5 repeat(s)
+repeat 0: OK, chip 239,503 cycles, replay 209,959 cycles (first start 29496, last end 239455), 4,194,304 rows, 0 of 64 tiles failed, violations 0; wall 20.4 s; the replay from cycle 31284: 17.1 s, 81.99 us/cycle  [meas: ReplayBench]
+repeat 1: OK, chip 239,503 cycles, replay 209,959 cycles (first start 29496, last end 239455), 4,194,304 rows, 0 of 64 tiles failed, violations 0; wall 22.8 s; the replay from cycle 31284: 20.3 s, 97.65 us/cycle  [meas: ReplayBench]
+repeat 2: OK, chip 239,503 cycles, replay 209,959 cycles (first start 29496, last end 239455), 4,194,304 rows, 0 of 64 tiles failed, violations 0; wall 17.4 s; the replay from cycle 31284: 15.3 s, 73.39 us/cycle  [meas: ReplayBench]
+repeat 3: OK, chip 239,503 cycles, replay 209,959 cycles (first start 29496, last end 239455), 4,194,304 rows, 0 of 64 tiles failed, violations 0; wall 18.0 s; the replay from cycle 31284: 15.9 s, 76.15 us/cycle  [meas: ReplayBench]
+repeat 4: OK, chip 239,503 cycles, replay 209,959 cycles (first start 29496, last end 239455), 4,194,304 rows, 0 of 64 tiles failed, violations 0; wall 17.7 s; the replay from cycle 31284: 15.5 s, 74.67 us/cycle  [meas: ReplayBench]
+ReplayBench: 5 repeat(s), 0 tile replays failed
+rb-cyclone-29-jfr: exit 0, 99 s

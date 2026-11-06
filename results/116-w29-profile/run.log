@@ -1,0 +1,85 @@
+persistent data: /home/questrunner/data
+kit sha256 e4cfe3e48bdb37c061a24e152b8ac0cf0ff50384e17900493cb97394a2642b8a
+meshsim 2ccc514 (sim-step-cost), gold 6da9c9d, built 2026-11-06
+start Fri Nov  6 10:01:16 AM UTC 2026 on godspeed, 16 threads
+openjdk version "21.0.12.1" 2026-08-18
+               total        used        free      shared  buff/cache   available
+Mem:              62           1          42           0          19          61
+evm-zone-29: delivery checked
+cyclone-29: delivery checked
+evm-zone-29: WORKER26's inputs checked
+manifest /tmp/w29-prof/v1261/evm-zone-29.manifest.json sha256 5bffa524ed8901f1957e546385697e463bc2ddce5b00d81d698ad8cb4078a0aa
+manifest /tmp/w29-prof/v1261/cyclone-29.manifest.json sha256 2d5e368e5721dcc0b07997a76a1834b98b998ad1d49bfed9a27ee42ede333bd5
+-rw-rw-r-- 1 questrunner questrunner 16777476 Nov  6 10:01 uniform.keys
+sort-jfr: exit 0
+sort-plain: exit 0
+rb-evm-zone-29-jfr: exit 0
+rb-evm-zone-29-plain: exit 0
+rb-cyclone-29-jfr: exit 0
+rb-cyclone-29-plain: exit 0
+rbsyn-jfr: exit 0
+rbsyn-plain: exit 0
+t2-jfr: exit 0, 42 s
+t2-plain: exit 0, 42 s
+== results
+    TOTAL 1,229,008 cycles (L1 GO -> L2 all READY; real split), of which C&C turnaround 96; ready_latency 8; direct-path
+SortTest: 11 passed, 0 failed
+    TOTAL 1,229,008 cycles (L1 GO -> L2 all READY; real split), of which C&C turnaround 96; ready_latency 8; direct-path
+SortTest: 11 passed, 0 failed
+ReplayBench: cyclone-29 windows 0..63 (state), 5 repeat(s)
+repeat 0: OK, chip 239,503 cycles, replay 209,959 cycles (first start 29496, last end 239455), 4,194,304 rows, 0 of 64 tiles failed, violations 0; wall 20.4 s; the replay from cycle 31284: 17.1 s, 81.99 us/cycle  [meas: ReplayBench]
+repeat 1: OK, chip 239,503 cycles, replay 209,959 cycles (first start 29496, last end 239455), 4,194,304 rows, 0 of 64 tiles failed, violations 0; wall 22.8 s; the replay from cycle 31284: 20.3 s, 97.65 us/cycle  [meas: ReplayBench]
+repeat 2: OK, chip 239,503 cycles, replay 209,959 cycles (first start 29496, last end 239455), 4,194,304 rows, 0 of 64 tiles failed, violations 0; wall 17.4 s; the replay from cycle 31284: 15.3 s, 73.39 us/cycle  [meas: ReplayBench]
+repeat 3: OK, chip 239,503 cycles, replay 209,959 cycles (first start 29496, last end 239455), 4,194,304 rows, 0 of 64 tiles failed, violations 0; wall 18.0 s; the replay from cycle 31284: 15.9 s, 76.15 us/cycle  [meas: ReplayBench]
+repeat 4: OK, chip 239,503 cycles, replay 209,959 cycles (first start 29496, last end 239455), 4,194,304 rows, 0 of 64 tiles failed, violations 0; wall 17.7 s; the replay from cycle 31284: 15.5 s, 74.67 us/cycle  [meas: ReplayBench]
+ReplayBench: 5 repeat(s), 0 tile replays failed
+ReplayBench: cyclone-29 windows 0..63 (state), 5 repeat(s)
+repeat 0: OK, chip 239,503 cycles, replay 209,959 cycles (first start 29496, last end 239455), 4,194,304 rows, 0 of 64 tiles failed, violations 0; wall 20.8 s; the replay from cycle 31284: 17.3 s, 83.25 us/cycle  [meas: ReplayBench]
+repeat 1: OK, chip 239,503 cycles, replay 209,959 cycles (first start 29496, last end 239455), 4,194,304 rows, 0 of 64 tiles failed, violations 0; wall 23.4 s; the replay from cycle 31284: 19.6 s, 93.98 us/cycle  [meas: ReplayBench]
+repeat 2: OK, chip 239,503 cycles, replay 209,959 cycles (first start 29496, last end 239455), 4,194,304 rows, 0 of 64 tiles failed, violations 0; wall 18.3 s; the replay from cycle 31284: 16.1 s, 77.17 us/cycle  [meas: ReplayBench]
+repeat 3: OK, chip 239,503 cycles, replay 209,959 cycles (first start 29496, last end 239455), 4,194,304 rows, 0 of 64 tiles failed, violations 0; wall 20.3 s; the replay from cycle 31284: 17.9 s, 85.90 us/cycle  [meas: ReplayBench]
+repeat 4: OK, chip 239,503 cycles, replay 209,959 cycles (first start 29496, last end 239455), 4,194,304 rows, 0 of 64 tiles failed, violations 0; wall 19.4 s; the replay from cycle 31284: 16.7 s, 80.01 us/cycle  [meas: ReplayBench]
+ReplayBench: 5 repeat(s), 0 tile replays failed
+ReplayBench: evm-zone-29 windows 0..63 (state), 5 repeat(s)
+repeat 0: OK, chip 265,480 cycles, replay 235,848 cycles (first start 29496, last end 265344), 4,194,304 rows, 0 of 64 tiles failed, violations 0; wall 21.7 s; the replay from cycle 29767: 18.4 s, 78.12 us/cycle  [meas: ReplayBench]
+repeat 1: OK, chip 265,480 cycles, replay 235,848 cycles (first start 29496, last end 265344), 4,194,304 rows, 0 of 64 tiles failed, violations 0; wall 19.7 s; the replay from cycle 29767: 17.7 s, 75.25 us/cycle  [meas: ReplayBench]
+repeat 2: OK, chip 265,480 cycles, replay 235,848 cycles (first start 29496, last end 265344), 4,194,304 rows, 0 of 64 tiles failed, violations 0; wall 17.6 s; the replay from cycle 29767: 15.6 s, 66.03 us/cycle  [meas: ReplayBench]
+repeat 3: OK, chip 265,480 cycles, replay 235,848 cycles (first start 29496, last end 265344), 4,194,304 rows, 0 of 64 tiles failed, violations 0; wall 18.0 s; the replay from cycle 29767: 16.0 s, 67.89 us/cycle  [meas: ReplayBench]
+repeat 4: OK, chip 265,480 cycles, replay 235,848 cycles (first start 29496, last end 265344), 4,194,304 rows, 0 of 64 tiles failed, violations 0; wall 18.3 s; the replay from cycle 29767: 16.2 s, 68.86 us/cycle  [meas: ReplayBench]
+ReplayBench: 5 repeat(s), 0 tile replays failed
+ReplayBench: evm-zone-29 windows 0..63 (state), 5 repeat(s)
+repeat 0: OK, chip 265,480 cycles, replay 235,848 cycles (first start 29496, last end 265344), 4,194,304 rows, 0 of 64 tiles failed, violations 0; wall 19.2 s; the replay from cycle 29767: 16.0 s, 67.89 us/cycle  [meas: ReplayBench]
+repeat 1: OK, chip 265,480 cycles, replay 235,848 cycles (first start 29496, last end 265344), 4,194,304 rows, 0 of 64 tiles failed, violations 0; wall 19.7 s; the replay from cycle 29767: 17.4 s, 73.62 us/cycle  [meas: ReplayBench]
+repeat 2: OK, chip 265,480 cycles, replay 235,848 cycles (first start 29496, last end 265344), 4,194,304 rows, 0 of 64 tiles failed, violations 0; wall 18.3 s; the replay from cycle 29767: 16.2 s, 68.76 us/cycle  [meas: ReplayBench]
+repeat 3: OK, chip 265,480 cycles, replay 235,848 cycles (first start 29496, last end 265344), 4,194,304 rows, 0 of 64 tiles failed, violations 0; wall 18.8 s; the replay from cycle 29767: 16.8 s, 71.10 us/cycle  [meas: ReplayBench]
+repeat 4: OK, chip 265,480 cycles, replay 235,848 cycles (first start 29496, last end 265344), 4,194,304 rows, 0 of 64 tiles failed, violations 0; wall 19.0 s; the replay from cycle 29767: 16.7 s, 70.84 us/cycle  [meas: ReplayBench]
+ReplayBench: 5 repeat(s), 0 tile replays failed
+ReplayBench: synthetic, 64 x 300 rows on every tile, 5 repeat(s)
+repeat 0: OK, chip 85,646 cycles, replay 62,015 cycles (first start 23583, last end 85598), 1,228,800 rows, 0 of 64 tiles failed, violations 0; wall 9.0 s; the replay from cycle 23585: 6.0 s, 95.93 us/cycle  [meas: ReplayBench]
+repeat 1: OK, chip 85,646 cycles, replay 62,015 cycles (first start 23583, last end 85598), 1,228,800 rows, 0 of 64 tiles failed, violations 0; wall 8.7 s; the replay from cycle 23585: 6.6 s, 106.95 us/cycle  [meas: ReplayBench]
+repeat 2: OK, chip 85,646 cycles, replay 62,015 cycles (first start 23583, last end 85598), 1,228,800 rows, 0 of 64 tiles failed, violations 0; wall 8.5 s; the replay from cycle 23585: 6.8 s, 109.08 us/cycle  [meas: ReplayBench]
+repeat 3: OK, chip 85,646 cycles, replay 62,015 cycles (first start 23583, last end 85598), 1,228,800 rows, 0 of 64 tiles failed, violations 0; wall 8.4 s; the replay from cycle 23585: 6.4 s, 103.64 us/cycle  [meas: ReplayBench]
+repeat 4: OK, chip 85,646 cycles, replay 62,015 cycles (first start 23583, last end 85598), 1,228,800 rows, 0 of 64 tiles failed, violations 0; wall 7.2 s; the replay from cycle 23585: 5.5 s, 88.57 us/cycle  [meas: ReplayBench]
+ReplayBench: 5 repeat(s), 0 tile replays failed
+ReplayBench: synthetic, 64 x 300 rows on every tile, 5 repeat(s)
+repeat 0: OK, chip 85,646 cycles, replay 62,015 cycles (first start 23583, last end 85598), 1,228,800 rows, 0 of 64 tiles failed, violations 0; wall 10.5 s; the replay from cycle 23585: 7.6 s, 121.79 us/cycle  [meas: ReplayBench]
+repeat 1: OK, chip 85,646 cycles, replay 62,015 cycles (first start 23583, last end 85598), 1,228,800 rows, 0 of 64 tiles failed, violations 0; wall 6.9 s; the replay from cycle 23585: 5.4 s, 86.27 us/cycle  [meas: ReplayBench]
+repeat 2: OK, chip 85,646 cycles, replay 62,015 cycles (first start 23583, last end 85598), 1,228,800 rows, 0 of 64 tiles failed, violations 0; wall 7.1 s; the replay from cycle 23585: 5.5 s, 89.33 us/cycle  [meas: ReplayBench]
+repeat 3: OK, chip 85,646 cycles, replay 62,015 cycles (first start 23583, last end 85598), 1,228,800 rows, 0 of 64 tiles failed, violations 0; wall 7.1 s; the replay from cycle 23585: 5.5 s, 88.86 us/cycle  [meas: ReplayBench]
+repeat 4: OK, chip 85,646 cycles, replay 62,015 cycles (first start 23583, last end 85598), 1,228,800 rows, 0 of 64 tiles failed, violations 0; wall 7.1 s; the replay from cycle 23585: 5.6 s, 89.76 us/cycle  [meas: ReplayBench]
+ReplayBench: 5 repeat(s), 0 tile replays failed
+rb-cyclone-29-jfr: exit 0, 99 s
+rb-cyclone-29-plain: exit 0, 104 s
+rb-evm-zone-29-jfr: exit 0, 98 s
+rb-evm-zone-29-plain: exit 0, 97 s
+rbsyn-jfr: exit 0, 44 s
+rbsyn-plain: exit 0, 39 s
+grep: /home/questrunner/queue/results/116-w29-profile/run.log: input file is also the output
+sort-jfr: exit 0, 169 s
+sort-plain: exit 0, 161 s
+t2-jfr: exit 0, 42 s
+t2-plain: exit 0, 42 s
+evm-zone-29: T2 on 1 run(s), 0 failed, 42 s
+evm-zone-29: T2 on 1 run(s), 0 failed, 42 s
+sort: 1,229,008 cycles as expected
+end Fri Nov  6 10:05:45 AM UTC 2026, exit 0

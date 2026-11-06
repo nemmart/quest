@@ -1,0 +1,11 @@
+[0.789s][info][jfr,startup] Started recording 1. No limit specified, using maxsize=250MB as default.
+[0.789s][info][jfr,startup] 
+[0.789s][info][jfr,startup] Use jcmd 548289 JFR.dump name=1 to copy recording data to file.
+ReplayBench: evm-zone-29 windows 0..63 (state), 5 repeat(s)
+repeat 0: OK, chip 265,480 cycles, replay 235,848 cycles (first start 29496, last end 265344), 4,194,304 rows, 0 of 64 tiles failed, violations 0; wall 21.7 s; the replay from cycle 29767: 18.4 s, 78.12 us/cycle  [meas: ReplayBench]
+repeat 1: OK, chip 265,480 cycles, replay 235,848 cycles (first start 29496, last end 265344), 4,194,304 rows, 0 of 64 tiles failed, violations 0; wall 19.7 s; the replay from cycle 29767: 17.7 s, 75.25 us/cycle  [meas: ReplayBench]
+repeat 2: OK, chip 265,480 cycles, replay 235,848 cycles (first start 29496, last end 265344), 4,194,304 rows, 0 of 64 tiles failed, violations 0; wall 17.6 s; the replay from cycle 29767: 15.6 s, 66.03 us/cycle  [meas: ReplayBench]
+repeat 3: OK, chip 265,480 cycles, replay 235,848 cycles (first start 29496, last end 265344), 4,194,304 rows, 0 of 64 tiles failed, violations 0; wall 18.0 s; the replay from cycle 29767: 16.0 s, 67.89 us/cycle  [meas: ReplayBench]
+repeat 4: OK, chip 265,480 cycles, replay 235,848 cycles (first start 29496, last end 265344), 4,194,304 rows, 0 of 64 tiles failed, violations 0; wall 18.3 s; the replay from cycle 29767: 16.2 s, 68.86 us/cycle  [meas: ReplayBench]
+ReplayBench: 5 repeat(s), 0 tile replays failed
+rb-evm-zone-29-jfr: exit 0, 98 s
