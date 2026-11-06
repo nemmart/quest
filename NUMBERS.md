@@ -89,3 +89,4 @@ same number (`044b-...`), claimed the same way.
 | 110r | meshsim WORKER22 | B1 T2 at 2^29, READY/GO, evm-zone-29 segments 37 (LRU), 64, 80, 84 |
 | 110s | meshsim WORKER22 | B1 T2 at 2^29, READY/GO, cyclone-29 segments 10, 10 (LRU), 14, 16 |
 | 110t | meshsim WORKER22 | B1 T2 at 2^29, READY/GO, cyclone-29 segments 32, 48, 64, 80 |
+| 110u | meshsim WORKER22 | B1 T2 at 2^29 with C&C 1's firmware owning the segment's barriers (CC_SEGMENT): segment 10 of evm-zone-29 and cyclone-29, every unit's real firmware |
