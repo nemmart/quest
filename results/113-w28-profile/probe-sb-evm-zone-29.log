@@ -1,0 +1,13 @@
+Exception in thread "main" java.nio.file.NoSuchFileException: /tmp/w28-profile/k/tables/replayer/../manifest.json
+	at java.base/sun.nio.fs.UnixException.translateToIOException(UnixException.java:92)
+	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:106)
+	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:111)
+	at java.base/sun.nio.fs.UnixFileSystemProvider.newByteChannel(UnixFileSystemProvider.java:261)
+	at java.base/java.nio.file.Files.newByteChannel(Files.java:380)
+	at java.base/java.nio.file.Files.newByteChannel(Files.java:432)
+	at java.base/java.nio.file.Files.readAllBytes(Files.java:3281)
+	at java.base/java.nio.file.Files.readString(Files.java:3359)
+	at java.base/java.nio.file.Files.readString(Files.java:3318)
+	at ReplayTables.checkManifest(ReplayTables.java:95)
+	at ReplayShard.main(ReplayShard.java:41)
+probe-sb-evm-zone-29: exit 1, 0 s
