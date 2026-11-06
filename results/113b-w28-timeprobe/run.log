@@ -1,0 +1,68 @@
+persistent data: /home/questrunner/data
+kit sha256 b10a2a5c5529d49c45a5443fd4927de5ae5e4bce351edfac4a203dcc9fed00bd
+meshsim 54c921c (sim-idle-profile), gold eeb64b5, built 2026-11-06
+start Fri Nov  6 04:01:00 AM UTC 2026 on godspeed, 16 threads
+openjdk version "21.0.12.1" 2026-08-18
+               total        used        free      shared  buff/cache   available
+Mem:              62           1          43           0          18          61
+evm-zone-29: inputs checked
+cyclone-29: inputs checked
+manifest /tmp/w28-profile/v1261/evm-zone-29.manifest.json sha256 5bffa524ed8901f1957e546385697e463bc2ddce5b00d81d698ad8cb4078a0aa
+manifest /tmp/w28-profile/v1261/cyclone-29.manifest.json sha256 2d5e368e5721dcc0b07997a76a1834b98b998ad1d49bfed9a27ee42ede333bd5
+time-t2-evm-zone-29: exit 0; evm-zone-29: T2 on 1 run(s), 0 failed, 540 s 
+time-sb-evm-zone-29: exit 1; 
+time-t2-cyclone-29: exit 0; cyclone-29: T2 on 1 run(s), 0 failed, 585 s 
+time-sb-cyclone-29: exit 1; 
+== time-t2-cyclone-29.txt
+TIME 1 (pool-1-thread-1, full+cc): 11399160 cycles, 712447 sampled (1 in 16); nanoTime() costs 53 ns, subtracted per section
+TIME 1 (pool-1-thread-1, full+cc) section request bus                              0.566 us/cycle
+TIME 1 (pool-1-thread-1, full+cc) section C&C endpoints                           -0.017 us/cycle
+TIME 1 (pool-1-thread-1, full+cc) section the 64 tiles (unsampled cycles)         39.896 us/cycle
+TIME 1 (pool-1-thread-1, full+cc) section CnC model                                0.013 us/cycle
+TIME 1 (pool-1-thread-1, full+cc) section CcCores (C&C 1-3)                        3.233 us/cycle
+TIME 1 (pool-1-thread-1, full+cc) section READY and error lines                    1.207 us/cycle
+TIME 1 (pool-1-thread-1, full+cc) section the cycle's tail                         0.082 us/cycle
+TIME 1 (pool-1-thread-1, full+cc) section checkInvariants                          1.823 us/cycle
+TIME 1 (pool-1-thread-1, full+cc) section total                                   46.803 us/cycle
+TIME 1 (pool-1-thread-1, full+cc) child       router   srq+inj  director      cmem      sram    writer        ag    tables      hist  readport    gather      core      slot  slot.end   ctl.end
+TIME 1 (pool-1-thread-1, full+cc) idle    44850049 42.9 |      22.6      82.6     -11.4     -10.8       2.1      -9.6      -6.3       8.3      -8.3     -28.4     -20.8     -13.3       0.5     -36.8      72.4
+TIME 1 (pool-1-thread-1, full+cc) router  178793 142.4 |     106.8      83.1     -10.0      -8.4       2.7      -8.6      -7.5       6.4      -3.9     -25.4     -20.9     -19.3       7.5     -35.6      75.2
+TIME 1 (pool-1-thread-1, full+cc) engines 412972 538.1 |      60.4     154.3      33.0      -8.5      89.2      15.6      -3.1       9.5      -7.1     -27.9     -18.7      81.5     110.6     -36.4      85.7
+TIME 1 (pool-1-thread-1, full+cc) core    154794 234.7 |      27.4      99.6      -9.1      -8.1       8.6      -7.0      -2.5      11.2      -6.3     -27.2     -19.3      71.7      48.7     -35.7      82.7
+TIME 1 (pool-1-thread-1, full+cc) cc1 per child (ns/cycle): router 30.7 srq+inj 73.1 director -8.7 cmem -10.3 sram 15.0 writer -6.7 ag -8.7 tables 5.8 hist 0.4 readport -28.6 gather -17.9 core 127.9 slot 75.7 slot.end -37.7 ctl.end 81.7; total 291.7; the slot: peripheral 78.9, DMA 14.2
+TIME 1 (pool-1-thread-1, full+cc) cc1 core by state (ns per cycle in it, cycles): wfi 127.7 (11398613) stalled 1577.9 (68) running 5755.7 (479)
+TIME 1 (pool-1-thread-1, full+cc) cc2 per child (ns/cycle): router 29.3 srq+inj 94.8 director -14.2 cmem -12.0 sram 14.6 writer -11.1 ag -20.6 tables -5.4 hist -4.0 readport -30.4 gather -17.1 core 93.5 slot 30.6 slot.end -37.8 ctl.end 90.7; total 200.9; the slot: peripheral 28.0, DMA 18.3
+TIME 1 (pool-1-thread-1, full+cc) cc2 core by state (ns per cycle in it, cycles): wfi 93.4 (11399098) stalled 2466.6 (8) running 7301.1 (54)
+TIME 1 (pool-1-thread-1, full+cc) cc3 per child (ns/cycle): router 22.4 srq+inj 99.8 director -14.6 cmem -25.3 sram 11.3 writer -8.1 ag -1.6 tables 12.2 hist -9.4 readport -30.3 gather -18.3 core 80.7 slot 136.0 slot.end -37.5 ctl.end 69.9; total 287.0; the slot: peripheral 124.3, DMA 25.0
+TIME 1 (pool-1-thread-1, full+cc) cc3 core by state (ns per cycle in it, cycles): halted -26.3 (212690) wfi 82.2 (9827974) stalled 12.9 (219317) running 100.5 (1139179)
+== time-t2-evm-zone-29.txt
+TIME 1 (pool-1-thread-1, full+cc): 10502911 cycles, 656431 sampled (1 in 16); nanoTime() costs 41 ns, subtracted per section
+TIME 1 (pool-1-thread-1, full+cc) section request bus                              0.606 us/cycle
+TIME 1 (pool-1-thread-1, full+cc) section C&C endpoints                            0.013 us/cycle
+TIME 1 (pool-1-thread-1, full+cc) section the 64 tiles (unsampled cycles)         39.766 us/cycle
+TIME 1 (pool-1-thread-1, full+cc) section CnC model                                0.010 us/cycle
+TIME 1 (pool-1-thread-1, full+cc) section CcCores (C&C 1-3)                        3.430 us/cycle
+TIME 1 (pool-1-thread-1, full+cc) section READY and error lines                    1.189 us/cycle
+TIME 1 (pool-1-thread-1, full+cc) section the cycle's tail                         0.100 us/cycle
+TIME 1 (pool-1-thread-1, full+cc) section checkInvariants                          1.792 us/cycle
+TIME 1 (pool-1-thread-1, full+cc) section total                                   46.905 us/cycle
+TIME 1 (pool-1-thread-1, full+cc) child       router   srq+inj  director      cmem      sram    writer        ag    tables      hist  readport    gather      core      slot  slot.end   ctl.end
+TIME 1 (pool-1-thread-1, full+cc) idle    41284756 228.3 |      34.2      95.6       0.6       2.3      14.8       2.1       6.6      21.5       2.8     -16.2     -10.6      -2.1      14.7     -24.6      86.4
+TIME 1 (pool-1-thread-1, full+cc) router  165464 339.9 |     125.0      97.0       4.9       4.0      17.3       4.9       7.4      27.0       4.0     -12.8     -12.6      -9.9      20.6     -23.5      86.4
+TIME 1 (pool-1-thread-1, full+cc) engines 413806 687.3 |      64.7     156.2      40.1       4.0      76.7      20.6      10.1      21.9       2.8     -14.8      -8.5     105.3     134.4     -24.3      98.3
+TIME 1 (pool-1-thread-1, full+cc) core    147558 475.6 |      43.0     117.6       5.9       7.8      24.7       7.5      14.6      29.7       7.1     -13.3      -7.2      92.9      61.8     -22.2     105.8
+TIME 1 (pool-1-thread-1, full+cc) cc1 per child (ns/cycle): router 34.9 srq+inj 114.1 director 1.4 cmem 0.5 sram 17.7 writer 4.5 ag 10.0 tables 23.8 hist 5.4 readport -17.0 gather -4.2 core 148.6 slot 111.2 slot.end -23.1 ctl.end 90.9; total 518.5; the slot: peripheral 84.7, DMA 18.0
+TIME 1 (pool-1-thread-1, full+cc) cc1 core by state (ns per cycle in it, cycles): wfi 148.4 (10502364) stalled 1425.1 (68) running 4054.5 (479)
+TIME 1 (pool-1-thread-1, full+cc) cc2 per child (ns/cycle): router 43.9 srq+inj 104.5 director 3.5 cmem 0.7 sram 12.9 writer 6.7 ag 8.1 tables 38.8 hist 5.8 readport -16.3 gather -9.1 core 93.7 slot 57.9 slot.end -26.1 ctl.end 83.6; total 408.5; the slot: peripheral 32.4, DMA 23.0
+TIME 1 (pool-1-thread-1, full+cc) cc2 core by state (ns per cycle in it, cycles): wfi 93.7 (10502849) stalled 960.1 (8) running 5547.8 (54)
+TIME 1 (pool-1-thread-1, full+cc) cc3 per child (ns/cycle): router 46.7 srq+inj 115.4 director 1.6 cmem 3.0 sram 25.5 writer 11.5 ag 6.5 tables 12.2 hist 3.9 readport -18.8 gather -4.6 core 121.8 slot 150.3 slot.end -24.8 ctl.end 100.4; total 550.6; the slot: peripheral 127.7, DMA 21.6
+TIME 1 (pool-1-thread-1, full+cc) cc3 core by state (ns per cycle in it, cycles): halted -0.4 (222209) wfi 125.7 (9125839) stalled 37.2 (186772) running 128.8 (968091)
+Exception in thread "main" java.nio.file.NoSuchFileException: /tmp/w28-profile/k/tables/replayer/../manifest.json
+	at java.base/sun.nio.fs.UnixException.translateToIOException(UnixException.java:92)
+	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:106)
+	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:111)
+Exception in thread "main" java.nio.file.NoSuchFileException: /tmp/w28-profile/k/tables/replayer/../manifest.json
+	at java.base/sun.nio.fs.UnixException.translateToIOException(UnixException.java:92)
+	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:106)
+	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:111)
+verdict: FAIL; exit 1 at Fri Nov  6 04:10:50 AM UTC 2026
