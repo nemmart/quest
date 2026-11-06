@@ -1,0 +1,31 @@
+persistent data: /home/questrunner/data
+kit sha256 cdb46fe4e756bd379fbf859e9fe9a62da0daa046e10d764bc0f95dbe94dbc309
+meshsim fec569c (sim-idle-skip), gold 6da9c9d, built 2026-11-06
+start Fri Nov  6 10:40:42 AM UTC 2026 on godspeed, 16 threads
+openjdk version "21.0.12.1" 2026-08-18
+               total        used        free      shared  buff/cache   available
+Mem:              62           1          42           0          19          61
+evm-zone-29: inputs checked
+cyclone-29: inputs checked
+manifest /tmp/w28-skip/v1261/evm-zone-29.manifest.json sha256 5bffa524ed8901f1957e546385697e463bc2ddce5b00d81d698ad8cb4078a0aa
+manifest /tmp/w28-skip/v1261/cyclone-29.manifest.json sha256 2d5e368e5721dcc0b07997a76a1834b98b998ad1d49bfed9a27ee42ede333bd5
+t2-evm-zone-29-false: exit 0; evm-zone-29: T2 on 1 run(s), 0 failed, 1151 s 
+sb-evm-zone-29-false: exit 0; 
+t2-evm-zone-29-true: exit 0; evm-zone-29: T2 on 1 run(s), 0 failed, 66 s 
+sb-evm-zone-29-true: exit 0; 
+t2-cyclone-29-false: exit 0; cyclone-29: T2 on 1 run(s), 0 failed, 1045 s 
+sb-cyclone-29-false: exit 0; 
+t2-cyclone-29-true: exit 0; cyclone-29: T2 on 1 run(s), 0 failed, 84 s 
+sb-cyclone-29-true: exit 0; 
+t2-evm-zone-29: SAME; chips 1
+t2-cyclone-29: SAME; chips 1
+sb-evm-zone-29: SAME; chips 128
+sb-cyclone-29: SAME; chips 128
+t2-evm-zone-29; stage 1 off: 1152 s, 21,390,486 cycles, 53.86 us/cycle; stage 1 on: 66 s, 21,390,486 cycles, 3.09 us/cycle
+t2-cyclone-29; stage 1 off: 1045 s, 21,589,890 cycles, 48.40 us/cycle; stage 1 on: 84 s, 21,589,890 cycles, 3.89 us/cycle
+sb-evm-zone-29; stage 1 off: 770 s, 29,894,836 cycles, 25.76 us/cycle; stage 1 on: 59 s, 29,894,836 cycles, 1.97 us/cycle
+sb-cyclone-29; stage 1 off: 761 s, 29,026,262 cycles, 26.22 us/cycle; stage 1 on: 59 s, 29,026,262 cycles, 2.03 us/cycle
+113b (the time probe, T2 segment 0, 32 windows): 46.9 us/cycle
+
+fingerprint, log and CSV comparison: 4 same, 0 different
+verdict: PASS; exit 0 at Fri Nov  6 10:59:59 AM UTC 2026
