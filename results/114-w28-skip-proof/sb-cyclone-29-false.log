@@ -23,8 +23,10 @@ cyclone-29   window    10  state-pick OK     65536 rows  pass   197035 cycles  3
 cyclone-29   window    11  state-pick OK     65536 rows  pass   197023 cycles  3.006 cycles/row  newexp 0 (served 0, slow path 0), refills 35, stalls [0, 184, 0, 0, 127, 104, 0]  [meas: StageB]
 cyclone-29   window    11  state-pick OK     65536 rows  pass   197023 cycles  3.006 cycles/row  newexp 0 (served 0, slow path 0), refills 35, stalls [0, 184, 0, 0, 127, 104, 0]  [meas: StageB]
 Exception in thread "main" java.lang.OutOfMemoryError: Java heap space
-	at Tile.s1Attach(Tile.java:197)
-	at Chip.<init>(Chip.java:98)
+	at BigSRAM.<init>(BigSRAM.java:51)
+	at Tile.<init>(Tile.java:79)
+	at Tile.<init>(Tile.java:52)
+	at Chip.<init>(Chip.java:80)
 	at StageB.runWindow(StageB.java:91)
 	at ReplayShard.main(ReplayShard.java:69)
-sb-cyclone-29-false: exit 1, 152 s
+sb-cyclone-29-false: exit 1, 146 s

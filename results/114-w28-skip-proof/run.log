@@ -1,7 +1,7 @@
 persistent data: /home/questrunner/data
 kit sha256 fdf07cc874e212266c3198ec18c306ca9100fd9416d1ea73327fb6b46c125e45
 meshsim 1a8b288 (sim-idle-skip), gold eeb64b5, built 2026-11-06
-start Fri Nov  6 08:04:29 AM UTC 2026 on godspeed, 16 threads
+start Fri Nov  6 08:22:43 AM UTC 2026 on godspeed, 16 threads
 openjdk version "21.0.12.1" 2026-08-18
                total        used        free      shared  buff/cache   available
 Mem:              62           1          42           0          19          61
@@ -9,22 +9,22 @@ evm-zone-29: inputs checked
 cyclone-29: inputs checked
 manifest /tmp/w28-skip/v1261/evm-zone-29.manifest.json sha256 5bffa524ed8901f1957e546385697e463bc2ddce5b00d81d698ad8cb4078a0aa
 manifest /tmp/w28-skip/v1261/cyclone-29.manifest.json sha256 2d5e368e5721dcc0b07997a76a1834b98b998ad1d49bfed9a27ee42ede333bd5
-t2-evm-zone-29-false: exit 0; evm-zone-29: T2 on 1 run(s), 0 failed, 1085 s 
+t2-evm-zone-29-false: exit 0; evm-zone-29: T2 on 1 run(s), 0 failed, 1057 s 
 sb-evm-zone-29-false: exit 1; 
-t2-evm-zone-29-true: exit 0; evm-zone-29: T2 on 1 run(s), 0 failed, 49 s 
+t2-evm-zone-29-true: exit 0; evm-zone-29: T2 on 1 run(s), 0 failed, 54 s 
 sb-evm-zone-29-true: exit 1; 
-t2-cyclone-29-false: exit 0; cyclone-29: T2 on 1 run(s), 0 failed, 1031 s 
+t2-cyclone-29-false: exit 0; cyclone-29: T2 on 1 run(s), 0 failed, 1084 s 
 sb-cyclone-29-false: exit 1; 
 t2-cyclone-29-true: exit 0; cyclone-29: T2 on 1 run(s), 0 failed, 53 s 
 sb-cyclone-29-true: exit 1; 
 t2-evm-zone-29: SAME; chips 1
 t2-cyclone-29: SAME; chips 1
 sb-evm-zone-29:  DIFF (logs); chips 24
-sb-cyclone-29:  DIFF (logs); chips 24
-t2-evm-zone-29; stage 1 off: 1084 s, 21,376,889 cycles, 50.71 us/cycle; stage 1 on: 49 s, 21,376,889 cycles, 2.29 us/cycle
-t2-cyclone-29; stage 1 off: 1031 s, 21,614,784 cycles, 47.70 us/cycle; stage 1 on: 53 s, 21,614,784 cycles, 2.45 us/cycle
-sb-evm-zone-29; stage 1 off: 148 s, 5,436,738 cycles, 27.22 us/cycle; stage 1 on: 19 s, 5,436,738 cycles, 3.49 us/cycle
-sb-cyclone-29; stage 1 off: 152 s, 5,463,406 cycles, 27.82 us/cycle; stage 1 on: 18 s, 5,463,406 cycles, 3.29 us/cycle
+sb-cyclone-29: DIFF (fingerprints) DIFF (logs); chips 25
+t2-evm-zone-29; stage 1 off: 1058 s, 21,376,889 cycles, 49.49 us/cycle; stage 1 on: 55 s, 21,376,889 cycles, 2.57 us/cycle
+t2-cyclone-29; stage 1 off: 1084 s, 21,614,784 cycles, 50.15 us/cycle; stage 1 on: 53 s, 21,614,784 cycles, 2.45 us/cycle
+sb-evm-zone-29; stage 1 off: 144 s, 5,436,738 cycles, 26.49 us/cycle; stage 1 on: 19 s, 5,436,738 cycles, 3.49 us/cycle
+sb-cyclone-29; stage 1 off: 146 s, 5,463,406 cycles, 26.72 us/cycle; stage 1 on: 21 s, 5,463,406 cycles, 3.84 us/cycle
 113b (the time probe, T2 segment 0, 32 windows): 46.9 us/cycle
 
 fingerprint, log and CSV comparison: 2 same, 2 different
@@ -32,4 +32,4 @@ Exception in thread "main" java.lang.OutOfMemoryError: Java heap space
 Exception in thread "main" java.lang.OutOfMemoryError: Java heap space
 Exception in thread "main" java.lang.OutOfMemoryError: Java heap space
 Exception in thread "main" java.lang.OutOfMemoryError: Java heap space
-verdict: FAIL; exit 1 at Fri Nov  6 08:22:38 AM UTC 2026
+verdict: FAIL; exit 1 at Fri Nov  6 08:40:51 AM UTC 2026
