@@ -96,3 +96,4 @@ same number (`044b-...`), claimed the same way.
 | 110v | meshsim WORKER22 | B1's final regression at v1.3-tracer 0d023ba (what merges): run_tests quick + full extras, the full-size sort p4/uniform-k128 against 1,229,008 cycles, the 64-window Stage B smoke of both workloads (as 110h) |
 | 115 | meshsim WORKER28 | stage 1 on main with B1 merged (sim-idle-skip 3fd4e5f): T2 segment 0 and the 64-window Stage B/F of both workloads, off and on, fingerprints, logs, CSVs, speed |
 | 115b | meshsim WORKER28 | stage 1 on main with B1 merged: the quick suite off and on, the sort included; shuffled on against unshuffled off |
+| 116 | meshsim WORKER29 | P2 step 1, the profile of a busy chip (sim-step-cost 2ccc514, engine unchanged): the full-size sort p4/uniform-k128, ReplayBench (all 64 tiles replaying, segment 0 of both workloads, 5 repeats) and its synthetic run, T2 segment 0 evm-zone-29 with stage 1 on; each under JFR and plain |
