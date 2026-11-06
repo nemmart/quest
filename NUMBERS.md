@@ -82,3 +82,4 @@ same number (`044b-...`), claimed the same way.
 | 110n | meshsim WORKER22 | B1 T2 at 2^29, evm-zone-29 segments 37 (LRU), 64, 80, 84 (replaces 110j) |
 | 110o | meshsim WORKER22 | B1 T2 at 2^29, cyclone-29 segments 10, 10 (LRU), 14, 16 (replaces 110k) |
 | 110p | meshsim WORKER22 | B1 T2 at 2^29, cyclone-29 segments 32, 48, 64, 80 (replaces 110l) |
+| 113 | meshsim WORKER28 | idle-skipping step 1, the profile (branch sim-idle-profile): T2 segment 0 of evm-zone-29 and cyclone-29 raw under JFR (64 windows) and the per-unit probe (32 windows); Stage B and F on windows 0-15 of both under JFR and the probe |
