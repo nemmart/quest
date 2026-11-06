@@ -90,3 +90,4 @@ same number (`044b-...`), claimed the same way.
 | 110s | meshsim WORKER22 | B1 T2 at 2^29, READY/GO, cyclone-29 segments 10, 10 (LRU), 14, 16 |
 | 110t | meshsim WORKER22 | B1 T2 at 2^29, READY/GO, cyclone-29 segments 32, 48, 64, 80 |
 | 110u | meshsim WORKER22 | B1 T2 at 2^29 with C&C 1's firmware owning the segment's barriers (CC_SEGMENT): segment 10 of evm-zone-29 and cyclone-29, every unit's real firmware |
+| 114 | meshsim WORKER28 | stage 1 (sim-idle-skip): T2 segment 0 of evm-zone-29 and cyclone-29 (64 windows, raw) and Stage B/F on windows 0-63 of both, stage 1 off and on; every chip's fingerprint, the logs and CSVs compared; us per cycle against 113b's 46.9 |
