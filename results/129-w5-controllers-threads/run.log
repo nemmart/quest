@@ -1,0 +1,69 @@
+
+==== machine  [09:10:02]
+6.8.0-147-generic
+16
+CPU(s):                                  16
+Model name:                              Intel(R) Core(TM) i5-14400F
+Thread(s) per core:                      2
+CPU(s) scaling MHz:                      18%
+ 09:10:02 up 3 days, 14 min,  2 users,  load average: 0.00, 0.00, 0.06
+Ubuntu clang version 18.1.3 (1ubuntu1)
+
+==== build (clang release)  [09:10:02]
+
+==== 1. TSan: the threads test (N = 3, every golden), gcc and clang  [09:10:04]
+./build/gcc-tsan/test_controllers: 2 passed, 0 failed, 0 skipped (debug-only)
+./build/clang-tsan/test_controllers: 2 passed, 0 failed, 0 skipped (debug-only)
+VERDICT TSan clean (gcc, clang): PASS
+
+==== 2. correctness: all 67 goldens in rounds of N controllers on N threads  [09:10:10]
+golden (engine, 1 threads, pinned): 67 runs in rounds of 1, all match, 0.051 s
+golden (engine, 1 threads, pinned): 67 runs in rounds of 1, all match, 0.047 s
+golden (engine, 1 threads, pinned): 67 runs in rounds of 1, all match, 0.052 s
+golden (engine, 2 threads, pinned): 67 runs in rounds of 2, all match, 0.039 s
+golden (engine, 2 threads, pinned): 67 runs in rounds of 2, all match, 0.043 s
+golden (engine, 2 threads, pinned): 67 runs in rounds of 2, all match, 0.040 s
+golden (engine, 4 threads, pinned): 67 runs in rounds of 4, all match, 0.038 s
+golden (engine, 4 threads, pinned): 67 runs in rounds of 4, all match, 0.046 s
+golden (engine, 4 threads, pinned): 67 runs in rounds of 4, all match, 0.045 s
+golden (engine, 6 threads, pinned): 67 runs in rounds of 6, all match, 0.042 s
+golden (engine, 6 threads, pinned): 67 runs in rounds of 6, all match, 0.038 s
+golden (engine, 6 threads, pinned): 67 runs in rounds of 6, all match, 0.038 s
+golden (engine, 8 threads, pinned): 67 runs in rounds of 8, all match, 0.035 s
+golden (engine, 8 threads, pinned): 67 runs in rounds of 8, all match, 0.037 s
+golden (engine, 8 threads, pinned): 67 runs in rounds of 8, all match, 0.036 s
+golden (engine, 12 threads, pinned): 67 runs in rounds of 12, all match, 0.042 s
+golden (engine, 12 threads, pinned): 67 runs in rounds of 12, all match, 0.041 s
+golden (engine, 12 threads, pinned): 67 runs in rounds of 12, all match, 0.034 s
+golden (engine, 16 threads): 67 runs in rounds of 16, all match, 0.035 s
+golden (engine, 16 threads): 67 runs in rounds of 16, all match, 0.035 s
+golden (engine, 16 threads): 67 runs in rounds of 16, all match, 0.033 s
+VERDICT every golden matches at N = 1, 2, 4, 6, 8, 12, 16: PASS
+
+==== 3. throughput: T controllers on T threads, the 13-cycle loop, 10^7 iterations each  [09:10:11]
+-- T = 1 on CPUs 0
+check: N = 1000, engine = direct driver (9068 lines), SIM_EXIT, count 1000
+threads 1: N 10000000 each: 42.96 M instructions/s in all (42.96 per thread), 20.95 ns per step on average, slowest thread 2.095 s
+threads 1: N 10000000 each: 43.03 M instructions/s in all (43.03 per thread), 20.91 ns per step on average, slowest thread 2.091 s
+threads 1: N 10000000 each: 43.03 M instructions/s in all (43.03 per thread), 20.91 ns per step on average, slowest thread 2.091 s
+-- T = 6 on CPUs 0,2,4,6,8,10
+check: N = 1000, engine = direct driver (9068 lines), SIM_EXIT, count 1000
+threads 6: N 10000000 each: 221.15 M instructions/s in all (36.86 per thread), 24.18 ns per step on average, slowest thread 2.442 s
+threads 6: N 10000000 each: 223.31 M instructions/s in all (37.22 per thread), 24.07 ns per step on average, slowest thread 2.418 s
+threads 6: N 10000000 each: 224.13 M instructions/s in all (37.35 per thread), 24.06 ns per step on average, slowest thread 2.409 s
+-- T = 12 on CPUs 0,1,2,3,4,5,6,7,8,9,10,11
+check: N = 1000, engine = direct driver (9068 lines), SIM_EXIT, count 1000
+threads 12: N 10000000 each: 239.33 M instructions/s in all (19.94 per thread), 45.11 ns per step on average, slowest thread 4.513 s
+threads 12: N 10000000 each: 223.03 M instructions/s in all (18.59 per thread), 48.25 ns per step on average, slowest thread 4.842 s
+threads 12: N 10000000 each: 211.21 M instructions/s in all (17.60 per thread), 50.64 ns per step on average, slowest thread 5.113 s
+-- T = 4 on CPUs 12,13,14,15
+check: N = 1000, engine = direct driver (9068 lines), SIM_EXIT, count 1000
+threads 4: N 10000000 each: 74.94 M instructions/s in all (18.74 per thread), 47.84 ns per step on average, slowest thread 4.804 s
+threads 4: N 10000000 each: 75.06 M instructions/s in all (18.77 per thread), 47.85 ns per step on average, slowest thread 4.796 s
+threads 4: N 10000000 each: 75.02 M instructions/s in all (18.75 per thread), 47.86 ns per step on average, slowest thread 4.799 s
+VERDICT every bench thread halts by SIM_EXIT: PASS
+
+==== done in 53 s  [09:10:54]
+T every bench thread halts by SIM_EXIT: PASS
+
+==== done in 53 s  [09:10:54]

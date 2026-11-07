@@ -1,0 +1,36 @@
+==== gcc tsan (controllers)
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c tests/test_controllers.cpp -o build/gcc-tsan/tests/test_controllers.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c tests/harness.cpp -o build/gcc-tsan/tests/harness.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/base/alloc_guard.cpp -o build/gcc-tsan/src/base/alloc_guard.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/base/arena.cpp -o build/gcc-tsan/src/base/arena.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/base/fatal.cpp -o build/gcc-tsan/src/base/fatal.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/config.cpp -o build/gcc-tsan/src/config.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/engine.cpp -o build/gcc-tsan/src/engine.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/parallel.cpp -o build/gcc-tsan/src/parallel.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/units/trace_log.cpp -o build/gcc-tsan/src/units/trace_log.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/units/controller.cpp -o build/gcc-tsan/src/units/controller.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c tests/golden_run.cpp -o build/gcc-tsan/tests/golden_run.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c tests/sha256.cpp -o build/gcc-tsan/tests/sha256.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread build/gcc-tsan/tests/test_controllers.o build/gcc-tsan/tests/harness.o build/gcc-tsan/src/base/alloc_guard.o build/gcc-tsan/src/base/arena.o build/gcc-tsan/src/base/fatal.o build/gcc-tsan/src/config.o build/gcc-tsan/src/engine.o build/gcc-tsan/src/parallel.o build/gcc-tsan/src/units/trace_log.o build/gcc-tsan/src/units/controller.o build/gcc-tsan/tests/golden_run.o build/gcc-tsan/tests/sha256.o -o build/gcc-tsan/test_controllers -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign -Wl,--allow-multiple-definition
+TSAN_OPTIONS="halt_on_error=1 second_deadlock_stack=1" ./build/gcc-tsan/test_controllers
+ok   controllers_three_threads_every_golden
+ok   controllers_mixed_order_visits_every_run_once
+./build/gcc-tsan/test_controllers: 2 passed, 0 failed, 0 skipped (debug-only)
+==== clang tsan (controllers)
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c tests/test_controllers.cpp -o build/clang-tsan/tests/test_controllers.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c tests/harness.cpp -o build/clang-tsan/tests/harness.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/base/alloc_guard.cpp -o build/clang-tsan/src/base/alloc_guard.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/base/arena.cpp -o build/clang-tsan/src/base/arena.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/base/fatal.cpp -o build/clang-tsan/src/base/fatal.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/config.cpp -o build/clang-tsan/src/config.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/engine.cpp -o build/clang-tsan/src/engine.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/parallel.cpp -o build/clang-tsan/src/parallel.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/units/trace_log.cpp -o build/clang-tsan/src/units/trace_log.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/units/controller.cpp -o build/clang-tsan/src/units/controller.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c tests/golden_run.cpp -o build/clang-tsan/tests/golden_run.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c tests/sha256.cpp -o build/clang-tsan/tests/sha256.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread build/clang-tsan/tests/test_controllers.o build/clang-tsan/tests/harness.o build/clang-tsan/src/base/alloc_guard.o build/clang-tsan/src/base/arena.o build/clang-tsan/src/base/fatal.o build/clang-tsan/src/config.o build/clang-tsan/src/engine.o build/clang-tsan/src/parallel.o build/clang-tsan/src/units/trace_log.o build/clang-tsan/src/units/controller.o build/clang-tsan/tests/golden_run.o build/clang-tsan/tests/sha256.o -o build/clang-tsan/test_controllers -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign -Wl,--allow-multiple-definition
+TSAN_OPTIONS="halt_on_error=1 second_deadlock_stack=1" ./build/clang-tsan/test_controllers
+ok   controllers_three_threads_every_golden
+ok   controllers_mixed_order_visits_every_run_once
+./build/clang-tsan/test_controllers: 2 passed, 0 failed, 0 skipped (debug-only)

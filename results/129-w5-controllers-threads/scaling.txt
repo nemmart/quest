@@ -1,0 +1,16 @@
+check: N = 1000, engine = direct driver (9068 lines), SIM_EXIT, count 1000
+threads 1: N 10000000 each: 42.96 M instructions/s in all (42.96 per thread), 20.95 ns per step on average, slowest thread 2.095 s
+threads 1: N 10000000 each: 43.03 M instructions/s in all (43.03 per thread), 20.91 ns per step on average, slowest thread 2.091 s
+threads 1: N 10000000 each: 43.03 M instructions/s in all (43.03 per thread), 20.91 ns per step on average, slowest thread 2.091 s
+check: N = 1000, engine = direct driver (9068 lines), SIM_EXIT, count 1000
+threads 6: N 10000000 each: 221.15 M instructions/s in all (36.86 per thread), 24.18 ns per step on average, slowest thread 2.442 s
+threads 6: N 10000000 each: 223.31 M instructions/s in all (37.22 per thread), 24.07 ns per step on average, slowest thread 2.418 s
+threads 6: N 10000000 each: 224.13 M instructions/s in all (37.35 per thread), 24.06 ns per step on average, slowest thread 2.409 s
+check: N = 1000, engine = direct driver (9068 lines), SIM_EXIT, count 1000
+threads 12: N 10000000 each: 239.33 M instructions/s in all (19.94 per thread), 45.11 ns per step on average, slowest thread 4.513 s
+threads 12: N 10000000 each: 223.03 M instructions/s in all (18.59 per thread), 48.25 ns per step on average, slowest thread 4.842 s
+threads 12: N 10000000 each: 211.21 M instructions/s in all (17.60 per thread), 50.64 ns per step on average, slowest thread 5.113 s
+check: N = 1000, engine = direct driver (9068 lines), SIM_EXIT, count 1000
+threads 4: N 10000000 each: 74.94 M instructions/s in all (18.74 per thread), 47.84 ns per step on average, slowest thread 4.804 s
+threads 4: N 10000000 each: 75.06 M instructions/s in all (18.77 per thread), 47.85 ns per step on average, slowest thread 4.796 s
+threads 4: N 10000000 each: 75.02 M instructions/s in all (18.75 per thread), 47.86 ns per step on average, slowest thread 4.799 s
