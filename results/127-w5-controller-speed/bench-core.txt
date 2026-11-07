@@ -1,0 +1,15 @@
+check: N = 1000, engine = direct driver (9068 lines), SIM_EXIT, count 1000
+core alone: N 10000000: 90000006 instructions, 130000005 cycles, 100000006 steps in 0.578 s: 155.72 M instructions/s, 5.78 ns per step
+core alone: N 10000000: 90000006 instructions, 130000005 cycles, 100000006 steps in 0.576 s: 156.38 M instructions/s, 5.76 ns per step
+core alone: N 10000000: 90000006 instructions, 130000005 cycles, 100000006 steps in 0.577 s: 155.94 M instructions/s, 5.77 ns per step
+-- perf stat core (rc 0)
+<not counted>,,cpu_atom/cycles/,0,0.00,,
+8143469229,,cpu_core/cycles/,1737164569,100.00,,
+<not counted>,,cpu_atom/instructions/,0,0.00,,
+42483813253,,cpu_core/instructions/,1737164569,100.00,5.22,insn per cycle
+<not counted>,,cpu_atom/branch-misses/,0,0.00,,
+76519,,cpu_core/branch-misses/,1737164569,100.00,,
+<not counted>,,cpu_atom/cache-misses/,0,0.00,,
+85021,,cpu_core/cache-misses/,1737164569,100.00,,
+<not supported>,,cpu_atom/L1-dcache-load-misses/,0,100.00,,
+311364,,cpu_core/L1-dcache-load-misses/,1737164569,100.00,,
