@@ -1,0 +1,29 @@
+after one: us_per_cycle=0.931 us_min=0.922 us_max=0.948 | us_per_cycle=0.945 us_min=0.924 us_max=0.978 | us_per_cycle=0.938 us_min=0.936 us_max=0.952 | 
+after t6-tiles: us_per_cycle=0.329 us_min=0.328 us_max=0.335 | us_per_cycle=0.330 us_min=0.327 us_max=0.335 | us_per_cycle=0.330 us_min=0.327 us_max=0.407 | 
+  timed us=0.351 compute=0.182 imbalance=0.029 barrier_wait=0.098 drain=0.025 publish=0.007 clear=0.010
+  timed us=0.351 compute=0.179 imbalance=0.026 barrier_wait=0.105 drain=0.025 publish=0.007 clear=0.009
+  timed us=0.338 compute=0.184 imbalance=0.029 barrier_wait=0.082 drain=0.029 publish=0.007 clear=0.007
+after t6-load: us_per_cycle=0.335 us_min=0.329 us_max=0.409 | us_per_cycle=0.339 us_min=0.335 us_max=0.346 | us_per_cycle=0.327 us_min=0.322 us_max=0.415 | 
+  timed us=0.346 compute=0.183 imbalance=0.022 barrier_wait=0.097 drain=0.026 publish=0.008 clear=0.009
+  timed us=0.356 compute=0.187 imbalance=0.030 barrier_wait=0.095 drain=0.027 publish=0.008 clear=0.009
+  timed us=0.349 compute=0.184 imbalance=0.027 barrier_wait=0.095 drain=0.027 publish=0.008 clear=0.008
+after t6-profile: us_per_cycle=0.332 us_min=0.328 us_max=0.612 | us_per_cycle=0.340 us_min=0.337 us_max=0.625 | us_per_cycle=0.335 us_min=0.332 us_max=0.641 | 
+  timed us=0.348 compute=0.185 imbalance=0.031 barrier_wait=0.088 drain=0.027 publish=0.008 clear=0.009
+  timed us=0.346 compute=0.183 imbalance=0.025 barrier_wait=0.093 drain=0.028 publish=0.008 clear=0.009
+  timed us=0.345 compute=0.182 imbalance=0.021 barrier_wait=0.097 drain=0.026 publish=0.008 clear=0.011
+after t8-rows: us_per_cycle=0.416 us_min=0.413 us_max=0.427 | us_per_cycle=0.416 us_min=0.412 us_max=0.461 | us_per_cycle=0.417 us_min=0.414 us_max=0.514 | 
+  timed us=0.429 compute=0.206 imbalance=0.094 barrier_wait=0.070 drain=0.041 publish=0.010 clear=0.008
+  timed us=0.430 compute=0.207 imbalance=0.094 barrier_wait=0.068 drain=0.043 publish=0.010 clear=0.008
+  timed us=0.434 compute=0.209 imbalance=0.095 barrier_wait=0.067 drain=0.044 publish=0.010 clear=0.009
+after t8-tiles: us_per_cycle=0.415 us_min=0.413 us_max=0.547 | us_per_cycle=0.415 us_min=0.411 us_max=0.469 | us_per_cycle=0.415 us_min=0.412 us_max=0.490 | 
+  timed us=0.435 compute=0.206 imbalance=0.095 barrier_wait=0.075 drain=0.041 publish=0.010 clear=0.008
+  timed us=0.432 compute=0.205 imbalance=0.097 barrier_wait=0.069 drain=0.042 publish=0.010 clear=0.008
+  timed us=0.430 compute=0.206 imbalance=0.095 barrier_wait=0.068 drain=0.042 publish=0.010 clear=0.008
+after t8-load: us_per_cycle=0.410 us_min=0.405 us_max=0.473 | us_per_cycle=0.412 us_min=0.407 us_max=0.458 | us_per_cycle=0.413 us_min=0.406 us_max=1.167 | 
+  timed us=0.425 compute=0.205 imbalance=0.080 barrier_wait=0.077 drain=0.040 publish=0.013 clear=0.009
+  timed us=0.428 compute=0.207 imbalance=0.077 barrier_wait=0.080 drain=0.041 publish=0.014 clear=0.009
+  timed us=0.430 compute=0.210 imbalance=0.081 barrier_wait=0.073 drain=0.043 publish=0.014 clear=0.009
+after t8-profile: us_per_cycle=0.417 us_min=0.408 us_max=0.650 | us_per_cycle=0.409 us_min=0.405 us_max=0.689 | us_per_cycle=0.432 us_min=0.424 us_max=0.632 | 
+  timed us=0.433 compute=0.209 imbalance=0.094 barrier_wait=0.065 drain=0.042 publish=0.014 clear=0.009
+  timed us=0.425 compute=0.206 imbalance=0.092 barrier_wait=0.061 drain=0.043 publish=0.014 clear=0.009
+  timed us=0.430 compute=0.210 imbalance=0.083 barrier_wait=0.072 drain=0.041 publish=0.014 clear=0.009
