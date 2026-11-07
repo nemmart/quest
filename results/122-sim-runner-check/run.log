@@ -1,0 +1,125 @@
+
+==== 1. sysctls and tools
+kernel.perf_event_paranoid = 1
+vm.mmap_rnd_bits = cat: /proc/sys/vm/mmap_rnd_bits: Permission denied
+kernel.kptr_restrict = 1
+gcc: /usr/bin/gcc: gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+g++: /usr/bin/g++: g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+clang: /usr/bin/clang: Ubuntu clang version 18.1.3 (1ubuntu1)
+clang++: /usr/bin/clang++: Ubuntu clang version 18.1.3 (1ubuntu1)
+ld.lld: /usr/bin/ld.lld: Ubuntu LLD 18.1.3 (compatible with GNU linkers)
+perf: /usr/bin/perf: perf version 6.8.12
+VERDICT perf_event_paranoid: PASS
+cat: /proc/sys/vm/mmap_rnd_bits: Permission denied
+tasks/122-sim-runner-check.sh: line 25: [: : integer expression expected
+VERDICT mmap_rnd_bits: FAIL
+VERDICT clang_lld_present: PASS
+
+==== 1b. CPU topology (for taskset: P-cores have SMT siblings and the higher max MHz)
+CPU CORE SOCKET    MAXMHZ ONLINE
+  0    0      0 4700.0000    yes
+  1    0      0 4700.0000    yes
+  2    1      0 4700.0000    yes
+  3    1      0 4700.0000    yes
+  4    2      0 4700.0000    yes
+  5    2      0 4700.0000    yes
+  6    3      0 4700.0000    yes
+  7    3      0 4700.0000    yes
+  8    4      0 4700.0000    yes
+  9    4      0 4700.0000    yes
+ 10    5      0 4700.0000    yes
+ 11    5      0 4700.0000    yes
+ 12    6      0 3500.0000    yes
+ 13    7      0 3500.0000    yes
+ 14    8      0 3500.0000    yes
+ 15    9      0 3500.0000    yes
+cpu0 siblings=0-1 max_khz=4700000
+cpu1 siblings=0-1 max_khz=4700000
+cpu2 siblings=2-3 max_khz=4700000
+cpu3 siblings=2-3 max_khz=4700000
+cpu4 siblings=4-5 max_khz=4700000
+cpu5 siblings=4-5 max_khz=4700000
+cpu6 siblings=6-7 max_khz=4700000
+cpu7 siblings=6-7 max_khz=4700000
+cpu8 siblings=8-9 max_khz=4700000
+cpu9 siblings=8-9 max_khz=4700000
+cpu10 siblings=10-11 max_khz=4700000
+cpu11 siblings=10-11 max_khz=4700000
+cpu12 siblings=12 max_khz=3500000
+cpu13 siblings=13 max_khz=3500000
+cpu14 siblings=14 max_khz=3500000
+cpu15 siblings=15 max_khz=3500000
+cpu_core (P): 0-11
+cpu_atom (E): 12-15
+
+==== 2. make check (gcc and clang, debug and release)
+make check rc=0 in 20 s
+ok   pool_full_is_fatal
+./build/clang-release/test_value_pool: 8 passed, 0 failed, 4 skipped (debug-only)
+==== make check: all passed (gcc clang; debug, release)
+VERDICT make_check_gcc_clang: PASS
+
+==== 3. perf on a short run (build/gcc-release/test_ring)
+
+ Performance counter stats for 'build/gcc-release/test_ring':
+
+       187,197,672      cpu_atom/cycles/                                                        (1.20%)
+       263,433,897      cpu_core/cycles/                                                        (98.80%)
+       153,507,513      cpu_atom/instructions/           #    0.82  insn per cycle              (1.20%)
+       813,833,990      cpu_core/instructions/           #    3.09  insn per cycle              (98.80%)
+         1,695,589      cpu_atom/cache-misses/                                                  (1.20%)
+            20,627      cpu_core/cache-misses/                                                  (98.80%)
+
+       0.198462723 seconds time elapsed
+
+       0.058048000 seconds user
+       0.001979000 seconds sys
+
+
+    72.18%  test_ring  test_ring             [.] (anonymous namespace)::ring_differential(unsigned long)
+            |          
+            |--69.84%--(anonymous namespace)::ring_differential(unsigned long)
+            |          
+             --2.34%--void std::deque<std::vector<unsigned long, std::allocator<unsigned long> >, std::allocator<std::vector<unsigned long, std::allocator<unsigned long> > > >::_M_push_back_aux<std::vector<unsigned long, std::allocator<unsigned long> > const&>(std::vector<unsigned long, std::allocator<unsigned long> > const&)
+     4.69%  test_ring  libc.so.6             [.] malloc
+            |
+            ---malloc
+               operator new(unsigned long)
+               |          
+                --1.18%--0x5641978257e0
+                          0x6a74963192a125aa
+     3.50%  test_ring  libc.so.6             [.] cfree
+            |
+            ---cfree
+               (anonymous namespace)::ring_differential(unsigned long)
+     1.18%  test_ring  libc.so.6             [.] 0x0000000000188d8b
+            |
+            ---0x7fda6b788db0
+               0x564197825980
+               0x2a29bad58f01b166
+     1.18%  test_ring  libc.so.6             [.] 0x00000000000ab256
+            |
+            ---0x7fda6b6ab258
+               cfree
+VERDICT perf: PASS
+
+==== 4. TSan, gcc and clang
+g++: clean rc=0 (tsan_ok 200000), racy rc=66 (WARNING: ThreadSanitizer: data race (pid=844519))
+VERDICT tsan_g++: PASS
+clang++: clean rc=0 (tsan_ok 200000), racy rc=66 (WARNING: ThreadSanitizer: data race (pid=844537))
+VERDICT tsan_clang++: PASS
+
+==== summary
+S
+clang++: clean rc=0 (tsan_ok 200000), racy rc=66 (WARNING: ThreadSanitizer: data race (pid=844537))
+VERDICT tsan_clang++: PASS
+
+==== summary
+VERDICT perf_event_paranoid: PASS
+VERDICT mmap_rnd_bits: FAIL
+VERDICT clang_lld_present: PASS
+VERDICT make_check_gcc_clang: PASS
+VERDICT perf: PASS
+VERDICT tsan_g++: PASS
+VERDICT tsan_clang++: PASS
+VERDICT tsan_clang++: PASS

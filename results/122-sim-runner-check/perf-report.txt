@@ -1,0 +1,25 @@
+    72.18%  test_ring  test_ring             [.] (anonymous namespace)::ring_differential(unsigned long)
+            |          
+            |--69.84%--(anonymous namespace)::ring_differential(unsigned long)
+            |          
+             --2.34%--void std::deque<std::vector<unsigned long, std::allocator<unsigned long> >, std::allocator<std::vector<unsigned long, std::allocator<unsigned long> > > >::_M_push_back_aux<std::vector<unsigned long, std::allocator<unsigned long> > const&>(std::vector<unsigned long, std::allocator<unsigned long> > const&)
+     4.69%  test_ring  libc.so.6             [.] malloc
+            |
+            ---malloc
+               operator new(unsigned long)
+               |          
+                --1.18%--0x5641978257e0
+                          0x6a74963192a125aa
+     3.50%  test_ring  libc.so.6             [.] cfree
+            |
+            ---cfree
+               (anonymous namespace)::ring_differential(unsigned long)
+     1.18%  test_ring  libc.so.6             [.] 0x0000000000188d8b
+            |
+            ---0x7fda6b788db0
+               0x564197825980
+               0x2a29bad58f01b166
+     1.18%  test_ring  libc.so.6             [.] 0x00000000000ab256
+            |
+            ---0x7fda6b6ab258
+               cfree

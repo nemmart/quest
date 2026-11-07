@@ -1,0 +1,365 @@
+==== gcc debug
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -c tests/test_arena.cpp -o build/gcc-debug/tests/test_arena.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -c tests/harness.cpp -o build/gcc-debug/tests/harness.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -c src/base/alloc_guard.cpp -o build/gcc-debug/src/base/alloc_guard.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -c src/base/arena.cpp -o build/gcc-debug/src/base/arena.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -c src/base/fatal.cpp -o build/gcc-debug/src/base/fatal.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -c tests/test_base.cpp -o build/gcc-debug/tests/test_base.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -c tests/test_bitmap.cpp -o build/gcc-debug/tests/test_bitmap.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -c tests/test_bucket.cpp -o build/gcc-debug/tests/test_bucket.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -c tests/test_ring.cpp -o build/gcc-debug/tests/test_ring.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -c tests/test_value_pool.cpp -o build/gcc-debug/tests/test_value_pool.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer build/gcc-debug/tests/test_arena.o build/gcc-debug/tests/harness.o build/gcc-debug/src/base/alloc_guard.o build/gcc-debug/src/base/arena.o build/gcc-debug/src/base/fatal.o -o build/gcc-debug/test_arena -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer build/gcc-debug/tests/test_base.o build/gcc-debug/tests/harness.o build/gcc-debug/src/base/alloc_guard.o build/gcc-debug/src/base/arena.o build/gcc-debug/src/base/fatal.o -o build/gcc-debug/test_base -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer build/gcc-debug/tests/test_bucket.o build/gcc-debug/tests/harness.o build/gcc-debug/src/base/alloc_guard.o build/gcc-debug/src/base/arena.o build/gcc-debug/src/base/fatal.o -o build/gcc-debug/test_bucket -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer build/gcc-debug/tests/test_ring.o build/gcc-debug/tests/harness.o build/gcc-debug/src/base/alloc_guard.o build/gcc-debug/src/base/arena.o build/gcc-debug/src/base/fatal.o -o build/gcc-debug/test_ring -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer build/gcc-debug/tests/test_value_pool.o build/gcc-debug/tests/harness.o build/gcc-debug/src/base/alloc_guard.o build/gcc-debug/src/base/arena.o build/gcc-debug/src/base/fatal.o -o build/gcc-debug/test_value_pool -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer build/gcc-debug/tests/test_bitmap.o build/gcc-debug/tests/harness.o build/gcc-debug/src/base/alloc_guard.o build/gcc-debug/src/base/arena.o build/gcc-debug/src/base/fatal.o -o build/gcc-debug/test_bitmap -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+ok   arena_objects_contiguous_in_order
+ok   alloc_big_aligned_and_zeroed
+ok   block_is_line_aligned
+ok   arena_differential_seed_1
+ok   arena_differential_seed_2
+ok   arena_differential_seed_3
+ok   arena_full_is_fatal
+ok   arena_index_past_size
+ok   alloc_big_failure_is_fatal
+./build/gcc-debug/test_arena: 9 passed, 0 failed, 0 skipped (debug-only)
+ok   fatal_prints_context_and_aborts
+ok   fatal_without_arguments
+ok   dcheck_fires_in_debug
+ok   dcheck_is_silent_when_true
+ok   dcheck_not_evaluated_in_release
+ok   hook_quiet_outside_a_run
+ok   hook_operator_new
+ok   hook_operator_new_array
+ok   hook_operator_new_nothrow
+ok   hook_operator_new_aligned
+ok   hook_operator_delete
+ok   hook_malloc
+ok   hook_calloc
+ok   hook_realloc
+ok   hook_free
+ok   hook_aligned_alloc
+ok   hook_posix_memalign
+ok   hook_stl_container
+ok   hook_per_thread_flag_is_cleared_by_fatal
+ok   begin_run_twice
+ok   end_run_outside
+ok   harness_captures_earlier_stderr
+./build/gcc-debug/test_base: 22 passed, 0 failed, 0 skipped (debug-only)
+ok   bitmap_words_needed_rounds_to_lines
+ok   bitmap_word_boundaries
+ok   bitmap_set_all_stops_at_size
+ok   bitmap_cycle_loop_ops_never_allocate
+ok   bitmap_differential_seed_1
+ok   bitmap_differential_seed_2
+ok   bitmap_differential_seed_3
+ok   bitmap_set_out_of_range
+ok   bitmap_test_out_of_range
+ok   bitmap_storage_misaligned
+./build/gcc-debug/test_bitmap: 10 passed, 0 failed, 0 skipped (debug-only)
+ok   bucket_words_needed_rounds_to_lines
+ok   bucket_append_read_clear
+ok   bucket_cycle_loop_ops_never_allocate
+ok   bucket_differential_seed_1
+ok   bucket_differential_seed_2
+ok   bucket_differential_seed_3
+ok   bucket_full_is_fatal
+ok   bucket_zero_width_is_fatal
+ok   bucket_entry_past_count
+ok   bucket_storage_misaligned
+./build/gcc-debug/test_bucket: 10 passed, 0 failed, 0 skipped (debug-only)
+ok   ring_words_needed_rounds_to_lines
+ok   ring_depth_one_width_one
+ok   ring_wraps_and_keeps_order
+ok   ring_fills_exactly_to_depth
+ok   ring_cycle_loop_ops_never_allocate
+ok   ring_differential_seed_1
+ok   ring_differential_seed_2
+ok   ring_differential_seed_3
+ok   ring_full_is_fatal
+ok   ring_zero_width_is_fatal
+ok   ring_pop_empty
+ok   ring_peek_past_count
+ok   ring_storage_misaligned
+./build/gcc-debug/test_ring: 13 passed, 0 failed, 0 skipped (debug-only)
+ok   pool_words_needed_rounds_to_lines
+ok   pool_lowest_free_first_and_values_kept
+ok   pool_values_are_16_byte_aligned
+ok   pool_cycle_loop_ops_never_allocate
+ok   pool_differential_seed_1
+ok   pool_differential_seed_2
+ok   pool_differential_seed_3
+ok   pool_full_is_fatal
+ok   pool_double_free
+ok   pool_free_out_of_range
+ok   pool_read_freed_index
+ok   pool_storage_misaligned
+./build/gcc-debug/test_value_pool: 12 passed, 0 failed, 0 skipped (debug-only)
+==== gcc release
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O2 -DNDEBUG -c tests/test_arena.cpp -o build/gcc-release/tests/test_arena.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O2 -DNDEBUG -c tests/harness.cpp -o build/gcc-release/tests/harness.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O2 -DNDEBUG -c src/base/alloc_guard.cpp -o build/gcc-release/src/base/alloc_guard.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O2 -DNDEBUG -c src/base/arena.cpp -o build/gcc-release/src/base/arena.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O2 -DNDEBUG -c src/base/fatal.cpp -o build/gcc-release/src/base/fatal.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O2 -DNDEBUG -c tests/test_base.cpp -o build/gcc-release/tests/test_base.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O2 -DNDEBUG -c tests/test_bitmap.cpp -o build/gcc-release/tests/test_bitmap.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O2 -DNDEBUG -c tests/test_bucket.cpp -o build/gcc-release/tests/test_bucket.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O2 -DNDEBUG -c tests/test_ring.cpp -o build/gcc-release/tests/test_ring.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O2 -DNDEBUG -c tests/test_value_pool.cpp -o build/gcc-release/tests/test_value_pool.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O2 -DNDEBUG build/gcc-release/tests/test_arena.o build/gcc-release/tests/harness.o build/gcc-release/src/base/alloc_guard.o build/gcc-release/src/base/arena.o build/gcc-release/src/base/fatal.o -o build/gcc-release/test_arena -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O2 -DNDEBUG build/gcc-release/tests/test_base.o build/gcc-release/tests/harness.o build/gcc-release/src/base/alloc_guard.o build/gcc-release/src/base/arena.o build/gcc-release/src/base/fatal.o -o build/gcc-release/test_base -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O2 -DNDEBUG build/gcc-release/tests/test_bucket.o build/gcc-release/tests/harness.o build/gcc-release/src/base/alloc_guard.o build/gcc-release/src/base/arena.o build/gcc-release/src/base/fatal.o -o build/gcc-release/test_bucket -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O2 -DNDEBUG build/gcc-release/tests/test_ring.o build/gcc-release/tests/harness.o build/gcc-release/src/base/alloc_guard.o build/gcc-release/src/base/arena.o build/gcc-release/src/base/fatal.o -o build/gcc-release/test_ring -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O2 -DNDEBUG build/gcc-release/tests/test_bitmap.o build/gcc-release/tests/harness.o build/gcc-release/src/base/alloc_guard.o build/gcc-release/src/base/arena.o build/gcc-release/src/base/fatal.o -o build/gcc-release/test_bitmap -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O2 -DNDEBUG build/gcc-release/tests/test_value_pool.o build/gcc-release/tests/harness.o build/gcc-release/src/base/alloc_guard.o build/gcc-release/src/base/arena.o build/gcc-release/src/base/fatal.o -o build/gcc-release/test_value_pool -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+ok   arena_objects_contiguous_in_order
+ok   alloc_big_aligned_and_zeroed
+ok   block_is_line_aligned
+ok   arena_differential_seed_1
+ok   arena_differential_seed_2
+ok   arena_differential_seed_3
+ok   arena_full_is_fatal
+ok   alloc_big_failure_is_fatal
+./build/gcc-release/test_arena: 8 passed, 0 failed, 1 skipped (debug-only)
+ok   fatal_prints_context_and_aborts
+ok   fatal_without_arguments
+ok   dcheck_is_silent_when_true
+ok   dcheck_not_evaluated_in_release
+ok   hook_quiet_outside_a_run
+ok   hook_operator_new
+ok   hook_operator_new_array
+ok   hook_operator_new_nothrow
+ok   hook_operator_new_aligned
+ok   hook_operator_delete
+ok   hook_malloc
+ok   hook_calloc
+ok   hook_realloc
+ok   hook_free
+ok   hook_aligned_alloc
+ok   hook_posix_memalign
+ok   hook_stl_container
+ok   hook_per_thread_flag_is_cleared_by_fatal
+ok   harness_captures_earlier_stderr
+./build/gcc-release/test_base: 19 passed, 0 failed, 3 skipped (debug-only)
+ok   bitmap_words_needed_rounds_to_lines
+ok   bitmap_word_boundaries
+ok   bitmap_set_all_stops_at_size
+ok   bitmap_cycle_loop_ops_never_allocate
+ok   bitmap_differential_seed_1
+ok   bitmap_differential_seed_2
+ok   bitmap_differential_seed_3
+./build/gcc-release/test_bitmap: 7 passed, 0 failed, 3 skipped (debug-only)
+ok   bucket_words_needed_rounds_to_lines
+ok   bucket_append_read_clear
+ok   bucket_cycle_loop_ops_never_allocate
+ok   bucket_differential_seed_1
+ok   bucket_differential_seed_2
+ok   bucket_differential_seed_3
+ok   bucket_full_is_fatal
+ok   bucket_zero_width_is_fatal
+./build/gcc-release/test_bucket: 8 passed, 0 failed, 2 skipped (debug-only)
+ok   ring_words_needed_rounds_to_lines
+ok   ring_depth_one_width_one
+ok   ring_wraps_and_keeps_order
+ok   ring_fills_exactly_to_depth
+ok   ring_cycle_loop_ops_never_allocate
+ok   ring_differential_seed_1
+ok   ring_differential_seed_2
+ok   ring_differential_seed_3
+ok   ring_full_is_fatal
+ok   ring_zero_width_is_fatal
+./build/gcc-release/test_ring: 10 passed, 0 failed, 3 skipped (debug-only)
+ok   pool_words_needed_rounds_to_lines
+ok   pool_lowest_free_first_and_values_kept
+ok   pool_values_are_16_byte_aligned
+ok   pool_cycle_loop_ops_never_allocate
+ok   pool_differential_seed_1
+ok   pool_differential_seed_2
+ok   pool_differential_seed_3
+ok   pool_full_is_fatal
+./build/gcc-release/test_value_pool: 8 passed, 0 failed, 4 skipped (debug-only)
+==== clang debug
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -c tests/test_arena.cpp -o build/clang-debug/tests/test_arena.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -c tests/harness.cpp -o build/clang-debug/tests/harness.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -c src/base/alloc_guard.cpp -o build/clang-debug/src/base/alloc_guard.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -c src/base/arena.cpp -o build/clang-debug/src/base/arena.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -c src/base/fatal.cpp -o build/clang-debug/src/base/fatal.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -c tests/test_base.cpp -o build/clang-debug/tests/test_base.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -c tests/test_bitmap.cpp -o build/clang-debug/tests/test_bitmap.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -c tests/test_bucket.cpp -o build/clang-debug/tests/test_bucket.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -c tests/test_ring.cpp -o build/clang-debug/tests/test_ring.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -c tests/test_value_pool.cpp -o build/clang-debug/tests/test_value_pool.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer build/clang-debug/tests/test_arena.o build/clang-debug/tests/harness.o build/clang-debug/src/base/alloc_guard.o build/clang-debug/src/base/arena.o build/clang-debug/src/base/fatal.o -o build/clang-debug/test_arena -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer build/clang-debug/tests/test_base.o build/clang-debug/tests/harness.o build/clang-debug/src/base/alloc_guard.o build/clang-debug/src/base/arena.o build/clang-debug/src/base/fatal.o -o build/clang-debug/test_base -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer build/clang-debug/tests/test_bucket.o build/clang-debug/tests/harness.o build/clang-debug/src/base/alloc_guard.o build/clang-debug/src/base/arena.o build/clang-debug/src/base/fatal.o -o build/clang-debug/test_bucket -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer build/clang-debug/tests/test_bitmap.o build/clang-debug/tests/harness.o build/clang-debug/src/base/alloc_guard.o build/clang-debug/src/base/arena.o build/clang-debug/src/base/fatal.o -o build/clang-debug/test_bitmap -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer build/clang-debug/tests/test_ring.o build/clang-debug/tests/harness.o build/clang-debug/src/base/alloc_guard.o build/clang-debug/src/base/arena.o build/clang-debug/src/base/fatal.o -o build/clang-debug/test_ring -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer build/clang-debug/tests/test_value_pool.o build/clang-debug/tests/harness.o build/clang-debug/src/base/alloc_guard.o build/clang-debug/src/base/arena.o build/clang-debug/src/base/fatal.o -o build/clang-debug/test_value_pool -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+ok   arena_objects_contiguous_in_order
+ok   alloc_big_aligned_and_zeroed
+ok   block_is_line_aligned
+ok   arena_differential_seed_1
+ok   arena_differential_seed_2
+ok   arena_differential_seed_3
+ok   arena_full_is_fatal
+ok   arena_index_past_size
+ok   alloc_big_failure_is_fatal
+./build/clang-debug/test_arena: 9 passed, 0 failed, 0 skipped (debug-only)
+ok   fatal_prints_context_and_aborts
+ok   fatal_without_arguments
+ok   dcheck_fires_in_debug
+ok   dcheck_is_silent_when_true
+ok   dcheck_not_evaluated_in_release
+ok   hook_quiet_outside_a_run
+ok   hook_operator_new
+ok   hook_operator_new_array
+ok   hook_operator_new_nothrow
+ok   hook_operator_new_aligned
+ok   hook_operator_delete
+ok   hook_malloc
+ok   hook_calloc
+ok   hook_realloc
+ok   hook_free
+ok   hook_aligned_alloc
+ok   hook_posix_memalign
+ok   hook_stl_container
+ok   hook_per_thread_flag_is_cleared_by_fatal
+ok   begin_run_twice
+ok   end_run_outside
+ok   harness_captures_earlier_stderr
+./build/clang-debug/test_base: 22 passed, 0 failed, 0 skipped (debug-only)
+ok   bitmap_words_needed_rounds_to_lines
+ok   bitmap_word_boundaries
+ok   bitmap_set_all_stops_at_size
+ok   bitmap_cycle_loop_ops_never_allocate
+ok   bitmap_differential_seed_1
+ok   bitmap_differential_seed_2
+ok   bitmap_differential_seed_3
+ok   bitmap_set_out_of_range
+ok   bitmap_test_out_of_range
+ok   bitmap_storage_misaligned
+./build/clang-debug/test_bitmap: 10 passed, 0 failed, 0 skipped (debug-only)
+ok   bucket_words_needed_rounds_to_lines
+ok   bucket_append_read_clear
+ok   bucket_cycle_loop_ops_never_allocate
+ok   bucket_differential_seed_1
+ok   bucket_differential_seed_2
+ok   bucket_differential_seed_3
+ok   bucket_full_is_fatal
+ok   bucket_zero_width_is_fatal
+ok   bucket_entry_past_count
+ok   bucket_storage_misaligned
+./build/clang-debug/test_bucket: 10 passed, 0 failed, 0 skipped (debug-only)
+ok   ring_words_needed_rounds_to_lines
+ok   ring_depth_one_width_one
+ok   ring_wraps_and_keeps_order
+ok   ring_fills_exactly_to_depth
+ok   ring_cycle_loop_ops_never_allocate
+ok   ring_differential_seed_1
+ok   ring_differential_seed_2
+ok   ring_differential_seed_3
+ok   ring_full_is_fatal
+ok   ring_zero_width_is_fatal
+ok   ring_pop_empty
+ok   ring_peek_past_count
+ok   ring_storage_misaligned
+./build/clang-debug/test_ring: 13 passed, 0 failed, 0 skipped (debug-only)
+ok   pool_words_needed_rounds_to_lines
+ok   pool_lowest_free_first_and_values_kept
+ok   pool_values_are_16_byte_aligned
+ok   pool_cycle_loop_ops_never_allocate
+ok   pool_differential_seed_1
+ok   pool_differential_seed_2
+ok   pool_differential_seed_3
+ok   pool_full_is_fatal
+ok   pool_double_free
+ok   pool_free_out_of_range
+ok   pool_read_freed_index
+ok   pool_storage_misaligned
+./build/clang-debug/test_value_pool: 12 passed, 0 failed, 0 skipped (debug-only)
+==== clang release
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O2 -DNDEBUG -c tests/test_arena.cpp -o build/clang-release/tests/test_arena.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O2 -DNDEBUG -c tests/harness.cpp -o build/clang-release/tests/harness.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O2 -DNDEBUG -c src/base/alloc_guard.cpp -o build/clang-release/src/base/alloc_guard.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O2 -DNDEBUG -c src/base/arena.cpp -o build/clang-release/src/base/arena.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O2 -DNDEBUG -c src/base/fatal.cpp -o build/clang-release/src/base/fatal.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O2 -DNDEBUG -c tests/test_base.cpp -o build/clang-release/tests/test_base.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O2 -DNDEBUG -c tests/test_bitmap.cpp -o build/clang-release/tests/test_bitmap.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O2 -DNDEBUG -c tests/test_bucket.cpp -o build/clang-release/tests/test_bucket.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O2 -DNDEBUG -c tests/test_ring.cpp -o build/clang-release/tests/test_ring.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O2 -DNDEBUG -c tests/test_value_pool.cpp -o build/clang-release/tests/test_value_pool.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O2 -DNDEBUG build/clang-release/tests/test_arena.o build/clang-release/tests/harness.o build/clang-release/src/base/alloc_guard.o build/clang-release/src/base/arena.o build/clang-release/src/base/fatal.o -o build/clang-release/test_arena -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O2 -DNDEBUG build/clang-release/tests/test_bucket.o build/clang-release/tests/harness.o build/clang-release/src/base/alloc_guard.o build/clang-release/src/base/arena.o build/clang-release/src/base/fatal.o -o build/clang-release/test_bucket -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O2 -DNDEBUG build/clang-release/tests/test_base.o build/clang-release/tests/harness.o build/clang-release/src/base/alloc_guard.o build/clang-release/src/base/arena.o build/clang-release/src/base/fatal.o -o build/clang-release/test_base -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O2 -DNDEBUG build/clang-release/tests/test_ring.o build/clang-release/tests/harness.o build/clang-release/src/base/alloc_guard.o build/clang-release/src/base/arena.o build/clang-release/src/base/fatal.o -o build/clang-release/test_ring -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O2 -DNDEBUG build/clang-release/tests/test_bitmap.o build/clang-release/tests/harness.o build/clang-release/src/base/alloc_guard.o build/clang-release/src/base/arena.o build/clang-release/src/base/fatal.o -o build/clang-release/test_bitmap -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O2 -DNDEBUG build/clang-release/tests/test_value_pool.o build/clang-release/tests/harness.o build/clang-release/src/base/alloc_guard.o build/clang-release/src/base/arena.o build/clang-release/src/base/fatal.o -o build/clang-release/test_value_pool -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+ok   arena_objects_contiguous_in_order
+ok   alloc_big_aligned_and_zeroed
+ok   block_is_line_aligned
+ok   arena_differential_seed_1
+ok   arena_differential_seed_2
+ok   arena_differential_seed_3
+ok   arena_full_is_fatal
+ok   alloc_big_failure_is_fatal
+./build/clang-release/test_arena: 8 passed, 0 failed, 1 skipped (debug-only)
+ok   fatal_prints_context_and_aborts
+ok   fatal_without_arguments
+ok   dcheck_is_silent_when_true
+ok   dcheck_not_evaluated_in_release
+ok   hook_quiet_outside_a_run
+ok   hook_operator_new
+ok   hook_operator_new_array
+ok   hook_operator_new_nothrow
+ok   hook_operator_new_aligned
+ok   hook_operator_delete
+ok   hook_malloc
+ok   hook_calloc
+ok   hook_realloc
+ok   hook_free
+ok   hook_aligned_alloc
+ok   hook_posix_memalign
+ok   hook_stl_container
+ok   hook_per_thread_flag_is_cleared_by_fatal
+ok   harness_captures_earlier_stderr
+./build/clang-release/test_base: 19 passed, 0 failed, 3 skipped (debug-only)
+ok   bitmap_words_needed_rounds_to_lines
+ok   bitmap_word_boundaries
+ok   bitmap_set_all_stops_at_size
+ok   bitmap_cycle_loop_ops_never_allocate
+ok   bitmap_differential_seed_1
+ok   bitmap_differential_seed_2
+ok   bitmap_differential_seed_3
+./build/clang-release/test_bitmap: 7 passed, 0 failed, 3 skipped (debug-only)
+ok   bucket_words_needed_rounds_to_lines
+ok   bucket_append_read_clear
+ok   bucket_cycle_loop_ops_never_allocate
+ok   bucket_differential_seed_1
+ok   bucket_differential_seed_2
+ok   bucket_differential_seed_3
+ok   bucket_full_is_fatal
+ok   bucket_zero_width_is_fatal
+./build/clang-release/test_bucket: 8 passed, 0 failed, 2 skipped (debug-only)
+ok   ring_words_needed_rounds_to_lines
+ok   ring_depth_one_width_one
+ok   ring_wraps_and_keeps_order
+ok   ring_fills_exactly_to_depth
+ok   ring_cycle_loop_ops_never_allocate
+ok   ring_differential_seed_1
+ok   ring_differential_seed_2
+ok   ring_differential_seed_3
+ok   ring_full_is_fatal
+ok   ring_zero_width_is_fatal
+./build/clang-release/test_ring: 10 passed, 0 failed, 3 skipped (debug-only)
+ok   pool_words_needed_rounds_to_lines
+ok   pool_lowest_free_first_and_values_kept
+ok   pool_values_are_16_byte_aligned
+ok   pool_cycle_loop_ops_never_allocate
+ok   pool_differential_seed_1
+ok   pool_differential_seed_2
+ok   pool_differential_seed_3
+ok   pool_full_is_fatal
+./build/clang-release/test_value_pool: 8 passed, 0 failed, 4 skipped (debug-only)
+==== make check: all passed (gcc clang; debug, release)
