@@ -1,0 +1,113 @@
+after chip sort one us=0.948
+after chip sort t2 rows       us=0.683   x_one=1.39  
+after chip sort t2 tiles      us=0.599   x_one=1.58  
+after chip sort t2 load       us=0.573   x_one=1.65  load max/mean 1.014
+after chip sort t2 profile0   us=0.549   x_one=1.73  load max/mean 1.006 0.0% of cost max/mean 1.006
+after chip sort t2 profile20  us=0.547   x_one=1.73  load max/mean 1.013 12.9% of cost max/mean 1.010
+after chip sort t2 profile60  us=0.555   x_one=1.71  load max/mean 1.002 35.2% of cost max/mean 1.001
+after chip sort t4 rows       us=0.502   x_one=1.89  
+after chip sort t4 tiles      us=0.597   x_one=1.59  
+after chip sort t4 load       us=0.401   x_one=2.36  load max/mean 1.045
+after chip sort t4 profile0   us=0.358   x_one=2.65  load max/mean 1.026 0.0% of cost max/mean 1.026
+after chip sort t4 profile20  us=0.369   x_one=2.57  load max/mean 1.120 22.0% of cost max/mean 1.022
+after chip sort t4 profile60  us=0.368   x_one=2.58  load max/mean 1.212 25.1% of cost max/mean 1.008
+after chip sort t6 tiles      us=0.584   x_one=1.62  
+after chip sort t6 load       us=1.101   x_one=0.86  load max/mean 1.023
+after chip sort t6 profile0   us=0.328   x_one=2.89  load max/mean 1.044 0.0% of cost max/mean 1.044
+after chip sort t6 profile20  us=0.331   x_one=2.86  load max/mean 1.098 20.4% of cost max/mean 1.012
+after chip sort t6 profile60  us=0.332   x_one=2.86  load max/mean 1.235 40.3% of cost max/mean 1.102
+after chip sort t8 rows       us=0.530   x_one=1.79  
+after chip sort t8 tiles      us=1.271   x_one=0.75  
+after chip sort t8 load       us=0.910   x_one=1.04  load max/mean 1.106
+after chip sort t8 profile0   us=0.421   x_one=2.25  load max/mean 1.049 0.0% of cost max/mean 1.049
+after chip sort t8 profile20  us=0.404   x_one=2.35  load max/mean 1.230 24.5% of cost max/mean 1.052
+after chip sort t8 profile60  us=0.393   x_one=2.41  load max/mean 1.253 40.1% of cost max/mean 1.026
+after chip sort t12 tiles      us=0.682   x_one=1.39  
+after chip sort t12 load       us=1.075   x_one=0.88  load max/mean 1.106
+after chip sort t12 profile0   us=0.411   x_one=2.31  load max/mean 1.095 0.0% of cost max/mean 1.095
+after chip sort t12 profile20  us=0.408   x_one=2.32  load max/mean 1.228 20.2% of cost max/mean 1.074
+after chip sort t12 profile60  us=0.402   x_one=2.36  load max/mean 1.443 42.6% of cost max/mean 1.257
+after chip wfi one us=0.878
+after chip wfi t2 rows       us=0.590   x_one=1.49  
+after chip wfi t2 tiles      us=0.895   x_one=0.98  
+after chip wfi t2 load       us=0.773   x_one=1.14  load max/mean 1.014
+after chip wfi t2 profile0   us=0.616   x_one=1.43  load max/mean 1.001 0.0% of cost max/mean 1.001
+after chip wfi t2 profile20  us=0.621   x_one=1.41  load max/mean 1.001 4.2% of cost max/mean 1.001
+after chip wfi t2 profile60  us=0.617   x_one=1.42  load max/mean 1.007 12.5% of cost max/mean 1.005
+after chip wfi t4 rows       us=0.454   x_one=1.93  
+after chip wfi t4 tiles      us=0.694   x_one=1.27  
+after chip wfi t4 load       us=0.656   x_one=1.34  load max/mean 1.045
+after chip wfi t4 profile0   us=0.459   x_one=1.91  load max/mean 1.028 0.0% of cost max/mean 1.028
+after chip wfi t4 profile20  us=0.454   x_one=1.93  load max/mean 1.046 6.5% of cost max/mean 1.008
+after chip wfi t4 profile60  us=0.459   x_one=1.91  load max/mean 1.064 19.2% of cost max/mean 1.015
+after chip wfi t6 tiles      us=0.472   x_one=1.86  
+after chip wfi t6 load       us=0.991   x_one=0.89  load max/mean 1.023
+after chip wfi t6 profile0   us=0.510   x_one=1.72  load max/mean 1.040 0.0% of cost max/mean 1.040
+after chip wfi t6 profile20  us=0.448   x_one=1.96  load max/mean 1.059 6.9% of cost max/mean 1.030
+after chip wfi t6 profile60  us=0.445   x_one=1.97  load max/mean 1.165 21.4% of cost max/mean 1.016
+after chip wfi t8 rows       us=0.567   x_one=1.55  
+after chip wfi t8 tiles      us=0.913   x_one=0.96  
+after chip wfi t8 load       us=1.358   x_one=0.65  load max/mean 1.106
+after chip wfi t8 profile0   us=0.561   x_one=1.57  load max/mean 1.066 0.0% of cost max/mean 1.066
+after chip wfi t8 profile20  us=0.574   x_one=1.53  load max/mean 1.084 6.0% of cost max/mean 1.037
+after chip wfi t8 profile60  us=0.514   x_one=1.71  load max/mean 1.169 22.6% of cost max/mean 1.027
+after chip wfi t12 tiles      us=0.561   x_one=1.57  
+after chip wfi t12 load       us=0.703   x_one=1.25  load max/mean 1.106
+after chip wfi t12 profile0   us=0.579   x_one=1.52  load max/mean 1.095 0.0% of cost max/mean 1.095
+after chip wfi t12 profile20  us=0.559   x_one=1.57  load max/mean 1.107 7.1% of cost max/mean 1.062
+after chip wfi t12 profile60  us=0.568   x_one=1.55  load max/mean 1.142 14.9% of cost max/mean 1.096
+after chip regs one us=1.449
+after chip regs t2 rows       us=1.121   x_one=1.29  
+after chip regs t2 tiles      us=1.082   x_one=1.34  
+after chip regs t2 load       us=0.864   x_one=1.68  load max/mean 1.014
+after chip regs t2 profile0   us=0.898   x_one=1.61  load max/mean 1.006 0.0% of cost max/mean 1.006
+after chip regs t2 profile20  us=0.876   x_one=1.65  load max/mean 1.014 8.0% of cost max/mean 1.012
+after chip regs t2 profile60  us=0.871   x_one=1.66  load max/mean 1.013 21.2% of cost max/mean 1.009
+after chip regs t4 rows       us=0.667   x_one=2.17  
+after chip regs t4 tiles      us=0.551   x_one=2.63  
+after chip regs t4 load       us=0.752   x_one=1.93  load max/mean 1.045
+after chip regs t4 profile0   us=0.570   x_one=2.54  load max/mean 1.020 0.0% of cost max/mean 1.020
+after chip regs t4 profile20  us=0.572   x_one=2.53  load max/mean 1.029 10.5% of cost max/mean 1.017
+after chip regs t4 profile60  us=0.586   x_one=2.47  load max/mean 1.086 22.7% of cost max/mean 1.011
+after chip regs t6 tiles      us=0.508   x_one=2.85  
+after chip regs t6 load       us=0.504   x_one=2.88  load max/mean 1.023
+after chip regs t6 profile0   us=0.494   x_one=2.93  load max/mean 1.039 0.0% of cost max/mean 1.039
+after chip regs t6 profile20  us=0.500   x_one=2.90  load max/mean 1.099 12.9% of cost max/mean 1.022
+after chip regs t6 profile60  us=0.518   x_one=2.80  load max/mean 1.192 35.8% of cost max/mean 1.015
+after chip regs t8 rows       us=0.636   x_one=2.28  
+after chip regs t8 tiles      us=0.609   x_one=2.38  
+after chip regs t8 load       us=0.686   x_one=2.11  load max/mean 1.106
+after chip regs t8 profile0   us=0.614   x_one=2.36  load max/mean 1.068 0.0% of cost max/mean 1.068
+after chip regs t8 profile20  us=0.599   x_one=2.42  load max/mean 1.082 12.3% of cost max/mean 1.046
+after chip regs t8 profile60  us=0.642   x_one=2.26  load max/mean 1.208 31.8% of cost max/mean 1.044
+after chip regs t12 tiles      us=0.698   x_one=2.08  
+after chip regs t12 load       us=0.744   x_one=1.95  load max/mean 1.106
+after chip regs t12 profile0   us=0.571   x_one=2.54  load max/mean 1.088 0.0% of cost max/mean 1.088
+after chip regs t12 profile20  us=0.564   x_one=2.57  load max/mean 1.123 16.7% of cost max/mean 1.101
+after chip regs t12 profile60  us=0.574   x_one=2.52  load max/mean 1.275 27.3% of cost max/mean 1.066
+after chip sort t2 tiles timed us=0.577 compute=0.496 imbalance=0.015 barrier_wait=0.033 drain=0.022 publish=0.004 clear=0.007
+after chip sort t2 profile20 timed us=0.562 compute=0.479 imbalance=0.015 barrier_wait=0.041 drain=0.025 publish=0.004 clear=0.003
+after chip sort t4 tiles timed us=0.377 compute=0.246 imbalance=0.022 barrier_wait=0.071 drain=0.021 publish=0.005 clear=0.009
+after chip sort t4 profile20 timed us=0.380 compute=0.253 imbalance=0.028 barrier_wait=0.060 drain=0.027 publish=0.006 clear=0.005
+after chip sort t6 tiles timed us=0.358 compute=0.190 imbalance=0.031 barrier_wait=0.090 drain=0.027 publish=0.007 clear=0.008
+after chip sort t6 profile20 timed us=0.343 compute=0.188 imbalance=0.035 barrier_wait=0.077 drain=0.029 publish=0.008 clear=0.008
+after chip sort t8 tiles timed us=1.132 compute=0.525 imbalance=0.250 barrier_wait=0.198 drain=0.111 publish=0.025 clear=0.023
+after chip sort t8 profile20 timed us=0.423 compute=0.208 imbalance=0.091 barrier_wait=0.058 drain=0.044 publish=0.015 clear=0.010
+after chip sort t12 tiles timed us=1.146 compute=0.512 imbalance=0.121 barrier_wait=0.288 drain=0.155 publish=0.042 clear=0.025
+after chip sort t12 profile20 timed us=0.417 compute=0.203 imbalance=0.042 barrier_wait=0.086 drain=0.057 publish=0.019 clear=0.011
+after mesh one us=5.377
+after mesh t2 tiles      us=2.782   x_one=1.93
+after mesh t2 profile0   us=2.817   x_one=1.91
+after mesh t2 profile20  us=2.830   x_one=1.90
+after mesh t4 tiles      us=1.690   x_one=3.18
+after mesh t4 profile0   us=1.755   x_one=3.06
+after mesh t4 profile20  us=1.759   x_one=3.06
+after mesh t6 tiles      us=1.447   x_one=3.72
+after mesh t6 profile0   us=1.582   x_one=3.40
+after mesh t6 profile20  us=1.724   x_one=3.12
+after mesh t8 tiles      us=1.503   x_one=3.58
+after mesh t8 profile0   us=1.884   x_one=2.85
+after mesh t8 profile20  us=1.930   x_one=2.79
+after mesh t12 tiles      us=1.534   x_one=3.51
+after mesh t12 profile0   us=1.597   x_one=3.37
+after mesh t12 profile20  us=1.652   x_one=3.25
