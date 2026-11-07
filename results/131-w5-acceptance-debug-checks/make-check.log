@@ -1,0 +1,1117 @@
+==== gcc tsan (controllers)
+==== gcc tsan
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c tests/test_controllers.cpp -o build/gcc-tsan/tests/test_controllers.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c tests/harness.cpp -o build/gcc-tsan/tests/harness.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c tests/test_parallel.cpp -o build/gcc-tsan/tests/test_parallel.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/base/alloc_guard.cpp -o build/gcc-tsan/src/base/alloc_guard.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c tests/harness.cpp -o build/gcc-tsan/tests/harness.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/base/arena.cpp -o build/gcc-tsan/src/base/arena.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/base/alloc_guard.cpp -o build/gcc-tsan/src/base/alloc_guard.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/base/arena.cpp -o build/gcc-tsan/src/base/arena.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/base/fatal.cpp -o build/gcc-tsan/src/base/fatal.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/config.cpp -o build/gcc-tsan/src/config.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/base/fatal.cpp -o build/gcc-tsan/src/base/fatal.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/engine.cpp -o build/gcc-tsan/src/engine.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/parallel.cpp -o build/gcc-tsan/src/parallel.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/config.cpp -o build/gcc-tsan/src/config.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/units/trace_log.cpp -o build/gcc-tsan/src/units/trace_log.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/engine.cpp -o build/gcc-tsan/src/engine.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/parallel.cpp -o build/gcc-tsan/src/parallel.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/units/controller.cpp -o build/gcc-tsan/src/units/controller.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c tests/golden_run.cpp -o build/gcc-tsan/tests/golden_run.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c tests/sha256.cpp -o build/gcc-tsan/tests/sha256.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread build/gcc-tsan/tests/test_controllers.o build/gcc-tsan/tests/harness.o build/gcc-tsan/src/base/alloc_guard.o build/gcc-tsan/src/base/arena.o build/gcc-tsan/src/base/fatal.o build/gcc-tsan/src/config.o build/gcc-tsan/src/engine.o build/gcc-tsan/src/parallel.o build/gcc-tsan/src/units/trace_log.o build/gcc-tsan/src/units/controller.o build/gcc-tsan/tests/golden_run.o build/gcc-tsan/tests/sha256.o -o build/gcc-tsan/test_controllers -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign -Wl,--allow-multiple-definition
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread build/gcc-tsan/tests/test_parallel.o build/gcc-tsan/tests/harness.o build/gcc-tsan/src/base/alloc_guard.o build/gcc-tsan/src/base/arena.o build/gcc-tsan/src/base/fatal.o build/gcc-tsan/src/config.o build/gcc-tsan/src/engine.o build/gcc-tsan/src/parallel.o -o build/gcc-tsan/test_parallel -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign -Wl,--allow-multiple-definition
+TSAN_OPTIONS="halt_on_error=1 second_deadlock_stack=1" ./build/gcc-tsan/test_controllers
+ok   a_synthetic_chip_is_deterministic_and_busy
+ok   n_chips_on_n_threads_match_one_at_a_time
+ok   n_chips_built_and_run_on_their_own_threads
+ok   the_same_chip_twice_on_two_threads
+ok   controllers_three_threads_every_golden
+ok   controllers_mixed_order_visits_every_run_once
+./build/gcc-tsan/test_controllers: 2 passed, 0 failed, 0 skipped (debug-only)
+==== clang tsan (controllers)
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c tests/test_controllers.cpp -o build/clang-tsan/tests/test_controllers.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c tests/harness.cpp -o build/clang-tsan/tests/harness.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/base/alloc_guard.cpp -o build/clang-tsan/src/base/alloc_guard.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/base/arena.cpp -o build/clang-tsan/src/base/arena.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/base/fatal.cpp -o build/clang-tsan/src/base/fatal.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/config.cpp -o build/clang-tsan/src/config.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/engine.cpp -o build/clang-tsan/src/engine.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/parallel.cpp -o build/clang-tsan/src/parallel.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/units/trace_log.cpp -o build/clang-tsan/src/units/trace_log.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/units/controller.cpp -o build/clang-tsan/src/units/controller.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c tests/golden_run.cpp -o build/clang-tsan/tests/golden_run.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c tests/sha256.cpp -o build/clang-tsan/tests/sha256.o
+ok   the_same_sim_twice_is_refused
+./build/gcc-tsan/test_parallel: 5 passed, 0 failed, 0 skipped (debug-only)
+==== clang tsan
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c tests/test_parallel.cpp -o build/clang-tsan/tests/test_parallel.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c tests/harness.cpp -o build/clang-tsan/tests/harness.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/base/alloc_guard.cpp -o build/clang-tsan/src/base/alloc_guard.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/config.cpp -o build/clang-tsan/src/config.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/engine.cpp -o build/clang-tsan/src/engine.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/parallel.cpp -o build/clang-tsan/src/parallel.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread build/clang-tsan/tests/test_parallel.o build/clang-tsan/tests/harness.o build/clang-tsan/src/base/alloc_guard.o build/clang-tsan/src/base/arena.o build/clang-tsan/src/base/fatal.o build/clang-tsan/src/config.o build/clang-tsan/src/engine.o build/clang-tsan/src/parallel.o -o build/clang-tsan/test_parallel -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign -Wl,--allow-multiple-definition
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread build/clang-tsan/tests/test_controllers.o build/clang-tsan/tests/harness.o build/clang-tsan/src/base/alloc_guard.o build/clang-tsan/src/base/arena.o build/clang-tsan/src/base/fatal.o build/clang-tsan/src/config.o build/clang-tsan/src/engine.o build/clang-tsan/src/parallel.o build/clang-tsan/src/units/trace_log.o build/clang-tsan/src/units/controller.o build/clang-tsan/tests/golden_run.o build/clang-tsan/tests/sha256.o -o build/clang-tsan/test_controllers -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign -Wl,--allow-multiple-definition
+TSAN_OPTIONS="halt_on_error=1 second_deadlock_stack=1" ./build/clang-tsan/test_controllers
+ok   a_synthetic_chip_is_deterministic_and_busy
+ok   n_chips_on_n_threads_match_one_at_a_time
+ok   n_chips_built_and_run_on_their_own_threads
+ok   the_same_chip_twice_on_two_threads
+ok   the_same_sim_twice_is_refused
+./build/clang-tsan/test_parallel: 5 passed, 0 failed, 0 skipped (debug-only)
+ok   controllers_three_threads_every_golden
+ok   controllers_mixed_order_visits_every_run_once
+./build/clang-tsan/test_controllers: 2 passed, 0 failed, 0 skipped (debug-only)
+==== gcc debug
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c tests/test_arena.cpp -o build/gcc-debug/tests/test_arena.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c tests/harness.cpp -o build/gcc-debug/tests/harness.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c src/base/alloc_guard.cpp -o build/gcc-debug/src/base/alloc_guard.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c src/base/arena.cpp -o build/gcc-debug/src/base/arena.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c src/base/fatal.cpp -o build/gcc-debug/src/base/fatal.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c src/config.cpp -o build/gcc-debug/src/config.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c src/engine.cpp -o build/gcc-debug/src/engine.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c src/parallel.cpp -o build/gcc-debug/src/parallel.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c tests/test_base.cpp -o build/gcc-debug/tests/test_base.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c tests/test_bitmap.cpp -o build/gcc-debug/tests/test_bitmap.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c tests/test_broken_units.cpp -o build/gcc-debug/tests/test_broken_units.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c src/units/trace_log.cpp -o build/gcc-debug/src/units/trace_log.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c src/units/controller.cpp -o build/gcc-debug/src/units/controller.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c tests/golden_run.cpp -o build/gcc-debug/tests/golden_run.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c tests/sha256.cpp -o build/gcc-debug/tests/sha256.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c tests/test_bucket.cpp -o build/gcc-debug/tests/test_bucket.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c tests/test_controllers.cpp -o build/gcc-debug/tests/test_controllers.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c tests/test_debug.cpp -o build/gcc-debug/tests/test_debug.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c tests/test_engine.cpp -o build/gcc-debug/tests/test_engine.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c tests/test_golden.cpp -o build/gcc-debug/tests/test_golden.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c tests/test_kinds.cpp -o build/gcc-debug/tests/test_kinds.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c tests/test_parallel.cpp -o build/gcc-debug/tests/test_parallel.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c tests/test_portconf.cpp -o build/gcc-debug/tests/test_portconf.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c tests/test_regblock.cpp -o build/gcc-debug/tests/test_regblock.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c tests/test_registry.cpp -o build/gcc-debug/tests/test_registry.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c tests/test_ring.cpp -o build/gcc-debug/tests/test_ring.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c tests/test_rv32.cpp -o build/gcc-debug/tests/test_rv32.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c tests/test_value_pool.cpp -o build/gcc-debug/tests/test_value_pool.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c tests/test_wide.cpp -o build/gcc-debug/tests/test_wide.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c src/sketch/controller.cpp -o build/gcc-debug/src/sketch/controller.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c src/sketch/tile_builder.cpp -o build/gcc-debug/src/sketch/tile_builder.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c src/sketch/write_engine.cpp -o build/gcc-debug/src/sketch/write_engine.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread build/gcc-debug/tests/test_arena.o build/gcc-debug/tests/harness.o build/gcc-debug/src/base/alloc_guard.o build/gcc-debug/src/base/arena.o build/gcc-debug/src/base/fatal.o build/gcc-debug/src/config.o build/gcc-debug/src/engine.o build/gcc-debug/src/parallel.o -o build/gcc-debug/test_arena -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread build/gcc-debug/tests/test_base.o build/gcc-debug/tests/harness.o build/gcc-debug/src/base/alloc_guard.o build/gcc-debug/src/base/arena.o build/gcc-debug/src/base/fatal.o build/gcc-debug/src/config.o build/gcc-debug/src/engine.o build/gcc-debug/src/parallel.o -o build/gcc-debug/test_base -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread build/gcc-debug/tests/test_bitmap.o build/gcc-debug/tests/harness.o build/gcc-debug/src/base/alloc_guard.o build/gcc-debug/src/base/arena.o build/gcc-debug/src/base/fatal.o build/gcc-debug/src/config.o build/gcc-debug/src/engine.o build/gcc-debug/src/parallel.o -o build/gcc-debug/test_bitmap -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread build/gcc-debug/tests/test_broken_units.o build/gcc-debug/tests/harness.o build/gcc-debug/src/base/alloc_guard.o build/gcc-debug/src/base/arena.o build/gcc-debug/src/base/fatal.o build/gcc-debug/src/config.o build/gcc-debug/src/engine.o build/gcc-debug/src/parallel.o build/gcc-debug/src/units/trace_log.o build/gcc-debug/src/units/controller.o build/gcc-debug/tests/golden_run.o build/gcc-debug/tests/sha256.o -o build/gcc-debug/test_broken_units -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread build/gcc-debug/tests/test_bucket.o build/gcc-debug/tests/harness.o build/gcc-debug/src/base/alloc_guard.o build/gcc-debug/src/base/arena.o build/gcc-debug/src/base/fatal.o build/gcc-debug/src/config.o build/gcc-debug/src/engine.o build/gcc-debug/src/parallel.o -o build/gcc-debug/test_bucket -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread build/gcc-debug/tests/test_controllers.o build/gcc-debug/tests/harness.o build/gcc-debug/src/base/alloc_guard.o build/gcc-debug/src/base/arena.o build/gcc-debug/src/base/fatal.o build/gcc-debug/src/config.o build/gcc-debug/src/engine.o build/gcc-debug/src/parallel.o build/gcc-debug/src/units/trace_log.o build/gcc-debug/src/units/controller.o build/gcc-debug/tests/golden_run.o build/gcc-debug/tests/sha256.o -o build/gcc-debug/test_controllers -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread build/gcc-debug/tests/test_debug.o build/gcc-debug/tests/harness.o build/gcc-debug/src/base/alloc_guard.o build/gcc-debug/src/base/arena.o build/gcc-debug/src/base/fatal.o build/gcc-debug/src/config.o build/gcc-debug/src/engine.o build/gcc-debug/src/parallel.o -o build/gcc-debug/test_debug -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread build/gcc-debug/tests/test_engine.o build/gcc-debug/tests/harness.o build/gcc-debug/src/base/alloc_guard.o build/gcc-debug/src/base/arena.o build/gcc-debug/src/base/fatal.o build/gcc-debug/src/config.o build/gcc-debug/src/engine.o build/gcc-debug/src/parallel.o -o build/gcc-debug/test_engine -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread build/gcc-debug/tests/test_golden.o build/gcc-debug/tests/harness.o build/gcc-debug/src/base/alloc_guard.o build/gcc-debug/src/base/arena.o build/gcc-debug/src/base/fatal.o build/gcc-debug/src/config.o build/gcc-debug/src/engine.o build/gcc-debug/src/parallel.o build/gcc-debug/src/units/trace_log.o build/gcc-debug/src/units/controller.o build/gcc-debug/tests/golden_run.o build/gcc-debug/tests/sha256.o -o build/gcc-debug/test_golden -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread build/gcc-debug/tests/test_kinds.o build/gcc-debug/tests/harness.o build/gcc-debug/src/base/alloc_guard.o build/gcc-debug/src/base/arena.o build/gcc-debug/src/base/fatal.o build/gcc-debug/src/config.o build/gcc-debug/src/engine.o build/gcc-debug/src/parallel.o -o build/gcc-debug/test_kinds -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread build/gcc-debug/tests/test_parallel.o build/gcc-debug/tests/harness.o build/gcc-debug/src/base/alloc_guard.o build/gcc-debug/src/base/arena.o build/gcc-debug/src/base/fatal.o build/gcc-debug/src/config.o build/gcc-debug/src/engine.o build/gcc-debug/src/parallel.o -o build/gcc-debug/test_parallel -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread build/gcc-debug/tests/test_portconf.o build/gcc-debug/tests/harness.o build/gcc-debug/src/base/alloc_guard.o build/gcc-debug/src/base/arena.o build/gcc-debug/src/base/fatal.o build/gcc-debug/src/config.o build/gcc-debug/src/engine.o build/gcc-debug/src/parallel.o -o build/gcc-debug/test_portconf -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread build/gcc-debug/tests/test_regblock.o build/gcc-debug/tests/harness.o build/gcc-debug/src/base/alloc_guard.o build/gcc-debug/src/base/arena.o build/gcc-debug/src/base/fatal.o build/gcc-debug/src/config.o build/gcc-debug/src/engine.o build/gcc-debug/src/parallel.o build/gcc-debug/src/units/trace_log.o build/gcc-debug/src/units/controller.o build/gcc-debug/tests/golden_run.o build/gcc-debug/tests/sha256.o -o build/gcc-debug/test_regblock -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread build/gcc-debug/tests/test_registry.o build/gcc-debug/tests/harness.o build/gcc-debug/src/base/alloc_guard.o build/gcc-debug/src/base/arena.o build/gcc-debug/src/base/fatal.o build/gcc-debug/src/config.o build/gcc-debug/src/engine.o build/gcc-debug/src/parallel.o -o build/gcc-debug/test_registry -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread build/gcc-debug/tests/test_ring.o build/gcc-debug/tests/harness.o build/gcc-debug/src/base/alloc_guard.o build/gcc-debug/src/base/arena.o build/gcc-debug/src/base/fatal.o build/gcc-debug/src/config.o build/gcc-debug/src/engine.o build/gcc-debug/src/parallel.o -o build/gcc-debug/test_ring -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread build/gcc-debug/tests/test_rv32.o build/gcc-debug/tests/harness.o build/gcc-debug/src/base/alloc_guard.o build/gcc-debug/src/base/arena.o build/gcc-debug/src/base/fatal.o build/gcc-debug/src/config.o build/gcc-debug/src/engine.o build/gcc-debug/src/parallel.o build/gcc-debug/src/units/trace_log.o build/gcc-debug/src/units/controller.o build/gcc-debug/tests/golden_run.o build/gcc-debug/tests/sha256.o -o build/gcc-debug/test_rv32 -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread build/gcc-debug/tests/test_value_pool.o build/gcc-debug/tests/harness.o build/gcc-debug/src/base/alloc_guard.o build/gcc-debug/src/base/arena.o build/gcc-debug/src/base/fatal.o build/gcc-debug/src/config.o build/gcc-debug/src/engine.o build/gcc-debug/src/parallel.o -o build/gcc-debug/test_value_pool -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread build/gcc-debug/tests/test_wide.o build/gcc-debug/tests/harness.o build/gcc-debug/src/base/alloc_guard.o build/gcc-debug/src/base/arena.o build/gcc-debug/src/base/fatal.o build/gcc-debug/src/config.o build/gcc-debug/src/engine.o build/gcc-debug/src/parallel.o -o build/gcc-debug/test_wide -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+ok   arena_objects_contiguous_in_order
+ok   alloc_big_aligned_and_zeroed
+ok   block_is_line_aligned
+ok   arena_differential_seed_1
+ok   arena_differential_seed_2
+ok   arena_differential_seed_3
+ok   arena_full_is_fatal
+ok   arena_index_past_size
+ok   alloc_big_failure_is_fatal
+./build/gcc-debug/test_arena: 9 passed, 0 failed, 0 skipped (debug-only)
+ok   fatal_prints_context_and_aborts
+ok   fatal_without_arguments
+ok   dcheck_fires_in_debug
+ok   dcheck_is_silent_when_true
+ok   dcheck_not_evaluated_in_release
+ok   hook_quiet_outside_a_run
+ok   hook_operator_new
+ok   hook_operator_new_array
+ok   hook_operator_new_nothrow
+ok   hook_operator_new_aligned
+ok   hook_operator_delete
+ok   hook_malloc
+ok   hook_calloc
+ok   hook_realloc
+ok   hook_free
+ok   hook_aligned_alloc
+ok   hook_posix_memalign
+ok   hook_stl_container
+ok   hook_per_thread_flag_is_cleared_by_fatal
+ok   begin_run_twice
+ok   end_run_outside
+ok   harness_captures_earlier_stderr
+./build/gcc-debug/test_base: 22 passed, 0 failed, 0 skipped (debug-only)
+ok   bitmap_words_needed_rounds_to_lines
+ok   bitmap_word_boundaries
+ok   bitmap_set_all_stops_at_size
+ok   bitmap_cycle_loop_ops_never_allocate
+ok   bitmap_differential_seed_1
+ok   bitmap_differential_seed_2
+ok   bitmap_differential_seed_3
+ok   bitmap_set_out_of_range
+ok   bitmap_test_out_of_range
+ok   bitmap_storage_misaligned
+./build/gcc-debug/test_bitmap: 10 passed, 0 failed, 0 skipped (debug-only)
+  CountingBlock: traces equal to the golden both ways; digest ready-driven 6b30c796fa65afea, step-all e285d089a19551ba
+ok   broken_counting_block_caught_by_step_all
+  LazyBlock: digest ready-driven 0761677669dd61d3, step-all cd778f100536ea46
+ok   broken_lazy_block_caught_by_step_all
+ok   broken_lazy_block_caught_by_the_missed_wake_detector
+./build/gcc-debug/test_broken_units: 3 passed, 0 failed, 0 skipped (debug-only)
+ok   bucket_words_needed_rounds_to_lines
+ok   bucket_append_read_clear
+ok   bucket_cycle_loop_ops_never_allocate
+ok   bucket_differential_seed_1
+ok   bucket_differential_seed_2
+ok   bucket_differential_seed_3
+ok   bucket_full_is_fatal
+ok   bucket_zero_width_is_fatal
+ok   bucket_entry_past_count
+ok   bucket_storage_misaligned
+./build/gcc-debug/test_bucket: 10 passed, 0 failed, 0 skipped (debug-only)
+ok   controllers_three_threads_every_golden
+ok   controllers_mixed_order_visits_every_run_once
+./build/gcc-debug/test_controllers: 2 passed, 0 failed, 0 skipped (debug-only)
+ok   the_synthetic_chip_digests_the_same_under_every_order
+ok   step_all_catches_a_forgotten_next
+ok   the_detector_names_a_unit_that_forgets_next
+ok   the_seeded_and_instance_major_orders_catch_an_order_dependence
+ok   the_detector_is_silent_on_units_blocked_on_a_credit_or_a_refusal
+ok   a_units_own_threshold_covers_a_wait_on_a_wire
+missed wake at cycle 18: sink is asleep with data waiting in sink.in
+ok   a_wait_on_a_wire_is_flagged_without_its_own_threshold
+ok   the_detector_can_report_and_go_on
+ok   run_until_runs_through_its_cycle
+ok   an_option_not_implemented_is_refused
+./build/gcc-debug/test_debug: 10 passed, 0 failed, 0 skipped (debug-only)
+ok   link_word_arrives_after_its_latency
+ok   fifo_full_is_judged_at_the_start_of_the_put_cycle
+ok   fifo_deep_enough_loses_nothing
+ok   hold_refuses_and_the_producer_retries
+ok   an_idle_unit_is_never_stepped
+ok   a_long_sleep_costs_one_wake
+ok   no_allocation_in_the_loop
+ok   sizes_equal_hand_derived_ones
+ok   the_digest_is_a_function_of_the_run
+ok   the_end_of_run_report_names_a_sleeper
+ok   two_puts_in_a_cycle_are_fatal
+ok   a_link_whose_consumer_never_takes_fills
+ok   a_wake_in_the_past_is_fatal
+ok   an_unwired_port_is_fatal
+ok   a_unit_of_the_wrong_type_is_fatal
+ok   widths_must_match
+./build/gcc-debug/test_engine: 16 passed, 0 failed, 0 skipped (debug-only)
+ok   golden_runs_listed
+ok   golden_all_match_direct
+ok   golden_all_match_engine
+ok   golden_engine_debug_checks
+ok   golden_refuses_a_config_difference
+ok   golden_refuses_an_image_or_tile_difference
+ok   golden_catches_a_difference
+ok   golden_start_skew_is_refs
+./build/gcc-debug/test_golden: 8 passed, 0 failed, 0 skipped (debug-only)
+ok   reg_wakes_its_readers_only_on_a_change
+ok   a_wire_change_steps_its_reader_in_the_same_cycle
+ok   levels_follow_a_wire_chain
+ok   a_combinational_loop_is_rejected_with_its_units
+ok   one_level_per_type_must_order_the_wires
+ok   a_wire_written_twice_in_a_cycle_is_fatal
+ok   a_regfile_change_steps_its_reader
+ok   a_count_reads_now_and_through_last
+ok   fifo_overflows_are_counted_at_the_next_cycle
+ok   credit_fifo_room_as_of_the_start_and_returns_at_the_next_cycle
+ok   a_put_without_a_credit_is_fatal
+ok   reg_wire_regfile_count_allocate_nothing_in_the_loop
+./build/gcc-debug/test_kinds: 12 passed, 0 failed, 0 skipped (debug-only)
+ok   a_synthetic_chip_is_deterministic_and_busy
+ok   n_chips_on_n_threads_match_one_at_a_time
+ok   n_chips_built_and_run_on_their_own_threads
+ok   the_same_chip_twice_on_two_threads
+ok   the_same_sim_twice_is_refused
+./build/gcc-debug/test_parallel: 5 passed, 0 failed, 0 skipped (debug-only)
+ok   conforms_link_1
+ok   conforms_link_2
+ok   conforms_link_3
+ok   conforms_link_8
+ok   conforms_fifo_1
+ok   conforms_fifo_2
+ok   conforms_fifo_4
+ok   conforms_fifo_16
+ok   conforms_credit_1
+ok   conforms_credit_2
+ok   conforms_credit_4
+ok   conforms_credit_16
+ok   conforms_hold
+ok   conforms_reg
+     rlink-1-2: the reserved link is M2's (PORTS.md 2a), not run
+ok   conforms_rlink_1_2
+     rlink-2-4: the reserved link is M2's (PORTS.md 2a), not run
+ok   conforms_rlink_2_4
+     rlink-3-8: the reserved link is M2's (PORTS.md 2a), not run
+ok   conforms_rlink_3_8
+./build/gcc-debug/test_portconf: 17 passed, 0 failed, 0 skipped (debug-only)
+ok   regblock_reset_view
+ok   regblock_go_and_landing
+ok   regblock_done_gate
+ok   regblock_consume_clears_only_what_it_returned
+ok   regblock_errors_and_interrupt
+ok   regblock_events_required
+ok   regblock_request_fifo
+./build/gcc-debug/test_regblock: 7 passed, 0 failed, 0 skipped (debug-only)
+ok   type_ids_follow_each_configs_first_add_order
+ok   two_configs_on_two_threads_get_the_same_ids
+./build/gcc-debug/test_registry: 2 passed, 0 failed, 0 skipped (debug-only)
+ok   ring_words_needed_rounds_to_lines
+ok   ring_depth_one_width_one
+ok   ring_wraps_and_keeps_order
+ok   ring_fills_exactly_to_depth
+ok   ring_cycle_loop_ops_never_allocate
+ok   ring_differential_seed_1
+ok   ring_differential_seed_2
+ok   ring_differential_seed_3
+ok   ring_full_is_fatal
+ok   ring_zero_width_is_fatal
+ok   ring_pop_empty
+ok   ring_peek_past_count
+ok   ring_storage_misaligned
+./build/gcc-debug/test_ring: 13 passed, 0 failed, 0 skipped (debug-only)
+ok   rv32_alu_immediates_and_registers
+ok   rv32_slt_signedness
+ok   rv32_multiplies_against_wide_arithmetic
+ok   rv32_divide_opcodes_are_illegal
+ok   rv32_loads_and_stores_extend
+ok   rv32_memory_aliases_past_32k
+ok   rv32_misaligned_access_is_ub
+ok   rv32_bus_errors
+ok   rv32_block_load_takes_two_cycles_and_samples_in_the_second
+ok   rv32_block_load_waits_before_its_checks
+ok   rv32_block_words
+ok   rv32_block_store_faults
+ok   rv32_request_send_refused_is_reexecuted
+ok   rv32_sim_exit_halts_after_its_retire_line
+ok   rv32_router_register_not_modelled
+ok   rv32_write_counter_not_modelled
+ok   rv32_request_receive_not_modelled
+ok   rv32_peripheral_window_not_modelled
+ok   rv32_hist_not_modelled
+ok   rv32_table_store_not_modelled
+ok   rv32_branch_timing
+ok   rv32_jalr_clears_bit0_and_misaligned_target_halts
+ok   rv32_halts
+ok   rv32_csrs
+ok   rv32_mcycle_write_and_mtime
+ok   rv32_mip_reads_the_interrupt_term
+ok   rv32_trap_inside_the_handler_halts
+ok   rv32_park_loop_in_the_handler
+ok   rv32_interrupt_waits_for_a_stall_but_not_a_block_load
+ok   rv32_wfi_sleeps_and_wakes
+ok   rv32_wfi_falls_through_when_the_term_holds
+ok   rv32_interrupt_in_wfi_traps_without_a_wake_line
+ok   rv32_sleeping_through_a_stall_equals_stepping_it
+ok   rv32_digest_is_the_same_slept_or_stepped
+./build/gcc-debug/test_rv32: 34 passed, 0 failed, 0 skipped (debug-only)
+ok   pool_words_needed_rounds_to_lines
+ok   pool_lowest_free_first_and_values_kept
+ok   pool_values_are_16_byte_aligned
+ok   pool_cycle_loop_ops_never_allocate
+ok   pool_differential_seed_1
+ok   pool_differential_seed_2
+ok   pool_differential_seed_3
+ok   pool_full_is_fatal
+ok   pool_double_free
+ok   pool_free_out_of_range
+ok   pool_read_freed_index
+ok   pool_storage_misaligned
+ok   slot_pool_wide_class_sizes_allocates_and_frees
+ok   slot_pool_full_is_fatal_naming_the_class
+./build/gcc-debug/test_value_pool: 14 passed, 0 failed, 0 skipped (debug-only)
+ok   a_wide_class_sizes_allocates_and_frees_over_a_fifo
+ok   a_fifo_overflow_frees_the_dropped_slot
+ok   a_wide_class_over_a_link_with_held_slots
+ok   allocating_beyond_the_declared_size_is_fatal
+ok   both_ends_declare_the_same_class
+ok   a_slot_allocated_and_never_put_is_a_leak
+ok   no_leak_reported_for_lines_in_flight_queued_or_held
+./build/gcc-debug/test_wide: 7 passed, 0 failed, 0 skipped (debug-only)
+==== gcc release
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c tests/test_arena.cpp -o build/gcc-release/tests/test_arena.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c tests/harness.cpp -o build/gcc-release/tests/harness.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c src/base/alloc_guard.cpp -o build/gcc-release/src/base/alloc_guard.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c src/base/arena.cpp -o build/gcc-release/src/base/arena.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c src/base/fatal.cpp -o build/gcc-release/src/base/fatal.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c src/config.cpp -o build/gcc-release/src/config.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c src/engine.cpp -o build/gcc-release/src/engine.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c src/parallel.cpp -o build/gcc-release/src/parallel.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c tests/test_base.cpp -o build/gcc-release/tests/test_base.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c tests/test_bitmap.cpp -o build/gcc-release/tests/test_bitmap.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c tests/test_broken_units.cpp -o build/gcc-release/tests/test_broken_units.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c src/units/trace_log.cpp -o build/gcc-release/src/units/trace_log.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c src/units/controller.cpp -o build/gcc-release/src/units/controller.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c tests/golden_run.cpp -o build/gcc-release/tests/golden_run.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c tests/sha256.cpp -o build/gcc-release/tests/sha256.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c tests/test_bucket.cpp -o build/gcc-release/tests/test_bucket.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c tests/test_controllers.cpp -o build/gcc-release/tests/test_controllers.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c tests/test_debug.cpp -o build/gcc-release/tests/test_debug.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c tests/test_engine.cpp -o build/gcc-release/tests/test_engine.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c tests/test_golden.cpp -o build/gcc-release/tests/test_golden.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c tests/test_kinds.cpp -o build/gcc-release/tests/test_kinds.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c tests/test_parallel.cpp -o build/gcc-release/tests/test_parallel.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c tests/test_portconf.cpp -o build/gcc-release/tests/test_portconf.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c tests/test_regblock.cpp -o build/gcc-release/tests/test_regblock.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c tests/test_registry.cpp -o build/gcc-release/tests/test_registry.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c tests/test_ring.cpp -o build/gcc-release/tests/test_ring.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c tests/test_rv32.cpp -o build/gcc-release/tests/test_rv32.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c tests/test_value_pool.cpp -o build/gcc-release/tests/test_value_pool.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c tests/test_wide.cpp -o build/gcc-release/tests/test_wide.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c src/sketch/controller.cpp -o build/gcc-release/src/sketch/controller.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c src/sketch/tile_builder.cpp -o build/gcc-release/src/sketch/tile_builder.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c src/sketch/write_engine.cpp -o build/gcc-release/src/sketch/write_engine.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread build/gcc-release/tests/test_arena.o build/gcc-release/tests/harness.o build/gcc-release/src/base/alloc_guard.o build/gcc-release/src/base/arena.o build/gcc-release/src/base/fatal.o build/gcc-release/src/config.o build/gcc-release/src/engine.o build/gcc-release/src/parallel.o -o build/gcc-release/test_arena -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread build/gcc-release/tests/test_base.o build/gcc-release/tests/harness.o build/gcc-release/src/base/alloc_guard.o build/gcc-release/src/base/arena.o build/gcc-release/src/base/fatal.o build/gcc-release/src/config.o build/gcc-release/src/engine.o build/gcc-release/src/parallel.o -o build/gcc-release/test_base -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread build/gcc-release/tests/test_bitmap.o build/gcc-release/tests/harness.o build/gcc-release/src/base/alloc_guard.o build/gcc-release/src/base/arena.o build/gcc-release/src/base/fatal.o build/gcc-release/src/config.o build/gcc-release/src/engine.o build/gcc-release/src/parallel.o -o build/gcc-release/test_bitmap -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread build/gcc-release/tests/test_broken_units.o build/gcc-release/tests/harness.o build/gcc-release/src/base/alloc_guard.o build/gcc-release/src/base/arena.o build/gcc-release/src/base/fatal.o build/gcc-release/src/config.o build/gcc-release/src/engine.o build/gcc-release/src/parallel.o build/gcc-release/src/units/trace_log.o build/gcc-release/src/units/controller.o build/gcc-release/tests/golden_run.o build/gcc-release/tests/sha256.o -o build/gcc-release/test_broken_units -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread build/gcc-release/tests/test_bucket.o build/gcc-release/tests/harness.o build/gcc-release/src/base/alloc_guard.o build/gcc-release/src/base/arena.o build/gcc-release/src/base/fatal.o build/gcc-release/src/config.o build/gcc-release/src/engine.o build/gcc-release/src/parallel.o -o build/gcc-release/test_bucket -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread build/gcc-release/tests/test_controllers.o build/gcc-release/tests/harness.o build/gcc-release/src/base/alloc_guard.o build/gcc-release/src/base/arena.o build/gcc-release/src/base/fatal.o build/gcc-release/src/config.o build/gcc-release/src/engine.o build/gcc-release/src/parallel.o build/gcc-release/src/units/trace_log.o build/gcc-release/src/units/controller.o build/gcc-release/tests/golden_run.o build/gcc-release/tests/sha256.o -o build/gcc-release/test_controllers -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread build/gcc-release/tests/test_debug.o build/gcc-release/tests/harness.o build/gcc-release/src/base/alloc_guard.o build/gcc-release/src/base/arena.o build/gcc-release/src/base/fatal.o build/gcc-release/src/config.o build/gcc-release/src/engine.o build/gcc-release/src/parallel.o -o build/gcc-release/test_debug -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread build/gcc-release/tests/test_engine.o build/gcc-release/tests/harness.o build/gcc-release/src/base/alloc_guard.o build/gcc-release/src/base/arena.o build/gcc-release/src/base/fatal.o build/gcc-release/src/config.o build/gcc-release/src/engine.o build/gcc-release/src/parallel.o -o build/gcc-release/test_engine -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread build/gcc-release/tests/test_golden.o build/gcc-release/tests/harness.o build/gcc-release/src/base/alloc_guard.o build/gcc-release/src/base/arena.o build/gcc-release/src/base/fatal.o build/gcc-release/src/config.o build/gcc-release/src/engine.o build/gcc-release/src/parallel.o build/gcc-release/src/units/trace_log.o build/gcc-release/src/units/controller.o build/gcc-release/tests/golden_run.o build/gcc-release/tests/sha256.o -o build/gcc-release/test_golden -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread build/gcc-release/tests/test_kinds.o build/gcc-release/tests/harness.o build/gcc-release/src/base/alloc_guard.o build/gcc-release/src/base/arena.o build/gcc-release/src/base/fatal.o build/gcc-release/src/config.o build/gcc-release/src/engine.o build/gcc-release/src/parallel.o -o build/gcc-release/test_kinds -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread build/gcc-release/tests/test_parallel.o build/gcc-release/tests/harness.o build/gcc-release/src/base/alloc_guard.o build/gcc-release/src/base/arena.o build/gcc-release/src/base/fatal.o build/gcc-release/src/config.o build/gcc-release/src/engine.o build/gcc-release/src/parallel.o -o build/gcc-release/test_parallel -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread build/gcc-release/tests/test_portconf.o build/gcc-release/tests/harness.o build/gcc-release/src/base/alloc_guard.o build/gcc-release/src/base/arena.o build/gcc-release/src/base/fatal.o build/gcc-release/src/config.o build/gcc-release/src/engine.o build/gcc-release/src/parallel.o -o build/gcc-release/test_portconf -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread build/gcc-release/tests/test_regblock.o build/gcc-release/tests/harness.o build/gcc-release/src/base/alloc_guard.o build/gcc-release/src/base/arena.o build/gcc-release/src/base/fatal.o build/gcc-release/src/config.o build/gcc-release/src/engine.o build/gcc-release/src/parallel.o build/gcc-release/src/units/trace_log.o build/gcc-release/src/units/controller.o build/gcc-release/tests/golden_run.o build/gcc-release/tests/sha256.o -o build/gcc-release/test_regblock -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread build/gcc-release/tests/test_registry.o build/gcc-release/tests/harness.o build/gcc-release/src/base/alloc_guard.o build/gcc-release/src/base/arena.o build/gcc-release/src/base/fatal.o build/gcc-release/src/config.o build/gcc-release/src/engine.o build/gcc-release/src/parallel.o -o build/gcc-release/test_registry -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread build/gcc-release/tests/test_ring.o build/gcc-release/tests/harness.o build/gcc-release/src/base/alloc_guard.o build/gcc-release/src/base/arena.o build/gcc-release/src/base/fatal.o build/gcc-release/src/config.o build/gcc-release/src/engine.o build/gcc-release/src/parallel.o -o build/gcc-release/test_ring -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread build/gcc-release/tests/test_rv32.o build/gcc-release/tests/harness.o build/gcc-release/src/base/alloc_guard.o build/gcc-release/src/base/arena.o build/gcc-release/src/base/fatal.o build/gcc-release/src/config.o build/gcc-release/src/engine.o build/gcc-release/src/parallel.o build/gcc-release/src/units/trace_log.o build/gcc-release/src/units/controller.o build/gcc-release/tests/golden_run.o build/gcc-release/tests/sha256.o -o build/gcc-release/test_rv32 -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread build/gcc-release/tests/test_value_pool.o build/gcc-release/tests/harness.o build/gcc-release/src/base/alloc_guard.o build/gcc-release/src/base/arena.o build/gcc-release/src/base/fatal.o build/gcc-release/src/config.o build/gcc-release/src/engine.o build/gcc-release/src/parallel.o -o build/gcc-release/test_value_pool -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread build/gcc-release/tests/test_wide.o build/gcc-release/tests/harness.o build/gcc-release/src/base/alloc_guard.o build/gcc-release/src/base/arena.o build/gcc-release/src/base/fatal.o build/gcc-release/src/config.o build/gcc-release/src/engine.o build/gcc-release/src/parallel.o -o build/gcc-release/test_wide -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+ok   arena_objects_contiguous_in_order
+ok   alloc_big_aligned_and_zeroed
+ok   block_is_line_aligned
+ok   arena_differential_seed_1
+ok   arena_differential_seed_2
+ok   arena_differential_seed_3
+ok   arena_full_is_fatal
+ok   alloc_big_failure_is_fatal
+./build/gcc-release/test_arena: 8 passed, 0 failed, 1 skipped (debug-only)
+ok   fatal_prints_context_and_aborts
+ok   fatal_without_arguments
+ok   dcheck_is_silent_when_true
+ok   dcheck_not_evaluated_in_release
+ok   hook_quiet_outside_a_run
+ok   hook_operator_new
+ok   hook_operator_new_array
+ok   hook_operator_new_nothrow
+ok   hook_operator_new_aligned
+ok   hook_operator_delete
+ok   hook_malloc
+ok   hook_calloc
+ok   hook_realloc
+ok   hook_free
+ok   hook_aligned_alloc
+ok   hook_posix_memalign
+ok   hook_stl_container
+ok   hook_per_thread_flag_is_cleared_by_fatal
+ok   harness_captures_earlier_stderr
+./build/gcc-release/test_base: 19 passed, 0 failed, 3 skipped (debug-only)
+ok   bitmap_words_needed_rounds_to_lines
+ok   bitmap_word_boundaries
+ok   bitmap_set_all_stops_at_size
+ok   bitmap_cycle_loop_ops_never_allocate
+ok   bitmap_differential_seed_1
+ok   bitmap_differential_seed_2
+ok   bitmap_differential_seed_3
+./build/gcc-release/test_bitmap: 7 passed, 0 failed, 3 skipped (debug-only)
+  CountingBlock: traces equal to the golden both ways; digest ready-driven 6b30c796fa65afea, step-all e285d089a19551ba
+ok   broken_counting_block_caught_by_step_all
+  LazyBlock: digest ready-driven 0761677669dd61d3, step-all cd778f100536ea46
+ok   broken_lazy_block_caught_by_step_all
+./build/gcc-release/test_broken_units: 2 passed, 0 failed, 1 skipped (debug-only)
+ok   bucket_words_needed_rounds_to_lines
+ok   bucket_append_read_clear
+ok   bucket_cycle_loop_ops_never_allocate
+ok   bucket_differential_seed_1
+ok   bucket_differential_seed_2
+ok   bucket_differential_seed_3
+ok   bucket_full_is_fatal
+ok   bucket_zero_width_is_fatal
+./build/gcc-release/test_bucket: 8 passed, 0 failed, 2 skipped (debug-only)
+ok   controllers_three_threads_every_golden
+ok   controllers_mixed_order_visits_every_run_once
+./build/gcc-release/test_controllers: 2 passed, 0 failed, 0 skipped (debug-only)
+ok   the_synthetic_chip_digests_the_same_under_every_order
+ok   step_all_catches_a_forgotten_next
+ok   the_seeded_and_instance_major_orders_catch_an_order_dependence
+ok   the_detector_is_silent_on_units_blocked_on_a_credit_or_a_refusal
+ok   a_units_own_threshold_covers_a_wait_on_a_wire
+ok   the_detector_can_report_and_go_on
+ok   run_until_runs_through_its_cycle
+ok   an_option_not_implemented_is_refused
+./build/gcc-release/test_debug: 8 passed, 0 failed, 2 skipped (debug-only)
+ok   link_word_arrives_after_its_latency
+ok   fifo_full_is_judged_at_the_start_of_the_put_cycle
+ok   fifo_deep_enough_loses_nothing
+ok   hold_refuses_and_the_producer_retries
+ok   an_idle_unit_is_never_stepped
+ok   a_long_sleep_costs_one_wake
+ok   no_allocation_in_the_loop
+ok   sizes_equal_hand_derived_ones
+ok   the_digest_is_a_function_of_the_run
+ok   the_end_of_run_report_names_a_sleeper
+ok   two_puts_in_a_cycle_are_fatal
+ok   a_link_whose_consumer_never_takes_fills
+ok   a_wake_in_the_past_is_fatal
+ok   an_unwired_port_is_fatal
+ok   a_unit_of_the_wrong_type_is_fatal
+ok   widths_must_match
+./build/gcc-release/test_engine: 16 passed, 0 failed, 0 skipped (debug-only)
+ok   golden_runs_listed
+ok   golden_all_match_direct
+ok   golden_all_match_engine
+ok   golden_engine_debug_checks
+ok   golden_refuses_a_config_difference
+ok   golden_refuses_an_image_or_tile_difference
+ok   golden_catches_a_difference
+ok   golden_start_skew_is_refs
+./build/gcc-release/test_golden: 8 passed, 0 failed, 0 skipped (debug-only)
+ok   reg_wakes_its_readers_only_on_a_change
+ok   a_wire_change_steps_its_reader_in_the_same_cycle
+ok   levels_follow_a_wire_chain
+ok   a_combinational_loop_is_rejected_with_its_units
+ok   one_level_per_type_must_order_the_wires
+ok   a_regfile_change_steps_its_reader
+ok   a_count_reads_now_and_through_last
+ok   fifo_overflows_are_counted_at_the_next_cycle
+ok   credit_fifo_room_as_of_the_start_and_returns_at_the_next_cycle
+ok   a_put_without_a_credit_is_fatal
+ok   reg_wire_regfile_count_allocate_nothing_in_the_loop
+./build/gcc-release/test_kinds: 11 passed, 0 failed, 1 skipped (debug-only)
+ok   a_synthetic_chip_is_deterministic_and_busy
+ok   n_chips_on_n_threads_match_one_at_a_time
+ok   n_chips_built_and_run_on_their_own_threads
+ok   the_same_chip_twice_on_two_threads
+ok   the_same_sim_twice_is_refused
+./build/gcc-release/test_parallel: 5 passed, 0 failed, 0 skipped (debug-only)
+ok   conforms_link_1
+ok   conforms_link_2
+ok   conforms_link_3
+ok   conforms_link_8
+ok   conforms_fifo_1
+ok   conforms_fifo_2
+ok   conforms_fifo_4
+ok   conforms_fifo_16
+ok   conforms_credit_1
+ok   conforms_credit_2
+ok   conforms_credit_4
+ok   conforms_credit_16
+ok   conforms_hold
+ok   conforms_reg
+     rlink-1-2: the reserved link is M2's (PORTS.md 2a), not run
+ok   conforms_rlink_1_2
+     rlink-2-4: the reserved link is M2's (PORTS.md 2a), not run
+ok   conforms_rlink_2_4
+     rlink-3-8: the reserved link is M2's (PORTS.md 2a), not run
+ok   conforms_rlink_3_8
+./build/gcc-release/test_portconf: 17 passed, 0 failed, 0 skipped (debug-only)
+ok   regblock_reset_view
+ok   regblock_go_and_landing
+ok   regblock_done_gate
+ok   regblock_consume_clears_only_what_it_returned
+ok   regblock_errors_and_interrupt
+ok   regblock_events_required
+ok   regblock_request_fifo
+./build/gcc-release/test_regblock: 7 passed, 0 failed, 0 skipped (debug-only)
+ok   type_ids_follow_each_configs_first_add_order
+ok   two_configs_on_two_threads_get_the_same_ids
+./build/gcc-release/test_registry: 2 passed, 0 failed, 0 skipped (debug-only)
+ok   ring_words_needed_rounds_to_lines
+ok   ring_depth_one_width_one
+ok   ring_wraps_and_keeps_order
+ok   ring_fills_exactly_to_depth
+ok   ring_cycle_loop_ops_never_allocate
+ok   ring_differential_seed_1
+ok   ring_differential_seed_2
+ok   ring_differential_seed_3
+ok   ring_full_is_fatal
+ok   ring_zero_width_is_fatal
+./build/gcc-release/test_ring: 10 passed, 0 failed, 3 skipped (debug-only)
+ok   rv32_alu_immediates_and_registers
+ok   rv32_slt_signedness
+ok   rv32_multiplies_against_wide_arithmetic
+ok   rv32_divide_opcodes_are_illegal
+ok   rv32_loads_and_stores_extend
+ok   rv32_memory_aliases_past_32k
+ok   rv32_misaligned_access_is_ub
+ok   rv32_bus_errors
+ok   rv32_block_load_takes_two_cycles_and_samples_in_the_second
+ok   rv32_block_load_waits_before_its_checks
+ok   rv32_block_words
+ok   rv32_block_store_faults
+ok   rv32_request_send_refused_is_reexecuted
+ok   rv32_sim_exit_halts_after_its_retire_line
+ok   rv32_router_register_not_modelled
+ok   rv32_write_counter_not_modelled
+ok   rv32_request_receive_not_modelled
+ok   rv32_peripheral_window_not_modelled
+ok   rv32_hist_not_modelled
+ok   rv32_table_store_not_modelled
+ok   rv32_branch_timing
+ok   rv32_jalr_clears_bit0_and_misaligned_target_halts
+ok   rv32_halts
+ok   rv32_csrs
+ok   rv32_mcycle_write_and_mtime
+ok   rv32_mip_reads_the_interrupt_term
+ok   rv32_trap_inside_the_handler_halts
+ok   rv32_park_loop_in_the_handler
+ok   rv32_interrupt_waits_for_a_stall_but_not_a_block_load
+ok   rv32_wfi_sleeps_and_wakes
+ok   rv32_wfi_falls_through_when_the_term_holds
+ok   rv32_interrupt_in_wfi_traps_without_a_wake_line
+ok   rv32_sleeping_through_a_stall_equals_stepping_it
+ok   rv32_digest_is_the_same_slept_or_stepped
+./build/gcc-release/test_rv32: 34 passed, 0 failed, 0 skipped (debug-only)
+ok   pool_words_needed_rounds_to_lines
+ok   pool_lowest_free_first_and_values_kept
+ok   pool_values_are_16_byte_aligned
+ok   pool_cycle_loop_ops_never_allocate
+ok   pool_differential_seed_1
+ok   pool_differential_seed_2
+ok   pool_differential_seed_3
+ok   pool_full_is_fatal
+ok   slot_pool_wide_class_sizes_allocates_and_frees
+ok   slot_pool_full_is_fatal_naming_the_class
+./build/gcc-release/test_value_pool: 10 passed, 0 failed, 4 skipped (debug-only)
+ok   a_wide_class_sizes_allocates_and_frees_over_a_fifo
+ok   a_fifo_overflow_frees_the_dropped_slot
+ok   a_wide_class_over_a_link_with_held_slots
+ok   allocating_beyond_the_declared_size_is_fatal
+ok   both_ends_declare_the_same_class
+ok   no_leak_reported_for_lines_in_flight_queued_or_held
+./build/gcc-release/test_wide: 6 passed, 0 failed, 1 skipped (debug-only)
+==== clang debug
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c tests/test_arena.cpp -o build/clang-debug/tests/test_arena.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c tests/harness.cpp -o build/clang-debug/tests/harness.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c src/base/alloc_guard.cpp -o build/clang-debug/src/base/alloc_guard.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c src/base/arena.cpp -o build/clang-debug/src/base/arena.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c src/base/fatal.cpp -o build/clang-debug/src/base/fatal.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c src/config.cpp -o build/clang-debug/src/config.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c src/engine.cpp -o build/clang-debug/src/engine.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c src/parallel.cpp -o build/clang-debug/src/parallel.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c tests/test_base.cpp -o build/clang-debug/tests/test_base.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c tests/test_bitmap.cpp -o build/clang-debug/tests/test_bitmap.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c tests/test_broken_units.cpp -o build/clang-debug/tests/test_broken_units.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c src/units/trace_log.cpp -o build/clang-debug/src/units/trace_log.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c src/units/controller.cpp -o build/clang-debug/src/units/controller.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c tests/golden_run.cpp -o build/clang-debug/tests/golden_run.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c tests/sha256.cpp -o build/clang-debug/tests/sha256.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c tests/test_bucket.cpp -o build/clang-debug/tests/test_bucket.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c tests/test_controllers.cpp -o build/clang-debug/tests/test_controllers.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c tests/test_debug.cpp -o build/clang-debug/tests/test_debug.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c tests/test_engine.cpp -o build/clang-debug/tests/test_engine.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c tests/test_golden.cpp -o build/clang-debug/tests/test_golden.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c tests/test_kinds.cpp -o build/clang-debug/tests/test_kinds.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c tests/test_parallel.cpp -o build/clang-debug/tests/test_parallel.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c tests/test_portconf.cpp -o build/clang-debug/tests/test_portconf.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c tests/test_regblock.cpp -o build/clang-debug/tests/test_regblock.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c tests/test_registry.cpp -o build/clang-debug/tests/test_registry.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c tests/test_ring.cpp -o build/clang-debug/tests/test_ring.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c tests/test_rv32.cpp -o build/clang-debug/tests/test_rv32.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c tests/test_value_pool.cpp -o build/clang-debug/tests/test_value_pool.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c tests/test_wide.cpp -o build/clang-debug/tests/test_wide.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c src/sketch/controller.cpp -o build/clang-debug/src/sketch/controller.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c src/sketch/tile_builder.cpp -o build/clang-debug/src/sketch/tile_builder.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread -c src/sketch/write_engine.cpp -o build/clang-debug/src/sketch/write_engine.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread build/clang-debug/tests/test_arena.o build/clang-debug/tests/harness.o build/clang-debug/src/base/alloc_guard.o build/clang-debug/src/base/arena.o build/clang-debug/src/base/fatal.o build/clang-debug/src/config.o build/clang-debug/src/engine.o build/clang-debug/src/parallel.o -o build/clang-debug/test_arena -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread build/clang-debug/tests/test_base.o build/clang-debug/tests/harness.o build/clang-debug/src/base/alloc_guard.o build/clang-debug/src/base/arena.o build/clang-debug/src/base/fatal.o build/clang-debug/src/config.o build/clang-debug/src/engine.o build/clang-debug/src/parallel.o -o build/clang-debug/test_base -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread build/clang-debug/tests/test_bitmap.o build/clang-debug/tests/harness.o build/clang-debug/src/base/alloc_guard.o build/clang-debug/src/base/arena.o build/clang-debug/src/base/fatal.o build/clang-debug/src/config.o build/clang-debug/src/engine.o build/clang-debug/src/parallel.o -o build/clang-debug/test_bitmap -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread build/clang-debug/tests/test_broken_units.o build/clang-debug/tests/harness.o build/clang-debug/src/base/alloc_guard.o build/clang-debug/src/base/arena.o build/clang-debug/src/base/fatal.o build/clang-debug/src/config.o build/clang-debug/src/engine.o build/clang-debug/src/parallel.o build/clang-debug/src/units/trace_log.o build/clang-debug/src/units/controller.o build/clang-debug/tests/golden_run.o build/clang-debug/tests/sha256.o -o build/clang-debug/test_broken_units -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread build/clang-debug/tests/test_bucket.o build/clang-debug/tests/harness.o build/clang-debug/src/base/alloc_guard.o build/clang-debug/src/base/arena.o build/clang-debug/src/base/fatal.o build/clang-debug/src/config.o build/clang-debug/src/engine.o build/clang-debug/src/parallel.o -o build/clang-debug/test_bucket -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread build/clang-debug/tests/test_controllers.o build/clang-debug/tests/harness.o build/clang-debug/src/base/alloc_guard.o build/clang-debug/src/base/arena.o build/clang-debug/src/base/fatal.o build/clang-debug/src/config.o build/clang-debug/src/engine.o build/clang-debug/src/parallel.o build/clang-debug/src/units/trace_log.o build/clang-debug/src/units/controller.o build/clang-debug/tests/golden_run.o build/clang-debug/tests/sha256.o -o build/clang-debug/test_controllers -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread build/clang-debug/tests/test_debug.o build/clang-debug/tests/harness.o build/clang-debug/src/base/alloc_guard.o build/clang-debug/src/base/arena.o build/clang-debug/src/base/fatal.o build/clang-debug/src/config.o build/clang-debug/src/engine.o build/clang-debug/src/parallel.o -o build/clang-debug/test_debug -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread build/clang-debug/tests/test_engine.o build/clang-debug/tests/harness.o build/clang-debug/src/base/alloc_guard.o build/clang-debug/src/base/arena.o build/clang-debug/src/base/fatal.o build/clang-debug/src/config.o build/clang-debug/src/engine.o build/clang-debug/src/parallel.o -o build/clang-debug/test_engine -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread build/clang-debug/tests/test_golden.o build/clang-debug/tests/harness.o build/clang-debug/src/base/alloc_guard.o build/clang-debug/src/base/arena.o build/clang-debug/src/base/fatal.o build/clang-debug/src/config.o build/clang-debug/src/engine.o build/clang-debug/src/parallel.o build/clang-debug/src/units/trace_log.o build/clang-debug/src/units/controller.o build/clang-debug/tests/golden_run.o build/clang-debug/tests/sha256.o -o build/clang-debug/test_golden -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread build/clang-debug/tests/test_kinds.o build/clang-debug/tests/harness.o build/clang-debug/src/base/alloc_guard.o build/clang-debug/src/base/arena.o build/clang-debug/src/base/fatal.o build/clang-debug/src/config.o build/clang-debug/src/engine.o build/clang-debug/src/parallel.o -o build/clang-debug/test_kinds -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread build/clang-debug/tests/test_parallel.o build/clang-debug/tests/harness.o build/clang-debug/src/base/alloc_guard.o build/clang-debug/src/base/arena.o build/clang-debug/src/base/fatal.o build/clang-debug/src/config.o build/clang-debug/src/engine.o build/clang-debug/src/parallel.o -o build/clang-debug/test_parallel -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread build/clang-debug/tests/test_portconf.o build/clang-debug/tests/harness.o build/clang-debug/src/base/alloc_guard.o build/clang-debug/src/base/arena.o build/clang-debug/src/base/fatal.o build/clang-debug/src/config.o build/clang-debug/src/engine.o build/clang-debug/src/parallel.o -o build/clang-debug/test_portconf -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread build/clang-debug/tests/test_regblock.o build/clang-debug/tests/harness.o build/clang-debug/src/base/alloc_guard.o build/clang-debug/src/base/arena.o build/clang-debug/src/base/fatal.o build/clang-debug/src/config.o build/clang-debug/src/engine.o build/clang-debug/src/parallel.o build/clang-debug/src/units/trace_log.o build/clang-debug/src/units/controller.o build/clang-debug/tests/golden_run.o build/clang-debug/tests/sha256.o -o build/clang-debug/test_regblock -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread build/clang-debug/tests/test_registry.o build/clang-debug/tests/harness.o build/clang-debug/src/base/alloc_guard.o build/clang-debug/src/base/arena.o build/clang-debug/src/base/fatal.o build/clang-debug/src/config.o build/clang-debug/src/engine.o build/clang-debug/src/parallel.o -o build/clang-debug/test_registry -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread build/clang-debug/tests/test_ring.o build/clang-debug/tests/harness.o build/clang-debug/src/base/alloc_guard.o build/clang-debug/src/base/arena.o build/clang-debug/src/base/fatal.o build/clang-debug/src/config.o build/clang-debug/src/engine.o build/clang-debug/src/parallel.o -o build/clang-debug/test_ring -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread build/clang-debug/tests/test_rv32.o build/clang-debug/tests/harness.o build/clang-debug/src/base/alloc_guard.o build/clang-debug/src/base/arena.o build/clang-debug/src/base/fatal.o build/clang-debug/src/config.o build/clang-debug/src/engine.o build/clang-debug/src/parallel.o build/clang-debug/src/units/trace_log.o build/clang-debug/src/units/controller.o build/clang-debug/tests/golden_run.o build/clang-debug/tests/sha256.o -o build/clang-debug/test_rv32 -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread build/clang-debug/tests/test_value_pool.o build/clang-debug/tests/harness.o build/clang-debug/src/base/alloc_guard.o build/clang-debug/src/base/arena.o build/clang-debug/src/base/fatal.o build/clang-debug/src/config.o build/clang-debug/src/engine.o build/clang-debug/src/parallel.o -o build/clang-debug/test_value_pool -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -pthread build/clang-debug/tests/test_wide.o build/clang-debug/tests/harness.o build/clang-debug/src/base/alloc_guard.o build/clang-debug/src/base/arena.o build/clang-debug/src/base/fatal.o build/clang-debug/src/config.o build/clang-debug/src/engine.o build/clang-debug/src/parallel.o -o build/clang-debug/test_wide -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+ok   arena_objects_contiguous_in_order
+ok   alloc_big_aligned_and_zeroed
+ok   block_is_line_aligned
+ok   arena_differential_seed_1
+ok   arena_differential_seed_2
+ok   arena_differential_seed_3
+ok   arena_full_is_fatal
+ok   arena_index_past_size
+ok   alloc_big_failure_is_fatal
+./build/clang-debug/test_arena: 9 passed, 0 failed, 0 skipped (debug-only)
+ok   fatal_prints_context_and_aborts
+ok   fatal_without_arguments
+ok   dcheck_fires_in_debug
+ok   dcheck_is_silent_when_true
+ok   dcheck_not_evaluated_in_release
+ok   hook_quiet_outside_a_run
+ok   hook_operator_new
+ok   hook_operator_new_array
+ok   hook_operator_new_nothrow
+ok   hook_operator_new_aligned
+ok   hook_operator_delete
+ok   hook_malloc
+ok   hook_calloc
+ok   hook_realloc
+ok   hook_free
+ok   hook_aligned_alloc
+ok   hook_posix_memalign
+ok   hook_stl_container
+ok   hook_per_thread_flag_is_cleared_by_fatal
+ok   begin_run_twice
+ok   end_run_outside
+ok   harness_captures_earlier_stderr
+./build/clang-debug/test_base: 22 passed, 0 failed, 0 skipped (debug-only)
+ok   bitmap_words_needed_rounds_to_lines
+ok   bitmap_word_boundaries
+ok   bitmap_set_all_stops_at_size
+ok   bitmap_cycle_loop_ops_never_allocate
+ok   bitmap_differential_seed_1
+ok   bitmap_differential_seed_2
+ok   bitmap_differential_seed_3
+ok   bitmap_set_out_of_range
+ok   bitmap_test_out_of_range
+ok   bitmap_storage_misaligned
+./build/clang-debug/test_bitmap: 10 passed, 0 failed, 0 skipped (debug-only)
+  CountingBlock: traces equal to the golden both ways; digest ready-driven 6b30c796fa65afea, step-all e285d089a19551ba
+ok   broken_counting_block_caught_by_step_all
+  LazyBlock: digest ready-driven 0761677669dd61d3, step-all cd778f100536ea46
+ok   broken_lazy_block_caught_by_step_all
+ok   broken_lazy_block_caught_by_the_missed_wake_detector
+./build/clang-debug/test_broken_units: 3 passed, 0 failed, 0 skipped (debug-only)
+ok   bucket_words_needed_rounds_to_lines
+ok   bucket_append_read_clear
+ok   bucket_cycle_loop_ops_never_allocate
+ok   bucket_differential_seed_1
+ok   bucket_differential_seed_2
+ok   bucket_differential_seed_3
+ok   bucket_full_is_fatal
+ok   bucket_zero_width_is_fatal
+ok   bucket_entry_past_count
+ok   bucket_storage_misaligned
+./build/clang-debug/test_bucket: 10 passed, 0 failed, 0 skipped (debug-only)
+ok   controllers_three_threads_every_golden
+ok   controllers_mixed_order_visits_every_run_once
+./build/clang-debug/test_controllers: 2 passed, 0 failed, 0 skipped (debug-only)
+ok   the_synthetic_chip_digests_the_same_under_every_order
+ok   step_all_catches_a_forgotten_next
+ok   the_detector_names_a_unit_that_forgets_next
+ok   the_seeded_and_instance_major_orders_catch_an_order_dependence
+ok   the_detector_is_silent_on_units_blocked_on_a_credit_or_a_refusal
+ok   a_units_own_threshold_covers_a_wait_on_a_wire
+missed wake at cycle 18: sink is asleep with data waiting in sink.in
+ok   a_wait_on_a_wire_is_flagged_without_its_own_threshold
+ok   the_detector_can_report_and_go_on
+ok   run_until_runs_through_its_cycle
+ok   an_option_not_implemented_is_refused
+./build/clang-debug/test_debug: 10 passed, 0 failed, 0 skipped (debug-only)
+ok   link_word_arrives_after_its_latency
+ok   fifo_full_is_judged_at_the_start_of_the_put_cycle
+ok   fifo_deep_enough_loses_nothing
+ok   hold_refuses_and_the_producer_retries
+ok   an_idle_unit_is_never_stepped
+ok   a_long_sleep_costs_one_wake
+ok   no_allocation_in_the_loop
+ok   sizes_equal_hand_derived_ones
+ok   the_digest_is_a_function_of_the_run
+ok   the_end_of_run_report_names_a_sleeper
+ok   two_puts_in_a_cycle_are_fatal
+ok   a_link_whose_consumer_never_takes_fills
+ok   a_wake_in_the_past_is_fatal
+ok   an_unwired_port_is_fatal
+ok   a_unit_of_the_wrong_type_is_fatal
+ok   widths_must_match
+./build/clang-debug/test_engine: 16 passed, 0 failed, 0 skipped (debug-only)
+ok   golden_runs_listed
+ok   golden_all_match_direct
+ok   golden_all_match_engine
+ok   golden_engine_debug_checks
+ok   golden_refuses_a_config_difference
+ok   golden_refuses_an_image_or_tile_difference
+ok   golden_catches_a_difference
+ok   golden_start_skew_is_refs
+./build/clang-debug/test_golden: 8 passed, 0 failed, 0 skipped (debug-only)
+ok   reg_wakes_its_readers_only_on_a_change
+ok   a_wire_change_steps_its_reader_in_the_same_cycle
+ok   levels_follow_a_wire_chain
+ok   a_combinational_loop_is_rejected_with_its_units
+ok   one_level_per_type_must_order_the_wires
+ok   a_wire_written_twice_in_a_cycle_is_fatal
+ok   a_regfile_change_steps_its_reader
+ok   a_count_reads_now_and_through_last
+ok   fifo_overflows_are_counted_at_the_next_cycle
+ok   credit_fifo_room_as_of_the_start_and_returns_at_the_next_cycle
+ok   a_put_without_a_credit_is_fatal
+ok   reg_wire_regfile_count_allocate_nothing_in_the_loop
+./build/clang-debug/test_kinds: 12 passed, 0 failed, 0 skipped (debug-only)
+ok   a_synthetic_chip_is_deterministic_and_busy
+ok   n_chips_on_n_threads_match_one_at_a_time
+ok   n_chips_built_and_run_on_their_own_threads
+ok   the_same_chip_twice_on_two_threads
+ok   the_same_sim_twice_is_refused
+./build/clang-debug/test_parallel: 5 passed, 0 failed, 0 skipped (debug-only)
+ok   conforms_link_1
+ok   conforms_link_2
+ok   conforms_link_3
+ok   conforms_link_8
+ok   conforms_fifo_1
+ok   conforms_fifo_2
+ok   conforms_fifo_4
+ok   conforms_fifo_16
+ok   conforms_credit_1
+ok   conforms_credit_2
+ok   conforms_credit_4
+ok   conforms_credit_16
+ok   conforms_hold
+ok   conforms_reg
+     rlink-1-2: the reserved link is M2's (PORTS.md 2a), not run
+ok   conforms_rlink_1_2
+     rlink-2-4: the reserved link is M2's (PORTS.md 2a), not run
+ok   conforms_rlink_2_4
+     rlink-3-8: the reserved link is M2's (PORTS.md 2a), not run
+ok   conforms_rlink_3_8
+./build/clang-debug/test_portconf: 17 passed, 0 failed, 0 skipped (debug-only)
+ok   regblock_reset_view
+ok   regblock_go_and_landing
+ok   regblock_done_gate
+ok   regblock_consume_clears_only_what_it_returned
+ok   regblock_errors_and_interrupt
+ok   regblock_events_required
+ok   regblock_request_fifo
+./build/clang-debug/test_regblock: 7 passed, 0 failed, 0 skipped (debug-only)
+ok   type_ids_follow_each_configs_first_add_order
+ok   two_configs_on_two_threads_get_the_same_ids
+./build/clang-debug/test_registry: 2 passed, 0 failed, 0 skipped (debug-only)
+ok   ring_words_needed_rounds_to_lines
+ok   ring_depth_one_width_one
+ok   ring_wraps_and_keeps_order
+ok   ring_fills_exactly_to_depth
+ok   ring_cycle_loop_ops_never_allocate
+ok   ring_differential_seed_1
+ok   ring_differential_seed_2
+ok   ring_differential_seed_3
+ok   ring_full_is_fatal
+ok   ring_zero_width_is_fatal
+ok   ring_pop_empty
+ok   ring_peek_past_count
+ok   ring_storage_misaligned
+./build/clang-debug/test_ring: 13 passed, 0 failed, 0 skipped (debug-only)
+ok   rv32_alu_immediates_and_registers
+ok   rv32_slt_signedness
+ok   rv32_multiplies_against_wide_arithmetic
+ok   rv32_divide_opcodes_are_illegal
+ok   rv32_loads_and_stores_extend
+ok   rv32_memory_aliases_past_32k
+ok   rv32_misaligned_access_is_ub
+ok   rv32_bus_errors
+ok   rv32_block_load_takes_two_cycles_and_samples_in_the_second
+ok   rv32_block_load_waits_before_its_checks
+ok   rv32_block_words
+ok   rv32_block_store_faults
+ok   rv32_request_send_refused_is_reexecuted
+ok   rv32_sim_exit_halts_after_its_retire_line
+ok   rv32_router_register_not_modelled
+ok   rv32_write_counter_not_modelled
+ok   rv32_request_receive_not_modelled
+ok   rv32_peripheral_window_not_modelled
+ok   rv32_hist_not_modelled
+ok   rv32_table_store_not_modelled
+ok   rv32_branch_timing
+ok   rv32_jalr_clears_bit0_and_misaligned_target_halts
+ok   rv32_halts
+ok   rv32_csrs
+ok   rv32_mcycle_write_and_mtime
+ok   rv32_mip_reads_the_interrupt_term
+ok   rv32_trap_inside_the_handler_halts
+ok   rv32_park_loop_in_the_handler
+ok   rv32_interrupt_waits_for_a_stall_but_not_a_block_load
+ok   rv32_wfi_sleeps_and_wakes
+ok   rv32_wfi_falls_through_when_the_term_holds
+ok   rv32_interrupt_in_wfi_traps_without_a_wake_line
+ok   rv32_sleeping_through_a_stall_equals_stepping_it
+ok   rv32_digest_is_the_same_slept_or_stepped
+./build/clang-debug/test_rv32: 34 passed, 0 failed, 0 skipped (debug-only)
+ok   pool_words_needed_rounds_to_lines
+ok   pool_lowest_free_first_and_values_kept
+ok   pool_values_are_16_byte_aligned
+ok   pool_cycle_loop_ops_never_allocate
+ok   pool_differential_seed_1
+ok   pool_differential_seed_2
+ok   pool_differential_seed_3
+ok   pool_full_is_fatal
+ok   pool_double_free
+ok   pool_free_out_of_range
+ok   pool_read_freed_index
+ok   pool_storage_misaligned
+ok   slot_pool_wide_class_sizes_allocates_and_frees
+ok   slot_pool_full_is_fatal_naming_the_class
+./build/clang-debug/test_value_pool: 14 passed, 0 failed, 0 skipped (debug-only)
+ok   a_wide_class_sizes_allocates_and_frees_over_a_fifo
+ok   a_fifo_overflow_frees_the_dropped_slot
+ok   a_wide_class_over_a_link_with_held_slots
+ok   allocating_beyond_the_declared_size_is_fatal
+ok   both_ends_declare_the_same_class
+ok   a_slot_allocated_and_never_put_is_a_leak
+ok   no_leak_reported_for_lines_in_flight_queued_or_held
+./build/clang-debug/test_wide: 7 passed, 0 failed, 0 skipped (debug-only)
+==== clang release
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c tests/test_arena.cpp -o build/clang-release/tests/test_arena.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c tests/harness.cpp -o build/clang-release/tests/harness.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c tests/test_base.cpp -o build/clang-release/tests/test_base.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c tests/test_bitmap.cpp -o build/clang-release/tests/test_bitmap.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c tests/test_broken_units.cpp -o build/clang-release/tests/test_broken_units.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c tests/test_bucket.cpp -o build/clang-release/tests/test_bucket.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c tests/test_controllers.cpp -o build/clang-release/tests/test_controllers.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c tests/test_debug.cpp -o build/clang-release/tests/test_debug.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c tests/test_engine.cpp -o build/clang-release/tests/test_engine.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c tests/test_golden.cpp -o build/clang-release/tests/test_golden.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c tests/test_kinds.cpp -o build/clang-release/tests/test_kinds.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c tests/test_parallel.cpp -o build/clang-release/tests/test_parallel.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c tests/test_portconf.cpp -o build/clang-release/tests/test_portconf.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c tests/test_regblock.cpp -o build/clang-release/tests/test_regblock.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c tests/test_registry.cpp -o build/clang-release/tests/test_registry.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c tests/test_ring.cpp -o build/clang-release/tests/test_ring.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c tests/test_rv32.cpp -o build/clang-release/tests/test_rv32.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c tests/test_value_pool.cpp -o build/clang-release/tests/test_value_pool.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c tests/test_wide.cpp -o build/clang-release/tests/test_wide.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c src/sketch/controller.cpp -o build/clang-release/src/sketch/controller.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c src/sketch/tile_builder.cpp -o build/clang-release/src/sketch/tile_builder.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c src/sketch/write_engine.cpp -o build/clang-release/src/sketch/write_engine.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread build/clang-release/tests/test_arena.o build/clang-release/tests/harness.o build/clang-release/src/base/alloc_guard.o build/clang-release/src/base/arena.o build/clang-release/src/base/fatal.o build/clang-release/src/config.o build/clang-release/src/engine.o build/clang-release/src/parallel.o -o build/clang-release/test_arena -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread build/clang-release/tests/test_base.o build/clang-release/tests/harness.o build/clang-release/src/base/alloc_guard.o build/clang-release/src/base/arena.o build/clang-release/src/base/fatal.o build/clang-release/src/config.o build/clang-release/src/engine.o build/clang-release/src/parallel.o -o build/clang-release/test_base -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread build/clang-release/tests/test_bitmap.o build/clang-release/tests/harness.o build/clang-release/src/base/alloc_guard.o build/clang-release/src/base/arena.o build/clang-release/src/base/fatal.o build/clang-release/src/config.o build/clang-release/src/engine.o build/clang-release/src/parallel.o -o build/clang-release/test_bitmap -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread build/clang-release/tests/test_bucket.o build/clang-release/tests/harness.o build/clang-release/src/base/alloc_guard.o build/clang-release/src/base/arena.o build/clang-release/src/base/fatal.o build/clang-release/src/config.o build/clang-release/src/engine.o build/clang-release/src/parallel.o -o build/clang-release/test_bucket -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread build/clang-release/tests/test_controllers.o build/clang-release/tests/harness.o build/clang-release/src/base/alloc_guard.o build/clang-release/src/base/arena.o build/clang-release/src/base/fatal.o build/clang-release/src/config.o build/clang-release/src/engine.o build/clang-release/src/parallel.o build/clang-release/src/units/trace_log.o build/clang-release/src/units/controller.o build/clang-release/tests/golden_run.o build/clang-release/tests/sha256.o -o build/clang-release/test_controllers -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread build/clang-release/tests/test_golden.o build/clang-release/tests/harness.o build/clang-release/src/base/alloc_guard.o build/clang-release/src/base/arena.o build/clang-release/src/base/fatal.o build/clang-release/src/config.o build/clang-release/src/engine.o build/clang-release/src/parallel.o build/clang-release/src/units/trace_log.o build/clang-release/src/units/controller.o build/clang-release/tests/golden_run.o build/clang-release/tests/sha256.o -o build/clang-release/test_golden -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread build/clang-release/tests/test_regblock.o build/clang-release/tests/harness.o build/clang-release/src/base/alloc_guard.o build/clang-release/src/base/arena.o build/clang-release/src/base/fatal.o build/clang-release/src/config.o build/clang-release/src/engine.o build/clang-release/src/parallel.o build/clang-release/src/units/trace_log.o build/clang-release/src/units/controller.o build/clang-release/tests/golden_run.o build/clang-release/tests/sha256.o -o build/clang-release/test_regblock -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread build/clang-release/tests/test_ring.o build/clang-release/tests/harness.o build/clang-release/src/base/alloc_guard.o build/clang-release/src/base/arena.o build/clang-release/src/base/fatal.o build/clang-release/src/config.o build/clang-release/src/engine.o build/clang-release/src/parallel.o -o build/clang-release/test_ring -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread build/clang-release/tests/test_portconf.o build/clang-release/tests/harness.o build/clang-release/src/base/alloc_guard.o build/clang-release/src/base/arena.o build/clang-release/src/base/fatal.o build/clang-release/src/config.o build/clang-release/src/engine.o build/clang-release/src/parallel.o -o build/clang-release/test_portconf -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread build/clang-release/tests/test_engine.o build/clang-release/tests/harness.o build/clang-release/src/base/alloc_guard.o build/clang-release/src/base/arena.o build/clang-release/src/base/fatal.o build/clang-release/src/config.o build/clang-release/src/engine.o build/clang-release/src/parallel.o -o build/clang-release/test_engine -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread build/clang-release/tests/test_broken_units.o build/clang-release/tests/harness.o build/clang-release/src/base/alloc_guard.o build/clang-release/src/base/arena.o build/clang-release/src/base/fatal.o build/clang-release/src/config.o build/clang-release/src/engine.o build/clang-release/src/parallel.o build/clang-release/src/units/trace_log.o build/clang-release/src/units/controller.o build/clang-release/tests/golden_run.o build/clang-release/tests/sha256.o -o build/clang-release/test_broken_units -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread build/clang-release/tests/test_value_pool.o build/clang-release/tests/harness.o build/clang-release/src/base/alloc_guard.o build/clang-release/src/base/arena.o build/clang-release/src/base/fatal.o build/clang-release/src/config.o build/clang-release/src/engine.o build/clang-release/src/parallel.o -o build/clang-release/test_value_pool -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread build/clang-release/tests/test_registry.o build/clang-release/tests/harness.o build/clang-release/src/base/alloc_guard.o build/clang-release/src/base/arena.o build/clang-release/src/base/fatal.o build/clang-release/src/config.o build/clang-release/src/engine.o build/clang-release/src/parallel.o -o build/clang-release/test_registry -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread build/clang-release/tests/test_parallel.o build/clang-release/tests/harness.o build/clang-release/src/base/alloc_guard.o build/clang-release/src/base/arena.o build/clang-release/src/base/fatal.o build/clang-release/src/config.o build/clang-release/src/engine.o build/clang-release/src/parallel.o -o build/clang-release/test_parallel -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread build/clang-release/tests/test_kinds.o build/clang-release/tests/harness.o build/clang-release/src/base/alloc_guard.o build/clang-release/src/base/arena.o build/clang-release/src/base/fatal.o build/clang-release/src/config.o build/clang-release/src/engine.o build/clang-release/src/parallel.o -o build/clang-release/test_kinds -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread build/clang-release/tests/test_wide.o build/clang-release/tests/harness.o build/clang-release/src/base/alloc_guard.o build/clang-release/src/base/arena.o build/clang-release/src/base/fatal.o build/clang-release/src/config.o build/clang-release/src/engine.o build/clang-release/src/parallel.o -o build/clang-release/test_wide -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread build/clang-release/tests/test_rv32.o build/clang-release/tests/harness.o build/clang-release/src/base/alloc_guard.o build/clang-release/src/base/arena.o build/clang-release/src/base/fatal.o build/clang-release/src/config.o build/clang-release/src/engine.o build/clang-release/src/parallel.o build/clang-release/src/units/trace_log.o build/clang-release/src/units/controller.o build/clang-release/tests/golden_run.o build/clang-release/tests/sha256.o -o build/clang-release/test_rv32 -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread build/clang-release/tests/test_debug.o build/clang-release/tests/harness.o build/clang-release/src/base/alloc_guard.o build/clang-release/src/base/arena.o build/clang-release/src/base/fatal.o build/clang-release/src/config.o build/clang-release/src/engine.o build/clang-release/src/parallel.o -o build/clang-release/test_debug -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+ok   arena_objects_contiguous_in_order
+ok   alloc_big_aligned_and_zeroed
+ok   block_is_line_aligned
+ok   arena_differential_seed_1
+ok   arena_differential_seed_2
+ok   arena_differential_seed_3
+ok   arena_full_is_fatal
+ok   alloc_big_failure_is_fatal
+./build/clang-release/test_arena: 8 passed, 0 failed, 1 skipped (debug-only)
+ok   fatal_prints_context_and_aborts
+ok   fatal_without_arguments
+ok   dcheck_is_silent_when_true
+ok   dcheck_not_evaluated_in_release
+ok   hook_quiet_outside_a_run
+ok   hook_operator_new
+ok   hook_operator_new_array
+ok   hook_operator_new_nothrow
+ok   hook_operator_new_aligned
+ok   hook_operator_delete
+ok   hook_malloc
+ok   hook_calloc
+ok   hook_realloc
+ok   hook_free
+ok   hook_aligned_alloc
+ok   hook_posix_memalign
+ok   hook_stl_container
+ok   hook_per_thread_flag_is_cleared_by_fatal
+ok   harness_captures_earlier_stderr
+./build/clang-release/test_base: 19 passed, 0 failed, 3 skipped (debug-only)
+ok   bitmap_words_needed_rounds_to_lines
+ok   bitmap_word_boundaries
+ok   bitmap_set_all_stops_at_size
+ok   bitmap_cycle_loop_ops_never_allocate
+ok   bitmap_differential_seed_1
+ok   bitmap_differential_seed_2
+ok   bitmap_differential_seed_3
+./build/clang-release/test_bitmap: 7 passed, 0 failed, 3 skipped (debug-only)
+  CountingBlock: traces equal to the golden both ways; digest ready-driven 6b30c796fa65afea, step-all e285d089a19551ba
+ok   broken_counting_block_caught_by_step_all
+  LazyBlock: digest ready-driven 0761677669dd61d3, step-all cd778f100536ea46
+ok   broken_lazy_block_caught_by_step_all
+./build/clang-release/test_broken_units: 2 passed, 0 failed, 1 skipped (debug-only)
+ok   bucket_words_needed_rounds_to_lines
+ok   bucket_append_read_clear
+ok   bucket_cycle_loop_ops_never_allocate
+ok   bucket_differential_seed_1
+ok   bucket_differential_seed_2
+ok   bucket_differential_seed_3
+ok   bucket_full_is_fatal
+ok   bucket_zero_width_is_fatal
+./build/clang-release/test_bucket: 8 passed, 0 failed, 2 skipped (debug-only)
+ok   controllers_three_threads_every_golden
+ok   controllers_mixed_order_visits_every_run_once
+./build/clang-release/test_controllers: 2 passed, 0 failed, 0 skipped (debug-only)
+ok   the_synthetic_chip_digests_the_same_under_every_order
+ok   step_all_catches_a_forgotten_next
+ok   the_seeded_and_instance_major_orders_catch_an_order_dependence
+ok   the_detector_is_silent_on_units_blocked_on_a_credit_or_a_refusal
+ok   a_units_own_threshold_covers_a_wait_on_a_wire
+ok   the_detector_can_report_and_go_on
+ok   run_until_runs_through_its_cycle
+ok   an_option_not_implemented_is_refused
+./build/clang-release/test_debug: 8 passed, 0 failed, 2 skipped (debug-only)
+ok   link_word_arrives_after_its_latency
+ok   fifo_full_is_judged_at_the_start_of_the_put_cycle
+ok   fifo_deep_enough_loses_nothing
+ok   hold_refuses_and_the_producer_retries
+ok   an_idle_unit_is_never_stepped
+ok   a_long_sleep_costs_one_wake
+ok   no_allocation_in_the_loop
+ok   sizes_equal_hand_derived_ones
+ok   the_digest_is_a_function_of_the_run
+ok   the_end_of_run_report_names_a_sleeper
+ok   two_puts_in_a_cycle_are_fatal
+ok   a_link_whose_consumer_never_takes_fills
+ok   a_wake_in_the_past_is_fatal
+ok   an_unwired_port_is_fatal
+ok   a_unit_of_the_wrong_type_is_fatal
+ok   widths_must_match
+./build/clang-release/test_engine: 16 passed, 0 failed, 0 skipped (debug-only)
+ok   golden_runs_listed
+ok   golden_all_match_direct
+ok   golden_all_match_engine
+ok   golden_engine_debug_checks
+ok   golden_refuses_a_config_difference
+ok   golden_refuses_an_image_or_tile_difference
+ok   golden_catches_a_difference
+ok   golden_start_skew_is_refs
+./build/clang-release/test_golden: 8 passed, 0 failed, 0 skipped (debug-only)
+ok   reg_wakes_its_readers_only_on_a_change
+ok   a_wire_change_steps_its_reader_in_the_same_cycle
+ok   levels_follow_a_wire_chain
+ok   a_combinational_loop_is_rejected_with_its_units
+ok   one_level_per_type_must_order_the_wires
+ok   a_regfile_change_steps_its_reader
+ok   a_count_reads_now_and_through_last
+ok   fifo_overflows_are_counted_at_the_next_cycle
+ok   credit_fifo_room_as_of_the_start_and_returns_at_the_next_cycle
+ok   a_put_without_a_credit_is_fatal
+ok   reg_wire_regfile_count_allocate_nothing_in_the_loop
+./build/clang-release/test_kinds: 11 passed, 0 failed, 1 skipped (debug-only)
+ok   a_synthetic_chip_is_deterministic_and_busy
+ok   n_chips_on_n_threads_match_one_at_a_time
+ok   n_chips_built_and_run_on_their_own_threads
+ok   the_same_chip_twice_on_two_threads
+ok   the_same_sim_twice_is_refused
+./build/clang-release/test_parallel: 5 passed, 0 failed, 0 skipped (debug-only)
+ok   conforms_link_1
+ok   conforms_link_2
+ok   conforms_link_3
+ok   conforms_link_8
+ok   conforms_fifo_1
+ok   conforms_fifo_2
+ok   conforms_fifo_4
+ok   conforms_fifo_16
+ok   conforms_credit_1
+ok   conforms_credit_2
+ok   conforms_credit_4
+ok   conforms_credit_16
+ok   conforms_hold
+ok   conforms_reg
+     rlink-1-2: the reserved link is M2's (PORTS.md 2a), not run
+ok   conforms_rlink_1_2
+     rlink-2-4: the reserved link is M2's (PORTS.md 2a), not run
+ok   conforms_rlink_2_4
+     rlink-3-8: the reserved link is M2's (PORTS.md 2a), not run
+ok   conforms_rlink_3_8
+./build/clang-release/test_portconf: 17 passed, 0 failed, 0 skipped (debug-only)
+ok   regblock_reset_view
+ok   regblock_go_and_landing
+ok   regblock_done_gate
+ok   regblock_consume_clears_only_what_it_returned
+ok   regblock_errors_and_interrupt
+ok   regblock_events_required
+ok   regblock_request_fifo
+./build/clang-release/test_regblock: 7 passed, 0 failed, 0 skipped (debug-only)
+ok   type_ids_follow_each_configs_first_add_order
+ok   two_configs_on_two_threads_get_the_same_ids
+./build/clang-release/test_registry: 2 passed, 0 failed, 0 skipped (debug-only)
+ok   ring_words_needed_rounds_to_lines
+ok   ring_depth_one_width_one
+ok   ring_wraps_and_keeps_order
+ok   ring_fills_exactly_to_depth
+ok   ring_cycle_loop_ops_never_allocate
+ok   ring_differential_seed_1
+ok   ring_differential_seed_2
+ok   ring_differential_seed_3
+ok   ring_full_is_fatal
+ok   ring_zero_width_is_fatal
+./build/clang-release/test_ring: 10 passed, 0 failed, 3 skipped (debug-only)
+ok   rv32_alu_immediates_and_registers
+ok   rv32_slt_signedness
+ok   rv32_multiplies_against_wide_arithmetic
+ok   rv32_divide_opcodes_are_illegal
+ok   rv32_loads_and_stores_extend
+ok   rv32_memory_aliases_past_32k
+ok   rv32_misaligned_access_is_ub
+ok   rv32_bus_errors
+ok   rv32_block_load_takes_two_cycles_and_samples_in_the_second
+ok   rv32_block_load_waits_before_its_checks
+ok   rv32_block_words
+ok   rv32_block_store_faults
+ok   rv32_request_send_refused_is_reexecuted
+ok   rv32_sim_exit_halts_after_its_retire_line
+ok   rv32_router_register_not_modelled
+ok   rv32_write_counter_not_modelled
+ok   rv32_request_receive_not_modelled
+ok   rv32_peripheral_window_not_modelled
+ok   rv32_hist_not_modelled
+ok   rv32_table_store_not_modelled
+ok   rv32_branch_timing
+ok   rv32_jalr_clears_bit0_and_misaligned_target_halts
+ok   rv32_halts
+ok   rv32_csrs
+ok   rv32_mcycle_write_and_mtime
+ok   rv32_mip_reads_the_interrupt_term
+ok   rv32_trap_inside_the_handler_halts
+ok   rv32_park_loop_in_the_handler
+ok   rv32_interrupt_waits_for_a_stall_but_not_a_block_load
+ok   rv32_wfi_sleeps_and_wakes
+ok   rv32_wfi_falls_through_when_the_term_holds
+ok   rv32_interrupt_in_wfi_traps_without_a_wake_line
+ok   rv32_sleeping_through_a_stall_equals_stepping_it
+ok   rv32_digest_is_the_same_slept_or_stepped
+./build/clang-release/test_rv32: 34 passed, 0 failed, 0 skipped (debug-only)
+ok   pool_words_needed_rounds_to_lines
+ok   pool_lowest_free_first_and_values_kept
+ok   pool_values_are_16_byte_aligned
+ok   pool_cycle_loop_ops_never_allocate
+ok   pool_differential_seed_1
+ok   pool_differential_seed_2
+ok   pool_differential_seed_3
+ok   pool_full_is_fatal
+ok   slot_pool_wide_class_sizes_allocates_and_frees
+ok   slot_pool_full_is_fatal_naming_the_class
+./build/clang-release/test_value_pool: 10 passed, 0 failed, 4 skipped (debug-only)
+ok   a_wide_class_sizes_allocates_and_frees_over_a_fifo
+ok   a_fifo_overflow_frees_the_dropped_slot
+ok   a_wide_class_over_a_link_with_held_slots
+ok   allocating_beyond_the_declared_size_is_fatal
+ok   both_ends_declare_the_same_class
+ok   no_leak_reported_for_lines_in_flight_queued_or_held
+./build/clang-release/test_wide: 6 passed, 0 failed, 1 skipped (debug-only)
+==== make check: all passed (gcc clang; debug, release)

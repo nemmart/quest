@@ -1,0 +1,6 @@
+golden (engine, 1 threads, pinned, 6 option sets): 67 runs in rounds of 1, all match, 0.140 s  [CPUs 0]
+golden (engine, 2 threads, pinned, 6 option sets): 67 runs in rounds of 2, all match, 0.093 s  [CPUs 0,2]
+golden (engine, 4 threads, pinned, 6 option sets): 67 runs in rounds of 4, all match, 0.075 s  [CPUs 0,2,4,6]
+golden (engine, 6 threads, pinned, 6 option sets): 67 runs in rounds of 6, all match, 0.070 s  [CPUs 0,2,4,6,8,10]
+golden (engine, 12 threads, pinned, 6 option sets): 67 runs in rounds of 12, all match, 0.063 s  [CPUs 0,1,2,3,4,5,6,7,8,9,10,11]
+golden (engine, 16 threads, 6 option sets): 67 runs in rounds of 16, all match, 0.061 s  [unpinned]
