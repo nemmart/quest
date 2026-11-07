@@ -1,0 +1,195 @@
+
+==== machine  [08:44:42]
+6.8.0-147-generic
+16
+CPU(s):                                  16
+Model name:                              Intel(R) Core(TM) i5-14400F
+CPU(s) scaling MHz:                      18%
+ 08:44:42 up 2 days, 23:48,  2 users,  load average: 0.01, 0.02, 0.03
+Ubuntu clang version 18.1.3 (1ubuntu1)
+
+==== build (clang release, D18) and the thread tests (clang debug: ASan, UBSan)  [08:44:42]
+ok   a_synthetic_chip_is_deterministic_and_busy
+ok   n_chips_on_n_threads_match_one_at_a_time
+ok   n_chips_built_and_run_on_their_own_threads
+ok   the_same_chip_twice_on_two_threads
+ok   the_same_sim_twice_is_refused
+./build/clang-debug/test_parallel: 5 passed, 0 failed, 0 skipped (debug-only)
+VERDICT test_parallel (debug): PASS
+
+==== footprint per chip (D15), from Sizes  [08:44:49]
+sizes chip=mesh total_bytes=276800 chips=1
+sizes chip=mesh structure="counts" bytes=0 count=0
+sizes chip=mesh structure="far wakes (heap)" bytes=256 count=1
+sizes chip=mesh structure="fifo ports" bytes=0 count=0
+sizes chip=mesh structure="hold ports" bytes=0 count=0
+sizes chip=mesh structure="instances: edge bits" bytes=512 count=1
+sizes chip=mesh structure="instances: heap places" bytes=256 count=1
+sizes chip=mesh structure="instances: ready masks" bytes=512 count=1
+sizes chip=mesh structure="instances: run of" bytes=256 count=1
+sizes chip=mesh structure="instances: step counts" bytes=512 count=1
+sizes chip=mesh structure="instances: wake cycles" bytes=512 count=1
+sizes chip=mesh structure="link ports" bytes=28672 count=512
+sizes chip=mesh structure="readers" bytes=0 count=0
+sizes chip=mesh structure="readers: bits" bytes=0 count=0
+sizes chip=mesh structure="reg ports" bytes=0 count=0
+sizes chip=mesh structure="regfile ports" bytes=0 count=0
+sizes chip=mesh structure="ring link w0" bytes=16384 count=256
+sizes chip=mesh structure="ring link w3" bytes=32768 count=256
+sizes chip=mesh structure="routes" bytes=20480 count=512
+sizes chip=mesh structure="run sets" bytes=128 count=64
+sizes chip=mesh structure="runs" bytes=128 count=1
+sizes chip=mesh structure="slot pools: allowances" bytes=0 count=0
+sizes chip=mesh structure="slot pools: headers" bytes=0 count=0
+sizes chip=mesh structure="wheel link w0" bytes=8192 count=4
+sizes chip=mesh structure="wheel link w0: buckets" bytes=128 count=4
+sizes chip=mesh structure="wheel link w3" bytes=32768 count=4
+sizes chip=mesh structure="wheel link w3: buckets" bytes=128 count=4
+sizes chip=mesh structure="wheels: headers" bytes=64 count=2
+sizes chip=mesh structure="wire ports" bytes=0 count=0
+sizes chip=mesh type="ports of mesh::Router" bytes=49152 count=512
+sizes chip=mesh type="unit mesh::Router" bytes=134144 count=64
+sizes chip=synth total_bytes=153856 chips=1
+sizes chip=synth structure="counts" bytes=2304 count=72
+sizes chip=synth structure="far wakes (heap)" bytes=320 count=1
+sizes chip=synth structure="fifo ports" bytes=11264 count=128
+sizes chip=synth structure="hold ports" bytes=4096 count=64
+sizes chip=synth structure="instances: edge bits" bytes=576 count=1
+sizes chip=synth structure="instances: heap places" bytes=320 count=1
+sizes chip=synth structure="instances: ready masks" bytes=576 count=1
+sizes chip=synth structure="instances: run of" bytes=320 count=1
+sizes chip=synth structure="instances: step counts" bytes=576 count=1
+sizes chip=synth structure="instances: wake cycles" bytes=576 count=1
+sizes chip=synth structure="link ports" bytes=7168 count=128
+sizes chip=synth structure="readers" bytes=1024 count=256
+sizes chip=synth structure="readers: bits" bytes=256 count=256
+sizes chip=synth structure="reg ports" bytes=2560 count=64
+sizes chip=synth structure="regfile ports" bytes=2048 count=64
+sizes chip=synth structure="regfile registers" bytes=4096 count=64
+sizes chip=synth structure="ring credit w1" bytes=4096 count=64
+sizes chip=synth structure="ring fifo w2" bytes=4096 count=64
+sizes chip=synth structure="ring link w0" bytes=5696 count=64
+sizes chip=synth structure="ring link w3" bytes=12736 count=64
+sizes chip=synth structure="routes" bytes=17920 count=448
+sizes chip=synth structure="run sets" bytes=256 count=72
+sizes chip=synth structure="runs" bytes=192 count=2
+sizes chip=synth structure="slot pools: allowances" bytes=0 count=0
+sizes chip=synth structure="slot pools: headers" bytes=0 count=0
+sizes chip=synth structure="wheel credit fifo w1" bytes=2048 count=2
+sizes chip=synth structure="wheel credit fifo w1: buckets" bytes=64 count=2
+sizes chip=synth structure="wheel credit return w0" bytes=1024 count=2
+sizes chip=synth structure="wheel credit return w0: buckets" bytes=64 count=2
+sizes chip=synth structure="wheel fifo w2" bytes=3072 count=2
+sizes chip=synth structure="wheel fifo w2: buckets" bytes=64 count=2
+sizes chip=synth structure="wheel hold w3" bytes=4096 count=2
+sizes chip=synth structure="wheel hold w3: buckets" bytes=64 count=2
+sizes chip=synth structure="wheel link w0" bytes=8192 count=16
+sizes chip=synth structure="wheel link w0: buckets" bytes=512 count=16
+sizes chip=synth structure="wheel link w3" bytes=32768 count=16
+sizes chip=synth structure="wheel link w3: buckets" bytes=512 count=16
+sizes chip=synth structure="wheel reg w2" bytes=3072 count=2
+sizes chip=synth structure="wheel reg w2: buckets" bytes=64 count=2
+sizes chip=synth structure="wheels: headers" bytes=128 count=7
+sizes chip=synth structure="wire ports" bytes=2560 count=64
+sizes chip=synth type="ports of synth::Node" bytes=30720 count=320
+sizes chip=synth type="unit synth::Leaf" bytes=1216 count=8
+sizes chip=synth type="unit synth::Node" bytes=11264 count=64
+
+==== 1. one chip per thread (as W6's N1): P-cores one per core 1..6, then 12 with hyperthreads; E-cores 1 and 4; 3 repeats  [08:44:49]
+N1-P1 threads form=1 chip=mesh chips=1 threads=1 cycles=40000 secs=0.2250 rate=177768 slowest=177768 mean=177768 us_per_chip_cycle=5.625 words_per_chip=34600 digest=a1b3bf9fe27fc079
+N1-P2 threads form=1 chip=mesh chips=2 threads=2 cycles=40000 secs=0.2399 rate=333437 slowest=166719 mean=172264 us_per_chip_cycle=5.805 words_per_chip=34600 digest=a25b4d4e5f06c97e
+N1-P3 threads form=1 chip=mesh chips=3 threads=3 cycles=40000 secs=0.2458 rate=488137 slowest=162712 mean=166872 us_per_chip_cycle=5.993 words_per_chip=34600 digest=f8c2d9f56383972f
+N1-P4 threads form=1 chip=mesh chips=4 threads=4 cycles=40000 secs=0.2508 rate=637989 slowest=159497 mean=162977 us_per_chip_cycle=6.136 words_per_chip=34600 digest=eecd4cee99cb5873
+N1-P5 threads form=1 chip=mesh chips=5 threads=5 cycles=40000 secs=0.2749 rate=727541 slowest=145508 mean=148793 us_per_chip_cycle=6.721 words_per_chip=34600 digest=e7802237985989e0
+N1-P6 threads form=1 chip=mesh chips=6 threads=6 cycles=40000 secs=0.2746 rate=874112 slowest=145685 mean=148591 us_per_chip_cycle=6.730 words_per_chip=34600 digest=19a76cd931ac75ea
+N1-P12 threads form=1 chip=mesh chips=12 threads=12 cycles=40000 secs=0.3736 rate=1284961 slowest=107080 mean=107365 us_per_chip_cycle=9.314 words_per_chip=34600 digest=bac60a4d8e7908e3
+N1-E1 threads form=1 chip=mesh chips=1 threads=1 cycles=40000 secs=0.3998 rate=100055 slowest=100055 mean=100055 us_per_chip_cycle=9.994 words_per_chip=34600 digest=a1b3bf9fe27fc079
+N1-E4 threads form=1 chip=mesh chips=4 threads=4 cycles=40000 secs=0.4326 rate=369878 slowest=92470 mean=93415 us_per_chip_cycle=10.705 words_per_chip=34600 digest=eecd4cee99cb5873
+N1-P1 threads form=1 chip=synth chips=1 threads=1 cycles=40000 secs=0.2516 rate=158985 slowest=158985 mean=158985 us_per_chip_cycle=6.290 words_per_chip=19232 digest=86c03a2ff060fa4e
+N1-P2 threads form=1 chip=synth chips=2 threads=2 cycles=40000 secs=0.2557 rate=312822 slowest=156411 mean=158350 us_per_chip_cycle=6.315 words_per_chip=19232 digest=b826a4d688fdf4a8
+N1-P3 threads form=1 chip=synth chips=3 threads=3 cycles=40000 secs=0.2668 rate=449762 slowest=149921 mean=153126 us_per_chip_cycle=6.531 words_per_chip=19232 digest=bb41a209c6f26047
+N1-P4 threads form=1 chip=synth chips=4 threads=4 cycles=40000 secs=0.2604 rate=614359 slowest=153590 mean=154839 us_per_chip_cycle=6.458 words_per_chip=19232 digest=cbb6f75b01b5a28e
+N1-P5 threads form=1 chip=synth chips=5 threads=5 cycles=40000 secs=0.2994 rate=667956 slowest=133591 mean=134970 us_per_chip_cycle=7.409 words_per_chip=19232 digest=7e8b8a34007bea96
+N1-P6 threads form=1 chip=synth chips=6 threads=6 cycles=40000 secs=0.2959 rate=811084 slowest=135181 mean=136262 us_per_chip_cycle=7.339 words_per_chip=19232 digest=4dd9a65ffd25ab18
+N1-P12 threads form=1 chip=synth chips=12 threads=12 cycles=40000 secs=0.4673 rate=1027250 slowest=85604 mean=85913 us_per_chip_cycle=11.640 words_per_chip=19232 digest=a960c17bc5803422
+N1-E1 threads form=1 chip=synth chips=1 threads=1 cycles=40000 secs=0.4616 rate=86647 slowest=86647 mean=86647 us_per_chip_cycle=11.541 words_per_chip=19232 digest=86c03a2ff060fa4e
+N1-E4 threads form=1 chip=synth chips=4 threads=4 cycles=40000 secs=0.4785 rate=334379 slowest=83595 mean=83785 us_per_chip_cycle=11.935 words_per_chip=19232 digest=cbb6f75b01b5a28e
+N1-P1 threads form=1 chip=mesh chips=1 threads=1 cycles=40000 secs=0.2250 rate=177791 slowest=177791 mean=177791 us_per_chip_cycle=5.625 words_per_chip=34600 digest=a1b3bf9fe27fc079
+N1-P2 threads form=1 chip=mesh chips=2 threads=2 cycles=40000 secs=0.2261 rate=353899 slowest=176950 mean=177203 us_per_chip_cycle=5.643 words_per_chip=34600 digest=a25b4d4e5f06c97e
+N1-P3 threads form=1 chip=mesh chips=3 threads=3 cycles=40000 secs=0.2473 rate=485337 slowest=161779 mean=167980 us_per_chip_cycle=5.953 words_per_chip=34600 digest=f8c2d9f56383972f
+N1-P4 threads form=1 chip=mesh chips=4 threads=4 cycles=40000 secs=0.2472 rate=647160 slowest=161790 mean=165097 us_per_chip_cycle=6.057 words_per_chip=34600 digest=eecd4cee99cb5873
+N1-P5 threads form=1 chip=mesh chips=5 threads=5 cycles=40000 secs=0.2775 rate=720732 slowest=144146 mean=148937 us_per_chip_cycle=6.714 words_per_chip=34600 digest=e7802237985989e0
+N1-P6 threads form=1 chip=mesh chips=6 threads=6 cycles=40000 secs=0.2747 rate=873596 slowest=145599 mean=150646 us_per_chip_cycle=6.638 words_per_chip=34600 digest=19a76cd931ac75ea
+N1-P12 threads form=1 chip=mesh chips=12 threads=12 cycles=40000 secs=0.3728 rate=1287514 slowest=107293 mean=107533 us_per_chip_cycle=9.300 words_per_chip=34600 digest=bac60a4d8e7908e3
+N1-E1 threads form=1 chip=mesh chips=1 threads=1 cycles=40000 secs=0.3849 rate=103916 slowest=103916 mean=103916 us_per_chip_cycle=9.623 words_per_chip=34600 digest=a1b3bf9fe27fc079
+N1-E4 threads form=1 chip=mesh chips=4 threads=4 cycles=40000 secs=0.4312 rate=371092 slowest=92773 mean=93467 us_per_chip_cycle=10.699 words_per_chip=34600 digest=eecd4cee99cb5873
+N1-P1 threads form=1 chip=synth chips=1 threads=1 cycles=40000 secs=0.2506 rate=159607 slowest=159607 mean=159607 us_per_chip_cycle=6.265 words_per_chip=19232 digest=86c03a2ff060fa4e
+N1-P2 threads form=1 chip=synth chips=2 threads=2 cycles=40000 secs=0.2634 rate=303701 slowest=151851 mean=156048 us_per_chip_cycle=6.408 words_per_chip=19232 digest=b826a4d688fdf4a8
+N1-P3 threads form=1 chip=synth chips=3 threads=3 cycles=40000 secs=0.2667 rate=449887 slowest=149962 mean=153471 us_per_chip_cycle=6.516 words_per_chip=19232 digest=bb41a209c6f26047
+N1-P4 threads form=1 chip=synth chips=4 threads=4 cycles=40000 secs=0.2667 rate=599836 slowest=149959 mean=152252 us_per_chip_cycle=6.568 words_per_chip=19232 digest=cbb6f75b01b5a28e
+N1-P5 threads form=1 chip=synth chips=5 threads=5 cycles=40000 secs=0.2975 rate=672282 slowest=134456 mean=137182 us_per_chip_cycle=7.290 words_per_chip=19232 digest=7e8b8a34007bea96
+N1-P6 threads form=1 chip=synth chips=6 threads=6 cycles=40000 secs=0.3006 rate=798479 slowest=133080 mean=135219 us_per_chip_cycle=7.395 words_per_chip=19232 digest=4dd9a65ffd25ab18
+N1-P12 threads form=1 chip=synth chips=12 threads=12 cycles=40000 secs=0.4673 rate=1027235 slowest=85603 mean=85920 us_per_chip_cycle=11.639 words_per_chip=19232 digest=a960c17bc5803422
+N1-E1 threads form=1 chip=synth chips=1 threads=1 cycles=40000 secs=0.4624 rate=86507 slowest=86507 mean=86507 us_per_chip_cycle=11.560 words_per_chip=19232 digest=86c03a2ff060fa4e
+N1-E4 threads form=1 chip=synth chips=4 threads=4 cycles=40000 secs=0.4780 rate=334708 slowest=83677 mean=83782 us_per_chip_cycle=11.936 words_per_chip=19232 digest=cbb6f75b01b5a28e
+N1-P1 threads form=1 chip=mesh chips=1 threads=1 cycles=40000 secs=0.2270 rate=176242 slowest=176242 mean=176242 us_per_chip_cycle=5.674 words_per_chip=34600 digest=a1b3bf9fe27fc079
+N1-P2 threads form=1 chip=mesh chips=2 threads=2 cycles=40000 secs=0.2265 rate=353158 slowest=176579 mean=177743 us_per_chip_cycle=5.626 words_per_chip=34600 digest=a25b4d4e5f06c97e
+N1-P3 threads form=1 chip=mesh chips=3 threads=3 cycles=40000 secs=0.2469 rate=486058 slowest=162019 mean=165443 us_per_chip_cycle=6.044 words_per_chip=34600 digest=f8c2d9f56383972f
+N1-P4 threads form=1 chip=mesh chips=4 threads=4 cycles=40000 secs=0.2468 rate=648252 slowest=162063 mean=165234 us_per_chip_cycle=6.052 words_per_chip=34600 digest=eecd4cee99cb5873
+N1-P5 threads form=1 chip=mesh chips=5 threads=5 cycles=40000 secs=0.2747 rate=728104 slowest=145621 mean=147995 us_per_chip_cycle=6.757 words_per_chip=34600 digest=e7802237985989e0
+N1-P6 threads form=1 chip=mesh chips=6 threads=6 cycles=40000 secs=0.2789 rate=860444 slowest=143407 mean=148752 us_per_chip_cycle=6.723 words_per_chip=34600 digest=19a76cd931ac75ea
+N1-P12 threads form=1 chip=mesh chips=12 threads=12 cycles=40000 secs=0.3729 rate=1287064 slowest=107255 mean=107563 us_per_chip_cycle=9.297 words_per_chip=34600 digest=bac60a4d8e7908e3
+N1-E1 threads form=1 chip=mesh chips=1 threads=1 cycles=40000 secs=0.3926 rate=101878 slowest=101878 mean=101878 us_per_chip_cycle=9.816 words_per_chip=34600 digest=a1b3bf9fe27fc079
+N1-E4 threads form=1 chip=mesh chips=4 threads=4 cycles=40000 secs=0.4289 rate=373044 slowest=93261 mean=93532 us_per_chip_cycle=10.692 words_per_chip=34600 digest=eecd4cee99cb5873
+N1-P1 threads form=1 chip=synth chips=1 threads=1 cycles=40000 secs=0.2518 rate=158859 slowest=158859 mean=158859 us_per_chip_cycle=6.295 words_per_chip=19232 digest=86c03a2ff060fa4e
+N1-P2 threads form=1 chip=synth chips=2 threads=2 cycles=40000 secs=0.2638 rate=303262 slowest=151631 mean=155834 us_per_chip_cycle=6.417 words_per_chip=19232 digest=b826a4d688fdf4a8
+N1-P3 threads form=1 chip=synth chips=3 threads=3 cycles=40000 secs=0.2639 rate=454702 slowest=151567 mean=154031 us_per_chip_cycle=6.492 words_per_chip=19232 digest=bb41a209c6f26047
+N1-P4 threads form=1 chip=synth chips=4 threads=4 cycles=40000 secs=0.2738 rate=584380 slowest=146095 mean=149228 us_per_chip_cycle=6.701 words_per_chip=19232 digest=cbb6f75b01b5a28e
+N1-P5 threads form=1 chip=synth chips=5 threads=5 cycles=40000 secs=0.2987 rate=669584 slowest=133917 mean=136203 us_per_chip_cycle=7.342 words_per_chip=19232 digest=7e8b8a34007bea96
+N1-P6 threads form=1 chip=synth chips=6 threads=6 cycles=40000 secs=0.3009 rate=797605 slowest=132934 mean=136383 us_per_chip_cycle=7.332 words_per_chip=19232 digest=4dd9a65ffd25ab18
+N1-P12 threads form=1 chip=synth chips=12 threads=12 cycles=40000 secs=0.4664 rate=1029170 slowest=85764 mean=85976 us_per_chip_cycle=11.631 words_per_chip=19232 digest=a960c17bc5803422
+N1-E1 threads form=1 chip=synth chips=1 threads=1 cycles=40000 secs=0.4629 rate=86420 slowest=86420 mean=86420 us_per_chip_cycle=11.571 words_per_chip=19232 digest=86c03a2ff060fa4e
+N1-E4 threads form=1 chip=synth chips=4 threads=4 cycles=40000 secs=0.4809 rate=332708 slowest=83177 mean=83654 us_per_chip_cycle=11.954 words_per_chip=19232 digest=cbb6f75b01b5a28e
+
+==== 2. sixteen chips per thread (past L2, as W6's N16): P1, P6, P12; E4; 3 repeats  [08:45:09]
+N16-P1 threads form=1 chip=mesh chips=16 threads=1 cycles=4000 secs=0.3625 rate=176570 slowest=176570 mean=176570 us_per_chip_cycle=5.663 words_per_chip=34600 digest=0d227e2cbe7e9f82
+N16-P6 threads form=1 chip=mesh chips=96 threads=6 cycles=4000 secs=0.4144 rate=926663 slowest=154444 mean=154707 us_per_chip_cycle=6.464 words_per_chip=34600 digest=a60ab0220c9db404
+N16-P12 threads form=1 chip=mesh chips=192 threads=12 cycles=4000 secs=0.5981 rate=1284161 slowest=107013 mean=107218 us_per_chip_cycle=9.327 words_per_chip=34600 digest=f5f610114eafd62c
+N16-E4 threads form=1 chip=mesh chips=64 threads=4 cycles=4000 secs=0.7060 rate=362614 slowest=90653 mean=92857 us_per_chip_cycle=10.769 words_per_chip=34600 digest=c3183e0165c7e99e
+N16-P1 threads form=1 chip=synth chips=16 threads=1 cycles=4000 secs=0.4049 rate=158063 slowest=158063 mean=158063 us_per_chip_cycle=6.327 words_per_chip=19232 digest=6967624e9aa7e9e3
+N16-P6 threads form=1 chip=synth chips=96 threads=6 cycles=4000 secs=0.4668 rate=822585 slowest=137098 mean=137425 us_per_chip_cycle=7.277 words_per_chip=19232 digest=f64f47971b7a649d
+N16-P12 threads form=1 chip=synth chips=192 threads=12 cycles=4000 secs=0.7477 rate=1027120 slowest=85593 mean=85683 us_per_chip_cycle=11.671 words_per_chip=19232 digest=3d3334abf5f0bd95
+N16-E4 threads form=1 chip=synth chips=64 threads=4 cycles=4000 secs=0.7741 rate=330716 slowest=82679 mean=82908 us_per_chip_cycle=12.062 words_per_chip=19232 digest=a336b10da8f92eff
+N16-P1 threads form=1 chip=mesh chips=16 threads=1 cycles=4000 secs=0.3626 rate=176503 slowest=176503 mean=176503 us_per_chip_cycle=5.666 words_per_chip=34600 digest=0d227e2cbe7e9f82
+N16-P6 threads form=1 chip=mesh chips=96 threads=6 cycles=4000 secs=0.4148 rate=925715 slowest=154286 mean=154750 us_per_chip_cycle=6.462 words_per_chip=34600 digest=a60ab0220c9db404
+N16-P12 threads form=1 chip=mesh chips=192 threads=12 cycles=4000 secs=0.5980 rate=1284175 slowest=107015 mean=107248 us_per_chip_cycle=9.324 words_per_chip=34600 digest=f5f610114eafd62c
+N16-E4 threads form=1 chip=mesh chips=64 threads=4 cycles=4000 secs=0.7037 rate=363787 slowest=90947 mean=91923 us_per_chip_cycle=10.879 words_per_chip=34600 digest=c3183e0165c7e99e
+N16-P1 threads form=1 chip=synth chips=16 threads=1 cycles=4000 secs=0.4053 rate=157902 slowest=157902 mean=157902 us_per_chip_cycle=6.333 words_per_chip=19232 digest=6967624e9aa7e9e3
+N16-P6 threads form=1 chip=synth chips=96 threads=6 cycles=4000 secs=0.4669 rate=822526 slowest=137088 mean=137334 us_per_chip_cycle=7.282 words_per_chip=19232 digest=f64f47971b7a649d
+N16-P12 threads form=1 chip=synth chips=192 threads=12 cycles=4000 secs=0.7483 rate=1026382 slowest=85532 mean=85691 us_per_chip_cycle=11.670 words_per_chip=19232 digest=3d3334abf5f0bd95
+N16-E4 threads form=1 chip=synth chips=64 threads=4 cycles=4000 secs=0.7731 rate=331142 slowest=82785 mean=83098 us_per_chip_cycle=12.034 words_per_chip=19232 digest=a336b10da8f92eff
+N16-P1 threads form=1 chip=mesh chips=16 threads=1 cycles=4000 secs=0.3614 rate=177095 slowest=177095 mean=177095 us_per_chip_cycle=5.647 words_per_chip=34600 digest=0d227e2cbe7e9f82
+N16-P6 threads form=1 chip=mesh chips=96 threads=6 cycles=4000 secs=0.4155 rate=924152 slowest=154025 mean=154414 us_per_chip_cycle=6.476 words_per_chip=34600 digest=a60ab0220c9db404
+N16-P12 threads form=1 chip=mesh chips=192 threads=12 cycles=4000 secs=0.5979 rate=1284452 slowest=107038 mean=107277 us_per_chip_cycle=9.322 words_per_chip=34600 digest=f5f610114eafd62c
+N16-E4 threads form=1 chip=mesh chips=64 threads=4 cycles=4000 secs=0.7008 rate=365279 slowest=91320 mean=92525 us_per_chip_cycle=10.808 words_per_chip=34600 digest=c3183e0165c7e99e
+N16-P1 threads form=1 chip=synth chips=16 threads=1 cycles=4000 secs=0.4048 rate=158096 slowest=158096 mean=158096 us_per_chip_cycle=6.325 words_per_chip=19232 digest=6967624e9aa7e9e3
+N16-P6 threads form=1 chip=synth chips=96 threads=6 cycles=4000 secs=0.4673 rate=821738 slowest=136956 mean=137299 us_per_chip_cycle=7.283 words_per_chip=19232 digest=f64f47971b7a649d
+N16-P12 threads form=1 chip=synth chips=192 threads=12 cycles=4000 secs=0.7480 rate=1026740 slowest=85562 mean=85671 us_per_chip_cycle=11.673 words_per_chip=19232 digest=3d3334abf5f0bd95
+N16-E4 threads form=1 chip=synth chips=64 threads=4 cycles=4000 secs=0.7800 rate=328215 slowest=82054 mean=82735 us_per_chip_cycle=12.087 words_per_chip=19232 digest=a336b10da8f92eff
+
+==== 3. the same 12 chips on 1, 6 and 12 threads: identical digests (and IPC, perf stat)  [08:45:24]
+D-P1 threads form=1 chip=mesh chips=12 threads=1 cycles=10000 secs=0.6787 rate=176797 slowest=176797 mean=176797 us_per_chip_cycle=5.656 words_per_chip=34600 digest=77f981e76f29fc11 perf: core_cycles=3519319549 core_instr=6887299464 core_cmiss=158334 atom_cycles=0 atom_instr=0
+D-P6 threads form=1 chip=mesh chips=12 threads=6 cycles=10000 secs=0.1369 rate=876826 slowest=146138 mean=151813 us_per_chip_cycle=6.587 words_per_chip=34600 digest=77f981e76f29fc11 perf: core_cycles=3607595811 core_instr=6928036669 core_cmiss=142077 atom_cycles=0 atom_instr=0
+D-P12 threads form=1 chip=mesh chips=12 threads=12 cycles=10000 secs=0.0966 rate=1242687 slowest=103557 mean=103682 us_per_chip_cycle=9.645 words_per_chip=34600 digest=77f981e76f29fc11 perf: core_cycles=5085916412 core_instr=6909642266 core_cmiss=191570 atom_cycles=0 atom_instr=0
+VERDICT digests of 12 mesh chips on 1, 6, 12 threads: PASS
+D-P1 threads form=1 chip=synth chips=12 threads=1 cycles=10000 secs=0.7608 rate=157733 slowest=157733 mean=157733 us_per_chip_cycle=6.340 words_per_chip=19232 digest=6a5f7de8ede35a38 perf: core_cycles=3946806394 core_instr=7953379509 core_cmiss=109002 atom_cycles=0 atom_instr=0
+D-P6 threads form=1 chip=synth chips=12 threads=6 cycles=10000 secs=0.1478 rate=811783 slowest=135297 mean=136627 us_per_chip_cycle=7.319 words_per_chip=19232 digest=6a5f7de8ede35a38 perf: core_cycles=4000081151 core_instr=7987499227 core_cmiss=108191 atom_cycles=0 atom_instr=0
+D-P12 threads form=1 chip=synth chips=12 threads=12 cycles=10000 secs=0.1170 rate=1025881 slowest=85490 mean=85873 us_per_chip_cycle=11.645 words_per_chip=19232 digest=6a5f7de8ede35a38 perf: core_cycles=6336751913 core_instr=7973282569 core_cmiss=156087 atom_cycles=0 atom_instr=0
+VERDICT digests of 12 synth chips on 1, 6, 12 threads: PASS
+VERDICT every run completed: PASS
+
+==== done in 44 s  [08:45:26]
+eads: PASS
+VERDICT every run completed: PASS
+
+==== done in 44 s  [08:45:26]
