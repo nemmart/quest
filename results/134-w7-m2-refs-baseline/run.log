@@ -1,5 +1,5 @@
 
-==== machine (D21)  [12:13:40]
+==== machine (D21)  [12:26:04]
 model:     Intel(R) Core(TM) i5-14400F
 sockets:   1, CPUs online 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15 (16)
 P cores:   6 cores, CPUs 0,1,2,3,4,5,6,7,8,9,10,11 (12 threads), max 4700000 kHz, min 800000 kHz
@@ -13,32 +13,32 @@ clang:     Ubuntu clang version 18.1.3 (1ubuntu1)
 java:      openjdk version "21.0.12.1" 2026-08-18
 pinned to CPU 0 (the first of P_ONE 0,2,4,6,8,10)
 openjdk version "21.0.12.1" 2026-08-18
- 12:13:40 up 3 days,  3:17,  1 user,  load average: 0.08, 0.02, 0.01
+ 12:26:04 up 3 days,  3:30,  1 user,  load average: 4.89, 3.19, 1.55
 
-==== build: a scratch copy of sim/ref/meshsim with golden-m2's images, ref and the drivers (as regen.sh builds them)  [12:13:40]
+==== build: a scratch copy of sim/ref/meshsim with golden-m2's images, ref and the drivers (as regen.sh builds them)  [12:26:04]
 keys-65536/uniform.keys a7636b687a6db39cac8fbf63c2f16f686fd1ce858fe8a7ed5d98621e452c9b7a
 VERDICT the key file is Quest 118's: PASS
 
-==== 2. baseline: M2Sort x 3 (hooks off), then SortTest as a whole JVM, each alone on CPU 0  [12:13:44]
+==== 2. baseline: M2Sort x 3 (hooks off), then SortTest as a whole JVM, each alone on CPU 0  [12:26:08]
 sort uniform.keys k128: TOTAL 1229687 cycles (L1 GO at 14838 -> L2 all READY at 1244525); boot 14791 cycles; run end at cycle 1244564; phases 99
 verify: keys misplaced 0, receive sizes wrong 0, values wrong 0, every core exited 0 true, violations 0, ERRORS 0: PASS
-timing: jvm start -> main 0.005 s; key file and oracle 0.523 s; chip 0.120 s; boot 1.301 s (14791 cycles); input load 0.133 s; setup total (jvm start -> run start) 2.084 s
-timing: the run (runUntil) 96.005 s for 1229773 cycles (78.07 us/cycle); the counted span (L1 GO -> L2 all READY) 95.981 s for 1229687 cycles (78.05 us/cycle); verification 0.143 s; hooks off
+timing: jvm start -> main 0.004 s; key file and oracle 0.538 s; chip 0.120 s; boot 1.425 s (14791 cycles); input load 0.136 s; setup total (jvm start -> run start) 2.226 s
+timing: the run (runUntil) 98.974 s for 1229773 cycles (80.48 us/cycle); the counted span (L1 GO -> L2 all READY) 98.946 s for 1229687 cycles (80.46 us/cycle); verification 0.144 s; hooks off
 VERDICT M2Sort run 1: 1,229,687 cycles, verified: PASS
 sort uniform.keys k128: TOTAL 1229687 cycles (L1 GO at 14838 -> L2 all READY at 1244525); boot 14791 cycles; run end at cycle 1244564; phases 99
 verify: keys misplaced 0, receive sizes wrong 0, values wrong 0, every core exited 0 true, violations 0, ERRORS 0: PASS
-timing: jvm start -> main 0.004 s; key file and oracle 0.541 s; chip 0.122 s; boot 1.332 s (14791 cycles); input load 0.143 s; setup total (jvm start -> run start) 2.145 s
-timing: the run (runUntil) 95.870 s for 1229773 cycles (77.96 us/cycle); the counted span (L1 GO -> L2 all READY) 95.843 s for 1229687 cycles (77.94 us/cycle); verification 0.146 s; hooks off
+timing: jvm start -> main 0.005 s; key file and oracle 0.553 s; chip 0.121 s; boot 1.335 s (14791 cycles); input load 0.134 s; setup total (jvm start -> run start) 2.150 s
+timing: the run (runUntil) 95.519 s for 1229773 cycles (77.67 us/cycle); the counted span (L1 GO -> L2 all READY) 95.489 s for 1229687 cycles (77.65 us/cycle); verification 0.149 s; hooks off
 VERDICT M2Sort run 2: 1,229,687 cycles, verified: PASS
 sort uniform.keys k128: TOTAL 1229687 cycles (L1 GO at 14838 -> L2 all READY at 1244525); boot 14791 cycles; run end at cycle 1244564; phases 99
 verify: keys misplaced 0, receive sizes wrong 0, values wrong 0, every core exited 0 true, violations 0, ERRORS 0: PASS
-timing: jvm start -> main 0.004 s; key file and oracle 0.480 s; chip 0.123 s; boot 1.232 s (14791 cycles); input load 0.138 s; setup total (jvm start -> run start) 1.980 s
-timing: the run (runUntil) 95.827 s for 1229773 cycles (77.92 us/cycle); the counted span (L1 GO -> L2 all READY) 95.802 s for 1229687 cycles (77.91 us/cycle); verification 0.141 s; hooks off
+timing: jvm start -> main 0.005 s; key file and oracle 0.554 s; chip 0.120 s; boot 1.290 s (14791 cycles); input load 0.136 s; setup total (jvm start -> run start) 2.108 s
+timing: the run (runUntil) 95.855 s for 1229773 cycles (77.94 us/cycle); the counted span (L1 GO -> L2 all READY) 95.824 s for 1229687 cycles (77.93 us/cycle); verification 0.137 s; hooks off
 VERDICT M2Sort run 3: 1,229,687 cycles, verified: PASS
-SortTest whole JVM: 97.702040491 s
+SortTest whole JVM: 97.717353336 s
 VERDICT SortTest: 1,229,687 cycles, 0 failed: PASS
 
-==== 3. the full-size references (regen.sh ALL=1 '^sort64k', 3 at a time) into /home/questrunner/data/w7-golden-m2/f47b12f  [12:20:16]
+==== 3. the full-size references (regen.sh ALL=1 '^sort64k', 3 at a time) into /home/questrunner/data/w7-golden-m2/f47b12f  [12:32:43]
 images: 12 files match MANIFEST.md
 regenerated 5 runs; HASHES updated (12 files)
 1f28a3e2bad1eb40c1bbbd901b90ba8fa7224e0f347348a906c2d9f9733d19cf  sort64k.cover.csv
@@ -56,12 +56,12 @@ regenerated 5 runs; HASHES updated (12 files)
 VERDICT sort64k: 1,229,687 cycles, verified: PASS
 VERDICT sort64k files (11): FAIL
 
-==== 4. regen.sh --check of every local reference  [12:24:44]
+==== 4. regen.sh --check of every local reference  [12:37:12]
 images: 12 files match MANIFEST.md
 checked 46 files from 22 runs: all SAME
 VERDICT regen.sh --check (local references): PASS
 
-==== summary  [12:26:00]
+==== summary  [12:38:27]
 VERDICT the key file is Quest 118's: PASS
 VERDICT M2Sort run 1: 1,229,687 cycles, verified: PASS
 VERDICT M2Sort run 2: 1,229,687 cycles, verified: PASS
