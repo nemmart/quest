@@ -1,0 +1,231 @@
+
+==== machine  [09:39:39]
+6.8.0-147-generic
+16
+CPU(s):                                  16
+Model name:                              Intel(R) Core(TM) i5-14400F
+Thread(s) per core:                      2
+CPU(s) scaling MHz:                      57%
+ 09:39:39 up 3 days, 43 min,  1 user,  load average: 0.14, 0.03, 0.05
+Ubuntu clang version 18.1.3 (1ubuntu1)
+openjdk version "21.0.12.1" 2026-08-18
+
+==== build: the framework (clang release), ref (as regen.sh builds it), SpeedRun and TraceRun, the JFR tools  [09:39:39]
+
+==== 1. like for like: the loop's trace at N = 1000, ref against the framework  [09:39:45]
+check: N = 1000, engine = direct driver (9068 lines), SIM_EXIT, count 1000
+wrote /tmp/w5-130/l3/loop.code.bin (15 words) and /tmp/w5-130/l3/loop.trace (9068 lines, N 1000)
+  9038 /tmp/w5-130/a
+  9038 /tmp/w5-130/b
+ 18076 total
+END halt 5 cycle 13048
+REGS 00000100 00000000 000003e8 0007a314 020556c4 ee059350 fffff9f8 00000000 00000200 fffff800 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 01000000 00000300 00000200 00007fc0
+CSRS pc 0100003c mstatus 00000000 mie 00000000 mtvec 02000078 mscratch 00000000 mepc 00000000 mcause 00000000 mtval 00000000 mcycle 00000000000032f8
+DMEM 6c4eecef3092a409e183fb5604a13358278ef2dc855e83af8ba1bc5eaa6cc09c
+VERDICT the loop's trace: ref = framework (N = 1000, body and closing): PASS
+wrote /tmp/w5-130/l4/loop.code.bin (15 words) and /tmp/w5-130/l4/loop.trace (90068 lines, N 10000)
+wrote /tmp/w5-130/l6/loop.code.bin (15 words, N 1000000); no trace above N = 100000
+
+==== 2a. ref, idle-skip on, N = 10^6: 4 runs in one JVM (run 1 warms the JIT)  [09:39:45]
+ref rep 1: 9000028 instructions, 13000048 cycles in 12.646 s: 0.71 M instructions/s, 1.03 M cycles/s, 1405.1 ns per instruction; halt 5, count 1000000
+ref rep 2: 9000028 instructions, 13000048 cycles in 12.017 s: 0.75 M instructions/s, 1.08 M cycles/s, 1335.2 ns per instruction; halt 5, count 1000000
+ref rep 3: 9000028 instructions, 13000048 cycles in 11.794 s: 0.76 M instructions/s, 1.10 M cycles/s, 1310.5 ns per instruction; halt 5, count 1000000
+ref rep 4: 9000028 instructions, 13000048 cycles in 11.705 s: 0.77 M instructions/s, 1.11 M cycles/s, 1300.6 ns per instruction; halt 5, count 1000000
+
+==== 2b. the framework, N = 10^6 and 10^7, 3 runs each  [09:40:33]
+check: N = 1000, engine = direct driver (9068 lines), SIM_EXIT, count 1000
+engine: N 1000000: 9000028 instructions, 13000048 cycles, 10000040 steps (core 10000030, block 6, bench 4) in 0.205 s: 43.91 M instructions/s, 63.43 M cycles/s, 20.50 ns per step
+engine: N 1000000: 9000028 instructions, 13000048 cycles, 10000040 steps (core 10000030, block 6, bench 4) in 0.205 s: 44.01 M instructions/s, 63.57 M cycles/s, 20.45 ns per step
+engine: N 1000000: 9000028 instructions, 13000048 cycles, 10000040 steps (core 10000030, block 6, bench 4) in 0.205 s: 43.99 M instructions/s, 63.54 M cycles/s, 20.46 ns per step
+check: N = 1000, engine = direct driver (9068 lines), SIM_EXIT, count 1000
+engine: N 10000000: 90000028 instructions, 130000048 cycles, 100000040 steps (core 100000030, block 6, bench 4) in 2.046 s: 43.98 M instructions/s, 63.53 M cycles/s, 20.46 ns per step
+engine: N 10000000: 90000028 instructions, 130000048 cycles, 100000040 steps (core 100000030, block 6, bench 4) in 2.046 s: 43.99 M instructions/s, 63.53 M cycles/s, 20.46 ns per step
+engine: N 10000000: 90000028 instructions, 130000048 cycles, 100000040 steps (core 100000030, block 6, bench 4) in 2.046 s: 43.98 M instructions/s, 63.53 M cycles/s, 20.46 ns per step
+
+==== 3a. ref, idle-skip off, N = 10^4: 4 runs in one JVM  [09:40:40]
+ref (idle-skip off) rep 1: 90028 instructions, 130048 cycles in 5.126 s: 0.02 M instructions/s, 0.03 M cycles/s, 56940.3 ns per instruction; halt 5, count 10000
+ref (idle-skip off) rep 2: 90028 instructions, 130048 cycles in 4.849 s: 0.02 M instructions/s, 0.03 M cycles/s, 53866.5 ns per instruction; halt 5, count 10000
+ref (idle-skip off) rep 3: 90028 instructions, 130048 cycles in 4.712 s: 0.02 M instructions/s, 0.03 M cycles/s, 52333.9 ns per instruction; halt 5, count 10000
+ref (idle-skip off) rep 4: 90028 instructions, 130048 cycles in 4.658 s: 0.02 M instructions/s, 0.03 M cycles/s, 51738.1 ns per instruction; halt 5, count 10000
+
+==== 3b. the framework, N = 10^4, 3 runs  [09:41:00]
+check: N = 1000, engine = direct driver (9068 lines), SIM_EXIT, count 1000
+engine: N 10000: 90028 instructions, 130048 cycles, 100040 steps (core 100030, block 6, bench 4) in 0.002 s: 42.66 M instructions/s, 61.63 M cycles/s, 21.09 ns per step
+engine: N 10000: 90028 instructions, 130048 cycles, 100040 steps (core 100030, block 6, bench 4) in 0.002 s: 43.54 M instructions/s, 62.89 M cycles/s, 20.67 ns per step
+engine: N 10000: 90028 instructions, 130048 cycles, 100040 steps (core 100030, block 6, bench 4) in 0.002 s: 43.58 M instructions/s, 62.96 M cycles/s, 20.65 ns per step
+VERDICT every run halts by SIM_EXIT: PASS
+VERDICT ref's runs end with the loop's count: PASS
+
+==== 4. JFR of ref: idle-skip on (N = 10^6, 2 runs), off (N = 10^4, 2 runs); folded  [09:41:00]
+ref rep 1: 9000028 instructions, 13000048 cycles in 12.380 s: 0.73 M instructions/s, 1.05 M cycles/s, 1375.5 ns per instruction; halt 5, count 1000000
+ref rep 2: 9000028 instructions, 13000048 cycles in 11.757 s: 0.77 M instructions/s, 1.11 M cycles/s, 1306.4 ns per instruction; halt 5, count 1000000
+ref (idle-skip off) rep 1: 90028 instructions, 130048 cycles in 5.297 s: 0.02 M instructions/s, 0.02 M cycles/s, 58839.4 ns per instruction; halt 5, count 10000
+ref (idle-skip off) rep 2: 90028 instructions, 130048 cycles in 4.691 s: 0.02 M instructions/s, 0.03 M cycles/s, 52101.7 ns per instruction; halt 5, count 10000
+-- idle-skip on
+/tmp/w5-130/on.jfr: 2098 execution samples, 2074 (98.9%) inside Chip.runCycle
+== threads (all samples)
+   98.86%      2074  main (sim)
+    1.10%        23  main
+    0.05%         1  JFR Shutdown Hook
+== unit (innermost runCycle/endCycle; share of the simulation's samples)
+   33.27%       690  RequestBus
+   19.53%       405  Chip.scanOverflows
+   17.02%       353  Chip (own loop)
+    6.99%       145  Chip.sleepCheck
+    5.64%       117  TileControl.endCycle
+    4.97%       103  Chip.checkInvariants
+    2.51%        52  Cnc1Peripheral
+    2.31%        48  Controller
+    2.22%        46  SRAMReadQueue
+    1.83%        38  Replayer
+    0.53%        11  CnC
+    0.39%         8  BigSRAM
+    0.34%         7  Router
+    0.34%         7  TableStore
+    0.29%         6  Tile
+    0.29%         6  HistStore
+    0.24%         5  InjectionPath
+    0.19%         4  PeripheralSlot.endCycle
+    0.19%         4  PeripheralSlot
+    0.19%         4  WriteEngine
+    0.14%         3  Endpoint
+    0.14%         3  TrafficDirector
+    0.14%         3  ControllerMemories
+    0.10%         2  AddressGenerator
+    0.10%         2  GatherEngine
+    0.05%         1  Tile$lambda
+    0.05%         1  PeripheralSlot$Dma
+== self (top frame's class)
+   35.44%       735  Chip
+   33.27%       690  RequestBus
+    7.86%       163  Replayer
+    7.38%       153  Tile
+    5.54%       115  TileControl
+    3.42%        71  BusBase
+    2.51%        52  Cnc1Peripheral
+    1.49%        31  Controller
+    1.16%        24  SRAMReadQueue
+    0.48%        10  SRAMMacro
+    0.39%         8  PeripheralSlot
+    0.39%         8  CnC
+    0.29%         6  java.lang.Integer
+    0.19%         4  Router
+    0.10%         2  java.util.Arrays
+    0.05%         1  java.util.ArrayList
+    0.05%         1  PeripheralSlot$Dma
+== method (top frame)
+   33.27%       690  RequestBus.runCycle
+   19.48%       404  Chip.scanOverflows
+   10.99%       228  Chip.runCycle
+    6.99%       145  Tile.canSleep
+    5.98%       124  Replayer.errors
+    5.35%       111  TileControl.endCycle
+    4.97%       103  Chip.checkInvariants
+    3.42%        71  BusBase.enterSlow
+    2.51%        52  Cnc1Peripheral.readyBits
+    1.16%        24  SRAMReadQueue.release
+    0.96%        20  Replayer.settle
+    0.92%        19  Replayer.runCycle
+    0.77%        16  Controller.execute
+    0.68%        14  Controller.step
+    0.39%         8  CnC.runCycle
+    0.29%         6  Tile.runCycle
+    0.29%         6  SRAMMacro.writeCheck
+    0.29%         6  java.lang.Integer.toHexString
+    0.19%         4  PeripheralSlot.endCycle
+    0.19%         4  PeripheralSlot.runCycle
+    0.14%         3  Router.select
+    0.10%         2  TileControl.conditionEvents
+    0.10%         2  java.util.Arrays.fill
+    0.10%         2  SRAMMacro.commitAll
+    0.05%         1  Tile.eventCounts
+    0.05%         1  TileControl.read
+    0.05%         1  Controller.load
+    0.05%         1  SRAMMacro.access
+-- idle-skip off
+/tmp/w5-130/off.jfr: 864 execution samples, 859 (99.4%) inside Chip.runCycle
+== threads (all samples)
+   99.42%       859  main (sim)
+    0.58%         5  main
+== unit (innermost runCycle/endCycle; share of the simulation's samples)
+   21.77%       187  TileControl.endCycle
+   19.91%       171  SRAMReadQueue
+    9.43%        81  Router
+    6.52%        56  TableStore
+    5.01%        43  Replayer
+    4.07%        35  Controller
+    3.96%        34  Tile
+    3.84%        33  Chip (own loop)
+    3.84%        33  Chip.checkInvariants
+    3.14%        27  WriteEngine
+    2.79%        24  AddressGenerator
+    2.44%        21  PeripheralSlot
+    2.10%        18  RequestBus
+    2.10%        18  TrafficDirector
+    2.10%        18  HistStore
+    1.51%        13  BigSRAM
+    1.40%        12  InjectionPath
+    1.05%         9  Cnc1Peripheral
+    1.05%         9  ControllerMemories
+    0.58%         5  Chip.scanOverflows
+    0.35%         3  PeripheralSlot.endCycle
+    0.35%         3  Tile$lambda
+    0.35%         3  GatherEngine
+    0.23%         2  PeripheralSlot$Dma
+    0.12%         1  ReadPort
+== self (top frame's class)
+   36.55%       314  BusBase
+   22.24%       191  TileControl
+    9.43%        81  Router
+    7.22%        62  Replayer
+    6.05%        52  PeripheralSlot
+    5.82%        50  Chip
+    4.42%        38  Tile
+    4.31%        37  SRAMReadQueue
+    2.10%        18  RequestBus
+    1.05%         9  Cnc1Peripheral
+    0.23%         2  Controller
+    0.23%         2  PeripheralSlot$Dma
+    0.12%         1  java.util.Arrays
+    0.12%         1  ReadPort
+    0.12%         1  java.util.ArrayDeque
+== method (top frame)
+   36.55%       314  BusBase.enterSlow
+   11.64%       100  TileControl.advance
+   10.48%        90  TileControl.endCycle
+    5.01%        43  Replayer.settle
+    4.89%        42  Router.runCycle
+    4.54%        39  Router.select
+    4.19%        36  SRAMReadQueue.release
+    3.96%        34  Tile.runCycle
+    3.84%        33  Chip.checkInvariants
+    3.03%        26  PeripheralSlot.liveEvents
+    2.44%        21  PeripheralSlot.runCycle
+    2.10%        18  RequestBus.runCycle
+    1.75%        15  Replayer.errors
+    1.40%        12  Chip.runCycle
+    0.93%         8  Cnc1Peripheral.runCycle
+    0.58%         5  Chip.scanOverflows
+    0.47%         4  Replayer.runCycle
+    0.35%         3  PeripheralSlot.endCycle
+    0.35%         3  Tile.lambda$new$0
+    0.23%         2  PeripheralSlot.liveErrors
+    0.23%         2  PeripheralSlot$Dma.runCycle
+    0.12%         1  Tile.eventCounts
+    0.12%         1  TileControl.conditionEvents
+    0.12%         1  SRAMReadQueue.runCycle
+    0.12%         1  Controller.load
+    0.12%         1  Cnc1Peripheral.errors
+    0.12%         1  java.util.Arrays.fill
+    0.12%         1  java.util.ArrayDeque.poll
+    0.12%         1  ReadPort.runCycle
+    0.12%         1  Controller.execute
+== inclusive (class anywhere on the stack)
+  100.00%       859  Chip
+  100.00%       859  SpeedRun
+
+==== done in 117 s  [09:41:36]
+    859  Chip
+  100.00%       859  SpeedRun
+
+==== done in 117 s  [09:41:36]
