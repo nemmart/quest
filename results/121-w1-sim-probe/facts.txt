@@ -1,0 +1,158 @@
+
+==== date, host, OS
+Sat Nov  7 06:03:06 AM UTC 2026
+godspeed
+Linux godspeed 6.8.0-147-generic #147-Ubuntu SMP PREEMPT_DYNAMIC Thu Sep 24 11:33:16 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
+PRETTY_NAME="Ubuntu 24.04.3 LTS"
+VERSION_ID="24.04"
+
+==== CPU
+nproc 16
+Architecture:                            x86_64
+CPU op-mode(s):                          32-bit, 64-bit
+Address sizes:                           39 bits physical, 48 bits virtual
+Byte Order:                              Little Endian
+CPU(s):                                  16
+On-line CPU(s) list:                     0-15
+Vendor ID:                               GenuineIntel
+Model name:                              Intel(R) Core(TM) i5-14400F
+CPU family:                              6
+Model:                                   191
+Thread(s) per core:                      2
+Core(s) per socket:                      10
+Socket(s):                               1
+Stepping:                                2
+CPU(s) scaling MHz:                      18%
+CPU max MHz:                             4700.0000
+CPU min MHz:                             800.0000
+BogoMIPS:                                4992.00
+Flags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf tsc_known_freq pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault ssbd ibrs ibpb stibp ibrs_enhanced tpr_shadow flexpriority ept vpid ept_ad fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid rdseed adx smap clflushopt clwb intel_pt sha_ni xsaveopt xsavec xgetbv1 xsaves split_lock_detect user_shstk avx_vnni dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp hwp_pkg_req hfi vnmi umip pku ospke waitpkg gfni vaes vpclmulqdq rdpid movdiri movdir64b fsrm md_clear serialize arch_lbr ibt flush_l1d arch_capabilities ibpb_exit_to_user
+Virtualization:                          VT-x
+L1d cache:                               416 KiB (10 instances)
+L1i cache:                               448 KiB (10 instances)
+L2 cache:                                9.5 MiB (7 instances)
+L3 cache:                                20 MiB (1 instance)
+NUMA node(s):                            1
+NUMA node0 CPU(s):                       0-15
+Vulnerability Gather data sampling:      Not affected
+Vulnerability Indirect target selection: Not affected
+Vulnerability Itlb multihit:             Not affected
+Vulnerability L1tf:                      Not affected
+Vulnerability Mds:                       Not affected
+Vulnerability Meltdown:                  Not affected
+Vulnerability Mmio stale data:           Not affected
+Vulnerability Reg file data sampling:    Mitigation; Clear Register File
+Vulnerability Retbleed:                  Not affected
+Vulnerability Spec rstack overflow:      Not affected
+Vulnerability Spec store bypass:         Mitigation; Speculative Store Bypass disabled via prctl
+Vulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization
+Vulnerability Spectre v2:                Mitigation; Enhanced / Automatic IBRS; IBPB conditional; PBRSB-eIBRS SW sequence; BHI BHI_DIS_S
+Vulnerability Srbds:                     Not affected
+Vulnerability Tsa:                       Not affected
+Vulnerability Tsx async abort:           Not affected
+Vulnerability Vmscape:                   Mitigation; IBPB before exit to userspace
+
+==== memory
+               total        used        free      shared  buff/cache   available
+Mem:              62           1          42           0          19          61
+Swap:              7           0           7
+MemTotal:       65671456 kB
+AnonHugePages:         0 kB
+HugePages_Total:       0
+Hugepagesize:       2048 kB
+
+==== numactl -H
+available: 1 nodes (0)
+node 0 cpus: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+node 0 size: 64132 MB
+node 0 free: 43227 MB
+node distances:
+node   0 
+  0:  10 
+
+==== cgroup and limits
+0::/user.slice/user-1000.slice/session-10.scope
+memory.max: max
+memory.high: max
+memory.swap.max: max
+pids.max: max
+cpu.max: max 100000
+real-time non-blocking time  (microseconds, -R) unlimited
+core file size              (blocks, -c) 0
+data seg size               (kbytes, -d) unlimited
+scheduling priority                 (-e) 0
+file size                   (blocks, -f) unlimited
+pending signals                     (-i) 255725
+max locked memory           (kbytes, -l) 8208932
+max memory size             (kbytes, -m) unlimited
+open files                          (-n) 1024
+pipe size                (512 bytes, -p) 8
+POSIX message queues         (bytes, -q) 819200
+real-time priority                  (-r) 0
+stack size                  (kbytes, -s) 8192
+cpu time                   (seconds, -t) unlimited
+max user processes                  (-u) 255725
+virtual memory              (kbytes, -v) unlimited
+file locks                          (-x) unlimited
+
+==== disk
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/nvme0n1p2  457G  174G  260G  41% /
+/dev/nvme0n1p2  457G  174G  260G  41% /
+/dev/nvme0n1p2  457G  174G  260G  41% /
+
+==== tools
+gcc: /usr/bin/gcc: gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+g++: /usr/bin/g++: g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+clang: not found
+clang++: not found
+make: /usr/bin/make: GNU Make 4.3
+cmake: /usr/bin/cmake: cmake version 3.28.3
+ld: /usr/bin/ld: GNU ld (GNU Binutils for Ubuntu) 2.42
+ld.lld: not found
+lld: not found
+java: /usr/bin/java: openjdk 21.0.12.1 2026-08-18
+javac: /usr/bin/javac: javac 21.0.12.1
+perf: /usr/bin/perf: perf version 6.8.12
+python3: /usr/bin/python3: Python 3.12.3
+git: /usr/bin/git: git version 2.43.0
+numactl: /usr/bin/numactl: 2.0.18
+
+==== what -march=native is
+  -march=                     		alderlake
+  -mtune=                     		alderlake
+
+==== riscv toolchains
+riscv64-unknown-elf-gcc: not found
+riscv32-unknown-elf-gcc: not found
+riscv-none-elf-gcc: not found
+riscv64-linux-gnu-gcc: not found
+riscv64-unknown-elf-objcopy: not found
+/opt/rocm
+/opt/rocm-7.2.1
+-- clang's riscv32 target (rv32i_zicsr_zmmul, ilp32, as ref's firmware builds):
+
+==== java
+openjdk version "21.0.12.1" 2026-08-18
+OpenJDK Runtime Environment (build 21.0.12.1+1-1-24.04.4-Ubuntu)
+OpenJDK 64-Bit Server VM (build 21.0.12.1+1-1-24.04.4-Ubuntu, mixed mode, sharing)
+
+==== perf
+perf_event_paranoid: 4
+kptr_restrict: 1
+perf_event_paranoid setting is 4:
+  -1: Allow use of (almost) all events by all users
+      Ignore mlock limit after perf_event_mlock_kb without CAP_IPC_LOCK
+>= 0: Disallow raw and ftrace function tracepoint access
+>= 1: Disallow CPU event access
+>= 2: Disallow kernel profiling
+To make the adjusted perf_event_paranoid setting permanent preserve it
+in /etc/sysctl.conf (e.g. kernel.perf_event_paranoid = <setting>)
+
+==== transparent huge pages
+enabled: always [madvise] never
+defrag: always defer defer+madvise [madvise] never
+khugepaged/defrag: 1
+
+==== TSan (for W4)
+g++ -fsanitize=thread: exit 66 FATAL: ThreadSanitizer: unexpected memory mapping 0x5dd69289b000-0x5dd69289c000

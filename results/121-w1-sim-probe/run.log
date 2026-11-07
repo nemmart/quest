@@ -1,0 +1,21 @@
+kit sha256 8ee763013add06d8b42e542814607a14079b9cbf61c95af590cf74928aa25fef
+meshsim fc27ea1 (sim-w1), kit built 2026-11-07
+facts written (158 lines)
+make check: exit 0, 15 s
+==== gcc debug
+./build/gcc-debug/test_arena: 9 passed, 0 failed, 0 skipped (debug-only)
+./build/gcc-debug/test_base: 22 passed, 0 failed, 0 skipped (debug-only)
+./build/gcc-debug/test_bitmap: 10 passed, 0 failed, 0 skipped (debug-only)
+./build/gcc-debug/test_bucket: 10 passed, 0 failed, 0 skipped (debug-only)
+./build/gcc-debug/test_ring: 13 passed, 0 failed, 0 skipped (debug-only)
+./build/gcc-debug/test_value_pool: 12 passed, 0 failed, 0 skipped (debug-only)
+==== gcc release
+./build/gcc-release/test_arena: 8 passed, 0 failed, 1 skipped (debug-only)
+./build/gcc-release/test_base: 19 passed, 0 failed, 3 skipped (debug-only)
+./build/gcc-release/test_bitmap: 7 passed, 0 failed, 3 skipped (debug-only)
+./build/gcc-release/test_bucket: 8 passed, 0 failed, 2 skipped (debug-only)
+./build/gcc-release/test_ring: 10 passed, 0 failed, 3 skipped (debug-only)
+./build/gcc-release/test_value_pool: 8 passed, 0 failed, 4 skipped (debug-only)
+==== make check: all passed (gcc ; debug, release)
+make -j16 check: exit 0, 12 s
+end Sat Nov  7 06:03:34 AM UTC 2026

@@ -1,0 +1,93 @@
+make check: exit 0, 15 s
+==== gcc debug
+./build/gcc-debug/test_arena: 9 passed, 0 failed, 0 skipped (debug-only)
+./build/gcc-debug/test_base: 22 passed, 0 failed, 0 skipped (debug-only)
+./build/gcc-debug/test_bitmap: 10 passed, 0 failed, 0 skipped (debug-only)
+./build/gcc-debug/test_bucket: 10 passed, 0 failed, 0 skipped (debug-only)
+./build/gcc-debug/test_ring: 13 passed, 0 failed, 0 skipped (debug-only)
+./build/gcc-debug/test_value_pool: 12 passed, 0 failed, 0 skipped (debug-only)
+==== gcc release
+./build/gcc-release/test_arena: 8 passed, 0 failed, 1 skipped (debug-only)
+./build/gcc-release/test_base: 19 passed, 0 failed, 3 skipped (debug-only)
+./build/gcc-release/test_bitmap: 7 passed, 0 failed, 3 skipped (debug-only)
+./build/gcc-release/test_bucket: 8 passed, 0 failed, 2 skipped (debug-only)
+./build/gcc-release/test_ring: 10 passed, 0 failed, 3 skipped (debug-only)
+./build/gcc-release/test_value_pool: 8 passed, 0 failed, 4 skipped (debug-only)
+==== make check: all passed (gcc ; debug, release)
+==== gcc debug
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -c tests/test_arena.cpp -o build/gcc-debug/tests/test_arena.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -c tests/harness.cpp -o build/gcc-debug/tests/harness.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -c src/base/alloc_guard.cpp -o build/gcc-debug/src/base/alloc_guard.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -c src/base/arena.cpp -o build/gcc-debug/src/base/arena.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -c src/base/fatal.cpp -o build/gcc-debug/src/base/fatal.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer build/gcc-debug/tests/test_arena.o build/gcc-debug/tests/harness.o build/gcc-debug/src/base/alloc_guard.o build/gcc-debug/src/base/arena.o build/gcc-debug/src/base/fatal.o -o build/gcc-debug/test_arena -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -c tests/test_base.cpp -o build/gcc-debug/tests/test_base.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer build/gcc-debug/tests/test_base.o build/gcc-debug/tests/harness.o build/gcc-debug/src/base/alloc_guard.o build/gcc-debug/src/base/arena.o build/gcc-debug/src/base/fatal.o -o build/gcc-debug/test_base -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -c tests/test_bitmap.cpp -o build/gcc-debug/tests/test_bitmap.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer build/gcc-debug/tests/test_bitmap.o build/gcc-debug/tests/harness.o build/gcc-debug/src/base/alloc_guard.o build/gcc-debug/src/base/arena.o build/gcc-debug/src/base/fatal.o -o build/gcc-debug/test_bitmap -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -c tests/test_bucket.cpp -o build/gcc-debug/tests/test_bucket.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer build/gcc-debug/tests/test_bucket.o build/gcc-debug/tests/harness.o build/gcc-debug/src/base/alloc_guard.o build/gcc-debug/src/base/arena.o build/gcc-debug/src/base/fatal.o -o build/gcc-debug/test_bucket -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -c tests/test_ring.cpp -o build/gcc-debug/tests/test_ring.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer build/gcc-debug/tests/test_ring.o build/gcc-debug/tests/harness.o build/gcc-debug/src/base/alloc_guard.o build/gcc-debug/src/base/arena.o build/gcc-debug/src/base/fatal.o -o build/gcc-debug/test_ring -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer -c tests/test_value_pool.cpp -o build/gcc-debug/tests/test_value_pool.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O1 -g -DSIM_DEBUG -fsanitize=address,undefined -fno-sanitize=vptr -fno-sanitize-recover=all -fno-omit-frame-pointer build/gcc-debug/tests/test_value_pool.o build/gcc-debug/tests/harness.o build/gcc-debug/src/base/alloc_guard.o build/gcc-debug/src/base/arena.o build/gcc-debug/src/base/fatal.o -o build/gcc-debug/test_value_pool -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+ok   arena_objects_contiguous_in_order
+ok   alloc_big_aligned_and_zeroed
+ok   block_is_line_aligned
+ok   arena_differential_seed_1
+ok   arena_differential_seed_2
+ok   arena_differential_seed_3
+ok   arena_full_is_fatal
+ok   arena_index_past_size
+ok   alloc_big_failure_is_fatal
+./build/gcc-debug/test_arena: 9 passed, 0 failed, 0 skipped (debug-only)
+ok   fatal_prints_context_and_aborts
+ok   fatal_without_arguments
+ok   dcheck_fires_in_debug
+ok   dcheck_is_silent_when_true
+ok   dcheck_not_evaluated_in_release
+ok   hook_quiet_outside_a_run
+ok   hook_operator_new
+ok   hook_operator_new_array
+ok   hook_operator_new_nothrow
+ok   hook_operator_new_aligned
+--
+./build/gcc-debug/test_value_pool: 12 passed, 0 failed, 0 skipped (debug-only)
+==== gcc release
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O2 -DNDEBUG -c tests/test_arena.cpp -o build/gcc-release/tests/test_arena.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O2 -DNDEBUG -c tests/harness.cpp -o build/gcc-release/tests/harness.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O2 -DNDEBUG -c src/base/alloc_guard.cpp -o build/gcc-release/src/base/alloc_guard.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O2 -DNDEBUG -c src/base/arena.cpp -o build/gcc-release/src/base/arena.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O2 -DNDEBUG -c src/base/fatal.cpp -o build/gcc-release/src/base/fatal.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O2 -DNDEBUG build/gcc-release/tests/test_arena.o build/gcc-release/tests/harness.o build/gcc-release/src/base/alloc_guard.o build/gcc-release/src/base/arena.o build/gcc-release/src/base/fatal.o -o build/gcc-release/test_arena -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O2 -DNDEBUG -c tests/test_base.cpp -o build/gcc-release/tests/test_base.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O2 -DNDEBUG build/gcc-release/tests/test_base.o build/gcc-release/tests/harness.o build/gcc-release/src/base/alloc_guard.o build/gcc-release/src/base/arena.o build/gcc-release/src/base/fatal.o -o build/gcc-release/test_base -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O2 -DNDEBUG -c tests/test_bitmap.cpp -o build/gcc-release/tests/test_bitmap.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O2 -DNDEBUG build/gcc-release/tests/test_bitmap.o build/gcc-release/tests/harness.o build/gcc-release/src/base/alloc_guard.o build/gcc-release/src/base/arena.o build/gcc-release/src/base/fatal.o -o build/gcc-release/test_bitmap -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O2 -DNDEBUG -c tests/test_bucket.cpp -o build/gcc-release/tests/test_bucket.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O2 -DNDEBUG build/gcc-release/tests/test_bucket.o build/gcc-release/tests/harness.o build/gcc-release/src/base/alloc_guard.o build/gcc-release/src/base/arena.o build/gcc-release/src/base/fatal.o -o build/gcc-release/test_bucket -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O2 -DNDEBUG -c tests/test_ring.cpp -o build/gcc-release/tests/test_ring.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O2 -DNDEBUG build/gcc-release/tests/test_ring.o build/gcc-release/tests/harness.o build/gcc-release/src/base/alloc_guard.o build/gcc-release/src/base/arena.o build/gcc-release/src/base/fatal.o -o build/gcc-release/test_ring -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O2 -DNDEBUG -c tests/test_value_pool.cpp -o build/gcc-release/tests/test_value_pool.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -O2 -DNDEBUG build/gcc-release/tests/test_value_pool.o build/gcc-release/tests/harness.o build/gcc-release/src/base/alloc_guard.o build/gcc-release/src/base/arena.o build/gcc-release/src/base/fatal.o -o build/gcc-release/test_value_pool -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign
+ok   arena_objects_contiguous_in_order
+ok   alloc_big_aligned_and_zeroed
+ok   block_is_line_aligned
+ok   arena_differential_seed_1
+ok   arena_differential_seed_2
+ok   arena_differential_seed_3
+ok   arena_full_is_fatal
+ok   alloc_big_failure_is_fatal
+./build/gcc-release/test_arena: 8 passed, 0 failed, 1 skipped (debug-only)
+ok   fatal_prints_context_and_aborts
+ok   fatal_without_arguments
+ok   dcheck_is_silent_when_true
+ok   dcheck_not_evaluated_in_release
+ok   hook_quiet_outside_a_run
+ok   hook_operator_new
+ok   hook_operator_new_array
+ok   hook_operator_new_nothrow
+ok   hook_operator_new_aligned
+ok   hook_operator_delete
+ok   hook_malloc
+make -j16 check: exit 0, 12 s
