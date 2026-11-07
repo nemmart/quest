@@ -1,0 +1,8 @@
+                                                                  before         after    change
+controller: ns per unit step (median of 5)                         20.43         20.37     -0.3%
+controller: the core alone, ns per step                             5.21          5.79          
+controller: the engine's part, ns per step (step - core)           15.22         14.58     -4.2%
+controller: sim::Engine/detail symbols' share (perf, self)         64.1%         53.6%          
+mesh: sim::Engine/detail symbols' share (perf, self)               18.3%         14.4%          
+mesh: us per mesh-cycle (median of 5)                              5.643         5.444     -3.5%
+mesh: footprint per chip, bytes (Sizes)                           286848        242240    -15.6%

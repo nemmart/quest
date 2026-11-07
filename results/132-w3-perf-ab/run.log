@@ -1,0 +1,178 @@
+
+==== the machine (D21)  [10:16:30]
+model:     Intel(R) Core(TM) i5-14400F
+sockets:   1, CPUs online 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15 (16)
+P cores:   6 cores, CPUs 0,1,2,3,4,5,6,7,8,9,10,11 (12 threads), max 4700000 kHz, min 800000 kHz
+E cores:   4 cores, CPUs 12,13,14,15, max 3500000 kHz, min 800000 kHz
+governor:  powersave
+caches:    L1d cache: 416 KiB (10 instances);L1i cache: 448 KiB (10 instances);L2 cache: 9.5 MiB (7 instances);L3 cache: 20 MiB (1 instance);
+memory:    MemTotal:       65671456 kB
+kernel:    Linux 6.8.0-147-generic
+gcc:       g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+clang:     Ubuntu clang version 18.1.3 (1ubuntu1)
+java:      openjdk version "21.0.12.1" 2026-08-18
+pinned to CPU 0 (the first P core's first thread unless PIN is given); P CPUs 0,1,2,3,4,5,6,7,8,9,10,11; E CPUs 12,13,14,15
+perf: available
+
+==== build before (0c7df79): clang release  [10:16:31]
+VERDICT build before: PASS
+
+==== build after (057a9d5): clang release  [10:16:33]
+VERDICT build after: PASS
+
+==== sanity: each build's own checks  [10:16:35]
+before: check: N = 1000, engine = direct driver (9068 lines), SIM_EXIT, count 1000
+VERDICT controller check before: PASS
+after: check: N = 1000, engine = direct driver (9068 lines), SIM_EXIT, count 1000
+VERDICT controller check after: PASS
+
+==== the goldens on the after build (67 x the six option sets: ready-driven, shuffle seeds 1-3, instance-major, step-all)  [10:16:35]
+SAME  wfi_go
+SAME  reqfull
+golden (engine, 6 option sets each): 67 runs, 0 differ, 0.102 s
+VERDICT goldens after (engine, six option sets): PASS
+
+==== the controller: bench_controller, 10^7 iterations of the 13-cycle loop, before and after interleaved, 5 each  [10:16:35]
+before rep 1: engine: N 10000000: 90000028 instructions, 130000048 cycles, 100000040 steps (core 100000030, block 6, bench 4) in 2.042 s: 44.07 M instructions/s, 63.65 M cycles/s, 20.42 ns per step
+after rep 1: engine: N 10000000: 90000028 instructions, 130000048 cycles, 100000040 steps (core 100000030, block 6, bench 4) in 2.037 s: 44.19 M instructions/s, 63.83 M cycles/s, 20.37 ns per step
+before rep 2: engine: N 10000000: 90000028 instructions, 130000048 cycles, 100000040 steps (core 100000030, block 6, bench 4) in 2.042 s: 44.07 M instructions/s, 63.65 M cycles/s, 20.42 ns per step
+after rep 2: engine: N 10000000: 90000028 instructions, 130000048 cycles, 100000040 steps (core 100000030, block 6, bench 4) in 2.036 s: 44.20 M instructions/s, 63.84 M cycles/s, 20.36 ns per step
+before rep 3: engine: N 10000000: 90000028 instructions, 130000048 cycles, 100000040 steps (core 100000030, block 6, bench 4) in 2.043 s: 44.06 M instructions/s, 63.64 M cycles/s, 20.43 ns per step
+after rep 3: engine: N 10000000: 90000028 instructions, 130000048 cycles, 100000040 steps (core 100000030, block 6, bench 4) in 2.036 s: 44.21 M instructions/s, 63.86 M cycles/s, 20.36 ns per step
+before rep 4: engine: N 10000000: 90000028 instructions, 130000048 cycles, 100000040 steps (core 100000030, block 6, bench 4) in 2.044 s: 44.04 M instructions/s, 63.61 M cycles/s, 20.44 ns per step
+after rep 4: engine: N 10000000: 90000028 instructions, 130000048 cycles, 100000040 steps (core 100000030, block 6, bench 4) in 2.045 s: 44.01 M instructions/s, 63.56 M cycles/s, 20.45 ns per step
+before rep 5: engine: N 10000000: 90000028 instructions, 130000048 cycles, 100000040 steps (core 100000030, block 6, bench 4) in 2.045 s: 44.00 M instructions/s, 63.56 M cycles/s, 20.45 ns per step
+after rep 5: engine: N 10000000: 90000028 instructions, 130000048 cycles, 100000040 steps (core 100000030, block 6, bench 4) in 2.037 s: 44.19 M instructions/s, 63.83 M cycles/s, 20.37 ns per step
+before: core alone: N 10000000: 90000006 instructions, 130000005 cycles, 100000006 steps in 0.521 s: 172.82 M instructions/s, 5.21 ns per step
+after: core alone: N 10000000: 90000006 instructions, 130000005 cycles, 100000006 steps in 0.579 s: 155.56 M instructions/s, 5.79 ns per step
+
+==== the mesh (W4's framework mesh, one chip, 200000 cycles), before and after interleaved, 5 each  [10:16:57]
+before rep 1: threads form=1 chip=mesh chips=1 threads=1 cycles=200000 secs=1.1323 rate=176625 slowest=176625 mean=176625 us_per_chip_cycle=5.662 words_per_chip=35856 digest=4a116005d9095712
+after rep 1: threads form=1 chip=mesh chips=1 threads=1 cycles=200000 secs=1.0896 rate=183546 slowest=183546 mean=183546 us_per_chip_cycle=5.448 words_per_chip=30280 digest=4a116005d9095712
+before rep 2: threads form=1 chip=mesh chips=1 threads=1 cycles=200000 secs=1.1244 rate=177868 slowest=177868 mean=177868 us_per_chip_cycle=5.622 words_per_chip=35856 digest=4a116005d9095712
+after rep 2: threads form=1 chip=mesh chips=1 threads=1 cycles=200000 secs=1.0876 rate=183896 slowest=183896 mean=183896 us_per_chip_cycle=5.438 words_per_chip=30280 digest=4a116005d9095712
+before rep 3: threads form=1 chip=mesh chips=1 threads=1 cycles=200000 secs=1.1190 rate=178729 slowest=178729 mean=178729 us_per_chip_cycle=5.595 words_per_chip=35856 digest=4a116005d9095712
+after rep 3: threads form=1 chip=mesh chips=1 threads=1 cycles=200000 secs=1.0889 rate=183678 slowest=183678 mean=183678 us_per_chip_cycle=5.444 words_per_chip=30280 digest=4a116005d9095712
+before rep 4: threads form=1 chip=mesh chips=1 threads=1 cycles=200000 secs=1.1326 rate=176580 slowest=176580 mean=176580 us_per_chip_cycle=5.663 words_per_chip=35856 digest=4a116005d9095712
+after rep 4: threads form=1 chip=mesh chips=1 threads=1 cycles=200000 secs=1.0915 rate=183233 slowest=183233 mean=183233 us_per_chip_cycle=5.458 words_per_chip=30280 digest=4a116005d9095712
+before rep 5: threads form=1 chip=mesh chips=1 threads=1 cycles=200000 secs=1.1286 rate=177212 slowest=177212 mean=177212 us_per_chip_cycle=5.643 words_per_chip=35856 digest=4a116005d9095712
+after rep 5: threads form=1 chip=mesh chips=1 threads=1 cycles=200000 secs=1.0869 rate=184010 slowest=184010 mean=184010 us_per_chip_cycle=5.434 words_per_chip=30280 digest=4a116005d9095712
+before: sizes chip=mesh total_bytes=286848 chips=1
+after: sizes chip=mesh total_bytes=242240 chips=1
+mesh digests: before digest=4a116005d9095712, after digest=4a116005d9095712
+VERDICT mesh digest unchanged: PASS
+
+==== perf stat (one run each)  [10:17:08]
+-- controller before
+<not counted>,cpu_atom/cycles/
+9615922540,cpu_core/cycles/
+<not counted>,cpu_atom/instructions/
+54729733968,cpu_core/instructions/
+<not counted>,cpu_atom/cache-misses/
+104164,cpu_core/cache-misses/
+<not supported>,cpu_atom/L1-dcache-load-misses/
+351091,cpu_core/L1-dcache-load-misses/
+<not counted>,cpu_atom/branch-misses/
+84930,cpu_core/branch-misses/
+-- mesh before
+<not counted>,cpu_atom/cycles/
+5376263436,cpu_core/cycles/
+<not counted>,cpu_atom/instructions/
+10528121667,cpu_core/instructions/
+<not counted>,cpu_atom/cache-misses/
+22994,cpu_core/cache-misses/
+<not supported>,cpu_atom/L1-dcache-load-misses/
+165039129,cpu_core/L1-dcache-load-misses/
+<not counted>,cpu_atom/branch-misses/
+85464999,cpu_core/branch-misses/
+-- controller after
+<not counted>,cpu_atom/cycles/
+9578004083,cpu_core/cycles/
+<not counted>,cpu_atom/instructions/
+43728621130,cpu_core/instructions/
+<not counted>,cpu_atom/cache-misses/
+83010,cpu_core/cache-misses/
+<not supported>,cpu_atom/L1-dcache-load-misses/
+349392,cpu_core/L1-dcache-load-misses/
+<not counted>,cpu_atom/branch-misses/
+83484,cpu_core/branch-misses/
+-- mesh after
+<not counted>,cpu_atom/cycles/
+5180587748,cpu_core/cycles/
+<not counted>,cpu_atom/instructions/
+10214970495,cpu_core/instructions/
+<not counted>,cpu_atom/cache-misses/
+19103,cpu_core/cache-misses/
+<not supported>,cpu_atom/L1-dcache-load-misses/
+119430330,cpu_core/L1-dcache-load-misses/
+<not counted>,cpu_atom/branch-misses/
+84256643,cpu_core/branch-misses/
+
+==== perf record: the top symbols (self), for the engine's share  [10:17:15]
+-- controller before: the top 12
+    35.03%  [.] sim::Engine::cycle()                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   -      -            
+    14.15%  [.] void sim::detail::run_form<units::Core, false>(sim::Engine&, sim::RunSet&)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             -      -            
+    12.26%  [.] void units::Rv32::execute<units::Core::Env>(units::Core::Env&, unsigned long, unsigned int, unsigned int)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              -      -            
+     9.26%  [.] unsigned long units::Rv32::step<units::Core::Env>(units::Core::Env&, unsigned long)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    -      -            
+     6.36%  [.] sim::Engine::run_until(unsigned long)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  -      -            
+     6.22%  [.] sim::Engine::after(sim::RunSet&, unsigned int, sim::Wake)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              -      -            
+     5.84%  [.] units::Core::step(sim::Ctx&)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           -      -            
+     3.94%  [.] void units::Rv32::fetch_execute<units::Core::Env>(units::Core::Env&, unsigned long)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    -      -            
+     1.30%  [.] sim::Engine::heap_remove(unsigned int)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 -      -            
+     1.09%  [.] sim::Engine::heap_set(unsigned int, unsigned long)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     -      -            
+     0.87%  [.] memset@plt                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             -      -            
+     0.79%  [.] 0x000000000018986d                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     -      -            
+-- mesh before: the top 12
+    80.70%  [.] mesh::Router::step(sim::Ctx&)                                                                                                                                    -      -            
+     7.00%  [.] void sim::detail::deliver_link<3u>(sim::Engine&, sim::Bucket const&)                                                                                             -      -            
+     5.74%  [.] void sim::detail::deliver_link<0u>(sim::Engine&, sim::Bucket const&)                                                                                             -      -            
+     3.03%  [.] sim::Engine::after(sim::RunSet&, unsigned int, sim::Wake)                                                                                                        -      -            
+     2.00%  [.] void sim::detail::run_form<mesh::Router, false>(sim::Engine&, sim::RunSet&)                                                                                      -      -            
+     0.53%  [.] sim::Engine::cycle()                                                                                                                                             -      -            
+     0.09%  [k] 0xffffffff9525acfe                                                                                                                                               -      -            
+     0.04%  [k] 0xffffffff9416eaf1                                                                                                                                               -      -            
+     0.04%  [k] 0xffffffff941a7ee7                                                                                                                                               -      -            
+     0.04%  [k] 0xffffffff941766ec                                                                                                                                               -      -            
+     0.04%  [k] 0xffffffff943a755d                                                                                                                                               -      -            
+     0.03%  [k] 0xffffffff94067de0                                                                                                                                               -      -            
+-- controller after: the top 12
+    23.23%  [.] void sim::detail::run_form<units::Core, false>(sim::Engine&, sim::RunSet&)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             -      -            
+    23.10%  [.] sim::Engine::run_until(unsigned long)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  -      -            
+    21.12%  [.] void units::Rv32::execute<units::Core::Env>(units::Core::Env&, unsigned long, unsigned int, unsigned int)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              -      -            
+    10.28%  [.] unsigned long units::Rv32::step<units::Core::Env>(units::Core::Env&, unsigned long)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    -      -            
+     6.71%  [.] units::Core::step(sim::Ctx&)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           -      -            
+     6.34%  [.] sim::Engine::near_slot()                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               -      -            
+     5.58%  [.] void units::Rv32::fetch_execute<units::Core::Env>(units::Core::Env&, unsigned long)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    -      -            
+     0.92%  [.] bool units::Rv32::load<units::Core::Env>(units::Core::Env&, unsigned int, unsigned int, unsigned int&)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 -      -            
+     0.90%  [.] sim::Engine::after_far(unsigned int, unsigned long)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    -      -            
+     0.78%  [.] bool units::Rv32::store<units::Core::Env>(units::Core::Env&, unsigned long, unsigned int, unsigned int, unsigned int, unsigned int)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    -      -            
+     0.69%  [.] bool units::Rv32::read_reg<units::Core::Env>(units::Core::Env&, unsigned int, unsigned int&)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           -      -            
+     0.02%  [.] units::fmt[abi:cxx11](char const*, ...)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                -      -            
+-- mesh after: the top 12
+    84.48%  [.] mesh::Router::step(sim::Ctx&)                                                                                                                                                                                                                                                                                                                                                                                                                 -      -            
+     6.88%  [.] void sim::detail::deliver_link<3u>(sim::Engine&, sim::Bucket const&)                                                                                                                                                                                                                                                                                                                                                                          -      -            
+     3.64%  [.] void sim::detail::run_form<mesh::Router, false>(sim::Engine&, sim::RunSet&)                                                                                                                                                                                                                                                                                                                                                                   -      -            
+     3.63%  [.] void sim::detail::deliver_link<0u>(sim::Engine&, sim::Bucket const&)                                                                                                                                                                                                                                                                                                                                                                          -      -            
+     0.20%  [.] sim::Engine::run_until(unsigned long)                                                                                                                                                                                                                                                                                                                                                                                                         -      -            
+     0.11%  [k] 0xffffffff943a755d                                                                                                                                                                                                                                                                                                                                                                                                                            -      -            
+     0.09%  [k] 0xffffffff95271053                                                                                                                                                                                                                                                                                                                                                                                                                            -      -            
+     0.05%  [k] 0xffffffff943a7566                                                                                                                                                                                                                                                                                                                                                                                                                            -      -            
+     0.05%  [.] sim::(anonymous namespace)::deliver_wheel(sim::Engine&, sim::Wheel const&, sim::Bucket&)                                                                                                                                                                                                                                                                                                                                                      -      -            
+     0.05%  [k] 0xffffffff9525acfe                                                                                                                                                                                                                                                                                                                                                                                                                            -      -            
+     0.05%  [k] 0xffffffff94212d35                                                                                                                                                                                                                                                                                                                                                                                                                            -      -            
+     0.05%  [k] 0xffffffff941a7ee7                                                                                                                                                                                                                                                                                                                                                                                                                            -      -            
+
+==== the table  [10:17:21]
+                                                                  before         after    change
+controller: ns per unit step (median of 5)                         20.43         20.37     -0.3%
+controller: the core alone, ns per step                             5.21          5.79          
+controller: the engine's part, ns per step (step - core)           15.22         14.58     -4.2%
+controller: sim::Engine/detail symbols' share (perf, self)         64.1%         53.6%          
+mesh: sim::Engine/detail symbols' share (perf, self)               18.3%         14.4%          
+mesh: us per mesh-cycle (median of 5)                              5.643         5.444     -3.5%
+mesh: footprint per chip, bytes (Sizes)                           286848        242240    -15.6%
+
+==== done in 51 s  [10:17:21]
+              286848        242240    -15.6%
+
+==== done in 51 s  [10:17:21]
