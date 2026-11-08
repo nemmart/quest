@@ -1,0 +1,84 @@
+
+==== machine (D21)  [10:48:13]
+model:     Intel(R) Core(TM) i5-14400F
+sockets:   1; CPUs usable 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15 (16 of 16 online)
+P cores:   6 cores, CPUs 0,1,2,3,4,5,6,7,8,9,10,11 (12 threads), max 4700000 kHz, min 800000 kHz
+E cores:   4 CPUs 12,13,14,15, max 3500000 kHz, min 800000 kHz
+placement: 0,2,4,6,8,10,1,3,5,7,9,11,12,13,14,15
+governor:  powersave
+caches:    L1d cache: 416 KiB (10 instances);L1i cache: 448 KiB (10 instances);L2 cache: 9.5 MiB (7 instances);L3 cache: 20 MiB (1 instance);
+memory:    MemTotal: 65671456 kB
+kernel:    Linux 6.8.0-147-generic
+gcc:       g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+clang:     Ubuntu clang version 18.1.3 (1ubuntu1)
+java:      openjdk version "21.0.12.1" 2026-08-18
+ 10:48:13 up 4 days,  1:52,  1 user,  load average: 0.08, 0.02, 0.06
+kit: before ef9cd71, w11 14195b9, after f1f0709
+
+==== the keys (KeyGen, 64 x 65536)  [10:48:13]
+VERDICT keys sha256 as HASHES: PASS
+
+==== build (clang release, D18)  [10:48:13]
+
+==== process 1 (before)  [10:48:27]
+before one sort threads=1 part=one span=1229687 reps=2 us_per_cycle=23.2217 us_min=22.5448 us_max=23.2217 secs=28.5555 words=463082 digest=f7e8e31f84fd119f rss_mb=241.4 sram_resident_mb=208.0 times="one domain" partition="one domain"
+before t6 sort threads=6 part=tiles span=1229687 reps=3 us_per_cycle=3.9250 us_min=3.8778 us_max=4.0455 secs=4.8265 words=485549 digest=f7e8e31f84fd119f rss_mb=243.4 sram_resident_mb=208.0 times="time_threads off" partition="64 domains in 6 engines on 6 threads; crossings: 214 link (214 link delivered direct); barrier every 3 cycles, set by link 't0.router.to-left' -> 't63.router.from-right' (latency 3); the flags barrier"
+
+==== process 1 (w11)  [10:50:12]
+w11 one sort threads=1 part=one span=1229687 reps=2 us_per_cycle=22.7783 us_min=22.7484 us_max=22.7783 secs=28.0102 words=463082 digest=881be987e1fe8a9f rss_mb=241.4 sram_resident_mb=208.0 times="one domain" partition="one domain"
+w11 t6 sort threads=6 part=tiles span=1229687 reps=3 us_per_cycle=4.3055 us_min=4.2838 us_max=4.3190 secs=5.2944 words=485549 digest=881be987e1fe8a9f rss_mb=243.4 sram_resident_mb=208.0 times="time_threads off" partition="64 domains in 6 engines on 6 threads; crossings: 214 link (214 link delivered direct); barrier every 3 cycles, set by link 't0.router.to-left' -> 't63.router.from-right' (latency 3); the flags barrier"
+
+==== process 1 (after)  [10:51:58]
+after one sort threads=1 part=one span=1229687 reps=2 us_per_cycle=20.2371 us_min=20.1092 us_max=20.2371 secs=24.8852 words=464170 digest=881be987e1fe8a9f rss_mb=241.4 sram_resident_mb=208.0 times="one domain" partition="one domain"
+after t6 sort threads=6 part=tiles span=1229687 reps=3 us_per_cycle=3.7383 us_min=3.6959 us_max=3.7485 secs=4.5969 words=486637 digest=881be987e1fe8a9f rss_mb=243.4 sram_resident_mb=208.0 times="time_threads off" partition="64 domains in 6 engines on 6 threads; crossings: 214 link (214 link delivered direct); barrier every 3 cycles, set by link 't0.router.to-left' -> 't63.router.from-right' (latency 3); the flags barrier"
+
+==== process 2 (before)  [10:53:31]
+before one sort threads=1 part=one span=1229687 reps=2 us_per_cycle=23.3743 us_min=23.0147 us_max=23.3743 secs=28.7431 words=463082 digest=f7e8e31f84fd119f rss_mb=241.4 sram_resident_mb=208.0 times="one domain" partition="one domain"
+before t6 sort threads=6 part=tiles span=1229687 reps=3 us_per_cycle=4.2740 us_min=4.2712 us_max=4.3302 secs=5.2556 words=485549 digest=f7e8e31f84fd119f rss_mb=243.3 sram_resident_mb=208.0 times="time_threads off" partition="64 domains in 6 engines on 6 threads; crossings: 214 link (214 link delivered direct); barrier every 3 cycles, set by link 't0.router.to-left' -> 't63.router.from-right' (latency 3); the flags barrier"
+
+==== process 2 (w11)  [10:55:19]
+w11 one sort threads=1 part=one span=1229687 reps=2 us_per_cycle=23.2968 us_min=22.7013 us_max=23.2968 secs=28.6477 words=463082 digest=881be987e1fe8a9f rss_mb=241.4 sram_resident_mb=208.0 times="one domain" partition="one domain"
+w11 t6 sort threads=6 part=tiles span=1229687 reps=3 us_per_cycle=4.3374 us_min=4.3317 us_max=4.3441 secs=5.3337 words=485549 digest=881be987e1fe8a9f rss_mb=243.3 sram_resident_mb=208.0 times="time_threads off" partition="64 domains in 6 engines on 6 threads; crossings: 214 link (214 link delivered direct); barrier every 3 cycles, set by link 't0.router.to-left' -> 't63.router.from-right' (latency 3); the flags barrier"
+
+==== process 2 (after)  [10:57:06]
+after one sort threads=1 part=one span=1229687 reps=2 us_per_cycle=20.1314 us_min=19.9535 us_max=20.1314 secs=24.7554 words=464170 digest=881be987e1fe8a9f rss_mb=241.5 sram_resident_mb=208.0 times="one domain" partition="one domain"
+after t6 sort threads=6 part=tiles span=1229687 reps=3 us_per_cycle=3.7439 us_min=3.7413 us_max=3.7948 secs=4.6038 words=486637 digest=881be987e1fe8a9f rss_mb=243.4 sram_resident_mb=208.0 times="time_threads off" partition="64 domains in 6 engines on 6 threads; crossings: 214 link (214 link delivered direct); barrier every 3 cycles, set by link 't0.router.to-left' -> 't63.router.from-right' (latency 3); the flags barrier"
+
+==== process 3 (before)  [10:58:39]
+before one sort threads=1 part=one span=1229687 reps=2 us_per_cycle=23.6322 us_min=23.0511 us_max=23.6322 secs=29.0602 words=463082 digest=f7e8e31f84fd119f rss_mb=241.4 sram_resident_mb=208.0 times="one domain" partition="one domain"
+before t6 sort threads=6 part=tiles span=1229687 reps=3 us_per_cycle=4.2964 us_min=4.2816 us_max=4.2978 secs=5.2832 words=485549 digest=f7e8e31f84fd119f rss_mb=243.3 sram_resident_mb=208.0 times="time_threads off" partition="64 domains in 6 engines on 6 threads; crossings: 214 link (214 link delivered direct); barrier every 3 cycles, set by link 't0.router.to-left' -> 't63.router.from-right' (latency 3); the flags barrier"
+
+==== process 3 (w11)  [11:00:27]
+w11 one sort threads=1 part=one span=1229687 reps=2 us_per_cycle=22.9891 us_min=22.6666 us_max=22.9891 secs=28.2694 words=463082 digest=881be987e1fe8a9f rss_mb=241.4 sram_resident_mb=208.0 times="one domain" partition="one domain"
+w11 t6 sort threads=6 part=tiles span=1229687 reps=3 us_per_cycle=4.3122 us_min=4.2933 us_max=4.3243 secs=5.3026 words=485549 digest=881be987e1fe8a9f rss_mb=243.3 sram_resident_mb=208.0 times="time_threads off" partition="64 domains in 6 engines on 6 threads; crossings: 214 link (214 link delivered direct); barrier every 3 cycles, set by link 't0.router.to-left' -> 't63.router.from-right' (latency 3); the flags barrier"
+
+==== process 3 (after)  [11:02:13]
+after one sort threads=1 part=one span=1229687 reps=2 us_per_cycle=20.8420 us_min=20.5623 us_max=20.8420 secs=25.6291 words=464170 digest=881be987e1fe8a9f rss_mb=241.5 sram_resident_mb=208.0 times="one domain" partition="one domain"
+after t6 sort threads=6 part=tiles span=1229687 reps=3 us_per_cycle=3.7353 us_min=3.7182 us_max=3.7717 secs=4.5932 words=486637 digest=881be987e1fe8a9f rss_mb=243.4 sram_resident_mb=208.0 times="time_threads off" partition="64 domains in 6 engines on 6 threads; crossings: 214 link (214 link delivered direct); barrier every 3 cycles, set by link 't0.router.to-left' -> 't63.router.from-right' (latency 3); the flags barrier"
+before t6-timed sort threads=6 part=tiles span=1229687 reps=1 us_per_cycle=4.4145 us_min=4.4145 us_max=4.4145 secs=5.4284 words=485549 digest=f7e8e31f84fd119f rss_mb=243.2 sram_resident_mb=208.0 times="intervals=424638 total=13615922411 compute=0.9147 imbalance=0.0563 barrier_wait=0.0148 drain=0.0094 publish=0.0021 clear=0.0022 end=0.0005 other=-0.0000" partition="64 domains in 6 engines on 6 threads; crossings: 214 link (214 link delivered direct); barrier every 3 cycles, set by link 't0.router.to-left' -> 't63.router.from-right' (latency 3); the flags barrier"
+w11 t6-timed sort threads=6 part=tiles span=1229687 reps=1 us_per_cycle=4.5918 us_min=4.5918 us_max=4.5918 secs=5.6465 words=485549 digest=881be987e1fe8a9f rss_mb=243.1 sram_resident_mb=208.0 times="intervals=424638 total=14155320065 compute=0.9032 imbalance=0.0709 barrier_wait=0.0124 drain=0.0087 publish=0.0020 clear=0.0022 end=0.0006 other=0.0000" partition="64 domains in 6 engines on 6 threads; crossings: 214 link (214 link delivered direct); barrier every 3 cycles, set by link 't0.router.to-left' -> 't63.router.from-right' (latency 3); the flags barrier"
+after t6-timed sort threads=6 part=tiles span=1229687 reps=1 us_per_cycle=3.9843 us_min=3.9843 us_max=3.9843 secs=4.8994 words=486637 digest=881be987e1fe8a9f rss_mb=243.2 sram_resident_mb=208.0 times="intervals=424638 total=12292672628 compute=0.9192 imbalance=0.0472 barrier_wait=0.0168 drain=0.0115 publish=0.0023 clear=0.0023 end=0.0007 other=0.0000" partition="64 domains in 6 engines on 6 threads; crossings: 214 link (214 link delivered direct); barrier every 3 cycles, set by link 't0.router.to-left' -> 't63.router.from-right' (latency 3); the flags barrier"
+
+==== digests (the machine at L2's all-READY, every configuration)  [11:04:21]
+VERDICT digests: 2 distinct: FAIL
+
+==== summary: seconds over the counted span (the median machine of each process; min-max over all), us per cycle, x one thread, x W7's ref (95.9 s)  [11:04:21]
+before one  secs=28.7431 (processes: 28.5555 28.7431 29.0602) us_per_cycle=23.3743 x_one=1.00  x_ref=3.3
+before t6   secs=5.2556  (processes: 4.8265 5.2556 5.2832) us_per_cycle=4.2740  x_one=5.47  x_ref=18.2
+before t6 timed: us_per_cycle=4.4145 [compute=4.038 imbalance=0.249 barrier_wait=0.065 drain=0.041 publish=0.009 clear=0.010 ]
+before memory: rss_mb=241.4 sram_resident_mb=208.0
+w11 one  secs=28.2694 (processes: 28.0102 28.2694 28.6477) us_per_cycle=22.9891 x_one=1.00  x_ref=3.4
+w11 t6   secs=5.3026  (processes: 5.2944 5.3026 5.3337) us_per_cycle=4.3122  x_one=5.33  x_ref=18.1
+w11 t6 timed: us_per_cycle=4.5918 [compute=4.147 imbalance=0.326 barrier_wait=0.057 drain=0.040 publish=0.009 clear=0.010 ]
+w11 memory: rss_mb=241.4 sram_resident_mb=208.0
+after one  secs=24.8852 (processes: 24.7554 24.8852 25.6291) us_per_cycle=20.2371 x_one=1.00  x_ref=3.9
+after t6   secs=4.5969  (processes: 4.5932 4.5969 4.6038) us_per_cycle=3.7383  x_one=5.41  x_ref=20.9
+after t6 timed: us_per_cycle=3.9843 [compute=3.662 imbalance=0.188 barrier_wait=0.067 drain=0.046 publish=0.009 clear=0.009 ]
+after memory: rss_mb=241.4 sram_resident_mb=208.0
+VERDICT every run completed: PASS
+
+==== done in 968 s  [11:04:21]
+_mb=208.0
+VERDICT every run completed: PASS
+
+==== done in 968 s  [11:04:21]
