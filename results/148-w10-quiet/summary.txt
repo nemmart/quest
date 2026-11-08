@@ -1,0 +1,22 @@
+after active=1   units=64      us_per_cycle=0.0260   ns_per_active_step=25.98   words=1984     perf(all): instr=215304458 cycles=51362747 l1_miss=25419 llc_miss=1435
+after active=1   units=1024    us_per_cycle=0.0261   ns_per_active_step=26.11   words=30576    perf(all): instr=226851053 cycles=55808610 l1_miss=93039 llc_miss=898
+after active=1   units=16384   us_per_cycle=0.0370   ns_per_active_step=37.00   words=488064   perf(all): instr=410050419 cycles=152693795 l1_miss=1106600 llc_miss=53344
+after active=1   units=131072  us_per_cycle=0.0503   ns_per_active_step=50.27   words=3904064  perf(all): instr=1786653497 cycles=889921216 l1_miss=8928640 llc_miss=3017591
+after active=8   units=64      us_per_cycle=0.1389   ns_per_active_step=17.36   words=1968     perf(all): instr=995392492 cycles=265860247 l1_miss=29813 llc_miss=709
+after active=8   units=1024    us_per_cycle=0.1365   ns_per_active_step=17.06   words=30560    perf(all): instr=1006925020 cycles=265125098 l1_miss=97545 llc_miss=702
+after active=8   units=16384   us_per_cycle=0.1974   ns_per_active_step=24.67   words=488048   perf(all): instr=1190221368 cycles=457012958 l1_miss=1111882 llc_miss=57599
+after active=8   units=131072  us_per_cycle=0.2464   ns_per_active_step=30.80   words=3904048  perf(all): instr=2567033485 cycles=1259257924 l1_miss=8969836 llc_miss=3012578
+after active=64  units=64      us_per_cycle=0.9200   ns_per_active_step=14.37   words=1584     perf(all): instr=7235352418 cycles=1748363625 l1_miss=54955 llc_miss=492
+after active=64  units=1024    us_per_cycle=1.0053   ns_per_active_step=15.71   words=30440    perf(all): instr=7247282714 cycles=1914717772 l1_miss=167799 llc_miss=873
+after active=64  units=16384   us_per_cycle=0.9882   ns_per_active_step=15.44   words=487928   perf(all): instr=7430235852 cycles=1958195517 l1_miss=1219438 llc_miss=60837
+after active=64  units=131072  us_per_cycle=1.0434   ns_per_active_step=16.30   words=3903928  perf(all): instr=8806808978 cycles=2775869390 l1_miss=9015485 llc_miss=3018288
+== chip sort in windows of 64
+quiet prog=sort windows=232 of 64 cycles reps=9 us_per_cycle=0.956
+quiet bin=2^5 windows=209 cycles=13376 steps_per_cycle=51.14 us_per_cycle=0.6396 ns_per_step=12.5
+quiet bin=2^6 windows=1 cycles=6 steps_per_cycle=69.17 us_per_cycle=1.9282 ns_per_step=27.9
+quiet bin=2^7 windows=22 cycles=1408 steps_per_cycle=190.16 us_per_cycle=3.9594 ns_per_step=20.8
+== chip wfi in windows of 64
+quiet prog=wfi windows=26 of 64 cycles reps=9 us_per_cycle=0.865
+quiet bin=2^3 windows=1 cycles=64 steps_per_cycle=14.48 us_per_cycle=0.2848 ns_per_step=19.7
+quiet bin=2^5 windows=23 cycles=1472 steps_per_cycle=49.07 us_per_cycle=0.7813 ns_per_step=15.9
+quiet bin=2^6 windows=2 cycles=128 steps_per_cycle=87.07 us_per_cycle=2.1218 ns_per_step=24.4
