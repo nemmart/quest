@@ -1,0 +1,32 @@
+before one: chip 0.932, mesh 5.381
+before t2 counter: barrier_only=0.0472 bare=0.3226 chip=0.546 x1.71 [compute=0.474 imbalance=0.009 barrier_wait=0.048 drain=0.016 publish=0.004 clear=0.010 ] mesh=2.814 x1.91
+before t2 flags: barrier_only=0.0766 bare=0.2833 chip=0.586 x1.59 [compute=0.471 imbalance=0.009 barrier_wait=0.040 drain=0.018 publish=0.004 clear=0.009 ] mesh=2.808 x1.92
+before t2 flags-spin: barrier_only=0.0767 bare=0.3031 chip=0.591 x1.58 [compute=0.474 imbalance=0.010 barrier_wait=0.035 drain=0.018 publish=0.004 clear=0.008 ] mesh=2.804 x1.92
+before t4 counter: barrier_only=0.1691 bare=0.4081 chip=0.350 x2.66 [compute=0.240 imbalance=0.023 barrier_wait=0.065 drain=0.020 publish=0.005 clear=0.008 ] mesh=1.701 x3.16
+before t4 flags: barrier_only=0.1436 bare=0.3396 chip=0.335 x2.78 [compute=0.240 imbalance=0.025 barrier_wait=0.046 drain=0.027 publish=0.005 clear=0.009 ] mesh=1.685 x3.19
+before t4 flags-spin: barrier_only=0.1437 bare=0.3503 chip=0.337 x2.77 [compute=0.238 imbalance=0.022 barrier_wait=0.045 drain=0.028 publish=0.005 clear=0.007 ] mesh=1.708 x3.15
+before t6 counter: barrier_only=0.2590 bare=0.4940 chip=0.333 x2.80 [compute=0.181 imbalance=0.028 barrier_wait=0.100 drain=0.026 publish=0.006 clear=0.009 ] mesh=1.488 x3.62
+before t6 flags: barrier_only=0.2345 bare=0.4280 chip=0.296 x3.15 [compute=0.179 imbalance=0.029 barrier_wait=0.050 drain=0.037 publish=0.006 clear=0.008 ] mesh=1.464 x3.68
+before t6 flags-spin: barrier_only=0.2371 bare=0.4200 chip=0.296 x3.15 [compute=0.180 imbalance=0.027 barrier_wait=0.052 drain=0.037 publish=0.006 clear=0.008 ] mesh=1.481 x3.63
+before t8 counter: barrier_only=0.2750 bare=0.5477 chip=0.416 x2.24 [compute=0.207 imbalance=0.098 barrier_wait=0.075 drain=0.040 publish=0.010 clear=0.008 ] mesh=1.509 x3.57
+before t8 flags: barrier_only=0.2979 bare=0.4739 chip=0.410 x2.27 [compute=0.206 imbalance=0.097 barrier_wait=0.056 drain=0.050 publish=0.009 clear=0.008 ] mesh=1.517 x3.55
+before t8 flags-spin: barrier_only=0.2966 bare=0.4733 chip=0.409 x2.28 [compute=0.207 imbalance=0.099 barrier_wait=0.054 drain=0.049 publish=0.009 clear=0.008 ] mesh=1.600 x3.36
+before t12 counter: barrier_only=0.3107 bare=0.6860 chip=0.410 x2.27 [compute=0.202 imbalance=0.062 barrier_wait=0.089 drain=0.059 publish=0.015 clear=0.008 ] mesh=1.609 x3.34
+before t12 flags: barrier_only=0.4181 bare=0.5658 chip=0.386 x2.41 [compute=0.206 imbalance=0.053 barrier_wait=0.058 drain=0.072 publish=0.015 clear=0.008 ] mesh=1.515 x3.55
+before t12 flags-spin: barrier_only=0.4144 bare=0.5613 chip=0.389 x2.40 [compute=0.205 imbalance=0.054 barrier_wait=0.057 drain=0.071 publish=0.015 clear=0.008 ] mesh=1.600 x3.36
+after one: chip 0.932, mesh 5.329
+after t2 counter: barrier_only=0.0525 bare=0.3056 chip=0.556 x1.68 [compute=0.471 imbalance=0.009 barrier_wait=0.047 drain=0.016 publish=0.004 clear=0.011 ] mesh=2.818 x1.89
+after t2 flags: barrier_only=0.0954 bare=0.2844 chip=0.593 x1.57 [compute=0.473 imbalance=0.008 barrier_wait=0.037 drain=0.018 publish=0.004 clear=0.009 ] mesh=2.841 x1.88
+after t2 flags-spin: barrier_only=0.0959 bare=0.2876 chip=0.588 x1.59 [compute=0.472 imbalance=0.009 barrier_wait=0.037 drain=0.018 publish=0.004 clear=0.009 ] mesh=2.809 x1.90
+after t4 counter: barrier_only=0.1753 bare=0.3965 chip=0.346 x2.69 [compute=0.241 imbalance=0.022 barrier_wait=0.063 drain=0.020 publish=0.005 clear=0.010 ] mesh=1.696 x3.14
+after t4 flags: barrier_only=0.1741 bare=0.3698 chip=0.337 x2.77 [compute=0.241 imbalance=0.021 barrier_wait=0.060 drain=0.020 publish=0.005 clear=0.011 ] mesh=1.694 x3.15
+after t4 flags-spin: barrier_only=0.1780 bare=0.3663 chip=0.339 x2.75 [compute=0.243 imbalance=0.022 barrier_wait=0.056 drain=0.019 publish=0.005 clear=0.010 ] mesh=1.682 x3.17
+after t6 counter: barrier_only=0.2538 bare=0.5028 chip=0.331 x2.82 [compute=0.182 imbalance=0.030 barrier_wait=0.094 drain=0.026 publish=0.006 clear=0.010 ] mesh=1.505 x3.54
+after t6 flags: barrier_only=0.2867 bare=0.4550 chip=0.304 x3.07 [compute=0.180 imbalance=0.029 barrier_wait=0.071 drain=0.025 publish=0.006 clear=0.009 ] mesh=1.454 x3.67
+after t6 flags-spin: barrier_only=0.2895 bare=0.4575 chip=0.305 x3.06 [compute=0.181 imbalance=0.029 barrier_wait=0.071 drain=0.025 publish=0.006 clear=0.009 ] mesh=1.476 x3.61
+after t8 counter: barrier_only=0.2670 bare=0.5472 chip=0.416 x2.24 [compute=0.207 imbalance=0.097 barrier_wait=0.072 drain=0.041 publish=0.009 clear=0.009 ] mesh=1.522 x3.50
+after t8 flags: barrier_only=0.3691 bare=0.5104 chip=0.409 x2.28 [compute=0.207 imbalance=0.098 barrier_wait=0.068 drain=0.037 publish=0.009 clear=0.008 ] mesh=1.517 x3.51
+after t8 flags-spin: barrier_only=0.3628 bare=0.5079 chip=0.409 x2.28 [compute=0.209 imbalance=0.097 barrier_wait=0.065 drain=0.037 publish=0.009 clear=0.008 ] mesh=1.502 x3.55
+after t12 counter: barrier_only=0.3105 bare=0.6914 chip=0.413 x2.26 [compute=0.206 imbalance=0.046 barrier_wait=0.103 drain=0.059 publish=0.015 clear=0.009 ] mesh=1.589 x3.35
+after t12 flags: barrier_only=0.5362 bare=0.5967 chip=0.391 x2.38 [compute=0.207 imbalance=0.056 barrier_wait=0.069 drain=0.058 publish=0.016 clear=0.009 ] mesh=1.610 x3.31
+after t12 flags-spin: barrier_only=0.5268 bare=0.5941 chip=0.384 x2.43 [compute=0.207 imbalance=0.057 barrier_wait=0.066 drain=0.059 publish=0.015 clear=0.009 ] mesh=1.619 x3.29
