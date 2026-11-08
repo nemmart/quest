@@ -1,0 +1,48 @@
+
+==== machine (D21)  [08:50:43]
+model:     Intel(R) Core(TM) i5-14400F
+sockets:   1; CPUs usable 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15 (16 of 16 online)
+P cores:   6 cores, CPUs 0,1,2,3,4,5,6,7,8,9,10,11 (12 threads), max 4700000 kHz, min 800000 kHz
+E cores:   4 CPUs 12,13,14,15, max 3500000 kHz, min 800000 kHz
+placement: 0,2,4,6,8,10,1,3,5,7,9,11,12,13,14,15
+governor:  powersave
+caches:    L1d cache: 416 KiB (10 instances);L1i cache: 448 KiB (10 instances);L2 cache: 9.5 MiB (7 instances);L3 cache: 20 MiB (1 instance);
+memory:    MemTotal: 65671456 kB
+kernel:    Linux 6.8.0-147-generic
+gcc:       g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+clang:     Ubuntu clang version 18.1.3 (1ubuntu1)
+java:      openjdk version "21.0.12.1" 2026-08-18
+ 08:50:43 up 3 days, 23:54,  1 user,  load average: 0.00, 0.00, 0.00
+kit: sim-w12 df7e4b2
+
+==== inputs: the full-size golden (/home/questrunner/data/w7-golden-m2/fb6f21e/sort64k-fp.fp), the key sets (KeyGen), the 16K golden (regen.sh)  [08:50:43]
+VERDICT sort64k-fp.fp present, sha256 as HASHES: PASS
+VERDICT key sets as HASHES: PASS
+VERDICT sort16k-fp regenerated (regen.sh --check: SAME): PASS
+
+==== build (clang release, D18)  [08:51:32]
+VERDICT build: PASS
+
+==== the full size, one thread (CPU 0)  [08:51:36]
+sort (1 domain): 321 points equal, through cycle 1244564 (the golden's last 1244564)
+sort verify: keys misplaced 0, receive sizes wrong 0, values wrong 0, cores not exited 0: 0, violations 0, ERRORS 0
+sort: TOTAL 1229687 cycles (L1 GO at 14838 -> L2 all READY at 1244525); phases 98 (sort64k.out: TOTAL 1229687; phases.csv: 98 after the boot's)
+VERDICT sort64k-one (32 s): PASS
+
+==== the full size, 8 domains (CPUs 0,2,4,6,8,10,1,3)  [08:52:08]
+sort (8 domains): 321 points equal, through cycle 1244564 (the golden's last 1244564)
+sort verify: keys misplaced 0, receive sizes wrong 0, values wrong 0, cores not exited 0: 0, violations 0, ERRORS 0
+sort: TOTAL 1229687 cycles (L1 GO at 14838 -> L2 all READY at 1244525); phases 98 (sort64k.out: TOTAL 1229687; phases.csv: 98 after the boot's)
+VERDICT sort64k-p8 (16 s): PASS
+
+==== 16K, 8 domains (CPUs 0,2,4,6,8,10,1,3)  [08:52:24]
+sort (8 domains): 248 points equal, through cycle 511496 (the golden's last 511496)
+sort verify: keys misplaced 0, receive sizes wrong 0, values wrong 0, cores not exited 0: 0, violations 0, ERRORS 0
+sort: TOTAL 496619 cycles (L1 GO at 14838 -> L2 all READY at 511457); phases 98 (sort16k.out: TOTAL 496619; phases.csv: 98 after the boot's)
+VERDICT sort16k-p8 (5 s): PASS
+
+==== done in 106 s  [08:52:29]
+ the boot's)
+VERDICT sort16k-p8 (5 s): PASS
+
+==== done in 106 s  [08:52:29]
