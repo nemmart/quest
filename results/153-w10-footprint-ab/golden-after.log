@@ -1,0 +1,30 @@
+ok   golden_runs_listed
+ok   golden_all_match_direct
+ok   golden_all_match_engine
+ok   golden_engine_debug_checks
+ok   golden_refuses_a_config_difference
+ok   golden_refuses_an_image_or_tile_difference
+ok   golden_catches_a_difference
+ok   golden_start_skew_is_refs
+./build/clang-release/test_golden: 8 passed, 0 failed, 0 skipped (debug-only)
+wfi (1 domain, 1 thread): stopped at cycle 1616 (the golden's last point 1616), checked through 1616; C&C: GOs 4, packets 34, ready_repulses 0, stepped 74; big SRAM: 262144 KB allocated, 0 KB touched
+regs (1 domain, 1 thread): stopped at cycle 869 (the golden's last point 869), checked through 869; C&C: GOs 1, packets 62, ready_repulses 0, stepped 76; big SRAM: 262144 KB allocated, 256 KB touched
+wfi (1 domain, 1 thread): stopped at cycle 1616 (the golden's last point 1616), checked through 1616; C&C: GOs 4, packets 34, ready_repulses 0, stepped 1616; big SRAM: 262144 KB allocated, 0 KB touched
+regs (1 domain, 1 thread): stopped at cycle 869 (the golden's last point 869), checked through 869; C&C: GOs 1, packets 62, ready_repulses 0, stepped 869; big SRAM: 262144 KB allocated, 256 KB touched
+wfi (1 domain, 1 thread): stopped at cycle 1616 (the golden's last point 1616), checked through 1616; C&C: GOs 4, packets 34, ready_repulses 0, stepped 74; big SRAM: 262144 KB allocated, 0 KB touched
+regs (1 domain, 1 thread): stopped at cycle 869 (the golden's last point 869), checked through 869; C&C: GOs 1, packets 62, ready_repulses 0, stepped 76; big SRAM: 262144 KB allocated, 256 KB touched
+wfi (1 domain, 1 thread): stopped at cycle 1616 (the golden's last point 1616), checked through 1616; C&C: GOs 4, packets 34, ready_repulses 0, stepped 74; big SRAM: 262144 KB allocated, 0 KB touched
+regs (1 domain, 1 thread): stopped at cycle 869 (the golden's last point 869), checked through 869; C&C: GOs 1, packets 62, ready_repulses 0, stepped 76; big SRAM: 262144 KB allocated, 256 KB touched
+wfi (2 domains, 2 threads): stopped at cycle 1616 (the golden's last point 1616), checked through 1616; C&C: GOs 4, packets 34, ready_repulses 0, stepped 74; big SRAM: 262144 KB allocated, 0 KB touched
+regs (2 domains, 2 threads): stopped at cycle 869 (the golden's last point 869), checked through 869; C&C: GOs 1, packets 62, ready_repulses 0, stepped 76; big SRAM: 262144 KB allocated, 256 KB touched
+wfi (4 domains, 4 threads): stopped at cycle 1616 (the golden's last point 1616), checked through 1616; C&C: GOs 4, packets 34, ready_repulses 0, stepped 74; big SRAM: 262144 KB allocated, 0 KB touched
+regs (4 domains, 4 threads): stopped at cycle 869 (the golden's last point 869), checked through 869; C&C: GOs 1, packets 62, ready_repulses 0, stepped 76; big SRAM: 262144 KB allocated, 256 KB touched
+wfi (8 domains, 8 threads): stopped at cycle 1616 (the golden's last point 1616), checked through 1616; C&C: GOs 4, packets 34, ready_repulses 0, stepped 74; big SRAM: 262144 KB allocated, 0 KB touched
+regs (8 domains, 8 threads): stopped at cycle 869 (the golden's last point 869), checked through 869; C&C: GOs 1, packets 62, ready_repulses 0, stepped 76; big SRAM: 262144 KB allocated, 256 KB touched
+ok   chip_wfi_and_regs_every_cycle
+ok   chip_every_tile_when_asked
+ok   chip_under_debug_options
+ok   chip_form2_row_bands
+ok   tile_router_overflow_steps_the_register_block
+ok   tile_read_port_end_to_end
+./build/clang-release/test_chip: 6 passed, 0 failed, 0 skipped (debug-only)

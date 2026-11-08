@@ -1,0 +1,106 @@
+
+==== machine (D21)  [06:57:27]
+model:     Intel(R) Core(TM) i5-14400F
+sockets:   1; CPUs usable 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15 (16 of 16 online)
+P cores:   6 cores, CPUs 0,1,2,3,4,5,6,7,8,9,10,11 (12 threads), max 4700000 kHz, min 800000 kHz
+E cores:   4 CPUs 12,13,14,15, max 3500000 kHz, min 800000 kHz
+placement: 0,2,4,6,8,10,1,3,5,7,9,11,12,13,14,15
+governor:  powersave
+caches:    L1d cache: 416 KiB (10 instances);L1i cache: 448 KiB (10 instances);L2 cache: 9.5 MiB (7 instances);L3 cache: 20 MiB (1 instance);
+memory:    MemTotal: 65671456 kB
+kernel:    Linux 6.8.0-147-generic
+gcc:       g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+clang:     Ubuntu clang version 18.1.3 (1ubuntu1)
+java:      openjdk version "21.0.12.1" 2026-08-18
+ 06:57:28 up 3 days, 22:01,  1 user,  load average: 0.00, 0.00, 0.00
+kit: before 378931d, after 51c9e5b
+
+==== build (clang release, D18) and the goldens (test_golden, test_chip: clang release)  [06:57:28]
+VERDICT test_golden, test_chip before: PASS
+VERDICT test_golden, test_chip after: PASS
+before one-sort chip prog=sort threads=1 part=one barrier=auto cycles=14791 reps=9 us_per_cycle=0.952 us_min=0.941 us_max=0.969 words=463018 digest=290a9f6d749c3708 times="one domain" partition="one domain"
+before one-wfi chip prog=wfi threads=1 part=one barrier=auto cycles=1665 reps=9 us_per_cycle=0.861 us_min=0.853 us_max=0.900 words=463018 digest=d502e639cf44e0f7 times="one domain" partition="one domain"
+before one-regs chip prog=regs threads=1 part=one barrier=auto cycles=897 reps=9 us_per_cycle=1.630 us_min=1.617 us_max=1.641 words=463018 digest=990b6342dc521ec2 times="one domain" partition="one domain"
+before perf-sort chip prog=sort threads=1 part=one barrier=auto cycles=14791 reps=9 us_per_cycle=0.954 us_min=0.945 us_max=0.976 words=463018 digest=290a9f6d749c3708 times="one domain" partition="one domain" perf: core_cycles=983385718 core_L1-dcache-load-misses=23649290 core_LLC-load-misses=33827 core_instructions=3462301817 
+before t6-sort chip prog=sort threads=6 part=tiles barrier=auto cycles=14791 reps=9 us_per_cycle=0.300 us_min=0.294 us_max=0.324 words=485485 digest=290a9f6d749c3708 times="time_threads off" partition="64 domains in 6 engines on 6 threads; crossings: 214 link (214 link delivered direct); barrier every 3 cycles, set by link 't0.router.to-left' -> 't63.router.from-right' (latency 3); the flags barrier"
+before mesh-one threads form=2 chip=mesh threads=1 domains=1 engines=0 part=rows barrier=auto spins=2000 due=on rate_in=0.35 cycles=60000 secs=0.3227 rate=185935 us_per_chip_cycle=5.378 words=24136 digest=d25cdc8ad7c16015 times="one domain" partition="one domain"
+before synth-one threads form=2 chip=synth threads=1 domains=1 engines=0 part=rows barrier=auto spins=2000 due=on rate_in=0.35 cycles=60000 secs=0.3841 rate=156195 us_per_chip_cycle=6.402 words=16848 digest=886efa593d2f82ec times="one domain" partition="one domain"
+after one-sort chip prog=sort threads=1 part=one barrier=auto cycles=14791 reps=9 us_per_cycle=0.950 us_min=0.947 us_max=0.968 words=463018 digest=290a9f6d749c3708 rss_mb_built=17.1 rss_mb_ran=17.1 sram_mb=256.0 sram_resident_mb_built=0.00 sram_resident_mb_ran=0.00 times="one domain" partition="one domain"
+after one-wfi chip prog=wfi threads=1 part=one barrier=auto cycles=1665 reps=9 us_per_cycle=0.868 us_min=0.852 us_max=0.912 words=463018 digest=d502e639cf44e0f7 rss_mb_built=17.1 rss_mb_ran=17.1 sram_mb=256.0 sram_resident_mb_built=0.00 sram_resident_mb_ran=0.00 times="one domain" partition="one domain"
+after one-regs chip prog=regs threads=1 part=one barrier=auto cycles=897 reps=9 us_per_cycle=1.662 us_min=1.640 us_max=1.687 words=463018 digest=990b6342dc521ec2 rss_mb_built=17.1 rss_mb_ran=17.3 sram_mb=256.0 sram_resident_mb_built=0.00 sram_resident_mb_ran=0.25 times="one domain" partition="one domain"
+after perf-sort chip prog=sort threads=1 part=one barrier=auto cycles=14791 reps=9 us_per_cycle=0.956 us_min=0.948 us_max=1.055 words=463018 digest=290a9f6d749c3708 rss_mb_built=17.1 rss_mb_ran=17.1 sram_mb=256.0 sram_resident_mb_built=0.00 sram_resident_mb_ran=0.00 times="one domain" partition="one domain" perf: core_cycles=994951031 core_L1-dcache-load-misses=23325864 core_LLC-load-misses=43354 core_instructions=3471486850 
+after t6-sort chip prog=sort threads=6 part=tiles barrier=auto cycles=14791 reps=9 us_per_cycle=0.301 us_min=0.297 us_max=0.307 words=485485 digest=290a9f6d749c3708 rss_mb_built=19.1 rss_mb_ran=19.1 sram_mb=256.0 sram_resident_mb_built=0.00 sram_resident_mb_ran=0.00 times="time_threads off" partition="64 domains in 6 engines on 6 threads; crossings: 214 link (214 link delivered direct); barrier every 3 cycles, set by link 't0.router.to-left' -> 't63.router.from-right' (latency 3); the flags barrier"
+after mesh-one threads form=2 chip=mesh threads=1 domains=1 engines=0 part=rows barrier=auto spins=2000 due=on rate_in=0.35 cycles=60000 secs=0.3215 rate=186621 us_per_chip_cycle=5.358 words=24136 digest=d25cdc8ad7c16015 times="one domain" partition="one domain"
+after synth-one threads form=2 chip=synth threads=1 domains=1 engines=0 part=rows barrier=auto spins=2000 due=on rate_in=0.35 cycles=60000 secs=0.3853 rate=155704 us_per_chip_cycle=6.422 words=16848 digest=886efa593d2f82ec times="one domain" partition="one domain"
+before one-sort chip prog=sort threads=1 part=one barrier=auto cycles=14791 reps=9 us_per_cycle=0.948 us_min=0.942 us_max=0.960 words=463018 digest=290a9f6d749c3708 times="one domain" partition="one domain"
+before one-wfi chip prog=wfi threads=1 part=one barrier=auto cycles=1665 reps=9 us_per_cycle=0.862 us_min=0.853 us_max=0.866 words=463018 digest=d502e639cf44e0f7 times="one domain" partition="one domain"
+before one-regs chip prog=regs threads=1 part=one barrier=auto cycles=897 reps=9 us_per_cycle=1.637 us_min=1.612 us_max=1.682 words=463018 digest=990b6342dc521ec2 times="one domain" partition="one domain"
+before t6-sort chip prog=sort threads=6 part=tiles barrier=auto cycles=14791 reps=9 us_per_cycle=0.303 us_min=0.296 us_max=0.319 words=485485 digest=290a9f6d749c3708 times="time_threads off" partition="64 domains in 6 engines on 6 threads; crossings: 214 link (214 link delivered direct); barrier every 3 cycles, set by link 't0.router.to-left' -> 't63.router.from-right' (latency 3); the flags barrier"
+before mesh-one threads form=2 chip=mesh threads=1 domains=1 engines=0 part=rows barrier=auto spins=2000 due=on rate_in=0.35 cycles=60000 secs=0.3249 rate=184692 us_per_chip_cycle=5.414 words=24136 digest=d25cdc8ad7c16015 times="one domain" partition="one domain"
+before synth-one threads form=2 chip=synth threads=1 domains=1 engines=0 part=rows barrier=auto spins=2000 due=on rate_in=0.35 cycles=60000 secs=0.3834 rate=156501 us_per_chip_cycle=6.390 words=16848 digest=886efa593d2f82ec times="one domain" partition="one domain"
+after one-sort chip prog=sort threads=1 part=one barrier=auto cycles=14791 reps=9 us_per_cycle=0.956 us_min=0.944 us_max=1.014 words=463018 digest=290a9f6d749c3708 rss_mb_built=17.1 rss_mb_ran=17.1 sram_mb=256.0 sram_resident_mb_built=0.00 sram_resident_mb_ran=0.00 times="one domain" partition="one domain"
+after one-wfi chip prog=wfi threads=1 part=one barrier=auto cycles=1665 reps=9 us_per_cycle=0.875 us_min=0.859 us_max=0.911 words=463018 digest=d502e639cf44e0f7 rss_mb_built=17.0 rss_mb_ran=17.0 sram_mb=256.0 sram_resident_mb_built=0.00 sram_resident_mb_ran=0.00 times="one domain" partition="one domain"
+after one-regs chip prog=regs threads=1 part=one barrier=auto cycles=897 reps=9 us_per_cycle=1.661 us_min=1.635 us_max=1.685 words=463018 digest=990b6342dc521ec2 rss_mb_built=17.1 rss_mb_ran=17.3 sram_mb=256.0 sram_resident_mb_built=0.00 sram_resident_mb_ran=0.25 times="one domain" partition="one domain"
+after t6-sort chip prog=sort threads=6 part=tiles barrier=auto cycles=14791 reps=9 us_per_cycle=0.300 us_min=0.295 us_max=0.305 words=485485 digest=290a9f6d749c3708 rss_mb_built=19.1 rss_mb_ran=19.1 sram_mb=256.0 sram_resident_mb_built=0.00 sram_resident_mb_ran=0.00 times="time_threads off" partition="64 domains in 6 engines on 6 threads; crossings: 214 link (214 link delivered direct); barrier every 3 cycles, set by link 't0.router.to-left' -> 't63.router.from-right' (latency 3); the flags barrier"
+after mesh-one threads form=2 chip=mesh threads=1 domains=1 engines=0 part=rows barrier=auto spins=2000 due=on rate_in=0.35 cycles=60000 secs=0.3298 rate=181942 us_per_chip_cycle=5.496 words=24136 digest=d25cdc8ad7c16015 times="one domain" partition="one domain"
+after synth-one threads form=2 chip=synth threads=1 domains=1 engines=0 part=rows barrier=auto spins=2000 due=on rate_in=0.35 cycles=60000 secs=0.3841 rate=156217 us_per_chip_cycle=6.401 words=16848 digest=886efa593d2f82ec times="one domain" partition="one domain"
+before one-sort chip prog=sort threads=1 part=one barrier=auto cycles=14791 reps=9 us_per_cycle=0.945 us_min=0.936 us_max=0.991 words=463018 digest=290a9f6d749c3708 times="one domain" partition="one domain"
+before one-wfi chip prog=wfi threads=1 part=one barrier=auto cycles=1665 reps=9 us_per_cycle=0.858 us_min=0.849 us_max=0.889 words=463018 digest=d502e639cf44e0f7 times="one domain" partition="one domain"
+before one-regs chip prog=regs threads=1 part=one barrier=auto cycles=897 reps=9 us_per_cycle=1.633 us_min=1.610 us_max=1.679 words=463018 digest=990b6342dc521ec2 times="one domain" partition="one domain"
+before t6-sort chip prog=sort threads=6 part=tiles barrier=auto cycles=14791 reps=9 us_per_cycle=0.304 us_min=0.296 us_max=0.316 words=485485 digest=290a9f6d749c3708 times="time_threads off" partition="64 domains in 6 engines on 6 threads; crossings: 214 link (214 link delivered direct); barrier every 3 cycles, set by link 't0.router.to-left' -> 't63.router.from-right' (latency 3); the flags barrier"
+before mesh-one threads form=2 chip=mesh threads=1 domains=1 engines=0 part=rows barrier=auto spins=2000 due=on rate_in=0.35 cycles=60000 secs=0.3341 rate=179613 us_per_chip_cycle=5.568 words=24136 digest=d25cdc8ad7c16015 times="one domain" partition="one domain"
+before synth-one threads form=2 chip=synth threads=1 domains=1 engines=0 part=rows barrier=auto spins=2000 due=on rate_in=0.35 cycles=60000 secs=0.3845 rate=156031 us_per_chip_cycle=6.409 words=16848 digest=886efa593d2f82ec times="one domain" partition="one domain"
+after one-sort chip prog=sort threads=1 part=one barrier=auto cycles=14791 reps=9 us_per_cycle=0.952 us_min=0.947 us_max=1.007 words=463018 digest=290a9f6d749c3708 rss_mb_built=17.1 rss_mb_ran=17.1 sram_mb=256.0 sram_resident_mb_built=0.00 sram_resident_mb_ran=0.00 times="one domain" partition="one domain"
+after one-wfi chip prog=wfi threads=1 part=one barrier=auto cycles=1665 reps=9 us_per_cycle=0.869 us_min=0.854 us_max=0.945 words=463018 digest=d502e639cf44e0f7 rss_mb_built=17.0 rss_mb_ran=17.0 sram_mb=256.0 sram_resident_mb_built=0.00 sram_resident_mb_ran=0.00 times="one domain" partition="one domain"
+after one-regs chip prog=regs threads=1 part=one barrier=auto cycles=897 reps=9 us_per_cycle=1.654 us_min=1.632 us_max=1.664 words=463018 digest=990b6342dc521ec2 rss_mb_built=17.1 rss_mb_ran=17.4 sram_mb=256.0 sram_resident_mb_built=0.00 sram_resident_mb_ran=0.25 times="one domain" partition="one domain"
+after t6-sort chip prog=sort threads=6 part=tiles barrier=auto cycles=14791 reps=9 us_per_cycle=0.296 us_min=0.295 us_max=0.306 words=485485 digest=290a9f6d749c3708 rss_mb_built=19.2 rss_mb_ran=19.2 sram_mb=256.0 sram_resident_mb_built=0.00 sram_resident_mb_ran=0.00 times="time_threads off" partition="64 domains in 6 engines on 6 threads; crossings: 214 link (214 link delivered direct); barrier every 3 cycles, set by link 't0.router.to-left' -> 't63.router.from-right' (latency 3); the flags barrier"
+after mesh-one threads form=2 chip=mesh threads=1 domains=1 engines=0 part=rows barrier=auto spins=2000 due=on rate_in=0.35 cycles=60000 secs=0.3335 rate=179903 us_per_chip_cycle=5.559 words=24136 digest=d25cdc8ad7c16015 times="one domain" partition="one domain"
+after synth-one threads form=2 chip=synth threads=1 domains=1 engines=0 part=rows barrier=auto spins=2000 due=on rate_in=0.35 cycles=60000 secs=0.3854 rate=155687 us_per_chip_cycle=6.423 words=16848 digest=886efa593d2f82ec times="one domain" partition="one domain"
+before one-sort chip prog=sort threads=1 part=one barrier=auto cycles=14791 reps=9 us_per_cycle=0.947 us_min=0.941 us_max=0.952 words=463018 digest=290a9f6d749c3708 times="one domain" partition="one domain"
+before one-wfi chip prog=wfi threads=1 part=one barrier=auto cycles=1665 reps=9 us_per_cycle=0.866 us_min=0.854 us_max=0.874 words=463018 digest=d502e639cf44e0f7 times="one domain" partition="one domain"
+before one-regs chip prog=regs threads=1 part=one barrier=auto cycles=897 reps=9 us_per_cycle=1.638 us_min=1.606 us_max=1.686 words=463018 digest=990b6342dc521ec2 times="one domain" partition="one domain"
+before t6-sort chip prog=sort threads=6 part=tiles barrier=auto cycles=14791 reps=9 us_per_cycle=0.302 us_min=0.296 us_max=0.326 words=485485 digest=290a9f6d749c3708 times="time_threads off" partition="64 domains in 6 engines on 6 threads; crossings: 214 link (214 link delivered direct); barrier every 3 cycles, set by link 't0.router.to-left' -> 't63.router.from-right' (latency 3); the flags barrier"
+before mesh-one threads form=2 chip=mesh threads=1 domains=1 engines=0 part=rows barrier=auto spins=2000 due=on rate_in=0.35 cycles=60000 secs=0.3202 rate=187377 us_per_chip_cycle=5.337 words=24136 digest=d25cdc8ad7c16015 times="one domain" partition="one domain"
+before synth-one threads form=2 chip=synth threads=1 domains=1 engines=0 part=rows barrier=auto spins=2000 due=on rate_in=0.35 cycles=60000 secs=0.3862 rate=155351 us_per_chip_cycle=6.437 words=16848 digest=886efa593d2f82ec times="one domain" partition="one domain"
+after one-sort chip prog=sort threads=1 part=one barrier=auto cycles=14791 reps=9 us_per_cycle=0.949 us_min=0.945 us_max=0.958 words=463018 digest=290a9f6d749c3708 rss_mb_built=17.1 rss_mb_ran=17.1 sram_mb=256.0 sram_resident_mb_built=0.00 sram_resident_mb_ran=0.00 times="one domain" partition="one domain"
+after one-wfi chip prog=wfi threads=1 part=one barrier=auto cycles=1665 reps=9 us_per_cycle=0.864 us_min=0.859 us_max=0.878 words=463018 digest=d502e639cf44e0f7 rss_mb_built=17.1 rss_mb_ran=17.1 sram_mb=256.0 sram_resident_mb_built=0.00 sram_resident_mb_ran=0.00 times="one domain" partition="one domain"
+after one-regs chip prog=regs threads=1 part=one barrier=auto cycles=897 reps=9 us_per_cycle=1.665 us_min=1.633 us_max=1.689 words=463018 digest=990b6342dc521ec2 rss_mb_built=17.1 rss_mb_ran=17.3 sram_mb=256.0 sram_resident_mb_built=0.00 sram_resident_mb_ran=0.25 times="one domain" partition="one domain"
+after t6-sort chip prog=sort threads=6 part=tiles barrier=auto cycles=14791 reps=9 us_per_cycle=0.305 us_min=0.298 us_max=0.311 words=485485 digest=290a9f6d749c3708 rss_mb_built=19.1 rss_mb_ran=19.1 sram_mb=256.0 sram_resident_mb_built=0.00 sram_resident_mb_ran=0.00 times="time_threads off" partition="64 domains in 6 engines on 6 threads; crossings: 214 link (214 link delivered direct); barrier every 3 cycles, set by link 't0.router.to-left' -> 't63.router.from-right' (latency 3); the flags barrier"
+after mesh-one threads form=2 chip=mesh threads=1 domains=1 engines=0 part=rows barrier=auto spins=2000 due=on rate_in=0.35 cycles=60000 secs=0.3291 rate=182300 us_per_chip_cycle=5.485 words=24136 digest=d25cdc8ad7c16015 times="one domain" partition="one domain"
+after synth-one threads form=2 chip=synth threads=1 domains=1 engines=0 part=rows barrier=auto spins=2000 due=on rate_in=0.35 cycles=60000 secs=0.3882 rate=154544 us_per_chip_cycle=6.471 words=16848 digest=886efa593d2f82ec times="one domain" partition="one domain"
+before one-sort chip prog=sort threads=1 part=one barrier=auto cycles=14791 reps=9 us_per_cycle=0.948 us_min=0.941 us_max=0.952 words=463018 digest=290a9f6d749c3708 times="one domain" partition="one domain"
+before one-wfi chip prog=wfi threads=1 part=one barrier=auto cycles=1665 reps=9 us_per_cycle=0.855 us_min=0.848 us_max=0.876 words=463018 digest=d502e639cf44e0f7 times="one domain" partition="one domain"
+before one-regs chip prog=regs threads=1 part=one barrier=auto cycles=897 reps=9 us_per_cycle=1.682 us_min=1.640 us_max=1.765 words=463018 digest=990b6342dc521ec2 times="one domain" partition="one domain"
+before t6-sort chip prog=sort threads=6 part=tiles barrier=auto cycles=14791 reps=9 us_per_cycle=0.301 us_min=0.289 us_max=0.322 words=485485 digest=290a9f6d749c3708 times="time_threads off" partition="64 domains in 6 engines on 6 threads; crossings: 214 link (214 link delivered direct); barrier every 3 cycles, set by link 't0.router.to-left' -> 't63.router.from-right' (latency 3); the flags barrier"
+before mesh-one threads form=2 chip=mesh threads=1 domains=1 engines=0 part=rows barrier=auto spins=2000 due=on rate_in=0.35 cycles=60000 secs=0.3222 rate=186197 us_per_chip_cycle=5.371 words=24136 digest=d25cdc8ad7c16015 times="one domain" partition="one domain"
+before synth-one threads form=2 chip=synth threads=1 domains=1 engines=0 part=rows barrier=auto spins=2000 due=on rate_in=0.35 cycles=60000 secs=0.3838 rate=156322 us_per_chip_cycle=6.397 words=16848 digest=886efa593d2f82ec times="one domain" partition="one domain"
+after one-sort chip prog=sort threads=1 part=one barrier=auto cycles=14791 reps=9 us_per_cycle=0.957 us_min=0.942 us_max=0.966 words=463018 digest=290a9f6d749c3708 rss_mb_built=17.1 rss_mb_ran=17.1 sram_mb=256.0 sram_resident_mb_built=0.00 sram_resident_mb_ran=0.00 times="one domain" partition="one domain"
+after one-wfi chip prog=wfi threads=1 part=one barrier=auto cycles=1665 reps=9 us_per_cycle=0.866 us_min=0.857 us_max=0.904 words=463018 digest=d502e639cf44e0f7 rss_mb_built=17.1 rss_mb_ran=17.1 sram_mb=256.0 sram_resident_mb_built=0.00 sram_resident_mb_ran=0.00 times="one domain" partition="one domain"
+after one-regs chip prog=regs threads=1 part=one barrier=auto cycles=897 reps=9 us_per_cycle=1.650 us_min=1.631 us_max=1.709 words=463018 digest=990b6342dc521ec2 rss_mb_built=17.1 rss_mb_ran=17.3 sram_mb=256.0 sram_resident_mb_built=0.00 sram_resident_mb_ran=0.25 times="one domain" partition="one domain"
+after t6-sort chip prog=sort threads=6 part=tiles barrier=auto cycles=14791 reps=9 us_per_cycle=0.301 us_min=0.294 us_max=0.315 words=485485 digest=290a9f6d749c3708 rss_mb_built=19.1 rss_mb_ran=19.1 sram_mb=256.0 sram_resident_mb_built=0.00 sram_resident_mb_ran=0.00 times="time_threads off" partition="64 domains in 6 engines on 6 threads; crossings: 214 link (214 link delivered direct); barrier every 3 cycles, set by link 't0.router.to-left' -> 't63.router.from-right' (latency 3); the flags barrier"
+after mesh-one threads form=2 chip=mesh threads=1 domains=1 engines=0 part=rows barrier=auto spins=2000 due=on rate_in=0.35 cycles=60000 secs=0.3239 rate=185244 us_per_chip_cycle=5.398 words=24136 digest=d25cdc8ad7c16015 times="one domain" partition="one domain"
+after synth-one threads form=2 chip=synth threads=1 domains=1 engines=0 part=rows barrier=auto spins=2000 due=on rate_in=0.35 cycles=60000 secs=0.3873 rate=154937 us_per_chip_cycle=6.454 words=16848 digest=886efa593d2f82ec times="one domain" partition="one domain"
+
+==== digests  [06:58:01]
+VERDICT digests (chip prog=sort threads=1): PASS
+VERDICT digests (chip prog=wfi): PASS
+VERDICT digests (chip prog=regs): PASS
+VERDICT digests (chip prog=sort threads=6): PASS
+VERDICT digests (chip=mesh): PASS
+VERDICT digests (chip=synth): PASS
+
+==== summary: medians (us per cycle) per revision  [06:58:01]
+one-sort: before 0.948  after 0.952  
+one-wfi: before 0.861  after 0.868  
+one-regs: before 1.637  after 1.661  
+t6-sort: before 0.302  after 0.301  
+mesh-one: before 5.378  after 5.485  
+synth-one: before 6.402  after 6.423  
+perf (boot, one process, 10 machines): before instr=3462301817 cycles=983385718  after instr=3471486850 cycles=994951031  
+VERDICT every run completed: PASS
+
+==== done in 34 s  [06:58:01]
+94951031  
+VERDICT every run completed: PASS
+
+==== done in 34 s  [06:58:01]
