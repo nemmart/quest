@@ -1,0 +1,194 @@
+
+==== units::Router::step(sim::Ctx&)
+    1.34 :   17c31:  mov    %rdi,%r14 // router.h:182
+    1.34 :   17c3a:  test   %rax,%rax // router.h:183
+    1.34 :   17d8f:  jmp    17e0b <units::Router::step(sim::Ctx&)+0x1eb> // router.h:0
+    1.33 :   17dd5:  mov    0xc(%rsp),%r12d // engine.h:0
+    3.98 :   17e01:  cmp    $0x4,%r11 // router.h:187
+      src: 173   if (!m) return false;
+    1.32 :   17e1b:  and    $0x3f,%edi // router.h:130
+      src: 184   f = f + 1 == n ? 0 : f + 1;
+    1.33 :   17e40:  inc    %esi // router.h:133
+      src: 188   if (!(m >> f & 1)) continue;
+    2.67 :   17e48:  bt     %esi,%edi // router.h:134
+      src: 191   for (unsigned i = 0; i < n; i++) {
+    1.32 :   17e4d:  dec    %ebp // router.h:132
+    2.67 :   17e77:  movzbl 0x93(%r14,%rdi,1),%r9d // router.h:136
+    1.34 :   17e80:  add    %r9,%r8
+   12.00 :   17e91:  mov    0x760(%r14,%r8,8),%r8 // router.h:137
+    2.68 :   17e99:  mov    %r8,0x10(%rsp) // router.h:0
+      src: 210   q.head = uint8_t(q.head + 1 == q.cap ? 0 : q.head + 1);
+    0.91 :   17e9e:  inc    %r9d // router.h:138
+      src: 225   if (o != EJECT || f != slot_of[EJECT][LOOPBACK]) rr[o] = uint8_t(f);
+    5.34 :   17ed7:  mov    %sil,0x84(%r14,%r11,1) // router.h:141
+    1.34 :   17f20:  lea    (%rcx,%r9,8),%rcx // engine.h:0
+      src: 247   l.inflight++;
+    2.67 :   17f28:  inc    %r13d // engine.h:423
+    1.33 :   17f50:  mov    %ecx,%r10d // engine.h:321
+      src: 270   bool empty() const { return count_ == 0; }
+    1.34 :   17f70:  mov    0x10(%r12,%r13,1),%r8d // bucket.h:48
+    1.34 :   17ffc:  cmove  %eax,%ecx // router.h:133
+    1.34 :   18011:  cmove  %r8d,%ecx
+    1.34 :   18019:  jb     180c2 <units::Router::step(sim::Ctx&)+0x4a2> // router.h:134
+      src: 331   if (!(m >> f & 1)) continue;
+    1.33 :   18028:  bt     %ecx,%r10d
+    1.30 :   18037:  cmp    $0x6,%ecx // router.h:133
+    1.33 :   180d0:  movzbl 0x493(%rdi,%r14,1),%r10d // router.h:136
+    2.67 :   180e0:  movdqu 0x750(%r14,%r8,8),%xmm0 // router.h:137
+    6.67 :   180ea:  mov    0x760(%r14,%r8,8),%r9
+      src: 410   q.head = uint8_t(q.head + 1 == q.cap ? 0 : q.head + 1);
+    1.34 :   180f2:  inc    %r10d // router.h:138
+    1.33 :   1810a:  shl    %cl,%ebp // router.h:0
+      src: 540   if (s.slot == loop && (s.w[1] & lw::TAG_TOKEN)) { c.put(loop_left); loop_left_at = c.now(); }
+    1.33 :   18266:  cmp    %esi,%ecx // router.h:194
+    1.34 :   18397:  or     %r12d,%ebp // router.h:0
+      src: 648   if (dst == me || dst == lw::BROADCAST) c.put(eject, s.w[0], s.w[1], s.w[2]);
+    1.34 :   183c9:  mov    0x40(%r14),%eax // router.h:197
+    1.34 :   18400:  jae    18899 <units::Router::step(sim::Ctx&)+0xc79> // engine.h:422
+      src: 691   bool empty() const { return count_ == 0; }
+    1.33 :   18456:  mov    0x10(%r8,%r10,1),%r11d // bucket.h:48
+    2.61 :   1845b:  test   %r11,%r11
+    2.22 :   18684:  cmp    $0x4,%r15 // router.h:202
+      src: 882   SIM_HOT bool Ctx::ready(LinkIn p) const { return *mask_ >> p.bit & 1; }
+    2.67 :   18699:  mov    0x10(%r13),%rax // engine.h:395
+    2.67 :   186a8:  bt     %rcx,%rsi
+    1.33 :   186ac:  jae    18681 <units::Router::step(sim::Ctx&)+0xa61> // router.h:203
+    0.99 :   186cb:  cmovb  %r12d,%ecx // engine.h:61
+    2.67 :   186cf:  mov    %edi,%r8d
+    2.67 :   186e6:  mov    0x8(%r9,%r11,8),%r8 // router.h:205
+      src: 911   if (++head == depth) head = 0;
+    1.33 :   186f0:  inc    %edi // engine.h:73
+    1.34 :   186f5:  cmove  %r12d,%edi
+      src: 917   if (++head == depth) head = 0;
+    1.33 :   186fd:  mov    %edi,0x8(%rsi,%rdx,8)
+      src: 930   SIM_HOT bool Ctx::ready(LinkIn p) const { return *mask_ >> p.bit & 1; }
+    1.34 :   18721:  mov    0x10(%r13),%rax // engine.h:395
+      src: 994   if (attached && c.ready(from_cnc)) {
+    1.33 :   187c5:  cmpb   $0x0,0x56(%r14) // router.h:216
+    1.26 :   18887:  pop    %r12 // router.h:226
+
+==== void sim::detail::run_form<units::TileCore, false>(sim::Engine&, sim::RunSet&)
+    3.52 :   9f84:   xor    $0x1,%eax // engine.h:183
+    1.76 :   9f95:   mov    $0x1,%esi // engine.h:184
+    1.76 :   9f9d:   shl    %cl,%rsi
+    1.76 :   9fa0:   bt     %r13,%rdx
+      src: 79   if (!RunSet::test(nb, k)) {
+    3.52 :   9fa4:   jae    a054 <void sim::detail::run_form<units::TileCore, false>(sim::Engine&, sim::RunSet&)+0x174> // engine.h:345
+    7.01 :   9fae:   and    %rax,%rbp // config.h:0
+    5.27 :   9fc8:   mov    %eax,0x10(%r14) // engine.h:332
+    3.51 :   9fcc:   shl    $0x3,%rax
+    1.74 :   9fd0:   add    0x20(%r14),%rax
+    1.76 :   9fd4:   mov    %rax,0x18(%r14)
+      src: 99   if constexpr (Result) w = units[k].step_result(e.ctx); else w = units[k].step(e.ctx);
+    1.75 :   9fd8:   mov    %r12,%rax // config.h:198
+    1.74 :   9fdb:   shl    $0x9,%rax
+    3.51 :   9fe8:   mov    0x28(%rsp),%rsi
+    1.74 :   9fed:   call   a500 <units::TileCore::step(sim::Ctx&)>
+      src: 106  const uint32_t i = r.first + k;
+    7.01 :   9ff2:   add    0x18(%rbx),%r12d // engine.h:336
+      src: 108  steps[i]++;
+    1.76 :   9ff6:   mov    0x50(%r14),%rcx // engine.h:337
+      src: 111  mask[i] &= ~edges[i];
+   10.54 :   9ffe:   mov    0x20(%r14),%rcx // engine.h:338
+    3.52 :   a002:   mov    0x28(%r14),%rdx
+    7.04 :   a00a:   not    %rdx
+      src: 117  if (__builtin_expect(heap_pos[i] != kNone, 0)) heap_remove(i);   // a far wake overtaken
+    5.27 :   a011:   mov    0x40(%r14),%rcx // engine.h:341
+    5.25 :   a015:   cmpl   $0xffffffff,(%rcx,%r12,4)
+    3.50 :   a01a:   jne    a094 <void sim::detail::run_form<units::TileCore, false>(sim::Engine&, sim::RunSet&)+0x1b4>
+      src: 121  if (at == now + 1) {
+    3.50 :   a01c:   mov    (%r14),%rcx // engine.h:342
+    3.52 :   a023:   inc    %rcx
+      src: 133  if (at == Wake::kNever) return;
+    1.75 :   a037:   cmp    $0xffffffffffffffff,%rax // engine.h:352
+      src: 142  static void set(uint64_t* b, uint32_t k) { b[k >> 6] |= uint64_t(1) << (k & 63); }
+    3.48 :   a054:   or     %rsi,%rdx // engine.h:185
+    1.76 :   a05c:   mov    %rdx,(%rax,%rcx,8)
+      src: 146  if (r.nnext++ == 0) { const uint32_t ri = run_of[i]; run_next[ri >> 6] |= uint64_t(1) << (ri & 63); }
+    1.76 :   a060:   mov    0x28(%rbx),%eax // engine.h:347
+
+==== units::TileCore::step(sim::Ctx&)
+      src: 11   sim::Wake step(sim::Ctx& c) {
+    7.17 :   a500:   push   %rbp // tile_ctl.h:251
+      src: 26   SIM_HOT bool Ctx::ready(LinkIn p) const { return *mask_ >> p.bit & 1; }
+   12.59 :   a515:   mov    0x10(%rsi),%rdx // engine.h:395
+    1.80 :   a520:   jae    a570 <units::TileCore::step(sim::Ctx&)+0x70> // tile_ctl.h:252
+      src: 46   if (++head == depth) head = 0;
+    3.59 :   a53c:   mov    0x8(%rdx,%rax,8),%r8d // engine.h:73
+    1.79 :   a547:   cmp    0x10(%rdx,%rax,8),%r8d
+    1.79 :   a56d:   and    %rax,(%rcx) // engine.h:417
+   14.41 :   a581:   mov    (%rax),%rdx // engine.h:388
+      src: 80   }
+    3.60 :   a58e:   add    $0x18,%rsp // tile_ctl.h:259
+    1.80 :   a595:   pop    %r15
+    5.41 :   a597:   pop    %rbp
+      src: 92   if (j >= depth) j -= depth;
+    1.80 :   a5a4:   mov    0x10(%rdx,%rax,8),%ecx // engine.h:61
+      src: 98   return w + size_t(j) * wid;
+    1.77 :   a5b5:   mov    (%rdx,%rax,8),%rcx // engine.h:62
+      src: 109  uint64_t h = w[1];
+    6.64 :   a5c6:   mov    0x8(%rcx,%r10,8),%rax // tile_ctl.h:263
+      src: 121  uint32_t* m = lw::region(a) == lw::R_DMEM ? rv.dmem : rv.imem;
+    5.39 :   a5d5:   xor    %r9d,%r9d // tile_ctl.h:265
+      src: 130  for (uint32_t i = 0; i < n; i++) m[(w0 + i) & (MEM_WORDS - 1)] = uint32_t((i < 2 ? w[0] : w[2]) >> (32 * (i & 1)));
+   12.55 :   a5f4:   mov    %r11d,(%r9,%rbx,1) // tile_ctl.h:267
+    7.19 :   a5f8:   and    $0x3,%eax
+    5.39 :   a617:   cmp    $0x1,%eax
+    1.79 :   a62b:   mov    $0x40,%ebx
+    3.51 :   a650:   mov    %r14d,(%r9,%r15,4)
+
+==== void sim::detail::deliver_link<3u>(sim::Engine&, sim::Bucket const&)
+    4.64 :   64770:  add    $0x20,%rdx // engine.h:604
+      src: 54    LinkPort& l = e.links[p[0]];
+    4.26 :   6477c:  mov    (%rdx),%rax // engine.h:605
+      src: 57    unsigned j = head + n++;
+    2.43 :   64783:  mov    0xc(%r8,%rax,8),%ecx // engine.h:66
+    4.86 :   6478b:  mov    %ebp,0xc(%r8,%rax,8)
+      src: 72    for (unsigned k = 0; k < W; k++) d[k] = p[1 + k];
+    4.84 :   647ae:  mov    0x8(%rdx),%rcx // engine.h:607
+   19.39 :   647b6:  mov    0x10(%rdx),%rcx
+    2.12 :   647ba:  mov    %rcx,0x8(%r14,%r15,8)
+    9.68 :   647bf:  mov    0x18(%rdx),%rcx
+      src: 79    l.inflight--;
+    4.80 :   647c8:  decw   0x1c(%r8,%rax,8) // engine.h:608
+      src: 86    e.mark_bit(l.owner, l.bit);
+    2.42 :   647dd:  mov    0x18(%r8,%rax,8),%ecx // engine.h:609
+      src: 90    const uint32_t ri = run_of[i];
+    2.41 :   647e6:  mov    (%r10,%rcx,4),%eax // engine.h:287
+    2.42 :   647ee:  lea    (%r11,%r14,8),%r15 // engine.h:289
+    2.42 :   647f7:  sub    %ebp,%ecx
+      src: 100   static bool test(const uint64_t* b, uint32_t k) { return b[k >> 6] >> (k & 63) & 1; }
+    2.43 :   64804:  mov    %ecx,%r12d // engine.h:184
+   19.41 :   6480f:  mov    $0x1,%ebp
+    1.74 :   64817:  bt     %rcx,%r13
+      src: 107   if (!RunSet::test(b, k)) {
+    7.28 :   6481b:  jb     64770 <void sim::detail::deliver_link<3u>(sim::Engine&, sim::Bucket const&)+0x50> // engine.h:291
+    2.42 :   64830:  mov    %ebp,0x24(%r11,%r14,8) // engine.h:293
+
+==== void sim::detail::run_form<units::Router, false>(sim::Engine&, sim::RunSet&)
+    8.32 :   1772c:  mov    %esi,%r15d // config.h:192
+    8.31 :   1775c:  mov    0x8(%rsp),%rcx // engine.h:0
+    8.29 :   1776d:  shl    %cl,%rsi // engine.h:184
+      src: 85    const uint32_t k = (wi << 6) + uint32_t(__builtin_ctzll(m));
+    8.35 :   17787:  tzcnt  %rbp,%r13 // config.h:194
+      src: 109   mask[i] &= ~edges[i];
+   16.70 :   177ca:  mov    0x20(%r14),%rcx // engine.h:338
+    8.34 :   177d2:  mov    (%rdx,%r12,8),%rdx
+    8.34 :   177e1:  cmpl   $0xffffffff,(%rcx,%r12,4) // engine.h:341
+    8.35 :   177eb:  mov    0x30(%r14),%rdx // engine.h:0
+    8.31 :   177fa:  cmp    %rax,%rcx // engine.h:342
+      src: 144   if (r.nnext++ == 0) { const uint32_t ri = run_of[i]; run_next[ri >> 6] |= uint64_t(1) << (ri & 63); }
+    8.34 :   1782c:  mov    0x28(%rbx),%eax // engine.h:347
+    8.34 :   1785b:  jmp    1777a <void sim::detail::run_form<units::Router, false>(sim::Engine&, sim::RunSet&)+0xca>
+
+==== sim::Engine::near_slot()
+   10.00 :   61c0c:  mov    %rcx,-0x20(%rsp) // engine.cpp:0
+      src: 110   uint64_t* ready() const { return bits[cur]; }
+    9.99 :   61cbf:  movzbl 0x2f(%rax,%r8,8),%r9d // engine.h:182
+      src: 113   static bool test(const uint64_t* b, uint32_t k) { return b[k >> 6] >> (k & 63) & 1; }
+   10.00 :   61cca:  mov    %ecx,%ebx // engine.h:184
+   20.00 :   61cd3:  mov    $0x1,%r9d
+      src: 121   if (!RunSet::test(b, k)) {
+   20.00 :   61ce0:  jb     61c80 <sim::Engine::near_slot()+0x100> // engine.h:291
+   20.00 :   61cee:  lea    0x1(%rcx),%esi // engine.h:293
+    9.99 :   61d15:  mov    -0x30(%rsp),%rcx // engine.h:0

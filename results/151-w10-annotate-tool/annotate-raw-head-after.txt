@@ -1,0 +1,120 @@
+
+Sorted summary for file /tmp/w10-151-w10-annotate-tool/kit/after/sim/build/prof/bench_chip
+----------------------------------------------
+
+   41.18 rv32.h:0
+    7.57 rv32.h:213
+    7.56 rv32.h:357
+    7.55 rv32.h:207
+    5.88 rv32.h:210
+    5.05 rv32.h:206
+    4.21 rv32.h:205
+    3.36 rv32.h:208
+    2.52 rv32.h:355
+    2.52 rv32.h:280
+    1.68 rv32.h:287
+    1.68 rv32.h:356
+    1.68 rv32.h:286
+    1.68 rv32.h:281
+    0.84 rv32.h:232
+    0.84 rv32.h:238
+    0.84 rv32.h:354
+    0.84 rv32.h:353
+    0.83 rv32.h:217
+    0.83 regmap.h:22
+    0.83 rv32.h:219
+ Percent |	Source code & Disassembly of bench_chip for cpu_core/cycles/ (119 samples, percent: local period)
+-----------------------------------------------------------------------------------------------------------------
+         :
+         :
+         :
+         : 3    Disassembly of section .text:
+         :
+         : 5    000000000000ae30 <void units::Rv32::execute<units::TileCore::Env>(units::TileCore::Env&, unsigned long, unsigned int, unsigned int)>:
+         : 6    else { stop_loudly(t, HALT_FETCH, ipc); return; }
+         : 7    execute(e, t, ins, ipc);
+         : 8    }
+         :
+         : 10   template <class Env>
+         : 11   void execute(Env& e, uint64_t t, uint32_t ins, uint32_t ipc) {
+    0.00 :   ae30:   push   %rbp
+    4.21 :   ae31:   push   %r15 // rv32.h:205
+    0.00 :   ae33:   push   %r14
+    0.00 :   ae35:   push   %r13
+    0.00 :   ae37:   push   %r12
+    0.00 :   ae39:   push   %rbx
+    0.00 :   ae3a:   sub    $0x58,%rsp
+         : 19   instructions++;
+    0.84 :   ae3e:   mov    0x140(%rdi),%r9 // rv32.h:206
+    0.00 :   ae45:   lea    0x1(%r9),%rax
+    4.21 :   ae49:   mov    %rax,0x140(%rdi)
+         : 23   const uint32_t op = ins & 0x7F, rd = (ins >> 7) & 31, f3 = (ins >> 12) & 7, rs1 = (ins >> 15) & 31,
+    0.00 :   ae50:   mov    %ecx,%r10d
+    0.00 :   ae53:   and    $0x7f,%r10d
+    2.52 :   ae57:   mov    %ecx,%r14d // rv32.h:207
+    0.00 :   ae5a:   shr    $0x7,%r14d
+    0.00 :   ae5e:   mov    %r14d,%eax
+    0.84 :   ae61:   and    $0x1f,%eax
+    3.36 :   ae64:   mov    %eax,0x38(%rsp) // rv32.h:0
+    4.19 :   ae68:   mov    %ecx,%r12d // rv32.h:207
+    0.00 :   ae6b:   shr    $0xc,%r12d
+    0.00 :   ae6f:   mov    %r12d,%ebp
+    0.00 :   ae72:   and    $0x7,%ebp
+    0.00 :   ae75:   mov    %ecx,%r13d
+    0.00 :   ae78:   shr    $0xf,%r13d
+    0.00 :   ae7c:   and    $0x1f,%r13d
+         : 38   rs2 = (ins >> 20) & 31, f7 = ins >> 25;
+    1.68 :   ae80:   mov    %ecx,%r15d // rv32.h:208
+    1.68 :   ae83:   shr    $0x14,%r15d
+    0.00 :   ae87:   mov    %r15d,%eax
+    0.00 :   ae8a:   and    $0x1f,%eax
+    0.00 :   ae8d:   mov    %ecx,%r11d
+    0.00 :   ae90:   shr    $0x19,%r11d
+         : 45   const int32_t sins = int32_t(ins);
+         : 46   const uint32_t a = x[rs1], b = x[rs2];
+    0.84 :   ae94:   mov    (%rdi,%r13,4),%ebx // rv32.h:210
+   19.33 :   ae98:   mov    %rbx,0x18(%rsp) // rv32.h:0
+    5.04 :   ae9d:   mov    (%rdi,%rax,4),%ebx // rv32.h:210
+    1.68 :   aea0:   mov    %rbx,0x20(%rsp) // rv32.h:0
+    3.35 :   aea5:   mov    %r8,%rbx
+    0.00 :   aea8:   mov    %r8,0x10(%rsp)
+         : 53   uint32_t next = ipc + 4, res = 0;
+    0.00 :   aead:   add    $0x4,%r8d
+    0.00 :   aeb1:   mov    %r8d,0xc(%rsp)
+         : 56   bool wr = false;
+         : 57   switch (op) {
+    0.00 :   aeb6:   lea    -0x3(%r10),%ebx
+    0.00 :   aeba:   cmp    $0x34,%ebx
+    0.00 :   aebd:   ja     af8a <void units::Rv32::execute<units::TileCore::Env>(units::TileCore::Env&, unsigned long, unsigned int, unsigned int)+0x15a>
+    0.84 :   aec3:   lea    0x7d432(%rip),%r8        # 882fc <_IO_stdin_used+0x2fc>
+    0.84 :   aeca:   movslq (%r8,%rbx,4),%r10 // rv32.h:213
+    1.68 :   aece:   add    %r8,%r10
+    0.00 :   aed1:   jmp    *%r10
+         : 65   }
+         : 66   if (take) { next = ipc + imm; stall += timing.branch_penalty; stall_branch += timing.branch_penalty; }
+         : 67   break;
+         : 68   }
+         : 69   case 0x03: {                                                                            // loads
+         : 70   uint32_t ea = a + uint32_t(sins >> 20);
+    0.00 :   aed4:   mov    %ecx,%r15d
+    0.00 :   aed7:   sar    $0x14,%r15d
+    0.00 :   aedb:   add    0x18(%rsp),%r15d
+         : 74   if (timing.reg_load_latency > 1 && in_regs(ea) && !(load_wait_t == t - 1 && load_wait_pc == ipc)) {
+    0.00 :   aee0:   cmpl   $0x2,0xe8(%rdi)
+    0.00 :   aee7:   jb     af14 <void units::Rv32::execute<units::TileCore::Env>(units::TileCore::Env&, unsigned long, unsigned int, unsigned int)+0xe4>
+    0.00 :   aee9:   cmp    $0xfffff800,%r15d
+    0.00 :   aef0:   jb     af14 <void units::Rv32::execute<units::TileCore::Env>(units::TileCore::Env&, unsigned long, unsigned int, unsigned int)+0xe4>
+    0.00 :   aef2:   lea    -0x1(%rdx),%rax
+    0.00 :   aef6:   cmp    %rax,0xb8(%rdi)
+    0.00 :   aefd:   jne    b478 <void units::Rv32::execute<units::TileCore::Env>(units::TileCore::Env&, unsigned long, unsigned int, unsigned int)+0x648>
+    0.00 :   af03:   mov    0x10(%rsp),%rax
+    0.00 :   af08:   cmp    %eax,0xc0(%rdi)
+    0.00 :   af0e:   jne    b478 <void units::Rv32::execute<units::TileCore::Env>(units::TileCore::Env&, unsigned long, unsigned int, unsigned int)+0x648>
+    0.00 :   af14:   mov    %ecx,%r13d
+         : 86   load_wait_t = t; load_wait_pc = ipc; instructions--; stall_reg_load++; cycles_stalled++;
+         : 87   return;                                       // a block or window load samples in its second cycle
+         : 88   }
+         : 89   uint32_t width = 1u << (f3 & 3);
+    0.00 :   af17:   and    $0x3,%r12b
+    0.00 :   af1b:   mov    $0x1,%eax
+    0.00 :   af20:   mov    %r12d,%ecx
