@@ -1,0 +1,58 @@
+
+==== machine (D21)  [09:50:20]
+model:     Intel(R) Core(TM) i5-14400F
+sockets:   1; CPUs usable 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15 (16 of 16 online)
+P cores:   6 cores, CPUs 0,1,2,3,4,5,6,7,8,9,10,11 (12 threads), max 4700000 kHz, min 800000 kHz
+E cores:   4 CPUs 12,13,14,15, max 3500000 kHz, min 800000 kHz
+placement: 0,2,4,6,8,10,1,3,5,7,9,11,12,13,14,15
+governor:  powersave
+caches:    L1d cache: 416 KiB (10 instances);L1i cache: 448 KiB (10 instances);L2 cache: 9.5 MiB (7 instances);L3 cache: 20 MiB (1 instance);
+memory:    MemTotal: 65671456 kB
+kernel:    Linux 6.8.0-147-generic
+gcc:       g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+clang:     Ubuntu clang version 18.1.3 (1ubuntu1)
+java:      openjdk version "21.0.12.1" 2026-08-18
+ 09:50:20 up 4 days, 54 min,  1 user,  load average: 0.00, 0.00, 0.07
+kit: after ef9cd71
+
+==== the keys (KeyGen, 64 x 65536)  [09:50:20]
+VERDICT keys sha256 as HASHES: PASS
+
+==== build (clang release, D18)  [09:50:21]
+
+==== process 1 (after)  [09:50:25]
+after one sort threads=1 part=one span=1229687 reps=2 us_per_cycle=23.2224 us_min=22.7626 us_max=23.2224 secs=28.5563 words=463082 digest=f7e8e31f84fd119f rss_mb=241.3 sram_resident_mb=208.0 times="one domain" partition="one domain"
+after t4 sort threads=4 part=tiles span=1229687 reps=3 us_per_cycle=5.4077 us_min=5.3857 us_max=5.4438 secs=6.6498 words=478838 digest=f7e8e31f84fd119f rss_mb=243.8 sram_resident_mb=208.0 times="time_threads off" partition="64 domains in 4 engines on 4 threads; crossings: 168 link (168 link delivered direct); barrier every 3 cycles, set by link 't0.router.to-left' -> 't63.router.from-right' (latency 3); the flags barrier"
+after t6 sort threads=6 part=tiles span=1229687 reps=3 us_per_cycle=4.3011 us_min=4.2846 us_max=4.3299 secs=5.2890 words=485549 digest=f7e8e31f84fd119f rss_mb=243.3 sram_resident_mb=208.0 times="time_threads off" partition="64 domains in 6 engines on 6 threads; crossings: 214 link (214 link delivered direct); barrier every 3 cycles, set by link 't0.router.to-left' -> 't63.router.from-right' (latency 3); the flags barrier"
+after t12 sort threads=12 part=tiles span=1229687 reps=3 us_per_cycle=4.6508 us_min=4.6365 us_max=4.7001 secs=5.7190 words=498328 digest=f7e8e31f84fd119f rss_mb=244.4 sram_resident_mb=208.0 times="time_threads off" partition="64 domains in 12 engines on 12 threads; crossings: 268 link (268 link delivered direct); barrier every 3 cycles, set by link 't0.router.to-left' -> 't63.router.from-right' (latency 3); the flags barrier"
+
+==== process 2 (after)  [09:53:03]
+after one sort threads=1 part=one span=1229687 reps=2 us_per_cycle=23.8295 us_min=23.2825 us_max=23.8295 secs=29.3028 words=463082 digest=f7e8e31f84fd119f rss_mb=241.4 sram_resident_mb=208.0 times="one domain" partition="one domain"
+after t4 sort threads=4 part=tiles span=1229687 reps=3 us_per_cycle=5.7634 us_min=5.7060 us_max=5.7977 secs=7.0871 words=478838 digest=f7e8e31f84fd119f rss_mb=243.8 sram_resident_mb=208.0 times="time_threads off" partition="64 domains in 4 engines on 4 threads; crossings: 168 link (168 link delivered direct); barrier every 3 cycles, set by link 't0.router.to-left' -> 't63.router.from-right' (latency 3); the flags barrier"
+after t6 sort threads=6 part=tiles span=1229687 reps=3 us_per_cycle=4.3736 us_min=4.2661 us_max=4.3900 secs=5.3781 words=485549 digest=f7e8e31f84fd119f rss_mb=243.3 sram_resident_mb=208.0 times="time_threads off" partition="64 domains in 6 engines on 6 threads; crossings: 214 link (214 link delivered direct); barrier every 3 cycles, set by link 't0.router.to-left' -> 't63.router.from-right' (latency 3); the flags barrier"
+after t12 sort threads=12 part=tiles span=1229687 reps=3 us_per_cycle=4.9558 us_min=4.9248 us_max=4.9988 secs=6.0941 words=498328 digest=f7e8e31f84fd119f rss_mb=244.4 sram_resident_mb=208.0 times="time_threads off" partition="64 domains in 12 engines on 12 threads; crossings: 268 link (268 link delivered direct); barrier every 3 cycles, set by link 't0.router.to-left' -> 't63.router.from-right' (latency 3); the flags barrier"
+
+==== process 3 (after)  [09:55:47]
+after one sort threads=1 part=one span=1229687 reps=2 us_per_cycle=23.7050 us_min=23.0506 us_max=23.7050 secs=29.1498 words=463082 digest=f7e8e31f84fd119f rss_mb=241.4 sram_resident_mb=208.0 times="one domain" partition="one domain"
+after t4 sort threads=4 part=tiles span=1229687 reps=3 us_per_cycle=5.8651 us_min=5.7661 us_max=5.8865 secs=7.2123 words=478838 digest=f7e8e31f84fd119f rss_mb=243.8 sram_resident_mb=208.0 times="time_threads off" partition="64 domains in 4 engines on 4 threads; crossings: 168 link (168 link delivered direct); barrier every 3 cycles, set by link 't0.router.to-left' -> 't63.router.from-right' (latency 3); the flags barrier"
+after t6 sort threads=6 part=tiles span=1229687 reps=3 us_per_cycle=4.3817 us_min=4.3380 us_max=4.3881 secs=5.3881 words=485549 digest=f7e8e31f84fd119f rss_mb=243.3 sram_resident_mb=208.0 times="time_threads off" partition="64 domains in 6 engines on 6 threads; crossings: 214 link (214 link delivered direct); barrier every 3 cycles, set by link 't0.router.to-left' -> 't63.router.from-right' (latency 3); the flags barrier"
+after t12 sort threads=12 part=tiles span=1229687 reps=3 us_per_cycle=4.9848 us_min=4.9075 us_max=5.0370 secs=6.1298 words=498328 digest=f7e8e31f84fd119f rss_mb=244.4 sram_resident_mb=208.0 times="time_threads off" partition="64 domains in 12 engines on 12 threads; crossings: 268 link (268 link delivered direct); barrier every 3 cycles, set by link 't0.router.to-left' -> 't63.router.from-right' (latency 3); the flags barrier"
+after t6-timed sort threads=6 part=tiles span=1229687 reps=1 us_per_cycle=4.6251 us_min=4.6251 us_max=4.6251 secs=5.6875 words=485549 digest=f7e8e31f84fd119f rss_mb=243.2 sram_resident_mb=208.0 times="intervals=424638 total=14258842970 compute=0.9187 imbalance=0.0521 barrier_wait=0.0148 drain=0.0095 publish=0.0021 clear=0.0023 end=0.0005 other=0.0000" partition="64 domains in 6 engines on 6 threads; crossings: 214 link (214 link delivered direct); barrier every 3 cycles, set by link 't0.router.to-left' -> 't63.router.from-right' (latency 3); the flags barrier"
+
+==== digests (the machine at L2's all-READY, every configuration)  [09:58:41]
+VERDICT digests: PASS
+
+==== summary: seconds over the counted span (the median machine of each process; min-max over all), us per cycle, x one thread, x W7's ref (95.9 s)  [09:58:41]
+after one  secs=29.1498 (processes: 28.5563 29.1498 29.3028) us_per_cycle=23.7050 x_one=1.00  x_ref=3.3
+after t4   secs=7.0871  (processes: 6.6498 7.0871 7.2123) us_per_cycle=5.7634  x_one=4.11  x_ref=13.5
+after t6   secs=5.3781  (processes: 5.2890 5.3781 5.3881) us_per_cycle=4.3736  x_one=5.42  x_ref=17.8
+after t12  secs=6.0941  (processes: 5.7190 6.0941 6.1298) us_per_cycle=4.9558  x_one=4.78  x_ref=15.7
+after t6 timed: us_per_cycle=4.6251 [compute=4.249 imbalance=0.241 barrier_wait=0.068 drain=0.044 publish=0.010 clear=0.011 ]
+after memory: rss_mb=241.3 sram_resident_mb=208.0
+VERDICT every run completed: PASS
+
+==== done in 501 s  [09:58:41]
+_mb=208.0
+VERDICT every run completed: PASS
+
+==== done in 501 s  [09:58:41]
