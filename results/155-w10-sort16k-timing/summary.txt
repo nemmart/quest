@@ -1,0 +1,19 @@
+after one thread: 15.1493 us/cycle, secs=7.5234 s, rss_mb=73.2 sram_resident_mb=52.0
+after t2  tiles    us=6.1715  x2.45  secs=3.0649 [compute=6.120 imbalance=0.122 barrier_wait=0.044 drain=0.027 publish=0.006 clear=0.006 ] 
+after t2  rows     us=6.2169  x2.44  secs=3.0874 [compute=6.054 imbalance=0.068 barrier_wait=0.040 drain=0.024 publish=0.006 clear=0.006 ] 
+after t2  load     us=6.2995  x2.40  secs=3.1284 [compute=6.195 imbalance=0.076 barrier_wait=0.040 drain=0.025 publish=0.006 clear=0.006 ] load max/mean 1.015
+after t2  profile  us=6.5432  x2.32  secs=3.2495 [compute=6.074 imbalance=0.160 barrier_wait=0.034 drain=0.026 publish=0.006 clear=0.006 ] load max/mean 1.008
+after t4  tiles    us=3.6542  x4.15  secs=1.8148 [compute=3.459 imbalance=0.147 barrier_wait=0.049 drain=0.030 publish=0.009 clear=0.010 ] 
+after t4  rows     us=3.6872  x4.11  secs=1.8311 [compute=3.548 imbalance=0.179 barrier_wait=0.059 drain=0.031 publish=0.008 clear=0.009 ] 
+after t4  load     us=3.8538  x3.93  secs=1.9139 [compute=3.638 imbalance=0.129 barrier_wait=0.067 drain=0.040 publish=0.010 clear=0.008 ] load max/mean 1.046
+after t4  profile  us=3.9644  x3.82  secs=1.9688 [compute=3.590 imbalance=0.258 barrier_wait=0.042 drain=0.034 publish=0.009 clear=0.007 ] load max/mean 1.028
+after t6  tiles    us=2.9185  x5.19  secs=1.4494 [compute=2.585 imbalance=0.188 barrier_wait=0.079 drain=0.042 publish=0.009 clear=0.010 ] 
+after t6  load     us=2.9262  x5.18  secs=1.4532 [compute=2.668 imbalance=0.161 barrier_wait=0.076 drain=0.044 publish=0.011 clear=0.011 ] load max/mean 1.015
+after t6  profile  us=3.1290  x4.84  secs=1.5539 [compute=2.641 imbalance=0.177 barrier_wait=0.073 drain=0.045 publish=0.011 clear=0.010 ] load max/mean 1.015
+after t8  tiles    us=4.0017  x3.79  secs=1.9873 [compute=2.872 imbalance=0.974 barrier_wait=0.099 drain=0.061 publish=0.013 clear=0.011 ] 
+after t8  rows     us=4.0177  x3.77  secs=1.9952 [compute=2.961 imbalance=0.989 barrier_wait=0.100 drain=0.065 publish=0.013 clear=0.011 ] 
+after t8  load     us=4.1003  x3.69  secs=2.0363 [compute=2.931 imbalance=0.981 barrier_wait=0.104 drain=0.066 publish=0.017 clear=0.012 ] load max/mean 1.108
+after t8  profile  us=3.8321  x3.95  secs=1.9031 [compute=2.751 imbalance=0.918 barrier_wait=0.062 drain=0.060 publish=0.017 clear=0.011 ] load max/mean 1.084
+after t12 tiles    us=3.3539  x4.52  secs=1.6656 [compute=2.776 imbalance=0.404 barrier_wait=0.118 drain=0.095 publish=0.021 clear=0.012 ] 
+after t12 load     us=3.1926  x4.75  secs=1.5855 [compute=2.852 imbalance=0.292 barrier_wait=0.095 drain=0.099 publish=0.025 clear=0.014 ] load max/mean 1.108
+after t12 profile  us=3.4108  x4.44  secs=1.6939 [compute=2.565 imbalance=0.361 barrier_wait=0.069 drain=0.087 publish=0.025 clear=0.013 ] load max/mean 1.104

@@ -1,0 +1,10 @@
+bench_sort: span 14838 -> 511457 (496619 cycles), 97 phases
+sort_quiet bin=2^0 windows=1 cycles=1000 share=0.002 steps_per_cycle=1.66 us_per_cycle=0.0431 ns_per_step=25.9
+sort_quiet bin=2^1 windows=1 cycles=1000 share=0.002 steps_per_cycle=2.19 us_per_cycle=0.0586 ns_per_step=26.8
+sort_quiet bin=2^2 windows=1 cycles=1000 share=0.002 steps_per_cycle=6.33 us_per_cycle=0.1971 ns_per_step=31.2
+sort_quiet bin=2^4 windows=1 cycles=1000 share=0.002 steps_per_cycle=19.23 us_per_cycle=0.5493 ns_per_step=28.6
+sort_quiet bin=2^5 windows=85 cycles=85000 share=0.171 steps_per_cycle=58.35 us_per_cycle=1.0873 ns_per_step=18.6
+sort_quiet bin=2^6 windows=149 cycles=149000 share=0.300 steps_per_cycle=91.26 us_per_cycle=3.0588 ns_per_step=33.5
+sort_quiet bin=2^7 windows=2 cycles=2000 share=0.004 steps_per_cycle=196.25 us_per_cycle=11.0121 ns_per_step=56.1
+sort_quiet bin=2^8 windows=17 cycles=16619 share=0.033 steps_per_cycle=426.71 us_per_cycle=21.7666 ns_per_step=51.0
+sort_quiet bin=2^9 windows=240 cycles=240000 share=0.483 steps_per_cycle=586.21 us_per_cycle=27.4581 ns_per_step=46.8

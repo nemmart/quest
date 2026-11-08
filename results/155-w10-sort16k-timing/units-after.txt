@@ -1,0 +1,24 @@
+bench_sort: span 14838 -> 511457 (496619 cycles), 97 phases
+sort_units span=496619 wall_us_per_cycle=18.814 (calibrating) units_us_per_cycle=11.447 (clock 5.6 ns a step not taken off)
+sort_unit kind=ctl count=64 share=0.2535 us_per_cycle=2.9017
+sort_unit kind=sram count=64 share=0.1594 us_per_cycle=1.8243
+sort_unit kind=inj count=64 share=0.1588 us_per_cycle=1.8180
+sort_unit kind=router count=64 share=0.1280 us_per_cycle=1.4656
+sort_unit kind=ts count=64 share=0.0629 us_per_cycle=0.7199
+sort_unit kind=core count=64 share=0.0595 us_per_cycle=0.6807
+sort_unit kind=we count=64 share=0.0573 us_per_cycle=0.6564
+sort_unit kind=ag count=64 share=0.0521 us_per_cycle=0.5964
+sort_unit kind=dir count=64 share=0.0323 us_per_cycle=0.3696
+sort_unit kind=hist count=64 share=0.0315 us_per_cycle=0.3605
+sort_unit kind=gather count=64 share=0.0047 us_per_cycle=0.0534
+sort_unit kind=cnc count=1 share=0.0000 us_per_cycle=0.0004
+sort_unit kind=row0 count=1 share=0.0000 us_per_cycle=0.0000
+sort_unit kind=row1 count=1 share=0.0000 us_per_cycle=0.0000
+sort_unit kind=row2 count=1 share=0.0000 us_per_cycle=0.0000
+sort_unit kind=row5 count=1 share=0.0000 us_per_cycle=0.0000
+sort_unit kind=row4 count=1 share=0.0000 us_per_cycle=0.0000
+sort_unit kind=row3 count=1 share=0.0000 us_per_cycle=0.0000
+sort_unit kind=row6 count=1 share=0.0000 us_per_cycle=0.0000
+sort_unit kind=row7 count=1 share=0.0000 us_per_cycle=0.0000
+sort_unit kind=ep3 count=1 share=0.0000 us_per_cycle=0.0000
+sort_unit kind=ep2 count=1 share=0.0000 us_per_cycle=0.0000
