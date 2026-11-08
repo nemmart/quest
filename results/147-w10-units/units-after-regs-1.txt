@@ -1,0 +1,23 @@
+units prog=regs cycles=897 wall_us_per_cycle=2.428 (calibrating: two clock reads a step) units_us_per_cycle=1.186 (the clock's 5.6 ns a step taken off) rest_us_per_cycle=1.242 (delivery, scheduling, and the clock again)
+unit kind=core count=64 share=0.3846 us_per_cycle=0.4562 steps_per_cycle=50.36 ns_per_step=9.1
+unit kind=ctl count=64 share=0.3302 us_per_cycle=0.3916 steps_per_cycle=4.28 ns_per_step=91.5
+unit kind=sram count=64 share=0.1204 us_per_cycle=0.1428 steps_per_cycle=0.50 ns_per_step=286.0
+unit kind=router count=64 share=0.1164 us_per_cycle=0.1380 steps_per_cycle=5.71 ns_per_step=24.2
+unit kind=dir count=64 share=0.0257 us_per_cycle=0.0305 steps_per_cycle=5.07 ns_per_step=6.0
+unit kind=ts count=64 share=0.0077 us_per_cycle=0.0092 steps_per_cycle=1.21 ns_per_step=7.6
+unit kind=inj count=64 share=0.0036 us_per_cycle=0.0043 steps_per_cycle=1.14 ns_per_step=3.8
+unit kind=cnc count=1 share=0.0034 us_per_cycle=0.0041 steps_per_cycle=0.08 ns_per_step=48.0
+unit kind=we count=64 share=0.0034 us_per_cycle=0.0040 steps_per_cycle=0.57 ns_per_step=7.0
+unit kind=ag count=64 share=0.0023 us_per_cycle=0.0027 steps_per_cycle=0.21 ns_per_step=12.5
+unit kind=hist count=64 share=0.0011 us_per_cycle=0.0012 steps_per_cycle=0.21 ns_per_step=5.8
+unit kind=row0 count=1 share=0.0004 us_per_cycle=0.0004 steps_per_cycle=0.01 ns_per_step=62.4
+unit kind=row1 count=1 share=0.0002 us_per_cycle=0.0002 steps_per_cycle=0.01 ns_per_step=32.8
+unit kind=row7 count=1 share=0.0002 us_per_cycle=0.0002 steps_per_cycle=0.01 ns_per_step=30.1
+unit kind=row2 count=1 share=0.0001 us_per_cycle=0.0001 steps_per_cycle=0.01 ns_per_step=20.7
+unit kind=row5 count=1 share=0.0001 us_per_cycle=0.0001 steps_per_cycle=0.01 ns_per_step=16.0
+unit kind=ep2 count=1 share=0.0001 us_per_cycle=0.0001 steps_per_cycle=0.00 ns_per_step=94.4
+unit kind=row6 count=1 share=0.0001 us_per_cycle=0.0001 steps_per_cycle=0.01 ns_per_step=14.6
+unit kind=row3 count=1 share=0.0001 us_per_cycle=0.0001 steps_per_cycle=0.01 ns_per_step=12.0
+unit kind=gather count=64 share=0.0001 us_per_cycle=0.0001 steps_per_cycle=0.21 ns_per_step=0.4
+unit kind=row4 count=1 share=0.0000 us_per_cycle=0.0000 steps_per_cycle=0.01 ns_per_step=6.0
+unit kind=ep3 count=1 share=0.0000 us_per_cycle=0.0000 steps_per_cycle=0.00 ns_per_step=12.4

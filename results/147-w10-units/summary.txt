@@ -1,0 +1,63 @@
+after sort: one thread us_per_cycle 0.949 0.951 0.945
+units prog=sort cycles=14791 wall_us_per_cycle=1.660 (calibrating: two clock reads a step) units_us_per_cycle=0.523 (the clock's 5.6 ns a step taken off) rest_us_per_cycle=1.137 (delivery, scheduling, and the clock again)
+units prog=sort cycles=14791 wall_us_per_cycle=1.656 (calibrating: two clock reads a step) units_us_per_cycle=0.512 (the clock's 5.6 ns a step taken off) rest_us_per_cycle=1.145 (delivery, scheduling, and the clock again)
+units prog=sort cycles=14791 wall_us_per_cycle=1.663 (calibrating: two clock reads a step) units_us_per_cycle=0.514 (the clock's 5.6 ns a step taken off) rest_us_per_cycle=1.149 (delivery, scheduling, and the clock again)
+  by kind (run 1; runs 2, 3 in units-*.txt):
+  unit kind=core count=64 share=0.6596 us_per_cycle=0.3451 steps_per_cycle=52.28 ns_per_step=6.6
+  unit kind=router count=64 share=0.2815 us_per_cycle=0.1473 steps_per_cycle=6.00 ns_per_step=24.6
+  unit kind=dir count=64 share=0.0503 us_per_cycle=0.0263 steps_per_cycle=5.99 ns_per_step=4.4
+  unit kind=ctl count=64 share=0.0048 us_per_cycle=0.0025 steps_per_cycle=0.03 ns_per_step=96.3
+  unit kind=cnc count=1 share=0.0035 us_per_cycle=0.0018 steps_per_cycle=0.09 ns_per_step=19.5
+  unit kind=ts count=64 share=0.0000 us_per_cycle=0.0000 steps_per_cycle=0.00 ns_per_step=5.8
+  unit kind=row0 count=1 share=0.0000 us_per_cycle=0.0000 steps_per_cycle=0.00 ns_per_step=61.4
+  unit kind=we count=64 share=0.0000 us_per_cycle=0.0000 steps_per_cycle=0.00 ns_per_step=3.9
+  unit kind=row1 count=1 share=0.0000 us_per_cycle=0.0000 steps_per_cycle=0.00 ns_per_step=37.9
+  unit kind=hist count=64 share=0.0000 us_per_cycle=0.0000 steps_per_cycle=0.00 ns_per_step=3.4
+  unit kind=row7 count=1 share=0.0000 us_per_cycle=0.0000 steps_per_cycle=0.00 ns_per_step=29.6
+  unit kind=row2 count=1 share=0.0000 us_per_cycle=0.0000 steps_per_cycle=0.00 ns_per_step=22.0
+  unit kind=sram count=64 share=0.0000 us_per_cycle=0.0000 steps_per_cycle=0.00 ns_per_step=1.9
+  unit kind=inj count=64 share=0.0000 us_per_cycle=0.0000 steps_per_cycle=0.00 ns_per_step=1.6
+  unit kind=row5 count=1 share=0.0000 us_per_cycle=0.0000 steps_per_cycle=0.00 ns_per_step=15.9
+  unit kind=row4 count=1 share=0.0000 us_per_cycle=0.0000 steps_per_cycle=0.00 ns_per_step=14.1
+after wfi: one thread us_per_cycle 0.873 0.868 0.866
+units prog=wfi cycles=1665 wall_us_per_cycle=1.513 (calibrating: two clock reads a step) units_us_per_cycle=0.577 (the clock's 5.6 ns a step taken off) rest_us_per_cycle=0.936 (delivery, scheduling, and the clock again)
+units prog=wfi cycles=1665 wall_us_per_cycle=1.439 (calibrating: two clock reads a step) units_us_per_cycle=0.548 (the clock's 5.6 ns a step taken off) rest_us_per_cycle=0.891 (delivery, scheduling, and the clock again)
+units prog=wfi cycles=1665 wall_us_per_cycle=1.441 (calibrating: two clock reads a step) units_us_per_cycle=0.540 (the clock's 5.5 ns a step taken off) rest_us_per_cycle=0.902 (delivery, scheduling, and the clock again)
+  by kind (run 1; runs 2, 3 in units-*.txt):
+  unit kind=core count=64 share=0.6925 us_per_cycle=0.3997 steps_per_cycle=45.99 ns_per_step=8.7
+  unit kind=ctl count=64 share=0.1982 us_per_cycle=0.1144 steps_per_cycle=1.27 ns_per_step=90.2
+  unit kind=router count=64 share=0.0795 us_per_cycle=0.0459 steps_per_cycle=1.73 ns_per_step=26.5
+  unit kind=dir count=64 share=0.0158 us_per_cycle=0.0091 steps_per_cycle=1.46 ns_per_step=6.3
+  unit kind=cnc count=1 share=0.0076 us_per_cycle=0.0044 steps_per_cycle=0.04 ns_per_step=98.6
+  unit kind=inj count=64 share=0.0019 us_per_cycle=0.0011 steps_per_cycle=0.27 ns_per_step=4.1
+  unit kind=row0 count=1 share=0.0009 us_per_cycle=0.0005 steps_per_cycle=0.01 ns_per_step=54.7
+  unit kind=row1 count=1 share=0.0006 us_per_cycle=0.0003 steps_per_cycle=0.01 ns_per_step=36.1
+  unit kind=ts count=64 share=0.0005 us_per_cycle=0.0003 steps_per_cycle=0.04 ns_per_step=7.0
+  unit kind=row5 count=1 share=0.0004 us_per_cycle=0.0002 steps_per_cycle=0.01 ns_per_step=26.2
+  unit kind=row7 count=1 share=0.0004 us_per_cycle=0.0002 steps_per_cycle=0.01 ns_per_step=24.8
+  unit kind=row2 count=1 share=0.0004 us_per_cycle=0.0002 steps_per_cycle=0.01 ns_per_step=23.5
+  unit kind=row6 count=1 share=0.0003 us_per_cycle=0.0002 steps_per_cycle=0.01 ns_per_step=20.8
+  unit kind=row4 count=1 share=0.0003 us_per_cycle=0.0002 steps_per_cycle=0.01 ns_per_step=17.9
+  unit kind=row3 count=1 share=0.0003 us_per_cycle=0.0002 steps_per_cycle=0.01 ns_per_step=16.9
+  unit kind=hist count=64 share=0.0002 us_per_cycle=0.0001 steps_per_cycle=0.04 ns_per_step=2.7
+after regs: one thread us_per_cycle 1.632 1.632 1.636
+units prog=regs cycles=897 wall_us_per_cycle=2.428 (calibrating: two clock reads a step) units_us_per_cycle=1.186 (the clock's 5.6 ns a step taken off) rest_us_per_cycle=1.242 (delivery, scheduling, and the clock again)
+units prog=regs cycles=897 wall_us_per_cycle=2.358 (calibrating: two clock reads a step) units_us_per_cycle=1.123 (the clock's 5.6 ns a step taken off) rest_us_per_cycle=1.235 (delivery, scheduling, and the clock again)
+units prog=regs cycles=897 wall_us_per_cycle=2.413 (calibrating: two clock reads a step) units_us_per_cycle=1.186 (the clock's 5.6 ns a step taken off) rest_us_per_cycle=1.227 (delivery, scheduling, and the clock again)
+  by kind (run 1; runs 2, 3 in units-*.txt):
+  unit kind=core count=64 share=0.3846 us_per_cycle=0.4562 steps_per_cycle=50.36 ns_per_step=9.1
+  unit kind=ctl count=64 share=0.3302 us_per_cycle=0.3916 steps_per_cycle=4.28 ns_per_step=91.5
+  unit kind=sram count=64 share=0.1204 us_per_cycle=0.1428 steps_per_cycle=0.50 ns_per_step=286.0
+  unit kind=router count=64 share=0.1164 us_per_cycle=0.1380 steps_per_cycle=5.71 ns_per_step=24.2
+  unit kind=dir count=64 share=0.0257 us_per_cycle=0.0305 steps_per_cycle=5.07 ns_per_step=6.0
+  unit kind=ts count=64 share=0.0077 us_per_cycle=0.0092 steps_per_cycle=1.21 ns_per_step=7.6
+  unit kind=inj count=64 share=0.0036 us_per_cycle=0.0043 steps_per_cycle=1.14 ns_per_step=3.8
+  unit kind=cnc count=1 share=0.0034 us_per_cycle=0.0041 steps_per_cycle=0.08 ns_per_step=48.0
+  unit kind=we count=64 share=0.0034 us_per_cycle=0.0040 steps_per_cycle=0.57 ns_per_step=7.0
+  unit kind=ag count=64 share=0.0023 us_per_cycle=0.0027 steps_per_cycle=0.21 ns_per_step=12.5
+  unit kind=hist count=64 share=0.0011 us_per_cycle=0.0012 steps_per_cycle=0.21 ns_per_step=5.8
+  unit kind=row0 count=1 share=0.0004 us_per_cycle=0.0004 steps_per_cycle=0.01 ns_per_step=62.4
+  unit kind=row1 count=1 share=0.0002 us_per_cycle=0.0002 steps_per_cycle=0.01 ns_per_step=32.8
+  unit kind=row7 count=1 share=0.0002 us_per_cycle=0.0002 steps_per_cycle=0.01 ns_per_step=30.1
+  unit kind=row2 count=1 share=0.0001 us_per_cycle=0.0001 steps_per_cycle=0.01 ns_per_step=20.7
+  unit kind=row5 count=1 share=0.0001 us_per_cycle=0.0001 steps_per_cycle=0.01 ns_per_step=16.0

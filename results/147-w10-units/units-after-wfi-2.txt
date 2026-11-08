@@ -1,0 +1,23 @@
+units prog=wfi cycles=1665 wall_us_per_cycle=1.439 (calibrating: two clock reads a step) units_us_per_cycle=0.548 (the clock's 5.6 ns a step taken off) rest_us_per_cycle=0.891 (delivery, scheduling, and the clock again)
+unit kind=core count=64 share=0.6746 us_per_cycle=0.3695 steps_per_cycle=45.99 ns_per_step=8.0
+unit kind=ctl count=64 share=0.2092 us_per_cycle=0.1146 steps_per_cycle=1.27 ns_per_step=90.4
+unit kind=router count=64 share=0.0837 us_per_cycle=0.0459 steps_per_cycle=1.73 ns_per_step=26.5
+unit kind=dir count=64 share=0.0176 us_per_cycle=0.0096 steps_per_cycle=1.46 ns_per_step=6.6
+unit kind=cnc count=1 share=0.0079 us_per_cycle=0.0043 steps_per_cycle=0.04 ns_per_step=97.3
+unit kind=inj count=64 share=0.0023 us_per_cycle=0.0013 steps_per_cycle=0.27 ns_per_step=4.7
+unit kind=row0 count=1 share=0.0009 us_per_cycle=0.0005 steps_per_cycle=0.01 ns_per_step=54.1
+unit kind=row1 count=1 share=0.0005 us_per_cycle=0.0003 steps_per_cycle=0.01 ns_per_step=30.8
+unit kind=row7 count=1 share=0.0004 us_per_cycle=0.0002 steps_per_cycle=0.01 ns_per_step=25.8
+unit kind=row5 count=1 share=0.0004 us_per_cycle=0.0002 steps_per_cycle=0.01 ns_per_step=25.4
+unit kind=row6 count=1 share=0.0004 us_per_cycle=0.0002 steps_per_cycle=0.01 ns_per_step=22.7
+unit kind=ts count=64 share=0.0004 us_per_cycle=0.0002 steps_per_cycle=0.04 ns_per_step=5.2
+unit kind=row2 count=1 share=0.0004 us_per_cycle=0.0002 steps_per_cycle=0.01 ns_per_step=21.3
+unit kind=row4 count=1 share=0.0003 us_per_cycle=0.0002 steps_per_cycle=0.01 ns_per_step=19.3
+unit kind=row3 count=1 share=0.0003 us_per_cycle=0.0001 steps_per_cycle=0.01 ns_per_step=16.2
+unit kind=hist count=64 share=0.0002 us_per_cycle=0.0001 steps_per_cycle=0.04 ns_per_step=3.5
+unit kind=we count=64 share=0.0002 us_per_cycle=0.0001 steps_per_cycle=0.04 ns_per_step=2.9
+unit kind=sram count=64 share=0.0001 us_per_cycle=0.0001 steps_per_cycle=0.04 ns_per_step=2.1
+unit kind=gather count=64 share=0.0001 us_per_cycle=0.0001 steps_per_cycle=0.04 ns_per_step=1.3
+unit kind=ep2 count=1 share=0.0000 us_per_cycle=0.0000 steps_per_cycle=0.00 ns_per_step=34.8
+unit kind=ag count=64 share=0.0000 us_per_cycle=0.0000 steps_per_cycle=0.04 ns_per_step=0.3
+unit kind=ep3 count=1 share=0.0000 us_per_cycle=0.0000 steps_per_cycle=0.00 ns_per_step=5.6
