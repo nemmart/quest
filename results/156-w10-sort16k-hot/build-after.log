@@ -1,0 +1,25 @@
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -g -pthread -c bench/w10/bench_sort.cpp -o build/prof/bench/w10/bench_sort.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -g -pthread -c src/units/net.cpp -o build/prof/src/units/net.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -g -pthread -c src/units/router.cpp -o build/prof/src/units/router.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -g -pthread -c src/units/inject.cpp -o build/prof/src/units/inject.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -g -pthread -c src/units/cnc.cpp -o build/prof/src/units/cnc.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -g -pthread -c src/units/chip.cpp -o build/prof/src/units/chip.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -g -pthread -c src/units/trace_log.cpp -o build/prof/src/units/trace_log.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -g -pthread -c src/units/controller.cpp -o build/prof/src/units/controller.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -g -pthread -c src/units/tile_ctl.cpp -o build/prof/src/units/tile_ctl.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -g -pthread -c tests/golden_run.cpp -o build/prof/tests/golden_run.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -g -pthread -c tests/sha256.cpp -o build/prof/tests/sha256.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -g -pthread -c src/base/alloc_guard.cpp -o build/prof/src/base/alloc_guard.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -g -pthread -c src/base/arena.cpp -o build/prof/src/base/arena.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -g -pthread -c src/base/fatal.cpp -o build/prof/src/base/fatal.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -g -pthread -c src/barrier.cpp -o build/prof/src/barrier.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -g -pthread -c src/config.cpp -o build/prof/src/config.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -g -pthread -c src/digest.cpp -o build/prof/src/digest.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -g -pthread -c src/engine.cpp -o build/prof/src/engine.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -g -pthread -c src/observe.cpp -o build/prof/src/observe.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -g -pthread -c src/parallel.cpp -o build/prof/src/parallel.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -g -pthread -c src/partition.cpp -o build/prof/src/partition.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -g -pthread -c src/regions.cpp -o build/prof/src/regions.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -g -pthread -c src/threads.cpp -o build/prof/src/threads.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -g -pthread -c src/topology.cpp -o build/prof/src/topology.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -g -pthread build/prof/bench/w10/bench_sort.o build/prof/src/units/net.o build/prof/src/units/router.o build/prof/src/units/inject.o build/prof/src/units/cnc.o build/prof/src/units/chip.o build/prof/src/units/trace_log.o build/prof/src/units/controller.o build/prof/src/units/tile_ctl.o build/prof/tests/golden_run.o build/prof/tests/sha256.o build/prof/src/base/alloc_guard.o build/prof/src/base/arena.o build/prof/src/base/fatal.o build/prof/src/barrier.o build/prof/src/config.o build/prof/src/digest.o build/prof/src/engine.o build/prof/src/observe.o build/prof/src/parallel.o build/prof/src/partition.o build/prof/src/regions.o build/prof/src/threads.o build/prof/src/topology.o -o build/prof/bench_sort -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign

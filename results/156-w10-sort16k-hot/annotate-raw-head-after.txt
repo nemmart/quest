@@ -1,0 +1,120 @@
+
+Sorted summary for file /tmp/w10-156-w10-sort16k-hot/kit/after/sim/build/prof/bench_sort
+----------------------------------------------
+
+   37.00 tile_ctl.h:136
+   11.79 engine.h:550
+    5.34 engine.h:73
+    5.32 tile_ctl.h:0
+    5.25 engine.h:546
+    3.71 engine.h:184
+    3.25 engine.h:551
+    1.57 engine.h:0
+    1.53 engine.h:287
+    1.30 tile_ctl.h:106
+    1.15 engine.h:61
+    0.94 tile_ctl.h:108
+    0.66 engine.h:293
+    0.54 engine.h:395
+ Percent |	Source code & Disassembly of bench_sort for cpu_core/cycles/ (7448 samples, percent: local period)
+------------------------------------------------------------------------------------------------------------------
+         :
+         :
+         :
+         : 3     Disassembly of section .text:
+         :
+         : 5     000000000002aca0 <units::TileCtl::step(sim::Ctx&)>:
+         : 6     p.out(line, "line", 1);
+         : 7     }
+         : 8     // Stepped when something reaches it (and at the first cycle): endCycle(t - 1) from what reached it at t (the
+         : 9     // shifted end of cycle, PORTS.md 7), then the view for t. A Count wakes nobody: a condition count that rises with
+         : 10    // nothing else reaching the block is seen at its next step (never in M2's programs: no overflow, no bad packet).
+         : 11    sim::Wake step(sim::Ctx& c) {
+    0.32 :   2aca0:  push   %rbp
+    0.00 :   2aca1:  push   %r15
+    0.00 :   2aca3:  push   %r14
+    0.01 :   2aca5:  push   %r13
+    0.00 :   2aca7:  push   %r12
+    0.00 :   2aca9:  push   %rbx
+    0.00 :   2acaa:  sub    $0x68,%rsp
+    0.00 :   2acae:  mov    %rsi,%r12
+    0.35 :   2acb1:  mov    %rdi,%r15
+         : 21    uint64_t gos = 0, dones = 0, readies = 0, sends = 0, trace_stores = 0, violations = 0, sim_exit_at = 0;
+         : 22    uint32_t sim_exit_value = 0;
+         :
+         : 24    // What reached the block during t (all of it from t's cycle; at most one bus operation, the core's).
+         : 25    struct In {
+         : 26    bool go = false, landed = false, freed = false;
+    0.00 :   2acb4:  movw   $0x0,0x18(%rsp)
+    0.00 :   2acbb:  movb   $0x0,0x1a(%rsp)
+         : 29    uint32_t op = 0, arg = 0, v = 0;   // op: 0 none, BUS_STORE (register, value), BUS_CONSUME (-, bits), BUS_ERROR (cond, -)
+    0.00 :   2acc0:  xorps  %xmm0,%xmm0
+    0.00 :   2acc3:  movups %xmm0,0x1c(%rsp)
+    0.03 :   2acc8:  movl   $0x0,0x2b(%rsp)
+         : 33    // M2
+         : 34    uint32_t kline = 0;                // a decrement of this counter (1-7) fell due at t (the director's K-stage line)
+         : 35    bool send_busy = false;            // the send hold occupied at the end of t (W9's Reg), or the core's put at t
+         : 36    bool bad = false;                  // the director dropped a bad packet at t (an event: ERRORS [1] at endCycle(t))
+         : 37    bool router_ovf_ev = false;        // the router counted an overflow at t (an event, D29: ERRORS [0] at endCycle(t))
+         : 38    uint64_t router_ovf = 0, we_in_ovf = 0, gather_ovf = 0;   // FIFO overflow counts through t (D28: Counts)
+    0.00 :   2acd0:  movups %xmm0,0x30(%rsp)
+    0.01 :   2acd5:  movups %xmm0,0x3f(%rsp)
+         : 41    RegBlockState::In in;
+         : 42    if (c.ready(go)) { c.take(go); in.go = true; }
+    0.66 :   2acda:  mov    0x8(%rdi),%r8 // tile_ctl.h:106
+    0.64 :   2acde:  mov    %r8,%rcx
+    0.00 :   2ace1:  shr    $0x20,%rcx
+         : 46    SIM_HOT Wake Ctx::in(Cycle n) const { return Wake{e_->now + n}; }
+         : 47    SIM_HOT uint64_t Ctx::mask() const { return *mask_; }
+         : 48    SIM_HOT void Ctx::stop() { if (e_->stop_at == kNoCycle) e_->stop_at = e_->now; }
+         :
+         : 50    // Link
+         : 51    SIM_HOT bool Ctx::ready(LinkIn p) const { return *mask_ >> p.bit & 1; }
+    0.03 :   2ace5:  mov    0x10(%rsi),%rax
+    0.07 :   2ace9:  mov    (%rax),%rdx
+    0.07 :   2acec:  mov    $0x1,%esi
+    0.00 :   2acf1:  mov    $0x1,%edi
+    0.01 :   2acf6:  shl    %cl,%rdi
+    0.42 :   2acf9:  bt     %rcx,%rdx
+    0.03 :   2acfd:  jae    2ad40 <units::TileCtl::step(sim::Ctx&)+0xa0>
+         : 59    return l.ring.peek(k);
+         : 60    }
+         : 61    SIM_HOT unsigned Ctx::size(LinkIn p) const { return e_->links[p.idx].ring.count(); }
+         : 62    SIM_HOT uint64_t Ctx::overflows(FifoIn p) const { return e_->fifos[p.idx].overflows; }
+         : 63    SIM_HOT void Ctx::take(LinkIn p) {
+         : 64    LinkPort& l = e_->links[p.idx];
+    0.00 :   2acff:  mov    (%r12),%rax
+    0.00 :   2ad03:  mov    0x60(%rax),%rax
+    0.00 :   2ad07:  mov    %r8d,%ecx
+    0.00 :   2ad0a:  lea    (%rcx,%rcx,4),%rcx
+         : 69    if (++head == depth) head = 0;
+    0.00 :   2ad0e:  mov    0x8(%rax,%rcx,8),%edx
+    0.00 :   2ad12:  inc    %edx
+    0.00 :   2ad14:  xor    %r8d,%r8d
+    0.00 :   2ad17:  cmp    0x10(%rax,%rcx,8),%edx
+    0.00 :   2ad1b:  cmovne %edx,%r8d
+         : 75    --n;
+    0.00 :   2ad1f:  decl   0xc(%rax,%rcx,8)
+         : 77    if (++head == depth) head = 0;
+    0.00 :   2ad23:  mov    %r8d,0x8(%rax,%rcx,8)
+         : 79    SIM_HOT bool Ctx::ready(LinkIn p) const { return *mask_ >> p.bit & 1; }
+    0.00 :   2ad28:  mov    0x10(%r12),%rax
+    0.00 :   2ad2d:  mov    (%rax),%rdx
+         : 82    DCHECK(l.owner == cur_ && !l.ring.empty() && l.last_take != e_->now, "take of an empty or foreign link, or a second take (%s)",
+         : 83    e_->unit_names[cur_]);
+         : 84    l.last_take = e_->now;
+         : 85    #endif
+         : 86    l.ring.pop();
+         : 87    if (l.ring.empty()) *mask_ &= ~(uint64_t(1) << p.bit);
+    0.00 :   2ad30:  jne    2ad3b <units::TileCtl::step(sim::Ctx&)+0x9b>
+    0.00 :   2ad32:  not    %rdi
+    0.00 :   2ad35:  and    %rdi,%rdx
+    0.00 :   2ad38:  mov    %rdx,(%rax)
+    0.00 :   2ad3b:  movb   $0x1,0x18(%rsp)
+         : 93    if (c.ready(landed)) { c.take(landed); in.landed = true; }
+    0.04 :   2ad40:  mov    0x10(%r15),%rdi
+    0.07 :   2ad44:  mov    %rdi,%rcx
+    0.01 :   2ad47:  shr    $0x20,%rcx
+         : 97    SIM_HOT bool Ctx::ready(LinkIn p) const { return *mask_ >> p.bit & 1; }
+    0.04 :   2ad4b:  shl    %cl,%rsi
+    0.50 :   2ad4e:  bt     %rcx,%rdx

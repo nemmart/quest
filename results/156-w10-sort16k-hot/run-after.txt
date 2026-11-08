@@ -1,0 +1,5 @@
+Couldn't record kernel reference relocation symbol
+Symbol resolution may be skewed if relocation was used (e.g. kexec).
+Check /proc/kallsyms permission or run as root.
+bench_sort: span 14838 -> 511457 (496619 cycles), 0 phases
+sort threads=1 part=one span=496619 reps=1 us_per_cycle=15.1882 us_min=15.1882 us_max=15.1882 secs=7.5428 words=463018 digest=bfb4f255823d1db6 rss_mb=73.1 sram_resident_mb=52.0 times="one domain" partition="one domain"

@@ -1,0 +1,358 @@
+
+==== units::TileCtl::step(sim::Ctx&)
+      src: 42    if (c.ready(go)) { c.take(go); in.go = true; }
+    0.66 :   2acda:  mov    0x8(%rdi),%r8 // tile_ctl.h:106
+    0.64 :   2acde:  mov    %r8,%rcx
+    0.50 :   2ad4e:  bt     %rcx,%rdx
+    0.54 :   2ada9:  bt     %rcx,%rdx // engine.h:395
+      src: 142   if (j >= depth) j -= depth;
+    1.15 :   2adc2:  mov    0x10(%rax,%rcx,8),%r8d // engine.h:61
+    0.94 :   2ade6:  mov    (%r10,%rbx,8),%r10d // tile_ctl.h:108
+      src: 155   if (++head == depth) head = 0;
+    5.34 :   2adea:  inc    %edx // engine.h:73
+    1.05 :   2b311:  mov    0x50(%rsp),%rax // tile_ctl.h:0
+    1.57 :   2b3ed:  xor    %r12d,%r12d // engine.h:0
+      src: 714   for (unsigned r = 0; r < kRegs; r++) c.write(regs, r, s.reg(r));
+   32.85 :   2b400:  inc    %r12 // tile_ctl.h:136
+    2.17 :   2b418:  mov    0x58(%rsp),%rdi
+    1.97 :   2b420:  call   25de0 <units::RegBlockState::reg(unsigned int) const>
+    4.27 :   2b425:  mov    0x50(%rsp),%rcx // tile_ctl.h:0
+    0.98 :   2b42d:  mov    %rcx,(%rsp) // engine.h:546
+    0.54 :   2b431:  mov    0x88(%rcx),%rcx
+    3.73 :   2b438:  shl    $0x5,%rbx
+      src: 730   if (r.regs[i] == v) return;
+    6.15 :   2b441:  mov    (%rcx,%rbx,1),%rcx // engine.h:550
+    5.09 :   2b445:  cmp    %eax,(%rcx,%r12,4)
+      src: 734   r.regs[i] = v;
+    1.25 :   2b44b:  mov    %eax,(%rcx,%r12,4) // engine.h:551
+    2.00 :   2b44f:  mov    0x10(%rsp),%rax
+      src: 767   const uint32_t ri = run_of[i];
+    1.53 :   2b4c1:  mov    (%r11,%rcx,4),%eax // engine.h:287
+      src: 778   static bool test(const uint64_t* b, uint32_t k) { return b[k >> 6] >> (k & 63) & 1; }
+    1.68 :   2b4e6:  mov    %ecx,%edx // engine.h:184
+    2.03 :   2b4ef:  mov    $0x1,%ebp
+      src: 790   if (r.nready++ == 0) run_ready[ri >> 6] |= uint64_t(1) << (ri & 63);
+    0.66 :   2b504:  mov    0x24(%r13,%r14,8),%ecx // engine.h:293
+    0.55 :   2b640:  je     2b70e <units::TileCtl::step(sim::Ctx&)+0xa6e> // engine.h:550
+
+==== units::BigSram::serve(sim::Ctx&, unsigned int, unsigned long)
+      src: 11    void serve(sim::Ctx& c, unsigned a, uint64_t) {
+    0.69 :   10400:  push   %rbp // big_sram.h:189
+    1.00 :   10411:  movzbl 0x1c68(%rdi,%r9,1),%r10d // big_sram.h:190
+    0.74 :   1041a:  lea    (%r10,%r10,8),%rax
+    0.96 :   10436:  mov    0x68(%r15,%r14,1),%ebx // big_sram.h:191
+      src: 31    if (e.write) {
+   11.97 :   1043b:  cmpb   $0x0,0x6c(%r15,%r14,1) // big_sram.h:192
+    1.03 :   10441:  mov    %edx,0xc(%rsp)
+    0.52 :   104c8:  jae    104b4 <units::BigSram::serve(sim::Ctx&, unsigned int, unsigned long)+0xb4> // big_sram.h:194
+      src: 69    for (unsigned j = 0; j < 4; j++) if (e.mask >> j & 1) store(base + j, e.d[j]);
+    0.64 :   104d4:  mov    (%r11,%r15,4),%r13d
+      src: 71    sum.write(c, data[c], v);
+    0.58 :   104d8:  mov    (%r14,%r15,4),%ebp // big_sram.h:122
+      src: 78    if (old_v == new_v) return;
+   32.57 :   104dc:  cmp    %r13d,%ebp // memsum.h:28
+      src: 81    if (old_v) sum -= mem_term(region, index, old_v);
+    0.64 :   104e1:  test   %rbp,%rbp // memsum.h:29
+    0.91 :   10502:  mov    %r8,%rbp // memsum.h:13
+    0.62 :   10509:  xor    %r8,%rbp
+    0.94 :   10510:  mov    %rbp,%r8
+      src: 103   if (new_v) sum += mem_term(region, index, new_v);
+    0.58 :   10524:  test   %r13d,%r13d // memsum.h:30
+   26.43 :   1058b:  jmp    1058f <units::BigSram::serve(sim::Ctx&, unsigned int, unsigned long)+0x18f> // big_sram.h:119
+      src: 141   const uint64_t lo = uint64_t(load(base)) | uint64_t(load(base + 1)) << 32;
+    0.91 :   10594:  mov    %eax,%edx // big_sram.h:197
+      src: 167   const uint64_t hi = uint64_t(load(base + 2)) | uint64_t(load(base + 3)) << 32;
+    0.55 :   105d0:  or     $0x3,%eax // big_sram.h:198
+    0.58 :   10710:  xor    %edx,%edx // big_sram.h:201
+    0.53 :   10725:  jne    10738 <units::BigSram::serve(sim::Ctx&, unsigned int, unsigned long)+0x338> // big_sram.h:202
+
+==== units::Router::step(sim::Ctx&)
+      src: 11    inline sim::Wake Router::step(sim::Ctx& c) {
+    1.20 :   1c8e0:  push   %rbp // router.h:182
+    0.93 :   1c8f1:  mov    %rdi,%r14
+    2.33 :   1c8fa:  test   %rax,%rax // router.h:183
+    0.68 :   1ca4f:  jmp    1cacb <units::Router::step(sim::Ctx&)+0x1eb> // router.h:0
+    1.63 :   1cac1:  cmp    $0x4,%r11 // router.h:187
+      src: 173   if (!m) return false;
+    0.86 :   1cadb:  and    $0x3f,%edi // router.h:130
+      src: 177   unsigned f = rr[o];
+    0.52 :   1cae5:  movzbl 0x84(%r14,%r11,1),%esi // router.h:131
+    0.93 :   1cb02:  cmp    %r8d,%esi // router.h:133
+      src: 188   if (!(m >> f & 1)) continue;
+    1.65 :   1cb08:  bt     %esi,%edi // router.h:134
+    0.59 :   1cb0b:  jb     1cb20 <units::Router::step(sim::Ctx&)+0x240>
+      src: 191   for (unsigned i = 0; i < n; i++) {
+    1.27 :   1cb0d:  dec    %ebp // router.h:132
+    2.10 :   1cb37:  movzbl 0x93(%r14,%rdi,1),%r9d // router.h:136
+   12.86 :   1cb51:  mov    0x760(%r14,%r8,8),%r8 // router.h:137
+    0.59 :   1cb59:  mov    %r8,0x10(%rsp) // router.h:0
+    3.57 :   1cd90:  movzbl 0x493(%rdi,%r14,1),%r10d // router.h:136
+    0.70 :   1cda0:  movdqu 0x750(%r14,%r8,8),%xmm0 // router.h:137
+   18.49 :   1cdaa:  mov    0x760(%r14,%r8,8),%r9
+      src: 410   q.head = uint8_t(q.head + 1 == q.cap ? 0 : q.head + 1);
+    0.90 :   1cdb2:  inc    %r10d // router.h:138
+    0.52 :   1cf41:  mov    %r9,0x10(%rsp) // router.h:0
+    0.50 :   1cf8d:  lea    (%rcx,%r12,8),%rcx
+    0.54 :   1cfd6:  and    %eax,%r15d // engine.h:323
+      src: 618   pending++;
+    0.90 :   1d036:  incq   0x560(%rdi) // engine.h:327
+    0.63 :   1d057:  or     %r12d,%ebp // router.h:0
+    0.54 :   1d0af:  mov    0xc(%rcx,%r15,8),%ebx // engine.h:422
+    0.70 :   1d15c:  mov    0x8(%r8,%r10,1),%ecx // bucket.h:35
+      src: 716   pending++;
+    0.93 :   1d169:  incq   0x560(%rdi) // engine.h:327
+      src: 721   if (attached && select(TO_CNC, 0x3F, s, taken)) { to_cnc_words++; c.put(to_cnc, s.w[0], s.w[1], s.w[2]); }
+    0.90 :   1d17b:  cmpb   $0x0,0x56(%r14) // router.h:200
+    0.97 :   1d344:  cmp    $0x4,%r15 // router.h:202
+      src: 882   SIM_HOT bool Ctx::ready(LinkIn p) const { return *mask_ >> p.bit & 1; }
+    0.95 :   1d359:  mov    0x10(%r13),%rax // engine.h:395
+    1.20 :   1d368:  bt     %rcx,%rsi
+    2.53 :   1d3a6:  mov    0x8(%r9,%r11,8),%r8 // router.h:205
+    3.53 :   1d434:  mov    0x8(%r9,%rbx,8),%r15 // router.h:211
+    0.75 :   1d439:  movzbl 0x55(%r14),%r8d
+      src: 987   route(c, LOOPBACK, d, a, cw, taken);
+    0.57 :   1d472:  mov    %ebp,(%rsp) // router.h:214
+    0.77 :   1d536:  je     1d542 <units::Router::step(sim::Ctx&)+0xc62> // router.h:225
+
+==== void sim::detail::deliver_link<3u>(sim::Engine&, sim::Bucket const&)
+    2.49 :   67520:  add    $0x20,%rdx // engine.h:604
+    1.11 :   6752f:  lea    (%rax,%rax,4),%rax // engine.h:605
+      src: 57    unsigned j = head + n++;
+    1.32 :   67533:  mov    0xc(%r8,%rax,8),%ecx // engine.h:66
+    1.73 :   67538:  lea    0x1(%rcx),%ebp
+    1.32 :   67540:  add    0x8(%r8,%rax,8),%ecx
+      src: 62    if (j >= depth) j -= depth;
+    2.37 :   67545:  mov    0x10(%r8,%rax,8),%ebp // engine.h:67
+    0.59 :   6754a:  cmp    %ebp,%ecx
+      src: 67    return w + size_t(j) * wid;
+    1.55 :   67551:  mov    (%r8,%rax,8),%r14 // engine.h:68
+    1.14 :   67555:  mov    0x14(%r8,%rax,8),%r15d
+      src: 72    for (unsigned k = 0; k < W; k++) d[k] = p[1 + k];
+    1.38 :   6755e:  mov    0x8(%rdx),%rcx // engine.h:607
+    2.69 :   67562:  mov    %rcx,(%r14,%r15,8)
+   12.83 :   67566:  mov    0x10(%rdx),%rcx
+   17.46 :   6756f:  mov    0x18(%rdx),%rcx
+    0.62 :   67573:  mov    %rcx,0x10(%r14,%r15,8)
+      src: 79    l.inflight--;
+    1.55 :   67578:  decw   0x1c(%r8,%rax,8) // engine.h:608
+      src: 81    e.mark_bit(l.owner, l.bit);
+    1.99 :   6757e:  movzbl 0x22(%r8,%rax,8),%ecx // engine.h:609
+      src: 83    [[gnu::always_inline]] void mark_bit(uint32_t i, unsigned bit) { mask[i] |= uint64_t(1) << bit; mark(i); }
+    0.85 :   67584:  mov    $0x1,%r14d // engine.h:296
+      src: 86    e.mark_bit(l.owner, l.bit);
+    3.05 :   6758d:  mov    0x18(%r8,%rax,8),%ecx // engine.h:609
+      src: 88    [[gnu::always_inline]] void mark_bit(uint32_t i, unsigned bit) { mask[i] |= uint64_t(1) << bit; mark(i); }
+    0.56 :   67592:  or     %r14,(%r9,%rcx,8) // engine.h:296
+      src: 90    const uint32_t ri = run_of[i];
+    4.36 :   67596:  mov    (%r10,%rcx,4),%eax // engine.h:287
+      src: 92    uint32_t k = i - r.first;
+    0.91 :   6759a:  lea    (%rax,%rax,8),%r14 // engine.h:289
+    3.34 :   675a2:  mov    0x18(%r11,%r14,8),%ebp
+    2.78 :   675a7:  sub    %ebp,%ecx
+      src: 97    uint64_t* ready() const { return bits[cur]; }
+    0.97 :   675a9:  movzbl 0x2f(%r11,%r14,8),%r12d // engine.h:182
+      src: 100   static bool test(const uint64_t* b, uint32_t k) { return b[k >> 6] >> (k & 63) & 1; }
+    4.77 :   675b4:  mov    %ecx,%r12d // engine.h:184
+    0.85 :   675b7:  shr    $0x6,%r12d
+   12.33 :   675bf:  mov    $0x1,%ebp
+    0.97 :   675c4:  shl    %cl,%rbp
+      src: 107   if (!RunSet::test(b, k)) {
+    3.46 :   675cb:  jb     67520 <void sim::detail::deliver_link<3u>(sim::Engine&, sim::Bucket const&)+0x50> // engine.h:291
+      src: 109   static void set(uint64_t* b, uint32_t k) { b[k >> 6] |= uint64_t(1) << (k & 63); }
+    1.29 :   675d1:  or     %r13,%rbp // engine.h:185
+      src: 112   if (r.nready++ == 0) run_ready[ri >> 6] |= uint64_t(1) << (ri & 63);
+    1.73 :   675d8:  mov    0x24(%r11,%r14,8),%ecx // engine.h:293
+
+==== units::BigSram::step(sim::Ctx&)
+      src: 11    sim::Wake step(sim::Ctx& c) {
+    2.14 :    fea0:   push   %rbp // big_sram.h:133
+    2.62 :    feb1:   mov    %rdi,%r14
+    4.62 :    fec1:   movaps %xmm0,0x10(%rsp) // big_sram.h:136
+      src: 35    for (uint32_t m = busy; m; m &= m - 1) serve(c, unsigned(__builtin_ctz(m)), t);
+    0.55 :    fec6:   mov    0x1c88(%rdi),%r12d // big_sram.h:138
+    1.58 :    fee0:   tzcnt  %r12d,%edx
+    0.62 :    fee5:   mov    %r14,%rdi
+    0.89 :    feeb:   mov    %r15,%rcx
+    0.62 :    ff06:   shr    $0x20,%rcx // big_sram.h:140
+      src: 59    SIM_HOT bool Ctx::ready(HoldIn p) const { return *mask_ >> p.bit & 1; }
+    0.69 :    ff0a:   mov    0x10(%rbx),%rdi // engine.h:483
+      src: 67    const HoldPort& h = e_->holds[p.idx];
+    0.76 :    ff24:   mov    (%rbx),%rcx // engine.h:485
+      src: 79    const unsigned a = area(addr), n = unsigned(w[0] >> 21 & 7), mask = chunk_mask(addr, n);
+    0.55 :    ff40:   mov    %ebp,%ecx // big_sram.h:143
+    0.90 :    ff57:   mov    %ebp,%ecx // big_sram.h:116
+    0.55 :    ff59:   and    $0x3,%ecx
+    0.55 :    ff6f:   je     ffd1 <units::BigSram::step(sim::Ctx&)+0x131> // big_sram.h:144
+      src: 141   if (merge || room) {
+    0.62 :    ffee:   test   %cl,%cl // big_sram.h:146
+      src: 170   h.last_take = e_->now;
+    0.76 :   1002f:  mov    (%rax),%rax // engine.h:493
+    0.83 :   100f2:  movzbl 0x1c78(%r14,%rsi,1),%eax // big_sram.h:169
+    2.27 :   10105:  lea    (%rdx,%rdx,8),%rax
+    3.24 :   1011f:  movb   $0x1,0x6c(%r10,%rdi,1) // big_sram.h:170
+    0.90 :   10125:  mov    %r15b,0x6d(%r10,%rdi,1)
+    0.62 :   1012a:  movl   $0x0,0x70(%r10,%rdi,1)
+    0.62 :   10133:  movb   $0x0,0x6e(%r10,%rdi,1)
+    0.62 :   10149:  and    %ecx,%edx // big_sram.h:173
+    0.76 :   1014b:  mov    %edx,0x74(%r10,%rdi,1)
+    0.55 :   10160:  mov    %edx,%ecx
+    0.55 :   10162:  xor    $0x20,%cl
+    0.55 :   10165:  mov    %r13,%r15
+    0.62 :   10179:  test   %eax,%eax
+    0.62 :   10191:  mov    %r12d,0x7c(%r10,%rdi,1)
+    0.96 :   101ae:  mov    %r11d,%ecx // big_sram.h:117
+      src: 292   busy |= 1u << a;
+    0.83 :   101c6:  mov    %esi,%ecx // big_sram.h:176
+    0.55 :   101ca:  or     %eax,0x1c88(%r14)
+    0.55 :   101d6:  test   %dl,%dl // big_sram.h:154
+    0.55 :   101de:  mov    0x8(%r14),%rsi
+    1.10 :   101f9:  bt     %rcx,%rdi // engine.h:483
+      src: 317   static unsigned area(uint32_t chunk) { return chunk >> 17 & 15; }
+    1.58 :   10215:  mov    %edi,%esi // big_sram.h:114
+    0.62 :   10217:  shr    $0x11,%esi
+    1.65 :   10231:  cmp    %ebp,%r8d // big_sram.h:158
+      src: 329   h.occ = false;
+    0.55 :   1023a:  movb   $0x0,0x3d(%r10,%r11,1) // engine.h:492
+      src: 331   h.last_take = e_->now;
+    0.62 :   10240:  mov    (%rcx),%rcx // engine.h:493
+      src: 341   enqueue(a, false, row(addr), chunk_mask(addr, unsigned(r >> 21 & 7)), uint32_t(r >> 24 & 0xFFFF), uint8_t(r >> 40 & 1), 0, 0);
+    0.62 :   1025c:  mov    %edi,%ecx // big_sram.h:161
+    0.69 :   10270:  mov    %edi,%ecx // big_sram.h:116
+    0.55 :   10275:  shl    %cl,%r10d
+    0.55 :   10286:  and    $0x1,%dil // big_sram.h:161
+    7.24 :   102a3:  lea    (%rdx,%rdx,8),%rax // big_sram.h:169
+    1.24 :   102a7:  lea    (%rax,%rax,2),%rax
+    1.93 :   102ab:  add    %rdx,%rax
+    0.97 :   102ae:  imul   $0x1c0,%rsi,%rdx
+    9.72 :   102bd:  movb   $0x0,0x6c(%rdx,%rax,1) // big_sram.h:170
+    1.45 :   102c2:  and    $0xf,%r10b
+    0.62 :   102c6:  mov    %r10b,0x6d(%rdx,%rax,1)
+    1.52 :   102cb:  mov    %ecx,0x70(%rdx,%rax,1)
+    1.10 :   102cf:  mov    %dil,0x6e(%rdx,%rax,1)
+      src: 376   } else e.d[0] = e.d[1] = e.d[2] = e.d[3] = 0;
+    0.96 :   102d4:  xorps  %xmm0,%xmm0 // big_sram.h:174
+      src: 379   count[a]++;
+    1.65 :   102dc:  incb   0x1c78(%r14,%rsi,1) // big_sram.h:175
+    0.55 :   102ed:  or     %eax,0x1c88(%r14) // big_sram.h:176
+
+==== units::Injection::step(sim::Ctx&)
+      src: 11    inline sim::Wake Injection::step(sim::Ctx& c) {
+    3.26 :   1e790:  push   %rbp // inject.h:190
+    2.27 :   1e7a1:  mov    %rdi,%rbx
+    1.36 :   1e7a8:  mov    %rdx,%rcx // inject.h:192
+    3.45 :   1e7be:  bt     %rcx,%rsi // engine.h:395
+    0.63 :   1e7c7:  mov    0x60(%rcx),%rcx // engine.h:410
+    5.17 :   1e7d5:  inc    %esi // engine.h:73
+    0.54 :   1e7dd:  cmovne %esi,%edi
+      src: 56    if (++head == depth) head = 0;
+    2.54 :   1e7e4:  mov    %edi,0x8(%rcx,%rdx,8)
+      src: 63    if (l.ring.empty()) *mask_ &= ~(uint64_t(1) << p.bit);
+    1.27 :   1e7e8:  jne    1e7f4 <units::Injection::step(sim::Ctx&)+0x64> // engine.h:417
+    1.54 :   1e7f9:  mov    %eax,0x24(%rbx) // inject.h:192
+      src: 79    rs.step(c, tok);                                          // G3: area returns, one release, one issue
+    0.91 :   1e812:  lea    0x38(%rbx),%rbp // inject.h:195
+    2.09 :   1e819:  mov    %r14,%rsi
+      src: 87    const bool r = rs.has_return(c), s = c.ready(send);
+    0.54 :   1e82c:  mov    (%rbx),%rsi // inject.h:196
+    0.73 :   1e82f:  mov    %rsi,%rcx
+    1.09 :   1e836:  mov    $0x1,%eax // inject.h:0
+    1.45 :   1e83e:  mov    0x10(%r14),%rdx // engine.h:483
+    0.54 :   1e845:  and    %rax,%rcx
+    0.82 :   1e85b:  test   %rcx,%rcx // inject.h:198
+    0.54 :   1e879:  mov    0x12e8(%rbx),%r12 // inject.h:201
+    1.54 :   1e88e:  test   %rcx,%rcx // inject.h:212
+    3.81 :   1e8b3:  mov    %r9,0x10(%rsp) // inject.h:0
+    0.54 :   1e8bd:  mov    %rbp,%rdi // inject.h:213
+    0.82 :   1e8ce:  lea    0x1370(%rbx),%rax
+    0.54 :   1e8fe:  incq   (%rax) // inject.h:0
+      src: 175   check(h);
+    2.90 :   1e901:  mov    %rbx,%rdi // inject.h:215
+      src: 179   c.put(to_router, d, h, cw);
+    0.91 :   1e90c:  mov    0x10(%rbx),%eax // inject.h:216
+      src: 181   detail::link_put_check(e_, p); Word* w = e_->append<3>(p.route); w[0] = a; w[1] = b; w[2] = c;
+    1.90 :   1e90f:  mov    (%r14),%rdi // engine.h:433
+      src: 188   unsigned count() const { return n; }
+    1.45 :   1e926:  lea    (%rsi,%rsi,4),%r10 // engine.h:54
+      src: 190   if (__builtin_expect(l.ring.count() + l.inflight >= l.cap, 0)) e->die_link_full(e->routes[p.route].dest);
+    0.54 :   1e92a:  movzwl 0x1c(%rcx,%r10,8),%r9d // engine.h:422
+    3.35 :   1e930:  mov    0xc(%rcx,%r10,8),%r11d
+    2.72 :   1e935:  add    %r9d,%r11d
+    0.54 :   1e938:  movzwl 0x1e(%rcx,%r10,8),%r13d
+    0.54 :   1e947:  lea    (%rcx,%r10,8),%rcx // engine.h:0
+      src: 202   if (__builtin_expect(r.last_put == now, 0)) die_two_puts(route);
+    1.45 :   1e956:  mov    (%rdi),%r9 // engine.h:319
+    1.63 :   1e959:  cmp    %r9,(%rdx,%r8,8)
+      src: 214   const Cycle at = now + r.latency;
+    0.63 :   1e97e:  movzwl 0xe(%rdx,%r8,8),%eax // engine.h:322
+    1.45 :   1e984:  add    %r9,%rax
+    0.82 :   1e99c:  test   %r9,%r9 // bucket.h:48
+    0.91 :   1e9be:  lea    (%rdx,%r8,1),%rax // engine.h:0
+      src: 239   if (__builtin_expect(count_ == capacity_, 0)) die_full();
+    1.99 :   1e9c2:  cmp    0xc(%rdx,%r8,1),%r9d // bucket.h:34
+    1.72 :   1e9df:  mov    0x8(%rdx,%r8,1),%ecx // bucket.h:35
+      src: 250   e[0] = r.dest;
+    1.81 :   1e9e8:  mov    %rsi,(%rax,%rcx,8) // engine.h:326
+      src: 252   pending++;
+    6.98 :   1e9ec:  incq   0x560(%rdi) // engine.h:327
+    0.54 :   1e9f3:  mov    0x10(%rsp),%rdx // engine.h:0
+    0.73 :   1e9fd:  mov    %r12,0x10(%rax,%rcx,8) // engine.h:433
+    2.09 :   1ea02:  mov    0x8(%rsp),%rdx
+    0.91 :   1ea07:  mov    %rdx,0x18(%rax,%rcx,8)
+      src: 265   const uint8_t busy = c.ready(send) ? 1 : 0;
+    0.54 :   1ea13:  movzbl 0x4(%rbx),%ecx // inject.h:221
+    0.91 :   1ea20:  shl    %cl,%rax // engine.h:483
+    1.36 :   1ea23:  and    (%rdx),%rax
+    0.73 :   1eb1f:  bt     %rcx,%rax
+    2.09 :   1eb23:  jae    1eb33 <units::Injection::step(sim::Ctx&)+0x3a3> // inject.h:224
+      src: 449   SIM_HOT Wake Ctx::next() const { return Wake{e_->now + 1}; }
+    0.73 :   1ec0d:  inc    %rax // engine.h:389
+    1.09 :   1ec10:  jmp    1eca9 <units::Injection::step(sim::Ctx&)+0x519> // engine.h:0
+    0.54 :   1ecb6:  pop    %rbp // inject.h:229
+    1.27 :   1ecb7:  ret
+
+==== units::Router::route(sim::Ctx&, unsigned int, unsigned long, unsigned long, unsigned long, unsigned int)
+      src: 11    inline void Router::route(sim::Ctx& c, unsigned port, uint64_t d, uint64_t a, uint64_t cw, uint32_t taken) {
+    6.24 :   1d570:  push   %rbp // router.h:169
+    0.93 :   1d571:  push   %r15
+    5.18 :   1d57e:  mov    %r8,%r15
+    2.66 :   1d58e:  mov    %edx,%ebp // router.h:170
+      src: 32    constexpr unsigned dst(uint64_t h) { return unsigned(h >> 7 & 0x7F); }
+    6.77 :   1d593:  mov    %r15d,%ecx // net.h:36
+    5.98 :   1d5bc:  call   149f0 <units::route_unicast(units::Hops const&, unsigned int, unsigned int, unsigned int)> // router.h:120
+    1.33 :   1d5c1:  mov    0x40(%rsp),%edx // router.h:0
+      src: 58    if (mask & M_LEFT) push(c, TO_LEFT, port, w, taken);
+    3.19 :   1d5cf:  test   $0x2,%al // router.h:175
+      src: 61    if (mask & M_DOWN) push(c, TO_DOWN, port, w, taken);
+    0.93 :   1d5d7:  test   $0x4,%al // router.h:176
+    0.53 :   1d70b:  mov    %r12,0xa0(%rbx,%r11,1) // router.h:154
+      src: 166   Fifo& q = this->q[i];
+    0.53 :   1d752:  shl    $0x6,%edi // router.h:152
+    0.66 :   1d76b:  cmp    %r10d,%r11d // router.h:162
+      src: 178   unsigned tail = q.head + q.count; if (tail >= q.cap) tail -= q.cap;
+    0.66 :   1d77b:  add    %r11d,%r10d
+    0.53 :   1d8bc:  bt     %edi,%edx // router.h:155
+    0.53 :   1d8d7:  lea    (%rbx,%r11,1),%r9 // router.h:0
+    1.46 :   1d91d:  mov    %r15,0x758(%rbx,%r10,8) // router.h:164
+    0.53 :   1d94e:  mov    $0x8,%edi // router.h:0
+      src: 331   const unsigned f = slot_of[o][port];
+    0.53 :   1d9b5:  movzbl 0x6c(%rbx,%rsi,1),%ecx // router.h:149
+    0.80 :   1da01:  bt     %edi,%edx // router.h:155
+    0.93 :   1da62:  mov    %r15,0x758(%rbx,%r10,8) // router.h:164
+    0.53 :   1da93:  mov    $0x40,%edi // router.h:0
+      src: 418   const unsigned f = slot_of[o][port];
+    0.53 :   1dafa:  movzbl 0x72(%rbx,%rsi,1),%ecx // router.h:149
+    0.53 :   1db25:  mov    %r12,0xa0(%rbx,%r11,1) // router.h:154
+    1.20 :   1db46:  bt     %edi,%edx // router.h:155
+    0.53 :   1db58:  cmp    %r10d,%ebp
+    1.20 :   1dba7:  mov    %r15,0x758(%rbx,%r10,8) // router.h:164
+    0.53 :   1dbd8:  mov    $0x800,%edi // router.h:0
+    1.59 :   1dc44:  cmp    $0xff,%ecx // router.h:149
+    1.73 :   1dc58:  mov    (%r8),%r9 // engine.h:388
+      src: 514   q.put_at = t; q.put_w[0] = w[0]; q.put_w[1] = w[1]; q.put_w[2] = w[2];
+    1.33 :   1dc5b:  mov    %edi,%r11d // router.h:154
+    3.85 :   1dc8b:  bt     %edi,%edx // router.h:155
+    3.05 :   1dc9d:  cmp    %r10d,%ebp
+    0.66 :   1dca6:  lea    (%rbx,%r11,1),%r9 // router.h:0
+      src: 533   q.put_kept = 1;
+    1.59 :   1dcb4:  movb   $0x1,0x95(%rbx,%rdi,1) // router.h:161
+      src: 535   unsigned tail = q.head + q.count; if (tail >= q.cap) tail -= q.cap
