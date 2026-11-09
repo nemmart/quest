@@ -1,0 +1,13 @@
+evm-zone-29  window     0  state-lru  OK     65536 rows    196867 cycles  streams CCC  newexp 0, stalls [0, 4, 0, 0, 109, 98, 0]
+evm-zone-29  window     1  state-lru  OK     65536 rows    196867 cycles  streams CCC  newexp 0, stalls [0, 4, 0, 0, 0, 255, 0]
+evm-zone-29  window     2  state-lru  OK     65536 rows    196822 cycles  streams CCC  newexp 0, stalls [0, 4, 0, 0, 124, 86, 0]
+evm-zone-29  window     7  state-lru  OK     65536 rows    196837 cycles  streams CCC  newexp 0, stalls [0, 4, 0, 0, 121, 104, 0]
+evm-zone-29  window    12  state-lru  OK     65536 rows    196852 cycles  streams CCC  newexp 0, stalls [0, 4, 0, 0, 127, 113, 0]
+evm-zone-29  window    21  state-lru  OK     65536 rows    196948 cycles  streams CCC  newexp 0, stalls [0, 4, 0, 0, 124, 122, 0]
+evm-zone-29  window    22  state-lru  OK     65536 rows    196739 cycles  streams CCC  newexp 0, stalls [0, 4, 0, 0, 127, 0, 0]
+evm-zone-29  window    34  state-lru  OK     65536 rows    214551 cycles  streams CCC  newexp 230, stalls [0, 4, 461, 0, 98, 110, 0]
+evm-zone-29  window    35  state-lru  OK     65536 rows    214711 cycles  streams CCC  newexp 226, stalls [0, 4, 453, 0, 0, 268, 0]
+evm-zone-29  window  5414  state-lru  OK     65536 rows    203728 cycles  streams CCC  newexp 0, stalls [0, 4, 0, 0, 124, 82, 0]
+evm-zone-29  window  5415  state-lru  OK     65536 rows    196612 cycles  streams CCC  newexp 0, stalls [0, 4, 0, 0, 0, 0, 0]
+evm-zone-29  window  8191  state-lru  OK     65536 rows    196612 cycles  streams CCC  newexp 0, stalls [0, 4, 0, 0, 0, 0, 0]
+state-lru: 12 windows, 786432 rows compared, 0 failed

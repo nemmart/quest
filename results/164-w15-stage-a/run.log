@@ -1,0 +1,80 @@
+kit sha256 9adb2cd2488d5a7dc0abc46aff0befd978913e1eef561ac195d373babca131a0
+kit: meshsim sim-w15 fd11957; ref classes from sim/ref at fd11957 (javac --release 17); host godspeed; 16 CPUs, 12 jobs; openjdk version "21.0.12.1" 2026-08-18; Ubuntu clang version 18.1.3 (1ubuntu1)
+
+==== inputs (11:21:42)
+selected: /home/questrunner/data/w9-deliveries-selected
+total 132
+drwxrwxr-x 4 questrunner questrunner  4096 Nov  4 11:11 .
+drwxrwxr-x 7 questrunner questrunner  4096 Nov  9 06:24 ..
+drwxrwxr-x 2 questrunner questrunner 12288 Nov  4 11:11 cyclone-29
+-rw-rw-r-- 1 questrunner questrunner 21850 Nov  4 11:11 cyclone-29.manifest.json
+drwxrwxr-x 2 questrunner questrunner 12288 Nov  4 11:03 evm-zone-29
+-rw-rw-r-- 1 questrunner questrunner 20064 Nov  4 11:03 evm-zone-29.manifest.json
+-rw-rw-r-- 1 questrunner questrunner 55530 Nov  4 11:11 manifest.json
+VERDICT inputs: PASS
+
+==== build (clang release) (11:21:42)
+VERDICT build: PASS
+
+==== (1) the selected windows: ref's ReplayDelivery and the C++ driver, line for line (11:21:46)
+values out: code 532726, read log 143691, write log 57326; words raw 233697, as picked 61776 (0.1 s)
+manifest /tmp/w15-164/sel/evm-zone-29.manifest.json sha256 0a8c8f747bdd8c99d06ed9227718d232458b32fab31be11e932a00060d07580d
+evm-zone-29: 12 windows
+state: 12 windows, 786432 rows compared, 0 failed
+state: 12 windows, 786432 rows compared, 0 failed
+VERDICT selected-evm-zone-29-state: PASS
+state-lru: 12 windows, 786432 rows compared, 0 failed
+state-lru: 12 windows, 786432 rows compared, 0 failed
+VERDICT selected-evm-zone-29-state-lru: PASS
+state-pick: 12 windows, 786432 rows compared, 0 failed
+state-pick: 12 windows, 786432 rows compared, 0 failed
+VERDICT selected-evm-zone-29-state-pick: PASS
+values out: code 667885, read log 129853, write log 159835; words raw 311824, as picked 100029 (0.1 s)
+manifest /tmp/w15-164/sel/cyclone-29.manifest.json sha256 c003780b5401f3cc7c393a5eac210f83f573b2a79faf7234ab326706f94f8942
+cyclone-29: 13 windows
+state: 13 windows, 851968 rows compared, 0 failed
+state: 13 windows, 851968 rows compared, 0 failed
+VERDICT selected-cyclone-29-state: PASS
+state-lru: 13 windows, 851968 rows compared, 0 failed
+state-lru: 13 windows, 851968 rows compared, 0 failed
+VERDICT selected-cyclone-29-state-lru: PASS
+state-pick: 13 windows, 851968 rows compared, 0 failed
+state-pick: 13 windows, 851968 rows compared, 0 failed
+VERDICT selected-cyclone-29-state-pick: PASS
+
+==== (2) every window on the C++ driver: state all, state-lru and state-pick every 8th (11:21:49)
+values out: code 528509713, read log 68288088, write log 55254496; words raw 193902855, as picked 142467921 (2.3 s)
+manifest /tmp/w15-164/full/evm-zone-29.manifest.json sha256 5bffa524ed8901f1957e546385697e463bc2ddce5b00d81d698ad8cb4078a0aa
+evm-zone-29: 8192 windows
+evm-zone-29 state: 8192 windows, 8192 OK, 0 failed (of 8192 listed)
+VERDICT full-evm-zone-29-state: PASS
+evm-zone-29 state-lru: 1024 windows, 1024 OK, 0 failed (of 1024 listed)
+VERDICT full-evm-zone-29-state-lru: PASS
+evm-zone-29 state-pick: 1024 windows, 1024 OK, 0 failed (of 1024 listed)
+VERDICT full-evm-zone-29-state-pick: PASS
+values out: code 431011038, read log 76531241, write log 37036072; words raw 164541759, as picked 84064558 (2.3 s)
+manifest /tmp/w15-164/full/cyclone-29.manifest.json sha256 2d5e368e5721dcc0b07997a76a1834b98b998ad1d49bfed9a27ee42ede333bd5
+cyclone-29: 8192 windows
+cyclone-29 state: 8192 windows, 8192 OK, 0 failed (of 8192 listed)
+VERDICT full-cyclone-29-state: PASS
+cyclone-29 state-lru: 1024 windows, 1024 OK, 0 failed (of 1024 listed)
+VERDICT full-cyclone-29-state-lru: PASS
+cyclone-29 state-pick: 1024 windows, 1024 OK, 0 failed (of 1024 listed)
+VERDICT full-cyclone-29-state-pick: PASS
+
+==== summary (11:23:36)
+inputs PASS
+build PASS
+selected-evm-zone-29-state PASS
+selected-evm-zone-29-state-lru PASS
+selected-evm-zone-29-state-pick PASS
+selected-cyclone-29-state PASS
+selected-cyclone-29-state-lru PASS
+selected-cyclone-29-state-pick PASS
+full-evm-zone-29-state PASS
+full-evm-zone-29-state-lru PASS
+full-evm-zone-29-state-pick PASS
+full-cyclone-29-state PASS
+full-cyclone-29-state-lru PASS
+full-cyclone-29-state-pick PASS
+ALL PASS
