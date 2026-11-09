@@ -1,0 +1,309 @@
+kit sha256 b1a11befe73a0bd76f2ca3bc30e2f261d160e81e401d9ca5bd4b6e310476531a
+kit: meshsim 296b425 (sim-w14), built 2026-11-09; host godspeed; 16 CPUs; openjdk version "21.0.12.1" 2026-08-18; Ubuntu clang version 18.1.3 (1ubuntu1)
+
+==== machine (D21) (11:33:11)
+model:     Intel(R) Core(TM) i5-14400F
+sockets:   1; CPUs usable 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15 (16 of 16 online)
+P cores:   6 cores, CPUs 0,1,2,3,4,5,6,7,8,9,10,11 (12 threads), max 4700000 kHz, min 800000 kHz
+E cores:   4 CPUs 12,13,14,15, max 3500000 kHz, min 800000 kHz
+placement: 0,2,4,6,8,10,1,3,5,7,9,11,12,13,14,15
+governor:  powersave
+caches:    L1d cache: 416 KiB (10 instances);L1i cache: 448 KiB (10 instances);L2 cache: 9.5 MiB (7 instances);L3 cache: 20 MiB (1 instance);
+memory:    MemTotal: 65671456 kB
+kernel:    Linux 6.8.0-147-generic
+gcc:       g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+clang:     Ubuntu clang version 18.1.3 (1ubuntu1)
+java:      openjdk version "21.0.12.1" 2026-08-18
+ 11:33:11 up 5 days,  2:37,  1 user,  load average: 0.00, 0.45, 0.60
+
+==== build (clang release; and clang release + -g for perf, its own directory) (11:33:11)
+VERDICT build: PASS
+
+==== inputs (11:33:20)
+VERDICT inputs: PASS
+
+==== 1. the traces: segments 0-3 (ref through TracerConf, converted; both programs in parallel) (11:33:20)
+convert: 43242386 groups, 91765907 cycles, 3985 cycle kinds
+evm-zone-29: 256 windows checked (16777216 rows), 0 failed, 225.9 s
+VERDICT trace-evm: PASS
+convert: 41605468 groups, 80108285 cycles, 913 cycle kinds
+cyclone-29: 256 windows checked (16777216 rows), 0 failed, 198.9 s
+VERDICT trace-cyclone: PASS
+-rw-rw-r-- 1 questrunner questrunner 215345603 Nov  9 11:36 /tmp/w14-166-w14-tracer-speed/cyclone.trace
+-rw-rw-r-- 1 questrunner questrunner 219433314 Nov  9 11:37 /tmp/w14-166-w14-tracer-speed/evm.trace
+
+==== 2. timing: C++ on CPU 0, ref's JVM on CPUs 0,1; 5 repetitions each; nothing else running (11:37:06)
+VERDICT cpp-evm: PASS
+trace /tmp/w14-166-w14-tracer-speed/evm.trace: groups 173.0 MB, 3985 cycle kinds, store 757 pages, loaded in 0.34 s
+rep 0 cycles=91765907 calls=288905444 seconds=3.110 ns_per_cycle=33.89 sink=670601858096061e segs=17.10,32.39,34.06,34.38,34.55,
+rep 1 cycles=91765907 calls=288905444 seconds=3.119 ns_per_cycle=33.98 sink=670601858096061e segs=14.80,32.31,34.06,34.68,34.68,
+rep 2 cycles=91765907 calls=288905444 seconds=3.116 ns_per_cycle=33.96 sink=670601858096061e segs=14.76,32.42,34.23,34.42,34.56,
+rep 3 cycles=91765907 calls=288905444 seconds=3.109 ns_per_cycle=33.88 sink=670601858096061e segs=14.98,32.35,34.19,34.43,34.38,
+rep 4 cycles=91765907 calls=288905444 seconds=3.112 ns_per_cycle=33.92 sink=670601858096061e segs=14.78,32.37,34.28,34.42,34.41,
+harness cycles=91765907 seconds=0.046 ns_per_cycle=0.50 (decoding and dispatch, no Tracer call)
+tracer_play median ns_per_cycle=33.92 of 5 reps
+VERDICT ref-evm: PASS
+trace /tmp/w14-166-w14-tracer-speed/evm.trace: groups 173.0 MB, 3985 cycle kinds, store 757 pages, loaded in 0.81 s
+rep 0 cycles=91765907 calls=288905444 seconds=4.445 ns_per_cycle=48.44 segs=1792.21,67.00,43.18,41.97,43.74,
+rep 1 cycles=91765907 calls=288905444 seconds=3.857 ns_per_cycle=42.03 segs=345.64,47.48,39.86,42.26,39.18,
+rep 2 cycles=91765907 calls=288905444 seconds=3.844 ns_per_cycle=41.89 segs=77.46,43.15,41.64,40.88,42.05,
+rep 3 cycles=91765907 calls=288905444 seconds=3.687 ns_per_cycle=40.17 segs=57.47,39.54,39.18,42.09,39.81,
+rep 4 cycles=91765907 calls=288905444 seconds=3.470 ns_per_cycle=37.81 segs=49.51,35.67,38.24,38.46,38.63,
+harness cycles=91765907 seconds=0.692 ns_per_cycle=7.55 (decoding and dispatch, no Tracer call)
+TracerPlay median ns_per_cycle=41.89 of 5 reps (sink 34d27aedab1e85e)
+VERDICT cpp-cyclone: PASS
+trace /tmp/w14-166-w14-tracer-speed/cyclone.trace: groups 166.4 MB, 913 cycle kinds, store 1780 pages, loaded in 0.32 s
+rep 0 cycles=80108285 calls=252743089 seconds=2.673 ns_per_cycle=33.36 sink=4bd23f58a95b8f3 segs=16.78,33.08,33.44,33.35,33.60,
+rep 1 cycles=80108285 calls=252743089 seconds=2.689 ns_per_cycle=33.56 sink=4bd23f58a95b8f3 segs=15.09,33.48,33.82,33.53,33.43,
+rep 2 cycles=80108285 calls=252743089 seconds=2.681 ns_per_cycle=33.47 sink=4bd23f58a95b8f3 segs=15.45,33.25,33.57,33.30,33.75,
+rep 3 cycles=80108285 calls=252743089 seconds=2.685 ns_per_cycle=33.52 sink=4bd23f58a95b8f3 segs=15.16,33.34,33.46,33.57,33.70,
+rep 4 cycles=80108285 calls=252743089 seconds=2.678 ns_per_cycle=33.43 sink=4bd23f58a95b8f3 segs=15.27,32.96,33.62,33.77,33.39,
+harness cycles=80108285 seconds=0.045 ns_per_cycle=0.56 (decoding and dispatch, no Tracer call)
+tracer_play median ns_per_cycle=33.47 of 5 reps
+VERDICT ref-cyclone: PASS
+trace /tmp/w14-166-w14-tracer-speed/cyclone.trace: groups 166.4 MB, 913 cycle kinds, store 1780 pages, loaded in 0.79 s
+rep 0 cycles=80108285 calls=252743089 seconds=3.646 ns_per_cycle=45.51 segs=2048.47,62.27,46.92,36.05,35.98,
+rep 1 cycles=80108285 calls=252743089 seconds=2.966 ns_per_cycle=37.03 segs=123.91,37.40,36.89,36.91,36.88,
+rep 2 cycles=80108285 calls=252743089 seconds=3.341 ns_per_cycle=41.71 segs=161.48,47.11,38.41,41.38,39.69,
+rep 3 cycles=80108285 calls=252743089 seconds=2.866 ns_per_cycle=35.78 segs=86.02,35.73,35.83,35.85,35.71,
+rep 4 cycles=80108285 calls=252743089 seconds=2.879 ns_per_cycle=35.93 segs=67.87,35.99,35.79,35.95,35.99,
+harness cycles=80108285 seconds=0.651 ns_per_cycle=8.13 (decoding and dispatch, no Tracer call)
+TracerPlay median ns_per_cycle=37.03 of 5 reps (sink 17d5ace885619438)
+SPEED evm: C++ 33.92 ns/cycle (harness 0.50), ref 41.89 ns/cycle (harness 7.55): ref/C++ 1.23x
+SPEED cyclone: C++ 33.47 ns/cycle (harness 0.56), ref 37.03 ns/cycle (harness 8.13): ref/C++ 1.11x
+
+==== 3. perf (cycles) on tracer_play, evm-zone-29, one repetition (11:38:14)
+    31.10%  [.] units::tracer::Tracer::settle(long)                                                                                                                                                                                                                                                       -      -            
+    28.36%  [.] main                                                                                                                                                                                                                                                                                      -      -            
+     9.74%  [.] units::tracer::Tracer::row(long)                                                                                                                                                                                                                                                          -      -            
+     3.65%  [.] units::tracer::Tracer::step(long)                                                                                                                                                                                                                                                         -      -            
+     3.27%  [.] units::tracer::Tracer::fetch(long, units::tracer::Tracer::Instr&)                                                                                                                                                                                                                         -      -            
+     2.43%  [.] units::tracer::Tracer::push_code(unsigned int)                                                                                                                                                                                                                                            -      -            
+     2.43%  [.] void std::vector<unsigned char, std::allocator<unsigned char> >::_M_range_insert<unsigned char const*>(__gnu_cxx::__normal_iterator<unsigned char*, std::vector<unsigned char, std::allocator<unsigned char> > >, unsigned char const*, unsigned char const*, std::forward_iterator_tag)  -      -            
+     2.19%  [.] units::tracer::Tracer::drain_cycle(long)                                                                                                                                                                                                                                                  -      -            
+     1.92%  [.] units::tracer::Tracer::fetch16(long, long, unsigned int&, bool)                                                                                                                                                                                                                           -      -            
+     1.63%  [.] void units::tracer::Bits::put<units::tracer::Tracer::drain_cycle(long)::$_0&>(unsigned long, int, units::tracer::Tracer::drain_cycle(long)::$_0&)                                                                                                                                         -      -            
+     1.08%  [k] 0xffffffff95400ba0                                                                                                                                                                                                                                                                        -      -            
+     0.99%  [.] units::tracer::Tracer::push_log(unsigned char, unsigned long)                                                                                                                                                                                                                             -      -            
+     0.75%  [.] rvc::uncompress(unsigned int)                                                                                                                                                                                                                                                             -      -            
+     0.73%  [.] units::tracer::Tracer::data_line(long, long)                                                                                                                                                                                                                                              -      -            
+     0.71%  [.] units::alu::exec(unsigned int, unsigned long, unsigned long, unsigned long, unsigned long, unsigned int, bool, unsigned long, unsigned long, units::alu::Out&)                                                                                                                            -      -            
+     0.59%  [.] units::tracer::Tracer::out_ready(long, int) const                                                                                                                                                                                                                                         -      -            
+     0.47%  [.] memmove@plt                                                                                                                                                                                                                                                                               -      -            
+     0.38%  [.] units::tracer::Tracer::out_take(long, int, unsigned long*)                                                                                                                                                                                                                                -      -            
+     0.38%  [k] 0xffffffff94876b48                                                                                                                                                                                                                                                                        -      -            
+     0.32%  [.] void units::tracer::Bits::put<units::tracer::Tracer::drain_cycle(long)::$_1&>(unsigned long, int, units::tracer::Tracer::drain_cycle(long)::$_1&)                                                                                                                                         -      -            
+     0.32%  [.] void units::tracer::Bits::put<units::tracer::Tracer::drain_cycle(long)::$_2&>(unsigned long, int, units::tracer::Tracer::drain_cycle(long)::$_2&)                                                                                                                                         -      -            
+
+==== units::tracer::Tracer::settle(long)
+      src: 11   if (T <= settled_) return;
+    3.41 :   f180:   cmp    %rsi,0x16260(%rdi) // tracer.cpp:176
+    2.02 :   f19d:   mov    %rdi,%rbx
+      src: 69   const int64_t ti = inputs_.n == 0 ? INT64_MAX : inputs_.peek().t;
+    1.99 :   f234:   mov    0x15854(%rbx),%edi // tracer.cpp:179
+      src: 120  s_running_ = running_; s_errors_ = errors_; s_rows_ = rows_done_; s_run_config_ = run_config_;
+    1.79 :   f2e1:   movzbl 0x14ce0(%rbx),%eax // tracer.cpp:191
+      src: 129  s_exp_offset_ = expansion_offset_; s_exp_opcode_ = presented_;
+    1.72 :   f312:   movq   0x14d10(%rbx),%xmm0 // tracer.cpp:192
+    1.56 :   f344:   movups %xmm0,0x162ac(%rbx) // tracer.cpp:193
+      src: 142  s_mul_ = hash_mul_; s_step_ = hash_step_; s_lines_ = hash_lines_;
+   45.12 :   f34b:   mov    0x12898(%rbx),%eax // tracer.cpp:194
+    2.15 :   f37d:   cmpb   $0x0,0x14ce1(%rbx) // tracer.cpp:196
+    1.58 :   f3a0:   movzbl %al,%eax
+    6.14 :   f3c0:   cmp    %rdi,0x94f8(%rbx,%rsi,8) // tracer.h:192
+    3.55 :   f3ca:   inc    %rsi
+    1.60 :   f3cd:   cmp    %rsi,%rdx
+    5.29 :   f400:   cmp    %rdi,0xcd40(%rbx,%rsi,8)
+    6.51 :   f40a:   inc    %rsi
+    4.24 :   f440:   cmp    %rsi,0x10588(%rbx,%rdx,8)
+    4.88 :   f44a:   inc    %rdx
+    1.51 :   f45f:   and    $0xfffffbff,%eax // event_counts.h:55
+      src: 245  }
+    1.40 :   f477:   ret // tracer.cpp:198
+
+==== units::tracer::Tracer::row(long)
+    1.54 :   11d57:  push   %r12 // tracer.cpp:339
+    0.88 :   11d8b:  movups %xmm0,0x79(%rsp) // tracer.h:215
+    1.98 :   11d90:  movups %xmm0,0x88(%rsp)
+    0.80 :   11da4:  movzbl 0x78(%rsp),%eax // tracer.cpp:343
+    2.05 :   11dbb:  mov    0x81(%rsp),%eax
+   13.02 :   11dee:  movdqu %xmm0,0x14d41(%rdi)
+    3.07 :   11df6:  movl   $0x0,0x14d53(%rdi)
+      src: 76    if (pc() == 0) {
+    2.05 :   11e33:  cmpq   $0x0,0x1038(%rdi) // tracer.cpp:349
+      src: 111   if (in.kind == K_CTRL && !in.presented) {
+    0.73 :   11eb4:  mov    0x14d38(%rdi),%edx // tracer.cpp:361
+    1.10 :   1206d:  add    %r8,%rcx // tracer.cpp:381
+    2.19 :   120a5:  movabs $0x3f80000000000000,%r8 // tracer.cpp:0
+      src: 274   inline bool executes(unsigned op) { return op < 256 && cls(op) != 0; }
+    3.88 :   120cc:  test   %bpl,%bpl // replayer_alu.h:93
+      src: 283   if (c_rd(lo) >= 146 || c_rs1(lo) >= 146 || c_rs2(lo) >= 146) return INV_OPERAND;
+    0.95 :   120d5:  mov    %ebx,%r9d // row_core.h:68
+      src: 295   if (format(lo) >= 6) return INV_FORMAT;
+    1.17 :   12115:  mov    %rbx,%r9 // row_core.h:69
+    1.46 :   1213f:  shr    $0x20,%r14 // row_core.h:50
+    0.88 :   121ac:  shr    $0x18,%r10d // tracer.cpp:0
+    1.46 :   121cf:  mov    %r14,0x48(%rsp) // row_core.h:61
+    1.24 :   1227d:  ret // tracer.cpp:512
+    0.59 :   122b4:  mov    %rbx,%r9 // tracer.cpp:0
+    0.95 :   122bb:  and    $0x7,%r9d
+    1.46 :   122d8:  add    %r13,%r15 // row_core.h:33
+    1.32 :   122db:  jmp    *%r15
+    0.66 :   122de:  mov    0x18(%rsp),%r9 // row_core.h:0
+    0.66 :   123ca:  mov    %r8d,%r9d
+    0.80 :   1244a:  cmp    $0x83,%r10b // row_core.h:83
+    0.80 :   127ba:  movzbl %bl,%eax // row_core.h:0
+    1.02 :   127d2:  test   %r9d,%r9d // tracer.cpp:420
+      src: 767   inline bool from_log(uint64_t lo) { return (lo >> 54) & 1; }
+    0.51 :   127e9:  bt     $0x36,%rbx // row_core.h:58
+    0.59 :   12b5e:  mov    %rsi,0x68(%rsp) // tracer.cpp:0
+    0.51 :   12b9b:  mov    %r13d,%edx // tracer.cpp:462
+      src: 1043  uint64_t pc() const { return rec[0]; }
+    0.59 :   12bab:  mov    0x1038(%rdi),%r8 // tracer.h:239
+    1.24 :   12bf6:  mov    0x68(%rsp),%rsi // tracer.cpp:465
+      src: 1080  switch (op) {
+    0.66 :   12c43:  movzbl %bl,%eax // tracer.cpp:515
+      src: 1200  if (mem_slot >= 0 && alu::is_store(op)) { dline_[mem_slot].d[mem_word] = v_rs2; dline_[mem_slot].dirty = true; }
+    0.51 :   12e03:  test   %edi,%edi // tracer.cpp:490
+    0.51 :   12e81:  mov    0x14d34(%rcx),%esi // tracer.cpp:493
+      src: 1240  if (tag >= 0) push_log(uint8_t(tag), log_word);
+    0.73 :   12ea4:  test   %r15d,%r15d // tracer.cpp:494
+      src: 1283  rows++;
+    0.88 :   12f52:  incq   0x125f0(%rcx) // tracer.cpp:498
+      src: 1285  if (alu::cls(op) == 'M') rows_m++;
+    0.51 :   12f59:  cmp    $0x4d,%bpl // tracer.cpp:499
+    0.95 :   12f8b:  movabs $0xffff0000ffffffff,%rsi // tracer.cpp:502
+    0.59 :   1300d:  add    %r10,%rax // tracer.cpp:511
+    0.80 :   13010:  dec    %rax
+    0.95 :   13013:  mov    %rax,0x14cf8(%rcx)
+    1.61 :   1301a:  jmp    1226c <units::tracer::Tracer::row(long)+0x51c>
+
+==== units::tracer::Tracer::step(long)
+      src: 11    void Tracer::step(int64_t T) {
+   26.17 :   10a00:  push   %r14 // tracer.cpp:310
+      src: 19    if (exp_discard_ > 0 && eq_occ_ > 0) {  // a NOP-substituted expansion's words, dropped one a cycle (N3)
+    1.17 :   10a0f:  mov    0x14d60(%rbx),%eax // tracer.cpp:312
+      src: 79    if (running_) stat[ST_CYCLES]++;  // STATUS [0] is 1: the drain included, and after a stopping error
+    1.56 :   10ac0:  cmpb   $0x0,0x14ce0(%rbx) // tracer.cpp:316
+    0.59 :   10ac7:  je     10ad8 <units::tracer::Tracer::step(long)+0xd8>
+    3.52 :   10ac9:  incl   0x126e8(%rbx)
+   16.41 :   10acf:  cmpb   $0x0,0x14ce1(%rbx)
+      src: 86    }
+    9.77 :   10ad8:  add    $0x8,%rsp // tracer.cpp:336
+    5.08 :   10add:  pop    %r14
+    1.17 :   10adf:  ret
+    0.78 :   10ae9:  mov    %rbx,%rdi // tracer.cpp:318
+    1.76 :   10af3:  pop    %rbx
+      src: 100   run_cycles++;
+    3.32 :   10afb:  incq   0x12610(%rbx) // tracer.cpp:319
+      src: 102   if (T < start_at_) return;
+   16.60 :   10b02:  cmp    %r14,0x14cf0(%rbx) // tracer.cpp:320
+      src: 105   if (T < stat_until_) stat[stat_cause_]++;
+    0.59 :   10b0b:  cmp    %r14,0x14e30(%rbx) // tracer.cpp:321
+      src: 110   if (busy_until_ >= T) {
+    1.37 :   10b22:  cmp    %r14,0x14cf8(%rbx) // tracer.cpp:322
+      src: 116   if (T < wait_until_) {
+    0.98 :   10b34:  cmp    %r14,0x14d00(%rbx) // tracer.cpp:330
+    6.45 :   10b4c:  test   %rax,%rax // tracer.cpp:331
+    1.37 :   10b94:  add    $0x8,%rsp // tracer.cpp:335
+
+==== units::tracer::Tracer::fetch(long, units::tracer::Tracer::Instr&)
+      src: 11    int64_t Tracer::fetch(int64_t T, Instr& in) {
+    2.83 :   13370:  push   %rbp // tracer.cpp:553
+    4.58 :   13384:  shr    $0x8,%r15 // tracer.h:150
+    2.40 :   133b9:  pop    %rbp // tracer.cpp:578
+    2.40 :   133bf:  mov    %ebp,%ecx // tracer.cpp:560
+      src: 58    const bool straddle = (uint64_t(o + 2) >> 7) != (uint64_t(o) >> 7);
+    0.87 :   133c8:  lea    0x2(%r15),%rdx // tracer.cpp:561
+    0.65 :   133cc:  xor    %rdx,%r15
+    1.74 :   133cf:  cmp    $0x80,%r15
+      src: 65    const bool straddle = (uint64_t(o + 2) >> 7) != (uint64_t(o) >> 7);
+    0.65 :   133df:  xor    %r8d,%r8d
+    0.87 :   133e6:  seta   %r8b
+    0.87 :   133ea:  mov    %rsp,%rcx
+    1.09 :   1340c:  mov    %rax,%r15 // tracer.cpp:0
+      src: 87    uint32_t w = uncompress(h & 0xFFFF);
+    1.09 :   1340f:  movzwl %bp,%edi // rvc.h:203
+    3.05 :   13412:  call   160c0 <rvc::uncompress(unsigned int)>
+    0.87 :   13417:  mov    %eax,%ecx
+    1.09 :   13444:  and    $0xfffffffe,%ecx // tracer.cpp:0
+      src: 113   w |= 1;
+    2.83 :   1344d:  mov    %ecx,%esi // row_core.h:17
+    1.31 :   13459:  mov    %ecx,%edi // row_core.h:18
+    0.65 :   1345e:  mov    %edi,%edx
+      src: 123   if (op == 0x2F) return 1u << 10 | ((w >> 12) & 1) << 5 | ((w >> 27) & 31);                       // AMO
+    2.83 :   13463:  cmp    $0xb,%r8d // row_core.h:19
+    1.53 :   13469:  cmp    $0x73,%r8d
+    0.65 :   1346f:  cmp    $0x2f,%r8d
+    2.61 :   134b6:  mov    %ecx,%esi // row_core.h:25
+    0.87 :   134bb:  and    $0x2,%esi
+    0.65 :   134be:  or     %edx,%esi
+    2.61 :   134c0:  mov    %ecx,%edx
+    0.65 :   134c2:  shr    $0x19,%edx
+      src: 169   unsigned e = decode_table[decode_index(w)], cls = e & 3, rd_field = (w >> 7) & 31;
+    0.65 :   134ca:  mov    %edx,%edx // row_core.h:113
+    1.53 :   134cc:  movzwl 0x1478(%r14,%rdx,2),%esi
+      src: 173   if (cls == 3) d.kind = K_BAD;
+   10.02 :   134d5:  mov    %esi,%edx // row_core.h:115
+      src: 176   d.cls = cls; d.start = 0; d.rd0 = 0; d.offset = 0;
+    3.05 :   134da:  mov    %edx,0x14d80(%r14) // row_core.h:114
+    3.49 :   134e1:  movq   $0x0,0x14d74(%r14)
+      src: 192   d.rd0 = unsigned(rom_lo[d.start] >> 46) & 3;
+    2.18 :   13521:  mov    0x2478(%r14,%rsi,8),%rdi // row_core.h:118
+   12.42 :   13529:  shr    $0x2e,%rdi
+    5.23 :   1352d:  and    $0x3,%edi
+    3.92 :   13530:  mov    %edi,0x14d78(%r14)
+      src: 197   if (rd_field == 0 && (d.rd0 == 1 || d.rd0 == 3)) d.kind = K_NOP;
+    7.63 :   13537:  test   $0xf80,%ecx // row_core.h:119
+    2.83 :   13579:  mov    %edi,0x10(%rbx) // tracer.cpp:575
+
+==== units::tracer::Tracer::push_code(unsigned int)
+      src: 11    void Tracer::push_code(uint32_t w) {
+    4.11 :   14110:  push   %r15 // tracer.cpp:539
+    1.47 :   14128:  mov    %rdi,%rbx // tracer.cpp:0
+    3.81 :   14135:  mov    %edx,0x4490(%rdi) // tracer.cpp:541
+    2.64 :   1413b:  mov    %esi,(%rcx,%rax,4)
+      src: 30    values++;
+    3.52 :   1413e:  incq   0x14b00(%rdi) // lru_coder.h:104
+      src: 47    hits++;
+    0.59 :   14161:  incq   0x14af0(%rbx) // lru_coder.h:118
+      src: 49    if (is_write && e_[15] == v) {
+    2.93 :   14168:  test   %cl,%cl // lru_coder.h:106
+    1.47 :   1419d:  xor    %eax,%eax // lru_coder.h:0
+    1.76 :   141a2:  mov    $0x0,%edx // lru_coder.h:110
+      src: 76    if (e_[i] == v) {
+   13.20 :   141b0:  cmp    %r15,0x14b08(%rbx,%rax,8) // lru_coder.h:111
+      src: 79    for (int i = 0; i < n; i++)
+   37.25 :   141ba:  inc    %rax // lru_coder.h:110
+   14.36 :   141c0:  jne    141b0 <units::tracer::Tracer::push_code(unsigned int)+0xa0>
+      src: 83    const int n = is_write ? 15 : 16;
+    0.59 :   141c2:  xor    %eax,%eax // lru_coder.h:109
+      src: 90    misses++;
+    1.76 :   141c9:  incq   0x14af8(%rbx) // lru_coder.h:129
+      src: 97    std::memmove(e_ + 1, e_, sizeof(uint64_t) * (is_write ? 14 : 15));
+    5.57 :   141d0:  lea    0x14b08(%rbx),%r14 // lru_coder.h:137
+      src: 107   bits += nb;
+    0.88 :   141f6:  add    %rcx,0x14ae8(%rbx) // lru_coder.h:140
+      src: 109   }
+    2.35 :   141fd:  pop    %rbx // tracer.cpp:543
+
+==== units::tracer::Tracer::drain_cycle(long)
+    1.95 :   10c41:  push   %r15 // tracer.cpp:742
+    0.98 :   10c43:  push   %r14
+    4.23 :   10c49:  push   %rbx
+    0.65 :   10c4a:  sub    $0x68,%rsp
+      src: 22    auto to1 = [this](uint64_t a, uint64_t b) { oq[1].push(push_t_, a, b); };
+    0.65 :   10c58:  mov    %rdi,0x30(%rsp) // tracer.cpp:744
+VERDICT perf: PASS
+
+==== verdict (11:38:20)
+build PASS
+inputs PASS
+trace-evm PASS
+trace-cyclone PASS
+cpp-evm PASS
+ref-evm PASS
+cpp-cyclone PASS
+ref-cyclone PASS
+perf PASS
+ALL PASS

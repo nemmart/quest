@@ -1,0 +1,577 @@
+
+==== units::tracer::Tracer::settle(long)
+      src: 11   if (T <= settled_) return;
+    3.41 :   f180:   cmp    %rsi,0x16260(%rdi) // tracer.cpp:176
+    2.02 :   f19d:   mov    %rdi,%rbx
+      src: 69   const int64_t ti = inputs_.n == 0 ? INT64_MAX : inputs_.peek().t;
+    1.99 :   f234:   mov    0x15854(%rbx),%edi // tracer.cpp:179
+      src: 120  s_running_ = running_; s_errors_ = errors_; s_rows_ = rows_done_; s_run_config_ = run_config_;
+    1.79 :   f2e1:   movzbl 0x14ce0(%rbx),%eax // tracer.cpp:191
+      src: 129  s_exp_offset_ = expansion_offset_; s_exp_opcode_ = presented_;
+    1.72 :   f312:   movq   0x14d10(%rbx),%xmm0 // tracer.cpp:192
+    1.56 :   f344:   movups %xmm0,0x162ac(%rbx) // tracer.cpp:193
+      src: 142  s_mul_ = hash_mul_; s_step_ = hash_step_; s_lines_ = hash_lines_;
+   45.12 :   f34b:   mov    0x12898(%rbx),%eax // tracer.cpp:194
+    2.15 :   f37d:   cmpb   $0x0,0x14ce1(%rbx) // tracer.cpp:196
+    1.58 :   f3a0:   movzbl %al,%eax
+    6.14 :   f3c0:   cmp    %rdi,0x94f8(%rbx,%rsi,8) // tracer.h:192
+    3.55 :   f3ca:   inc    %rsi
+    1.60 :   f3cd:   cmp    %rsi,%rdx
+    5.29 :   f400:   cmp    %rdi,0xcd40(%rbx,%rsi,8)
+    6.51 :   f40a:   inc    %rsi
+    4.24 :   f440:   cmp    %rsi,0x10588(%rbx,%rdx,8)
+    4.88 :   f44a:   inc    %rdx
+    1.51 :   f45f:   and    $0xfffffbff,%eax // event_counts.h:55
+      src: 245  }
+    1.40 :   f477:   ret // tracer.cpp:198
+
+==== units::tracer::Tracer::row(long)
+    1.54 :   11d57:  push   %r12 // tracer.cpp:339
+    0.88 :   11d8b:  movups %xmm0,0x79(%rsp) // tracer.h:215
+    1.98 :   11d90:  movups %xmm0,0x88(%rsp)
+    0.80 :   11da4:  movzbl 0x78(%rsp),%eax // tracer.cpp:343
+    2.05 :   11dbb:  mov    0x81(%rsp),%eax
+   13.02 :   11dee:  movdqu %xmm0,0x14d41(%rdi)
+    3.07 :   11df6:  movl   $0x0,0x14d53(%rdi)
+      src: 76    if (pc() == 0) {
+    2.05 :   11e33:  cmpq   $0x0,0x1038(%rdi) // tracer.cpp:349
+      src: 111   if (in.kind == K_CTRL && !in.presented) {
+    0.73 :   11eb4:  mov    0x14d38(%rdi),%edx // tracer.cpp:361
+    1.10 :   1206d:  add    %r8,%rcx // tracer.cpp:381
+    2.19 :   120a5:  movabs $0x3f80000000000000,%r8 // tracer.cpp:0
+      src: 274   inline bool executes(unsigned op) { return op < 256 && cls(op) != 0; }
+    3.88 :   120cc:  test   %bpl,%bpl // replayer_alu.h:93
+      src: 283   if (c_rd(lo) >= 146 || c_rs1(lo) >= 146 || c_rs2(lo) >= 146) return INV_OPERAND;
+    0.95 :   120d5:  mov    %ebx,%r9d // row_core.h:68
+      src: 295   if (format(lo) >= 6) return INV_FORMAT;
+    1.17 :   12115:  mov    %rbx,%r9 // row_core.h:69
+    1.46 :   1213f:  shr    $0x20,%r14 // row_core.h:50
+    0.88 :   121ac:  shr    $0x18,%r10d // tracer.cpp:0
+    1.46 :   121cf:  mov    %r14,0x48(%rsp) // row_core.h:61
+    1.24 :   1227d:  ret // tracer.cpp:512
+    0.59 :   122b4:  mov    %rbx,%r9 // tracer.cpp:0
+    0.95 :   122bb:  and    $0x7,%r9d
+    1.46 :   122d8:  add    %r13,%r15 // row_core.h:33
+    1.32 :   122db:  jmp    *%r15
+    0.66 :   122de:  mov    0x18(%rsp),%r9 // row_core.h:0
+    0.66 :   123ca:  mov    %r8d,%r9d
+    0.80 :   1244a:  cmp    $0x83,%r10b // row_core.h:83
+    0.80 :   127ba:  movzbl %bl,%eax // row_core.h:0
+    1.02 :   127d2:  test   %r9d,%r9d // tracer.cpp:420
+      src: 767   inline bool from_log(uint64_t lo) { return (lo >> 54) & 1; }
+    0.51 :   127e9:  bt     $0x36,%rbx // row_core.h:58
+    0.59 :   12b5e:  mov    %rsi,0x68(%rsp) // tracer.cpp:0
+    0.51 :   12b9b:  mov    %r13d,%edx // tracer.cpp:462
+      src: 1043  uint64_t pc() const { return rec[0]; }
+    0.59 :   12bab:  mov    0x1038(%rdi),%r8 // tracer.h:239
+    1.24 :   12bf6:  mov    0x68(%rsp),%rsi // tracer.cpp:465
+      src: 1080  switch (op) {
+    0.66 :   12c43:  movzbl %bl,%eax // tracer.cpp:515
+      src: 1200  if (mem_slot >= 0 && alu::is_store(op)) { dline_[mem_slot].d[mem_word] = v_rs2; dline_[mem_slot].dirty = true; }
+    0.51 :   12e03:  test   %edi,%edi // tracer.cpp:490
+    0.51 :   12e81:  mov    0x14d34(%rcx),%esi // tracer.cpp:493
+      src: 1240  if (tag >= 0) push_log(uint8_t(tag), log_word);
+    0.73 :   12ea4:  test   %r15d,%r15d // tracer.cpp:494
+      src: 1283  rows++;
+    0.88 :   12f52:  incq   0x125f0(%rcx) // tracer.cpp:498
+      src: 1285  if (alu::cls(op) == 'M') rows_m++;
+    0.51 :   12f59:  cmp    $0x4d,%bpl // tracer.cpp:499
+    0.95 :   12f8b:  movabs $0xffff0000ffffffff,%rsi // tracer.cpp:502
+    0.59 :   1300d:  add    %r10,%rax // tracer.cpp:511
+    0.80 :   13010:  dec    %rax
+    0.95 :   13013:  mov    %rax,0x14cf8(%rcx)
+    1.61 :   1301a:  jmp    1226c <units::tracer::Tracer::row(long)+0x51c>
+
+==== units::tracer::Tracer::step(long)
+      src: 11    void Tracer::step(int64_t T) {
+   26.17 :   10a00:  push   %r14 // tracer.cpp:310
+      src: 19    if (exp_discard_ > 0 && eq_occ_ > 0) {  // a NOP-substituted expansion's words, dropped one a cycle (N3)
+    1.17 :   10a0f:  mov    0x14d60(%rbx),%eax // tracer.cpp:312
+      src: 79    if (running_) stat[ST_CYCLES]++;  // STATUS [0] is 1: the drain included, and after a stopping error
+    1.56 :   10ac0:  cmpb   $0x0,0x14ce0(%rbx) // tracer.cpp:316
+    0.59 :   10ac7:  je     10ad8 <units::tracer::Tracer::step(long)+0xd8>
+    3.52 :   10ac9:  incl   0x126e8(%rbx)
+   16.41 :   10acf:  cmpb   $0x0,0x14ce1(%rbx)
+      src: 86    }
+    9.77 :   10ad8:  add    $0x8,%rsp // tracer.cpp:336
+    5.08 :   10add:  pop    %r14
+    1.17 :   10adf:  ret
+    0.78 :   10ae9:  mov    %rbx,%rdi // tracer.cpp:318
+    1.76 :   10af3:  pop    %rbx
+      src: 100   run_cycles++;
+    3.32 :   10afb:  incq   0x12610(%rbx) // tracer.cpp:319
+      src: 102   if (T < start_at_) return;
+   16.60 :   10b02:  cmp    %r14,0x14cf0(%rbx) // tracer.cpp:320
+      src: 105   if (T < stat_until_) stat[stat_cause_]++;
+    0.59 :   10b0b:  cmp    %r14,0x14e30(%rbx) // tracer.cpp:321
+      src: 110   if (busy_until_ >= T) {
+    1.37 :   10b22:  cmp    %r14,0x14cf8(%rbx) // tracer.cpp:322
+      src: 116   if (T < wait_until_) {
+    0.98 :   10b34:  cmp    %r14,0x14d00(%rbx) // tracer.cpp:330
+    6.45 :   10b4c:  test   %rax,%rax // tracer.cpp:331
+    1.37 :   10b94:  add    $0x8,%rsp // tracer.cpp:335
+
+==== units::tracer::Tracer::fetch(long, units::tracer::Tracer::Instr&)
+      src: 11    int64_t Tracer::fetch(int64_t T, Instr& in) {
+    2.83 :   13370:  push   %rbp // tracer.cpp:553
+    4.58 :   13384:  shr    $0x8,%r15 // tracer.h:150
+    2.40 :   133b9:  pop    %rbp // tracer.cpp:578
+    2.40 :   133bf:  mov    %ebp,%ecx // tracer.cpp:560
+      src: 58    const bool straddle = (uint64_t(o + 2) >> 7) != (uint64_t(o) >> 7);
+    0.87 :   133c8:  lea    0x2(%r15),%rdx // tracer.cpp:561
+    0.65 :   133cc:  xor    %rdx,%r15
+    1.74 :   133cf:  cmp    $0x80,%r15
+      src: 65    const bool straddle = (uint64_t(o + 2) >> 7) != (uint64_t(o) >> 7);
+    0.65 :   133df:  xor    %r8d,%r8d
+    0.87 :   133e6:  seta   %r8b
+    0.87 :   133ea:  mov    %rsp,%rcx
+    1.09 :   1340c:  mov    %rax,%r15 // tracer.cpp:0
+      src: 87    uint32_t w = uncompress(h & 0xFFFF);
+    1.09 :   1340f:  movzwl %bp,%edi // rvc.h:203
+    3.05 :   13412:  call   160c0 <rvc::uncompress(unsigned int)>
+    0.87 :   13417:  mov    %eax,%ecx
+    1.09 :   13444:  and    $0xfffffffe,%ecx // tracer.cpp:0
+      src: 113   w |= 1;
+    2.83 :   1344d:  mov    %ecx,%esi // row_core.h:17
+    1.31 :   13459:  mov    %ecx,%edi // row_core.h:18
+    0.65 :   1345e:  mov    %edi,%edx
+      src: 123   if (op == 0x2F) return 1u << 10 | ((w >> 12) & 1) << 5 | ((w >> 27) & 31);                       // AMO
+    2.83 :   13463:  cmp    $0xb,%r8d // row_core.h:19
+    1.53 :   13469:  cmp    $0x73,%r8d
+    0.65 :   1346f:  cmp    $0x2f,%r8d
+    2.61 :   134b6:  mov    %ecx,%esi // row_core.h:25
+    0.87 :   134bb:  and    $0x2,%esi
+    0.65 :   134be:  or     %edx,%esi
+    2.61 :   134c0:  mov    %ecx,%edx
+    0.65 :   134c2:  shr    $0x19,%edx
+      src: 169   unsigned e = decode_table[decode_index(w)], cls = e & 3, rd_field = (w >> 7) & 31;
+    0.65 :   134ca:  mov    %edx,%edx // row_core.h:113
+    1.53 :   134cc:  movzwl 0x1478(%r14,%rdx,2),%esi
+      src: 173   if (cls == 3) d.kind = K_BAD;
+   10.02 :   134d5:  mov    %esi,%edx // row_core.h:115
+      src: 176   d.cls = cls; d.start = 0; d.rd0 = 0; d.offset = 0;
+    3.05 :   134da:  mov    %edx,0x14d80(%r14) // row_core.h:114
+    3.49 :   134e1:  movq   $0x0,0x14d74(%r14)
+      src: 192   d.rd0 = unsigned(rom_lo[d.start] >> 46) & 3;
+    2.18 :   13521:  mov    0x2478(%r14,%rsi,8),%rdi // row_core.h:118
+   12.42 :   13529:  shr    $0x2e,%rdi
+    5.23 :   1352d:  and    $0x3,%edi
+    3.92 :   13530:  mov    %edi,0x14d78(%r14)
+      src: 197   if (rd_field == 0 && (d.rd0 == 1 || d.rd0 == 3)) d.kind = K_NOP;
+    7.63 :   13537:  test   $0xf80,%ecx // row_core.h:119
+    2.83 :   13579:  mov    %edi,0x10(%rbx) // tracer.cpp:575
+
+==== units::tracer::Tracer::push_code(unsigned int)
+      src: 11    void Tracer::push_code(uint32_t w) {
+    4.11 :   14110:  push   %r15 // tracer.cpp:539
+    1.47 :   14128:  mov    %rdi,%rbx // tracer.cpp:0
+    3.81 :   14135:  mov    %edx,0x4490(%rdi) // tracer.cpp:541
+    2.64 :   1413b:  mov    %esi,(%rcx,%rax,4)
+      src: 30    values++;
+    3.52 :   1413e:  incq   0x14b00(%rdi) // lru_coder.h:104
+      src: 47    hits++;
+    0.59 :   14161:  incq   0x14af0(%rbx) // lru_coder.h:118
+      src: 49    if (is_write && e_[15] == v) {
+    2.93 :   14168:  test   %cl,%cl // lru_coder.h:106
+    1.47 :   1419d:  xor    %eax,%eax // lru_coder.h:0
+    1.76 :   141a2:  mov    $0x0,%edx // lru_coder.h:110
+      src: 76    if (e_[i] == v) {
+   13.20 :   141b0:  cmp    %r15,0x14b08(%rbx,%rax,8) // lru_coder.h:111
+      src: 79    for (int i = 0; i < n; i++)
+   37.25 :   141ba:  inc    %rax // lru_coder.h:110
+   14.36 :   141c0:  jne    141b0 <units::tracer::Tracer::push_code(unsigned int)+0xa0>
+      src: 83    const int n = is_write ? 15 : 16;
+    0.59 :   141c2:  xor    %eax,%eax // lru_coder.h:109
+      src: 90    misses++;
+    1.76 :   141c9:  incq   0x14af8(%rbx) // lru_coder.h:129
+      src: 97    std::memmove(e_ + 1, e_, sizeof(uint64_t) * (is_write ? 14 : 15));
+    5.57 :   141d0:  lea    0x14b08(%rbx),%r14 // lru_coder.h:137
+      src: 107   bits += nb;
+    0.88 :   141f6:  add    %rcx,0x14ae8(%rbx) // lru_coder.h:140
+      src: 109   }
+    2.35 :   141fd:  pop    %rbx // tracer.cpp:543
+
+==== units::tracer::Tracer::drain_cycle(long)
+    1.95 :   10c41:  push   %r15 // tracer.cpp:742
+    0.98 :   10c43:  push   %r14
+    4.23 :   10c49:  push   %rbx
+    0.65 :   10c4a:  sub    $0x68,%rsp
+      src: 22    auto to1 = [this](uint64_t a, uint64_t b) { oq[1].push(push_t_, a, b); };
+    0.65 :   10c58:  mov    %rdi,0x30(%rsp) // tracer.cpp:744
+      src: 24    auto to2 = [this](uint64_t a, uint64_t b) { oq[2].push(push_t_, a, b); };
+    0.98 :   10c5d:  mov    %rdi,0x18(%rsp) // tracer.cpp:745
+      src: 26    auto to3 = [this](uint64_t a, uint64_t b) { oq[3].push(push_t_, a, b); };
+    1.95 :   10c62:  mov    %rdi,0x10(%rsp) // tracer.cpp:746
+      src: 30    if (!scans_done_ && T >= scan_start_) {
+    1.30 :   10c6e:  cmpb   $0x0,0x162d8(%rdi) // tracer.cpp:748
+    0.98 :   10c8f:  je     10e40 <units::tracer::Tracer::drain_cycle(long)+0x200> // tracer.cpp:750
+      src: 53    if (code_ended_ && log_ended_) {
+    0.65 :   10ca4:  cmpb   $0x0,0x16543(%rbx) // tracer.cpp:786
+    0.65 :   10cab:  je     10d4f <units::tracer::Tracer::drain_cycle(long)+0x10f>
+      src: 99    if (scan_stalls != st0) stat[ST_STALL_OUTPUT]++;  // either scan stalled on a full output queue (item 157)
+    0.98 :   10d4f:  cmp    %rbp,0x126e0(%rbx) // tracer.cpp:796
+      src: 105   if (scans_done_ && q0ptr_ == REC_WORDS && q0_last_t_ < T && xfer_left_ == 0) {
+    0.65 :   10d5e:  cmpb   $0x0,0x162d8(%rbx) // tracer.cpp:799
+    0.98 :   10d65:  je     10e31 <units::tracer::Tracer::drain_cycle(long)+0x1f1>
+      src: 161   }
+    0.98 :   10e31:  add    $0x68,%rsp // tracer.cpp:806
+    1.30 :   10e38:  pop    %r13
+    0.98 :   10e3a:  pop    %r14
+    0.98 :   10e3f:  ret
+      src: 170   if (code_scan_ < code_n) {
+    2.28 :   10e40:  movslq 0x162dc(%rbx),%rax // tracer.cpp:751
+    1.63 :   10e5a:  mov    (%rcx,%rax,4),%r14d // tracer.cpp:752
+      src: 177   const int bits = comp0_ ? set2_code_.peek_bits(v) : 32;
+   12.38 :   10e5e:  movzbl 0x16540(%rbx),%eax // tracer.cpp:753
+    1.63 :   10ec7:  cmp    0x4494(%rbx),%eax // tracer.cpp:765
+      src: 219   const uint8_t tag = log_tag[log_scan_];
+    5.54 :   10ee5:  movzbl (%rdx,%rax,1),%r10d // tracer.cpp:767
+    0.65 :   10eff:  lea    0x16500(%rbx),%rax // tracer.cpp:770
+    0.65 :   10f16:  cmp    $0x2,%r10b // tracer.cpp:768
+      src: 233   LruCoder& c = wr ? set2_wlog_ : set2_rlog_;
+    0.65 :   10f1a:  cmove  %r13,%r12 // tracer.cpp:769
+      src: 235   const bool wr = tag == TAG_WRITE;
+    0.65 :   10f1e:  sete   %r8b // tracer.cpp:768
+      src: 240   const bool cmp = wr ? comp2_ : comp1_;
+    0.98 :   10f29:  cmove  %rcx,%r9 // tracer.cpp:771
+    0.98 :   10f2d:  movzbl (%r9),%ecx
+    3.91 :   10f31:  test   %cl,%cl
+    1.30 :   10f33:  mov    %r10b,0xf(%rsp) // tracer.cpp:0
+    0.65 :   1139f:  mov    0xb508(%rbx),%ecx // tracer.h:0
+    1.63 :   113a5:  add    0x94e4(%rbx),%ecx // tracer.h:189
+      src: 537   if (comp0_) set2_code_.encode(v, pk_code_, to1); else pk_code_.put(v, 32, to1);
+    0.65 :   113c0:  je     115de <units::tracer::Tracer::drain_cycle(long)+0x99e> // tracer.cpp:756
+    1.30 :   11469:  mov    $0x40,%r9d // lru_coder.h:0
+    1.63 :   11473:  cmp    $0x80,%r9d // tracer.cpp:774
+    0.98 :   1147f:  or     $0x2,%rdx // tracer.cpp:0
+    0.65 :   11483:  imul   $0x3848,%rdx,%rdx // tracer.h:189
+    1.30 :   1148a:  xor    %r8d,%r8d // tracer.h:0
+    0.98 :   11497:  mov    0x7cc0(%rbx,%rdx,1),%r8d
+    3.91 :   1149f:  add    0x5c9c(%rbx,%rdx,1),%r8d // tracer.h:189
+    1.30 :   114a7:  cmp    $0x100,%r8d
+      src: 608   const bool wr = tag == TAG_WRITE;
+    2.28 :   114b4:  cmp    $0x2,%r10b // tracer.cpp:768
+      src: 612   const bool cmp = wr ? comp2_ : comp1_;
+    2.61 :   114ba:  test   %cl,%cl // tracer.cpp:771
+      src: 643   const bool cmp = wr ? comp2_ : comp1_;
+    1.95 :   1152d:  test   %cl,%cl
+      src: 646   else { if (cmp) c.encode(v, pk, to2); else pk.put(v, 64, to2); }
+    1.95 :   11534:  je     116ff <units::tracer::Tracer::drain_cycle(long)+0xabf> // tracer.cpp:777
+    2.93 :   115de:  lea    0x30(%rsp),%rcx // lru_coder.h:0
+    0.98 :   115ec:  mov    $0x20,%edx // tracer.cpp:756
+    0.98 :   115f6:  mov    %r15,%rsi // tracer.cpp:0
+      src: 695   code_scan_++;
+    0.65 :   115f9:  incl   0x162dc(%rbx) // tracer.cpp:757
+    4.23 :   115ff:  jmp    10c95 <units::tracer::Tracer::drain_cycle(long)+0x55>
+    2.61 :   116e2:  lea    0x10(%rsp),%rcx // tracer.cpp:0
+    0.65 :   1170f:  call   15080 <void units::tracer::Bits::put<units::tracer::Tracer::drain_cycle(long)::$_1&>(unsigned long, int, units::tracer::Tracer::drain_cycle(long)::$_1&)> // tracer.cpp:777
+    1.30 :   11714:  jmp    1183d <units::tracer::Tracer::drain_cycle(long)+0xbfd> // tracer.cpp:0
+    0.98 :   1185d:  cmpb   $0x0,0x16544(%rbx) // tracer.cpp:779
+
+==== units::tracer::Tracer::fetch16(long, long, unsigned int&, bool)
+      src: 11    int64_t Tracer::fetch16(int64_t t, int64_t o, uint32_t& out, bool second) {
+   12.22 :   14490:  push   %rbp // tracer.cpp:581
+    2.96 :   14491:  push   %r15
+    8.89 :   144a1:  mov    %rcx,%r10
+    7.41 :   144b7:  shr    $0x7,%r13 // tracer.cpp:582
+    0.74 :   144d1:  neg    %cl // lru_index.h:118
+    0.74 :   144d6:  shr    %cl,%rsi
+    6.67 :   144d9:  mov    0x14900(%rdi),%rdi // lru_index.h:0
+      src: 47    if (s < 0) return -1;
+    1.85 :   144e6:  test   %r15d,%r15d // lru_index.h:62
+    1.11 :   144eb:  mov    0x148e8(%r14),%r8 // lru_index.h:0
+   11.11 :   144fa:  shl    %cl,%r9d
+    1.11 :   144fd:  not    %r9d
+      src: 81    if (s < 0) return -1;
+    1.48 :   14544:  test   %r8d,%r8d // lru_index.h:62
+    0.74 :   14604:  mov    %r12,%r11 // tracer.cpp:0
+    4.07 :   14748:  cmp    0x148dc(%r14),%r15d
+    1.11 :   1476a:  mov    (%rdx,%rcx,4),%edi // lru_index.h:120
+      src: 258   prev_[s] = tail_;
+    0.74 :   14790:  mov    (%rax),%edi // lru_index.h:124
+    8.15 :   147b8:  shl    $0x7,%rcx // tracer.cpp:606
+    0.74 :   147bc:  lea    (%rcx,%rax,8),%rax
+    0.74 :   147c7:  mov    %ebx,%ecx
+    2.96 :   147d0:  shl    $0x3,%ebx
+    5.19 :   147d5:  shr    %cl,%rax
+    3.70 :   147d8:  movzwl %ax,%eax
+      src: 289   }
+    5.19 :   147de:  mov    %r11,%rax // tracer.cpp:608
+    2.96 :   147e8:  pop    %r13
+    2.59 :   147ef:  ret
+
+==== void units::tracer::Bits::put<units::tracer::Tracer::drain_cycle(long)::$_0&>(unsigned long, int, units::tracer::Tracer::drain_cycle(long)::$_0&)
+      src: 11    void put(uint64_t v, int n, Out&& out) {
+    6.14 :   14ca0:  push   %rbp // lru_coder.h:32
+    2.19 :   14ca1:  push   %r15
+    2.63 :   14ca5:  push   %rbx
+    5.26 :   14cb6:  mov    $0xffffffffffffffff,%r10 // lru_coder.h:0
+    1.75 :   14cc3:  jmp    14ce8 <void units::tracer::Bits::put<units::tracer::Tracer::drain_cycle(long)::$_0&>(unsigned long, int, units::tracer::Tracer::drain_cycle(long)::$_0&)+0x48>
+      src: 40    while (n > 0) {
+    0.88 :   14ce0:  sub    %eax,%edx // lru_coder.h:33
+      src: 48    const uint64_t m = take == 64 ? ~uint64_t(0) : (uint64_t(1) << take) - 1, part = v & m;
+    4.39 :   14cf5:  mov    $0xffffffffffffffff,%rbx // lru_coder.h:35
+   11.40 :   14d01:  cmp    $0x40,%eax
+    2.63 :   14d0b:  and    %rsi,%rbx
+      src: 56    if (fill < 64) {
+    3.51 :   14d0e:  cmp    $0x3f,%r8d // lru_coder.h:36
+    7.46 :   14d1d:  or     %r14,(%rdi) // lru_coder.h:37
+      src: 64    if (fill + take > 64) hi |= part >> (64 - fill);
+    6.58 :   14d20:  lea    (%rax,%r8,1),%ebp // lru_coder.h:38
+      src: 74    hi |= part << (fill - 64);
+    0.88 :   14d40:  mov    %r8d,%ecx // lru_coder.h:40
+    1.32 :   14d43:  shl    %cl,%rbx
+    8.33 :   14d46:  or     %rbx,0x8(%rdi)
+      src: 78    fill += take;
+    7.89 :   14d4a:  add    %eax,%r8d // lru_coder.h:42
+    5.26 :   14d61:  cmovne %r8,%rsi // lru_coder.h:44
+    0.88 :   14d9a:  lea    (%r15,%rcx,1),%ebp // tracer.cpp:709
+    7.90 :   14dbf:  mov    %rbx,0x84e0(%r9,%r15,8) // tracer.cpp:710
+    1.32 :   14dcf:  inc    %rcx
+      src: 147   lo = hi = 0;
+    2.63 :   14e26:  movups %xmm0,(%rdi) // lru_coder.h:48
+    3.51 :   14e3d:  pop    %r14 // lru_coder.h:52
+
+==== units::tracer::Tracer::push_log(unsigned char, unsigned long)
+      src: 11    void Tracer::push_log(uint8_t tag, uint64_t v) {
+    1.44 :   14230:  push   %rbp // tracer.cpp:544
+    0.72 :   14231:  push   %r15
+    0.72 :   14237:  push   %rbx
+    0.72 :   1424b:  mov    %rdx,%r14 // tracer.cpp:0
+    2.16 :   1424e:  mov    %rdi,%rbx
+   10.79 :   1425c:  mov    0x4488(%rdi),%rcx // tracer.cpp:546
+    4.32 :   14267:  incl   0x4494(%rdi)
+      src: 29    if (tag == TAG_WRITE) { set1_wlog_.encode(v); wlog_values_++; }
+    0.72 :   1426d:  cmp    $0x2,%sil // tracer.cpp:547
+      src: 52    hits++;
+    1.44 :   1429b:  incq   0x14c40(%rbx) // lru_coder.h:118
+      src: 54    if (is_write && e_[15] == v) {
+    0.72 :   142a2:  test   %cl,%cl // lru_coder.h:106
+      src: 77    if (is_write && e_[15] == v) {
+    2.16 :   142e3:  movzbl 0x14b88(%rbx),%ecx
+      src: 84    hits++;
+    1.44 :   14304:  incq   0x14b98(%rbx) // lru_coder.h:118
+      src: 86    if (is_write && e_[15] == v) {
+    4.32 :   1430b:  test   %cl,%cl // lru_coder.h:106
+   11.51 :   1433c:  mov    $0x5,%r12d // lru_coder.h:0
+    1.44 :   14351:  adc    $0xf,%rdx // lru_coder.h:110
+    0.72 :   14355:  data16 cs nopw 0x0(%rax,%rax,1)
+      src: 109   if (e_[i] == v) {
+    6.47 :   14360:  cmp    %r14,0x14c58(%rbx,%rax,8) // lru_coder.h:111
+      src: 112   for (int i = 0; i < n; i++)
+    2.88 :   1436e:  inc    %rax // lru_coder.h:110
+      src: 116   const int n = is_write ? 15 : 16;
+    1.44 :   14376:  xor    %eax,%eax // lru_coder.h:109
+      src: 125   const bool wide = (v >> 32) != 0;
+    2.16 :   14384:  xor    %r12d,%r12d // lru_coder.h:130
+    1.44 :   1438e:  setne  %r12b
+      src: 135   std::memmove(e_ + 1, e_, sizeof(uint64_t) * (is_write ? 14 : 15));
+    1.44 :   14392:  lea    0x14c58(%rbx),%r15 // lru_coder.h:137
+    0.72 :   143ab:  call   4500 <memmove@plt>
+    1.44 :   143c2:  incl   0x14cdc(%rbx) // tracer.cpp:547
+    1.44 :   143c8:  jmp    14461 <units::tracer::Tracer::push_log(unsigned char, unsigned long)+0x231>
+    0.72 :   143d2:  mov    $0x0,%edx // lru_coder.h:110
+    0.72 :   143db:  nopl   0x0(%rax,%rax,1)
+      src: 157   if (e_[i] == v) {
+    5.76 :   143e0:  cmp    %r14,0x14bb0(%rbx,%rax,8) // lru_coder.h:111
+      src: 160   for (int i = 0; i < n; i++)
+    9.35 :   143ee:  inc    %rax // lru_coder.h:110
+    2.16 :   143f1:  cmp    %rax,%rdx
+      src: 171   const bool wide = (v >> 32) != 0;
+    5.04 :   14406:  xor    %r12d,%r12d // lru_coder.h:130
+    2.16 :   14409:  mov    %r14,%rcx
+    0.72 :   1442a:  mov    %r15,%rsi // lru_coder.h:137
+    0.72 :   1442d:  call   4500 <memmove@plt>
+      src: 182   nb = wide ? 66 : 34;
+    0.72 :   14432:  shl    $0x5,%r12d // lru_coder.h:131
+    0.72 :   1443d:  mov    %ebp,%esi // lru_coder.h:0
+      src: 189   else { set1_rlog_.encode(v); rlog_values_++; if (tag == TAG_LOAD) set1_wlog_.last_load(v); }
+    2.16 :   14446:  incl   0x14cd8(%rbx) // tracer.cpp:548
+    0.72 :   1444c:  test   %sil,%sil
+      src: 197   }
+    1.44 :   14461:  pop    %rbx // tracer.cpp:549
+    1.44 :   14466:  pop    %r15
+    0.72 :   14469:  ret
+
+==== units::tracer::Tracer::data_line(long, long)
+      src: 11    int64_t Tracer::data_line(int64_t t, int64_t line) {
+    4.85 :   13700:  push   %r15 // tracer.cpp:612
+    1.94 :   13702:  push   %r14
+      src: 20    d_access++;
+    4.85 :   13712:  incq   0x12630(%rdi) // tracer.cpp:613
+    4.85 :   13731:  shr    %cl,%rsi // lru_index.h:118
+    0.97 :   13734:  mov    0x14940(%rdi),%rdi // lru_index.h:0
+      src: 38    if (s < 0) return -1;
+    5.83 :   13740:  test   %edx,%edx // lru_index.h:62
+    6.80 :   13744:  mov    0x14928(%rbx),%r8 // lru_index.h:0
+    7.77 :   13756:  not    %r9d
+   10.68 :   13945:  cmp    0x1491c(%rbx),%edx // tracer.cpp:0
+    1.94 :   1394d:  lea    0x1491c(%rbx),%rax // lru_index.h:0
+      src: 198   if (prev_[s] >= 0) next_[prev_[s]] = next_[s]; else head_ = next_[s];
+    0.97 :   13954:  mov    0x14930(%rbx),%rdi // lru_index.h:120
+    1.94 :   1396f:  mov    %r8d,(%rsi,%r9,4)
+   12.62 :   13973:  jmp    1397c <units::tracer::Tracer::data_line(long, long)+0x27c>
+    0.97 :   1398b:  mov    %r9d,(%r10) // lru_index.h:121
+      src: 216   prev_[s] = tail_;
+    6.80 :   1398e:  mov    (%rax),%r8d // lru_index.h:124
+      src: 221   if (tail_ >= 0) next_[tail_] = s; else head_ = s;
+    0.97 :   1399c:  mov    (%rax),%ecx // lru_index.h:126
+    0.97 :   1399e:  test   %ecx,%ecx
+      src: 232   }
+    5.83 :   139af:  mov    %r14,%rax // tracer.cpp:635
+    0.97 :   139b2:  pop    %rbx
+   11.64 :   139b3:  pop    %r12
+    2.91 :   139b5:  pop    %r13
+    2.91 :   139b9:  pop    %r15
+
+==== void units::tracer::Bits::put<units::tracer::Tracer::drain_cycle(long)::$_1&>(unsigned long, int, units::tracer::Tracer::drain_cycle(long)::$_1&)
+      src: 11    void put(uint64_t v, int n, Out&& out) {
+   11.11 :   15080:  push   %rbp // lru_coder.h:32
+    6.67 :   15081:  push   %r15
+    2.22 :   15083:  push   %r14
+    6.67 :   15096:  mov    $0xffffffffffffffff,%r10 // lru_coder.h:0
+    2.22 :   1509d:  xor    %r11d,%r11d
+      src: 40    while (n > 0) {
+    4.44 :   150c0:  sub    %eax,%edx // lru_coder.h:33
+      src: 48    const uint64_t m = take == 64 ? ~uint64_t(0) : (uint64_t(1) << take) - 1, part = v & m;
+    8.89 :   150d5:  mov    $0xffffffffffffffff,%rbx // lru_coder.h:35
+    4.44 :   150e1:  cmp    $0x40,%eax
+    6.67 :   150eb:  and    %rsi,%rbx
+      src: 56    if (fill < 64) {
+    6.67 :   150ee:  cmp    $0x3f,%r8d // lru_coder.h:36
+    2.22 :   150fd:  or     %r14,(%rdi) // lru_coder.h:37
+      src: 64    if (fill + take > 64) hi |= part >> (64 - fill);
+    4.44 :   15100:  lea    (%rax,%r8,1),%ebp // lru_coder.h:38
+      src: 74    hi |= part << (fill - 64);
+    2.22 :   15120:  mov    %r8d,%ecx // lru_coder.h:40
+      src: 78    fill += take;
+    2.22 :   1512a:  add    %eax,%r8d // lru_coder.h:42
+      src: 81    v = take == 64 ? 0 : v >> take;
+    2.22 :   15130:  mov    %rsi,%r8 // lru_coder.h:44
+      src: 98    if (occ >= QCAP) FATAL("Tracer: a push into a full output queue (the scan's room check)");
+    2.22 :   15151:  movslq 0xcd2c(%r9),%rcx // tracer.cpp:708
+    4.44 :   1517a:  lea    (%r15,%rcx,1),%ebp // tracer.cpp:709
+    2.22 :   15184:  add    %ecx,%r15d
+    8.89 :   1519f:  mov    %rbx,0xbd28(%r9,%r15,8) // tracer.cpp:710
+    2.22 :   151af:  inc    %rcx
+      src: 147   lo = hi = 0;
+    2.22 :   15206:  movups %xmm0,(%rdi) // lru_coder.h:48
+      src: 157   }
+    2.22 :   15218:  add    $0x8,%rsp // lru_coder.h:52
+    2.22 :   1521d:  pop    %r14
+
+==== void units::tracer::Bits::put<units::tracer::Tracer::drain_cycle(long)::$_2&>(unsigned long, int, units::tracer::Tracer::drain_cycle(long)::$_2&)
+      src: 11    void put(uint64_t v, int n, Out&& out) {
+   19.99 :   14e90:  push   %rbp // lru_coder.h:32
+    4.44 :   14e91:  push   %r15
+      src: 17    while (n > 0) {
+    2.22 :   14e97:  test   %edx,%edx // lru_coder.h:33
+    2.22 :   14ea6:  mov    $0xffffffffffffffff,%r10 // lru_coder.h:0
+    2.22 :   14ead:  xor    %r11d,%r11d
+      src: 40    while (n > 0) {
+    4.45 :   14ed0:  sub    %eax,%edx // lru_coder.h:33
+      src: 43    const int take = n < 128 - fill ? n : 128 - fill;
+    4.44 :   14ed8:  mov    $0x80,%eax // lru_coder.h:34
+      src: 48    const uint64_t m = take == 64 ? ~uint64_t(0) : (uint64_t(1) << take) - 1, part = v & m;
+   11.11 :   14ee5:  mov    $0xffffffffffffffff,%rbx // lru_coder.h:35
+    4.44 :   14ef1:  cmp    $0x40,%eax
+    2.22 :   14ef7:  cmove  %r10,%rbx
+    2.22 :   14efb:  and    %rsi,%rbx
+      src: 56    if (fill < 64) {
+    4.45 :   14efe:  cmp    $0x3f,%r8d // lru_coder.h:36
+      src: 64    if (fill + take > 64) hi |= part >> (64 - fill);
+    2.22 :   14f10:  lea    (%rax,%r8,1),%ebp // lru_coder.h:38
+    2.22 :   14f14:  cmp    $0x40,%ebp
+      src: 74    hi |= part << (fill - 64);
+    4.44 :   14f30:  mov    %r8d,%ecx // lru_coder.h:40
+    4.45 :   14f36:  or     %rbx,0x8(%rdi)
+      src: 78    fill += take;
+    4.44 :   14f3a:  add    %eax,%r8d // lru_coder.h:42
+    4.45 :   14f51:  cmovne %r8,%rsi // lru_coder.h:44
+    2.22 :   14f8a:  lea    (%r15,%rcx,1),%ebp // tracer.cpp:709
+    2.22 :   14fa1:  sub    %ebp,%r15d
+    6.67 :   14faf:  mov    %rbx,0xf570(%r9,%r15,8) // tracer.cpp:710
+      src: 157   }
+    2.22 :   15028:  add    $0x8,%rsp // lru_coder.h:52
+
+==== units::tracer::LruIndex::find(unsigned long)
+      src: 11    }
+   23.33 :   15b90:  movabs $0x9e3779b97f4a7c15,%r8 // tracer.cpp:67
+    3.33 :   15ba1:  mov    %edx,%ecx // tracer.cpp:118
+    3.33 :   15ba3:  neg    %cl
+      src: 25    iline_ = new Line[size_t(icache_lines) + 1];
+   26.67 :   15bac:  mov    %r8d,%eax // tracer.cpp:61
+      src: 28    dline_ = new Line[size_t(CACHE_LINES) + 1];
+   16.67 :   15bb3:  test   %eax,%eax // tracer.cpp:62
+    3.33 :   15bc6:  not    %r11d // tracer.cpp:0
+   23.33 :   15bec:  cmp    0x14(%rdi),%eax
+
+==== units::tracer::MemSystem::keep_victim_clean(int, long)
+   11.11 :   17787:  js     178d9 <units::tracer::MemSystem::keep_victim_clean(int, long)+0x179> // mem_system.h:213
+    5.56 :   1778d:  cmpl   $0x0,0xf8(%rdi,%rax,4)
+    5.55 :   17795:  js     178d9 <units::tracer::MemSystem::keep_victim_clean(int, long)+0x179>
+    5.55 :   1779b:  cmpl   $0x0,0xfc(%rdi,%rax,4)
+    5.56 :   177b1:  js     178d9 <units::tracer::MemSystem::keep_victim_clean(int, long)+0x179>
+    5.56 :   177f9:  cmp    0x50f0(%rdi,%rcx,8),%rsi // mem_system.h:214
+    5.56 :   17812:  lea    (%rsi,%rax,1),%r8d
+    5.56 :   17833:  lea    (%r8,%rax,1),%esi
+    5.56 :   17837:  movslq %esi,%rsi
+    5.56 :   1785a:  cmp    0x50f0(%rdi,%r8,8),%rcx
+   11.11 :   17862:  mov    0x5120(%rdi,%rax,8),%rcx
+   11.11 :   17883:  mov    $0x6,%ecx
+    5.56 :   178a3:  mov    $0x7,%esi
+    5.56 :   178b8:  je     178d9 <units::tracer::MemSystem::keep_victim_clean(int, long)+0x179> // mem_system.h:216
+      src: 86    }
+    5.56 :   178d9:  ret // mem_system.h:221
+
+==== units::tracer::MemSystem::access(long, int, bool, bool, int)
+      src: 11    int64_t access(int64_t t, int32_t a, bool write, bool index, int cls) {
+   27.27 :   17350:  push   %rbp // mem_system.h:157
+    9.09 :   1737b:  movzbl %r8b,%eax // mem_system.h:162
+    9.09 :   173bc:  lea    0x0(,%r15,4),%esi // mem_system.h:164
+      src: 83    hits[cls]++;
+    9.09 :   17461:  incq   0xa8(%rbx,%rbp,8) // mem_system.h:171
+      src: 104   keep_victim_clean(base, done);
+    9.09 :   17499:  mov    %rbx,%rdi // mem_system.h:193
+      src: 109   cycles[cls] += done - t0;
+    9.09 :   174a7:  mov    %r13,%rax // mem_system.h:194
+      src: 113   return done;
+    9.09 :   174b5:  mov    %r13,%rax // mem_system.h:195
+    9.09 :   174c1:  pop    %r14
+    9.09 :   174d5:  mov    %r13d,%ecx // mem_system.h:0
+
+==== units::tracer::Tracer::lookup(long, unsigned long)
+      src: 11    uint64_t Tracer::lookup(int64_t T, uint64_t np) {
+   33.33 :   13a10:  push   %rbp // tracer.cpp:639
+   16.67 :   13a11:  push   %r15
+      src: 39    if (s < 0) return -1;
+   16.67 :   13a56:  test   %r11d,%r11d // lru_index.h:62
+      src: 51    for (uint32_t h = hash(k);; h = (h + 1) & mask()) {
+   16.67 :   13a7d:  inc    %edi // lru_index.h:60
+   16.67 :   13e92:  cmp    0x1495c(%rbx),%r11d // tracer.cpp:0
+
+==== units::tracer::MemSystem::read(long, int, int, long, units::tracer::MemSystem::Response&)
+      src: 11    Response& read(int64_t t, int32_t root, int depth, int64_t line, Response& r) {
+   25.00 :   169d0:  push   %rbp // mem_system.h:78
+      src: 55    const bool idx = k < walk_.index_lines;
+   25.00 :   16a40:  movslq 0xd31c(%r14),%rax // mem_system.h:87
+   25.00 :   16a6c:  xor    %ecx,%ecx // mem_system.h:89
+   25.00 :   16a79:  add    %rcx,0x58(%r14,%r15,8) // mem_system.h:90
+
+==== units::tracer::LruIndex::remove(int)
+      src: 46    if (n_errors_logged < FACTS) {
+   66.67 :   16b7c:  lea    0x1(%r10),%ebx // tracer.cpp:98
+      src: 118   e[(head + n) % INPUTS] = x;
+   33.33 :   16c31:  mov    %esi,0x18(%rdi) // tracer.cpp:112
+
+==== units::tracer::LruIndex::insert(unsigned long)
+   50.00 :   1691a:  mov    %edx,%ecx // tracer.cpp:0
+      src: 64    // ================================================================ facts
+   50.00 :   1695d:  mov    %eax,(%r8,%rcx,4) // tracer.cpp:87
+
+==== units::tracer::FileStore::walk(int, int, long, units::tracer::FileStore::Walk&) const
+   50.00 :   c587:   movslq %r9d,%r15 // file_store.cpp:0
+   50.00 :   c5b8:   shl    $0x5,%esi // file_store.h:103
+
+==== units::tracer::MemSystem::victim(int) const
+  100.00 :   17611:  js     17727 <units::tracer::MemSystem::victim(int) const+0x167> // mem_system.h:202

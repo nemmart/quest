@@ -1,0 +1,7 @@
+Couldn't record kernel reference relocation symbol
+Symbol resolution may be skewed if relocation was used (e.g. kexec).
+Check /proc/kallsyms permission or run as root.
+trace /tmp/w14-166-w14-tracer-speed/evm.trace: groups 173.0 MB, 3985 cycle kinds, store 757 pages, loaded in 0.33 s
+rep 0 cycles=91765907 calls=288905444 seconds=3.119 ns_per_cycle=33.99 sink=670601858096061e segs=18.51,32.47,34.21,34.52,34.56,
+harness cycles=91765907 seconds=0.047 ns_per_cycle=0.51 (decoding and dispatch, no Tracer call)
+tracer_play median ns_per_cycle=33.99 of 1 reps

@@ -1,0 +1,10 @@
+cyclone-29: WORKER26's inputs: image 1519 pages, map 2^13 lines (p1 0x9e3779b1, p3 10368899), log2 K 24, lowest 0x7e000000
+cyclone-29 segment 0: OK  drain 2800806 cycles;  17876600 cycles (4.262/row, 17.88 ms at 1 GHz)  pages written 266 (263 created)  dirty lines 65  cells checked 133514  stalls [9736, 1062744, 12, 26226, 0, 284, 0]
+  reads 11927, writes 9864; index 43274 (99.90% hit), data 21791 (45.55% hit), LPDDR reads 11909; walk 263484 cycles, data 1012038; early evictions 7942, write-allocates 0, read waits 63 (3866 cycles)
+cyclone-29 segment 1: OK  drain 2729741 cycles;  17079988 cycles (4.072/row, 17.08 ms at 1 GHz)  pages written 53 (0 created)  dirty lines 65  cells checked 26218  stalls [240, 302370, 0, 162, 0, 0, 0]
+  reads 3283, writes 1576; index 9717 (99.90% hit), data 4859 (32.43% hit), LPDDR reads 3293; walk 59042 cycles, data 272096; early evictions 0, write-allocates 0, read waits 0 (0 cycles)
+cyclone-29 segment 2: OK  drain 2729741 cycles;  17079822 cycles (4.072/row, 17.08 ms at 1 GHz)  pages written 54 (0 created)  dirty lines 65  cells checked 26217  stalls [240, 302204, 0, 162, 0, 0, 0]
+  reads 3282, writes 1576; index 9715 (99.91% hit), data 4858 (32.44% hit), LPDDR reads 3291; walk 58956 cycles, data 272016; early evictions 1, write-allocates 0, read waits 0 (0 cycles)
+cyclone-29 segment 3: OK  drain 2729741 cycles;  17080006 cycles (4.072/row, 17.08 ms at 1 GHz)  pages written 53 (0 created)  dirty lines 65  cells checked 26217  stalls [240, 302388, 0, 162, 0, 0, 0]
+  reads 3284, writes 1577; index 9721 (99.91% hit), data 4861 (32.44% hit), LPDDR reads 3293; walk 58992 cycles, data 272182; early evictions 3, write-allocates 0, read waits 0 (0 cycles)
+cyclone-29: 256 windows checked (16777216 rows), 0 failed, 198.9 s

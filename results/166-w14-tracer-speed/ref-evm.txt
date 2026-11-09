@@ -1,0 +1,8 @@
+trace /tmp/w14-166-w14-tracer-speed/evm.trace: groups 173.0 MB, 3985 cycle kinds, store 757 pages, loaded in 0.81 s
+rep 0 cycles=91765907 calls=288905444 seconds=4.445 ns_per_cycle=48.44 segs=1792.21,67.00,43.18,41.97,43.74,
+rep 1 cycles=91765907 calls=288905444 seconds=3.857 ns_per_cycle=42.03 segs=345.64,47.48,39.86,42.26,39.18,
+rep 2 cycles=91765907 calls=288905444 seconds=3.844 ns_per_cycle=41.89 segs=77.46,43.15,41.64,40.88,42.05,
+rep 3 cycles=91765907 calls=288905444 seconds=3.687 ns_per_cycle=40.17 segs=57.47,39.54,39.18,42.09,39.81,
+rep 4 cycles=91765907 calls=288905444 seconds=3.470 ns_per_cycle=37.81 segs=49.51,35.67,38.24,38.46,38.63,
+harness cycles=91765907 seconds=0.692 ns_per_cycle=7.55 (decoding and dispatch, no Tracer call)
+TracerPlay median ns_per_cycle=41.89 of 5 reps (sink 34d27aedab1e85e)
