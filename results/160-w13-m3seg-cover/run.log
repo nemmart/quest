@@ -1,0 +1,101 @@
+
+==== machine (D21)  [05:44:13]
+model:     Intel(R) Core(TM) i5-14400F
+sockets:   1; CPUs usable 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15 (16 of 16 online)
+P cores:   6 cores, CPUs 0,1,2,3,4,5,6,7,8,9,10,11 (12 threads), max 4700000 kHz, min 800000 kHz
+E cores:   4 CPUs 12,13,14,15, max 3500000 kHz, min 800000 kHz
+placement: 0,2,4,6,8,10,1,3,5,7,9,11,12,13,14,15
+governor:  powersave
+caches:    L1d cache: 416 KiB (10 instances);L1i cache: 448 KiB (10 instances);L2 cache: 9.5 MiB (7 instances);L3 cache: 20 MiB (1 instance);
+memory:    MemTotal: 65671456 kB
+kernel:    Linux 6.8.0-147-generic
+gcc:       g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+clang:     Ubuntu clang version 18.1.3 (1ubuntu1)
+java:      openjdk version "21.0.12.1" 2026-08-18
+ 05:44:13 up 4 days, 20:48,  1 user,  load average: 0.03, 0.01, 0.00
+meshsim f5c46fa (sim-w13), sim/ref, built 2026-11-09
+openjdk version "21.0.12.1" 2026-08-18
+persistent data: /home/questrunner/data
+
+==== inputs  [05:44:13]
+evm-zone-29: inputs checked (delivery 7142e894c80a0c9d491f21c852a942885e0abd97cfe6aefd0101d716824e138f, w26 57dc0ffe7574ab3e11f79f8414501bd1ceb2fd75faab0b03f3b4a6c2c61cad2d)
+cyclone-29: inputs checked (delivery f8a0622e144a944c51386b5b36f81101dcdeb16e5a8d950c1e9ca0e3097f8982, w26 ace78f61efbb9c0e418a0b1d7f54a79f6e299b7ff45ad7f09537b11961b95fba)
+
+==== M3FpSelf (local check, on the runner too)  [05:44:13]
+points 713, distinct unit hashes 1022, chain 34b764cf5f685594; neutral true, deterministic true
+M3FpSelf: PASS
+VERDICT m3fpself: PASS
+
+==== M3Seg, five runs in parallel  [05:44:14]
+evm-cover: exit 0
+evm-zone-29: WORKER26's inputs: image 496 pages, map 2^13 lines (p1 0x6c442cb7, p3 10368899), log2 K 23, lowest 0x7e000000
+evm-zone-29 segment 10: setup (T1's carry through segments 0-9) 12.5 s; memory snapshot 880 pages, sha 734d8a741dd023d9
+config: goLatency 8, readyLatency 8, errorLatency -1 (8), stageDelay 64, idleSkip true
+fingerprints: 240 calls; cost per call, us: tr 338.7 tr.ic 44.4 tr.dc 19.5 tr.mem 62.5 tr.files 44.4
+counts: 9.2 depth-1 posts lost to a same-cycle consume 1; 9.3 PULSE_DMAs on C&C 3 14162, with the Tracer's inputs of the previous cycle pending 0
+evm-zone-29 segment 10 (T2, 64 windows): OK  C&C 3 23693532 cycles (trace rows 19531654, drain 4129492), 14162 transfers, 1772179 DMA packets; replay max 234206 cycles; 4194304 rows checked; chip 23940707 cycles; 185.1 s
+VERDICT evm-cover: PASS
+cyc-cover: exit 0
+cyclone-29: WORKER26's inputs: image 1519 pages, map 2^13 lines (p1 0x9e3779b1, p3 10368899), log2 K 24, lowest 0x7e000000
+cyclone-29 segment 10: setup (T1's carry through segments 0-9) 9.3 s; memory snapshot 3584 pages, sha 59b2c3dae61eff84
+config: goLatency 8, readyLatency 8, errorLatency -1 (8), stageDelay 64, idleSkip true
+counts: 9.2 depth-1 posts lost to a same-cycle consume 1; 9.3 PULSE_DMAs on C&C 3 15716, with the Tracer's inputs of the previous cycle pending 0
+cyclone-29 segment 10 (T2, 64 windows): OK  C&C 3 28105968 cycles (trace rows 23810180, drain 4264156), 15716 transfers, 1974150 DMA packets; replay max 200588 cycles; 4194304 rows checked; chip 28319576 cycles; 237.8 s
+VERDICT cyc-cover: PASS
+evm-old: exit 0
+evm-zone-29: WORKER26's inputs: image 496 pages, map 2^13 lines (p1 0x6c442cb7, p3 10368899), log2 K 23, lowest 0x7e000000
+evm-zone-29 segment 10: setup (T1's carry through segments 0-9) 11.6 s; memory snapshot 880 pages, sha 734d8a741dd023d9
+config: goLatency 1, readyLatency 1, errorLatency -1 (1), stageDelay 32, idleSkip true
+evm-zone-29 segment 10 (T2, 64 windows): OK  C&C 3 23693506 cycles (trace rows 19531654, drain 4129492), 14162 transfers, 1772179 DMA packets; replay max 234206 cycles; 4194304 rows checked; chip 23940667 cycles; 54.6 s
+VERDICT evm-old: PASS
+evm-plain: exit 0
+evm-zone-29: WORKER26's inputs: image 496 pages, map 2^13 lines (p1 0x6c442cb7, p3 10368899), log2 K 23, lowest 0x7e000000
+evm-zone-29 segment 10: setup (T1's carry through segments 0-9) 12.3 s; memory snapshot 880 pages, sha 734d8a741dd023d9
+config: goLatency 8, readyLatency 8, errorLatency -1 (8), stageDelay 64, idleSkip true
+evm-zone-29 segment 10 (T2, 64 windows): OK  C&C 3 23693532 cycles (trace rows 19531654, drain 4129492), 14162 transfers, 1772179 DMA packets; replay max 234206 cycles; 4194304 rows checked; chip 23940707 cycles; 53.8 s
+VERDICT evm-plain: PASS
+evm-fponly: exit 0
+evm-zone-29: WORKER26's inputs: image 496 pages, map 2^13 lines (p1 0x6c442cb7, p3 10368899), log2 K 23, lowest 0x7e000000
+evm-zone-29 segment 10: setup (T1's carry through segments 0-9) 11.6 s; memory snapshot 880 pages, sha 734d8a741dd023d9
+config: goLatency 8, readyLatency 8, errorLatency -1 (8), stageDelay 64, idleSkip true
+fingerprints: 240 calls; cost per call, us: tr 386.0 tr.ic 45.0 tr.dc 23.2 tr.mem 65.4 tr.files 51.8
+evm-zone-29 segment 10 (T2, 64 windows): OK  C&C 3 23693532 cycles (trace rows 19531654, drain 4129492), 14162 transfers, 1772179 DMA packets; replay max 234206 cycles; 4194304 rows checked; chip 23940707 cycles; 54.5 s
+VERDICT evm-fponly: PASS
+evm plain   10,64,23693532,19531654,4129492,14162,1772179,234206,4194304,23940707
+evm cover   10,64,23693532,19531654,4129492,14162,1772179,234206,4194304,23940707
+evm fponly  10,64,23693532,19531654,4129492,14162,1772179,234206,4194304,23940707
+evm old     10,64,23693506,19531654,4129492,14162,1772179,234206,4194304,23940667
+cyc cover   10,64,28105968,23810180,4264156,15716,1974150,200588,4194304,28319576
+VERDICT plain-equals-159: PASS
+VERDICT hooks-neutral: PASS
+9.1: 110u's latencies give 110u's figures
+VERDICT fp-deterministic: PASS
+fingerprint points: 240
+# cost per call, us: tr 338.7 tr.ic 44.4 tr.dc 19.5 tr.mem 62.5 tr.files 44.4
+total 216
+drwxrwxr-x   2 questrunner questrunner  4096 Nov  9 05:48 .
+drwxrwxr-x 199 questrunner questrunner 12288 Nov  9 05:44 ..
+-rw-rw-r--   1 questrunner questrunner     2 Nov  9 05:44 ATTEMPTS
+-rw-rw-r--   1 questrunner questrunner   224 Nov  9 05:48 cyc-cover.csv
+-rw-rw-r--   1 questrunner questrunner 13685 Nov  9 05:48 cyc.cover.csv
+-rw-rw-r--   1 questrunner questrunner  5216 Nov  9 05:48 cyc.cover.csv.pcs.gz
+-rw-rw-r--   1 questrunner questrunner   695 Nov  9 05:48 cyc-cover.log
+-rw-rw-r--   1 questrunner questrunner   225 Nov  9 05:47 evm-cover.csv
+-rw-rw-r--   1 questrunner questrunner 13650 Nov  9 05:47 evm.cover.csv
+-rw-rw-r--   1 questrunner questrunner  4446 Nov  9 05:47 evm.cover.csv.pcs.gz
+-rw-rw-r--   1 questrunner questrunner   798 Nov  9 05:47 evm-cover.log
+-rw-rw-r--   1 questrunner questrunner 47192 Nov  9 05:47 evm.fp
+-rw-rw-r--   1 questrunner questrunner   224 Nov  9 05:45 evm-fponly.csv
+-rw-rw-r--   1 questrunner questrunner 47192 Nov  9 05:45 evm-fponly.fp
+-rw-rw-r--   1 questrunner questrunner   651 Nov  9 05:45 evm-fponly.log
+-rw-rw-r--   1 questrunner questrunner   224 Nov  9 05:45 evm-old.csv
+-rw-rw-r--   1 questrunner questrunner   550 Nov  9 05:45 evm-old.log
+-rw-rw-r--   1 questrunner questrunner   224 Nov  9 05:45 evm-plain.csv
+-rw-rw-r--   1 questrunner questrunner   550 Nov  9 05:45 evm-plain.log
+-rw-------   1 questrunner questrunner   716 Nov  9 05:44 machine.txt
+-rw-rw-r--   1 questrunner questrunner  5734 Nov  9 05:48 run.log
+
+==== done in 248 s  [05:48:21]
+nner questrunner  5734 Nov  9 05:48 run.log
+
+==== done in 248 s  [05:48:21]
