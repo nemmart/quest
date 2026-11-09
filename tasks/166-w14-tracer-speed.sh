@@ -1,13 +1,13 @@
 #!/bin/bash
-# Task 164-w14-tracer-speed -- meshsim sim/ WORKER14 (branch sim-w14 296b425).
+# Task 166-w14-tracer-speed -- meshsim sim/ WORKER14 (branch sim-w14 296b425).
 # The Tracer's speed alone (sim-w14): C++ (tracer_play) against ref's Tracer (TracerPlay) on the calls of T1's segments 0-3,
 # evm-zone-29 and cyclone-29, one P core, 5 in-process repetitions each, machine recorded (D21); perf on the C++ step.
 # Timing: run alone.
-# From an embedded kit. Writes only results/164-w14-tracer-speed/. Scratch in /tmp, removed first and at the end; inputs only read.
+# From an embedded kit. Writes only results/166-w14-tracer-speed/. Scratch in /tmp, removed first and at the end; inputs only read.
 set -u
 cd "$(dirname "$0")/.."
-REPO=$PWD; RES=$REPO/results/164-w14-tracer-speed; mkdir -p "$RES"
-W=/tmp/w14-164-w14-tracer-speed; rm -rf "$W"; mkdir -p "$W"
+REPO=$PWD; RES=$REPO/results/166-w14-tracer-speed; mkdir -p "$RES"
+W=/tmp/w14-166-w14-tracer-speed; rm -rf "$W"; mkdir -p "$W"
 sed -n '/^__KIT_BEGIN__$/,/^__KIT_END__$/p' "$0" | sed '1d;$d' | base64 -d > "$W/kit.tgz" || exit 2
 GOT=$(sha256sum "$W/kit.tgz" | cut -d' ' -f1); echo "kit sha256 $GOT"
 [ "$GOT" = "b1a11befe73a0bd76f2ca3bc30e2f261d160e81e401d9ca5bd4b6e310476531a" ] || { echo "kit sha256 mismatch (want b1a11befe73a0bd76f2ca3bc30e2f261d160e81e401d9ca5bd4b6e310476531a)"; exit 2; }
