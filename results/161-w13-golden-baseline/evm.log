@@ -1,0 +1,9 @@
+evm-zone-29: WORKER26's inputs: image 496 pages, map 2^13 lines (p1 0x6c442cb7, p3 10368899), log2 K 23, lowest 0x7e000000
+evm-zone-29 segment 10: setup (T1's carry through segments 0-9) 10.1 s; memory snapshot 880 pages, sha 734d8a741dd023d9
+config: goLatency 8, readyLatency 8, errorLatency -1 (8), stageDelay 64, idleSkip true
+chip fingerprints: 242 calls; cost per call, ms: core 0.10 ctl 0.11 cmem 0.74 dir 0.06 router 0.58 inj 0.05 srq 0.49 sram 0.15 sram.data 13.26 we 0.18 ag 0.43 ts 0.22 hist 0.08 gather 0.11 rdport 0.05 req 0.02 slot 0.09 rp 0.51 tr 0.27 tr.ic 0.03 tr.dc 0.02 tr.mem 0.06 tr.files 0.05 cc1p 0.02 cc.host 0.00 reqbus 0.02 cnc 0.01 ep 0.00
+counts: 9.2 at: the Tracer: run done at 0
+counts: 9.4 the write buffer's ring: at most 0 lines between cycles (cycle 0), at most 0 within a cycle (bound: the last count plus the cycle's early evictions); ring 64, depth 4
+counts: 9.2 depth-1 posts lost to a same-cycle consume 1; 9.3 PULSE_DMAs on C&C 3 14162, with the Tracer's inputs of the previous cycle pending 0
+evm-zone-29 segment 10 (T2, 64 windows): OK  C&C 3 23693532 cycles (trace rows 19531654, drain 4129492), 14162 transfers, 1772179 DMA packets; replay max 234206 cycles; 4194304 rows checked; chip 23940707 cycles; 199.9 s
+timing: setup 10.07 s; boot 0.23 s (7222 cycles); segment 198.42 s (23933485 cycles: 8.29 us a cycle); checks 1.25 s

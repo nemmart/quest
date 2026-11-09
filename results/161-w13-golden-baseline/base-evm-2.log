@@ -1,0 +1,5 @@
+evm-zone-29: WORKER26's inputs: image 496 pages, map 2^13 lines (p1 0x6c442cb7, p3 10368899), log2 K 23, lowest 0x7e000000
+evm-zone-29 segment 10: setup (T1's carry through segments 0-9) 10.3 s; memory snapshot 880 pages, sha 734d8a741dd023d9
+config: goLatency 8, readyLatency 8, errorLatency -1 (8), stageDelay 64, idleSkip true
+evm-zone-29 segment 10 (T2, 64 windows): OK  C&C 3 23693532 cycles (trace rows 19531654, drain 4129492), 14162 transfers, 1772179 DMA packets; replay max 234206 cycles; 4194304 rows checked; chip 23940707 cycles; 47.0 s
+timing: setup 10.26 s; boot 0.28 s (7222 cycles); segment 45.88 s (23933485 cycles: 1.92 us a cycle); checks 0.86 s

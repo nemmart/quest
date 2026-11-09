@@ -1,0 +1,87 @@
+
+==== machine (D21)  [06:24:15]
+model:     Intel(R) Core(TM) i5-14400F
+sockets:   1; CPUs usable 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15 (16 of 16 online)
+P cores:   6 cores, CPUs 0,1,2,3,4,5,6,7,8,9,10,11 (12 threads), max 4700000 kHz, min 800000 kHz
+E cores:   4 CPUs 12,13,14,15, max 3500000 kHz, min 800000 kHz
+placement: 0,2,4,6,8,10,1,3,5,7,9,11,12,13,14,15
+governor:  powersave
+caches:    L1d cache: 416 KiB (10 instances);L1i cache: 448 KiB (10 instances);L2 cache: 9.5 MiB (7 instances);L3 cache: 20 MiB (1 instance);
+memory:    MemTotal: 65671456 kB
+kernel:    Linux 6.8.0-147-generic
+gcc:       g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+clang:     Ubuntu clang version 18.1.3 (1ubuntu1)
+java:      openjdk version "21.0.12.1" 2026-08-18
+ 06:24:15 up 4 days, 21:28,  1 user,  load average: 0.01, 0.00, 0.04
+meshsim da3f36a (sim-w13), sim/ref, built 2026-11-09
+openjdk version "21.0.12.1" 2026-08-18
+persistent data: /home/questrunner/data
+
+==== inputs  [06:24:15]
+evm-zone-29: inputs checked (delivery 7142e894c80a0c9d491f21c852a942885e0abd97cfe6aefd0101d716824e138f, w26 57dc0ffe7574ab3e11f79f8414501bd1ceb2fd75faab0b03f3b4a6c2c61cad2d)
+cyclone-29: inputs checked (delivery f8a0622e144a944c51386b5b36f81101dcdeb16e5a8d950c1e9ca0e3097f8982, w26 ace78f61efbb9c0e418a0b1d7f54a79f6e299b7ff45ad7f09537b11961b95fba)
+
+==== self-checks  [06:24:15]
+M3FpSelf: PASS
+lines 36420, distinct hashes 905; neutral true, deterministic true
+M3ChipFpSelf: PASS
+VERDICT self-checks: PASS
+
+==== A: the references (two JVMs)  [06:24:18]
+evm: exit 0
+evm-zone-29: WORKER26's inputs: image 496 pages, map 2^13 lines (p1 0x6c442cb7, p3 10368899), log2 K 23, lowest 0x7e000000
+evm-zone-29 segment 10: setup (T1's carry through segments 0-9) 10.1 s; memory snapshot 880 pages, sha 734d8a741dd023d9
+config: goLatency 8, readyLatency 8, errorLatency -1 (8), stageDelay 64, idleSkip true
+chip fingerprints: 242 calls; cost per call, ms: core 0.10 ctl 0.11 cmem 0.74 dir 0.06 router 0.58 inj 0.05 srq 0.49 sram 0.15 sram.data 13.26 we 0.18 ag 0.43 ts 0.22 hist 0.08 gather 0.11 rdport 0.05 req 0.02 slot 0.09 rp 0.51 tr 0.27 tr.ic 0.03 tr.dc 0.02 tr.mem 0.06 tr.files 0.05 cc1p 0.02 cc.host 0.00 reqbus 0.02 cnc 0.01 ep 0.00
+counts: 9.2 at: the Tracer: run done at 0
+counts: 9.4 the write buffer's ring: at most 0 lines between cycles (cycle 0), at most 0 within a cycle (bound: the last count plus the cycle's early evictions); ring 64, depth 4
+counts: 9.2 depth-1 posts lost to a same-cycle consume 1; 9.3 PULSE_DMAs on C&C 3 14162, with the Tracer's inputs of the previous cycle pending 0
+evm-zone-29 segment 10 (T2, 64 windows): OK  C&C 3 23693532 cycles (trace rows 19531654, drain 4129492), 14162 transfers, 1772179 DMA packets; replay max 234206 cycles; 4194304 rows checked; chip 23940707 cycles; 199.9 s
+timing: setup 10.07 s; boot 0.23 s (7222 cycles); segment 198.42 s (23933485 cycles: 8.29 us a cycle); checks 1.25 s
+VERDICT ref-evm: PASS
+cyclone: exit 0
+cyclone-29: WORKER26's inputs: image 1519 pages, map 2^13 lines (p1 0x9e3779b1, p3 10368899), log2 K 24, lowest 0x7e000000
+cyclone-29 segment 10: setup (T1's carry through segments 0-9) 8.0 s; memory snapshot 3584 pages, sha 59b2c3dae61eff84
+config: goLatency 8, readyLatency 8, errorLatency -1 (8), stageDelay 64, idleSkip true
+chip fingerprints: 286 calls; cost per call, ms: core 0.12 ctl 0.13 cmem 0.76 dir 0.06 router 0.56 inj 0.06 srq 0.49 sram 0.15 sram.data 12.38 we 0.23 ag 0.47 ts 0.22 hist 0.08 gather 0.07 rdport 0.05 req 0.01 slot 0.08 rp 0.49 tr 0.29 tr.ic 0.01 tr.dc 0.04 tr.mem 0.06 tr.files 2.93 cc1p 0.02 cc.host 0.00 reqbus 0.02 cnc 0.01 ep 0.00
+counts: 9.2 at: the Tracer: run done at 0
+counts: 9.4 the write buffer's ring: at most 1 lines between cycles (cycle 5806996), at most 3 within a cycle (bound: the last count plus the cycle's early evictions); ring 64, depth 4
+counts: 9.2 depth-1 posts lost to a same-cycle consume 1; 9.3 PULSE_DMAs on C&C 3 15716, with the Tracer's inputs of the previous cycle pending 0
+cyclone-29 segment 10 (T2, 64 windows): OK  C&C 3 28105968 cycles (trace rows 23810180, drain 4264156), 15716 transfers, 1974150 DMA packets; replay max 200588 cycles; 4194304 rows checked; chip 28319576 cycles; 231.9 s
+timing: setup 7.96 s; boot 0.22 s (7222 cycles); segment 230.19 s (28312354 cycles: 8.13 us a cycle); checks 1.50 s
+VERDICT ref-cyclone: PASS
+VERDICT evm-equals-159: PASS
+VERDICT cyclone-equals-159: PASS
+evm: 242 points, 293788 unit lines
+cyclone: 286 points, 347204 unit lines
+join: /dev/fd/63:797: is not sorted: 2700000/tr ed779d53be102bcc
+join: /dev/fd/62:802: is not sorted: 2700000/tr ed779d53be102bcc
+join: input is not in sorted order
+1195 common, 0 differ
+VERDICT tracer-equals-160: PASS
+total 25564
+drwxrwxr-x 2 questrunner questrunner    4096 Nov  9 06:28 .
+drwxrwxr-x 7 questrunner questrunner    4096 Nov  9 06:24 ..
+-rw-rw-r-- 1 questrunner questrunner 5216001 Nov  9 06:24 cyclone.files.gz
+-rw-rw-r-- 1 questrunner questrunner 1503856 Nov  9 06:28 cyclone.fpchip.gz
+-rw-rw-r-- 1 questrunner questrunner 8268984 Nov  9 06:24 cyclone.sram.gz
+-rw-rw-r-- 1 questrunner questrunner 1556094 Nov  9 06:24 evm.files.gz
+-rw-rw-r-- 1 questrunner questrunner 1339797 Nov  9 06:27 evm.fpchip.gz
+-rw-rw-r-- 1 questrunner questrunner 8269042 Nov  9 06:24 evm.sram.gz
+-rw-rw-r-- 1 questrunner questrunner     486 Nov  9 06:28 HASHES
+
+==== B: the baseline (one JVM pinned to one P core; nothing else running)  [06:28:19]
+pinned to CPUs 0,1
+evm run 1: timing: setup 10.37 s; boot 0.29 s (7222 cycles); segment 46.93 s (23933485 cycles: 1.96 us a cycle); checks 0.83 s; 1 OK
+evm run 2: timing: setup 10.26 s; boot 0.28 s (7222 cycles); segment 45.88 s (23933485 cycles: 1.92 us a cycle); checks 0.86 s; 1 OK
+evm run 3: timing: setup 10.74 s; boot 0.30 s (7222 cycles); segment 45.87 s (23933485 cycles: 1.92 us a cycle); checks 0.86 s; 1 OK
+cyclone run 1: timing: setup 9.20 s; boot 0.30 s (7222 cycles); segment 51.38 s (28312354 cycles: 1.81 us a cycle); checks 0.80 s; 1 OK
+cyclone run 2: timing: setup 8.72 s; boot 0.28 s (7222 cycles); segment 50.28 s (28312354 cycles: 1.78 us a cycle); checks 1.13 s; 1 OK
+cyclone run 3: timing: setup 8.59 s; boot 0.28 s (7222 cycles); segment 51.03 s (28312354 cycles: 1.80 us a cycle); checks 0.84 s; 1 OK
+BASELINE evm: segment 46.23 s mean (3 runs), setup 10.47 s, boot 0.29 s, 0 not OK
+BASELINE cyclone: segment 50.90 s mean (3 runs), setup 8.83 s, boot 0.29 s, 0 not OK
+
+==== done in 602 s  [06:34:17]
+ runs), setup 8.83 s, boot 0.29 s, 0 not OK
+
+==== done in 602 s  [06:34:17]

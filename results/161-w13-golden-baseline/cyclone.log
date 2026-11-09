@@ -1,0 +1,9 @@
+cyclone-29: WORKER26's inputs: image 1519 pages, map 2^13 lines (p1 0x9e3779b1, p3 10368899), log2 K 24, lowest 0x7e000000
+cyclone-29 segment 10: setup (T1's carry through segments 0-9) 8.0 s; memory snapshot 3584 pages, sha 59b2c3dae61eff84
+config: goLatency 8, readyLatency 8, errorLatency -1 (8), stageDelay 64, idleSkip true
+chip fingerprints: 286 calls; cost per call, ms: core 0.12 ctl 0.13 cmem 0.76 dir 0.06 router 0.56 inj 0.06 srq 0.49 sram 0.15 sram.data 12.38 we 0.23 ag 0.47 ts 0.22 hist 0.08 gather 0.07 rdport 0.05 req 0.01 slot 0.08 rp 0.49 tr 0.29 tr.ic 0.01 tr.dc 0.04 tr.mem 0.06 tr.files 2.93 cc1p 0.02 cc.host 0.00 reqbus 0.02 cnc 0.01 ep 0.00
+counts: 9.2 at: the Tracer: run done at 0
+counts: 9.4 the write buffer's ring: at most 1 lines between cycles (cycle 5806996), at most 3 within a cycle (bound: the last count plus the cycle's early evictions); ring 64, depth 4
+counts: 9.2 depth-1 posts lost to a same-cycle consume 1; 9.3 PULSE_DMAs on C&C 3 15716, with the Tracer's inputs of the previous cycle pending 0
+cyclone-29 segment 10 (T2, 64 windows): OK  C&C 3 28105968 cycles (trace rows 23810180, drain 4264156), 15716 transfers, 1974150 DMA packets; replay max 200588 cycles; 4194304 rows checked; chip 28319576 cycles; 231.9 s
+timing: setup 7.96 s; boot 0.22 s (7222 cycles); segment 230.19 s (28312354 cycles: 8.13 us a cycle); checks 1.50 s
