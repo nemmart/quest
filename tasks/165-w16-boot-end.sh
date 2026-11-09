@@ -3,7 +3,8 @@
 # The boot-end point of M3's references (sim/tests/golden-m3, AUDIT-M3 section 7): every unit's line at cycle 7,222
 # (`coresBooted`) from $DATA/w13-golden-m3/{evm,cyclone}.fpchip.gz, the D12 header and the point markers; the sizes of
 # the inputs' dumps (*.sram.gz, *.files.gz), and the sram dumps themselves into results if each is at most 8 MB.
-# Reads only $DATA/w13-golden-m3 (checked against golden-m3/HASHES first). Writes only results/165-w16-boot-end/.
+# Reads only $DATA/w13-golden-m3 (checked against golden-m3/HASHES first). Writes only results/165-w16-boot-end/
+# (run.log and the verdict are the runner's: exit 1 on any failure).
 set -u
 cd "$(dirname "$0")/.."
 REPO=$PWD; RES=$REPO/results/165-w16-boot-end; mkdir -p "$RES"
@@ -40,5 +41,5 @@ for S in evm cyclone; do
 done
 gzip -n -9 "$RES"/*.boot.fp
 ls -l "$RES"
-} > "$RES/run.log" 2>&1
-[ $FAIL = 0 ] && touch "$RES/DONE" || touch "$RES/FAILED"
+} 2>&1
+exit $FAIL
