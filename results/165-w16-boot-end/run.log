@@ -1,0 +1,41 @@
+persistent data: /home/questrunner/data
+ 11:23:48 up 5 days,  2:28,  1 user,  load average: 6.94, 3.04, 1.14
+total 25556
+-rw-rw-r-- 1 questrunner questrunner 5216001 Nov  9 06:24 cyclone.files.gz
+-rw-rw-r-- 1 questrunner questrunner 1503856 Nov  9 06:28 cyclone.fpchip.gz
+-rw-rw-r-- 1 questrunner questrunner 8268984 Nov  9 06:24 cyclone.sram.gz
+-rw-rw-r-- 1 questrunner questrunner 1556094 Nov  9 06:24 evm.files.gz
+-rw-rw-r-- 1 questrunner questrunner 1339797 Nov  9 06:27 evm.fpchip.gz
+-rw-rw-r-- 1 questrunner questrunner 8269042 Nov  9 06:24 evm.sram.gz
+-rw-rw-r-- 1 questrunner questrunner     486 Nov  9 06:28 HASHES
+evm.fpchip.gz: OK
+cyclone.fpchip.gz: OK
+evm.files.gz: OK
+cyclone.files.gz: OK
+evm.sram.gz: OK
+cyclone.sram.gz: OK
+== evm
+# boot-end 7222
+# cc3-exit 23694305
+# end 23940706
+evm: 1214 lines at cycle 7222
+evm.sram.gz: 8269042 bytes, 16968784 uncompressed
+  copied
+evm.files.gz: 1556094 bytes, 3608016 uncompressed
+== cyclone
+# boot-end 7222
+# cc3-exit 28106741
+# end 28319575
+cyclone: 1214 lines at cycle 7222
+cyclone.sram.gz: 8268984 bytes, 16968808 uncompressed
+  copied
+cyclone.files.gz: 5216001 bytes, 14694416 uncompressed
+total 16184
+-rw-rw-r-- 1 questrunner questrunner       2 Nov  9 11:23 ATTEMPTS
+-rw-rw-r-- 1 questrunner questrunner    4684 Nov  9 11:23 cyclone.boot.fp.gz
+-rw-rw-r-- 1 questrunner questrunner    1479 Nov  9 11:23 cyclone.header.txt
+-rw-rw-r-- 1 questrunner questrunner 8268984 Nov  9 11:23 cyclone.sram.gz
+-rw-rw-r-- 1 questrunner questrunner    4684 Nov  9 11:23 evm.boot.fp.gz
+-rw-rw-r-- 1 questrunner questrunner    1480 Nov  9 11:23 evm.header.txt
+-rw-rw-r-- 1 questrunner questrunner 8269042 Nov  9 11:23 evm.sram.gz
+-rw-rw-r-- 1 questrunner questrunner    1149 Nov  9 11:23 run.log
