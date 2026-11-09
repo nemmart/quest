@@ -1,0 +1,44 @@
+kit sha256 3a17389d792c610a0953960115465a1bbe7dfad467d1c88b210ba9c1b16a653c
+kit: meshsim e854942 (sim-w14), built 2026-11-09; host godspeed; 16 CPUs; openjdk version "21.0.12.1" 2026-08-18; Ubuntu clang version 18.1.3 (1ubuntu1)
+
+==== build (clang release) (08:11:47)
+VERDICT build: PASS
+
+==== inputs (08:11:51)
+VERDICT inputs: PASS
+
+==== T1: segments 0-3 of both programs, ref through TracerConf into test_tracer (08:11:51)
+evm-zone-29 segment 0: OK  drain 3085154 cycles;  17744468 cycles (4.231/row, 17.74 ms at 1 GHz)  pages written 55 (54 created)  dirty lines 96  cells checked 22719  stalls [132712, 195642, 1154, 2457
+evm-zone-29 segment 1: OK  drain 3994723 cycles;  19661956 cycles (4.688/row, 19.66 ms at 1 GHz)  pages written 81 (68 created)  dirty lines 74  cells checked 22278  stalls [1220454, 198494, 864, 2601
+evm-zone-29 segment 2: OK  drain 4113842 cycles;  19511938 cycles (4.652/row, 19.51 ms at 1 GHz)  pages written 19 (0 created)  dirty lines 108  cells checked 3266  stalls [1282356, 30126, 80, 89530, 
+evm-zone-29 segment 3: OK  drain 4120029 cycles;  19531696 cycles (4.657/row, 19.53 ms at 1 GHz)  pages written 19 (0 created)  dirty lines 108  cells checked 3265  stalls [1317500, 29370, 70, 81814, 
+evm-zone-29: 256 windows checked (16777216 rows), 0 failed, 320.5 s
+  /tmp/w14-163-w14-t1-sweep/t1-evm.fifo: 43242386 groups, 91765907 cycles, 288905444 calls, 0 fatal refusals, 918 fingerprints, all equal to ref
+ok   stream_from_tracerconf_stream
+/tmp/w14-163-w14-t1-sweep/kit/sim/build/clang-release/test_tracer: 1 passed, 0 failed, 0 skipped (debug-only)
+VERDICT t1-evm-ref-against-delivery: PASS
+VERDICT t1-evm-cpp-equals-ref: PASS
+cyclone-29 segment 0: OK  drain 2800806 cycles;  17876600 cycles (4.262/row, 17.88 ms at 1 GHz)  pages written 266 (263 created)  dirty lines 65  cells checked 133514  stalls [9736, 1062744, 12, 26226
+cyclone-29 segment 1: OK  drain 2729741 cycles;  17079988 cycles (4.072/row, 17.08 ms at 1 GHz)  pages written 53 (0 created)  dirty lines 65  cells checked 26218  stalls [240, 302370, 0, 162, 0, 0, 0
+cyclone-29 segment 2: OK  drain 2729741 cycles;  17079822 cycles (4.072/row, 17.08 ms at 1 GHz)  pages written 54 (0 created)  dirty lines 65  cells checked 26217  stalls [240, 302204, 0, 162, 0, 0, 0
+cyclone-29 segment 3: OK  drain 2729741 cycles;  17080006 cycles (4.072/row, 17.08 ms at 1 GHz)  pages written 53 (0 created)  dirty lines 65  cells checked 26217  stalls [240, 302388, 0, 162, 0, 0, 0
+cyclone-29: 256 windows checked (16777216 rows), 0 failed, 286.3 s
+  /tmp/w14-163-w14-t1-sweep/t1-cyclone.fifo: 41605468 groups, 80108285 cycles, 252743089 calls, 0 fatal refusals, 802 fingerprints, all equal to ref
+ok   stream_from_tracerconf_stream
+/tmp/w14-163-w14-t1-sweep/kit/sim/build/clang-release/test_tracer: 1 passed, 0 failed, 0 skipped (debug-only)
+VERDICT t1-cyclone-ref-against-delivery: PASS
+VERDICT t1-cyclone-cpp-equals-ref: PASS
+
+==== the sweep: mix 41-200, wb 4-16, wbover 2-6 (6 at a time) (08:17:11)
+sweep: 178 of 178 replays equal to ref
+VERDICT sweep-178-logs: PASS
+
+==== verdict (08:18:06)
+build PASS
+inputs PASS
+t1-evm-ref-against-delivery PASS
+t1-evm-cpp-equals-ref PASS
+t1-cyclone-ref-against-delivery PASS
+t1-cyclone-cpp-equals-ref PASS
+sweep-178-logs PASS
+ALL PASS

@@ -1,0 +1,10 @@
+evm-zone-29: WORKER26's inputs: image 496 pages, map 2^13 lines (p1 0x6c442cb7, p3 10368899), log2 K 23, lowest 0x7e000000
+evm-zone-29 segment 0: OK  drain 3085154 cycles;  17744468 cycles (4.231/row, 17.74 ms at 1 GHz)  pages written 55 (54 created)  dirty lines 96  cells checked 22719  stalls [132712, 195642, 1154, 245796, 0, 3310, 0]
+  reads 15424, writes 1927; index 26036 (99.91% hit), data 16871 (74.22% hit), LPDDR reads 4373; walk 157992 cycles, data 432848; early evictions 420, write-allocates 1, read waits 205 (9796 cycles)
+evm-zone-29 segment 1: OK  drain 3994723 cycles;  19661956 cycles (4.688/row, 19.66 ms at 1 GHz)  pages written 81 (68 created)  dirty lines 74  cells checked 22278  stalls [1220454, 198494, 864, 260186, 0, 0, 0]
+  reads 67905, writes 1937; index 134253 (99.97% hit), data 69842 (91.01% hit), LPDDR reads 6304; walk 808108 cycles, data 893976; early evictions 859, write-allocates 7, read waits 251 (11018 cycles)
+evm-zone-29 segment 2: OK  drain 4113842 cycles;  19511938 cycles (4.652/row, 19.51 ms at 1 GHz)  pages written 19 (0 created)  dirty lines 108  cells checked 3266  stalls [1282356, 30126, 80, 89530, 0, 0, 0]
+  reads 69840, writes 217; index 138238 (99.98% hit), data 70057 (97.10% hit), LPDDR reads 2057; walk 831500 cycles, data 570488; early evictions 0, write-allocates 0, read waits 0 (0 cycles)
+evm-zone-29 segment 3: OK  drain 4120029 cycles;  19531696 cycles (4.657/row, 19.53 ms at 1 GHz)  pages written 19 (0 created)  dirty lines 108  cells checked 3265  stalls [1317500, 29370, 70, 81814, 0, 0, 0]
+  reads 71236, writes 156; index 141432 (99.98% hit), data 71392 (97.17% hit), LPDDR reads 2050; walk 850664 cycles, data 577980; early evictions 0, write-allocates 0, read waits 0 (0 cycles)
+evm-zone-29: 256 windows checked (16777216 rows), 0 failed, 320.5 s
