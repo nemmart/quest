@@ -1,8 +1,8 @@
 #!/bin/bash
 # Task 168-w16-fpchip -- meshsim sim/ WORKER16 (branch sim-w16). Not timing; a minute.
-# The memory at segment 10's start of M3's references (M3Inputs.files: the FileStore T1's carry leaves; AUDIT-M3 7):
-# $DATA/w13-golden-m3/{evm,cyclone}.fpchip.gz, checked against sim/tests/golden-m3/HASHES, copied into results for the
-# framework's boot-end check (tr.files). Reads only $DATA/w13-golden-m3; writes only results/168-w16-fpchip/.
+# Every unit's line at every point of M3's references (AUDIT-M3 7: every 100,000 cycles, the boot's end, C&C 3's exit,
+# the end): $DATA/w13-golden-m3/{evm,cyclone}.fpchip.gz, checked against sim/tests/golden-m3/HASHES, copied into results
+# for the framework's per-unit point checks of the segment. Reads only $DATA/w13-golden-m3; writes only results/168-w16-fpchip/.
 set -u
 cd "$(dirname "$0")/.."
 REPO=$PWD; RES=$REPO/results/168-w16-fpchip; mkdir -p "$RES"
