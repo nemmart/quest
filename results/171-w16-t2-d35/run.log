@@ -1,0 +1,154 @@
+kit sha256 10bc8767062fb2de6259304d18711be7e6f14207eead19903bc2070e53a3a794
+kit: meshsim b486dae (sim-w16), built 2026-11-10; host godspeed; 16 CPUs; Ubuntu clang version 18.1.3 (1ubuntu1)
+
+==== machine (D21) (09:04:53)
+model:     Intel(R) Core(TM) i5-14400F
+sockets:   1; CPUs usable 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15 (16 of 16 online)
+P cores:   6 cores, CPUs 0,1,2,3,4,5,6,7,8,9,10,11 (12 threads), max 4700000 kHz, min 800000 kHz
+E cores:   4 CPUs 12,13,14,15, max 3500000 kHz, min 800000 kHz
+placement: 0,2,4,6,8,10,1,3,5,7,9,11,12,13,14,15
+governor:  powersave
+caches:    L1d cache: 416 KiB (10 instances);L1i cache: 448 KiB (10 instances);L2 cache: 9.5 MiB (7 instances);L3 cache: 20 MiB (1 instance);
+memory:    MemTotal: 65671456 kB
+kernel:    Linux 6.8.0-147-generic
+gcc:       g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+clang:     Ubuntu clang version 18.1.3 (1ubuntu1)
+java:      openjdk version "21.0.13.0.3" 2026-10-24
+ 09:04:53 up 6 days, 9 min,  1 user,  load average: 0.03, 0.01, 0.00
+
+==== build (clang release; clang release -g for perf) (09:04:53)
+VERDICT build: PASS
+
+==== inputs (09:05:07)
+VERDICT inputs: PASS
+
+==== 1. checked runs: one domain and the 6-domain split, every point, the rows (parallel) (09:05:08)
+evm-1: boot-end 7222 (ref: 7222)
+evm-1: end: C&C 3 and every tile exited at cycle 23940706 (ref's c.cycle 23940707)
+evm-1: points: 241 checked, 0 with a difference, a PULSE_DMA in flight at 1; request bus lag_cycles 0; parts 1
+evm-1: tr_results: status 1, windows 64, transfers 14162, ERRORS 0x0, advice left 0
+evm-1: exits: 64 of 64 tiles exited 1; rows: 64 of 64 tiles equal to rows.bin (count and hash)
+VERDICT check-evm-1: PASS
+evm-6: boot-end 7222 (ref: 7222)
+evm-6: end: C&C 3 and every tile exited at cycle 23940706 (ref's c.cycle 23940707)
+evm-6: points: 241 checked, 0 with a difference, a PULSE_DMA in flight at 1; request bus lag_cycles 0; parts 6
+evm-6: tr_results: status 1, windows 64, transfers 14162, ERRORS 0x0, advice left 0
+evm-6: exits: 64 of 64 tiles exited 1; rows: 64 of 64 tiles equal to rows.bin (count and hash)
+VERDICT check-evm-6: PASS
+cyclone-1: boot-end 7222 (ref: 7222)
+cyclone-1: end: C&C 3 and every tile exited at cycle 28319575 (ref's c.cycle 28319576)
+cyclone-1: points: 285 checked, 0 with a difference, a PULSE_DMA in flight at 1; request bus lag_cycles 0; parts 1
+cyclone-1: tr_results: status 1, windows 64, transfers 15716, ERRORS 0x0, advice left 0
+cyclone-1: exits: 64 of 64 tiles exited 1; rows: 64 of 64 tiles equal to rows.bin (count and hash)
+VERDICT check-cyclone-1: PASS
+cyclone-6: boot-end 7222 (ref: 7222)
+cyclone-6: end: C&C 3 and every tile exited at cycle 28319575 (ref's c.cycle 28319576)
+cyclone-6: points: 285 checked, 0 with a difference, a PULSE_DMA in flight at 1; request bus lag_cycles 0; parts 6
+cyclone-6: tr_results: status 1, windows 64, transfers 15716, ERRORS 0x0, advice left 0
+cyclone-6: exits: 64 of 64 tiles exited 1; rows: 64 of 64 tiles equal to rows.bin (count and hash)
+VERDICT check-cyclone-6: PASS
+
+==== 2. timing: one thread on CPU 0, the split on CPUs 0,2,4,6,8,10; 3 repetitions each; nothing else running (09:05:20)
+rep 0: parts 1, setup 0.031 s, boot 0.003 s (to 7222), segment 7.083 s for 23933484 cycles, 0.2959 us per cycle
+rep 1: parts 1, setup 0.031 s, boot 0.003 s (to 7222), segment 7.089 s for 23933484 cycles, 0.2962 us per cycle
+rep 2: parts 1, setup 0.030 s, boot 0.003 s (to 7222), segment 7.114 s for 23933484 cycles, 0.2972 us per cycle
+rep 0: parts 6, setup 0.034 s, boot 0.037 s (to 7222), segment 7.018 s for 23933484 cycles, 0.2932 us per cycle
+rep 1: parts 6, setup 0.033 s, boot 0.037 s (to 7222), segment 7.020 s for 23933484 cycles, 0.2933 us per cycle
+rep 2: parts 6, setup 0.033 s, boot 0.037 s (to 7222), segment 7.031 s for 23933484 cycles, 0.2938 us per cycle
+VERDICT time-evm: PASS
+rep 0: parts 1, setup 0.077 s, boot 0.003 s (to 7222), segment 7.831 s for 28312353 cycles, 0.2766 us per cycle
+rep 1: parts 1, setup 0.077 s, boot 0.003 s (to 7222), segment 7.798 s for 28312353 cycles, 0.2754 us per cycle
+rep 2: parts 1, setup 0.075 s, boot 0.003 s (to 7222), segment 7.797 s for 28312353 cycles, 0.2754 us per cycle
+rep 0: parts 6, setup 0.077 s, boot 0.039 s (to 7222), segment 8.009 s for 28312353 cycles, 0.2829 us per cycle
+rep 1: parts 6, setup 0.077 s, boot 0.038 s (to 7222), segment 7.962 s for 28312353 cycles, 0.2812 us per cycle
+rep 2: parts 6, setup 0.076 s, boot 0.039 s (to 7222), segment 7.971 s for 28312353 cycles, 0.2815 us per cycle
+VERDICT time-cyclone: PASS
+
+==== 3. where the time goes: units by kind (one thread, calibrate), the split's phases, perf (09:06:51)
+rep 0: parts 1 (calibrate), setup 0.031 s, boot 0.003 s (to 7222), segment 8.007 s for 23933484 cycles, 0.3346 us per cycle
+  units: 6.633 s in steps (82.8% of the segment and boot); C&C 3's domain (tile 2, C&C 3) 4.393 s
+    cc:slot                   3.108 s  46.9%
+    slot                      1.197 s  18.0%
+    cc:ctl                    0.900 s  13.6%
+    ctl                       0.332 s   5.0%
+    router                    0.328 s   4.9%
+    cc:core                   0.246 s   3.7%
+    core                      0.152 s   2.3%
+    inj                       0.107 s   1.6%
+    sram                      0.089 s   1.3%
+    dir                       0.058 s   0.9%
+    cc:router                 0.044 s   0.7%
+    ag                        0.036 s   0.5%
+    we                        0.034 s   0.5%
+    ts                        0.003 s   0.0%
+rep 0: parts 6, setup 0.034 s, boot 0.036 s (to 7222), segment 7.280 s for 23933484 cycles, 0.3042 us per cycle
+  threads: intervals=7985051 total=18198762824 compute=0.2118 imbalance=0.6137 barrier_wait=-0.0078 drain=0.1263 publish=0.0341 clear=0.0217 end=0.0002 other=0.0000
+rep 0: parts 1 (calibrate), setup 0.077 s, boot 0.003 s (to 7222), segment 8.818 s for 28312353 cycles, 0.3115 us per cycle
+  units: 7.288 s in steps (82.6% of the segment and boot); C&C 3's domain (tile 2, C&C 3) 5.086 s
+    cc:slot                   3.593 s  49.3%
+    slot                      1.093 s  15.0%
+    cc:ctl                    1.054 s  14.5%
+    router                    0.373 s   5.1%
+    ctl                       0.350 s   4.8%
+    cc:core                   0.290 s   4.0%
+    inj                       0.124 s   1.7%
+    core                      0.119 s   1.6%
+    sram                      0.102 s   1.4%
+    dir                       0.063 s   0.9%
+    cc:router                 0.050 s   0.7%
+    we                        0.037 s   0.5%
+    ag                        0.037 s   0.5%
+    ts                        0.002 s   0.0%
+rep 0: parts 6, setup 0.077 s, boot 0.037 s (to 7222), segment 8.303 s for 28312353 cycles, 0.2933 us per cycle
+  threads: intervals=9444674 total=20753604366 compute=0.2037 imbalance=0.6131 barrier_wait=0.0115 drain=0.1127 publish=0.0359 clear=0.0229 end=0.0002 other=0.0000
+    19.51%  [.] units::PeriphSlot::publish(sim::Ctx&, long)                                                                                                                                                                                                                                                        -      -            
+            |--17.25%--units::PeriphSlot::publish(sim::Ctx&, long)
+             --1.61%--units::tracer::Tracer::word(long, int, unsigned int&)
+     8.23%  [.] units::TileCtl::step(sim::Ctx&)                                                                                                                                                                                                                                                                    -      -            
+             --7.78%--units::TileCtl::step(sim::Ctx&)
+     7.51%  [.] units::tracer::Tracer::word(long, int, unsigned int&)                                                                                                                                                                                                                                              -      -            
+            |--5.05%--units::tracer::Tracer::word(long, int, unsigned int&)
+            |--1.40%--units::tracer::Tracer::settle(long)
+             --1.06%--units::PeriphSlot::publish(sim::Ctx&, long)
+     6.37%  [.] units::tracer::Tracer::settle(long)                                                                                                                                                                                                                                                                -      -            
+            |--4.53%--units::tracer::Tracer::settle(long)
+             --1.45%--units::tracer::Tracer::word(long, int, unsigned int&)
+     4.31%  [.] units::PeriphSlot::step(sim::Ctx&)                                                                                                                                                                                                                                                                 -      -            
+             --3.92%--units::PeriphSlot::step(sim::Ctx&)
+     3.35%  [.] units::RegBlockState::end_cycle(unsigned long, units::RegBlockState::In const&)                                                                                                                                                                                                                    -      -            
+             --3.25%--units::RegBlockState::end_cycle(unsigned long, units::RegBlockState::In const&)
+     3.18%  [.] sim::Engine::run_until(unsigned long)                                                                                                                                                                                                                                                              -      -            
+             --2.80%--sim::Engine::run_until(unsigned long)
+     2.84%  [.] void sim::detail::run_form<units::PeriphSlot, false>(sim::Engine&, sim::RunSet&)                                                                                                                                                                                                                   -      -            
+             --2.55%--void sim::detail::run_form<units::PeriphSlot, false>(sim::Engine&, sim::RunSet&)
+     2.77%  [.] units::Router::step(sim::Ctx&)                                                                                                                                                                                                                                                                     -      -            
+             --2.66%--units::Router::step(sim::Ctx&)
+                        --0.60%--0x558600000151
+     2.20%  [.] unsigned long units::Rv32::step<units::TileCore::Env>(units::TileCore::Env&, unsigned long)                                                                                                                                                                                                        -      -            
+             --2.13%--unsigned long units::Rv32::step<units::TileCore::Env>(units::TileCore::Env&, unsigned long)
+     2.02%  [.] void sim::detail::run_form<units::TileCore, false>(sim::Engine&, sim::RunSet&)                                                                                                                                                                                                                     -      -            
+             --1.72%--void sim::detail::run_form<units::TileCore, false>(sim::Engine&, sim::RunSet&)
+     1.93%  [.] units::RegBlockState::counter_events(unsigned int)                                                                                                                                                                                                                                                 -      -            
+             --1.87%--units::RegBlockState::counter_events(unsigned int)
+     1.89%  [.] units::Replayer::settle(long)                                                                                                                                                                                                                                                                      -      -            
+             --1.43%--units::Replayer::settle(long)
+     1.78%  [.] void sim::detail::run_form<units::TileCtl, false>(sim::Engine&, sim::RunSet&)                                                                                                                                                                                                                      -      -            
+             --1.65%--void sim::detail::run_form<units::TileCtl, false>(sim::Engine&, sim::RunSet&)
+     1.74%  [.] units::RegBlockState::publish(unsigned int*) const                                                                                                                                                                                                                                                 -      -            
+             --1.66%--units::RegBlockState::publish(unsigned int*) const
+     1.72%  [.] units::tracer::Tracer::row(long)                                                                                                                                                                                                                                                                   -      -            
+             --1.69%--units::tracer::Tracer::row(long)
+     1.66%  [.] units::SlotCore::run_cycle(long, unsigned int)                                                                                                                                                                                                                                                     -      -            
+             --1.45%--units::SlotCore::run_cycle(long, unsigned int)
+                        --1.23%--0xfff8b8cffff8b8ec
+
+==== verdict (09:07:32)
+build PASS
+inputs PASS
+check-evm-1 PASS
+check-evm-6 PASS
+check-cyclone-1 PASS
+check-cyclone-6 PASS
+time-evm PASS
+time-cyclone PASS
+ALL PASS

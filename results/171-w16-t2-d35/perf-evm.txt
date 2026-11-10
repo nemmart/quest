@@ -1,0 +1,60 @@
+    19.51%  [.] units::PeriphSlot::publish(sim::Ctx&, long)                                                                                                                                                                                                                                                        -      -            
+            |--17.25%--units::PeriphSlot::publish(sim::Ctx&, long)
+             --1.61%--units::tracer::Tracer::word(long, int, unsigned int&)
+     8.23%  [.] units::TileCtl::step(sim::Ctx&)                                                                                                                                                                                                                                                                    -      -            
+             --7.78%--units::TileCtl::step(sim::Ctx&)
+     7.51%  [.] units::tracer::Tracer::word(long, int, unsigned int&)                                                                                                                                                                                                                                              -      -            
+            |--5.05%--units::tracer::Tracer::word(long, int, unsigned int&)
+            |--1.40%--units::tracer::Tracer::settle(long)
+             --1.06%--units::PeriphSlot::publish(sim::Ctx&, long)
+     6.37%  [.] units::tracer::Tracer::settle(long)                                                                                                                                                                                                                                                                -      -            
+            |--4.53%--units::tracer::Tracer::settle(long)
+             --1.45%--units::tracer::Tracer::word(long, int, unsigned int&)
+     4.31%  [.] units::PeriphSlot::step(sim::Ctx&)                                                                                                                                                                                                                                                                 -      -            
+             --3.92%--units::PeriphSlot::step(sim::Ctx&)
+     3.35%  [.] units::RegBlockState::end_cycle(unsigned long, units::RegBlockState::In const&)                                                                                                                                                                                                                    -      -            
+             --3.25%--units::RegBlockState::end_cycle(unsigned long, units::RegBlockState::In const&)
+     3.18%  [.] sim::Engine::run_until(unsigned long)                                                                                                                                                                                                                                                              -      -            
+             --2.80%--sim::Engine::run_until(unsigned long)
+     2.84%  [.] void sim::detail::run_form<units::PeriphSlot, false>(sim::Engine&, sim::RunSet&)                                                                                                                                                                                                                   -      -            
+             --2.55%--void sim::detail::run_form<units::PeriphSlot, false>(sim::Engine&, sim::RunSet&)
+     2.77%  [.] units::Router::step(sim::Ctx&)                                                                                                                                                                                                                                                                     -      -            
+             --2.66%--units::Router::step(sim::Ctx&)
+                        --0.60%--0x558600000151
+     2.20%  [.] unsigned long units::Rv32::step<units::TileCore::Env>(units::TileCore::Env&, unsigned long)                                                                                                                                                                                                        -      -            
+             --2.13%--unsigned long units::Rv32::step<units::TileCore::Env>(units::TileCore::Env&, unsigned long)
+     2.02%  [.] void sim::detail::run_form<units::TileCore, false>(sim::Engine&, sim::RunSet&)                                                                                                                                                                                                                     -      -            
+             --1.72%--void sim::detail::run_form<units::TileCore, false>(sim::Engine&, sim::RunSet&)
+     1.93%  [.] units::RegBlockState::counter_events(unsigned int)                                                                                                                                                                                                                                                 -      -            
+             --1.87%--units::RegBlockState::counter_events(unsigned int)
+     1.89%  [.] units::Replayer::settle(long)                                                                                                                                                                                                                                                                      -      -            
+             --1.43%--units::Replayer::settle(long)
+     1.78%  [.] void sim::detail::run_form<units::TileCtl, false>(sim::Engine&, sim::RunSet&)                                                                                                                                                                                                                      -      -            
+             --1.65%--void sim::detail::run_form<units::TileCtl, false>(sim::Engine&, sim::RunSet&)
+     1.74%  [.] units::RegBlockState::publish(unsigned int*) const                                                                                                                                                                                                                                                 -      -            
+             --1.66%--units::RegBlockState::publish(unsigned int*) const
+     1.72%  [.] units::tracer::Tracer::row(long)                                                                                                                                                                                                                                                                   -      -            
+             --1.69%--units::tracer::Tracer::row(long)
+     1.66%  [.] units::SlotCore::run_cycle(long, unsigned int)                                                                                                                                                                                                                                                     -      -            
+             --1.45%--units::SlotCore::run_cycle(long, unsigned int)
+                        --1.23%--0xfff8b8cffff8b8ec
+     1.59%  [.] units::Replayer::start_row(long)                                                                                                                                                                                                                                                                   -      -            
+             --1.50%--units::Replayer::start_row(long)
+     1.14%  [.] units::Replayer::drain(long)                                                                                                                                                                                                                                                                       -      -            
+             --1.11%--units::Replayer::drain(long)
+     1.10%  [.] units::InjReadSide::step(sim::Ctx&, units::Tokens&)                                                                                                                                                                                                                                                -      -            
+     1.08%  [.] units::Replayer::word(long, int, unsigned int&)                                                                                                                                                                                                                                                    -      -            
+             --0.77%--units::Replayer::word(long, int, unsigned int&)
+     0.96%  [.] units::TileCore::step(sim::Ctx&)                                                                                                                                                                                                                                                                   -      -            
+             --0.77%--units::TileCore::step(sim::Ctx&)
+     0.82%  [.] units::Router::route_mask(sim::Ctx&, unsigned int, unsigned int, unsigned long, unsigned long, unsigned long, unsigned int)                                                                                                                                                                        -      -            
+             --0.81%--units::Router::route_mask(sim::Ctx&, unsigned int, unsigned int, unsigned long, unsigned long, unsigned long, unsigned int)
+     0.82%  [.] units::rowcore::decode(unsigned int, unsigned short const*, unsigned long const*, units::rowcore::Decoded&)                                                                                                                                                                                        -      -            
+     0.80%  [.] void units::Rv32::execute<units::TileCore::Env>(units::TileCore::Env&, unsigned long, unsigned int, unsigned int)                                                                                                                                                                                  -      -            
+             --0.75%--void units::Rv32::execute<units::TileCore::Env>(units::TileCore::Env&, unsigned long, unsigned int, unsigned int)
+     0.77%  [.] units::ReplayerStream::peek()                                                                                                                                                                                                                                                                      -      -            
+             --0.75%--units::ReplayerStream::peek()
+                        --0.55%--0xfff8b8cffff8b8ec
+     0.74%  [.] units::Router::eject_select(sim::Ctx&, unsigned int&)                                                                                                                                                                                                                                              -      -            
+             --0.71%--units::Router::eject_select(sim::Ctx&, unsigned int&)
+     0.73%  [.] units::BigSram::serve(sim::Ctx&, unsigned int, unsigned long)                                                                                                                                                                                                                                      -      -            
