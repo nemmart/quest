@@ -1,0 +1,154 @@
+kit sha256 5c6c53e544fe21fc6b70840d07fa524a58946a6da39116d6964827d37d8881eb
+kit: meshsim 4a38467 (sim-w16), built 2026-11-10; host godspeed; 16 CPUs; Ubuntu clang version 18.1.3 (1ubuntu1)
+
+==== machine (D21) (07:27:52)
+model:     Intel(R) Core(TM) i5-14400F
+sockets:   1; CPUs usable 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15 (16 of 16 online)
+P cores:   6 cores, CPUs 0,1,2,3,4,5,6,7,8,9,10,11 (12 threads), max 4700000 kHz, min 800000 kHz
+E cores:   4 CPUs 12,13,14,15, max 3500000 kHz, min 800000 kHz
+placement: 0,2,4,6,8,10,1,3,5,7,9,11,12,13,14,15
+governor:  powersave
+caches:    L1d cache: 416 KiB (10 instances);L1i cache: 448 KiB (10 instances);L2 cache: 9.5 MiB (7 instances);L3 cache: 20 MiB (1 instance);
+memory:    MemTotal: 65671456 kB
+kernel:    Linux 6.8.0-147-generic
+gcc:       g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+clang:     Ubuntu clang version 18.1.3 (1ubuntu1)
+java:      openjdk version "21.0.13.0.3" 2026-10-24
+ 07:27:52 up 5 days, 22:32,  1 user,  load average: 0.03, 0.01, 0.00
+
+==== build (clang release; clang release -g for perf) (07:27:52)
+VERDICT build: PASS
+
+==== inputs (07:28:06)
+VERDICT inputs: PASS
+
+==== 1. checked runs: one domain and the 6-domain split, every point, the rows (parallel) (07:28:06)
+evm-1: boot-end 7222 (ref: 7222)
+evm-1: end: C&C 3 and every tile exited at cycle 23940706 (ref's c.cycle 23940707)
+evm-1: points: 241 checked, 0 with a difference, a PULSE_DMA in flight at 1; request bus lag_cycles 0; parts 1
+evm-1: tr_results: status 1, windows 64, transfers 14162, ERRORS 0x0, advice left 0
+evm-1: exits: 64 of 64 tiles exited 1; rows: 64 of 64 tiles equal to rows.bin (count and hash)
+VERDICT check-evm-1: PASS
+evm-6: boot-end 7222 (ref: 7222)
+evm-6: end: C&C 3 and every tile exited at cycle 23940706 (ref's c.cycle 23940707)
+evm-6: points: 241 checked, 0 with a difference, a PULSE_DMA in flight at 1; request bus lag_cycles 0; parts 6
+evm-6: tr_results: status 1, windows 64, transfers 14162, ERRORS 0x0, advice left 0
+evm-6: exits: 64 of 64 tiles exited 1; rows: 64 of 64 tiles equal to rows.bin (count and hash)
+VERDICT check-evm-6: PASS
+cyclone-1: boot-end 7222 (ref: 7222)
+cyclone-1: end: C&C 3 and every tile exited at cycle 28319575 (ref's c.cycle 28319576)
+cyclone-1: points: 285 checked, 0 with a difference, a PULSE_DMA in flight at 1; request bus lag_cycles 0; parts 1
+cyclone-1: tr_results: status 1, windows 64, transfers 15716, ERRORS 0x0, advice left 0
+cyclone-1: exits: 64 of 64 tiles exited 1; rows: 64 of 64 tiles equal to rows.bin (count and hash)
+VERDICT check-cyclone-1: PASS
+cyclone-6: boot-end 7222 (ref: 7222)
+cyclone-6: end: C&C 3 and every tile exited at cycle 28319575 (ref's c.cycle 28319576)
+cyclone-6: points: 285 checked, 0 with a difference, a PULSE_DMA in flight at 1; request bus lag_cycles 0; parts 6
+cyclone-6: tr_results: status 1, windows 64, transfers 15716, ERRORS 0x0, advice left 0
+cyclone-6: exits: 64 of 64 tiles exited 1; rows: 64 of 64 tiles equal to rows.bin (count and hash)
+VERDICT check-cyclone-6: PASS
+
+==== 2. timing: one thread on CPU 0, the split on CPUs 0,2,4,6,8,10; 3 repetitions each; nothing else running (07:28:46)
+rep 0: parts 1, setup 0.031 s, boot 0.006 s (to 7222), segment 24.307 s for 23933484 cycles, 1.0156 us per cycle
+rep 1: parts 1, setup 0.031 s, boot 0.006 s (to 7222), segment 24.293 s for 23933484 cycles, 1.0150 us per cycle
+rep 2: parts 1, setup 0.031 s, boot 0.006 s (to 7222), segment 24.298 s for 23933484 cycles, 1.0152 us per cycle
+rep 0: parts 6, setup 0.034 s, boot 0.036 s (to 7222), segment 20.977 s for 23933484 cycles, 0.8765 us per cycle
+rep 1: parts 6, setup 0.033 s, boot 0.037 s (to 7222), segment 20.926 s for 23933484 cycles, 0.8743 us per cycle
+rep 2: parts 6, setup 0.033 s, boot 0.036 s (to 7222), segment 20.936 s for 23933484 cycles, 0.8748 us per cycle
+VERDICT time-evm: PASS
+rep 0: parts 1, setup 0.077 s, boot 0.006 s (to 7222), segment 26.464 s for 28312353 cycles, 0.9347 us per cycle
+rep 1: parts 1, setup 0.077 s, boot 0.006 s (to 7222), segment 26.643 s for 28312353 cycles, 0.9411 us per cycle
+rep 2: parts 1, setup 0.075 s, boot 0.006 s (to 7222), segment 26.571 s for 28312353 cycles, 0.9385 us per cycle
+rep 0: parts 6, setup 0.077 s, boot 0.037 s (to 7222), segment 24.010 s for 28312353 cycles, 0.8480 us per cycle
+rep 1: parts 6, setup 0.078 s, boot 0.037 s (to 7222), segment 24.107 s for 28312353 cycles, 0.8515 us per cycle
+rep 2: parts 6, setup 0.083 s, boot 0.038 s (to 7222), segment 24.079 s for 28312353 cycles, 0.8505 us per cycle
+VERDICT time-cyclone: PASS
+
+==== 3. where the time goes: units by kind (one thread, calibrate), the split's phases, perf (07:33:35)
+rep 0: parts 1 (calibrate), setup 0.031 s, boot 0.007 s (to 7222), segment 25.963 s for 23933484 cycles, 1.0848 us per cycle
+  units: 24.506 s in steps (94.4% of the segment and boot); C&C 3's domain (tile 2, C&C 3) 15.794 s
+    cc:slot                  14.328 s  58.5%
+    slot                      7.695 s  31.4%
+    cc:ctl                    0.952 s   3.9%
+    router                    0.363 s   1.5%
+    ctl                       0.347 s   1.4%
+    cc:core                   0.261 s   1.1%
+    core                      0.160 s   0.7%
+    inj                       0.113 s   0.5%
+    sram                      0.096 s   0.4%
+    dir                       0.062 s   0.3%
+    cc:router                 0.051 s   0.2%
+    ag                        0.038 s   0.2%
+    we                        0.036 s   0.1%
+    ts                        0.004 s   0.0%
+rep 0: parts 6, setup 0.037 s, boot 0.038 s (to 7222), segment 21.438 s for 23933484 cycles, 0.8957 us per cycle
+  threads: intervals=7985051 total=53536092274 compute=0.2271 imbalance=0.7112 barrier_wait=0.0061 drain=0.0387 publish=0.0091 clear=0.0077 end=0.0001 other=-0.0000
+rep 0: parts 1 (calibrate), setup 0.077 s, boot 0.007 s (to 7222), segment 27.888 s for 28312353 cycles, 0.9850 us per cycle
+  units: 26.266 s in steps (94.2% of the segment and boot); C&C 3's domain (tile 2, C&C 3) 18.591 s
+    cc:slot                  16.915 s  64.4%
+    slot                      6.601 s  25.1%
+    cc:ctl                    1.125 s   4.3%
+    router                    0.411 s   1.6%
+    ctl                       0.355 s   1.4%
+    cc:core                   0.303 s   1.2%
+    core                      0.125 s   0.5%
+    inj                       0.123 s   0.5%
+    sram                      0.106 s   0.4%
+    dir                       0.065 s   0.2%
+    cc:router                 0.058 s   0.2%
+    we                        0.040 s   0.2%
+    ag                        0.037 s   0.1%
+    ts                        0.002 s   0.0%
+rep 0: parts 6, setup 0.077 s, boot 0.037 s (to 7222), segment 24.562 s for 28312353 cycles, 0.8675 us per cycle
+  threads: intervals=9444674 total=61331987412 compute=0.2192 imbalance=0.7184 barrier_wait=0.0073 drain=0.0371 publish=0.0100 clear=0.0080 end=0.0001 other=0.0000
+    34.80%  [.] units::SlotCore::peek(long, unsigned int, unsigned int, unsigned int&)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         -      -            
+            |--30.32%--units::SlotCore::peek(long, unsigned int, unsigned int, unsigned int&)
+            |--2.36%--units::PeriphSlot::publish(sim::Ctx&, long)
+             --1.71%--units::tracer::Tracer::word(long, int, unsigned int&)
+    24.07%  [.] units::PeriphSlot::publish(sim::Ctx&, long)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    -      -            
+            |--21.12%--units::PeriphSlot::publish(sim::Ctx&, long)
+             --2.83%--units::SlotCore::peek(long, unsigned int, unsigned int, unsigned int&)
+    10.30%  [.] units::tracer::Tracer::word(long, int, unsigned int&)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          -      -            
+            |--6.67%--units::tracer::Tracer::word(long, int, unsigned int&)
+            |--1.86%--units::tracer::Tracer::settle(long)
+             --1.77%--units::SlotCore::peek(long, unsigned int, unsigned int, unsigned int&)
+     3.68%  [.] units::Replayer::word(long, int, unsigned int&)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                -      -            
+            |--2.35%--units::Replayer::word(long, int, unsigned int&)
+             --1.18%--units::Replayer::settle(long)
+     2.50%  [.] units::TileCtl::step(sim::Ctx&)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                -      -            
+             --2.38%--units::TileCtl::step(sim::Ctx&)
+     2.42%  [.] units::tracer::Tracer::settle(long)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            -      -            
+            |--1.67%--units::tracer::Tracer::settle(long)
+             --0.60%--units::tracer::Tracer::word(long, int, unsigned int&)
+     2.09%  [.] units::Replayer::settle(long)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  -      -            
+             --1.74%--units::Replayer::settle(long)
+     1.61%  [.] units::PeriphSlot::step(sim::Ctx&)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             -      -            
+             --1.48%--units::PeriphSlot::step(sim::Ctx&)
+     1.20%  [.] units::SlotCore::live_events(long)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             -      -            
+             --1.12%--units::SlotCore::live_events(long)
+                        --1.03%--0xfff8e601fff8e599
+     1.14%  [.] sim::Engine::run_until(unsigned long)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          -      -            
+             --1.04%--sim::Engine::run_until(unsigned long)
+     1.08%  [.] void sim::detail::run_form<units::PeriphSlot, false>(sim::Engine&, sim::RunSet&)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               -      -            
+             --1.05%--void sim::detail::run_form<units::PeriphSlot, false>(sim::Engine&, sim::RunSet&)
+     0.96%  [.] units::RegBlockState::end_cycle(unsigned long, units::RegBlockState::In const&)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                -      -            
+             --0.90%--units::RegBlockState::end_cycle(unsigned long, units::RegBlockState::In const&)
+     0.75%  [.] void sim::detail::run_form<units::TileCore, false>(sim::Engine&, sim::RunSet&)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 -      -            
+             --0.68%--void sim::detail::run_form<units::TileCore, false>(sim::Engine&, sim::RunSet&)
+     0.71%  [.] void sim::detail::run_form<units::TileCtl, false>(sim::Engine&, sim::RunSet&)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  -      -            
+             --0.66%--void sim::detail::run_form<units::TileCtl, false>(sim::Engine&, sim::RunSet&)
+     0.65%  [.] units::Router::step(sim::Ctx&)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 -      -            
+             --0.60%--units::Router::step(sim::Ctx&)
+     0.63%  [.] units::SlotCore::run_cycle(long, unsigned int)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 -      -            
+             --0.52%--units::SlotCore::run_cycle(long, unsigned int)
+
+==== verdict (07:35:41)
+build PASS
+inputs PASS
+check-evm-1 PASS
+check-evm-6 PASS
+check-cyclone-1 PASS
+check-cyclone-6 PASS
+time-evm PASS
+time-cyclone PASS
+ALL PASS
