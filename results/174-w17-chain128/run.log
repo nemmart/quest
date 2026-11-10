@@ -1,0 +1,63 @@
+kit sha256 1729f722ba9627daee77a77ab4014c5cc2423b82c2c71c957d6f5e530aaf2854
+kit: meshsim af8348d (sim-w17), built 2026-11-10; host godspeed; 16 CPUs; Ubuntu clang version 18.1.3 (1ubuntu1)
+
+==== machine (D21) (10:29:15)
+model:     Intel(R) Core(TM) i5-14400F
+sockets:   1; CPUs usable 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15 (16 of 16 online)
+P cores:   6 cores, CPUs 0,1,2,3,4,5,6,7,8,9,10,11 (12 threads), max 4700000 kHz, min 800000 kHz
+E cores:   4 CPUs 12,13,14,15, max 3500000 kHz, min 800000 kHz
+placement: 0,2,4,6,8,10,1,3,5,7,9,11,12,13,14,15
+governor:  powersave
+caches:    L1d cache: 416 KiB (10 instances);L1i cache: 448 KiB (10 instances);L2 cache: 9.5 MiB (7 instances);L3 cache: 20 MiB (1 instance);
+memory:    MemTotal: 65671456 kB
+kernel:    Linux 6.8.0-147-generic
+gcc:       g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+clang:     Ubuntu clang version 18.1.3 (1ubuntu1)
+java:      openjdk version "21.0.13.0.3" 2026-10-24
+ 10:29:15 up 6 days,  1:33,  1 user,  load average: 0.00, 0.02, 0.09
+
+==== build (clang release) (10:29:15)
+ok   chain_json
+ok   chain_segments_round_trip
+ok   chain_w26_inputs
+ok   chain_landings
+ok   chain_oracle_files
+ok   chain_manifest
+ok   chain_stream_values
+./build/clang-release/test_chain: 7 passed, 0 failed, 0 skipped (debug-only)
+VERDICT build: PASS
+
+==== inputs (10:29:22)
+evm-zone-29: inputs checked (delivery 7142e894c80a0c9d491f21c852a942885e0abd97cfe6aefd0101d716824e138f, w26 57dc0ffe7574ab3e11f79f8414501bd1ceb2fd75faab0b03f3b4a6c2c61cad2d)
+cyclone-29: inputs checked (delivery f8a0622e144a944c51386b5b36f81101dcdeb16e5a8d950c1e9ca0e3097f8982, w26 ace78f61efbb9c0e418a0b1d7f54a79f6e299b7ff45ad7f09537b11961b95fba)
+VERDICT inputs: PASS
+P_ONE (one CPU per physical P core): 0,2,4,6,8,10; evm on CPU 0, cyclone on CPU 2
+VERDICT separate-cores: PASS
+
+==== the chains: segments 0-127, both workloads side by side (10:29:22)
+evm-zone-29: W26's inputs: image 496 pages (root 32, depth 2), map 2^13 lines (root 16032, depth 1), log2 K 23, lowest 0x7e000000; 128 segments; 8192 windows with files; loaded in 0.13 s
+evm-zone-29: segments 0-127: 128 of 128 OK; 2941623679 segment cycles (ran 2943440000), 536870912 rows; setup 7.73 s, boot 0.34 s, segment 878.54 s (0.2987 us/cycle), checks 63.51 s, carry 0.25 s; total 950.60 s
+evm: 128 of 128 segments OK with the start memory equal to ref's
+VERDICT chain-evm: PASS
+cyclone-29: W26's inputs: image 1519 pages (root 32, depth 2), map 2^13 lines (root 48768, depth 1), log2 K 24, lowest 0x7e000000; 128 segments; 8192 windows with files; loaded in 0.20 s
+cyclone-29: segments 0-127: 128 of 128 OK; 2817819737 segment cycles (ran 2819530000), 536870912 rows; setup 13.29 s, boot 0.34 s, segment 849.69 s (0.3015 us/cycle), checks 49.72 s, carry 1.17 s; total 914.52 s
+cyclone: 128 of 128 segments OK with the start memory equal to ref's
+VERDICT chain-cyclone: PASS
+
+==== segment 10 against Quest 173 (the run equal to golden-m3) (10:45:13)
+VERDICT evm-segment10-as-173: PASS
+VERDICT cyclone-segment10-as-173: PASS
+
+==== the table (segment, ok, exit, end, cycles, setup s, boot s, segment s, us/cycle) (10:45:13)
+evm: 128 rows in evm.csv
+cyclone: 128 rows in cyclone.csv
+
+==== verdict (10:45:13)
+build PASS
+inputs PASS
+separate-cores PASS
+chain-evm PASS
+chain-cyclone PASS
+evm-segment10-as-173 PASS
+cyclone-segment10-as-173 PASS
+ALL PASS
