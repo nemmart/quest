@@ -1,0 +1,22 @@
+drift (ERRORS [3]) and loopback token waits, EngineTest full's data sets [p4_drift]
+  data set                   run        drift tiles  drift events token-wait cycles  read window-full   run cycles
+  control: EngineTest drift  gap 4                1           158                 0                 0         1231
+    drift, each tile's first cycle (t<tile>@<cycle>): t7@106
+  uniform (Data(7, 65536))   gap 4                0             0                 0                 0        71238
+  uniform (Data(7, 65536))   gap 0                0             0                 0                 0        71178
+  uniform (Data(7, 65536))   gap 8                0             0                 0                 0        71298
+  zipfraw                    gap 4                0             0                 0                 0       294473
+  zipfraw                    gap 0                0             0                 0                 0       294413
+  zipfraw                    gap 8                0             0                 0                 0       294533
+  trace                      gap 4                0             0                 0                 0       706361
+  trace                      gap 0                0             0                 0                 0       706301
+  trace                      gap 8                0             0                 0                 0       706421
+  one99                      gap 4                0             0                 0                 0       434605
+  one99                      gap 0                0             0                 0                 0       434545
+  one99                      gap 8                0             0                 0                 0       434665
+  radix sort (16384 keys)    augment              0             0                 0                 0        16405
+  radix sort (16384 keys)    pass 1               0             0                 0                 0        16405
+  radix sort (16384 keys)    pass 2               0             0                 0                 0        16405
+  radix sort (16384 keys)    pass 3               0             0                 0                 0        16405
+  radix sort (16384 keys)    pass 4               0             0                 0                 0        16405
+  radix sort (16384 keys)    total                0             0                 0                 0        82025
