@@ -1,0 +1,69 @@
+kit sha256 bd69e3d9deef0313578fbdf0334be5defded022b33cc6bc55b8e5f0750b03f1b
+kit: meshsim sim-w22 060645c; host godspeed; 16 CPUs; Ubuntu clang version 18.1.3 (1ubuntu1); Model name:                              Intel(R) Core(TM) i5-14400F
+VERDICT build: PASS
+VERDICT net-structure,unicast: PASS
+p4_lines: equal, 2 lines = tests/p4suites/net.log lines 1-2; NetTest: 16887 passed, 0 failed
+VERDICT net-quick-structure,unicast: PASS
+p4_lines: equal, 2 lines = tests/p4suites/net-quick.log lines 1-2; NetTest: 16887 passed, 0 failed
+VERDICT net-shuf-structure,unicast: PASS
+p4_lines: equal, 2 lines = tests/p4suites/net-shuf.log lines 1-2; NetTest (shuffled, seed 5): 16887 passed, 0 failed
+VERDICT net-shuf2-structure,unicast: PASS
+p4_lines: equal, 2 lines = tests/p4suites/net-shuf2.log lines 1-2; NetTest (shuffled, seed 11): 16887 passed, 0 failed
+VERDICT net-routes: PASS
+p4_lines: equal, 1 lines = tests/p4suites/net.log lines 4-4; NetTest: 4032 passed, 0 failed
+VERDICT net-quick-routes: PASS
+p4_lines: equal, 1 lines = tests/p4suites/net-quick.log lines 4-4; NetTest: 4032 passed, 0 failed
+VERDICT net-shuf-routes: PASS
+p4_lines: equal, 1 lines = tests/p4suites/net-shuf.log lines 4-4; NetTest (shuffled, seed 5): 4032 passed, 0 failed
+VERDICT net-shuf2-routes: PASS
+p4_lines: equal, 1 lines = tests/p4suites/net-shuf2.log lines 4-4; NetTest (shuffled, seed 11): 4032 passed, 0 failed
+VERDICT net-random: PASS
+p4_lines: equal, 21 lines = tests/p4suites/net.log lines 5-25; NetTest: 6 passed, 0 failed
+VERDICT net-quick-random: PASS
+p4_lines: equal, 21 lines = tests/p4suites/net-quick.log lines 5-25; NetTest: 6 passed, 0 failed
+VERDICT net-shuf-random: PASS
+p4_lines: equal, 21 lines = tests/p4suites/net-shuf.log lines 5-25; NetTest (shuffled, seed 5): 6 passed, 0 failed
+VERDICT net-shuf2-random: PASS
+p4_lines: equal, 21 lines = tests/p4suites/net-shuf2.log lines 5-25; NetTest (shuffled, seed 11): 6 passed, 0 failed
+VERDICT net-fullrate: PASS
+p4_lines: equal, 10 lines = tests/p4suites/net.log lines 26-35; NetTest: 621 passed, 0 failed
+VERDICT net-quick-fullrate: PASS
+p4_lines: equal, 10 lines = tests/p4suites/net-quick.log lines 26-35; NetTest: 621 passed, 0 failed
+VERDICT net-shuf-fullrate: PASS
+p4_lines: equal, 10 lines = tests/p4suites/net-shuf.log lines 26-35; NetTest (shuffled, seed 5): 621 passed, 0 failed
+VERDICT net-shuf2-fullrate: PASS
+p4_lines: equal, 10 lines = tests/p4suites/net-shuf2.log lines 26-35; NetTest (shuffled, seed 11): 621 passed, 0 failed
+VERDICT net-fanin: PASS
+p4_lines: equal, 9 lines = tests/p4suites/net.log lines 38-46; NetTest: 13 passed, 0 failed
+VERDICT net-quick-fanin: PASS
+p4_lines: equal, 9 lines = tests/p4suites/net-quick.log lines 38-46; NetTest: 13 passed, 0 failed
+VERDICT net-shuf-fanin: PASS
+p4_lines: equal, 9 lines = tests/p4suites/net-shuf.log lines 38-46; NetTest (shuffled, seed 5): 13 passed, 0 failed
+VERDICT net-shuf2-fanin: PASS
+p4_lines: equal, 9 lines = tests/p4suites/net-shuf2.log lines 38-46; NetTest (shuffled, seed 11): 13 passed, 0 failed
+skewtable: exit 0 in 225 s
+VERDICT skewtable: PASS
+
+build PASS
+net-structure,unicast PASS
+net-quick-structure,unicast PASS
+net-shuf-structure,unicast PASS
+net-shuf2-structure,unicast PASS
+net-routes PASS
+net-quick-routes PASS
+net-shuf-routes PASS
+net-shuf2-routes PASS
+net-random PASS
+net-quick-random PASS
+net-shuf-random PASS
+net-shuf2-random PASS
+net-fullrate PASS
+net-quick-fullrate PASS
+net-shuf-fullrate PASS
+net-shuf2-fullrate PASS
+net-fanin PASS
+net-quick-fanin PASS
+net-shuf-fanin PASS
+net-shuf2-fanin PASS
+skewtable PASS
+DONE
