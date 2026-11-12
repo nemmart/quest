@@ -3,7 +3,7 @@ kit: meshsim sim-w22 bb6ed970; host godspeed; 16 CPUs; Ubuntu clang version 18.1
 VERDICT build: PASS
 VERDICT engine-full: FAIL
 engine-full: 5 s
-tests/p4_lines.sh: line 11: 512250 Aborted                 (core dumped) "$@" > "$o" 2>&1
+tests/p4_lines.sh: line 11: 512953 Aborted                 (core dumped) "$@" > "$o" 2>&1
 p4_lines: no lines printed
 FATAL src/units/director.h:110: director (tile 0): the harness's log is full (16384 entries)
 VERDICT rdport-full-fromc: PASS
@@ -11,10 +11,10 @@ rdport-full-fromc: 0 s
   (allowed) FAIL [read port from C] the overflow (invariant 8), and nothing else, reported: violations: 0
 p4_lines: equal, 1 lines = tests/p4suites/rdport-full.log lines 1-1; ReadPortGatherTest full: 515 passed, 1 failed
 VERDICT rdport-full-gather: PASS
-rdport-full-gather: 9 s
+rdport-full-gather: 8 s
 p4_lines: equal, 7 lines = tests/p4suites/rdport-full.log lines 30-36; ReadPortGatherTest full: 24 passed, 0 failed
 VERDICT rdport-full-gatherc: PASS
-rdport-full-gatherc: 5 s
+rdport-full-gatherc: 6 s
   (allowed) FAIL [gather from C] gather from C: no invariant violations
 p4_lines: equal, 1 lines = tests/p4suites/rdport-full.log lines 37-37; ReadPortGatherTest full: 2 passed, 1 failed
 
