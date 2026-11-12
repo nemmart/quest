@@ -1,0 +1,15 @@
+kit assembled in /tmp/w24-181/ref/kit: 424K
+openjdk version "21.0.13.0.3" 2026-10-24
+== generating key sets into keys-65536: reverse,sorted,trace100-30,uniform
+keys-65536/uniform.keys: 64 x 65536
+keys-65536/trace100-30.keys: 64 x 65536
+keys-65536/sorted.keys: 64 x 65536
+keys-65536/reverse.keys: 64 x 65536
+== inputs: 10 files match HASHES
+== 5 runs to do (5 selected), 5 at a time, heap 6g each; logs in results/
+07:20:17 p4/sorted-kv32: exit 0, 122 s; SortTest: 10 passed, 0 failed
+07:21:08 p4/uniform-k128: exit 0, 173 s; SortTest: 11 passed, 0 failed
+07:21:19 p4/reverse-k128: exit 0, 184 s; SortTest: 10 passed, 0 failed
+07:21:40 shuf/uniform-k128: exit 0, 205 s; SortTest (shuffled, seed 4): 11 passed, 0 failed
+07:21:51 p4/trace100-30-k128: exit 0, 216 s; SortTest: 10 passed, 0 failed
+wrote results/SUMMARY.md and results/all.csv (5 runs)

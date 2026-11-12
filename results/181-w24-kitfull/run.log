@@ -1,0 +1,63 @@
+kit sha256 a21c61c9edbb471f9e073db99b77adcc90239c60681930f11ef18b3107b92d7e
+kit: meshsim sim-w24 fd24088f; host godspeed; 16 CPUs
+Model name:                              Intel(R) Core(TM) i5-14400F
+Thread(s) per core:                      2
+Core(s) per socket:                      10
+Socket(s):                               1
+CPU max MHz:                             4700.0000
+MemTotal:       65671464 kB
+openjdk version "21.0.13.0.3" 2026-10-24
+Ubuntu clang version 18.1.3 (1ubuntu1)
+== inputs: 10 files match HASHES
+== 5 runs to do (5 selected), 5 at a time; logs in results/
+07:18:38 p4/sorted-kv32: exit 0, 34 s; SortTest: 10 passed, 0 failed
+07:18:51 p4/reverse-k128: exit 0, 47 s; SortTest: 10 passed, 0 failed
+07:18:52 p4/trace100-30-k128: exit 0, 48 s; SortTest: 10 passed, 0 failed
+07:19:05 p4/uniform-k128: exit 0, 61 s; SortTest: 11 passed, 0 failed
+07:19:25 shuf/uniform-k128: exit 0, 81 s; SortTest (shuffled, seed 4): 11 passed, 0 failed
+wrote results/SUMMARY.md and results/all.csv (5 runs)
+== inputs: 10 files match HASHES
+== 5 runs to do (5 selected), 5 at a time, heap 6g each; logs in results/
+07:20:17 p4/sorted-kv32: exit 0, 122 s; SortTest: 10 passed, 0 failed
+07:21:08 p4/uniform-k128: exit 0, 173 s; SortTest: 11 passed, 0 failed
+07:21:19 p4/reverse-k128: exit 0, 184 s; SortTest: 10 passed, 0 failed
+07:21:40 shuf/uniform-k128: exit 0, 205 s; SortTest (shuffled, seed 4): 11 passed, 0 failed
+07:21:51 p4/trace100-30-k128: exit 0, 216 s; SortTest: 10 passed, 0 failed
+wrote results/SUMMARY.md and results/all.csv (5 runs)
+VERDICT cpp-runs: PASS
+VERDICT ref-runs: PASS
+SAME csv p4_reverse-k128.csv (peaks aside)
+SAME log p4_reverse-k128.log (peak lines aside)
+SAME TOTAL p4_reverse-k128.log
+SAME csv p4_sorted-kv32.csv (peaks aside)
+SAME log p4_sorted-kv32.log (peak lines aside)
+SAME TOTAL p4_sorted-kv32.log
+SAME csv p4_trace100-30-k128.csv (peaks aside)
+SAME log p4_trace100-30-k128.log (peak lines aside)
+SAME TOTAL p4_trace100-30-k128.log
+SAME csv p4_uniform-k128.csv (peaks aside)
+SAME log p4_uniform-k128.log (peak lines aside)
+SAME TOTAL p4_uniform-k128.log
+SAME csv shuf_uniform-k128.csv (peaks aside)
+SAME log shuf_uniform-k128.log (peak lines aside)
+SAME TOTAL shuf_uniform-k128.log
+VERDICT cpp-equals-ref: PASS
+# /tmp/w24-181/cpp/results against /tmp/w24-181/ref/kit/results
+
+| run | path | TOTAL new | TOTAL ref | diff | steps that differ |
+|---|---|---|---|---|---|
+| p4_reverse-k128 | TH | 1396769 | 1396769 | 0 | L1, SPLIT, XB, RED, XC, TH, SWEEP, DESC, K, K1.0, K1.1, K1.2, K1.3, K1.4, K2.0, K2.1, K2.2, K2.3, K2.4, V, V1.0, V1.1, V1.2, V1.3, V1.4, V2.0, V2.1, V2.2, V2.3, V2.4, L2 |
+| p4_sorted-kv32 | LB | 905096 | 905096 | 0 | L1, SPLIT, XB, RED, XC, TH, SWEEP, DESC, K, K1.0, K1.1, K1.2, K1.3, K1.4, K2.0, K2.1, K2.2, K2.3, K2.4, L2 |
+| p4_trace100-30-k128 | BT | 1881549 | 1881549 | 0 | L1, SPLIT, XB, RED, XC, TH, SWEEP, DESC, K, K1.0, K1.1, K1.2, K1.3, K1.4, K2.0, K2.1, K2.2, K2.3, K2.4, V, V1.0, V1.1, V1.2, V1.3, V1.4, V2.0, V2.1, V2.2, V2.3, V2.4, L2 |
+| p4_uniform-k128 | direct | 1229687 | 1229687 | 0 | L1, SPLIT, XB, RED, XC, TH, SWEEP, DESC, K, K1.0, K1.1, K1.2, K1.3, K1.4, K2.0, K2.1, K2.2, K2.3, K2.4, V, V1.0, V1.1, V1.2, V1.3, V1.4, V2.0, V2.1, V2.2, V2.3, V2.4, L2 |
+| shuf_uniform-k128 | direct | 1229687 | 1229687 | 0 | L1, SPLIT, XB, RED, XC, TH, SWEEP, DESC, K, K1.0, K1.1, K1.2, K1.3, K1.4, K2.0, K2.1, K2.2, K2.3, K2.4, V, V1.0, V1.1, V1.2, V1.3, V1.4, V2.0, V2.1, V2.2, V2.3, V2.4, L2 |
+
+0 identical, 5 differ, 0 not in the reference.
+
+VERDICT uniform-k128-vs-sort64k: PASS
+
+cpp-runs PASS
+ref-runs PASS
+cpp-equals-ref PASS
+uniform-k128-vs-sort64k PASS
+DONE

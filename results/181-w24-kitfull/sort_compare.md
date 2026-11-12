@@ -1,0 +1,158 @@
+# /tmp/w24-181/cpp/results against /tmp/w24-181/ref/kit/results
+
+| run | path | TOTAL new | TOTAL ref | diff | steps that differ |
+|---|---|---|---|---|---|
+| p4_reverse-k128 | TH | 1396769 | 1396769 | 0 | L1, SPLIT, XB, RED, XC, TH, SWEEP, DESC, K, K1.0, K1.1, K1.2, K1.3, K1.4, K2.0, K2.1, K2.2, K2.3, K2.4, V, V1.0, V1.1, V1.2, V1.3, V1.4, V2.0, V2.1, V2.2, V2.3, V2.4, L2 |
+| p4_sorted-kv32 | LB | 905096 | 905096 | 0 | L1, SPLIT, XB, RED, XC, TH, SWEEP, DESC, K, K1.0, K1.1, K1.2, K1.3, K1.4, K2.0, K2.1, K2.2, K2.3, K2.4, L2 |
+| p4_trace100-30-k128 | BT | 1881549 | 1881549 | 0 | L1, SPLIT, XB, RED, XC, TH, SWEEP, DESC, K, K1.0, K1.1, K1.2, K1.3, K1.4, K2.0, K2.1, K2.2, K2.3, K2.4, V, V1.0, V1.1, V1.2, V1.3, V1.4, V2.0, V2.1, V2.2, V2.3, V2.4, L2 |
+| p4_uniform-k128 | direct | 1229687 | 1229687 | 0 | L1, SPLIT, XB, RED, XC, TH, SWEEP, DESC, K, K1.0, K1.1, K1.2, K1.3, K1.4, K2.0, K2.1, K2.2, K2.3, K2.4, V, V1.0, V1.1, V1.2, V1.3, V1.4, V2.0, V2.1, V2.2, V2.3, V2.4, L2 |
+| shuf_uniform-k128 | direct | 1229687 | 1229687 | 0 | L1, SPLIT, XB, RED, XC, TH, SWEEP, DESC, K, K1.0, K1.1, K1.2, K1.3, K1.4, K2.0, K2.1, K2.2, K2.3, K2.4, V, V1.0, V1.1, V1.2, V1.3, V1.4, V2.0, V2.1, V2.2, V2.3, V2.4, L2 |
+
+0 identical, 5 differ, 0 not in the reference.
+
+## Differences
+
+- p4_reverse-k128 L1: peak_link 1 -> 0; peak_eject 1 -> 0; peak_weIn 1 -> 0; peak_gatherQ 1 -> 0; peak_area 1 -> 0
+- p4_reverse-k128 SPLIT: peak_link 2 -> 0; peak_eject 2 -> 0; peak_area 1 -> 0
+- p4_reverse-k128 XB: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_reverse-k128 RED: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_reverse-k128 XC: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_reverse-k128 TH: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_reverse-k128 SWEEP: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_reverse-k128 DESC: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_reverse-k128 K: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_reverse-k128 K1.0: peak_link 4 -> 0; peak_eject 5 -> 0; peak_weIn 1 -> 0; peak_area 1 -> 0
+- p4_reverse-k128 K1.1: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_reverse-k128 K1.2: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_reverse-k128 K1.3: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_reverse-k128 K1.4: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_reverse-k128 K2.0: peak_link 4 -> 0; peak_eject 5 -> 0; peak_weIn 1 -> 0; peak_area 1 -> 0
+- p4_reverse-k128 K2.1: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_reverse-k128 K2.2: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_reverse-k128 K2.3: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_reverse-k128 K2.4: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_reverse-k128 V: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_reverse-k128 V1.0: peak_link 4 -> 0; peak_eject 5 -> 0; peak_weIn 1 -> 0; peak_area 1 -> 0
+- p4_reverse-k128 V1.1: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_reverse-k128 V1.2: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_reverse-k128 V1.3: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_reverse-k128 V1.4: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_reverse-k128 V2.0: peak_link 4 -> 0; peak_eject 5 -> 0; peak_weIn 1 -> 0; peak_area 1 -> 0
+- p4_reverse-k128 V2.1: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_reverse-k128 V2.2: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_reverse-k128 V2.3: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_reverse-k128 V2.4: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_reverse-k128 L2: peak_link 1 -> 0; peak_eject 1 -> 0; peak_weIn 1 -> 0; peak_gatherQ 1 -> 0; peak_area 1 -> 0
+- p4_sorted-kv32 L1: peak_link 1 -> 0; peak_eject 1 -> 0; peak_weIn 1 -> 0; peak_area 1 -> 0
+- p4_sorted-kv32 SPLIT: peak_link 2 -> 0; peak_eject 2 -> 0; peak_area 1 -> 0
+- p4_sorted-kv32 XB: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_sorted-kv32 RED: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_sorted-kv32 XC: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_sorted-kv32 TH: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_sorted-kv32 SWEEP: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_sorted-kv32 DESC: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_sorted-kv32 K: peak_link 1 -> 0; peak_eject 1 -> 0; peak_weIn 1 -> 0; peak_area 1 -> 0
+- p4_sorted-kv32 K1.0: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_sorted-kv32 K1.1: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_sorted-kv32 K1.2: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_sorted-kv32 K1.3: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_sorted-kv32 K1.4: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_sorted-kv32 K2.0: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_sorted-kv32 K2.1: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_sorted-kv32 K2.2: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_sorted-kv32 K2.3: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_sorted-kv32 K2.4: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_sorted-kv32 L2: peak_link 1 -> 0; peak_eject 1 -> 0; peak_weIn 1 -> 0; peak_area 1 -> 0
+- p4_trace100-30-k128 L1: peak_link 1 -> 0; peak_eject 1 -> 0; peak_weIn 1 -> 0; peak_gatherQ 1 -> 0; peak_area 1 -> 0
+- p4_trace100-30-k128 SPLIT: peak_link 2 -> 0; peak_eject 2 -> 0; peak_area 1 -> 0
+- p4_trace100-30-k128 XB: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_trace100-30-k128 RED: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_trace100-30-k128 XC: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_trace100-30-k128 TH: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_trace100-30-k128 SWEEP: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_trace100-30-k128 DESC: peak_link 2 -> 0; peak_eject 2 -> 0
+- p4_trace100-30-k128 K: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_trace100-30-k128 K1.0: peak_link 5 -> 0; peak_eject 5 -> 0; peak_weIn 1 -> 0; peak_area 1 -> 0
+- p4_trace100-30-k128 K1.1: peak_link 5 -> 0; peak_eject 4 -> 0; peak_weIn 1 -> 0; peak_area 1 -> 0
+- p4_trace100-30-k128 K1.2: peak_link 5 -> 0; peak_eject 5 -> 0; peak_weIn 1 -> 0; peak_area 1 -> 0
+- p4_trace100-30-k128 K1.3: peak_link 4 -> 0; peak_eject 3 -> 0; peak_weIn 1 -> 0; peak_area 1 -> 0
+- p4_trace100-30-k128 K1.4: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_trace100-30-k128 K2.0: peak_link 5 -> 0; peak_eject 4 -> 0; peak_weIn 1 -> 0; peak_area 1 -> 0
+- p4_trace100-30-k128 K2.1: peak_link 5 -> 0; peak_eject 4 -> 0; peak_weIn 1 -> 0; peak_area 1 -> 0
+- p4_trace100-30-k128 K2.2: peak_link 5 -> 0; peak_eject 4 -> 0; peak_weIn 1 -> 0; peak_area 1 -> 0
+- p4_trace100-30-k128 K2.3: peak_link 4 -> 0; peak_eject 2 -> 0; peak_weIn 1 -> 0; peak_area 1 -> 0
+- p4_trace100-30-k128 K2.4: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_trace100-30-k128 V: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_trace100-30-k128 V1.0: peak_link 5 -> 0; peak_eject 5 -> 0; peak_weIn 1 -> 0; peak_area 1 -> 0
+- p4_trace100-30-k128 V1.1: peak_link 5 -> 0; peak_eject 4 -> 0; peak_weIn 1 -> 0; peak_area 1 -> 0
+- p4_trace100-30-k128 V1.2: peak_link 5 -> 0; peak_eject 5 -> 0; peak_weIn 1 -> 0; peak_area 1 -> 0
+- p4_trace100-30-k128 V1.3: peak_link 4 -> 0; peak_eject 3 -> 0; peak_weIn 1 -> 0; peak_area 1 -> 0
+- p4_trace100-30-k128 V1.4: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_trace100-30-k128 V2.0: peak_link 5 -> 0; peak_eject 4 -> 0; peak_weIn 1 -> 0; peak_area 1 -> 0
+- p4_trace100-30-k128 V2.1: peak_link 5 -> 0; peak_eject 4 -> 0; peak_weIn 1 -> 0; peak_area 1 -> 0
+- p4_trace100-30-k128 V2.2: peak_link 5 -> 0; peak_eject 4 -> 0; peak_weIn 1 -> 0; peak_area 1 -> 0
+- p4_trace100-30-k128 V2.3: peak_link 4 -> 0; peak_eject 2 -> 0; peak_weIn 1 -> 0; peak_area 1 -> 0
+- p4_trace100-30-k128 V2.4: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_trace100-30-k128 L2: peak_link 1 -> 0; peak_eject 1 -> 0; peak_weIn 1 -> 0; peak_gatherQ 1 -> 0; peak_area 1 -> 0
+- p4_uniform-k128 L1: peak_link 1 -> 0; peak_eject 1 -> 0; peak_weIn 1 -> 0; peak_gatherQ 1 -> 0; peak_area 1 -> 0
+- p4_uniform-k128 SPLIT: peak_link 2 -> 0; peak_eject 2 -> 0; peak_area 1 -> 0
+- p4_uniform-k128 XB: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_uniform-k128 RED: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_uniform-k128 XC: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_uniform-k128 TH: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_uniform-k128 SWEEP: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_uniform-k128 DESC: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_uniform-k128 K: peak_link 5 -> 0; peak_eject 3 -> 0; peak_weIn 1 -> 0; peak_area 1 -> 0
+- p4_uniform-k128 K1.0: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_uniform-k128 K1.1: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_uniform-k128 K1.2: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_uniform-k128 K1.3: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_uniform-k128 K1.4: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_uniform-k128 K2.0: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_uniform-k128 K2.1: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_uniform-k128 K2.2: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_uniform-k128 K2.3: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_uniform-k128 K2.4: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_uniform-k128 V: peak_link 5 -> 0; peak_eject 3 -> 0; peak_weIn 1 -> 0; peak_area 1 -> 0
+- p4_uniform-k128 V1.0: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_uniform-k128 V1.1: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_uniform-k128 V1.2: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_uniform-k128 V1.3: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_uniform-k128 V1.4: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_uniform-k128 V2.0: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_uniform-k128 V2.1: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_uniform-k128 V2.2: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_uniform-k128 V2.3: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_uniform-k128 V2.4: peak_link 1 -> 0; peak_eject 1 -> 0
+- p4_uniform-k128 L2: peak_link 1 -> 0; peak_eject 1 -> 0; peak_weIn 1 -> 0; peak_gatherQ 1 -> 0; peak_area 1 -> 0
+- shuf_uniform-k128 L1: peak_link 1 -> 0; peak_eject 1 -> 0; peak_weIn 1 -> 0; peak_gatherQ 1 -> 0; peak_area 1 -> 0
+- shuf_uniform-k128 SPLIT: peak_link 2 -> 0; peak_eject 2 -> 0; peak_area 1 -> 0
+- shuf_uniform-k128 XB: peak_link 1 -> 0; peak_eject 1 -> 0
+- shuf_uniform-k128 RED: peak_link 1 -> 0; peak_eject 1 -> 0
+- shuf_uniform-k128 XC: peak_link 1 -> 0; peak_eject 1 -> 0
+- shuf_uniform-k128 TH: peak_link 1 -> 0; peak_eject 1 -> 0
+- shuf_uniform-k128 SWEEP: peak_link 1 -> 0; peak_eject 1 -> 0
+- shuf_uniform-k128 DESC: peak_link 1 -> 0; peak_eject 1 -> 0
+- shuf_uniform-k128 K: peak_link 5 -> 0; peak_eject 3 -> 0; peak_weIn 1 -> 0; peak_area 1 -> 0
+- shuf_uniform-k128 K1.0: peak_link 1 -> 0; peak_eject 1 -> 0
+- shuf_uniform-k128 K1.1: peak_link 1 -> 0; peak_eject 1 -> 0
+- shuf_uniform-k128 K1.2: peak_link 1 -> 0; peak_eject 1 -> 0
+- shuf_uniform-k128 K1.3: peak_link 1 -> 0; peak_eject 1 -> 0
+- shuf_uniform-k128 K1.4: peak_link 1 -> 0; peak_eject 1 -> 0
+- shuf_uniform-k128 K2.0: peak_link 1 -> 0; peak_eject 1 -> 0
+- shuf_uniform-k128 K2.1: peak_link 1 -> 0; peak_eject 1 -> 0
+- shuf_uniform-k128 K2.2: peak_link 1 -> 0; peak_eject 1 -> 0
+- shuf_uniform-k128 K2.3: peak_link 1 -> 0; peak_eject 1 -> 0
+- shuf_uniform-k128 K2.4: peak_link 1 -> 0; peak_eject 1 -> 0
+- shuf_uniform-k128 V: peak_link 5 -> 0; peak_eject 3 -> 0; peak_weIn 1 -> 0; peak_area 1 -> 0
+- shuf_uniform-k128 V1.0: peak_link 1 -> 0; peak_eject 1 -> 0
+- shuf_uniform-k128 V1.1: peak_link 1 -> 0; peak_eject 1 -> 0
+- shuf_uniform-k128 V1.2: peak_link 1 -> 0; peak_eject 1 -> 0
+- shuf_uniform-k128 V1.3: peak_link 1 -> 0; peak_eject 1 -> 0
+- shuf_uniform-k128 V1.4: peak_link 1 -> 0; peak_eject 1 -> 0
+- shuf_uniform-k128 V2.0: peak_link 1 -> 0; peak_eject 1 -> 0
+- shuf_uniform-k128 V2.1: peak_link 1 -> 0; peak_eject 1 -> 0
+- shuf_uniform-k128 V2.2: peak_link 1 -> 0; peak_eject 1 -> 0
+- shuf_uniform-k128 V2.3: peak_link 1 -> 0; peak_eject 1 -> 0
+- shuf_uniform-k128 V2.4: peak_link 1 -> 0; peak_eject 1 -> 0
+- shuf_uniform-k128 L2: peak_link 1 -> 0; peak_eject 1 -> 0; peak_weIn 1 -> 0; peak_gatherQ 1 -> 0; peak_area 1 -> 0

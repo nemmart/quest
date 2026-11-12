@@ -1,0 +1,14 @@
+meshsim v1.35 kit: sort_test d1b5929ac191...
+== generating key sets into keys-65536 with pipeline/keys' KeyGen (a JDK is present): reverse,sorted,trace100-30,uniform
+keys-65536/uniform.keys: 64 x 65536
+keys-65536/trace100-30.keys: 64 x 65536
+keys-65536/sorted.keys: 64 x 65536
+keys-65536/reverse.keys: 64 x 65536
+== inputs: 10 files match HASHES
+== 5 runs to do (5 selected), 5 at a time; logs in results/
+07:18:38 p4/sorted-kv32: exit 0, 34 s; SortTest: 10 passed, 0 failed
+07:18:51 p4/reverse-k128: exit 0, 47 s; SortTest: 10 passed, 0 failed
+07:18:52 p4/trace100-30-k128: exit 0, 48 s; SortTest: 10 passed, 0 failed
+07:19:05 p4/uniform-k128: exit 0, 61 s; SortTest: 11 passed, 0 failed
+07:19:25 shuf/uniform-k128: exit 0, 81 s; SortTest (shuffled, seed 4): 11 passed, 0 failed
+wrote results/SUMMARY.md and results/all.csv (5 runs)
