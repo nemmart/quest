@@ -1,0 +1,159 @@
+kit sha256 2f4cca802d4e25c8c0897bc4546c11c0603961e051bd5bce65deb05a0bb30954
+kit: meshsim 83013b22 (sim-w22), the freeze check kit, built 2026-11-12; host godspeed; 16 CPUs; Ubuntu clang version 18.1.3 (1ubuntu1); openjdk version "21.0.13.0.3" 2026-10-24
+
+==== 6. the machine (D21) (15:30:47, +0 s)
+model:     Intel(R) Core(TM) i5-14400F
+sockets:   1; CPUs usable 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15 (16 of 16 online)
+P cores:   6 cores, CPUs 0,1,2,3,4,5,6,7,8,9,10,11 (12 threads), max 4700000 kHz, min 800000 kHz
+E cores:   4 CPUs 12,13,14,15, max 3500000 kHz, min 800000 kHz
+placement: 0,2,4,6,8,10,1,3,5,7,9,11,12,13,14,15
+governor:  powersave
+caches:    L1d cache: 416 KiB (10 instances);L1i cache: 448 KiB (10 instances);L2 cache: 9.5 MiB (7 instances);L3 cache: 20 MiB (1 instance);
+memory:    MemTotal: 65671464 kB
+kernel:    Linux 6.8.0-147-generic
+gcc:       g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+clang:     Ubuntu clang version 18.1.3 (1ubuntu1)
+java:      openjdk version "21.0.13.0.3" 2026-10-24
+ 15:30:47 up 11:56,  1 user,  load average: 0.08, 0.02, 0.01
+VERDICT machine: PASS
+
+==== build: clang release (test_sort, t2, chain, test_chain); the acceptance kit's programs (clang suite) (15:30:47, +0 s)
+VERDICT build: PASS
+
+==== 1. ./run_tests.sh all --check (in the background) (15:30:59, +12 s)
+
+==== 4. the chains, segments 0-127 of both workloads (in the background) (15:30:59, +12 s)
+evm-zone-29: inputs checked
+cyclone-29: inputs checked
+
+==== 2. the full-size sort (p4 uniform-k128), one thread and 6 domains (15:31:00, +13 s)
+sort (1 domain): 321 points equal, through cycle 1244564 (the golden's last 1244564)
+sort verify: keys misplaced 0, receive sizes wrong 0, values wrong 0, cores not exited 0: 0, violations 0, ERRORS 0
+sort: TOTAL 1229687 cycles (L1 GO at 14838 -> L2 all READY at 1244525); phases 98 (sort64k.out: TOTAL 1229687; phases.csv: 98 after the boot's)
+VERDICT sort-one: PASS
+tasks/186-w22-freeze-rehearsal.sh: line 84: 582742 Aborted                 (core dumped) ( cd "$KS" && env SORT_SIZE=64k SORT_PARTS=$2 SORT_KEYS="$KS/$KD/uniform.keys" SORT_FP="$FP64" ./build/clang-release/test_sort sort_runs ) > "$RES/$1.log" 2>&1
+FATAL src/units/chip.cpp:260: row_bands: 6 parts (1, 2, 4 or 8)
+VERDICT sort-split6: FAIL
+
+==== 3. T2 on segment 10 of both workloads, every point against golden-m3, one domain and 6 (parallel) (15:31:39, +52 s)
+evm-1: boot-end 7222 (ref: 7222)
+evm-1: end: C&C 3 and every tile exited at cycle 23940706 (ref's c.cycle 23940707)
+evm-1: points: 241 checked, 0 with a difference, a PULSE_DMA in flight at 1; request bus lag_cycles 0; parts 1
+evm-1: tr_results: status 1, windows 64, transfers 14162, ERRORS 0x0, advice left 0
+evm-1: exits: 64 of 64 tiles exited 1; rows: 64 of 64 tiles equal to rows.bin (count and hash)
+VERDICT t2-evm-1: PASS
+evm-6: boot-end 7222 (ref: 7222)
+evm-6: end: C&C 3 and every tile exited at cycle 23940706 (ref's c.cycle 23940707)
+evm-6: points: 241 checked, 0 with a difference, a PULSE_DMA in flight at 1; request bus lag_cycles 0; parts 6
+evm-6: tr_results: status 1, windows 64, transfers 14162, ERRORS 0x0, advice left 0
+evm-6: exits: 64 of 64 tiles exited 1; rows: 64 of 64 tiles equal to rows.bin (count and hash)
+VERDICT t2-evm-6: PASS
+cyclone-1: boot-end 7222 (ref: 7222)
+cyclone-1: end: C&C 3 and every tile exited at cycle 28319575 (ref's c.cycle 28319576)
+cyclone-1: points: 285 checked, 0 with a difference, a PULSE_DMA in flight at 1; request bus lag_cycles 0; parts 1
+cyclone-1: tr_results: status 1, windows 64, transfers 15716, ERRORS 0x0, advice left 0
+cyclone-1: exits: 64 of 64 tiles exited 1; rows: 64 of 64 tiles equal to rows.bin (count and hash)
+VERDICT t2-cyclone-1: PASS
+cyclone-6: boot-end 7222 (ref: 7222)
+cyclone-6: end: C&C 3 and every tile exited at cycle 28319575 (ref's c.cycle 28319576)
+cyclone-6: points: 285 checked, 0 with a difference, a PULSE_DMA in flight at 1; request bus lag_cycles 0; parts 6
+cyclone-6: tr_results: status 1, windows 64, transfers 15716, ERRORS 0x0, advice left 0
+cyclone-6: exits: 64 of 64 tiles exited 1; rows: 64 of 64 tiles equal to rows.bin (count and hash)
+VERDICT t2-cyclone-6: PASS
+
+==== 1. run_tests.sh: waiting (15:32:01, +74 s)
+  both "started" requests served by 711 (+108)
+  the tiles' image streamed, all READY at 842 (+131); GO at 862 (+20); all 64 running at 886 (+24)
+  from C&C 1 running: 633 cycles; violations 0
+phase: 32 back-to-back broadcast commands (cmd type 1, one argument), READY then GO each
+  GO to GO, steady state (the last 16): the Java model 57.0 (57-57); cores 129.5 (129-130)
+  violations: model 0, cores 0
+== parameter sweep, quick (about 1 minute; 'java Sweep full' takes about 25)
+    a2a uniform 4096         default     5,711; min     5,707 (-0.07%), max     5,733 (+0.39%)
+    gather 4096 k=2          default     8,257; min     8,253 (-0.05%), max     8,273 (+0.19%)
+    63 searches (read port)  default    29,788; min    29,772 (-0.05%), max    29,884 (+0.32%)
+    one-command round trip   default        55; min        50 (-9.09%), max        65 (+18.18%)
+== the all-to-all from C on the four data sets
+PENDING (P5)
+== full-size all-to-alls (4 data sets) and radix sort (about 1.5 minutes)
+EngineTest full: 392 passed, 0 failed
+== fan-in under 0/+1 skew, 40 skew patterns (several minutes)
+NetTest skewtable: 0 passed, 0 failed
+      2 PENDING (P4: W22-16 (figure 12))
+      7 PENDING (P5)
+      1 PENDING (P5 (test_tileslotconf has no shuffled run yet))
+      2 PENDING (P5: W20, set_errors on a controller)
+      3 PENDING (P5 (W23))
+      2 PENDING (v1.35: fw/build.sh (W19))
+      1 PENDING (W20, C2)
+== all passed (PENDING suites aside); logs in results/
+run_tests.sh: exit 0; 18 steps PENDING; 0 logs differing
+VERDICT run_tests: PASS
+VERDICT run_tests-pending-18-steps: PENDING
+
+==== 4. the chains: waiting (15:42:38, +711 s)
+evm-zone-29: W26's inputs: image 496 pages (root 32, depth 2), map 2^13 lines (root 16032, depth 1), log2 K 23, lowest 0x7e000000; 128 segments; 8192 windows with files; loaded in 0.21 s
+evm-zone-29: segments 0-127: 128 of 128 OK; 2941623679 segment cycles (ran 2943440000), 536870912 rows; setup 8.87 s, boot 0.37 s, segment 983.29 s (0.3343 us/cycle), checks 85.02 s, carry 0.24 s; total 1078.07 s
+evm: 128 of 128 segments OK with the start memory equal to ref's
+VERDICT chain-evm: PASS
+cyclone-29: W26's inputs: image 1519 pages (root 32, depth 2), map 2^13 lines (root 48768, depth 1), log2 K 24, lowest 0x7e000000; 128 segments; 8192 windows with files; loaded in 0.24 s
+cyclone-29: segments 0-127: 128 of 128 OK; 2817819737 segment cycles (ran 2819530000), 536870912 rows; setup 15.28 s, boot 0.38 s, segment 964.19 s (0.3422 us/cycle), checks 84.83 s, carry 1.19 s; total 1066.20 s
+cyclone: 128 of 128 segments OK with the start memory equal to ref's
+VERDICT chain-cyclone: PASS
+
+==== 5. the acceptance kit's calibration (alone) (15:48:58, +1091 s)
+VERDICT calibration: PASS
+stage B stalls, cycles per window over 8 windows (log queues 256 entries): image 0.0 (max 0), code 184.0 (max 184), newexp 11898.5 (max 13319), exp 314.9 (max 586), rlog 15.9 (max 127), wlog 13.0 (max 104), outq 0.0 (max 0)
+stage B log waits: read log 15.9, write log 13.0 cycles per window; windows with any: read 1, write 1
+throughput: 5760 windows per hour (all stages)
+ok   stage A: 8 of 8 windows matched
+ok   stage B: 8 of 8 windows matched
+PASS: synthetic windows 0..7
+== 4 processes, windows 8..39, stages AB
+stage B: 32 windows OK, 2097152 rows, 24.5 JVM-s, 85556 rows per JVM-second, 0.77 s per window
+stage B stalls, cycles per window over 32 windows (log queues 256 entries): image 0.0 (max 0), code 184.0 (max 184), newexp 11940.6 (max 15565), exp 444.9 (max 822), rlog 7.7 (max 124), wlog 21.8 (max 243), outq 0.0 (max 0)
+stage B log waits: read log 7.7, write log 21.8 cycles per window; windows with any: read 2, write 4
+throughput: 16457 windows per hour (all stages)
+ok   stage A: 32 of 32 windows matched
+ok   stage B: 32 of 32 windows matched
+PASS: synthetic windows 8..39
+== 8 processes, windows 40..71, stages ABF
+stage F stalls, cycles per window over 32 windows (log queues 256 entries): image 0.0 (max 0), code 184.0 (max 184), newexp 11092.4 (max 14913), exp 406.4 (max 666), rlog 10.6 (max 121), wlog 18.3 (max 249), outq 0.0 (max 0)
+stage F log waits: read log 10.6, write log 18.3 cycles per window; windows with any: read 3, write 4
+throughput: 12800 windows per hour (all stages)
+ok   stage A: 32 of 32 windows matched
+ok   stage B: 32 of 32 windows matched
+ok   stage F: 32 of 32 windows matched
+PASS: synthetic windows 40..71
+== 16 processes, windows 0..127, stages AB
+stage B: 128 windows OK, 8388608 rows, 196.8 JVM-s, 42631 rows per JVM-second, 1.54 s per window
+stage B stalls, cycles per window over 128 windows (log queues 256 entries): image 0.0 (max 0), code 184.0 (max 184), newexp 11402.6 (max 15565), exp 414.2 (max 822), rlog 12.9 (max 127), wlog 23.2 (max 249), outq 0.0 (max 0)
+stage B log waits: read log 12.9, write log 23.2 cycles per window; windows with any: read 14, write 20
+throughput: 30720 windows per hour (all stages)
+ok   stage A: 128 of 128 windows matched
+ok   stage B: 128 of 128 windows matched
+PASS: synthetic windows 0..127
+
+==== verdicts (15:49:39, +1132 s)
+machine PASS
+build PASS
+sort-one PASS
+sort-split6 FAIL
+t2-evm-1 PASS
+t2-evm-6 PASS
+t2-cyclone-1 PASS
+t2-cyclone-6 PASS
+run_tests PASS
+run_tests-pending-18-steps PENDING
+chain-evm PASS
+chain-cyclone PASS
+calibration PASS
+
+build 12 s
+sort-one 38 s
+sort-split6 0 s
+t2 22 s
+run_tests 699 s
+chains 1079 s
+calibration 41 s
+SOME FAILED
