@@ -1,6 +1,6 @@
-clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c src/base/alloc_guard.cpp -o build/clang-release/src/base/alloc_guard.o
 clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c tests/test_sort.cpp -o build/clang-release/tests/test_sort.o
 clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c tests/harness.cpp -o build/clang-release/tests/harness.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c src/base/alloc_guard.cpp -o build/clang-release/src/base/alloc_guard.o
 clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c src/base/arena.cpp -o build/clang-release/src/base/arena.o
 clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c src/base/fatal.cpp -o build/clang-release/src/base/fatal.o
 clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -MMD -MP -pthread -O2 -DNDEBUG -pthread -c src/barrier.cpp -o build/clang-release/src/barrier.o
