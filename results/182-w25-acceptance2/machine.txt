@@ -1,0 +1,23 @@
+machine.sh: what this machine is, and which CPUs to use (WORKER4; D21: nothing machine-specific is baked in).
+Replaces WORKER5's machine.inc. Works on hybrid chips (Intel P/E cores: /sys/devices/cpu_core, cpu_atom) and on
+ordinary ones (every core a "P" core), one socket or several; only CPUs this process may run on are used.
+
+Run it:
+  machine.sh record [FILE]   the machine: CPU model, sockets, cores and threads, core types with CPUs and clocks,
+                             caches, memory, kernel, governor, compilers, Java; printed, and written to FILE if given
+  machine.sh cpus KIND [N]   a CPU list (comma-separated), KIND one of:
+                               p      every P-core CPU (hyperthreads included)
+                               p1     one CPU per P core (the first sibling of each)
+                               e      every E-core CPU (empty on a non-hybrid chip)
+                               all    every CPU this process may use
+                               place  the default placement order: p1, then the P cores' other siblings, then e, then
+                                      the rest (the framework's own default, src/topology.cpp, is the same)
+                             with N, only the first N
+Or source it (a Quest task): `. machine.sh [P_LIST [E_LIST]]` sets ALL_CPUS, P_CPUS, P_ONE, E_CPUS, PLACE and defines
+expand, take, count and machine_record, as machine.inc did. Overrides, in order: the arguments, then the environment
+(SIM_P_CPUS, SIM_E_CPUS, SIM_ALLOWED_CPUS; SIM_SYSFS: another /sys, for tests), then detection.
+
+expand() { local out= p a b i; IFS=, read -ra parts <<< "$1"; for p in "${parts[@]}"; do
+  if [[ $p == *-* ]]; then a=${p%-*}; b=${p#*-}; for ((i=a; i<=b; i++)); do out+=${out:+,}$i; done; elif [ -n "$p" ]; then out+=${out:+,}$p; fi; done; echo "$out"; }
+count() { [ -z "$1" ] && echo 0 || echo "$1" | tr ',' '\n' | wc -l; }
+take N LIST: the first N of LIST

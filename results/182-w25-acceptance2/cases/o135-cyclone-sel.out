@@ -1,0 +1,14 @@
+shard: cyclone-29 windows all of /tmp/w25-182-w25-acceptance2/sel, stages AB, 16 processes, no-row limit 50000 cycles, log queues 256 entries (m3-images), start Thu Nov 12 09:13:07 AM UTC 2026
+program cyclone-29, windows 0..12 (13, all the manifest lists), stages ABF, 16 JVMs, wall 2 s
+stage A: 13 windows OK, 851968 rows, 0.3 JVM-s, 2907741 rows per JVM-second, 0.02 s per window
+stage B: 13 windows OK, 851968 rows, 16.6 JVM-s, 51323 rows per JVM-second, 1.28 s per window
+stage F: 13 windows OK, 851968 rows, 10.0 JVM-s, 85359 rows per JVM-second, 0.77 s per window
+stage B stalls, cycles per window over 13 windows (log queues 256 entries): image 0.0 (max 0), code 172.3 (max 190), newexp 4564.8 (max 25713), exp 51.2 (max 586), rlog 44.8 (max 124), wlog 130.2 (max 255), outq 0.0 (max 0)
+stage B log waits: read log 44.8, write log 130.2 cycles per window; windows with any: read 5, write 10
+stage F stalls, cycles per window over 13 windows (log queues 256 entries): image 0.0 (max 0), code 172.3 (max 190), newexp 4564.8 (max 25713), exp 51.2 (max 586), rlog 44.8 (max 124), wlog 130.2 (max 255), outq 0.0 (max 0)
+stage F log waits: read log 44.8, write log 130.2 cycles per window; windows with any: read 5, write 10
+throughput: 23400 windows per hour (all stages)
+ok   stage A: 13 of 13 windows matched
+ok   stage B: 13 of 13 windows matched
+ok   stage F: 13 of 13 windows matched
+PASS: cyclone-29 windows (all 13 listed)
