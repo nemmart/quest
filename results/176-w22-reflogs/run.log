@@ -6,16 +6,16 @@ FAIL differs from ref: engine-full.log
 FAIL differs from ref: rdport-full.log
 FAIL differs from ref: agbench.log
 VERDICT skewtable: PASS
-skewtable: NetTest skewtable: 0 passed, 0 failed   [187 s]
+skewtable: NetTest skewtable: 0 passed, 0 failed   [198 s]
 p4suites: fixtures written to /tmp/w22-176/one-skewtable/sim/tests/p4suites (ref unknown)
 VERDICT engine-full: PASS
-engine-full: EngineTest full: 392 passed, 0 failed   [322 s]
+engine-full: EngineTest full: 392 passed, 0 failed   [370 s]
 p4suites: fixtures written to /tmp/w22-176/one-engine-full/sim/tests/p4suites (ref unknown)
 VERDICT rdport-full: PASS
-rdport-full: ReadPortGatherTest full: 594 passed, 0 failed   [45 s]
+rdport-full: ReadPortGatherTest full: 594 passed, 0 failed   [48 s]
 p4suites: fixtures written to /tmp/w22-176/one-rdport-full/sim/tests/p4suites (ref unknown)
 VERDICT agbench: PASS
-agbench:   stream run 8 x 2: start to rd_done   20   22   24   26    [30 s]
+agbench:   stream run 8 x 2: start to rd_done   20   22   24   26    [32 s]
 p4suites: fixtures written to /tmp/w22-176/one-agbench/sim/tests/p4suites (ref unknown)
 
 check-16 FAIL
