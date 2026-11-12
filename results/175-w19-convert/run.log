@@ -1,0 +1,69 @@
+kit sha256 8e583fc6e6e2400b70088b3f729657c629162e277db9e0115fdfde344c674b71
+kit: meshsim sim-w19 11e9173; host godspeed; 16 CPUs; Ubuntu clang version 18.1.3 (1ubuntu1)
+
+==== inputs (03:34:51)
+VERDICT inputs: PASS
+
+==== build (clang release, the Makefile's flags) (03:34:51)
+VERDICT build: PASS
+
+==== sel evm-zone-29 (03:35:04)
+ConvertDelivery evm-zone-29: 12 windows, 48 records converted, 88 links; OK
+values out: code 532726, read log 143691, write log 57326; words raw 233697, as picked 61776 (0.0 s)
+manifest /tmp/w19-175/sel/evm-zone-29.manifest.json sha256 0a8c8f747bdd8c99d06ed9227718d232458b32fab31be11e932a00060d07580d
+(0 s)
+VERDICT manifest-sel-evm-zone-29: PASS
+records 48 (want 48), sha256 not in the manifest: 0
+VERDICT records-sel-evm-zone-29: PASS
+links 88 (want 88), wrong targets: 0
+VERDICT links-sel-evm-zone-29: PASS
+
+==== sel cyclone-29 (03:35:04)
+ConvertDelivery cyclone-29: 13 windows, 52 records converted, 95 links; OK
+values out: code 667885, read log 129853, write log 159835; words raw 311824, as picked 100029 (0.0 s)
+manifest /tmp/w19-175/sel/cyclone-29.manifest.json sha256 c003780b5401f3cc7c393a5eac210f83f573b2a79faf7234ab326706f94f8942
+(0 s)
+VERDICT manifest-sel-cyclone-29: PASS
+records 52 (want 52), sha256 not in the manifest: 0
+VERDICT records-sel-cyclone-29: PASS
+links 95 (want 95), wrong targets: 0
+VERDICT links-sel-cyclone-29: PASS
+
+==== full evm-zone-29 (03:35:05)
+ConvertDelivery evm-zone-29: 8192 windows, 32768 records converted, 57348 links; OK
+values out: code 528509713, read log 68288088, write log 55254496; words raw 193902855, as picked 142467921 (6.7 s)
+manifest /tmp/w19-175/full/evm-zone-29.manifest.json sha256 5bffa524ed8901f1957e546385697e463bc2ddce5b00d81d698ad8cb4078a0aa
+(7 s)
+VERDICT manifest-full-evm-zone-29: PASS
+records 32768 (want 32768), sha256 not in the manifest: 0
+VERDICT records-full-evm-zone-29: PASS
+links 57348 (want 57348), wrong targets: 0
+VERDICT links-full-evm-zone-29: PASS
+
+==== full cyclone-29 (03:42:07)
+ConvertDelivery cyclone-29: 8192 windows, 32768 records converted, 57348 links; OK
+values out: code 431011038, read log 76531241, write log 37036072; words raw 164541759, as picked 84064558 (6.9 s)
+manifest /tmp/w19-175/full/cyclone-29.manifest.json sha256 2d5e368e5721dcc0b07997a76a1834b98b998ad1d49bfed9a27ee42ede333bd5
+(7 s)
+VERDICT manifest-full-cyclone-29: PASS
+records 32768 (want 32768), sha256 not in the manifest: 0
+VERDICT records-full-cyclone-29: PASS
+links 57348 (want 57348), wrong targets: 0
+VERDICT links-full-cyclone-29: PASS
+
+==== summary (03:49:08)
+inputs PASS
+build PASS
+manifest-sel-evm-zone-29 PASS
+records-sel-evm-zone-29 PASS
+links-sel-evm-zone-29 PASS
+manifest-sel-cyclone-29 PASS
+records-sel-cyclone-29 PASS
+links-sel-cyclone-29 PASS
+manifest-full-evm-zone-29 PASS
+records-full-evm-zone-29 PASS
+links-full-evm-zone-29 PASS
+manifest-full-cyclone-29 PASS
+records-full-cyclone-29 PASS
+links-full-cyclone-29 PASS
+ALL_PASS
