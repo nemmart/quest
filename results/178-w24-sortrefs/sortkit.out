@@ -1,0 +1,118 @@
+kit assembled in /tmp/w24-178/k/kit: 424K
+openjdk version "21.0.13.0.3" 2026-10-24
+== generating key sets into keys-2000: equal,one99,reverse,sorted,trace10-10,trace10-30,trace10-60,trace100-10,trace100-30,trace100-60,trace10000-10,trace10000-30,trace10000-60,uniform,zipf05,zipf08,zipf10,zipfraw05,zipfraw08,zipfraw10
+keys-2000/uniform.keys: 64 x 2000
+keys-2000/zipf05.keys: 64 x 2000
+keys-2000/zipfraw05.keys: 64 x 2000
+keys-2000/zipf08.keys: 64 x 2000
+keys-2000/zipfraw08.keys: 64 x 2000
+keys-2000/zipf10.keys: 64 x 2000
+keys-2000/zipfraw10.keys: 64 x 2000
+keys-2000/trace10-10.keys: 64 x 2000
+keys-2000/trace10-30.keys: 64 x 2000
+keys-2000/trace10-60.keys: 64 x 2000
+keys-2000/trace100-10.keys: 64 x 2000
+keys-2000/trace100-30.keys: 64 x 2000
+keys-2000/trace100-60.keys: 64 x 2000
+keys-2000/trace10000-10.keys: 64 x 2000
+keys-2000/trace10000-30.keys: 64 x 2000
+keys-2000/trace10000-60.keys: 64 x 2000
+keys-2000/sorted.keys: 64 x 2000
+keys-2000/reverse.keys: 64 x 2000
+keys-2000/equal.keys: 64 x 2000
+keys-2000/one99.keys: 64 x 2000
+== inputs: 26 files match HASHES
+== 92 runs to do (92 selected), 14 at a time, heap 2g each; logs in results/
+04:31:45 sweep/trace100-30-k128/corner: exit 1, 0 s; 
+04:32:32 p4/zipfraw10-k128: exit 0, 47 s; SortTest: 11 passed, 0 failed
+04:32:56 p4/zipf10-k128: exit 0, 71 s; SortTest: 11 passed, 0 failed
+04:32:56 p4/few5-k128: exit 0, 71 s; SortTest: 11 passed, 0 failed
+04:32:58 p4/trace10000-60-k128: exit 0, 73 s; SortTest: 11 passed, 0 failed
+04:32:59 p4/trace10000-10-k128: exit 0, 74 s; SortTest: 11 passed, 0 failed
+04:33:03 p4/trace10-10-k128: exit 0, 78 s; SortTest: 11 passed, 0 failed
+04:33:04 p4/trace100-60-k128: exit 0, 79 s; SortTest: 11 passed, 0 failed
+04:33:04 p4/trace10000-30-k128: exit 0, 79 s; SortTest: 11 passed, 0 failed
+04:33:04 sweep/trace100-30-k128/ts-latency-3: exit 1, 0 s; 
+04:33:05 sweep/trace100-30-k128/ts-latency-4: exit 1, 1 s; 
+04:33:06 p4/trace100-10-k128: exit 0, 81 s; SortTest: 11 passed, 0 failed
+04:33:09 p4/trace100-30-k128: exit 0, 84 s; SortTest: 11 passed, 0 failed
+04:33:12 p4/trace10-60-k128: exit 0, 87 s; SortTest: 11 passed, 0 failed
+04:33:15 p4/trace10-30-k128: exit 0, 90 s; SortTest: 11 passed, 0 failed
+04:33:20 sweep/trace100-30-k128/default: exit 0, 95 s; SortTest: 11 passed, 0 failed
+04:33:56 sweep/trace100-30-k128/sram-read-1: exit 0, 84 s; SortTest: 11 passed, 0 failed
+04:34:02 shuf/trace100-30-k128: exit 0, 137 s; SortTest (shuffled, seed 4): 11 passed, 0 failed
+04:34:21 sweep/trace100-30-k128/area-queue-4: exit 0, 83 s; SortTest: 11 passed, 0 failed
+04:34:21 sweep/trace100-30-k128/sram-read-3: exit 0, 85 s; SortTest: 11 passed, 0 failed
+04:34:22 sweep/trace100-30-k128/sram-read-4: exit 0, 86 s; SortTest: 11 passed, 0 failed
+04:34:24 sweep/trace100-30-k128/area-queue-16: exit 0, 85 s; SortTest: 11 passed, 0 failed
+04:34:26 sweep/trace100-30-k128/ts-latency-2: exit 0, 83 s; SortTest: 11 passed, 0 failed
+04:34:26 sweep/uniform-k128/corner: exit 1, 0 s; 
+04:34:32 sweep/trace100-30-k128/go-run-4: exit 0, 86 s; SortTest: 11 passed, 0 failed
+04:34:32 sweep/trace100-30-k128/go-run-8: exit 0, 83 s; SortTest: 11 passed, 0 failed
+04:34:39 sweep/trace100-30-k128/ready-1: exit 0, 94 s; SortTest: 11 passed, 0 failed
+04:34:39 sweep/trace100-30-k128/link-2: exit 0, 87 s; SortTest: 11 passed, 0 failed
+04:34:46 sweep/trace100-30-k128/ready-4: exit 0, 101 s; SortTest: 11 passed, 0 failed
+04:34:50 sweep/trace100-30-k128/skew-off: exit 0, 90 s; SortTest: 11 passed, 0 failed
+04:34:52 sweep/trace100-30-k128/link-4: exit 0, 97 s; SortTest: 11 passed, 0 failed
+04:35:13 p4/one99-k128: exit 0, 34 s; SortTest: 11 passed, 0 failed
+04:35:17 sweep/trace100-30-k128/skew-seed-2: exit 0, 81 s; SortTest: 11 passed, 0 failed
+04:35:22 p4/zipfraw08-k128: exit 0, 50 s; SortTest: 11 passed, 0 failed
+04:35:31 p4/reverse-k128: exit 0, 65 s; SortTest: 10 passed, 0 failed
+04:35:34 sweep/trace100-30-k128/skew-seed-3: exit 0, 92 s; SortTest: 11 passed, 0 failed
+04:35:35 p4/zipf08-k128: exit 0, 63 s; SortTest: 11 passed, 0 failed
+04:35:37 p4/uniform-k128: exit 0, 58 s; SortTest: 11 passed, 0 failed
+04:35:40 p4/equal-k128: exit 0, 27 s; SortTest: 11 passed, 0 failed
+04:35:42 sweep/trace100-30-k128/skew-seed-6: exit 0, 80 s; SortTest: 11 passed, 0 failed
+04:35:44 p4/zipfraw05-k128: exit 0, 54 s; SortTest: 11 passed, 0 failed
+04:35:44 sweep/uniform-k128/ts-latency-3: exit 1, 0 s; 
+04:35:45 sweep/uniform-k128/ts-latency-4: exit 1, 1 s; 
+04:35:45 p4/sorted-k128: exit 0, 53 s; SortTest: 11 passed, 0 failed
+04:35:45 sweep/trace100-30-k128/skew-seed-4: exit 0, 84 s; SortTest: 11 passed, 0 failed
+04:35:46 p4/zipf05-k128: exit 0, 60 s; SortTest: 11 passed, 0 failed
+04:35:48 sweep/trace100-30-k128/cm-4: exit 0, 84 s; SortTest: 11 passed, 0 failed
+04:35:49 sweep/trace100-30-k128/skew-seed-5: exit 0, 88 s; SortTest: 11 passed, 0 failed
+04:36:12 sweep/uniform-k128/default: exit 0, 50 s; SortTest: 11 passed, 0 failed
+04:36:28 sweep/uniform-k128/sram-read-3: exit 0, 54 s; SortTest: 11 passed, 0 failed
+04:36:28 sweep/uniform-k128/sram-read-4: exit 0, 53 s; SortTest: 11 passed, 0 failed
+04:36:28 sweep/uniform-k128/area-queue-16: exit 0, 48 s; SortTest: 11 passed, 0 failed
+04:36:31 sweep/uniform-k128/sram-read-1: exit 0, 60 s; SortTest: 11 passed, 0 failed
+04:36:32 sweep/uniform-k128/ts-latency-2: exit 0, 50 s; SortTest: 11 passed, 0 failed
+04:36:34 sweep/uniform-k128/area-queue-4: exit 0, 57 s; SortTest: 11 passed, 0 failed
+04:36:36 sweep/uniform-k128/ready-1: exit 0, 51 s; SortTest: 11 passed, 0 failed
+04:36:36 sweep/uniform-k128/link-2: exit 0, 48 s; SortTest: 11 passed, 0 failed
+04:36:40 sweep/uniform-k128/go-run-4: exit 0, 54 s; SortTest: 11 passed, 0 failed
+04:36:40 sweep/uniform-k128/go-run-8: exit 0, 54 s; SortTest: 11 passed, 0 failed
+04:36:40 sweep/uniform-k128/ready-4: exit 0, 55 s; SortTest: 11 passed, 0 failed
+04:36:41 sweep/uniform-k128/link-4: exit 0, 52 s; SortTest: 11 passed, 0 failed
+04:36:47 shuf/uniform-k128: exit 0, 90 s; SortTest (shuffled, seed 4): 11 passed, 0 failed
+04:37:03 sweep/uniform-k128/skew-off: exit 0, 51 s; SortTest: 11 passed, 0 failed
+04:37:13 sweep/uniform-k128/skew-seed-3: exit 0, 45 s; SortTest: 11 passed, 0 failed
+04:37:17 sweep/uniform-k128/skew-seed-2: exit 0, 49 s; SortTest: 11 passed, 0 failed
+04:37:18 sweep/uniform-k128/skew-seed-4: exit 0, 50 s; SortTest: 11 passed, 0 failed
+04:37:22 sweep/uniform-k128/skew-seed-5: exit 0, 51 s; SortTest: 11 passed, 0 failed
+04:37:24 sweep/uniform-k128/cm-4: exit 0, 50 s; SortTest: 11 passed, 0 failed
+04:37:34 sweep/uniform-k128/skew-seed-6: exit 0, 62 s; SortTest: 11 passed, 0 failed
+04:37:40 p4/trace10-10-kv32: exit 0, 64 s; SortTest: 10 passed, 0 failed
+04:37:46 p4/trace10-30-kv32: exit 0, 70 s; SortTest: 10 passed, 0 failed
+04:37:49 p4/trace100-60-kv32: exit 0, 68 s; SortTest: 10 passed, 0 failed
+04:37:55 p4/trace10-60-kv32: exit 0, 75 s; SortTest: 10 passed, 0 failed
+04:37:55 p4/trace100-10-kv32: exit 0, 75 s; SortTest: 10 passed, 0 failed
+04:37:57 p4/trace100-30-kv32: exit 0, 77 s; SortTest: 10 passed, 0 failed
+04:38:00 p4/trace10000-10-kv32: exit 0, 73 s; SortTest: 10 passed, 0 failed
+04:38:01 p4/shaped-k128: exit 0, 44 s; SortTest: 11 passed, 0 failed
+04:38:03 p4/zipfraw08-kv32: exit 0, 41 s; SortTest: 10 passed, 0 failed
+04:38:10 p4/one99-kv32: exit 0, 24 s; SortTest: 10 passed, 0 failed
+04:38:11 p4/zipfraw10-kv32: exit 0, 37 s; SortTest: 10 passed, 0 failed
+04:38:11 p4/trace10000-30-kv32: exit 0, 68 s; SortTest: 10 passed, 0 failed
+04:38:12 p4/zipf08-kv32: exit 0, 54 s; SortTest: 10 passed, 0 failed
+04:38:17 p4/trace10000-60-kv32: exit 0, 64 s; SortTest: 10 passed, 0 failed
+04:38:18 p4/equal-kv32: exit 0, 17 s; SortTest: 10 passed, 0 failed
+04:38:20 p4/zipf10-kv32: exit 0, 56 s; SortTest: 10 passed, 0 failed
+04:38:20 p4/reverse-kv32: exit 0, 40 s; SortTest: 9 passed, 0 failed
+04:38:24 p4/zipfraw05-kv32: exit 0, 27 s; SortTest: 10 passed, 0 failed
+04:38:28 p4/zipf05-kv32: exit 0, 33 s; SortTest: 10 passed, 0 failed
+04:38:30 p4/sorted-kv32: exit 0, 30 s; SortTest: 10 passed, 0 failed
+04:38:31 p4/uniform-kv32: exit 0, 36 s; SortTest: 10 passed, 0 failed
+04:38:32 p4/ragged-kv32: exit 0, 29 s; SortTest: 10 passed, 0 failed
+04:38:32 shuf/reverse-kv32: exit 0, 43 s; SortTest (shuffled, seed 4): 9 passed, 0 failed
+wrote results/SUMMARY.md and results/all.csv (86 runs, 6 without a result)

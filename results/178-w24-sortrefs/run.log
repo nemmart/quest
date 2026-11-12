@@ -1,0 +1,24 @@
+kit sha256 ca767af5153709d256b25f8b411fad3022637b6085597aa3e392134dd0cb2ec5
+kit: meshsim sim-w24 50bb537; host godspeed; 16 CPUs
+Model name:                              Intel(R) Core(TM) i5-14400F
+Thread(s) per core:                      2
+Core(s) per socket:                      10
+Socket(s):                               1
+CPU max MHz:                             4700.0000
+MemTotal:       65671464 kB
+openjdk version "21.0.13.0.3" 2026-10-24
+bt16k-kv32: verify: keys misplaced 0, receive sizes wrong 0, values wrong 0, every core exited 0 true, violations 0, ERRORS 0: PASS
+bt16k-k128: verify: keys misplaced 0, receive sizes wrong 0, values wrong 0, every core exited 0 true, violations 0, ERRORS 0: PASS
+wrote 2 runs into /tmp/w24-178/kit/sim/tests/sort/fp
+VERDICT bt-fp: PASS
+04:38:30 p4/sorted-kv32: exit 0, 30 s; SortTest: 10 passed, 0 failed
+04:38:31 p4/uniform-kv32: exit 0, 36 s; SortTest: 10 passed, 0 failed
+04:38:32 p4/ragged-kv32: exit 0, 29 s; SortTest: 10 passed, 0 failed
+04:38:32 shuf/reverse-kv32: exit 0, 43 s; SortTest (shuffled, seed 4): 9 passed, 0 failed
+wrote results/SUMMARY.md and results/all.csv (86 runs, 6 without a result)
+kit: 86 run CSVs, 6 logs without a clean pass
+VERDICT kit-n2000: FAIL
+
+bt-fp PASS
+kit-n2000 FAIL
+FAILED
