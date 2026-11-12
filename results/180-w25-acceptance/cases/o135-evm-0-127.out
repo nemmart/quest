@@ -1,0 +1,14 @@
+shard: evm-zone-29 windows --first 0 --count 128 of /tmp/w25-180-w25-acceptance/full, stages AB, 16 processes, no-row limit 50000 cycles, log queues 256 entries (m3-images), start Thu Nov 12 06:36:25 AM UTC 2026
+program evm-zone-29, windows 0..127 (128), stages ABF, 16 JVMs, wall 2 s
+stage A: 128 windows OK, 8388608 rows, 2.6 JVM-s, 3261512 rows per JVM-second, 0.02 s per window
+stage B: 128 windows OK, 8388608 rows, 17.5 JVM-s, 478147 rows per JVM-second, 0.14 s per window
+stage F: 4 windows OK, 262144 rows, 0.5 JVM-s, 556569 rows per JVM-second, 0.12 s per window
+stage B stalls, cycles per window over 128 windows (log queues 256 entries): image 0.0 (max 0), code 182.1 (max 184), newexp 475.5 (max 20584), exp 2.2 (max 98), rlog 71.3 (max 127), wlog 128.5 (max 255), outq 0.0 (max 0)
+stage B log waits: read log 71.3, write log 128.5 cycles per window; windows with any: read 79, write 100
+stage F stalls, cycles per window over 4 windows (log queues 256 entries): image 0.0 (max 0), code 184.0 (max 184), newexp 0.0 (max 0), exp 0.0 (max 0), rlog 58.2 (max 124), wlog 182.5 (max 255), outq 0.0 (max 0)
+stage F log waits: read log 58.2, write log 182.5 cycles per window; windows with any: read 2, write 4
+throughput: 156000 windows per hour (all stages)
+ok   stage A: 128 of 128 windows matched
+ok   stage B: 128 of 128 windows matched
+ok   stage F: 4 of 4 windows matched
+PASS: evm-zone-29 windows 0..127
