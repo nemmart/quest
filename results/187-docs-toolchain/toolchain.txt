@@ -1,0 +1,16 @@
+== which
+riscv64-unknown-elf-gcc: /usr/bin/riscv64-unknown-elf-gcc
+riscv64-unknown-elf-ld: /usr/bin/riscv64-unknown-elf-ld
+riscv64-unknown-elf-objcopy: /usr/bin/riscv64-unknown-elf-objcopy
+patch: /usr/bin/patch
+== riscv64-unknown-elf-gcc --version
+riscv64-unknown-elf-gcc (13.2.0-11ubuntu1+12) 13.2.0
+== riscv64-unknown-elf-ld --version
+GNU ld (2.42-1ubuntu1+6) 2.42
+== packages
+binutils-riscv64-unknown-elf 2.42-1ubuntu1+6 install ok installed
+gcc-riscv64-unknown-elf 13.2.0-11ubuntu1+12 install ok installed
+patch 2.7.6-7build3 install ok installed
+picolibc-riscv64-unknown-elf 1.8.6-2 install ok installed
+== os
+Ubuntu 24.04.3 LTS

@@ -1,0 +1,87 @@
+boot ROM: 48 words
+a2a: code 724 B, data 64 B
+blockcopy: code 172 B, data 0 B
+cmd: code 388 B, data 0 B
+cond: code 1096 B, data 64 B
+faults: code 288 B, data 32 B
+gather: code 224 B, data 0 B
+hello: code 152 B, data 16 B
+inv: code 340 B, data 0 B
+misalign_ld: code 100 B, data 0 B
+misalign_st: code 92 B, data 0 B
+rdport: code 612 B, data 0 B
+regs: code 952 B, data 0 B
+req: code 152 B, data 0 B
+search: code 1216 B, data 0 B
+wfi: code 460 B, data 0 B
+csr: code 376 B, data 112 B
+irq: code 212 B, data 64 B
+reqfull: code 1592 B, data 32 B
+timers: code 260 B, data 80 B
+wfi_cmd: code 176 B, data 64 B
+wfi_go: code 180 B, data 64 B
+cc_ping: code 272 B, data 0 B
+cc_req: code 348 B, data 0 B
+tile_req: code 156 B, data 0 B
+cc1: code 3456 B, data 272 B
+cc23: code 792 B, data 16 B
+cc_rcp: code 932 B, data 0 B
+cc_bad: code 716 B, data 0 B
+recipes: 19 built
+replay_ctl: code 3728 B, data 0 B
+tracer_ctl: code 3528 B, data 16 B
+/usr/lib/gcc/riscv64-unknown-elf/13.2.0/../../../riscv64-unknown-elf/bin/ld: warning: orphan section `.rela.text.init' from `/tmp/ccNpRkFt.o' being placed in section `.rela.dyn'
+sort: code 21872 B, data 240 B
+DIFFERS: a2a.sym against tests/golden-m2/images/a2a.sym
+DIFFERS (or missing): blockcopy.sym against fw/images/blockcopy.sym
+DIFFERS: cc1.sym against tests/m3-images/cc1.sym
+DIFFERS: cc23.sym against tests/m3-images/cc23.sym
+DIFFERS (or missing): cc_bad.sym against fw/images/cc_bad.sym
+DIFFERS: cc_ping.sym against tests/m3-images/cc_ping.sym
+DIFFERS (or missing): cc_rcp.sym against fw/images/cc_rcp.sym
+DIFFERS: cc_req.sym against tests/m3-images/cc_req.sym
+DIFFERS (or missing): cmd.sym against fw/images/cmd.sym
+DIFFERS (or missing): cond.sym against fw/images/cond.sym
+DIFFERS: csr.sym against tests/golden/images/csr.sym
+DIFFERS: faults.sym against tests/golden/images/faults.sym
+DIFFERS (or missing): gather.sym against fw/images/gather.sym
+DIFFERS: hello.sym against tests/golden/images/hello.sym
+DIFFERS (or missing): inv.sym against fw/images/inv.sym
+DIFFERS: irq.sym against tests/golden/images/irq.sym
+DIFFERS (or missing): log8k/replay_ctl.sym against fw/images/log8k/replay_ctl.sym
+DIFFERS: misalign_ld.sym against tests/golden/images/misalign_ld.sym
+DIFFERS: misalign_st.sym against tests/golden/images/misalign_st.sym
+DIFFERS (or missing): oldmap/replay_ctl.sym against fw/images/oldmap/replay_ctl.sym
+DIFFERS (or missing): rcp_a2a.sym against fw/images/rcp_a2a.sym
+DIFFERS (or missing): rcp_aug.sym against fw/images/rcp_aug.sym
+DIFFERS (or missing): rcp_boot.sym against fw/images/rcp_boot.sym
+DIFFERS (or missing): rcp_bucket.sym against fw/images/rcp_bucket.sym
+DIFFERS (or missing): rcp_cc1.sym against fw/images/rcp_cc1.sym
+DIFFERS (or missing): rcp_cmdloop.sym against fw/images/rcp_cmdloop.sym
+DIFFERS (or missing): rcp_cmem.sym against fw/images/rcp_cmem.sym
+DIFFERS (or missing): rcp_copy.sym against fw/images/rcp_copy.sym
+DIFFERS (or missing): rcp_gather.sym against fw/images/rcp_gather.sym
+DIFFERS (or missing): rcp_rdport.sym against fw/images/rcp_rdport.sym
+DIFFERS (or missing): rcp_replay.sym against fw/images/rcp_replay.sym
+DIFFERS (or missing): rcp_rules.sym against fw/images/rcp_rules.sym
+DIFFERS (or missing): rcp_selftest.sym against fw/images/rcp_selftest.sym
+DIFFERS (or missing): rcp_signal.sym against fw/images/rcp_signal.sym
+DIFFERS (or missing): rcp_status.sym against fw/images/rcp_status.sym
+DIFFERS (or missing): rcp_sync.sym against fw/images/rcp_sync.sym
+DIFFERS (or missing): rcp_tables.sym against fw/images/rcp_tables.sym
+DIFFERS (or missing): rcp_xchg.sym against fw/images/rcp_xchg.sym
+DIFFERS (or missing): rcp_xvec.sym against fw/images/rcp_xvec.sym
+DIFFERS (or missing): rdport.sym against fw/images/rdport.sym
+DIFFERS: regs.sym against tests/golden-m2/images/regs.sym
+DIFFERS: replay_ctl.sym against tests/m3-images/replay_ctl.sym
+DIFFERS: reqfull.sym against tests/golden/images/reqfull.sym
+DIFFERS (or missing): req.sym against fw/images/req.sym
+DIFFERS (or missing): search.sym against fw/images/search.sym
+DIFFERS: sort.sym against tests/golden-m2/images/sort.sym
+DIFFERS: tile_req.sym against tests/m3-images/tile_req.sym
+DIFFERS: timers.sym against tests/golden/images/timers.sym
+DIFFERS: tracer_ctl.sym against tests/m3-images/tracer_ctl.sym
+DIFFERS: wfi_cmd.sym against tests/golden/images/wfi_cmd.sym
+DIFFERS: wfi_go.sym against tests/golden/images/wfi_go.sym
+DIFFERS: wfi.sym against tests/golden-m2/images/wfi.sym
+fw/build.sh: FAILED
