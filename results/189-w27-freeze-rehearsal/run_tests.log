@@ -1,0 +1,179 @@
+== building the suites (MODE=suite CC_NAME=clang)
+== the layout (v1.3: tools/check_layout.sh; v1.35: tools/check_copies.sh)
+check_copies: 322 files equal to v1.3's
+== building the tile programs (sw/build.sh; regenerates sw/mesh.h)
+PENDING (v1.35: fw/build.sh (W19))
+== building the sort program (sw/ext/sort/build.sh: one image, the split, the planner)
+PENDING (v1.35: fw/build.sh (W19))
+== bus primitives (W26: on the framework's port kinds; the debug build, its throws checks being debug assertions)
+BusTest: 154 passed, 0 failed
+LOG DIFFERS (bus): no reference log ref/meshsim/results/bus.log
+== network, packets, director
+NetTest: 31328 passed, 0 failed
+== shuffled child order (seed 5)
+NetTest (shuffled, seed 5): 31328 passed, 0 failed
+== shuffled child order (seed 11)
+NetTest (shuffled, seed 11): 31328 passed, 0 failed
+== big SRAM, read and write queues
+MemTest: 171 passed, 0 failed
+== shuffled child order (seed 3)
+MemTest (shuffled, seed 3): 171 passed, 0 failed
+== shuffled child order (seed 8)
+MemTest (shuffled, seed 8): 171 passed, 0 failed
+== address generator, write engine, all-to-all (small)
+EngineTest: 365 passed, 0 failed
+== shuffled child order (seed 4)
+EngineTest (shuffled, seed 4): 365 passed, 0 failed
+== control and the controller (from C)
+PENDING (P5)
+== shuffled child order (seed 4)
+PENDING (P5)
+== riscv-tests rv32ui/rv32um on the controller
+riscv: equal to v1.3's by its C++ equivalent, test_golden (every program's retire trace equal to ref's): test_golden: 8 passed, 0 failed, 0 skipped (debug-only)
+== read port, GATHER (Java; the C parts PENDING (phase 2))
+ReadPortGatherTest: 587 passed, 0 failed
+== per-phase accounting (from C)
+AccountingTest: 12 passed, 0 failed
+== search steps through the read port (microbenchmark, from C)
+    state by index: a step costs 35.9 + 37.42 x active cycles (least squares over every step); 63 searches from first step to last: 28,830 cycles
+    state packed:   a step costs 38.5 + 27.43 x active cycles (least squares over every step); 63 searches from first step to last: 21,287 cycles
+SearchBench: 56 passed, 0 failed
+== shuffled child order (seed 4)
+ReadPortGatherTest (shuffled, seed 4): 587 passed, 0 failed
+== address generator read-ahead, figure 12's PTR/HIST ports
+AgTest: 240 passed, 0 failed
+== shuffled child order (seed 4)
+AgTest (shuffled, seed 4): 240 passed, 0 failed
+== building the controllers' firmware (sw/build_cc.sh: sw/cc/cc1.c, cc23.c; WORKER14)
+cc_bad: code 716 B, data 0 B
+fw/build.sh --check: 6 images equal to their fixture copies, 6 to fw/images/
+== building the v1.2 recipes (sw/build_recipes.sh: wip/sw/recipes/, unedited)
+fw/build.sh --check: 0 images equal to their fixture copies, 57 to fw/images/
+== the v1.2 recipes as suites, and the book's code blocks against their sources
+PENDING (P5)
+== shuffled child order (seed 4)
+PENDING (P5)
+== the errors end to end: ERRORS, the handler's reports, the error lines, the toast pin, the reset
+PENDING (P5)
+== shuffled child order (seed 4)
+PENDING (P5)
+== REGISTERS.md and mesh.h against their generators, the draft header and the simulator
+RegDocTest: 269 passed, 0 failed
+== the register map, the send port, the pulses (from Java)
+HooksTest: 141 passed, 0 failed
+== shuffled child order (seed 4)
+HooksTest (shuffled, seed 4): 141 passed, 0 failed
+== the peripheral framework: the standard window, events, region writes, the DMA
+periph: equal to v1.3's by its C++ equivalent, test_tileslotconf (W15's TileSlotConf: PeripheralSlotTest's groups on a real tile, against ref): test_tileslotconf: 1 passed, 0 failed, 0 skipped (debug-only)
+== shuffled child order (seed 4)
+PENDING (P5 (test_tileslotconf has no shuffled run yet))
+== the request port, the request bus and the receive queues in the tree
+request bus [meas: RequestBusTest]: reqbus_latency unloaded, from the REQUEST_SEND store to the request in its target's queue (readable the next cycle): 17 cycles at reqHopLatency 3 (8 beats, three hops; spec 3.3's estimate 15-20)
+RequestBusTest: 50 passed, 0 failed
+== shuffled child order (seed 4)
+RequestBusTest (shuffled, seed 4): 50 passed, 0 failed
+== C&C 1-3 as cores (Config.ccCores, WORKER14): the boot ROM's controller branch, the link, the request tree
+CcCoresTest: 77 passed, 0 failed
+sed: can't read s/dump: No such file or directory
+sed: can't read s/dump: No such file or directory
+sed: can't read done: No such file or directory
+sed: can't read done: No such file or directory
+sed: can't read at: No such file or directory
+sed: can't read at: No such file or directory
+sed: can't read \+[0-9]+/dump: No such file or directory
+sed: can't read \+[0-9]+/dump: No such file or directory
+sed: can't read done: No such file or directory
+sed: can't read done: No such file or directory
+sed: can't read at: No such file or directory
+sed: can't read at: No such file or directory
+sed: can't read +<D44>/: No such file or directory
+sed: can't read +<D44>/: No such file or directory
+== shuffled child order (seed 4)
+CcCoresTest (shuffled, seed 4): 77 passed, 0 failed
+sed: can't read s/dump: No such file or directory
+sed: can't read s/dump: No such file or directory
+sed: can't read done: No such file or directory
+sed: can't read done: No such file or directory
+sed: can't read at: No such file or directory
+sed: can't read at: No such file or directory
+sed: can't read \+[0-9]+/dump: No such file or directory
+sed: can't read \+[0-9]+/dump: No such file or directory
+sed: can't read done: No such file or directory
+sed: can't read done: No such file or directory
+sed: can't read at: No such file or directory
+sed: can't read at: No such file or directory
+sed: can't read +<D44>/: No such file or directory
+sed: can't read +<D44>/: No such file or directory
+== the replay controller (sw/replay/build.sh)
+replay_ctl: code 3728 B, data 0 B, data+bss end 0x000029ec (stack below 0x7BC0)
+== Stage B: replay_ctl.c on a tile against Stage A, synthetic windows
+StageB synthetic: 19 windows, 0 failed
+== the replayer model (v1.25): the opcode table, the ALU against vec.tsv at 821e1bd, the unit tests
+ReplayerTest: 2187 passed, 0 failed
+== the Tracer's memory system (v1.3, B1): FileStore's trees and statuses, the shared cache's timing
+MemorySystemTest: 56 passed, 0 failed
+== the Tracer's RVC decompressor against gold's, every 16-bit encoding (v1.3, B1)
+RvcTest: 49157 passed, 0 failed
+== the Tracer (v1.3, B1): execution, memory, the map, errors, cuts, controller-fed expansions, the output path
+TracerTest: 180 passed, 0 failed
+== the sort's local sorts (L1, L2)
+SortTest: 42 passed, 0 failed
+== the sort, every built-in set at 64 x <= 2,000 (several minutes)
+SortTest: 104 passed, 0 failed
+== shuffled child order (seed 4)
+SortTest (shuffled, seed 4): 104 passed, 0 failed
+== BT, forced, trace hot 10 / 10 % at 64 x 16,384, 32-bit values (a few minutes)
+    M14: zero-length groups 0 (summed over tiles), of which with a gap 0 (1 + gap since 10 October); group-run stall cycles 0 (drift)
+SortTest: 10 passed, 0 failed
+== the same, 128-bit values
+    M14: zero-length groups 0 (summed over tiles), of which with a gap 0 (1 + gap since 10 October); group-run stall cycles 0 (drift)
+SortTest: 11 passed, 0 failed
+== gather 1 at full size (Java; the C parts PENDING (phase 2))
+ReadPortGatherTest full: 594 passed, 0 failed
+== per-phase accounting, full-size all-to-all from C
+AccountingTest full: 12 passed, 0 failed
+== read-ahead measurements: ag_lookahead, zero-length groups, start to first request (a few minutes)
+  stream run                            3    5    7    9 
+  (2 L + 1 for reference)               3    5    7    9 
+  stream run 8 x 2: start to rd_done   20   22   24   26 
+== item S1: K's margin over the write path, L = 1-4, and the table-window case (a few minutes)
+L = 2, K = 8, rcp_gather: S1: accept -> complete, the largest: big SRAM 8 (20864 writes; in its area's queue by 7), PTR 5 (5216 updates), HIST 0 (0 updates); K = 8: margin 0 before the controller's reaction (+4) [meas: S1Bench]
+L = 3, K = 10, rcp_bucket: S1: accept -> complete, the largest: big SRAM 10 (128000 writes; in its area's queue by 9), PTR 6 (64000 updates), HIST 6 (51200 updates); K = 10: margin 0 before the controller's reaction (+4); the table-window case: 2048 HIST loads soon after an update, the nearest 25 cycles after its write-back [meas: S1Bench]
+L = 3, K = 10, rcp_a2a:    S1: accept -> complete, the largest: big SRAM 10 (28672 writes; in its area's queue by 9), PTR 6 (14336 updates), HIST 0 (0 updates); K = 10: margin 0 before the controller's reaction (+4) [meas: S1Bench]
+L = 3, K = 10, rcp_gather: S1: accept -> complete, the largest: big SRAM 10 (20864 writes; in its area's queue by 9), PTR 6 (5216 updates), HIST 0 (0 updates); K = 10: margin 0 before the controller's reaction (+4) [meas: S1Bench]
+L = 4, K = 12, rcp_bucket: S1: accept -> complete, the largest: big SRAM 12 (128000 writes; in its area's queue by 11), PTR 7 (64000 updates), HIST 7 (51200 updates); K = 12: margin 0 before the controller's reaction (+4); the table-window case: 2048 HIST loads soon after an update, the nearest 26 cycles after its write-back [meas: S1Bench]
+L = 4, K = 12, rcp_a2a:    S1: accept -> complete, the largest: big SRAM 12 (28672 writes; in its area's queue by 11), PTR 7 (14336 updates), HIST 0 (0 updates); K = 12: margin 0 before the controller's reaction (+4) [meas: S1Bench]
+L = 4, K = 12, rcp_gather: S1: accept -> complete, the largest: big SRAM 12 (20864 writes; in its area's queue by 11), PTR 7 (5216 updates), HIST 0 (0 updates); K = 12: margin 0 before the controller's reaction (+4) [meas: S1Bench]
+S1Bench: 60 passed, 0 failed
+== C&C 1-3 as cores (WORKER14): the boot and a phase against the Java model
+boot 'rcp_boot' (62 + 0 packets to each tile): the Java model 134 cycles; cores 923 cycles
+  the host lands C&C 1's image (235 packets) and CMD_JUMP: C&C 1 running at 253
+  C&C 1 stages the commands and streams C&C 2/3's images: both running at 603 (+350)
+  both "started" requests served by 711 (+108)
+  the tiles' image streamed, all READY at 879 (+168); GO at 899 (+20); all 64 running at 923 (+24)
+  from C&C 1 running: 670 cycles; violations 0
+boot 'cmd' (25 + 0 packets to each tile): the Java model 97 cycles; cores 886 cycles
+  the host lands C&C 1's image (235 packets) and CMD_JUMP: C&C 1 running at 253
+  C&C 1 stages the commands and streams C&C 2/3's images: both running at 603 (+350)
+  both "started" requests served by 711 (+108)
+  the tiles' image streamed, all READY at 842 (+131); GO at 862 (+20); all 64 running at 886 (+24)
+  from C&C 1 running: 633 cycles; violations 0
+phase: 32 back-to-back broadcast commands (cmd type 1, one argument), READY then GO each
+  GO to GO, steady state (the last 16): the Java model 57.0 (57-57); cores 129.5 (129-130)
+  violations: model 0, cores 0
+== parameter sweep, quick (about 1 minute; 'java Sweep full' takes about 25)
+    a2a uniform 4096         default     5,711; min     5,707 (-0.07%), max     5,733 (+0.39%)
+    gather 4096 k=2          default     8,257; min     8,253 (-0.05%), max     8,273 (+0.19%)
+    63 searches (read port)  default    29,788; min    29,772 (-0.05%), max    29,884 (+0.32%)
+    one-command round trip   default        55; min        50 (-9.09%), max        65 (+18.18%)
+== the all-to-all from C on the four data sets
+PENDING (P5)
+== full-size all-to-alls (4 data sets) and radix sort (about 1.5 minutes)
+EngineTest full: 392 passed, 0 failed
+== fan-in under 0/+1 skew, 40 skew patterns (several minutes)
+NetTest skewtable: 0 passed, 0 failed
+      1 PENDING (P5 (test_tileslotconf has no shuffled run yet))
+      7 PENDING (P5)
+      2 PENDING (v1.35: fw/build.sh (W19))
+LOG DIFFERS (bus): no reference log ref/meshsim/results/bus.log
+== FAILURES

@@ -1,0 +1,33 @@
+generated 128 windows in 5 s; 653M
+== 1 processes, windows 0..7, stages AB
+stage B: 8 windows OK, 524288 rows, 4.7 JVM-s, 111267 rows per JVM-second, 0.59 s per window
+stage B stalls, cycles per window over 8 windows (log queues 256 entries): image 0.0 (max 0), code 184.0 (max 184), newexp 11898.5 (max 13319), exp 314.9 (max 586), rlog 15.9 (max 127), wlog 13.0 (max 104), outq 0.0 (max 0)
+stage B log waits: read log 15.9, write log 13.0 cycles per window; windows with any: read 1, write 1
+throughput: 5760 windows per hour (all stages)
+ok   stage A: 8 of 8 windows matched
+ok   stage B: 8 of 8 windows matched
+PASS: synthetic windows 0..7
+== 4 processes, windows 8..39, stages AB
+stage B: 32 windows OK, 2097152 rows, 21.6 JVM-s, 97189 rows per JVM-second, 0.67 s per window
+stage B stalls, cycles per window over 32 windows (log queues 256 entries): image 0.0 (max 0), code 184.0 (max 184), newexp 11940.6 (max 15565), exp 444.9 (max 822), rlog 7.7 (max 124), wlog 21.8 (max 243), outq 0.0 (max 0)
+stage B log waits: read log 7.7, write log 21.8 cycles per window; windows with any: read 2, write 4
+throughput: 19200 windows per hour (all stages)
+ok   stage A: 32 of 32 windows matched
+ok   stage B: 32 of 32 windows matched
+PASS: synthetic windows 8..39
+== 8 processes, windows 40..71, stages ABF
+stage F stalls, cycles per window over 32 windows (log queues 256 entries): image 0.0 (max 0), code 184.0 (max 184), newexp 11092.4 (max 14913), exp 406.4 (max 666), rlog 10.6 (max 121), wlog 18.3 (max 249), outq 0.0 (max 0)
+stage F log waits: read log 10.6, write log 18.3 cycles per window; windows with any: read 3, write 4
+throughput: 12800 windows per hour (all stages)
+ok   stage A: 32 of 32 windows matched
+ok   stage B: 32 of 32 windows matched
+ok   stage F: 32 of 32 windows matched
+PASS: synthetic windows 40..71
+== 16 processes, windows 0..127, stages AB
+stage B: 128 windows OK, 8388608 rows, 197.0 JVM-s, 42573 rows per JVM-second, 1.54 s per window
+stage B stalls, cycles per window over 128 windows (log queues 256 entries): image 0.0 (max 0), code 184.0 (max 184), newexp 11402.6 (max 15565), exp 414.2 (max 822), rlog 12.9 (max 127), wlog 23.2 (max 249), outq 0.0 (max 0)
+stage B log waits: read log 12.9, write log 23.2 cycles per window; windows with any: read 14, write 20
+throughput: 32914 windows per hour (all stages)
+ok   stage A: 128 of 128 windows matched
+ok   stage B: 128 of 128 windows matched
+PASS: synthetic windows 0..127
