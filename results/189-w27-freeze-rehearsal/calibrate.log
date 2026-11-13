@@ -8,10 +8,10 @@ ok   stage A: 8 of 8 windows matched
 ok   stage B: 8 of 8 windows matched
 PASS: synthetic windows 0..7
 == 4 processes, windows 8..39, stages AB
-stage B: 32 windows OK, 2097152 rows, 21.6 JVM-s, 97189 rows per JVM-second, 0.67 s per window
+stage B: 32 windows OK, 2097152 rows, 20.9 JVM-s, 100127 rows per JVM-second, 0.65 s per window
 stage B stalls, cycles per window over 32 windows (log queues 256 entries): image 0.0 (max 0), code 184.0 (max 184), newexp 11940.6 (max 15565), exp 444.9 (max 822), rlog 7.7 (max 124), wlog 21.8 (max 243), outq 0.0 (max 0)
 stage B log waits: read log 7.7, write log 21.8 cycles per window; windows with any: read 2, write 4
-throughput: 19200 windows per hour (all stages)
+throughput: 23040 windows per hour (all stages)
 ok   stage A: 32 of 32 windows matched
 ok   stage B: 32 of 32 windows matched
 PASS: synthetic windows 8..39
@@ -24,7 +24,7 @@ ok   stage B: 32 of 32 windows matched
 ok   stage F: 32 of 32 windows matched
 PASS: synthetic windows 40..71
 == 16 processes, windows 0..127, stages AB
-stage B: 128 windows OK, 8388608 rows, 197.0 JVM-s, 42573 rows per JVM-second, 1.54 s per window
+stage B: 128 windows OK, 8388608 rows, 196.8 JVM-s, 42625 rows per JVM-second, 1.54 s per window
 stage B stalls, cycles per window over 128 windows (log queues 256 entries): image 0.0 (max 0), code 184.0 (max 184), newexp 11402.6 (max 15565), exp 414.2 (max 822), rlog 12.9 (max 127), wlog 23.2 (max 249), outq 0.0 (max 0)
 stage B log waits: read log 12.9, write log 23.2 cycles per window; windows with any: read 14, write 20
 throughput: 32914 windows per hour (all stages)
