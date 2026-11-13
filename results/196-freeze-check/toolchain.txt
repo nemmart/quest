@@ -1,0 +1,8 @@
+== the firmware toolchain (the image builds: run_tests.sh's build steps, fw/build.sh)
+riscv64-unknown-elf-gcc: riscv64-unknown-elf-gcc (13.2.0-11ubuntu1+12) 13.2.0
+binutils: GNU assembler (2.42-1ubuntu1+6) 2.42
+package gcc-riscv64-unknown-elf: 13.2.0-11ubuntu1+12
+package binutils-riscv64-unknown-elf: 2.42-1ubuntu1+6
+package picolibc-riscv64-unknown-elf: 1.8.6-2
+picolibc: "1.8.6"
+locale of the image builds: LC_ALL=C, charmap ANSI_X3.4-1968
