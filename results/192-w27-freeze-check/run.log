@@ -2,7 +2,7 @@ kit sha256 e2c2a89757c07fff6737c4914975d4593d656533e9418949aacb12aa0280eac1
 items: check
 kit: meshsim 3e5b90ab (sim-w27), the freeze check kit, built 2026-11-13; host godspeed; 16 CPUs; Ubuntu clang version 18.1.3 (1ubuntu1); openjdk version "21.0.13.0.3" 2026-10-24
 
-==== 6. the machine (D21) (08:26:18, +0 s)
+==== 6. the machine (D21) (08:26:39, +1 s)
 model:     Intel(R) Core(TM) i5-14400F
 sockets:   1; CPUs usable 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15 (16 of 16 online)
 P cores:   6 cores, CPUs 0,1,2,3,4,5,6,7,8,9,10,11 (12 threads), max 4700000 kHz, min 800000 kHz
@@ -15,7 +15,7 @@ kernel:    Linux 6.8.0-147-generic
 gcc:       g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
 clang:     Ubuntu clang version 18.1.3 (1ubuntu1)
 java:      openjdk version "21.0.13.0.3" 2026-10-24
- 08:26:18 up 1 day,  4:52,  1 user,  load average: 5.67, 8.84, 9.29
+ 08:26:39 up 1 day,  4:52,  1 user,  load average: 6.59, 8.88, 9.29
 VERDICT machine: PASS
 == the firmware toolchain (the image builds: run_tests.sh's build steps, fw/build.sh)
 riscv64-unknown-elf-gcc: riscv64-unknown-elf-gcc (13.2.0-11ubuntu1+12) 13.2.0
@@ -27,16 +27,16 @@ picolibc: "1.8.6"
 locale of the image builds: LC_ALL=C, charmap ANSI_X3.4-1968
 VERDICT toolchain: PASS
 
-==== 8. make check from a clean copy of the kit's sim/, alone (08:26:18, +0 s)
+==== 8. make check from a clean copy of the kit's sim/, alone (08:26:39, +1 s)
 ==== gcc tsan (controllers)
 ==== gcc tsan (chip)
 ==== gcc tsan
-FATAL: ThreadSanitizer: unexpected memory mapping 0x621d87876000-0x621d8787a000
-make[1]: *** [src/threads.mk:36: tsan-one] Error 66
-make: *** [src/threads.mk:39: tsan] Error 2
+FATAL: ThreadSanitizer: unexpected memory mapping 0x6042ecd75000-0x6042ecd7b000
+make[1]: *** [src/units/net.mk:21: tsan-chip-one] Error 66
+make: *** [src/units/net.mk:23: tsan-chip] Error 2
 VERDICT make-check: FAIL
 
-==== verdicts (08:26:34, +16 s)
+==== verdicts (08:26:55, +17 s)
 machine PASS
 toolchain PASS
 make-check FAIL
