@@ -21,105 +21,105 @@ keys-65536/equal.keys: 64 x 65536
 keys-65536/one99.keys: 64 x 65536
 == inputs: 26 files match HASHES
 == 92 runs to do (92 selected), 10 at a time; logs in results/
-tools/runjob.sh: line 9: 888368 Aborted                 (core dumped) SORT_BUILD=image ./sort_test $SEED run label=$ID $ARGS csv="$OUT/$F.csv.part" phases="$OUT/$F.phases.csv" > "$OUT/$F.log" 2>&1
-07:43:10 sweep/trace100-30-k128/corner: exit 134, 1 s; 
-tools/runjob.sh: line 9: 888374 Aborted                 (core dumped) SORT_BUILD=image ./sort_test $SEED run label=$ID $ARGS csv="$OUT/$F.csv.part" phases="$OUT/$F.phases.csv" > "$OUT/$F.log" 2>&1
-07:43:54 p4/few5-k128: exit 134, 45 s; 
-07:45:15 p4/zipfraw10-k128: exit 0, 126 s; SortTest: 10 passed, 0 failed
-07:45:22 p4/trace10000-10-k128: exit 0, 132 s; SortTest: 10 passed, 0 failed
-07:45:22 p4/trace100-60-k128: exit 0, 133 s; SortTest: 10 passed, 0 failed
-07:45:24 p4/zipf10-k128: exit 0, 135 s; SortTest: 10 passed, 0 failed
-07:45:50 p4/trace10-30-k128: exit 0, 161 s; SortTest: 10 passed, 0 failed
-07:46:12 p4/trace10000-30-k128: exit 0, 139 s; SortTest: 10 passed, 0 failed
-07:47:20 p4/trace10-10-k128: exit 0, 251 s; SortTest: 10 passed, 0 failed
-07:47:33 p4/trace10000-60-k128: exit 0, 138 s; SortTest: 10 passed, 0 failed
-07:47:44 sweep/trace100-30-k128/sram-read-1: exit 0, 140 s; SortTest: 10 passed, 0 failed
-07:48:02 shuf/trace100-30-k128: exit 0, 160 s; SortTest (shuffled, seed 4): 10 passed, 0 failed
-tools/runjob.sh: line 9: 888649 Aborted                 (core dumped) SORT_BUILD=image ./sort_test $SEED run label=$ID $ARGS csv="$OUT/$F.csv.part" phases="$OUT/$F.phases.csv" > "$OUT/$F.log" 2>&1
-07:48:03 sweep/trace100-30-k128/ts-latency-3: exit 134, 1 s; 
-tools/runjob.sh: line 9: 888670 Aborted                 (core dumped) SORT_BUILD=image ./sort_test $SEED run label=$ID $ARGS csv="$OUT/$F.csv.part" phases="$OUT/$F.phases.csv" > "$OUT/$F.log" 2>&1
-07:48:04 sweep/trace100-30-k128/ts-latency-4: exit 134, 1 s; 
-tools/runjob.sh: line 9: 888691 Aborted                 (core dumped) SORT_BUILD=image ./sort_test $SEED run label=$ID $ARGS csv="$OUT/$F.csv.part" phases="$OUT/$F.phases.csv" > "$OUT/$F.log" 2>&1
-07:48:04 sweep/trace100-30-k128/ready-1: exit 134, 0 s; 
-07:48:09 sweep/trace100-30-k128/default: exit 0, 167 s; SortTest: 10 passed, 0 failed
-07:48:10 sweep/trace100-30-k128/sram-read-3: exit 0, 140 s; SortTest: 10 passed, 0 failed
-07:48:24 p4/trace10-60-k128: exit 0, 315 s; SortTest: 10 passed, 0 failed
-07:48:28 p4/trace100-10-k128: exit 0, 319 s; SortTest: 10 passed, 0 failed
-07:48:30 p4/trace100-30-k128: exit 0, 321 s; SortTest: 10 passed, 0 failed
-07:48:43 sweep/trace100-30-k128/sram-read-4: exit 0, 150 s; SortTest: 10 passed, 0 failed
-07:49:52 sweep/trace100-30-k128/area-queue-16: exit 0, 139 s; SortTest: 10 passed, 0 failed
-07:50:29 sweep/trace100-30-k128/go-run-4: exit 0, 140 s; SortTest: 10 passed, 0 failed
-07:50:32 sweep/trace100-30-k128/go-run-8: exit 0, 142 s; SortTest: 10 passed, 0 failed
-07:50:38 sweep/trace100-30-k128/area-queue-4: exit 0, 198 s; SortTest: 10 passed, 0 failed
-07:50:44 sweep/trace100-30-k128/link-2: exit 0, 140 s; SortTest: 10 passed, 0 failed
-07:50:49 sweep/trace100-30-k128/skew-off: exit 0, 139 s; SortTest: 10 passed, 0 failed
-tools/runjob.sh: line 9: 888970 Aborted                 (core dumped) SORT_BUILD=image ./sort_test $SEED run label=$ID $ARGS csv="$OUT/$F.csv.part" phases="$OUT/$F.phases.csv" > "$OUT/$F.log" 2>&1
-07:50:50 sweep/uniform-k128/corner: exit 134, 1 s; 
-07:50:50 sweep/trace100-30-k128/link-4: exit 0, 142 s; SortTest: 10 passed, 0 failed
-07:52:12 sweep/trace100-30-k128/ts-latency-2: exit 0, 268 s; SortTest: 10 passed, 0 failed
-07:52:48 p4/zipf08-k128: exit 0, 118 s; SortTest: 11 passed, 0 failed
-07:52:52 sweep/trace100-30-k128/skew-seed-5: exit 0, 140 s; SortTest: 10 passed, 0 failed
-07:52:56 sweep/trace100-30-k128/skew-seed-6: exit 0, 138 s; SortTest: 10 passed, 0 failed
-07:52:59 p4/reverse-k128: exit 0, 129 s; SortTest: 10 passed, 0 failed
-07:53:04 sweep/trace100-30-k128/cm-4: exit 0, 140 s; SortTest: 10 passed, 0 failed
-07:53:06 sweep/trace100-30-k128/ready-4: exit 0, 302 s; SortTest: 10 passed, 0 failed
-07:53:36 sweep/trace100-30-k128/skew-seed-4: exit 0, 187 s; SortTest: 10 passed, 0 failed
-07:54:02 p4/zipfraw08-k128: exit 0, 110 s; SortTest: 11 passed, 0 failed
-07:54:10 sweep/trace100-30-k128/skew-seed-2: exit 0, 327 s; SortTest: 10 passed, 0 failed
-07:54:34 sweep/trace100-30-k128/skew-seed-3: exit 0, 282 s; SortTest: 10 passed, 0 failed
-07:54:43 p4/equal-k128: exit 0, 97 s; SortTest: 11 passed, 0 failed
-07:54:47 p4/uniform-k128: exit 0, 115 s; SortTest: 11 passed, 0 failed
-07:54:49 p4/zipf05-k128: exit 0, 113 s; SortTest: 11 passed, 0 failed
-07:55:06 p4/zipfraw05-k128: exit 0, 127 s; SortTest: 11 passed, 0 failed
-07:55:49 shuf/uniform-k128: exit 0, 133 s; SortTest (shuffled, seed 4): 11 passed, 0 failed
-tools/runjob.sh: line 9: 889352 Aborted                 (core dumped) SORT_BUILD=image ./sort_test $SEED run label=$ID $ARGS csv="$OUT/$F.csv.part" phases="$OUT/$F.phases.csv" > "$OUT/$F.log" 2>&1
-07:55:50 sweep/uniform-k128/ts-latency-3: exit 134, 1 s; 
-tools/runjob.sh: line 9: 889373 Aborted                 (core dumped) SORT_BUILD=image ./sort_test $SEED run label=$ID $ARGS csv="$OUT/$F.csv.part" phases="$OUT/$F.phases.csv" > "$OUT/$F.log" 2>&1
-07:55:50 sweep/uniform-k128/ts-latency-4: exit 134, 0 s; 
-tools/runjob.sh: line 9: 889394 Aborted                 (core dumped) SORT_BUILD=image ./sort_test $SEED run label=$ID $ARGS csv="$OUT/$F.csv.part" phases="$OUT/$F.phases.csv" > "$OUT/$F.log" 2>&1
-07:55:51 sweep/uniform-k128/ready-1: exit 134, 1 s; 
-07:55:54 p4/one99-k128: exit 0, 186 s; SortTest: 11 passed, 0 failed
-07:56:14 sweep/uniform-k128/sram-read-1: exit 0, 124 s; SortTest: 11 passed, 0 failed
-07:56:31 sweep/uniform-k128/sram-read-3: exit 0, 117 s; SortTest: 11 passed, 0 failed
-07:56:38 sweep/uniform-k128/sram-read-4: exit 0, 115 s; SortTest: 11 passed, 0 failed
-07:56:41 sweep/uniform-k128/area-queue-4: exit 0, 114 s; SortTest: 11 passed, 0 failed
-07:56:59 sweep/uniform-k128/ts-latency-2: exit 0, 113 s; SortTest: 11 passed, 0 failed
-07:57:09 p4/sorted-k128: exit 0, 245 s; SortTest: 11 passed, 0 failed
-07:57:46 sweep/uniform-k128/ready-4: exit 0, 115 s; SortTest: 11 passed, 0 failed
-07:58:06 sweep/uniform-k128/go-run-8: exit 0, 112 s; SortTest: 11 passed, 0 failed
-07:58:13 sweep/uniform-k128/default: exit 0, 251 s; SortTest: 11 passed, 0 failed
-07:58:23 sweep/uniform-k128/link-2: exit 0, 112 s; SortTest: 11 passed, 0 failed
-07:58:31 sweep/uniform-k128/link-4: exit 0, 113 s; SortTest: 11 passed, 0 failed
-07:58:33 sweep/uniform-k128/skew-off: exit 0, 112 s; SortTest: 11 passed, 0 failed
-07:59:07 sweep/uniform-k128/area-queue-16: exit 0, 258 s; SortTest: 11 passed, 0 failed
-07:59:40 sweep/uniform-k128/skew-seed-4: exit 0, 114 s; SortTest: 11 passed, 0 failed
-07:59:41 sweep/uniform-k128/skew-seed-2: exit 0, 162 s; SortTest: 11 passed, 0 failed
-07:59:49 sweep/uniform-k128/go-run-4: exit 0, 235 s; SortTest: 11 passed, 0 failed
-07:59:58 sweep/uniform-k128/skew-seed-5: exit 0, 112 s; SortTest: 11 passed, 0 failed
-08:00:05 sweep/uniform-k128/skew-seed-6: exit 0, 112 s; SortTest: 11 passed, 0 failed
-08:00:05 p4/trace10-10-kv32: exit 0, 94 s; SortTest: 9 passed, 0 failed
-08:00:09 p4/trace10-30-kv32: exit 0, 96 s; SortTest: 9 passed, 0 failed
-08:00:17 sweep/uniform-k128/cm-4: exit 0, 114 s; SortTest: 11 passed, 0 failed
-08:01:19 p4/trace100-30-kv32: exit 0, 98 s; SortTest: 9 passed, 0 failed
-08:01:23 p4/shaped-k128: exit 0, 74 s; SortTest: 11 passed, 0 failed
-08:01:33 p4/trace10000-10-kv32: exit 0, 95 s; SortTest: 9 passed, 0 failed
-08:01:34 sweep/uniform-k128/skew-seed-3: exit 0, 265 s; SortTest: 11 passed, 0 failed
-08:01:41 p4/trace10000-60-kv32: exit 0, 96 s; SortTest: 9 passed, 0 failed
-08:01:42 p4/trace10000-30-kv32: exit 0, 97 s; SortTest: 9 passed, 0 failed
-08:01:46 p4/zipf08-kv32: exit 0, 89 s; SortTest: 10 passed, 0 failed
-08:02:04 p4/trace10-60-kv32: exit 0, 177 s; SortTest: 9 passed, 0 failed
-08:02:49 p4/zipfraw08-kv32: exit 0, 90 s; SortTest: 10 passed, 0 failed
-08:02:54 p4/one99-kv32: exit 0, 73 s; SortTest: 10 passed, 0 failed
-08:03:01 p4/reverse-kv32: exit 0, 87 s; SortTest: 9 passed, 0 failed
-08:03:07 p4/uniform-kv32: exit 0, 81 s; SortTest: 10 passed, 0 failed
-08:03:21 p4/trace100-10-kv32: exit 0, 221 s; SortTest: 9 passed, 0 failed
-08:03:24 shuf/reverse-kv32: exit 0, 102 s; SortTest (shuffled, seed 4): 9 passed, 0 failed
-08:03:24 p4/zipf05-kv32: exit 0, 80 s; SortTest: 10 passed, 0 failed
-08:03:27 p4/trace100-60-kv32: exit 0, 218 s; SortTest: 9 passed, 0 failed
-08:03:30 p4/zipfraw10-kv32: exit 0, 117 s; SortTest: 10 passed, 0 failed
-08:03:47 p4/zipf10-kv32: exit 0, 144 s; SortTest: 10 passed, 0 failed
-08:03:54 p4/ragged-kv32: exit 0, 47 s; SortTest: 10 passed, 0 failed
-08:04:00 p4/zipfraw05-kv32: exit 0, 71 s; SortTest: 10 passed, 0 failed
-08:04:04 p4/sorted-kv32: exit 0, 70 s; SortTest: 10 passed, 0 failed
-08:04:12 p4/equal-kv32: exit 0, 71 s; SortTest: 10 passed, 0 failed
+tools/runjob.sh: line 9: 891666 Aborted                 (core dumped) SORT_BUILD=image ./sort_test $SEED run label=$ID $ARGS csv="$OUT/$F.csv.part" phases="$OUT/$F.phases.csv" > "$OUT/$F.log" 2>&1
+08:05:07 sweep/trace100-30-k128/corner: exit 134, 1 s; 
+tools/runjob.sh: line 9: 891677 Aborted                 (core dumped) SORT_BUILD=image ./sort_test $SEED run label=$ID $ARGS csv="$OUT/$F.csv.part" phases="$OUT/$F.phases.csv" > "$OUT/$F.log" 2>&1
+08:06:54 p4/few5-k128: exit 134, 108 s; 
+08:07:18 p4/trace10-10-k128: exit 0, 132 s; SortTest: 10 passed, 0 failed
+08:07:18 p4/trace10-30-k128: exit 0, 132 s; SortTest: 10 passed, 0 failed
+08:07:19 p4/trace100-60-k128: exit 0, 133 s; SortTest: 10 passed, 0 failed
+08:07:19 p4/trace10000-10-k128: exit 0, 132 s; SortTest: 10 passed, 0 failed
+08:07:19 p4/trace100-30-k128: exit 0, 133 s; SortTest: 10 passed, 0 failed
+08:07:21 p4/zipf10-k128: exit 0, 135 s; SortTest: 10 passed, 0 failed
+08:09:23 p4/trace10000-30-k128: exit 0, 149 s; SortTest: 10 passed, 0 failed
+08:09:38 p4/trace10000-60-k128: exit 0, 140 s; SortTest: 10 passed, 0 failed
+08:09:39 sweep/trace100-30-k128/sram-read-1: exit 0, 140 s; SortTest: 10 passed, 0 failed
+08:09:41 sweep/trace100-30-k128/sram-read-4: exit 0, 140 s; SortTest: 10 passed, 0 failed
+08:09:42 sweep/trace100-30-k128/sram-read-3: exit 0, 143 s; SortTest: 10 passed, 0 failed
+tools/runjob.sh: line 9: 891943 Aborted                 (core dumped) SORT_BUILD=image ./sort_test $SEED run label=$ID $ARGS csv="$OUT/$F.csv.part" phases="$OUT/$F.phases.csv" > "$OUT/$F.log" 2>&1
+08:09:42 sweep/trace100-30-k128/ts-latency-3: exit 134, 1 s; 
+tools/runjob.sh: line 9: 891985 Aborted                 (core dumped) SORT_BUILD=image ./sort_test $SEED run label=$ID $ARGS csv="$OUT/$F.csv.part" phases="$OUT/$F.phases.csv" > "$OUT/$F.log" 2>&1
+08:09:42 sweep/trace100-30-k128/ready-1: exit 134, 0 s; 
+tools/runjob.sh: line 9: 891964 Aborted                 (core dumped) SORT_BUILD=image ./sort_test $SEED run label=$ID $ARGS csv="$OUT/$F.csv.part" phases="$OUT/$F.phases.csv" > "$OUT/$F.log" 2>&1
+08:09:43 sweep/trace100-30-k128/ts-latency-4: exit 134, 1 s; 
+08:10:02 shuf/trace100-30-k128: exit 0, 164 s; SortTest (shuffled, seed 4): 10 passed, 0 failed
+08:10:08 p4/zipfraw10-k128: exit 0, 302 s; SortTest: 10 passed, 0 failed
+08:10:21 p4/trace10-60-k128: exit 0, 315 s; SortTest: 10 passed, 0 failed
+08:10:28 p4/trace100-10-k128: exit 0, 322 s; SortTest: 10 passed, 0 failed
+08:10:59 sweep/trace100-30-k128/default: exit 0, 220 s; SortTest: 10 passed, 0 failed
+08:11:55 sweep/trace100-30-k128/area-queue-16: exit 0, 137 s; SortTest: 10 passed, 0 failed
+08:12:02 sweep/trace100-30-k128/go-run-4: exit 0, 139 s; SortTest: 10 passed, 0 failed
+08:12:02 sweep/trace100-30-k128/ready-4: exit 0, 140 s; SortTest: 10 passed, 0 failed
+08:12:21 sweep/trace100-30-k128/go-run-8: exit 0, 139 s; SortTest: 10 passed, 0 failed
+08:12:47 sweep/trace100-30-k128/skew-off: exit 0, 139 s; SortTest: 10 passed, 0 failed
+08:12:51 sweep/trace100-30-k128/area-queue-4: exit 0, 208 s; SortTest: 10 passed, 0 failed
+tools/runjob.sh: line 9: 892263 Aborted                 (core dumped) SORT_BUILD=image ./sort_test $SEED run label=$ID $ARGS csv="$OUT/$F.csv.part" phases="$OUT/$F.phases.csv" > "$OUT/$F.log" 2>&1
+08:12:52 sweep/uniform-k128/corner: exit 134, 1 s; 
+08:13:20 sweep/trace100-30-k128/skew-seed-2: exit 0, 141 s; SortTest: 10 passed, 0 failed
+08:14:14 sweep/trace100-30-k128/skew-seed-3: exit 0, 139 s; SortTest: 10 passed, 0 failed
+08:14:26 sweep/trace100-30-k128/ts-latency-2: exit 0, 287 s; SortTest: 10 passed, 0 failed
+08:14:34 sweep/trace100-30-k128/skew-seed-5: exit 0, 152 s; SortTest: 10 passed, 0 failed
+08:14:38 sweep/trace100-30-k128/skew-seed-6: exit 0, 137 s; SortTest: 10 passed, 0 failed
+08:15:09 sweep/trace100-30-k128/cm-4: exit 0, 142 s; SortTest: 10 passed, 0 failed
+08:15:17 p4/zipf08-k128: exit 0, 117 s; SortTest: 11 passed, 0 failed
+08:15:31 sweep/trace100-30-k128/link-2: exit 0, 323 s; SortTest: 10 passed, 0 failed
+08:15:37 p4/reverse-k128: exit 0, 165 s; SortTest: 10 passed, 0 failed
+08:15:45 sweep/trace100-30-k128/link-4: exit 0, 324 s; SortTest: 10 passed, 0 failed
+08:16:04 p4/zipfraw08-k128: exit 0, 110 s; SortTest: 11 passed, 0 failed
+08:16:13 p4/one99-k128: exit 0, 107 s; SortTest: 11 passed, 0 failed
+08:16:27 p4/uniform-k128: exit 0, 113 s; SortTest: 11 passed, 0 failed
+08:16:33 p4/zipf05-k128: exit 0, 115 s; SortTest: 11 passed, 0 failed
+08:17:01 p4/zipfraw05-k128: exit 0, 112 s; SortTest: 11 passed, 0 failed
+08:17:06 p4/sorted-k128: exit 0, 109 s; SortTest: 11 passed, 0 failed
+08:17:08 sweep/trace100-30-k128/skew-seed-4: exit 0, 306 s; SortTest: 10 passed, 0 failed
+tools/runjob.sh: line 9: 892664 Aborted                 (core dumped) SORT_BUILD=image ./sort_test $SEED run label=$ID $ARGS csv="$OUT/$F.csv.part" phases="$OUT/$F.phases.csv" > "$OUT/$F.log" 2>&1
+08:17:09 sweep/uniform-k128/ts-latency-3: exit 134, 1 s; 
+tools/runjob.sh: line 9: 892685 Aborted                 (core dumped) SORT_BUILD=image ./sort_test $SEED run label=$ID $ARGS csv="$OUT/$F.csv.part" phases="$OUT/$F.phases.csv" > "$OUT/$F.log" 2>&1
+08:17:10 sweep/uniform-k128/ts-latency-4: exit 134, 1 s; 
+tools/runjob.sh: line 9: 892706 Aborted                 (core dumped) SORT_BUILD=image ./sort_test $SEED run label=$ID $ARGS csv="$OUT/$F.csv.part" phases="$OUT/$F.phases.csv" > "$OUT/$F.log" 2>&1
+08:17:11 sweep/uniform-k128/ready-1: exit 134, 1 s; 
+08:18:05 sweep/uniform-k128/sram-read-3: exit 0, 112 s; SortTest: 11 passed, 0 failed
+08:18:21 sweep/uniform-k128/sram-read-4: exit 0, 114 s; SortTest: 11 passed, 0 failed
+08:18:23 sweep/uniform-k128/area-queue-4: exit 0, 110 s; SortTest: 11 passed, 0 failed
+08:18:41 shuf/uniform-k128: exit 0, 184 s; SortTest (shuffled, seed 4): 11 passed, 0 failed
+08:19:01 sweep/uniform-k128/ts-latency-2: exit 0, 115 s; SortTest: 11 passed, 0 failed
+08:19:05 sweep/uniform-k128/sram-read-1: exit 0, 181 s; SortTest: 11 passed, 0 failed
+08:19:05 sweep/uniform-k128/ready-4: exit 0, 114 s; SortTest: 11 passed, 0 failed
+08:19:13 p4/equal-k128: exit 0, 222 s; SortTest: 11 passed, 0 failed
+08:19:59 sweep/uniform-k128/go-run-4: exit 0, 114 s; SortTest: 11 passed, 0 failed
+08:20:04 sweep/uniform-k128/area-queue-16: exit 0, 183 s; SortTest: 11 passed, 0 failed
+08:20:06 sweep/uniform-k128/default: exit 0, 260 s; SortTest: 11 passed, 0 failed
+08:20:17 sweep/uniform-k128/link-2: exit 0, 114 s; SortTest: 11 passed, 0 failed
+08:20:37 sweep/uniform-k128/link-4: exit 0, 116 s; SortTest: 11 passed, 0 failed
+08:20:55 sweep/uniform-k128/skew-off: exit 0, 114 s; SortTest: 11 passed, 0 failed
+08:20:58 sweep/uniform-k128/skew-seed-3: exit 0, 113 s; SortTest: 11 passed, 0 failed
+08:21:38 sweep/uniform-k128/skew-seed-2: exit 0, 153 s; SortTest: 11 passed, 0 failed
+08:21:49 sweep/uniform-k128/go-run-8: exit 0, 208 s; SortTest: 11 passed, 0 failed
+08:21:52 sweep/uniform-k128/skew-seed-5: exit 0, 113 s; SortTest: 11 passed, 0 failed
+08:21:59 sweep/uniform-k128/cm-4: exit 0, 113 s; SortTest: 11 passed, 0 failed
+08:22:03 p4/trace10-10-kv32: exit 0, 106 s; SortTest: 9 passed, 0 failed
+08:22:29 p4/trace10-60-kv32: exit 0, 94 s; SortTest: 9 passed, 0 failed
+08:23:13 p4/trace100-30-kv32: exit 0, 95 s; SortTest: 9 passed, 0 failed
+08:23:24 p4/trace100-60-kv32: exit 0, 95 s; SortTest: 9 passed, 0 failed
+08:23:27 p4/trace10000-10-kv32: exit 0, 95 s; SortTest: 9 passed, 0 failed
+08:23:30 p4/trace100-10-kv32: exit 0, 152 s; SortTest: 9 passed, 0 failed
+08:23:35 sweep/uniform-k128/skew-seed-4: exit 0, 262 s; SortTest: 11 passed, 0 failed
+08:23:35 p4/trace10000-30-kv32: exit 0, 96 s; SortTest: 9 passed, 0 failed
+08:23:40 p4/trace10000-60-kv32: exit 0, 97 s; SortTest: 9 passed, 0 failed
+08:23:44 p4/shaped-k128: exit 0, 75 s; SortTest: 11 passed, 0 failed
+08:24:09 p4/trace10-30-kv32: exit 0, 212 s; SortTest: 9 passed, 0 failed
+08:24:25 sweep/uniform-k128/skew-seed-6: exit 0, 261 s; SortTest: 11 passed, 0 failed
+08:24:50 p4/zipfraw10-kv32: exit 0, 80 s; SortTest: 10 passed, 0 failed
+08:25:02 p4/reverse-kv32: exit 0, 87 s; SortTest: 9 passed, 0 failed
+08:25:05 p4/uniform-kv32: exit 0, 81 s; SortTest: 10 passed, 0 failed
+08:25:18 p4/one99-kv32: exit 0, 103 s; SortTest: 10 passed, 0 failed
+08:25:23 shuf/reverse-kv32: exit 0, 103 s; SortTest (shuffled, seed 4): 9 passed, 0 failed
+08:25:31 p4/zipf05-kv32: exit 0, 82 s; SortTest: 10 passed, 0 failed
+08:25:40 p4/zipf08-kv32: exit 0, 147 s; SortTest: 10 passed, 0 failed
+08:25:42 p4/zipf10-kv32: exit 0, 135 s; SortTest: 10 passed, 0 failed
+08:25:43 p4/zipfraw05-kv32: exit 0, 78 s; SortTest: 10 passed, 0 failed
+08:25:48 p4/zipfraw08-kv32: exit 0, 144 s; SortTest: 10 passed, 0 failed
+08:25:52 p4/ragged-kv32: exit 0, 47 s; SortTest: 10 passed, 0 failed
+08:26:02 p4/sorted-kv32: exit 0, 72 s; SortTest: 10 passed, 0 failed
+08:26:04 p4/equal-kv32: exit 0, 62 s; SortTest: 10 passed, 0 failed
 wrote results/SUMMARY.md and results/all.csv (83 runs, 9 without a result)
