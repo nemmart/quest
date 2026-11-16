@@ -1,0 +1,20 @@
+evm-zone-23: segments file 1913e54349827770134d90052863d8dff8738e77cae287c3ecd78ab12579f241
+evm-zone-23, none base, compression none, N 128: verified, checked, against the segment file ok
+    5833069 rows, 93 cuts, N 128; frames file 3825712 bytes, SHA-256 bd7c771b52fd5bc94f3dee6d2051bcea886f1323173b8a6a65c370c6f42d885c; program image 491 pages (492 taken); table full (k 13, 256 pages taken); data image 1097 words, 7 pages; memory segments 73060 words (raw 584480 B, LRU 195604 B); 1.5 s
+    verify: images (cycle-0 44bf303f7a0a499a, 128 starts and Tracer's copies, final 2cd6a484047a8c60) equal gold's memory; page counts equal; jump targets 5526 found, 0 missed (table full); both forms of every update-word frame decode; 2.5 s: VERIFIED
+evm-zone-23, static base, compression auto, N 128: verified, checked, against the segment file ok
+    5833069 rows, 93 cuts, N 128; frames file 2849712 bytes, SHA-256 b209f2b08b5d9b778455024046a78024cd5d78bae3f467906d9044f6c0ff2bfd; program image 491 pages (492 taken); table added (k 13, 2 pages taken); data image 1128 words, 7 pages; memory segments 73060 words (raw 584480 B, LRU 195604 B); 1.6 s
+    verify: images (cycle-0 44bf303f7a0a499a, 128 starts and Tracer's copies, final 2cd6a484047a8c60) equal gold's memory; page counts equal; jump targets 5526 found, 0 missed (table added); both forms of every update-word frame decode, the smaller sent; 2.5 s: VERIFIED
+evm-zone-23, static base, compression lru, N 256: verified, checked, against the segment file ok
+    5833069 rows, 93 cuts, N 256; frames file 2992048 bytes, SHA-256 57e219b92afca8bc9c2bb79d640f85fb53b496908658d96c6bfb1e8965a5852c; program image 491 pages (492 taken); table added (k 13, 2 pages taken); data image 1128 words, 7 pages; memory segments 73060 words (raw 584480 B, LRU 195604 B); 1.6 s
+    verify: images (cycle-0 44bf303f7a0a499a, 256 starts and Tracer's copies, final 2cd6a484047a8c60) equal gold's memory; page counts equal; jump targets 5526 found, 0 missed (table added); both forms of every update-word frame decode; 5.0 s: VERIFIED
+cyclone-22: segments file 6ccc978de2015a3abd2b6efbd3442e289b8a4f0cb76a5554a57f359d236d3900
+cyclone-22, none base, compression none, N 128: verified, checked, against the segment file ok
+    2705819 rows, 111 cuts, N 128; frames file 5390064 bytes, SHA-256 85d338d018e525657b9046b09a08816d341509f54d38366317fdd5a73fcb7b8f; program image 808 pages (809 taken); table full (k 13, 256 pages taken); data image 3477 words, 11 pages; memory segments 107376 words (raw 859008 B, LRU 217756 B); 2.3 s
+    verify: images (cycle-0 8192a64c543a551b, 128 starts and Tracer's copies, final d97a38a8b608193b) equal gold's memory; page counts equal; jump targets 2945 found, 0 missed (table full); both forms of every update-word frame decode; 3.8 s: VERIFIED
+cyclone-22, static base, compression auto, N 128: verified, checked, against the segment file ok
+    2705819 rows, 111 cuts, N 128; frames file 3997328 bytes, SHA-256 6f63e10e82825ce85d564a1eb7197f1836caec651ab25f27f59d3d97aae54eb5; program image 808 pages (809 taken); table added (k 13, 0 pages taken); data image 3559 words, 11 pages; memory segments 107376 words (raw 859008 B, LRU 217756 B); 2.4 s
+    verify: images (cycle-0 8192a64c543a551b, 128 starts and Tracer's copies, final d97a38a8b608193b) equal gold's memory; page counts equal; jump targets 2945 found, 0 missed (table added); both forms of every update-word frame decode, the smaller sent; 3.8 s: VERIFIED
+cyclone-22, static base, compression lru, N 256: verified, checked, against the segment file ok
+    2705819 rows, 111 cuts, N 256; frames file 4139664 bytes, SHA-256 04a2287c4a5f378608176e09ac5b9ae5e786551684aad9ebb65397535bdd4f81; program image 808 pages (809 taken); table added (k 13, 0 pages taken); data image 3559 words, 11 pages; memory segments 107376 words (raw 859008 B, LRU 217756 B); 2.3 s
+    verify: images (cycle-0 8192a64c543a551b, 256 starts and Tracer's copies, final d97a38a8b608193b) equal gold's memory; page counts equal; jump targets 2945 found, 0 missed (table added); both forms of every update-word frame decode; 7.5 s: VERIFIED

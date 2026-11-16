@@ -1,0 +1,745 @@
+frame file: 16525984 bytes, 11 frames, N = 256 (from frame 7)
+
+frame 1 (program image header) at byte 0: 3 128-bit words of data (64 bytes with its header)
+  program stem /programs/cyclone
+  file length 131072 pages
+  frame 2: 413698 64-bit words, 199507 128-bit words, 809 pages
+
+frame 2 (program image data) at byte 64: 199507 128-bit words of data (3192128 bytes with its header), LRU
+    run at word 4194304 (byte 0x2000000), 413184 words
+    run at word 4608000 (byte 0x2328000), 512 words
+  413698 words, 2 runs
+
+frame 4 (jump table header, the base table on its own) at byte 3192192: 4 128-bit words of data (80 bytes with its header)
+  path "/programs/cyclone.base"
+  base table "" (none: a full new table)
+  k 13 (8192 lines), p1 0x9e3779b1, p3 10368899
+  frame 5: 131073 64-bit words, 26015 128-bit words, 256 pages
+
+frame 5 (jump table data, the base table on its own) at byte 3192272: 26015 128-bit words of data (416256 bytes with its header), LRU
+    run at word 0 (byte 0x0), 131072 words
+  131073 words, 1 runs
+
+frame 3 (proof header) at byte 3608528: 336 128-bit words of data (5392 bytes with its header)
+  format version 1
+  program stem /programs/cyclone
+  working directory /work/cyclone-input-15961266
+  proof parameters, 22 fields:
+    log2_k                     0x18
+    lowest_address             0x7e000000
+    program_size               0x3289e0
+    max_trusted_advice_size    0x0
+    trusted_advice_start       0x7f000000
+    trusted_advice_end         0x7f000000
+    max_untrusted_advice_size  0x1000000
+    untrusted_advice_start     0x7e000000
+    untrusted_advice_end       0x7f000000
+    max_input_size             0x1000
+    max_output_size            0x2000
+    input_start                0x7f000000
+    input_end                  0x7f001000
+    output_start               0x7f001000
+    output_end                 0x7f003000
+    stack_size                 0x4000000
+    stack_end                  0x803289e0
+    heap_size                  0x10000000
+    heap_end                   0x94328a60
+    panic                      0x7f003000
+    termination                0x7f003008
+    io_end                     0x7f003010
+  data image: 360527 64-bit words, 152236 128-bit words, 712 pages
+  memory segments: 2208186 64-bit words in all, 588924 128-bit words
+  per segment: 64-bit words, pages written; per ASIC: start, final, Tracer's copy pages
+      0     133551 words    266 written   ASIC      0   1994    269
+      1      26221 words     53 written   ASIC    269   1992     54
+      2      26220 words     54 written   ASIC    269   1992     55
+      3      26220 words     53 written   ASIC    269   1992     54
+      4      26221 words     53 written   ASIC    269   1992     55
+      5     264089 words    524 written   ASIC    269   1992    527
+      6      26220 words     53 written   ASIC    782   1992     55
+      7      26221 words     53 written   ASIC    782   1992     55
+      8      26220 words     54 written   ASIC    782   1992     56
+      9      26220 words     53 written   ASIC    782   1992     55
+     10     531983 words   1048 written   ASIC    782   1992   1052
+     11      26220 words     53 written   ASIC   1808   1150     55
+     12      26220 words     53 written   ASIC   1808   1099     55
+     13      26220 words     53 written   ASIC   1808   1048     55
+     14     377386 words    744 written   ASIC   1808    997    748
+     15      44161 words     92 written   ASIC   1808    302     95
+     16       2357 words     22 written   ASIC   1809    259     25
+     17       2200 words     22 written   ASIC   1809    259     25
+     18       2816 words     23 written   ASIC   1809    259     26
+     19      68883 words    150 written   ASIC   1809    254    154
+     20      20967 words     44 written   ASIC   1930    247     46
+     21       2225 words      6 written   ASIC   1930    247      8
+     22       2225 words      6 written   ASIC   1930    247      8
+     23       2225 words      6 written   ASIC   1930    247      8
+     24       2225 words      6 written   ASIC   1930    247      8
+     25       2225 words      6 written   ASIC   1930    247      8
+     26       2225 words      6 written   ASIC   1930    247      8
+     27       2225 words      6 written   ASIC   1930    247      8
+     28       2225 words      6 written   ASIC   1930    247      8
+     29       2225 words      6 written   ASIC   1930    247      8
+     30       2225 words      6 written   ASIC   1930    247      8
+     31       2225 words      6 written   ASIC   1930    247      8
+     32       2225 words      6 written   ASIC   1930    247      8
+     33       2225 words      6 written   ASIC   1930    247      8
+     34       2225 words      6 written   ASIC   1930    247      8
+     35      69994 words    154 written   ASIC   1930    247    158
+     36       7716 words     42 written   ASIC   1931    148     46
+     37       6020 words     44 written   ASIC   1931    148     48
+     38       4190 words     36 written   ASIC   1931    148     40
+     39       5558 words     35 written   ASIC   1931    148     39
+     40       4128 words     31 written   ASIC   1931    148     35
+     41       5686 words     34 written   ASIC   1931    148     38
+     42       5997 words     37 written   ASIC   1931    148     41
+     43       5802 words     35 written   ASIC   1931    148     39
+     44       8909 words     50 written   ASIC   1931    148     54
+     45       8771 words     53 written   ASIC   1932    145     57
+     46      13453 words     61 written   ASIC   1933    145     65
+     47       4708 words     41 written   ASIC   1939    145     45
+     48       3948 words     31 written   ASIC   1939    145     35
+     49       5361 words     34 written   ASIC   1939    145     38
+     50       5995 words     43 written   ASIC   1939    145     47
+     51       6209 words     42 written   ASIC   1939    145     46
+     52       6012 words     45 written   ASIC   1939    145     49
+     53       8256 words     50 written   ASIC   1939    145     54
+     54       6452 words     42 written   ASIC   1939    145     46
+     55       6680 words     44 written   ASIC   1939    145     48
+     56       7991 words     48 written   ASIC   1939    145     52
+     57       9704 words     50 written   ASIC   1939    145     54
+     58       7020 words     48 written   ASIC   1944    145     52
+     59       5864 words     39 written   ASIC   1944    145     43
+     60       5777 words     41 written   ASIC   1944    145     45
+     61       5672 words     44 written   ASIC   1944    145     48
+     62       7173 words     49 written   ASIC   1944    145     53
+     63       7516 words     51 written   ASIC   1944    145     55
+     64       5301 words     45 written   ASIC   1944    145     49
+     65       8275 words     56 written   ASIC   1945    145     60
+     66       7443 words     47 written   ASIC   1945    145     51
+     67       8742 words     49 written   ASIC   1945    145     53
+     68      26447 words     90 written   ASIC   1945    145     94
+     69      10130 words     56 written   ASIC   1977    125     60
+     70       8535 words     56 written   ASIC   1977    125     60
+     71       8500 words     49 written   ASIC   1977    125     53
+     72      12097 words     67 written   ASIC   1977    123     71
+     73      12416 words     59 written   ASIC   1977    121     63
+     74       7419 words     49 written   ASIC   1977    116     53
+     75       8150 words     56 written   ASIC   1977    109     60
+     76       7532 words     47 written   ASIC   1977    106     51
+     77      12023 words     56 written   ASIC   1977    106     60
+     78       9291 words     53 written   ASIC   1991     93     57
+     79       8622 words     54 written   ASIC   1991     92     58
+     80       8154 words     51 written   ASIC   1991     89     55
+     81       9491 words     72 written   ASIC   1991     83     76
+     82        683 words     17 written   ASIC   1991     35     21
+     83        805 words     19 written   ASIC   1991     35     23
+     84        710 words     17 written   ASIC   1991     33     21
+     85        660 words     16 written   ASIC   1991     32     20
+     86        634 words     15 written   ASIC   1991     31     19
+     87        683 words     16 written   ASIC   1991     31     20
+     88        915 words     23 written   ASIC   1991     28     28
+     89          0 words      0 written   ASIC   1994      0      0
+     90          0 words      0 written   ASIC   1994      0      0
+     91          0 words      0 written   ASIC   1994      0      0
+     92          0 words      0 written   ASIC   1994      0      0
+     93          0 words      0 written   ASIC   1994      0      0
+     94          0 words      0 written   ASIC   1994      0      0
+     95          0 words      0 written   ASIC   1994      0      0
+     96          0 words      0 written   ASIC   1994      0      0
+     97          0 words      0 written   ASIC   1994      0      0
+     98          0 words      0 written   ASIC   1994      0      0
+     99          0 words      0 written   ASIC   1994      0      0
+    100          0 words      0 written   ASIC   1994      0      0
+    101          0 words      0 written   ASIC   1994      0      0
+    102          0 words      0 written   ASIC   1994      0      0
+    103          0 words      0 written   ASIC   1994      0      0
+    104          0 words      0 written   ASIC   1994      0      0
+    105          0 words      0 written   ASIC   1994      0      0
+    106          0 words      0 written   ASIC   1994      0      0
+    107          0 words      0 written   ASIC   1994      0      0
+    108          0 words      0 written   ASIC   1994      0      0
+    109          0 words      0 written   ASIC   1994      0      0
+    110          0 words      0 written   ASIC   1994      0      0
+    111          0 words      0 written   ASIC   1994      0      0
+    112          0 words      0 written   ASIC   1994      0      0
+    113          0 words      0 written   ASIC   1994      0      0
+    114          0 words      0 written   ASIC   1994      0      0
+    115          0 words      0 written   ASIC   1994      0      0
+    116          0 words      0 written   ASIC   1994      0      0
+    117          0 words      0 written   ASIC   1994      0      0
+    118          0 words      0 written   ASIC   1994      0      0
+    119          0 words      0 written   ASIC   1994      0      0
+    120          0 words      0 written   ASIC   1994      0      0
+    121          0 words      0 written   ASIC   1994      0      0
+    122          0 words      0 written   ASIC   1994      0      0
+    123          0 words      0 written   ASIC   1994      0      0
+    124          0 words      0 written   ASIC   1994      0      0
+    125          0 words      0 written   ASIC   1994      0      0
+    126          0 words      0 written   ASIC   1994      0      0
+    127          0 words      0 written   ASIC   1994      0      0
+    128          0 words      0 written   ASIC   1994      0      0
+    129          0 words      0 written   ASIC   1994      0      0
+    130          0 words      0 written   ASIC   1994      0      0
+    131          0 words      0 written   ASIC   1994      0      0
+    132          0 words      0 written   ASIC   1994      0      0
+    133          0 words      0 written   ASIC   1994      0      0
+    134          0 words      0 written   ASIC   1994      0      0
+    135          0 words      0 written   ASIC   1994      0      0
+    136          0 words      0 written   ASIC   1994      0      0
+    137          0 words      0 written   ASIC   1994      0      0
+    138          0 words      0 written   ASIC   1994      0      0
+    139          0 words      0 written   ASIC   1994      0      0
+    140          0 words      0 written   ASIC   1994      0      0
+    141          0 words      0 written   ASIC   1994      0      0
+    142          0 words      0 written   ASIC   1994      0      0
+    143          0 words      0 written   ASIC   1994      0      0
+    144          0 words      0 written   ASIC   1994      0      0
+    145          0 words      0 written   ASIC   1994      0      0
+    146          0 words      0 written   ASIC   1994      0      0
+    147          0 words      0 written   ASIC   1994      0      0
+    148          0 words      0 written   ASIC   1994      0      0
+    149          0 words      0 written   ASIC   1994      0      0
+    150          0 words      0 written   ASIC   1994      0      0
+    151          0 words      0 written   ASIC   1994      0      0
+    152          0 words      0 written   ASIC   1994      0      0
+    153          0 words      0 written   ASIC   1994      0      0
+    154          0 words      0 written   ASIC   1994      0      0
+    155          0 words      0 written   ASIC   1994      0      0
+    156          0 words      0 written   ASIC   1994      0      0
+    157          0 words      0 written   ASIC   1994      0      0
+    158          0 words      0 written   ASIC   1994      0      0
+    159          0 words      0 written   ASIC   1994      0      0
+    160          0 words      0 written   ASIC   1994      0      0
+    161          0 words      0 written   ASIC   1994      0      0
+    162          0 words      0 written   ASIC   1994      0      0
+    163          0 words      0 written   ASIC   1994      0      0
+    164          0 words      0 written   ASIC   1994      0      0
+    165          0 words      0 written   ASIC   1994      0      0
+    166          0 words      0 written   ASIC   1994      0      0
+    167          0 words      0 written   ASIC   1994      0      0
+    168          0 words      0 written   ASIC   1994      0      0
+    169          0 words      0 written   ASIC   1994      0      0
+    170          0 words      0 written   ASIC   1994      0      0
+    171          0 words      0 written   ASIC   1994      0      0
+    172          0 words      0 written   ASIC   1994      0      0
+    173          0 words      0 written   ASIC   1994      0      0
+    174          0 words      0 written   ASIC   1994      0      0
+    175          0 words      0 written   ASIC   1994      0      0
+    176          0 words      0 written   ASIC   1994      0      0
+    177          0 words      0 written   ASIC   1994      0      0
+    178          0 words      0 written   ASIC   1994      0      0
+    179          0 words      0 written   ASIC   1994      0      0
+    180          0 words      0 written   ASIC   1994      0      0
+    181          0 words      0 written   ASIC   1994      0      0
+    182          0 words      0 written   ASIC   1994      0      0
+    183          0 words      0 written   ASIC   1994      0      0
+    184          0 words      0 written   ASIC   1994      0      0
+    185          0 words      0 written   ASIC   1994      0      0
+    186          0 words      0 written   ASIC   1994      0      0
+    187          0 words      0 written   ASIC   1994      0      0
+    188          0 words      0 written   ASIC   1994      0      0
+    189          0 words      0 written   ASIC   1994      0      0
+    190          0 words      0 written   ASIC   1994      0      0
+    191          0 words      0 written   ASIC   1994      0      0
+    192          0 words      0 written   ASIC   1994      0      0
+    193          0 words      0 written   ASIC   1994      0      0
+    194          0 words      0 written   ASIC   1994      0      0
+    195          0 words      0 written   ASIC   1994      0      0
+    196          0 words      0 written   ASIC   1994      0      0
+    197          0 words      0 written   ASIC   1994      0      0
+    198          0 words      0 written   ASIC   1994      0      0
+    199          0 words      0 written   ASIC   1994      0      0
+    200          0 words      0 written   ASIC   1994      0      0
+    201          0 words      0 written   ASIC   1994      0      0
+    202          0 words      0 written   ASIC   1994      0      0
+    203          0 words      0 written   ASIC   1994      0      0
+    204          0 words      0 written   ASIC   1994      0      0
+    205          0 words      0 written   ASIC   1994      0      0
+    206          0 words      0 written   ASIC   1994      0      0
+    207          0 words      0 written   ASIC   1994      0      0
+    208          0 words      0 written   ASIC   1994      0      0
+    209          0 words      0 written   ASIC   1994      0      0
+    210          0 words      0 written   ASIC   1994      0      0
+    211          0 words      0 written   ASIC   1994      0      0
+    212          0 words      0 written   ASIC   1994      0      0
+    213          0 words      0 written   ASIC   1994      0      0
+    214          0 words      0 written   ASIC   1994      0      0
+    215          0 words      0 written   ASIC   1994      0      0
+    216          0 words      0 written   ASIC   1994      0      0
+    217          0 words      0 written   ASIC   1994      0      0
+    218          0 words      0 written   ASIC   1994      0      0
+    219          0 words      0 written   ASIC   1994      0      0
+    220          0 words      0 written   ASIC   1994      0      0
+    221          0 words      0 written   ASIC   1994      0      0
+    222          0 words      0 written   ASIC   1994      0      0
+    223          0 words      0 written   ASIC   1994      0      0
+    224          0 words      0 written   ASIC   1994      0      0
+    225          0 words      0 written   ASIC   1994      0      0
+    226          0 words      0 written   ASIC   1994      0      0
+    227          0 words      0 written   ASIC   1994      0      0
+    228          0 words      0 written   ASIC   1994      0      0
+    229          0 words      0 written   ASIC   1994      0      0
+    230          0 words      0 written   ASIC   1994      0      0
+    231          0 words      0 written   ASIC   1994      0      0
+    232          0 words      0 written   ASIC   1994      0      0
+    233          0 words      0 written   ASIC   1994      0      0
+    234          0 words      0 written   ASIC   1994      0      0
+    235          0 words      0 written   ASIC   1994      0      0
+    236          0 words      0 written   ASIC   1994      0      0
+    237          0 words      0 written   ASIC   1994      0      0
+    238          0 words      0 written   ASIC   1994      0      0
+    239          0 words      0 written   ASIC   1994      0      0
+    240          0 words      0 written   ASIC   1994      0      0
+    241          0 words      0 written   ASIC   1994      0      0
+    242          0 words      0 written   ASIC   1994      0      0
+    243          0 words      0 written   ASIC   1994      0      0
+    244          0 words      0 written   ASIC   1994      0      0
+    245          0 words      0 written   ASIC   1994      0      0
+    246          0 words      0 written   ASIC   1994      0      0
+    247          0 words      0 written   ASIC   1994      0      0
+    248          0 words      0 written   ASIC   1994      0      0
+    249          0 words      0 written   ASIC   1994      0      0
+    250          0 words      0 written   ASIC   1994      0      0
+    251          0 words      0 written   ASIC   1994      0      0
+    252          0 words      0 written   ASIC   1994      0      0
+    253          0 words      0 written   ASIC   1994      0      0
+    254          0 words      0 written   ASIC   1994      0      0
+    255          0 words      0 written   ASIC   1994      0      0
+
+frame 4 (jump table header) at byte 3613920: 4 128-bit words of data (80 bytes with its header)
+  path "" (a run's table)
+  base table "/programs/cyclone.base"
+  k 13 (8192 lines), p1 0x9e3779b1, p3 10368899
+  frame 5: 0 64-bit words, 0 128-bit words, 0 pages
+
+frame 5 (jump table data) at byte 3614000: 0 128-bit words of data (16 bytes with its header), LRU
+  0 words, 0 runs
+
+frame 6 (data image) at byte 3614016: 152236 128-bit words of data (2435792 bytes with its header), LRU
+    run at word 0 (byte 0x0), 1176 words
+    run at word 1189 (byte 0x2528), 6116 words
+    run at word 7322 (byte 0xe4d0), 10544 words
+    run at word 17884 (byte 0x22ee0), 124 words
+    run at word 18032 (byte 0x23380), 58 words
+    run at word 18116 (byte 0x23620), 5588 words
+    run at word 23726 (byte 0x2e570), 70 words
+    run at word 23810 (byte 0x2e810), 222 words
+    run at word 24046 (byte 0x2ef70), 56 words
+    run at word 24114 (byte 0x2f190), 5764 words
+    run at word 29892 (byte 0x3a620), 6214 words
+    run at word 36120 (byte 0x468c0), 6215 words
+    run at word 42349 (byte 0x52b68), 6085 words
+    run at word 48460 (byte 0x5ea60), 15 words
+    run at word 48488 (byte 0x5eb40), 74 words
+    run at word 48576 (byte 0x5ee00), 52 words
+    run at word 48640 (byte 0x5f000), 55 words
+    run at word 48708 (byte 0x5f220), 50 words
+    run at word 48776 (byte 0x5f440), 17610 words
+    run at word 66399 (byte 0x81af8), 91 words
+    run at word 66507 (byte 0x81e58), 6460 words
+    run at word 72980 (byte 0x8e8a0), 3 words
+    run at word 72996 (byte 0x8e920), 42 words
+    run at word 73060 (byte 0x8eb20), 212 words
+    run at word 73284 (byte 0x8f220), 34 words
+    run at word 73332 (byte 0x8f3a0), 19638 words
+    run at word 92984 (byte 0xb59c0), 7578 words
+    run at word 100582 (byte 0xc4730), 106 words
+    run at word 100702 (byte 0xc4af0), 42 words
+    run at word 100762 (byte 0xc4cd0), 15 words
+    run at word 100795 (byte 0xc4dd8), 146 words
+    run at word 100960 (byte 0xc5300), 26 words
+    run at word 101001 (byte 0xc5448), 35 words
+    run at word 101050 (byte 0xc55d0), 563 words
+    run at word 101636 (byte 0xc6820), 34 words
+    run at word 101685 (byte 0xc69a8), 28 words
+    run at word 101730 (byte 0xc6b10), 31 words
+    run at word 101775 (byte 0xc6c78), 256 words
+    run at word 102048 (byte 0xc7500), 226 words
+    run at word 102295 (byte 0xc7cb8), 373 words
+    run at word 102687 (byte 0xc88f8), 31 words
+    run at word 102732 (byte 0xc8a60), 192 words
+    run at word 102938 (byte 0xc90d0), 289 words
+    run at word 103245 (byte 0xc9a68), 87 words
+    run at word 103350 (byte 0xc9db0), 379 words
+    run at word 103743 (byte 0xca9f8), 306 words
+    run at word 104061 (byte 0xcb3e8), 215 words
+    run at word 104289 (byte 0xcbb08), 414 words
+    run at word 104722 (byte 0xcc890), 388 words
+    run at word 105127 (byte 0xcd538), 45 words
+    run at word 105187 (byte 0xcd718), 31 words
+    run at word 105232 (byte 0xcd880), 28 words
+    run at word 105273 (byte 0xcd9c8), 1400 words
+    run at word 106692 (byte 0xd0620), 24 words
+    run at word 106733 (byte 0xd0768), 364 words
+    run at word 107110 (byte 0xd1330), 53 words
+    run at word 107178 (byte 0xd1550), 135 words
+    run at word 107328 (byte 0xd1a00), 15 words
+    run at word 107361 (byte 0xd1b08), 310 words
+    run at word 107686 (byte 0xd2530), 131 words
+    run at word 107836 (byte 0xd29e0), 165 words
+    run at word 108015 (byte 0xd2f78), 157 words
+    run at word 108187 (byte 0xd34d8), 3 words
+    run at word 108203 (byte 0xd3558), 19 words
+    run at word 108240 (byte 0xd3680), 179 words
+    run at word 108434 (byte 0xd3c90), 30 words
+    run at word 108483 (byte 0xd3e18), 123 words
+    run at word 108621 (byte 0xd4268), 46 words
+    run at word 108689 (byte 0xd4488), 302 words
+    run at word 109010 (byte 0xd4e90), 134 words
+    run at word 109159 (byte 0xd5338), 268 words
+    run at word 109449 (byte 0xd5c48), 36 words
+    run at word 109502 (byte 0xd5df0), 399 words
+    run at word 109913 (byte 0xd6ac8), 52 words
+    run at word 109980 (byte 0xd6ce0), 222 words
+    run at word 110215 (byte 0xd7438), 382 words
+    run at word 110611 (byte 0xd8098), 366 words
+    run at word 110996 (byte 0xd8ca0), 190 words
+    run at word 111201 (byte 0xd9308), 45 words
+    run at word 111261 (byte 0xd94e8), 71 words
+    run at word 111354 (byte 0xd97d0), 273 words
+    run at word 111641 (byte 0xda0c8), 83 words
+    run at word 111742 (byte 0xda3f0), 296 words
+    run at word 112053 (byte 0xdada8), 39 words
+    run at word 112106 (byte 0xdaf50), 237 words
+    run at word 112357 (byte 0xdb728), 91 words
+    run at word 112466 (byte 0xdba90), 45 words
+    run at word 112523 (byte 0xdbc58), 148 words
+    run at word 112684 (byte 0xdc160), 338 words
+    run at word 113037 (byte 0xdcc68), 71 words
+    run at word 113123 (byte 0xdcf18), 25 words
+    run at word 113163 (byte 0xdd058), 87 words
+    run at word 113269 (byte 0xdd3a8), 20 words
+    run at word 113302 (byte 0xdd4b0), 657 words
+    run at word 113977 (byte 0xde9c8), 31 words
+    run at word 114022 (byte 0xdeb30), 246 words
+    run at word 114283 (byte 0xdf358), 434 words
+    run at word 114735 (byte 0xe0178), 23 words
+    run at word 114776 (byte 0xe02c0), 247 words
+    run at word 115037 (byte 0xe0ae8), 596 words
+    run at word 115648 (byte 0xe1e00), 94 words
+    run at word 115756 (byte 0xe2160), 84 words
+    run at word 115864 (byte 0xe24c0), 180 words
+    run at word 116062 (byte 0xe2af0), 34 words
+    run at word 116110 (byte 0xe2c70), 135 words
+    run at word 116266 (byte 0xe3150), 22 words
+    run at word 116310 (byte 0xe32b0), 410 words
+    run at word 116741 (byte 0xe4028), 66 words
+    run at word 116829 (byte 0xe42e8), 719 words
+    run at word 117564 (byte 0xe59e0), 386 words
+    run at word 117972 (byte 0xe66a0), 509 words
+    run at word 118496 (byte 0xe7700), 22 words
+    run at word 118532 (byte 0xe7820), 67 words
+    run at word 118620 (byte 0xe7ae0), 36 words
+    run at word 118676 (byte 0xe7ca0), 58 words
+    run at word 118748 (byte 0xe7ee0), 102 words
+    run at word 118872 (byte 0xe82c0), 6 words
+    run at word 118892 (byte 0xe8360), 26 words
+    run at word 118932 (byte 0xe84a0), 929 words
+    run at word 119876 (byte 0xea220), 830 words
+    run at word 120720 (byte 0xebc80), 262 words
+    run at word 121001 (byte 0xec548), 1005 words
+    run at word 122032 (byte 0xee580), 152 words
+    run at word 122197 (byte 0xeeaa8), 22 words
+    run at word 122233 (byte 0xeebc8), 66 words
+    run at word 122313 (byte 0xeee48), 247 words
+    run at word 122573 (byte 0xef668), 42 words
+    run at word 122641 (byte 0xef888), 24 words
+    run at word 122677 (byte 0xef9a8), 382 words
+    run at word 123077 (byte 0xf0628), 191 words
+    run at word 123281 (byte 0xf0c88), 38 words
+    run at word 123333 (byte 0xf0e28), 222 words
+    run at word 123581 (byte 0xf15e8), 2 words
+    run at word 123597 (byte 0xf1668), 272 words
+    run at word 123881 (byte 0xf1f48), 56 words
+    run at word 123953 (byte 0xf2188), 182 words
+    run at word 124153 (byte 0xf27c8), 60 words
+    run at word 124233 (byte 0xf2a48), 111 words
+    run at word 124361 (byte 0xf2e48), 423 words
+    run at word 124797 (byte 0xf3be8), 199 words
+    run at word 125009 (byte 0xf4288), 162 words
+    run at word 125185 (byte 0xf4808), 184 words
+    run at word 125381 (byte 0xf4e28), 47 words
+    run at word 125441 (byte 0xf5008), 434 words
+    run at word 125889 (byte 0xf5e08), 14756 words
+    run at word 140663 (byte 0x112bb8), 9297 words
+    run at word 149982 (byte 0x124ef0), 22831 words
+    run at word 172825 (byte 0x1518c8), 14497 words
+    run at word 187334 (byte 0x16de30), 9371 words
+    run at word 196726 (byte 0x1803b0), 9767 words
+    run at word 206505 (byte 0x193548), 14844 words
+    run at word 221363 (byte 0x1b0598), 107939 words
+    run at word 329315 (byte 0x283318), 25729 words
+    run at word 355058 (byte 0x2b5790), 10 words
+    run at word 355082 (byte 0x2b5850), 10 words
+    run at word 355106 (byte 0x2b5910), 7648 words
+    run at word 2097152 (byte 0x1000000), 131 words
+  360527 words, 157 runs
+
+frame 7 (register states) at byte 6049808: 17408 128-bit words of data (278544 bytes with its header)
+  segment: pc, instr_idx, next offset, advice values, log2 K, I/O region size
+      0  pc 0x80000000  idx 1  off 0  advice 1  log2K 24  io 0x2000000
+      1  pc 0x80154654  idx 522761  off 5  advice 0  log2K 24  io 0x2000000
+      2  pc 0x80154664  idx 522765  off 0  advice 0  log2K 24  io 0x2000000
+      3  pc 0x8015466c  idx 522769  off 2  advice 0  log2K 24  io 0x2000000
+      4  pc 0x8015464c  idx 522753  off 0  advice 0  log2K 24  io 0x2000000
+      5  pc 0x80154654  idx 522757  off 1  advice 0  log2K 24  io 0x2000000
+      6  pc 0x8015464c  idx 522753  off 0  advice 0  log2K 24  io 0x2000000
+      7  pc 0x80154654  idx 522757  off 1  advice 0  log2K 24  io 0x2000000
+      8  pc 0x80154654  idx 522761  off 5  advice 0  log2K 24  io 0x2000000
+      9  pc 0x80154664  idx 522765  off 0  advice 0  log2K 24  io 0x2000000
+     10  pc 0x8015466c  idx 522769  off 2  advice 0  log2K 24  io 0x2000000
+     11  pc 0x8015466c  idx 522769  off 2  advice 0  log2K 24  io 0x2000000
+     12  pc 0x8015464c  idx 522753  off 0  advice 0  log2K 24  io 0x2000000
+     13  pc 0x80154654  idx 522757  off 1  advice 0  log2K 24  io 0x2000000
+     14  pc 0x80154654  idx 522761  off 5  advice 0  log2K 24  io 0x2000000
+     15  pc 0x8019d22c  idx 633416  off 0  advice 11  log2K 24  io 0x2000000
+     16  pc 0x800bcf0e  idx 314187  off 840  advice 5  log2K 24  io 0x2000000
+     17  pc 0x8019d230  idx 633417  off 0  advice 15  log2K 24  io 0x2000000
+     18  pc 0x800bcf0e  idx 313402  off 55  advice 29  log2K 24  io 0x2000000
+     19  pc 0x800bcf0e  idx 314406  off 1059  advice 14  log2K 24  io 0x2000000
+     20  pc 0x8018880e  idx 605559  off 0  advice 1  log2K 24  io 0x2000000
+     21  pc 0x80187bb0  idx 604111  off 0  advice 0  log2K 24  io 0x2000000
+     22  pc 0x80187a3e  idx 603993  off 0  advice 0  log2K 24  io 0x2000000
+     23  pc 0x80187d40  idx 604243  off 0  advice 0  log2K 24  io 0x2000000
+     24  pc 0x80187a5a  idx 604002  off 0  advice 0  log2K 24  io 0x2000000
+     25  pc 0x801913f6  idx 617427  off 0  advice 0  log2K 24  io 0x2000000
+     26  pc 0x8018df1e  idx 613180  off 0  advice 0  log2K 24  io 0x2000000
+     27  pc 0x80187b86  idx 604098  off 0  advice 0  log2K 24  io 0x2000000
+     28  pc 0x80187ca4  idx 604186  off 0  advice 0  log2K 24  io 0x2000000
+     29  pc 0x80187a10  idx 603978  off 0  advice 0  log2K 24  io 0x2000000
+     30  pc 0x80187dce  idx 604286  off 0  advice 0  log2K 24  io 0x2000000
+     31  pc 0x80187b42  idx 604075  off 0  advice 0  log2K 24  io 0x2000000
+     32  pc 0x8018e194  idx 613376  off 0  advice 0  log2K 24  io 0x2000000
+     33  pc 0x801879a0  idx 603944  off 0  advice 0  log2K 24  io 0x2000000
+     34  pc 0x801879fc  idx 603972  off 0  advice 0  log2K 24  io 0x2000000
+     35  pc 0x801879ea  idx 603966  off 0  advice 373  log2K 24  io 0x2000000
+     36  pc 0x8004f3a6  idx 112413  off 0  advice 2537  log2K 24  io 0x2000000
+     37  pc 0x8019cf78  idx 632968  off 0  advice 2871  log2K 24  io 0x2000000
+     38  pc 0x800602a2  idx 137937  off 1  advice 2762  log2K 24  io 0x2000000
+     39  pc 0x8019d714  idx 633975  off 5  advice 2907  log2K 24  io 0x2000000
+     40  pc 0x8019cf54  idx 632957  off 2  advice 2713  log2K 24  io 0x2000000
+     41  pc 0x8004f356  idx 112389  off 0  advice 2774  log2K 24  io 0x2000000
+     42  pc 0x8005b8ae  idx 130111  off 0  advice 2798  log2K 24  io 0x2000000
+     43  pc 0x800606d2  idx 138323  off 0  advice 2779  log2K 24  io 0x2000000
+     44  pc 0x8004f4e2  idx 112499  off 0  advice 2196  log2K 24  io 0x2000000
+     45  pc 0x800999b2  idx 249309  off 2  advice 2622  log2K 24  io 0x2000000
+     46  pc 0x8019a990  idx 629566  off 0  advice 1589  log2K 24  io 0x2000000
+     47  pc 0x80063634  idx 143196  off 0  advice 2610  log2K 24  io 0x2000000
+     48  pc 0x8004f53a  idx 112522  off 0  advice 3094  log2K 24  io 0x2000000
+     49  pc 0x800b2c28  idx 296258  off 0  advice 2680  log2K 24  io 0x2000000
+     50  pc 0x8004f1b0  idx 112273  off 0  advice 2711  log2K 24  io 0x2000000
+     51  pc 0x8019cf54  idx 632957  off 2  advice 2417  log2K 24  io 0x2000000
+     52  pc 0x800b1c9a  idx 294785  off 0  advice 2379  log2K 24  io 0x2000000
+     53  pc 0x800641f0  idx 144239  off 0  advice 2112  log2K 24  io 0x2000000
+     54  pc 0x8019b87c  idx 630906  off 0  advice 1879  log2K 24  io 0x2000000
+     55  pc 0x8019cf64  idx 632963  off 0  advice 2375  log2K 24  io 0x2000000
+     56  pc 0x800aa7a6  idx 283014  off 0  advice 1711  log2K 24  io 0x2000000
+     57  pc 0x8019cf54  idx 632956  off 1  advice 1543  log2K 24  io 0x2000000
+     58  pc 0x800a72a8  idx 271619  off 0  advice 2058  log2K 24  io 0x2000000
+     59  pc 0x8019cf54  idx 632955  off 0  advice 2455  log2K 24  io 0x2000000
+     60  pc 0x8004f4e0  idx 112498  off 0  advice 2000  log2K 24  io 0x2000000
+     61  pc 0x8019cf60  idx 632962  off 0  advice 2656  log2K 24  io 0x2000000
+     62  pc 0x8019cf54  idx 632955  off 0  advice 1937  log2K 24  io 0x2000000
+     63  pc 0x8019d174  idx 633316  off 0  advice 2202  log2K 24  io 0x2000000
+     64  pc 0x8004f1cc  idx 112282  off 0  advice 3018  log2K 24  io 0x2000000
+     65  pc 0x800b6f54  idx 302702  off 0  advice 1781  log2K 24  io 0x2000000
+     66  pc 0x800999c0  idx 249313  off 0  advice 1498  log2K 24  io 0x2000000
+     67  pc 0x800ac8b6  idx 286115  off 0  advice 1592  log2K 24  io 0x2000000
+     68  pc 0x80095e50  idx 240597  off 2  advice 841  log2K 24  io 0x2000000
+     69  pc 0x8004f2c8  idx 112349  off 0  advice 1446  log2K 24  io 0x2000000
+     70  pc 0x800999c2  idx 249314  off 0  advice 807  log2K 24  io 0x2000000
+     71  pc 0x8019cf54  idx 632957  off 2  advice 783  log2K 24  io 0x2000000
+     72  pc 0x8019cf58  idx 632960  off 2  advice 2285  log2K 24  io 0x2000000
+     73  pc 0x800877a6  idx 213518  off 0  advice 1377  log2K 24  io 0x2000000
+     74  pc 0x80060726  idx 138431  off 2  advice 876  log2K 24  io 0x2000000
+     75  pc 0x8001cf20  idx 45414  off 0  advice 2015  log2K 24  io 0x2000000
+     76  pc 0x800b2c4c  idx 296277  off 1  advice 1825  log2K 24  io 0x2000000
+     77  pc 0x8019cfd4  idx 633001  off 1  advice 1081  log2K 24  io 0x2000000
+     78  pc 0x800a8600  idx 274190  off 2  advice 1518  log2K 24  io 0x2000000
+     79  pc 0x8019aa28  idx 629649  off 1  advice 1590  log2K 24  io 0x2000000
+     80  pc 0x8004f536  idx 112521  off 0  advice 975  log2K 24  io 0x2000000
+     81  pc 0x8019d16c  idx 633305  off 1  advice 1123  log2K 24  io 0x2000000
+     82  pc 0x8019d468  idx 633702  off 0  advice 342  log2K 24  io 0x2000000
+     83  pc 0x800b7b96  idx 303964  off 0  advice 357  log2K 24  io 0x2000000
+     84  pc 0x800b7ace  idx 303898  off 0  advice 381  log2K 24  io 0x2000000
+     85  pc 0x800bccaa  idx 311619  off 170  advice 322  log2K 24  io 0x2000000
+     86  pc 0x800b7ada  idx 303901  off 0  advice 337  log2K 24  io 0x2000000
+     87  pc 0x800bcf0e  idx 314336  off 989  advice 438  log2K 24  io 0x2000000
+     88  pc 0x800b2216  idx 295390  off 0  advice 263  log2K 24  io 0x2000000
+     89  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+     90  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+     91  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+     92  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+     93  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+     94  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+     95  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+     96  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+     97  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+     98  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+     99  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    100  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    101  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    102  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    103  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    104  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    105  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    106  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    107  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    108  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    109  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    110  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    111  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    112  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    113  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    114  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    115  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    116  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    117  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    118  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    119  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    120  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    121  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    122  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    123  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    124  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    125  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    126  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    127  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    128  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    129  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    130  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    131  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    132  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    133  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    134  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    135  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    136  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    137  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    138  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    139  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    140  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    141  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    142  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    143  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    144  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    145  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    146  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    147  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    148  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    149  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    150  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    151  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    152  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    153  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    154  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    155  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    156  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    157  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    158  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    159  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    160  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    161  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    162  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    163  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    164  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    165  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    166  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    167  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    168  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    169  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    170  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    171  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    172  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    173  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    174  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    175  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    176  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    177  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    178  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    179  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    180  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    181  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    182  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    183  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    184  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    185  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    186  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    187  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    188  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    189  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    190  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    191  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    192  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    193  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    194  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    195  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    196  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    197  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    198  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    199  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    200  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    201  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    202  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    203  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    204  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    205  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    206  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    207  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    208  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    209  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    210  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    211  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    212  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    213  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    214  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    215  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    216  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    217  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    218  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    219  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    220  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    221  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    222  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    223  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    224  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    225  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    226  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    227  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    228  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    229  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    230  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    231  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    232  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    233  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    234  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    235  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    236  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    237  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    238  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    239  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    240  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    241  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    242  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    243  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    244  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    245  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    246  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    247  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    248  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    249  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    250  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    251  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    252  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    253  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    254  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+    255  pc 0x0  idx 0  off 0  advice 0  log2K 24  io 0x2000000
+
+frame 8 (advice logs) at byte 6328352: 48426 128-bit words of data (774832 bytes with its header)
+  96687 advice values in all; per segment: 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 11 5 15 29 14 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 373 2537 2871 2762 2907 2713 2774 2798 2779 2196 2622 1589 2610 3094 2680 2711 2417 2379 2112 1879 2375 1711 1543 2058 2455 2000 2656 1937 2202 3018 1781 1498 1592 841 1446 807 783 2285 1377 876 2015 1825 1081 1518 1590 975 1123 342 357 381 322 337 438 263 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+
+frame 9 (memory segments) at byte 7103184: 588924 128-bit words of data (9422800 bytes with its header), LRU
+  2208186 words, 15167 runs
+
+check: ok (lengths, counts of frames 1, 3 and 4, page counts by copy-on-write trees for every s, the advice counts in frames 7 and 8)
+against the segment file (128 segments): ok
