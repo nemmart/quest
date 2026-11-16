@@ -1,0 +1,18 @@
+vectors: the 7 committed files are what packets-vectors writes
+vectors by the Python reader: 8 CRC-32C values, 43 single packets, 5 whole files, 32 damaged files: ok
+commands: packets and packets-read on keccak256's frames (72,672 bytes, 148 packets): the round trip, --idle, --first, --no-idle, --packets-only, --list, --compare; five refusals with exit status 1 and nothing written
+CRC-32C: the JDK's and the reader's agree on the published values and on 700 random strings
+round trip: 132 made-up frame files (an empty one; one frame of 1 to 71 words; 60 of many frames), the frames byte-identical, the packetizer's rule kept
+damage: 275 changes to 6 packets of a file of 148 (75040 bytes): each refused by the check it should be, at the right packet and byte; with every flag and an acknowledge number set, taken
+order: 41 files with a packet dropped, sent twice or swapped with the next: each refused
+frame-end: a frame ending inside a packet is refused; a file ending inside a frame is truncated
+truncation: small.packets cut short at each of its 4464 bytes: refused as truncated, but at the 9 frame ends, where it is a good file with fewer frames
+every bit: each single bit of the five small packet files changed in turn, 209752 files, every one refused: {data-checksum=179584, header-crc=30048, truncated=120}
+wrap: files numbered from 0xFFFFA, 0xFFFFE, 0xFFFFD, 0xFFFF0, 2 and 1 read back with the same first number and refused with another; a file of 1048600 packets numbered from 1 passes 0xFFFFE to 1 and ends at 26
+idle: 12 counts of zero bytes between packets (1 to 5000, with ones that are not whole words), and 200 files with a different count before every packet, before the first and after the last; noIdle refuses them
+length 0: taken anywhere, taking no number; refused when it holds the last number or the one after the next
+two streams: each numbered by itself; stream 1's data is counted and kept nowhere
+other cuts: 300 files cut into packets of any legal lengths, taken, the frames byte-identical
+vectors: 43 single packets, 5 whole files and 32 damaged files: the reader says what VECTORS.txt expects of each
+packets test: ok (218096 checks)
+packets: all ok

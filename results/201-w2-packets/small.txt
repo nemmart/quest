@@ -1,0 +1,68 @@
+evm-zone-23: segments file 1913e54349827770134d90052863d8dff8738e77cae287c3ecd78ab12579f241
+evm-zone-23, none base, compression none, N 128: verified, checked, against the segment file ok
+    5833069 rows, 93 cuts, N 128; frames file 3825712 bytes, SHA-256 bd7c771b52fd5bc94f3dee6d2051bcea886f1323173b8a6a65c370c6f42d885c; program image 491 pages (492 taken); table full (k 13, 256 pages taken); data image 1097 words, 7 pages; memory segments 73060 words (raw 584480 B, LRU 195604 B); 1.5 s
+    verify: images (cycle-0 44bf303f7a0a499a, 128 starts and Tracer's copies, final 2cd6a484047a8c60) equal gold's memory; page counts equal; jump targets 5526 found, 0 missed (table full); both forms of every update-word frame decode; 2.5 s: VERIFIED
+evm-zone-23, none base, compression none, N 128: as packets, read back, the frames byte-identical
+    packets: 9 frames, 239,107 words in 7,479 packets on stream 2 (numbers 1 to 7479); 0 idle bytes
+    packet file 3,945,376 bytes, the frame file 3,825,712: overhead 119,664 bytes (3.128%); SHA-256 737af575ef54d8ff6c9071dd3312bac636f5fcd4b162a89262990ba3200ab3d9
+    packet file: 3,945,376 bytes: 7,479 packets on stream 2 (numbers 1 to 7479), 0 on stream 1; 0 of length 0; 0 idle bytes
+    data: 239,107 words in 9 frames; 7,470 packets of 32 words, 9 shorter (9 a frame's last)
+    against the frames: 3,825,712 bytes; overhead 119,664 bytes (3.128%): 7,479 header words, 0 idle bytes; the frames' SHA-256 bd7c771b52fd5bc94f3dee6d2051bcea886f1323173b8a6a65c370c6f42d885c
+    the frames are byte-identical to /home/questrunner/queue/results/201-w2-packets/small/evm-zone-23-full.frames
+    checks: ok
+evm-zone-23, static base, compression auto, N 128: verified, checked, against the segment file ok
+    5833069 rows, 93 cuts, N 128; frames file 2849712 bytes, SHA-256 b209f2b08b5d9b778455024046a78024cd5d78bae3f467906d9044f6c0ff2bfd; program image 491 pages (492 taken); table added (k 13, 2 pages taken); data image 1128 words, 7 pages; memory segments 73060 words (raw 584480 B, LRU 195604 B); 1.6 s
+    verify: images (cycle-0 44bf303f7a0a499a, 128 starts and Tracer's copies, final 2cd6a484047a8c60) equal gold's memory; page counts equal; jump targets 5526 found, 0 missed (table added); both forms of every update-word frame decode, the smaller sent; 2.5 s: VERIFIED
+evm-zone-23, static base, compression auto, N 128: as packets, read back, the frames byte-identical
+    packets: 11 frames, 178,107 words in 5,573 packets on stream 2 (numbers 1 to 5573); 0 idle bytes
+    packet file 2,938,880 bytes, the frame file 2,849,712: overhead 89,168 bytes (3.129%); SHA-256 b7e3d2fed9ecd4b53bec35fa4b6d60826e95a1f7c93d92b7776df8f74af78fa2
+    packet file: 2,938,880 bytes: 5,573 packets on stream 2 (numbers 1 to 5573), 0 on stream 1; 0 of length 0; 0 idle bytes
+    data: 178,107 words in 11 frames; 5,562 packets of 32 words, 11 shorter (11 a frame's last)
+    against the frames: 2,849,712 bytes; overhead 89,168 bytes (3.129%): 5,573 header words, 0 idle bytes; the frames' SHA-256 b209f2b08b5d9b778455024046a78024cd5d78bae3f467906d9044f6c0ff2bfd
+    the frames are byte-identical to /home/questrunner/queue/results/201-w2-packets/small/evm-zone-23-base.frames
+    checks: ok
+evm-zone-23, static base, compression lru, N 256: verified, checked, against the segment file ok
+    5833069 rows, 93 cuts, N 256; frames file 2992048 bytes, SHA-256 57e219b92afca8bc9c2bb79d640f85fb53b496908658d96c6bfb1e8965a5852c; program image 491 pages (492 taken); table added (k 13, 2 pages taken); data image 1128 words, 7 pages; memory segments 73060 words (raw 584480 B, LRU 195604 B); 1.6 s
+    verify: images (cycle-0 44bf303f7a0a499a, 256 starts and Tracer's copies, final 2cd6a484047a8c60) equal gold's memory; page counts equal; jump targets 5526 found, 0 missed (table added); both forms of every update-word frame decode; 5.0 s: VERIFIED
+evm-zone-23, static base, compression lru, N 256: as packets, read back, the frames byte-identical
+    packets: 11 frames, 187,003 words in 5,851 packets on stream 2 (numbers 1 to 5851); 0 idle bytes
+    packet file 3,085,664 bytes, the frame file 2,992,048: overhead 93,616 bytes (3.129%); SHA-256 e795a3c95033eeb19a6fcf4dda0d9323e22c47dc408420c34706100a4beb53b1
+    packet file: 3,085,664 bytes: 5,851 packets on stream 2 (numbers 1 to 5851), 0 on stream 1; 0 of length 0; 0 idle bytes
+    data: 187,003 words in 11 frames; 5,840 packets of 32 words, 11 shorter (11 a frame's last)
+    against the frames: 2,992,048 bytes; overhead 93,616 bytes (3.129%): 5,851 header words, 0 idle bytes; the frames' SHA-256 57e219b92afca8bc9c2bb79d640f85fb53b496908658d96c6bfb1e8965a5852c
+    the frames are byte-identical to /home/questrunner/queue/results/201-w2-packets/small/evm-zone-23-base256.frames
+    checks: ok
+cyclone-22: segments file 6ccc978de2015a3abd2b6efbd3442e289b8a4f0cb76a5554a57f359d236d3900
+cyclone-22, none base, compression none, N 128: verified, checked, against the segment file ok
+    2705819 rows, 111 cuts, N 128; frames file 5390064 bytes, SHA-256 85d338d018e525657b9046b09a08816d341509f54d38366317fdd5a73fcb7b8f; program image 808 pages (809 taken); table full (k 13, 256 pages taken); data image 3477 words, 11 pages; memory segments 107376 words (raw 859008 B, LRU 217756 B); 2.3 s
+    verify: images (cycle-0 8192a64c543a551b, 128 starts and Tracer's copies, final d97a38a8b608193b) equal gold's memory; page counts equal; jump targets 2945 found, 0 missed (table full); both forms of every update-word frame decode; 3.7 s: VERIFIED
+cyclone-22, none base, compression none, N 128: as packets, read back, the frames byte-identical
+    packets: 9 frames, 336,879 words in 10,534 packets on stream 2 (numbers 1 to 10534); 0 idle bytes
+    packet file 5,558,608 bytes, the frame file 5,390,064: overhead 168,544 bytes (3.127%); SHA-256 8d3d9fbbd88cad6c1d15cd1404b7ec0a7f272af7c7e3aa05cbf8da76a6a3ce8c
+    packet file: 5,558,608 bytes: 10,534 packets on stream 2 (numbers 1 to 10534), 0 on stream 1; 0 of length 0; 0 idle bytes
+    data: 336,879 words in 9 frames; 10,525 packets of 32 words, 9 shorter (9 a frame's last)
+    against the frames: 5,390,064 bytes; overhead 168,544 bytes (3.127%): 10,534 header words, 0 idle bytes; the frames' SHA-256 85d338d018e525657b9046b09a08816d341509f54d38366317fdd5a73fcb7b8f
+    the frames are byte-identical to /home/questrunner/queue/results/201-w2-packets/small/cyclone-22-full.frames
+    checks: ok
+cyclone-22, static base, compression auto, N 128: verified, checked, against the segment file ok
+    2705819 rows, 111 cuts, N 128; frames file 3997328 bytes, SHA-256 6f63e10e82825ce85d564a1eb7197f1836caec651ab25f27f59d3d97aae54eb5; program image 808 pages (809 taken); table added (k 13, 0 pages taken); data image 3559 words, 11 pages; memory segments 107376 words (raw 859008 B, LRU 217756 B); 2.3 s
+    verify: images (cycle-0 8192a64c543a551b, 128 starts and Tracer's copies, final d97a38a8b608193b) equal gold's memory; page counts equal; jump targets 2945 found, 0 missed (table added); both forms of every update-word frame decode, the smaller sent; 3.8 s: VERIFIED
+cyclone-22, static base, compression auto, N 128: as packets, read back, the frames byte-identical
+    packets: 11 frames, 249,833 words in 7,814 packets on stream 2 (numbers 1 to 7814); 0 idle bytes
+    packet file 4,122,352 bytes, the frame file 3,997,328: overhead 125,024 bytes (3.128%); SHA-256 f02615cd5c50d81c462665866716c95904ea856439ef5af94fdcacd858f0a3c0
+    packet file: 4,122,352 bytes: 7,814 packets on stream 2 (numbers 1 to 7814), 0 on stream 1; 0 of length 0; 0 idle bytes
+    data: 249,833 words in 11 frames; 7,804 packets of 32 words, 10 shorter (10 a frame's last)
+    against the frames: 3,997,328 bytes; overhead 125,024 bytes (3.128%): 7,814 header words, 0 idle bytes; the frames' SHA-256 6f63e10e82825ce85d564a1eb7197f1836caec651ab25f27f59d3d97aae54eb5
+    the frames are byte-identical to /home/questrunner/queue/results/201-w2-packets/small/cyclone-22-base.frames
+    checks: ok
+cyclone-22, static base, compression lru, N 256: verified, checked, against the segment file ok
+    2705819 rows, 111 cuts, N 256; frames file 4139664 bytes, SHA-256 04a2287c4a5f378608176e09ac5b9ae5e786551684aad9ebb65397535bdd4f81; program image 808 pages (809 taken); table added (k 13, 0 pages taken); data image 3559 words, 11 pages; memory segments 107376 words (raw 859008 B, LRU 217756 B); 2.3 s
+    verify: images (cycle-0 8192a64c543a551b, 256 starts and Tracer's copies, final d97a38a8b608193b) equal gold's memory; page counts equal; jump targets 2945 found, 0 missed (table added); both forms of every update-word frame decode; 7.4 s: VERIFIED
+cyclone-22, static base, compression lru, N 256: as packets, read back, the frames byte-identical
+    packets: 11 frames, 258,729 words in 8,092 packets on stream 2 (numbers 1 to 8092); 0 idle bytes
+    packet file 4,269,136 bytes, the frame file 4,139,664: overhead 129,472 bytes (3.128%); SHA-256 350e684956593c0cc60676b75caad43013110fe16497703d75bbca8096ff9f19
+    packet file: 4,269,136 bytes: 8,092 packets on stream 2 (numbers 1 to 8092), 0 on stream 1; 0 of length 0; 0 idle bytes
+    data: 258,729 words in 11 frames; 8,082 packets of 32 words, 10 shorter (10 a frame's last)
+    against the frames: 4,139,664 bytes; overhead 129,472 bytes (3.128%): 8,092 header words, 0 idle bytes; the frames' SHA-256 04a2287c4a5f378608176e09ac5b9ae5e786551684aad9ebb65397535bdd4f81
+    the frames are byte-identical to /home/questrunner/queue/results/201-w2-packets/small/cyclone-22-base256.frames
+    checks: ok
