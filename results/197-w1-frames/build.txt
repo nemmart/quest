@@ -1,0 +1,35 @@
+built build/ (82 classes)
+  bigint_multiply              141 rows  ok
+  blake2b                     1067 rows  ok
+  blake3                       648 rows  ok
+  blake3_keyed64               646 rows  ok
+  keccak256                   3087 rows  ok
+  keccak256_absorb_permute    3121 rows  ok
+  sha256                      1900 rows  ok
+  sha256_init                 1864 rows  ok
+  secp256k1_mulq               186 rows  ok
+  secp256k1_squareq            167 rows  ok
+  secp256k1_divq               194 rows  ok
+  secp256k1_mulr               232 rows  ok
+  secp256k1_squarer            213 rows  ok
+  secp256k1_divr               240 rows  ok
+  secp256k1_glvr_adv            13 rows  ok
+inline emit test: 15 ok, 0 pending, 0 failed
+  SECP256K1_DIVQ_INLINE          4 calls,     4 agree (0 expected aborts)
+  SECP256K1_DIVR_INLINE          4 calls,     4 agree (0 expected aborts)
+  SECP256K1_MULQ_INLINE          4 calls,     4 agree (0 expected aborts)
+  SECP256K1_MULR_INLINE          4 calls,     4 agree (0 expected aborts)
+  SECP256K1_SQUAREQ_INLINE       4 calls,     4 agree (0 expected aborts)
+  SECP256K1_SQUARER_INLINE       4 calls,     4 agree (0 expected aborts)
+  SHA256_INLINE                103 calls,   103 agree (0 expected aborts)
+  SHA256_INIT_INLINE           103 calls,   103 agree (0 expected aborts)
+  KECCAK256_ABSORB_PERMUTE    2102 calls,  2102 agree (0 expected aborts)
+  KECCAK256                   2003 calls,  2003 agree (0 expected aborts)
+  BLAKE2_INLINE                 13 calls,    13 agree (0 expected aborts)
+  BLAKE3_KEYED64_INLINE        206 calls,   206 agree (0 expected aborts)
+  BLAKE3_INLINE               1003 calls,  1003 agree (0 expected aborts)
+  BIGINT256_MUL_INLINE         120 calls,   120 agree (0 expected aborts)
+inline vector test: 5677 calls, 5677 agree, 0 differ
+frames on the guests: 40 runs, all ok
+segments against v1.36 gold: 168 runs, all byte-identical
+guests: all as expected

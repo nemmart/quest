@@ -1,0 +1,23 @@
+start Mon Nov 16 08:49:35 AM UTC 2026 on godspeed, 16 threads
+openjdk version "21.0.13.0.3" 2026-10-24
+Python 3.12.3
+build: PASS (43 s)
+frames on the guests: 40 runs, all ok
+segments against v1.36 gold: 168 runs, all byte-identical
+guests: all as expected
+small: PASS (24 s)
+cyclone-22, base table, lru all: verified, checked, against the segment file ok
+    2705819 rows, 111 cuts; frames file 4753744 bytes, SHA-256 27e2717807b6bba2f75e1dc7f60213507045355348b643e9d1a076b6b766d098; table added (k 13, 0 pages taken); data image 4033 words, 12 pages; memory segments 107376 words (raw 859008 B, LRU 217756 B); 2.2 s
+    verify: images (cycle-0 8192a64c543a551b, 128 starts and Tracer's copies, final d97a38a8b608193b) equal gold's memory; page counts equal; jump targets 2945 found, 0 missed (table added); LRU = raw on frames 5, 6, 9; 3.7 s: VERIFIED
+small-old-unchanged: PASS (31 s)
+segments against v1.36 gold: 172 runs, all byte-identical
+guests: all as expected
+29: PASS (114 s)
+cyclone-29, base table, lru all: verified, checked, against the segment file ok
+    371526406 rows, 128 cuts; frames file 17140304 bytes, SHA-256 41a1eb981cb73f0d6a78fa0a9570e8c93b92e302522579c44681f2b80ddff52b; table added (k 13, 0 pages taken); data image 362888 words, 713 pages; memory segments 2208186 words (raw 17665488 B, LRU 9422781 B); 15.8 s
+    verify: images (cycle-0 c3d536c9d6737432, 128 starts and Tracer's copies, final d52c4573b748cc86) equal gold's memory; page counts equal; jump targets 4240 found, 0 missed (table added); LRU = raw on frames 5, 6, 9; 14.5 s: VERIFIED
+build: PASS (43 s)
+small: PASS (24 s)
+small-old-unchanged: PASS (31 s)
+29: PASS (114 s)
+end Mon Nov 16 08:53:07 AM UTC 2026

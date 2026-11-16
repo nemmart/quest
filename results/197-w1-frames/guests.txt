@@ -1,0 +1,50 @@
+assert_eq_pass (4 rows, 1 a segment, base none, lru none): ok
+assert_eq_pass (4 rows, 1 a segment, base static, lru all): ok
+d12_c_slli_x0 (5 rows, 1 a segment, base none, lru none): ok
+d12_c_slli_x0 (5 rows, 1 a segment, base static, lru all): ok
+d1_decodable_gap (6 rows, 1 a segment, base none, lru none): ok
+d1_decodable_gap (6 rows, 1 a segment, base static, lru all): ok
+d1_rodata_in_text (4 rows, 1 a segment, base none, lru none): ok
+d1_rodata_in_text (4 rows, 1 a segment, base static, lru all): ok
+ebreak (2 rows, 1 a segment, base none, lru none): ok
+ebreak (2 rows, 1 a segment, base static, lru all): ok
+end_c_j_0 (2 rows, 1 a segment, base none, lru none): ok
+end_c_j_0 (2 rows, 1 a segment, base static, lru all): ok
+end_jal_ra_0 (2 rows, 1 a segment, base none, lru none): ok
+end_jal_ra_0 (2 rows, 1 a segment, base static, lru all): ok
+fence (5 rows, 1 a segment, base none, lru none): ok
+fence (5 rows, 1 a segment, base static, lru all): ok
+inline_sha256_rd0 (1905 rows, 20 a segment, base none, lru none): ok
+inline_sha256_rd0 (1905 rows, 20 a segment, base static, lru all): ok
+keccak256 (3091 rows, 31 a segment, base none, lru none): ok
+keccak256 (3091 rows, 31 a segment, base static, lru all): ok
+lr_d_x0_nonzero (10 rows, 1 a segment, base none, lru none): ok
+lr_d_x0_nonzero (10 rows, 1 a segment, base static, lru all): ok
+lr_d_x0_zero (8 rows, 1 a segment, base none, lru none): ok
+lr_d_x0_zero (8 rows, 1 a segment, base static, lru all): ok
+lr_w_x0_nonzero (12 rows, 1 a segment, base none, lru none): ok
+lr_w_x0_nonzero (12 rows, 1 a segment, base static, lru all): ok
+rd0_add (4 rows, 1 a segment, base none, lru none): ok
+rd0_add (4 rows, 1 a segment, base static, lru all): ok
+sc_d_x0 (22 rows, 1 a segment, base none, lru none): ok
+sc_d_x0 (22 rows, 1 a segment, base static, lru all): ok
+sc_w_x0 (35 rows, 1 a segment, base none, lru none): ok
+sc_w_x0 (35 rows, 1 a segment, base static, lru all): ok
+stack_canary_store (6 rows, 1 a segment, base none, lru none): ok
+stack_canary_store (6 rows, 1 a segment, base static, lru all): ok
+unimp_unreached (2 rows, 1 a segment, base none, lru none): ok
+unimp_unreached (2 rows, 1 a segment, base static, lru all): ok
+jumps (32 rows, 1 a segment, base none, lru none): ok
+jumps (32 rows, 1 a segment, base static, lru all): ok
+kin (3091 rows, 31 a segment, base none, lru none): ok
+kin (3091 rows, 31 a segment, base static, lru all): ok
+counts two ways: 240 cases (depths 1-3, 128 segments, pages rewritten across segments)
+caught: a per-ASIC count (s 0, final image) + 1
+caught: the Tracer's copy count of the last segment - 1
+caught: frame 3's data image pages + 1
+caught: frame 4's pages + 1
+caught: a reserved header bit
+caught: frame 7's advice field against frame 8
+caught: frame 9's first value
+frames test: ok
+frames on the guests: 40 runs, all ok

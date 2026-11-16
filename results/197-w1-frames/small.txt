@@ -1,0 +1,14 @@
+evm-zone-23: segments file 1913e54349827770134d90052863d8dff8738e77cae287c3ecd78ab12579f241
+evm-zone-23, full table, lru none: verified, checked, against the segment file ok
+    5833069 rows, 93 cuts; frames file 3830064 bytes, SHA-256 9361daf212172a8b89718dd5eeffafeb274a7d4bff4b5cafcb30b91ac062faef; table full (k 13, 257 pages taken); data image 1158 words, 8 pages; memory segments 73060 words (raw 584480 B, LRU 195604 B); 1.5 s
+    verify: images (cycle-0 44bf303f7a0a499a, 128 starts and Tracer's copies, final 2cd6a484047a8c60) equal gold's memory; page counts equal; jump targets 5526 found, 0 missed (table full); LRU = raw on frames 5, 6, 9; 2.5 s: VERIFIED
+evm-zone-23, base table, lru all: verified, checked, against the segment file ok
+    5833069 rows, 93 cuts; frames file 3444384 bytes, SHA-256 17d00a657b3f1795d5953334df01bf81cc8e09c69d0fe1f0044bbd17bc93b67d; table added (k 13, 3 pages taken); data image 1158 words, 8 pages; memory segments 73060 words (raw 584480 B, LRU 195604 B); 1.5 s
+    verify: images (cycle-0 44bf303f7a0a499a, 128 starts and Tracer's copies, final 2cd6a484047a8c60) equal gold's memory; page counts equal; jump targets 5526 found, 0 missed (table added); LRU = raw on frames 5, 6, 9; 2.5 s: VERIFIED
+cyclone-22: segments file 6ccc978de2015a3abd2b6efbd3442e289b8a4f0cb76a5554a57f359d236d3900
+cyclone-22, full table, lru none: verified, checked, against the segment file ok
+    2705819 rows, 111 cuts; frames file 5400960 bytes, SHA-256 d82eb2d216e716d620dccca1cc8984cea425a88efcd65e72a8d908e34495cf14; table full (k 13, 257 pages taken); data image 4033 words, 12 pages; memory segments 107376 words (raw 859008 B, LRU 217756 B); 2.2 s
+    verify: images (cycle-0 8192a64c543a551b, 128 starts and Tracer's copies, final d97a38a8b608193b) equal gold's memory; page counts equal; jump targets 2945 found, 0 missed (table full); LRU = raw on frames 5, 6, 9; 3.7 s: VERIFIED
+cyclone-22, base table, lru all: verified, checked, against the segment file ok
+    2705819 rows, 111 cuts; frames file 4753744 bytes, SHA-256 27e2717807b6bba2f75e1dc7f60213507045355348b643e9d1a076b6b766d098; table added (k 13, 0 pages taken); data image 4033 words, 12 pages; memory segments 107376 words (raw 859008 B, LRU 217756 B); 2.2 s
+    verify: images (cycle-0 8192a64c543a551b, 128 starts and Tracer's copies, final d97a38a8b608193b) equal gold's memory; page counts equal; jump targets 2945 found, 0 missed (table added); LRU = raw on frames 5, 6, 9; 3.7 s: VERIFIED
