@@ -1,0 +1,396 @@
+evm-zone-23-raw-full.frames, N 64, s 0: the master: status 1 (detail 0x0), 9 frames, 6 runs, 912 pages taken, 130 LOADs, 65 results, 0 others, boot 5; ERRORS: the tile's 0x0, Ingress's 0x0, the Updater's 0x0
+evm-zone-23-raw-full.frames, N 64, s 0: the master's exit 0x1; the tracer tile: status 1, 8 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 6400512 cycles from the reset
+evm-zone-23-raw-full.frames, N 64, s 0: passed in 6400512 cycles, 4.7 s of simulation, 1375015 cycles a second
+
+run             done at     cycles    on data   on pages  on memory     read  written PAGE_COUNT
+program         2175694    2071692    1340790          0     474103        0      493          0
+table           3261432    1069622     740742          0     195501        0      257          0
+cycle0          3274913      12625       3765          0       6824        1        8          0
+start-0         3374404        798          0          0        794        1        1          0
+tracer          3409954      35232       7091          0      23757        3       26          0
+final           3879058     468912     162117          0     241492      186      259          0
+the link: 7054 packets, 225500 words, 3720864 bytes; the page map: 913 pages marked; the master's core: 787812 cycles awake of 6400512 (12.31%), 523935 instructions
+the master: the tracer tile's load at its cycle 3410449, the windows landed and the replay released at 6180805, its exit at 6400386
+the threshold: 256; the link at 1 bytes a cycle; the master's wakes: 2681, 2364 to the hand-over; Ingress read out in 939 transfers, 817 to the hand-over; 25 threshold stores; the master awake 700743 cycles to the hand-over; the link: its last byte at 3838039, 117175 cycles waiting for room
+each frame, its type: wakes/transfers: 1: 2/2 2: 1477/497 3: 5/5 4: 2/2 5: 770/260 6: 10/4 7: 40/23 8: 19/11 9: 33/12 (the last to the hand-over)
+PASS proof_run evm-zone-23-raw-full.frames, N 64, s 0: 0 checks failed
+evm-zone-23-raw-full.frames, N 64, s 1: the master: status 1 (detail 0x0), 9 frames, 6 runs, 917 pages taken, 130 LOADs, 65 results, 0 others, boot 5; ERRORS: the tile's 0x0, Ingress's 0x0, the Updater's 0x0
+evm-zone-23-raw-full.frames, N 64, s 1: the master's exit 0x1; the tracer tile: status 1, 8 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 6422016 cycles from the reset
+evm-zone-23-raw-full.frames, N 64, s 1: passed in 6422016 cycles, 4.7 s of simulation, 1377922 cycles a second
+
+run             done at     cycles    on data   on pages  on memory     read  written PAGE_COUNT
+program         2175694    2071692    1340790          0     474103        0      493          0
+table           3261430    1069622     740742          0     195501        0      257          0
+cycle0          3274911      12625       3765          0       6824        1        8          0
+start-1         3408683      35042      17882          0      12820        4       13          0
+tracer          3443443      34442       8170          0      22122        4       24          0
+final           3878802     435167     136726        199     237007      187      250          0
+the link: 7054 packets, 225500 words, 3720864 bytes; the page map: 918 pages marked; the master's core: 782498 cycles awake of 6422016 (12.18%), 520407 instructions
+the master: the tracer tile's load at its cycle 3443938, the windows landed and the replay released at 6202115, its exit at 6421713
+the threshold: 256; the link at 1 bytes a cycle; the master's wakes: 2667, 2387 to the hand-over; Ingress read out in 927 transfers, 827 to the hand-over; 24 threshold stores; the master awake 707002 cycles to the hand-over; the link: its last byte at 3838632, 117768 cycles waiting for room
+each frame, its type: wakes/transfers: 1: 2/2 2: 1477/497 3: 5/5 4: 2/2 5: 770/260 6: 10/4 7: 41/24 8: 20/12 9: 54/20 (the last to the hand-over)
+PASS proof_run evm-zone-23-raw-full.frames, N 64, s 1: 0 checks failed
+evm-zone-23-raw-full.frames, N 64, s 6: the master: status 1 (detail 0x0), 9 frames, 6 runs, 939 pages taken, 130 LOADs, 65 results, 0 others, boot 5; ERRORS: the tile's 0x0, Ingress's 0x0, the Updater's 0x0
+evm-zone-23-raw-full.frames, N 64, s 6: the master's exit 0x1; the tracer tile: status 1, 8 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 6838272 cycles from the reset
+evm-zone-23-raw-full.frames, N 64, s 6: passed in 6838272 cycles, 5.0 s of simulation, 1373356 cycles a second
+
+run             done at     cycles    on data   on pages  on memory     read  written PAGE_COUNT
+program         2175694    2071692    1340790          0     474103        0      493          0
+table           3261420    1069622     740742          0     195501        0      257          0
+cycle0          3274901      12625       3765          0       6824        1        8          0
+start-6         3581054     206940     100266          0      77168       36       82          0
+tracer          3614847      33475         54          0      31028       14       30          0
+final           3885239     270218      61832          0     170448      143      178          0
+the link: 7054 packets, 225500 words, 3720864 bytes; the page map: 940 pages marked; the master's core: 785501 cycles awake of 6838272 (11.49%), 522698 instructions
+the master: the tracer tile's load at its cycle 3615288, the windows landed and the replay released at 6607928, its exit at 6838230
+the threshold: 256; the link at 1 bytes a cycle; the master's wakes: 2672, 2500 to the hand-over; Ingress read out in 932 transfers, 865 to the hand-over; 25 threshold stores; the master awake 734708 cycles to the hand-over; the link: its last byte at 3840720, 119856 cycles waiting for room
+each frame, its type: wakes/transfers: 1: 2/2 2: 1477/497 3: 5/5 4: 2/2 5: 770/260 6: 10/4 7: 42/25 8: 20/12 9: 166/57 (the last to the hand-over)
+PASS proof_run evm-zone-23-raw-full.frames, N 64, s 6: 0 checks failed
+evm-zone-23-raw-base.frames, N 64, s 0: the master: status 1 (detail 0x0), 11 frames, 7 runs, 915 pages taken, 130 LOADs, 65 results, 0 others, boot 5; ERRORS: the tile's 0x0, Ingress's 0x0, the Updater's 0x0
+evm-zone-23-raw-base.frames, N 64, s 0: the master's exit 0x1; the tracer tile: status 1, 8 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 6405632 cycles from the reset
+evm-zone-23-raw-base.frames, N 64, s 0: passed in 6405632 cycles, 4.7 s of simulation, 1355562 cycles a second
+
+run             done at     cycles    on data   on pages  on memory     read  written PAGE_COUNT
+program         2175694    2071692    1340790          0     474103        0      493          0
+base            3256326    1078798     752511          0     192908        0      257          0
+table           3276542       3597          1          0       2550        1        3          0
+cycle0          3286553       9364         72          0       7256        1        8          0
+start-0         3379718        691          0          0        687        1        1          0
+tracer          3414974      34938       8584          0      21970        3       26          0
+final           3885521     470355     161018          0     244034      186      259          0
+the link: 7072 packets, 226023 words, 3729520 bytes; the page map: 916 pages marked; the master's core: 784778 cycles awake of 6405632 (12.25%), 521977 instructions
+the master: the tracer tile's load at its cycle 3415469, the windows landed and the replay released at 6185825, its exit at 6405406
+the threshold: 256; the link at 1 bytes a cycle; the master's wakes: 2676, 2371 to the hand-over; Ingress read out in 930 transfers, 822 to the hand-over; 30 threshold stores; the master awake 703775 cycles to the hand-over; the link: its last byte at 3843939, 114419 cycles waiting for room
+each frame, its type: wakes/transfers: 1: 2/2 2: 1477/497 4: 2/2 5: 771/259 3: 5/5 4: 2/2 5: 7/4 6: 8/4 7: 40/24 8: 19/11 9: 32/11 (the last to the hand-over)
+PASS proof_run evm-zone-23-raw-base.frames, N 64, s 0: 0 checks failed
+evm-zone-23-raw-base.frames, N 64, s 1: the master: status 1 (detail 0x0), 11 frames, 7 runs, 920 pages taken, 130 LOADs, 65 results, 0 others, boot 5; ERRORS: the tile's 0x0, Ingress's 0x0, the Updater's 0x0
+evm-zone-23-raw-base.frames, N 64, s 1: the master's exit 0x1; the tracer tile: status 1, 8 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 6427648 cycles from the reset
+evm-zone-23-raw-base.frames, N 64, s 1: passed in 6427648 cycles, 4.9 s of simulation, 1305352 cycles a second
+
+run             done at     cycles    on data   on pages  on memory     read  written PAGE_COUNT
+program         2175694    2071692    1340790          0     474103        0      493          0
+base            3256326    1078798     752511          0     192908        0      257          0
+table           3276540       3597          1          0       2550        1        3          0
+cycle0          3286551       9364         72          0       7256        1        8          0
+start-1         3413994      34967      18608          0      12019        4       13          0
+tracer          3449253      34941       7388          0      23403        4       24          0
+final           3884401     434956     137588        145     235988      187      250          0
+the link: 7072 packets, 226023 words, 3729520 bytes; the page map: 921 pages marked; the master's core: 785632 cycles awake of 6427648 (12.22%), 522658 instructions
+the master: the tracer tile's load at its cycle 3449748, the windows landed and the replay released at 6207925, its exit at 6427523
+the threshold: 256; the link at 1 bytes a cycle; the master's wakes: 2675, 2394 to the hand-over; Ingress read out in 931 transfers, 832 to the hand-over; 30 threshold stores; the master awake 710090 cycles to the hand-over; the link: its last byte at 3843900, 114380 cycles waiting for room
+each frame, its type: wakes/transfers: 1: 2/2 2: 1477/497 4: 2/2 5: 771/259 3: 5/5 4: 2/2 5: 7/4 6: 8/4 7: 40/25 8: 19/11 9: 55/20 (the last to the hand-over)
+PASS proof_run evm-zone-23-raw-base.frames, N 64, s 1: 0 checks failed
+evm-zone-23-raw-base.frames, N 64, s 6: the master: status 1 (detail 0x0), 11 frames, 7 runs, 942 pages taken, 130 LOADs, 65 results, 0 others, boot 5; ERRORS: the tile's 0x0, Ingress's 0x0, the Updater's 0x0
+evm-zone-23-raw-base.frames, N 64, s 6: the master's exit 0x1; the tracer tile: status 1, 8 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 6843904 cycles from the reset
+evm-zone-23-raw-base.frames, N 64, s 6: passed in 6843904 cycles, 5.0 s of simulation, 1373558 cycles a second
+
+run             done at     cycles    on data   on pages  on memory     read  written PAGE_COUNT
+program         2175694    2071692    1340790          0     474103        0      493          0
+base            3256326    1078798     752511          0     192908        0      257          0
+table           3276530       3597          1          0       2550        1        3          0
+cycle0          3286541       9364         72          0       7256        1        8          0
+start-6         3585913     206652     100150          0      76996       36       82          0
+tracer          3620069      33838         54          0      31391       14       30          0
+final           3890227     269984      60348          0     171698      143      178          0
+the link: 7072 packets, 226023 words, 3729520 bytes; the page map: 943 pages marked; the master's core: 788658 cycles awake of 6843904 (11.52%), 524967 instructions
+the master: the tracer tile's load at its cycle 3620510, the windows landed and the replay released at 6613150, its exit at 6843452
+the threshold: 256; the link at 1 bytes a cycle; the master's wakes: 2680, 2506 to the hand-over; Ingress read out in 936 transfers, 868 to the hand-over; 29 threshold stores; the master awake 737350 cycles to the hand-over; the link: its last byte at 3845231, 115711 cycles waiting for room
+each frame, its type: wakes/transfers: 1: 2/2 2: 1477/497 4: 2/2 5: 771/259 3: 5/5 4: 2/2 5: 7/4 6: 8/4 7: 39/23 8: 21/12 9: 166/57 (the last to the hand-over)
+PASS proof_run evm-zone-23-raw-base.frames, N 64, s 6: 0 checks failed
+evm-zone-23-lru-full.frames, N 64, s 0: the master: status 1 (detail 0x0), 9 frames, 6 runs, 912 pages taken, 130 LOADs, 65 results, 0 others, boot 5; ERRORS: the tile's 0x0, Ingress's 0x0, the Updater's 0x0
+evm-zone-23-lru-full.frames, N 64, s 0: the master's exit 0x1; the tracer tile: status 1, 8 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 5787648 cycles from the reset
+evm-zone-23-lru-full.frames, N 64, s 0: passed in 5787648 cycles, 4.1 s of simulation, 1428378 cycles a second
+
+run             done at     cycles    on data   on pages  on memory     read  written PAGE_COUNT
+program         2163406    2059404    1336487          0     466118        0      493          0
+table           2658106     478624     150214          0     195031        0      257          0
+cycle0          2669299      10337       2290          0       6342        1        8          0
+start-0         2769393        963          0          0        959        1        1          0
+tracer          2796822      27111          4          0      22723        3       26          0
+final           3104610     307614       1199          0     241112      186      259          0
+the link: 5286 packets, 168971 words, 2788112 bytes; the page map: 913 pages marked; the master's core: 641483 cycles awake of 5787648 (11.08%), 430131 instructions
+the master: the tracer tile's load at its cycle 2797263, the windows landed and the replay released at 5567619, its exit at 5787200
+the threshold: 256; the link at 1 bytes a cycle; the master's wakes: 1994, 1916 to the hand-over; Ingress read out in 712 transfers, 673 to the hand-over; 24 threshold stores; the master awake 610020 cycles to the hand-over; the link: its last byte at 3024892, 236780 cycles waiting for room
+each frame, its type: wakes/transfers: 1: 2/2 2: 1464/493 3: 5/5 4: 2/2 5: 351/126 6: 10/4 7: 41/24 8: 20/11 9: 15/5 (the last to the hand-over)
+PASS proof_run evm-zone-23-lru-full.frames, N 64, s 0: 0 checks failed
+evm-zone-23-lru-full.frames, N 64, s 1: the master: status 1 (detail 0x0), 9 frames, 6 runs, 917 pages taken, 130 LOADs, 65 results, 0 others, boot 5; ERRORS: the tile's 0x0, Ingress's 0x0, the Updater's 0x0
+evm-zone-23-lru-full.frames, N 64, s 1: the master's exit 0x1; the tracer tile: status 1, 8 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 5789696 cycles from the reset
+evm-zone-23-lru-full.frames, N 64, s 1: passed in 5789696 cycles, 4.0 s of simulation, 1433648 cycles a second
+
+run             done at     cycles    on data   on pages  on memory     read  written PAGE_COUNT
+program         2163406    2059404    1336487          0     466118        0      493          0
+table           2658576     479096     155968          0     189749        0      257          0
+cycle0          2669424      10201       2109          0       6387        1        8          0
+start-1         2784877      16434         55          0      12039        4       13          0
+tracer          2811384      26207          1          0      22056        4       24          0
+final           3106949     295391       1197         84     232875      187      250          0
+the link: 5286 packets, 168971 words, 2788112 bytes; the page map: 918 pages marked; the master's core: 641827 cycles awake of 5789696 (11.09%), 430421 instructions
+the master: the tracer tile's load at its cycle 2811825, the windows landed and the replay released at 5570002, its exit at 5789600
+the threshold: 256; the link at 1 bytes a cycle; the master's wakes: 1993, 1918 to the hand-over; Ingress read out in 711 transfers, 674 to the hand-over; 25 threshold stores; the master awake 611448 cycles to the hand-over; the link: its last byte at 3027096, 238984 cycles waiting for room
+each frame, its type: wakes/transfers: 1: 2/2 2: 1464/493 3: 5/5 4: 2/2 5: 349/124 6: 10/4 7: 44/26 8: 20/11 9: 16/6 (the last to the hand-over)
+PASS proof_run evm-zone-23-lru-full.frames, N 64, s 1: 0 checks failed
+evm-zone-23-lru-full.frames, N 64, s 6: the master: status 1 (detail 0x0), 9 frames, 6 runs, 939 pages taken, 130 LOADs, 65 results, 0 others, boot 5; ERRORS: the tile's 0x0, Ingress's 0x0, the Updater's 0x0
+evm-zone-23-lru-full.frames, N 64, s 6: the master's exit 0x1; the tracer tile: status 1, 8 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 6133248 cycles from the reset
+evm-zone-23-lru-full.frames, N 64, s 6: passed in 6133248 cycles, 4.4 s of simulation, 1409471 cycles a second
+
+run             done at     cycles    on data   on pages  on memory     read  written PAGE_COUNT
+program         2163406    2059404    1336487          0     466118        0      493          0
+table           2658566     479096     155968          0     189749        0      257          0
+cycle0          2669414      10201       2109          0       6387        1        8          0
+start-6         2875841     107284        222          0      77556       36       82          0
+tracer          2909578      33437         54          0      30990       14       30          0
+final           3121180     211428        926          0     172564      143      178          0
+the link: 5286 packets, 168971 words, 2788112 bytes; the page map: 940 pages marked; the master's core: 643860 cycles awake of 6133248 (10.50%), 431988 instructions
+the master: the tracer tile's load at its cycle 2910019, the windows landed and the replay released at 5902659, its exit at 6132961
+the threshold: 256; the link at 1 bytes a cycle; the master's wakes: 1995, 1944 to the hand-over; Ingress read out in 710 transfers, 689 to the hand-over; 24 threshold stores; the master awake 620942 cycles to the hand-over; the link: its last byte at 3036323, 248211 cycles waiting for room
+each frame, its type: wakes/transfers: 1: 2/2 2: 1464/493 3: 5/5 4: 2/2 5: 349/124 6: 10/4 7: 42/24 8: 21/12 9: 43/22 (the last to the hand-over)
+PASS proof_run evm-zone-23-lru-full.frames, N 64, s 6: 0 checks failed
+evm-zone-23-lru-base.frames, N 64, s 0: the master: status 1 (detail 0x0), 11 frames, 7 runs, 915 pages taken, 130 LOADs, 65 results, 0 others, boot 5; ERRORS: the tile's 0x0, Ingress's 0x0, the Updater's 0x0
+evm-zone-23-lru-base.frames, N 64, s 0: the master's exit 0x1; the tracer tile: status 1, 8 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 5786624 cycles from the reset
+evm-zone-23-lru-base.frames, N 64, s 0: passed in 5786624 cycles, 4.1 s of simulation, 1424694 cycles a second
+
+run             done at     cycles    on data   on pages  on memory     read  written PAGE_COUNT
+program         2163406    2059404    1336487          0     466118        0      493          0
+base            2648722     483502     156168          0     193955        0      257          0
+table           2668535       3236          1          0       2189        1        3          0
+cycle0          2677617       8435          3          0       6727        1        8          0
+start-0         2767134        842          0          0        838        1        1          0
+tracer          2795736      28284          4          0      23896        3       26          0
+final           3103389     307479       1199          0     240977      186      259          0
+the link: 5295 packets, 169222 words, 2792272 bytes; the page map: 916 pages marked; the master's core: 635836 cycles awake of 5786624 (10.99%), 426489 instructions
+the master: the tracer tile's load at its cycle 2796177, the windows landed and the replay released at 5566533, its exit at 5786114
+the threshold: 256; the link at 1 bytes a cycle; the master's wakes: 1987, 1908 to the hand-over; Ingress read out in 708 transfers, 669 to the hand-over; 28 threshold stores; the master awake 604233 cycles to the hand-over; the link: its last byte at 3025937, 233665 cycles waiting for room
+each frame, its type: wakes/transfers: 1: 2/2 2: 1464/493 4: 2/2 5: 346/119 3: 5/5 4: 2/2 5: 5/3 6: 6/3 7: 37/23 8: 20/12 9: 13/4 (the last to the hand-over)
+PASS proof_run evm-zone-23-lru-base.frames, N 64, s 0: 0 checks failed
+evm-zone-23-lru-base.frames, N 64, s 1: the master: status 1 (detail 0x0), 11 frames, 7 runs, 920 pages taken, 130 LOADs, 65 results, 0 others, boot 5; ERRORS: the tile's 0x0, Ingress's 0x0, the Updater's 0x0
+evm-zone-23-lru-base.frames, N 64, s 1: the master's exit 0x1; the tracer tile: status 1, 8 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 5787648 cycles from the reset
+evm-zone-23-lru-base.frames, N 64, s 1: passed in 5787648 cycles, 4.1 s of simulation, 1424909 cycles a second
+
+run             done at     cycles    on data   on pages  on memory     read  written PAGE_COUNT
+program         2163406    2059404    1336487          0     466118        0      493          0
+base            2648722     483502     156168          0     193955        0      257          0
+table           2668533       3236          1          0       2189        1        3          0
+cycle0          2677615       8435          3          0       6727        1        8          0
+start-1         2782117      15827          4          0      11483        4       13          0
+tracer          2808926      26509          1          0      22358        4       24          0
+final           3108775     299675       1197        133     237110      187      250          0
+the link: 5295 packets, 169222 words, 2792272 bytes; the page map: 921 pages marked; the master's core: 636437 cycles awake of 5787648 (11.00%), 426981 instructions
+the master: the tracer tile's load at its cycle 2809367, the windows landed and the replay released at 5567544, its exit at 5787142
+the threshold: 256; the link at 1 bytes a cycle; the master's wakes: 1987, 1912 to the hand-over; Ingress read out in 709 transfers, 672 to the hand-over; 28 threshold stores; the master awake 606058 cycles to the hand-over; the link: its last byte at 3030178, 237906 cycles waiting for room
+each frame, its type: wakes/transfers: 1: 2/2 2: 1464/493 4: 2/2 5: 346/119 3: 5/5 4: 2/2 5: 5/3 6: 6/3 7: 38/24 8: 20/12 9: 16/6 (the last to the hand-over)
+PASS proof_run evm-zone-23-lru-base.frames, N 64, s 1: 0 checks failed
+evm-zone-23-lru-base.frames, N 64, s 6: the master: status 1 (detail 0x0), 11 frames, 7 runs, 942 pages taken, 130 LOADs, 65 results, 0 others, boot 5; ERRORS: the tile's 0x0, Ingress's 0x0, the Updater's 0x0
+evm-zone-23-lru-base.frames, N 64, s 6: the master's exit 0x1; the tracer tile: status 1, 8 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 6130688 cycles from the reset
+evm-zone-23-lru-base.frames, N 64, s 6: passed in 6130688 cycles, 4.4 s of simulation, 1404417 cycles a second
+
+run             done at     cycles    on data   on pages  on memory     read  written PAGE_COUNT
+program         2163406    2059404    1336487          0     466118        0      493          0
+base            2648722     483502     156168          0     193955        0      257          0
+table           2668523       3236          1          0       2189        1        3          0
+cycle0          2677605       8435          3          0       6727        1        8          0
+start-6         2872336     105740        222          0      76012       36       82          0
+tracer          2906947      34311         54          0      31864       14       30          0
+final           3119594     212473        926          0     173609      143      178          0
+the link: 5295 packets, 169222 words, 2792272 bytes; the page map: 943 pages marked; the master's core: 638962 cycles awake of 6130688 (10.42%), 428862 instructions
+the master: the tracer tile's load at its cycle 2907388, the windows landed and the replay released at 5900028, its exit at 6130330
+the threshold: 256; the link at 1 bytes a cycle; the master's wakes: 1991, 1940 to the hand-over; Ingress read out in 709 transfers, 688 to the hand-over; 27 threshold stores; the master awake 616044 cycles to the hand-over; the link: its last byte at 3035039, 242767 cycles waiting for room
+each frame, its type: wakes/transfers: 1: 2/2 2: 1464/493 4: 2/2 5: 346/119 3: 5/5 4: 2/2 5: 5/3 6: 6/3 7: 38/23 8: 21/13 9: 43/22 (the last to the hand-over)
+PASS proof_run evm-zone-23-lru-base.frames, N 64, s 6: 0 checks failed
+cyclone-22-raw-full.frames, N 64, s 0: the master: status 1 (detail 0x0), 9 frames, 6 runs, 1262 pages taken, 130 LOADs, 65 results, 0 others, boot 5; ERRORS: the tile's 0x0, Ingress's 0x0, the Updater's 0x0
+cyclone-22-raw-full.frames, N 64, s 0: the master's exit 0x1; the tracer tile: status 1, 8 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 7975936 cycles from the reset
+cyclone-22-raw-full.frames, N 64, s 0: passed in 7975936 cycles, 6.1 s of simulation, 1313270 cycles a second
+
+run             done at     cycles    on data   on pages  on memory     read  written PAGE_COUNT
+program         3514222    3410319    2208330          0     779399        0      810          0
+table           4605353    1075405     747763          0     194263        0      257          0
+cycle0          4635635      29426      14142          0      10338        1       12          0
+start-0         4710724        821          0          0        817        1        1          0
+tracer          4762892      51850       6671          0      38089        4       40          0
+final           5434368     671284     383125          0     207400      107      222          0
+the link: 10032 packets, 320799 words, 5293296 bytes; the page map: 1263 pages marked; the master's core: 1124283 cycles awake of 7975936 (14.10%), 755004 instructions
+the master: the tracer tile's load at its cycle 4763387, the windows landed and the replay released at 7738263, its exit at 7975490
+the threshold: 256; the link at 1 bytes a cycle; the master's wakes: 3798, 3325 to the hand-over; Ingress read out in 1302 transfers, 1140 to the hand-over; 24 threshold stores; the master awake 998858 cycles to the hand-over; the link: its last byte at 5401144, 107848 cycles waiting for room
+each frame, its type: wakes/transfers: 1: 2/2 2: 2430/816 3: 4/4 4: 2/2 5: 770/259 6: 24/9 7: 41/23 8: 5/5 9: 41/19 (the last to the hand-over)
+PASS proof_run cyclone-22-raw-full.frames, N 64, s 0: 0 checks failed
+cyclone-22-raw-full.frames, N 64, s 1: the master: status 1 (detail 0x0), 9 frames, 6 runs, 1282 pages taken, 130 LOADs, 65 results, 0 others, boot 5; ERRORS: the tile's 0x0, Ingress's 0x0, the Updater's 0x0
+cyclone-22-raw-full.frames, N 64, s 1: the master's exit 0x1; the tracer tile: status 1, 8 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 8186368 cycles from the reset
+cyclone-22-raw-full.frames, N 64, s 1: passed in 8186368 cycles, 6.3 s of simulation, 1292241 cycles a second
+
+run             done at     cycles    on data   on pages  on memory     read  written PAGE_COUNT
+program         3514222    3410319    2208330          0     779399        0      810          0
+table           4605351    1075405     747763          0     194263        0      257          0
+cycle0          4635633      29426      14142          0      10338        1       12          0
+start-1         4762056      51861      24903          0      19937        6       20          0
+tracer          4843302      80928      16348          0      54085       12       56          0
+final           5434218     590724     337876          0     182418       96      197          0
+the link: 10032 packets, 320799 words, 5293296 bytes; the page map: 1283 pages marked; the master's core: 1128903 cycles awake of 8186368 (13.79%), 758131 instructions
+the master: the tracer tile's load at its cycle 4843797, the windows landed and the replay released at 7934971, its exit at 8185963
+the threshold: 256; the link at 1 bytes a cycle; the master's wakes: 3813, 3387 to the hand-over; Ingress read out in 1305 transfers, 1165 to the hand-over; 24 threshold stores; the master awake 1015941 cycles to the hand-over; the link: its last byte at 5401142, 107846 cycles waiting for room
+each frame, its type: wakes/transfers: 1: 2/2 2: 2430/816 3: 4/4 4: 2/2 5: 770/259 6: 24/9 7: 42/24 8: 6/6 9: 101/42 (the last to the hand-over)
+PASS proof_run cyclone-22-raw-full.frames, N 64, s 1: 0 checks failed
+cyclone-22-raw-full.frames, N 64, s 3: the master: status 1 (detail 0x0), 9 frames, 6 runs, 1396 pages taken, 130 LOADs, 65 results, 0 others, boot 5; ERRORS: the tile's 0x0, Ingress's 0x0, the Updater's 0x0
+cyclone-22-raw-full.frames, N 64, s 3: the master's exit 0x1; the tracer tile: status 1, 8 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 9647616 cycles from the reset
+cyclone-22-raw-full.frames, N 64, s 3: passed in 9647616 cycles, 6.8 s of simulation, 1425175 cycles a second
+
+run             done at     cycles    on data   on pages  on memory     read  written PAGE_COUNT
+program         3514222    3410319    2208330          0     779399        0      810          0
+table           4605347    1075405     747763          0     194263        0      257          0
+cycle0          4635629      29426      14142          0      10338        1       12          0
+start-3         4867518     157330      78195          0      58341       32       61          0
+tracer          5396783     528947     196224          0     267412       18      272          0
+final           5441585      44610        220          0      42093       61       48          0
+the link: 10032 packets, 320799 words, 5293296 bytes; the page map: 1397 pages marked; the master's core: 1130656 cycles awake of 9647616 (11.72%), 760835 instructions
+the master: the tracer tile's load at its cycle 5397278, the windows landed and the replay released at 9408860, its exit at 9647147
+the threshold: 256; the link at 1 bytes a cycle; the master's wakes: 3808, 3773 to the hand-over; Ingress read out in 1303 transfers, 1298 to the hand-over; 24 threshold stores; the master awake 1118103 cycles to the hand-over; the link: its last byte at 5407927, 114631 cycles waiting for room
+each frame, its type: wakes/transfers: 1: 2/2 2: 2430/816 3: 4/4 4: 2/2 5: 770/259 6: 24/9 7: 42/24 8: 6/6 9: 487/175 (the last to the hand-over)
+PASS proof_run cyclone-22-raw-full.frames, N 64, s 3: 0 checks failed
+cyclone-22-raw-base.frames, N 64, s 0: the master: status 1 (detail 0x0), 11 frames, 7 runs, 1263 pages taken, 130 LOADs, 65 results, 0 others, boot 5; ERRORS: the tile's 0x0, Ingress's 0x0, the Updater's 0x0
+cyclone-22-raw-base.frames, N 64, s 0: the master's exit 0x1; the tracer tile: status 1, 8 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 7968256 cycles from the reset
+cyclone-22-raw-base.frames, N 64, s 0: passed in 7968256 cycles, 6.1 s of simulation, 1311139 cycles a second
+
+run             done at     cycles    on data   on pages  on memory     read  written PAGE_COUNT
+program         3513980    3410077    2208337          0     779150        0      810          0
+base            4596325    1080601     750343          0     196879        0      257          0
+table           4613136        923          0          0        919        1        1          0
+cycle0          4629946      16168        679          0      10543        1       12          0
+start-0         4704520        820          0          0        816        1        1          0
+tracer          4755452      50614       6760          0      36764        4       40          0
+final           5428227     672583     386436          0     205388      107      222          0
+the link: 10034 packets, 320807 words, 5293456 bytes; the page map: 1264 pages marked; the master's core: 1120274 cycles awake of 7968256 (14.06%), 752405 instructions
+the master: the tracer tile's load at its cycle 4755947, the windows landed and the replay released at 7730823, its exit at 7968050
+the threshold: 256; the link at 1 bytes a cycle; the master's wakes: 3797, 3321 to the hand-over; Ingress read out in 1304 transfers, 1141 to the hand-over; 25 threshold stores; the master awake 994184 cycles to the hand-over; the link: its last byte at 5395037, 101581 cycles waiting for room
+each frame, its type: wakes/transfers: 1: 2/2 2: 2429/816 4: 2/2 5: 767/257 3: 4/4 4: 2/2 5: 2/1 6: 22/11 7: 41/23 8: 5/5 9: 39/17 (the last to the hand-over)
+PASS proof_run cyclone-22-raw-base.frames, N 64, s 0: 0 checks failed
+cyclone-22-raw-base.frames, N 64, s 1: the master: status 1 (detail 0x0), 11 frames, 7 runs, 1283 pages taken, 130 LOADs, 65 results, 0 others, boot 5; ERRORS: the tile's 0x0, Ingress's 0x0, the Updater's 0x0
+cyclone-22-raw-base.frames, N 64, s 1: the master's exit 0x1; the tracer tile: status 1, 8 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 8178176 cycles from the reset
+cyclone-22-raw-base.frames, N 64, s 1: passed in 8178176 cycles, 6.3 s of simulation, 1289395 cycles a second
+
+run             done at     cycles    on data   on pages  on memory     read  written PAGE_COUNT
+program         3513980    3410077    2208337          0     779150        0      810          0
+base            4596325    1080601     750343          0     196879        0      257          0
+table           4613134        923          0          0        919        1        1          0
+cycle0          4629944      16168        679          0      10543        1       12          0
+start-1         4755961      51969      25804          0      19144        6       20          0
+tracer          4835136      78857      14647          0      53715       12       56          0
+final           5429400     594072     340729          0     182913       96      197          0
+the link: 10034 packets, 320807 words, 5293456 bytes; the page map: 1284 pages marked; the master's core: 1124169 cycles awake of 8178176 (13.75%), 755083 instructions
+the master: the tracer tile's load at its cycle 4835631, the windows landed and the replay released at 7926901, its exit at 8177893
+the threshold: 256; the link at 1 bytes a cycle; the master's wakes: 3810, 3381 to the hand-over; Ingress read out in 1307 transfers, 1165 to the hand-over; 25 threshold stores; the master awake 1010598 cycles to the hand-over; the link: its last byte at 5395035, 101579 cycles waiting for room
+each frame, its type: wakes/transfers: 1: 2/2 2: 2429/816 4: 2/2 5: 767/257 3: 4/4 4: 2/2 5: 2/1 6: 22/11 7: 42/24 8: 6/6 9: 97/39 (the last to the hand-over)
+PASS proof_run cyclone-22-raw-base.frames, N 64, s 1: 0 checks failed
+cyclone-22-raw-base.frames, N 64, s 3: the master: status 1 (detail 0x0), 11 frames, 7 runs, 1397 pages taken, 130 LOADs, 65 results, 0 others, boot 5; ERRORS: the tile's 0x0, Ingress's 0x0, the Updater's 0x0
+cyclone-22-raw-base.frames, N 64, s 3: the master's exit 0x1; the tracer tile: status 1, 8 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 9638912 cycles from the reset
+cyclone-22-raw-base.frames, N 64, s 3: passed in 9638912 cycles, 6.8 s of simulation, 1425486 cycles a second
+
+run             done at     cycles    on data   on pages  on memory     read  written PAGE_COUNT
+program         3513980    3410077    2208337          0     779150        0      810          0
+base            4596325    1080601     750343          0     196879        0      257          0
+table           4613130        923          0          0        919        1        1          0
+cycle0          4629941      16169        554          0      10669        1       12          0
+start-3         4862573     158588      79781          0      58013       32       61          0
+tracer          5390382     527491     196835          0     265345       18      272          0
+final           5434020      43446        220          0      40929       61       48          0
+the link: 10034 packets, 320807 words, 5293456 bytes; the page map: 1398 pages marked; the master's core: 1125089 cycles awake of 9638912 (11.67%), 757213 instructions
+the master: the tracer tile's load at its cycle 5390877, the windows landed and the replay released at 9400324, its exit at 9638611
+the threshold: 256; the link at 1 bytes a cycle; the master's wakes: 3803, 3767 to the hand-over; Ingress read out in 1303 transfers, 1298 to the hand-over; 25 threshold stores; the master awake 1112330 cycles to the hand-over; the link: its last byte at 5402073, 108617 cycles waiting for room
+each frame, its type: wakes/transfers: 1: 2/2 2: 2429/816 4: 2/2 5: 767/257 3: 4/4 4: 2/2 5: 2/1 6: 22/11 7: 42/24 8: 6/6 9: 483/172 (the last to the hand-over)
+PASS proof_run cyclone-22-raw-base.frames, N 64, s 3: 0 checks failed
+cyclone-22-lru-full.frames, N 64, s 0: the master: status 1 (detail 0x0), 9 frames, 6 runs, 1262 pages taken, 130 LOADs, 65 results, 0 others, boot 5; ERRORS: the tile's 0x0, Ingress's 0x0, the Updater's 0x0
+cyclone-22-lru-full.frames, N 64, s 0: the master's exit 0x1; the tracer tile: status 1, 8 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 7201792 cycles from the reset
+cyclone-22-lru-full.frames, N 64, s 0: passed in 7201792 cycles, 5.2 s of simulation, 1376119 cycles a second
+
+run             done at     cycles    on data   on pages  on memory     read  written PAGE_COUNT
+program         3399230    3295327    2093662          0     779075        0      810          0
+table           3842517     427468      99629          0     194460        0      257          0
+cycle0          3868156      24783       9597          0      10376        1       12          0
+start-0         3943271        824          0          0        820        1        1          0
+tracer          3988863      45274         39          0      38145        4       40          0
+final           4285122     296085       6442          0     208884      107      222          0
+the link: 7519 packets, 240446 words, 3967440 bytes; the page map: 1263 pages marked; the master's core: 882731 cycles awake of 7201792 (12.26%), 598149 instructions
+the master: the tracer tile's load at its cycle 3989304, the windows landed and the replay released at 6964180, its exit at 7201407
+the threshold: 256; the link at 1 bytes a cycle; the master's wakes: 2835, 2755 to the hand-over; Ingress read out in 995 transfers, 958 to the hand-over; 23 threshold stores; the master awake 849409 cycles to the hand-over; the link: its last byte at 4194795, 227355 cycles waiting for room
+each frame, its type: wakes/transfers: 1: 2/2 2: 2344/792 3: 5/5 4: 2/2 5: 308/110 6: 22/8 7: 41/23 8: 5/5 9: 20/10 (the last to the hand-over)
+PASS proof_run cyclone-22-lru-full.frames, N 64, s 0: 0 checks failed
+cyclone-22-lru-full.frames, N 64, s 1: the master: status 1 (detail 0x0), 9 frames, 6 runs, 1282 pages taken, 130 LOADs, 65 results, 0 others, boot 5; ERRORS: the tile's 0x0, Ingress's 0x0, the Updater's 0x0
+cyclone-22-lru-full.frames, N 64, s 1: the master's exit 0x1; the tracer tile: status 1, 8 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 7379968 cycles from the reset
+cyclone-22-lru-full.frames, N 64, s 1: passed in 7379968 cycles, 5.5 s of simulation, 1345854 cycles a second
+
+run             done at     cycles    on data   on pages  on memory     read  written PAGE_COUNT
+program         3399230    3295327    2093662          0     779075        0      810          0
+table           3842515     427468      99629          0     194460        0      257          0
+cycle0          3868154      24783       9597          0      10376        1       12          0
+start-1         3969820      27081       1520          0      18540        6       20          0
+tracer          4036886      66748         79          0      56174       12       56          0
+final           4291717     254657        413          0     183814       96      197          0
+the link: 7519 packets, 240446 words, 3967440 bytes; the page map: 1283 pages marked; the master's core: 888317 cycles awake of 7379968 (12.04%), 601889 instructions
+the master: the tracer tile's load at its cycle 4037327, the windows landed and the replay released at 7128501, its exit at 7379493
+the threshold: 256; the link at 1 bytes a cycle; the master's wakes: 2855, 2792 to the hand-over; Ingress read out in 999 transfers, 977 to the hand-over; 23 threshold stores; the master awake 860258 cycles to the hand-over; the link: its last byte at 4199566, 232126 cycles waiting for room
+each frame, its type: wakes/transfers: 1: 2/2 2: 2344/792 3: 5/5 4: 2/2 5: 308/110 6: 22/8 7: 42/24 8: 6/6 9: 55/27 (the last to the hand-over)
+PASS proof_run cyclone-22-lru-full.frames, N 64, s 1: 0 checks failed
+cyclone-22-lru-full.frames, N 64, s 3: the master: status 1 (detail 0x0), 9 frames, 6 runs, 1396 pages taken, 130 LOADs, 65 results, 0 others, boot 5; ERRORS: the tile's 0x0, Ingress's 0x0, the Updater's 0x0
+cyclone-22-lru-full.frames, N 64, s 3: the master's exit 0x1; the tracer tile: status 1, 8 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 8612864 cycles from the reset
+cyclone-22-lru-full.frames, N 64, s 3: passed in 8612864 cycles, 5.9 s of simulation, 1453807 cycles a second
+
+run             done at     cycles    on data   on pages  on memory     read  written PAGE_COUNT
+program         3399230    3295327    2093662          0     779075        0      810          0
+table           3842511     427468      99629          0     194460        0      257          0
+cycle0          3868150      24783       9597          0      10376        1       12          0
+start-3         4033474      90742      10866          0      59082       32       61          0
+tracer          4362415     328641        132          0     263198       18      272          0
+final           4406900      44311        220          0      41794       61       48          0
+the link: 7519 packets, 240446 words, 3967440 bytes; the page map: 1397 pages marked; the master's core: 899675 cycles awake of 8612864 (10.45%), 610793 instructions
+the master: the tracer tile's load at its cycle 4362856, the windows landed and the replay released at 8374438, its exit at 8612725
+the threshold: 256; the link at 1 bytes a cycle; the master's wakes: 2863, 2837 to the hand-over; Ingress read out in 1000 transfers, 999 to the hand-over; 23 threshold stores; the master awake 889355 cycles to the hand-over; the link: its last byte at 4285467, 318027 cycles waiting for room
+each frame, its type: wakes/transfers: 1: 2/2 2: 2344/792 3: 5/5 4: 2/2 5: 308/110 6: 22/8 7: 42/24 8: 6/6 9: 100/49 (the last to the hand-over)
+PASS proof_run cyclone-22-lru-full.frames, N 64, s 3: 0 checks failed
+cyclone-22-lru-base.frames, N 64, s 0: the master: status 1 (detail 0x0), 11 frames, 7 runs, 1263 pages taken, 130 LOADs, 65 results, 0 others, boot 5; ERRORS: the tile's 0x0, Ingress's 0x0, the Updater's 0x0
+cyclone-22-lru-base.frames, N 64, s 0: the master's exit 0x1; the tracer tile: status 1, 8 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 7190528 cycles from the reset
+cyclone-22-lru-base.frames, N 64, s 0: passed in 7190528 cycles, 5.2 s of simulation, 1378832 cycles a second
+
+run             done at     cycles    on data   on pages  on memory     read  written PAGE_COUNT
+program         3399230    3295327    2093662          0     779075        0      810          0
+base            3828159     427214      98987          0     194848        0      257          0
+table           3844894        856          0          0        852        1        1          0
+cycle0          3861159      15623        274          0      10539        1       12          0
+start-0         3934653        810          0          0        806        1        1          0
+tracer          3977857      42886         39          0      35757        4       40          0
+final           4271994     293963       8649          0     204555      107      222          0
+the link: 7521 packets, 240454 words, 3967600 bytes; the page map: 1264 pages marked; the master's core: 884355 cycles awake of 7190528 (12.30%), 599348 instructions
+the master: the tracer tile's load at its cycle 3978298, the windows landed and the replay released at 6953174, its exit at 7190401
+the threshold: 256; the link at 1 bytes a cycle; the master's wakes: 2839, 2756 to the hand-over; Ingress read out in 999 transfers, 961 to the hand-over; 24 threshold stores; the master awake 850568 cycles to the hand-over; the link: its last byte at 4182057, 214457 cycles waiting for room
+each frame, its type: wakes/transfers: 1: 2/2 2: 2344/792 4: 2/2 5: 306/109 3: 4/4 4: 2/2 5: 2/1 6: 21/11 7: 41/23 8: 5/5 9: 21/9 (the last to the hand-over)
+PASS proof_run cyclone-22-lru-base.frames, N 64, s 0: 0 checks failed
+cyclone-22-lru-base.frames, N 64, s 1: the master: status 1 (detail 0x0), 11 frames, 7 runs, 1283 pages taken, 130 LOADs, 65 results, 0 others, boot 5; ERRORS: the tile's 0x0, Ingress's 0x0, the Updater's 0x0
+cyclone-22-lru-base.frames, N 64, s 1: the master's exit 0x1; the tracer tile: status 1, 8 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 7370240 cycles from the reset
+cyclone-22-lru-base.frames, N 64, s 1: passed in 7370240 cycles, 5.5 s of simulation, 1345596 cycles a second
+
+run             done at     cycles    on data   on pages  on memory     read  written PAGE_COUNT
+program         3399230    3295327    2093662          0     779075        0      810          0
+base            3828159     427214      98987          0     194848        0      257          0
+table           3844929        893          0          0        889        1        1          0
+cycle0          3861055      15484        277          0      10397        1       12          0
+start-1         3961747      27533       1065          0      19447        6       20          0
+tracer          4027430      65365         79          0      54791       12       56          0
+final           4281091     253487        413          0     182644       96      197          0
+the link: 7521 packets, 240454 words, 3967600 bytes; the page map: 1284 pages marked; the master's core: 889313 cycles awake of 7370240 (12.07%), 602751 instructions
+the master: the tracer tile's load at its cycle 4027871, the windows landed and the replay released at 7119141, its exit at 7370133
+the threshold: 256; the link at 1 bytes a cycle; the master's wakes: 2854, 2791 to the hand-over; Ingress read out in 1004 transfers, 982 to the hand-over; 23 threshold stores; the master awake 861254 cycles to the hand-over; the link: its last byte at 4189900, 222300 cycles waiting for room
+each frame, its type: wakes/transfers: 1: 2/2 2: 2344/792 4: 2/2 5: 306/109 3: 4/4 4: 2/2 5: 2/1 6: 21/11 7: 42/25 8: 6/6 9: 54/27 (the last to the hand-over)
+PASS proof_run cyclone-22-lru-base.frames, N 64, s 1: 0 checks failed
+cyclone-22-lru-base.frames, N 64, s 3: the master: status 1 (detail 0x0), 11 frames, 7 runs, 1397 pages taken, 130 LOADs, 65 results, 0 others, boot 5; ERRORS: the tile's 0x0, Ingress's 0x0, the Updater's 0x0
+cyclone-22-lru-base.frames, N 64, s 3: the master's exit 0x1; the tracer tile: status 1, 8 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 8604160 cycles from the reset
+cyclone-22-lru-base.frames, N 64, s 3: passed in 8604160 cycles, 5.9 s of simulation, 1455247 cycles a second
+
+run             done at     cycles    on data   on pages  on memory     read  written PAGE_COUNT
+program         3399230    3295327    2093662          0     779075        0      810          0
+base            3828159     427214      98987          0     194848        0      257          0
+table           3844794        762          0          0        758        1        1          0
+cycle0          3861282      15846        259          0      10777        1       12          0
+start-3         4025737      91938      12732          0      58412       32       61          0
+tracer          4355494     329457        132          0     264014       18      272          0
+final           4401541      45873        220          0      43356       61       48          0
+the link: 7521 packets, 240454 words, 3967600 bytes; the page map: 1398 pages marked; the master's core: 900745 cycles awake of 8604160 (10.47%), 611683 instructions
+the master: the tracer tile's load at its cycle 4355935, the windows landed and the replay released at 8365382, its exit at 8603669
+the threshold: 256; the link at 1 bytes a cycle; the master's wakes: 2863, 2837 to the hand-over; Ingress read out in 1004 transfers, 1003 to the hand-over; 24 threshold stores; the master awake 890425 cycles to the hand-over; the link: its last byte at 4278188, 310588 cycles waiting for room
+each frame, its type: wakes/transfers: 1: 2/2 2: 2344/792 4: 2/2 5: 306/109 3: 4/4 4: 2/2 5: 2/1 6: 21/11 7: 42/24 8: 6/6 9: 100/49 (the last to the hand-over)
+PASS proof_run cyclone-22-lru-base.frames, N 64, s 3: 0 checks failed
