@@ -1,0 +1,44 @@
+runs 3777 (chains of 1, 2, 4, 16: 1538, 1135, 723, 381); FAILED 2
+cycles 9240941679; packets 192175408
+  seed 200137: 4 nodes, 18-bit numbers, host window 64, wires 1; 1143400 cycles, 23617 packets, 14124 words down, 53010 up; rest in 0: FAILED: a sender stood still: no acknowledgement in 20801 cycles on a link in step (end 0, stream 2): it has acknowledged 85, next 134, new 134; the other end has taken 85, owes resend 1, asked 1 (2048 cycles ago), room for 1024 words
+  seed 140162: 1 nodes, 18-bit numbers, host window 64, wires 3; 1453171 cycles, 6842 packets, 73689 words down, 12211 up; rest in 0: FAILED: a sender stood still: no acknowledgement in 20801 cycles on a link in step (end 0, stream 2): it has acknowledged 2319, next 2361, new 2361; the other end has taken 2319, owes resend 1, asked 1 (2048 cycles ago), room for 1024 words
+
+the largest over the slices (a slice's average where the line says average):
+  coming to rest after the noise: 481394 cycles on average, 2225033 at most
+  the most: packets a node kept on a stream 8, the host 64; words in a queue 948; words in a forwarding buffer 751
+  the longest: a foreground packet waiting for the line with nothing else to wait for 532 cycles; a sender without an acknowledgement on a link in step 20801
+  the longest, stalls and noise included: a foreground packet from its turn at the host to the first node 2003636, to the last 2011806; a reply from let out to the host 2472161
+  recoveries (a link's last damaged byte to its next delivery, or to nothing owed): 136957, 746 cycles on average, 1455425 at most (seed 250020)
+
+rare events, summed:
+  gone                                                               35865         23697        106718         12625         16914          3978          4386
+  first0                                                             35648         23447        107282         12732         16959          4033          4409
+  header                                                             35904         23466        106822         12656         16842          3921          4403
+  data                                                               36107         23796             0             0             0             0             0
+  packets sent: data                                              71856460
+  sent again                                                       2335487
+  status (length 0, in step)                                     111175817
+  "lost"                                                           3357506
+  "recovery"                                                       2029125
+  "lost" and "recovery" together (both ends lost)                   635705
+  restart                                                           785308
+  header CRC failed                                                1625689
+  data checksum failed                                              546593
+  a field that cannot be                                                 0   <- never happened
+  a header CRC failed during a recovery                            1617933
+  a stop bit taken during a recovery                               3138656
+  a packet ahead of the one expected, or a number ahead             522114
+  a packet seen before                                                   0   <- never happened
+  a packet with no room (G11)                                            0   <- never happened
+  a sender went back                                                698831
+  the number wrapped on a new packet                               1146740
+  the number wrapped on a packet sent again                          58320
+  bursts of noise                                                  8052712
+  cycles inside a burst                                         2243665060
+  single bits flipped                                              1294339
+  consumer stalls                                                224472286
+  an acknowledgement behind (G20)                                        0   <- never happened
+  an acknowledgement beyond what was sent (G20)                          0   <- never happened
+  a link started again                                                   0   <- never happened
+  a kept packet found bad (G21)                                          0   <- never happened
+  a packet made wrong (G22)                                              0   <- never happened

@@ -1,0 +1,6 @@
+mkdir -p build/san build/clang
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -MMD -MP -O2 -g test_header.cpp link_end.cpp bench.cpp node.cpp chain.cpp -o build/test_header
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -MMD -MP -O2 -g test_link.cpp link_end.cpp bench.cpp node.cpp chain.cpp -o build/test_link
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -MMD -MP -O2 -g linkcase.cpp link_end.cpp bench.cpp node.cpp chain.cpp -o build/linkcase
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -MMD -MP -O2 -g linksearch.cpp link_end.cpp bench.cpp node.cpp chain.cpp -o build/linksearch
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -MMD -MP -O2 -g linkrun.cpp link_end.cpp bench.cpp node.cpp chain.cpp -o build/linkrun

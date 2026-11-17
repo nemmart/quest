@@ -1,0 +1,45 @@
+
+linkrun: rules proposed; seeds 180000 to 180242; 2000000 cycles of traffic and noise each
+runs 243 (chains of 1, 2, 4, 16: 106, 67, 49, 21); FAILED 0
+cycles 592062479; packets 11469472; words delivered: 36406338 from the host (every node counted), 6682665 to it
+coming to rest after the noise: 436471 cycles on average, 1230236 at most
+bytes sent: 1100540056 in packets with data, 133969380 in packets of length 0 in step (12.17% of the data's), 7027300 in recovery and restart rounds
+the last node's bytes of data a cycle, averaged over the runs: 0.3907
+the most: packets a node kept on a stream 8, the host 40; words in a queue 948; words in a forwarding buffer 670
+the longest: a foreground packet waiting for the line with nothing else to wait for 532 cycles; a sender without an acknowledgement on a link in step 4665
+the longest, stalls and noise included: a foreground packet from its turn at the host to the first node 2002846, to the last 2003332; a reply from let out to the host 2410497
+recoveries (a link's last damaged byte to its next delivery, or to nothing owed): 80754, 701 cycles on average, 65377 at most (seed 180117)
+
+rare events, counted:
+  damage aimed at             data    sent again        status          lost      recovery lost+recovery       restart
+  gone                        1656          1270          3934           525           844           218           565
+  first0                      1832          1242          3952           570           789           221           604
+  header                      1762          1199          3850           554           814           214           565
+  data                        1835          1257             0             0             0             0             0
+  packets sent: data                                                4281309
+  sent again                                                         138329
+  status (length 0, in step)                                        6698469
+  "lost"                                                             163023
+  "recovery"                                                          96340
+  "lost" and "recovery" together (both ends lost)                     37780
+  restart                                                             54222
+  header CRC failed                                                   80983
+  data checksum failed                                                33582
+  a field that cannot be                                                  0   <- never happened
+  a header CRC failed during a recovery                               80574
+  a stop bit taken during a recovery                                 156058
+  a packet ahead of the one expected, or a number ahead               32368
+  a packet seen before                                                    0   <- never happened
+  a packet with no room (G11)                                             0   <- never happened
+  a sender went back                                                  42799
+  the number wrapped on a new packet                                  66358
+  the number wrapped on a packet sent again                            2351
+  bursts of noise                                                    404994
+  cycles inside a burst                                           122496624
+  single bits flipped                                                 56878
+  consumer stalls                                                  15324496
+  an acknowledgement behind (G20)                                         0   <- never happened
+  an acknowledgement beyond what was sent (G20)                           0   <- never happened
+  a link started again                                                    0   <- never happened
+  a kept packet found bad (G21)                                           0   <- never happened
+  a packet made wrong (G22)                                               0   <- never happened

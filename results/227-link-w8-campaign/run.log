@@ -1,0 +1,12 @@
+kit sha256 b27099655e1872052ecf6f1f14ce76127b6abdb8a34878debbd35bbdb5a76939
+kit: meshsim ac4d3078 (updater-w8), updater_wip/link
+host godspeed; 16 CPUs
+g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+Mem:              62           1           9           0          53          61
+VERDICT build: PASS
+VERDICT campaign: FAIL (a seed failed: campaign.txt)
+runs 3777 (chains of 1, 2, 4, 16: 1538, 1135, 723, 381); FAILED 2
+cycles 9240941679; packets 192175408
+  seed 200137: 4 nodes, 18-bit numbers, host window 64, wires 1; 1143400 cycles, 23617 packets, 14124 words down, 53010 up; rest in 0: FAILED: a sender stood still: no acknowledgement in 20801 cycles on a link in step (end 0, stream 2): it has acknowledged 85, next 134, new 134; the other end has taken 85, owes resend 1, asked 1 (2048 cycles ago), room for 1024 words
+  seed 140162: 1 nodes, 18-bit numbers, host window 64, wires 3; 1453171 cycles, 6842 packets, 73689 words down, 12211 up; rest in 0: FAILED: a sender stood still: no acknowledgement in 20801 cycles on a link in step (end 0, stream 2): it has acknowledged 2319, next 2361, new 2361; the other end has taken 2319, owes resend 1, asked 1 (2048 cycles ago), room for 1024 words
+took 1821 s
