@@ -1,0 +1,20 @@
+[cyclone-22 02:37:05] build: tools deliveries convert gold jumpmap into /tmp/v137-206-v137-w4-suites/inputs (jolt-asic-planning fa59d9a, meshsim 84b50cd9)
+[cyclone-22 02:37:06] delivery_writer /tmp/v137-206-v137-w4-suites/inputs/build/delivery_writer (jolt-asic-planning fa59d9a)
+[cyclone-22 02:37:06] classes /tmp/v137-206-v137-w4-suites/kit/classes; gold 7ef9039
+[cyclone-22 02:37:09] delivery.log: delivery_writer done in 3 s: cyclone-22: 64 windows replayed OK, 0 failed; 8117457 rows replayed (3 variants)
+64 windows, 64 replayed ok
+[cyclone-22 02:37:09] deliveries: /tmp/v137-206-v137-w4-suites/inputs/w9-deliveries/cyclone-22.manifest.json 822cf65d82fbbdcc55bfdb7e071433fdcee22869a2cff129431ed03fb55dd155
+ConvertDelivery cyclone-22: 64 windows, 256 records converted, 452 links; OK
+values out: code 3400396, read log 519606, write log 336136; words raw 1278009, as picked 568344 (0.0 s)
+[cyclone-22 02:37:09] v1.26.1: /tmp/v137-206-v137-w4-suites/inputs/v1261/cyclone-22.manifest.json 81ebbfdd2285010b1ec16a27b99f0722a267a81ad96c7b49eec32786f989ea1c (canonical key order)
+2705819 rows, 128 segments, file 260960 bytes, SHA-256 008e1607be234560f17585c2bfc8668041877411c020e1cc72da91f82b6c3ca7; 256 advice words, 77609 update words; 0.3 s
+[cyclone-22 02:37:10] gold v1.2: /tmp/v137-206-v137-w4-suites/inputs/gold/cyclone-22/segments.seg 008e1607be234560f17585c2bfc8668041877411c020e1cc72da91f82b6c3ca7
+2705819 rows, 128 segments, file 1314868 bytes, SHA-256 8ce54faf251e95c8667ab5e5ebd61df0576dc83b8ec0bf701095f3330a89bc87; 256 advice words, 77609 update words; 0.5 s
+[cyclone-22 02:37:10] gold v1.3: /tmp/v137-206-v137-w4-suites/inputs/gold-v1.3/cyclone-22/segments.seg 8ce54faf251e95c8667ab5e5ebd61df0576dc83b8ec0bf701095f3330a89bc87
+run: 2705819 rows, 116957 jumps (lookups), 0 self-jumps, 1 program end; 1.5 s
+table: 42388 entries (42388 static, 2945 run, 0 run-only), k=13 (8192 lines, 1024 KB), load 0.323, fullest line 15, placed 0/1/2 steps 42388/0/0; p1=0x9e3779b1 p3=10368899
+acceptance: 116957 jumps through frame6.bin's table: 0 map errors, 0 wrong bases; lines read 1/2/3: 116957/0/0
+word 66: log2 K 24 (run 24, image floor 23), lowest_address 0x7e000000; OK; 1.8 s
+[cyclone-22 02:37:12] jumpmap: gold_check ok at all 128 segments
+[cyclone-22 02:37:12] jumpmap: /tmp/v137-206-v137-w4-suites/inputs/w26-jumpmap/cyclone-22/manifest.sha256 f6bd0527bb68a6887e2996c4215af47455ee8d8c4a13b0c6aa34aa44713fba21
+[cyclone-22 02:37:12] done: tools deliveries convert gold jumpmap
