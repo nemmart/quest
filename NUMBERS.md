@@ -210,3 +210,6 @@ same number (`044b-...`), claimed the same way.
 | 224 | meshsim updater_wip WORKER9 | the same, "suites-ctl" (updater-w9 f542bb10): every step with the Updater on its controller, fed by the forward count, with the test LPDDR and the stand-in cache. Not timing |
 | 225 | meshsim updater_wip WORKER9 | the same, "suites-ctl-varied" (updater-w9 f542bb10): as 224 with the test pieces' timing varied. Not timing |
 | 226 | meshsim updater_wip WORKER9 | the same, "suites-cache" (updater-w9 f542bb10): the proof steps and the Tracer alone on the cache's controller, on the merged tree. Not timing |
+| 227 | meshsim updater_wip WORKER8 | the host link's protocol on its own (updater_wip/link at ac4d3078, updater-w8), "campaign": the random runs, 16 slices of seeds at once for 30 minutes, 2 million cycles a seed on chains of 1, 2, 4 and 16, every property checked every cycle; the slices added up. Not timing |
+| 228 | meshsim updater_wip WORKER8 | the same, "long-noise" (ac4d3078): 16 runs with bursts of noise up to 300 ms, on chains of 1 and 2. Not timing |
+| 229 | meshsim updater_wip WORKER8 | the same, "searches" (ac4d3078): six searches of the shrunken model too large for a session's machine (chains of 2 and 3, and one link with more packets and damage), 15 million states each at most. Not timing |
