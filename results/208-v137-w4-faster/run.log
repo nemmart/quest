@@ -1,0 +1,85 @@
+kit sha256 b8a2a4725b5d386333fda5884387916fdf6c82058a18b33d6daa0f7797bd32f2
+
+==== the machine (03:07:16, +0 s)
+kit: meshsim 84b50cd9 (updater-w4), v1.37_wip's check kit (faster; the link's vectors: HEAD's), built 2026-11-17
+host godspeed; 16 CPUs; Linux 6.8.0-147-generic
+Ubuntu clang version 18.1.3 (1ubuntu1)
+g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+GNU Make 4.3
+openjdk version "21.0.13.0.3" 2026-10-24
+cmake version 3.28.3
+Python 3.12.3
+riscv-none-elf-gcc: 
+riscv64-unknown-elf-gcc: riscv64-unknown-elf-gcc (13.2.0-11ubuntu1+12) 13.2.0
+Mem:              62           1           6           0          55          61
+ 257G
+VERDICT machine: PASS
+
+==== 1. convert_delivery (clang release), which the inputs' build needs (03:07:16, +0 s)
+VERDICT build-convert: PASS
+
+==== 2. the small inputs, from the pinned sources (jolt-asic-planning from Quest task 111's kit) (03:07:19, +3 s)
+[evm-zone-23 03:10:32] jumpmap: gold_check ok at all 128 segments
+[evm-zone-23 03:10:32] jumpmap: /tmp/v137-208-v137-w4-faster/inputs/w26-jumpmap/evm-zone-23/manifest.sha256 1ab3f06a7e4ffdd897d5a0254048d47697b27237878da0fd02468a00dc812ca3
+[evm-zone-23 03:10:32] done: tools deliveries convert gold jumpmap
+[cyclone-22 03:10:38] jumpmap: gold_check ok at all 128 segments
+[cyclone-22 03:10:38] jumpmap: /tmp/v137-208-v137-w4-faster/inputs/w26-jumpmap/cyclone-22/manifest.sha256 f6bd0527bb68a6887e2996c4215af47455ee8d8c4a13b0c6aa34aa44713fba21
+[cyclone-22 03:10:38] done: tools deliveries convert gold jumpmap
+evm-zone-23: PASS
+cyclone-22: PASS
+1.1G	/tmp/v137-208-v137-w4-faster/inputs
+VERDICT inputs-small: PASS
+
+==== 2b. the host's side of the proof steps: gold's frames, packets and references (pipeline/frames/build.sh) (03:10:40, +204 s)
+evm-zone-23-raw-full: 5833069 rows, 12 segments of 8 windows, N 64; frames 3608000 B, packets 3720864 B; s: 0 1 6 
+evm-zone-23-raw-base: 5833069 rows, 12 segments of 8 windows, N 64; frames 3616368 B, packets 3729520 B; s: 0 1 6 
+evm-zone-23-lru-full: 5833069 rows, 12 segments of 8 windows, N 64; frames 2703536 B, packets 2788112 B; s: 0 1 6 
+evm-zone-23-lru-base: 5833069 rows, 12 segments of 8 windows, N 64; frames 2707552 B, packets 2792272 B; s: 0 1 6 
+cyclone-22-raw-full: 2705819 rows, 6 segments of 8 windows, N 64; frames 5132784 B, packets 5293296 B; s: 0 1 3 
+cyclone-22-raw-base: 2705819 rows, 6 segments of 8 windows, N 64; frames 5132912 B, packets 5293456 B; s: 0 1 3 
+cyclone-22-lru-full: 2705819 rows, 6 segments of 8 windows, N 64; frames 3847136 B, packets 3967440 B; s: 0 1 3 
+cyclone-22-lru-base: 2705819 rows, 6 segments of 8 windows, N 64; frames 3847264 B, packets 3967600 B; s: 0 1 3 
+frames: matrix: 8 runs in /tmp/v137-208-v137-w4-faster/inputs/v137/matrix; 8 packet files equal to the tests' writer's
+evm-zone-23: 5833069 rows, 2 segments of 64 windows, N 128; frames 2742848 B, packets 2828672 B; s: 0 1 
+cyclone-22: 2705819 rows, 1 segments of 64 windows, N 128; frames 3900560 B, packets 4022560 B; s: 0 
+frames: real: 2 runs in /tmp/v137-208-v137-w4-faster/inputs/v137/real; 2 packet files equal to the tests' writer's
+evm-zone-29: 354861942 rows, 85 segments of 64 windows, N 128; frames 4234368 B, packets 4366800 B; s: 0 1 42 83 84 
+cyclone-29: 371526406 rows, 89 segments of 64 windows, N 128; frames 16383648 B, packets 16895744 B; s: 0 1 44 87 88 
+frames: 29: 2 runs in /tmp/v137-208-v137-w4-faster/inputs/v137/29; 2 packet files equal to the tests' writer's
+VERDICT frames: PASS
+
+==== 5. the link at 2, 4 and 8 bytes a cycle (29, matrix); the threshold at 32, 64 and 128 (matrix) (03:12:20, +304 s)
+174
+VERDICT faster-29-2: PASS-10-runs
+VERDICT faster-29-4: PASS-10-runs
+VERDICT faster-29-8: PASS-10-runs
+VERDICT faster-matrix-2: PASS-24-runs
+VERDICT faster-matrix-4: PASS-24-runs
+VERDICT faster-matrix-8: PASS-24-runs
+VERDICT threshold-matrix-32: PASS-24-runs
+VERDICT threshold-matrix-64: PASS-24-runs
+VERDICT threshold-matrix-128: PASS-24-runs
+
+102 runs, 102 passed
+
+72 runs, 72 passed
+
+==== end (03:15:36, +500 s)
+machine PASS
+build-convert PASS
+inputs-small PASS
+frames PASS
+faster-29-2 PASS-10-runs
+faster-29-4 PASS-10-runs
+faster-29-8 PASS-10-runs
+faster-matrix-2 PASS-24-runs
+faster-matrix-4 PASS-24-runs
+faster-matrix-8 PASS-24-runs
+threshold-matrix-32 PASS-24-runs
+threshold-matrix-64 PASS-24-runs
+threshold-matrix-128 PASS-24-runs
+build-convert 3 s
+inputs-small 201 s
+frames 100 s
+faster 196 s
+ALL PASS
