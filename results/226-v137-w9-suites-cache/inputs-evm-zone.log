@@ -1,0 +1,21 @@
+[evm-zone-23 12:04:18] build: tools deliveries convert gold jumpmap into /tmp/v137-226-v137-w9-suites-cache/inputs (jolt-asic-planning fa59d9a, meshsim f542bb10)
+[evm-zone-23 12:04:18] tracer: cmake (FetchContent: fmt, nlohmann_json, xbyak) and build, 16 jobs
+[evm-zone-23 12:05:07] delivery_writer /tmp/v137-226-v137-w9-suites-cache/inputs/build/delivery_writer (jolt-asic-planning fa59d9a)
+[evm-zone-23 12:05:07] classes /tmp/v137-226-v137-w9-suites-cache/kit/classes; gold 7ef9039
+[evm-zone-23 12:05:14] delivery.log: delivery_writer done in 7 s: evm-zone-23: 128 windows replayed OK, 0 failed; 17499207 rows replayed (3 variants)
+128 windows, 128 replayed ok
+[evm-zone-23 12:05:14] deliveries: /tmp/v137-226-v137-w9-suites-cache/inputs/w9-deliveries/evm-zone-23.manifest.json 8f46f60c37b28b6e834a1921d7773a3075f69eb27f9cfe086185eb0d50cd8b01
+ConvertDelivery evm-zone-23: 128 windows, 512 records converted, 900 links; OK
+values out: code 6982280, read log 1262646, write log 547275; words raw 2650600, as picked 1077813 (0.0 s)
+[evm-zone-23 12:05:14] v1.26.1: /tmp/v137-226-v137-w9-suites-cache/inputs/v1261/evm-zone-23.manifest.json 9af69b442fbac79a39a58244f1d5df6d1c34101a46a554cb83f8e5f3bb12077e (canonical key order)
+5833069 rows, 128 segments, file 256312 bytes, SHA-256 4975c876500fa063fa86242d33c3eab6d977ab4c7c207046ce094a9a27593533; 3713 advice words, 45330 update words; 0.5 s
+[evm-zone-23 12:05:15] gold v1.2: /tmp/v137-226-v137-w9-suites-cache/inputs/gold/evm-zone-23/segments.seg 4975c876500fa063fa86242d33c3eab6d977ab4c7c207046ce094a9a27593533
+5833069 rows, 128 segments, file 1310220 bytes, SHA-256 309bb20e03cb174d3f405c7ad34ec7598027555f7be450297362e34cbee208e7; 3713 advice words, 45330 update words; 0.6 s
+[evm-zone-23 12:05:15] gold v1.3: /tmp/v137-226-v137-w9-suites-cache/inputs/gold-v1.3/evm-zone-23/segments.seg 309bb20e03cb174d3f405c7ad34ec7598027555f7be450297362e34cbee208e7
+run: 5833069 rows, 373731 jumps (lookups), 0 self-jumps, 1 program end; 1.5 s
+table: 49772 entries (49770 static, 5526 run, 2 run-only), k=13 (8192 lines, 1024 KB), load 0.380, fullest line 15, placed 0/1/2 steps 49772/0/0; p1=0x6c442cb7 p3=10368899
+acceptance: 373731 jumps through frame6.bin's table: 0 map errors, 0 wrong bases; lines read 1/2/3: 373731/0/0
+word 66: log2 K 23 (run 23, image floor 23), lowest_address 0x7e000000; OK; 2.0 s
+[evm-zone-23 12:05:18] jumpmap: gold_check ok at all 128 segments
+[evm-zone-23 12:05:18] jumpmap: /tmp/v137-226-v137-w9-suites-cache/inputs/w26-jumpmap/evm-zone-23/manifest.sha256 1ab3f06a7e4ffdd897d5a0254048d47697b27237878da0fd02468a00dc812ca3
+[evm-zone-23 12:05:18] done: tools deliveries convert gold jumpmap
