@@ -1,0 +1,49 @@
+
+linkrun: rules hl; seeds 160000 to 160479; 2000000 cycles of traffic and noise each
+runs 480 (chains of 1, 2, 4, 16: 190, 135, 108, 47); FAILED 0
+cycles 1169418921; packets 25113485; words delivered: 76158768 from the host (every node counted), 11868766 to it
+coming to rest after the noise: 436289 cycles on average, 1772329 at most
+bytes sent: 2087882240 in packets with data, 237482560 in packets of length 0 in step (11.37% of the data's), 68733728 in recovery and restart rounds
+the last node's bytes of data a cycle, averaged over the runs: 0.3855
+the most: packets a node kept 8, the host 25; words in a queue 847; words in a forwarding buffer 679
+the longest: a foreground packet waiting for the line with nothing else to wait for 559 cycles; a sender without an acknowledgement on a link in step 3159
+a foreground packet ready at an end, not stopped, the link in step, until it starts: 215357 cycles at most, 179 on average over 5972775 packets; of that, with the window full 215357 at most, behind packets being sent again 22958 at most
+cycles a line stood idle while a packet's data was passed over: 9624060
+the longest, stalls and noise included: a foreground packet from its turn at the host to the first node 2003956, to the last 2008616; a reply from let out to the host 2340452
+recoveries (a link's last damaged byte to its next delivery, or to nothing owed): 257035, 577 cycles on average, 5187 at most (seed 160477)
+
+rare events, counted:
+  damage aimed at             data    sent again        status          lost      recovery lost+recovery       restart
+  gone                        4030          2040         17789          2110          2250           617           198
+  first0                      4015          1961         17784          2182          2217           628           195
+  header                      3914          2062         17826          2198          2237           581           185
+  data                        3884          2160             0             0             0             0           208
+  head0                       4040          2040             0             0             0             0           188
+  packets sent: data                                                9018248
+  sent again                                                         309583
+  status (length 0, in step)                                       14842660
+  "lost"                                                             463369
+  "recovery"                                                         290484
+  "lost" and "recovery" together (both ends lost)                     84364
+  restart                                                            104777
+  header CRC failed                                                  237015
+  data checksum failed                                                76759
+  a field that cannot be                                                  0   <- never happened
+  a header CRC failed during a recovery                              235897
+  a stop bit taken during a recovery                                 455843
+  a packet ahead of the one expected, or a number ahead               66486
+  a packet seen before                                                    0   <- never happened
+  a packet with no room                                                   0   <- never happened
+  a sender went back                                                  91489
+  the number wrapped on a new packet                                 167431
+  the number wrapped on a packet sent again                            7632
+  bursts of noise                                                   1165790
+  cycles inside a burst                                           311184423
+  single bits flipped                                                192565
+  consumer stalls                                                  29583531
+  an acknowledgement behind the last one taken                            0   <- never happened
+  an acknowledgement beyond what was sent                                 0   <- never happened
+  a packet made wrong, the first time: asked for again                    0   <- never happened
+  a link started again                                                    0   <- never happened
+  asked for a packet no longer kept: error                                0   <- never happened
+  a packet made wrong a second time: error                                0   <- never happened
