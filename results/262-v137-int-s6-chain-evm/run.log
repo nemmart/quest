@@ -1,0 +1,86 @@
+kit sha256 44375cbbac4c40bbca0598c2f1350033836fb6e466bc0dad901ee084ca956161
+
+==== the machine (23:39:16, +0 s)
+kit: meshsim d974f3a3 (v137-build), v1.37_wip's check kit (chain-evm-zone; the link's vectors: HEAD's), built 2026-11-18
+host godspeed; 16 CPUs; Linux 6.8.0-149-generic
+Ubuntu clang version 18.1.3 (1ubuntu1)
+g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+GNU Make 4.3
+openjdk version "21.0.13.0.3" 2026-10-24
+cmake version 3.28.3
+Python 3.12.3
+riscv-none-elf-gcc: 
+riscv64-unknown-elf-gcc: riscv64-unknown-elf-gcc (13.2.0-11ubuntu1+12) 13.2.0
+Mem:              62           1          60           0           1          61
+ 255G
+VERDICT machine: PASS
+
+==== 1. convert_delivery (clang release), which the inputs' build needs (23:39:16, +0 s)
+VERDICT build-convert: PASS
+
+==== 2. the small inputs, from the pinned sources (jolt-asic-planning from Quest task 111's kit) (23:39:20, +4 s)
+[evm-zone-23 23:42:32] jumpmap: gold_check ok at all 128 segments
+[evm-zone-23 23:42:32] jumpmap: /tmp/v137-262-v137-int-s6-chain-evm/inputs/w26-jumpmap/evm-zone-23/manifest.sha256 7bc1d0e838eb942adea7384c441c3eba8329dbd46dc80190a3612c96f29af614
+[evm-zone-23 23:42:32] done: tools deliveries convert gold jumpmap
+[cyclone-22 23:42:39] jumpmap: gold_check ok at all 128 segments
+[cyclone-22 23:42:39] jumpmap: /tmp/v137-262-v137-int-s6-chain-evm/inputs/w26-jumpmap/cyclone-22/manifest.sha256 f8519e26838f4699ac1ce7205a4ba4ca41ac32fcf2d3947aa8f1b1d87c09f193
+[cyclone-22 23:42:39] done: tools deliveries convert gold jumpmap
+evm-zone-23: PASS
+cyclone-22: PASS
+1.1G	/tmp/v137-262-v137-int-s6-chain-evm/inputs
+VERDICT inputs-small: PASS
+
+==== 2b. the host's side of the proof steps: gold's frames, packets and references (pipeline/frames/build.sh) (23:42:40, +204 s)
+evm-zone-29: 354861942 rows, 85 segments of 64 windows, N 128; frames 4234368 B, packets 4366800 B; s: 0 1 42 83 84 
+cyclone-29: 371526406 rows, 89 segments of 64 windows, N 128; frames 16383648 B, packets 16895744 B; s: 0 1 44 87 88 
+frames: 29: 2 runs in /tmp/v137-262-v137-int-s6-chain-evm/inputs/v137/29; 2 packet files equal to the tests' writer's
+VERDICT frames: PASS
+
+==== 6. the chain of processes at 2^29: evm-zone-29, the driver and two chips (segments 0 and 1) (23:43:33, +257 s)
+driver: ASIC 0's reply (segment 0): 72 words in three link packets at cycle 26684767, as gold's files give
+driver: ASIC 1's reply (segment 1): 72 words in three link packets at cycle 28405723, as gold's files give
+PASS driver: 2 ASICs, 0 checks failed
+evm-zone-29.frames, N 128, s 1: the master's exit 0x1; the tracer tile: status 1, 64 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 28404224 cycles from the reset
+the master: the tracer tile's load at its cycle 3039333, the windows landed and the replay released at 28154109, its exit at 28404020
+the wire: client 1 of 2, 28409344 cycles exchanged, 5120 after the exit; waits 297540 (6.190 s)
+PASS proof_run evm-zone-29.frames, N 128, s 1: 0 checks failed
+evm-zone-29.frames, N 128, s 0: the master's exit 0x1; the tracer tile: status 1, 64 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 26683904 cycles from the reset
+the master: the tracer tile's load at its cycle 2931767, the windows landed and the replay released at 26422583, its exit at 26683689
+the wire: client 0 of 2, 28409856 cycles exchanged, 1725952 after the exit; waits 83801 (5.527 s)
+PASS proof_run evm-zone-29.frames, N 128, s 0: 0 checks failed
+wire-launch: driver     pid 237193  exit 0
+wire-launch: client 0   pid 237194  exit 0
+wire-launch: client 1   pid 237195  exit 0
+wire-launch: run run237192 ok after 47.44 s
+run a: exit 0
+driver: ASIC 0's reply (segment 0): 72 words in three link packets at cycle 26684767, as gold's files give
+driver: ASIC 1's reply (segment 1): 72 words in three link packets at cycle 28405723, as gold's files give
+PASS driver: 2 ASICs, 0 checks failed
+evm-zone-29.frames, N 128, s 1: the master's exit 0x1; the tracer tile: status 1, 64 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 28404224 cycles from the reset
+the master: the tracer tile's load at its cycle 3039333, the windows landed and the replay released at 28154109, its exit at 28404020
+the wire: client 1 of 2, 28409344 cycles exchanged, 5120 after the exit; waits 243631 (6.149 s)
+PASS proof_run evm-zone-29.frames, N 128, s 1: 0 checks failed
+evm-zone-29.frames, N 128, s 0: the master's exit 0x1; the tracer tile: status 1, 64 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 26683904 cycles from the reset
+the master: the tracer tile's load at its cycle 2931767, the windows landed and the replay released at 26422583, its exit at 26683689
+the wire: client 0 of 2, 28409856 cycles exchanged, 1725952 after the exit; waits 118747 (5.908 s)
+PASS proof_run evm-zone-29.frames, N 128, s 0: 0 checks failed
+wire-launch: driver     pid 237199  exit 0
+wire-launch: client 0   pid 237200  exit 0
+wire-launch: client 1   pid 237201  exit 0
+wire-launch: run run237198 ok after 49.57 s
+run b: exit 0
+VERDICT chain: PASS
+VERDICT chain-again: PASS-the-same
+
+==== end (23:45:16, +360 s)
+machine PASS
+build-convert PASS
+inputs-small PASS
+frames PASS
+chain PASS
+chain-again PASS-the-same
+build-convert 4 s
+inputs-small 200 s
+frames 53 s
+chain 103 s
+ALL PASS
