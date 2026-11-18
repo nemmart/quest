@@ -1,0 +1,11 @@
+kit sha256 8a12104e5369ef8eb8a99493085235d48a0f79d91e85d6fea9ef6a031f8daef8
+kit: meshsim 72f12b9a (updater-w8), updater_wip/link
+host godspeed; 16 CPUs
+g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+Mem:              62           1          15           0          46          61
+VERDICT build: PASS
+memory for the task: 64990150656 bytes
+--packets 2 4 1 0 --queue 4 --damage 1 --hold 3 --max-states 64990150 --seconds 1400               39859919 states  1400.2 s  rest<=440  NOT complete: --seconds, 5275179 states still waiting
+--packets 2 4 1 0 --queue 4 --damage 1 --hold 3 --max-states 347834608 --seconds 10500             86515438 states  2812.6 s  rest<=440  holds
+VERDICT search: PASS (complete)
+took 4220 s
