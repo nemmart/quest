@@ -1,0 +1,123 @@
+kit sha256 0dd004cd2d0cd6baa60fa8ae58870fd387991ca1cd5520410ef6cfb915d13f4c
+
+==== the machine (18:17:21, +0 s)
+kit: meshsim f873c715 (v137-build), v1.37_wip's check kit (suites; the link's vectors: HEAD's), built 2026-11-18
+host godspeed; 16 CPUs; Linux 6.8.0-149-generic
+Ubuntu clang version 18.1.3 (1ubuntu1)
+g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+GNU Make 4.3
+openjdk version "21.0.13.0.3" 2026-10-24
+cmake version 3.28.3
+Python 3.12.3
+riscv-none-elf-gcc: 
+riscv64-unknown-elf-gcc: riscv64-unknown-elf-gcc (13.2.0-11ubuntu1+12) 13.2.0
+Mem:              62           1          60           0           1          61
+ 256G
+VERDICT machine: PASS
+
+==== 1. convert_delivery (clang release), which the inputs' build needs (18:17:21, +0 s)
+VERDICT build-convert: PASS
+
+==== 2. the small inputs, from the pinned sources (jolt-asic-planning from Quest task 111's kit) (18:17:24, +3 s)
+[evm-zone-23 18:18:24] jumpmap: gold_check ok at all 128 segments
+[evm-zone-23 18:18:24] jumpmap: /tmp/v137-250-v137-int-s3-suites/inputs/w26-jumpmap/evm-zone-23/manifest.sha256 1ab3f06a7e4ffdd897d5a0254048d47697b27237878da0fd02468a00dc812ca3
+[evm-zone-23 18:18:24] done: tools deliveries convert gold jumpmap
+[cyclone-22 18:18:31] jumpmap: gold_check ok at all 128 segments
+[cyclone-22 18:18:31] jumpmap: /tmp/v137-250-v137-int-s3-suites/inputs/w26-jumpmap/cyclone-22/manifest.sha256 f6bd0527bb68a6887e2996c4215af47455ee8d8c4a13b0c6aa34aa44713fba21
+[cyclone-22 18:18:31] done: tools deliveries convert gold jumpmap
+evm-zone-23: PASS
+cyclone-22: PASS
+1.1G	/tmp/v137-250-v137-int-s3-suites/inputs
+VERDICT inputs-small: PASS
+
+==== 2b. the host's side of the proof steps: gold's frames, packets and references (pipeline/frames/build.sh) (18:18:32, +71 s)
+evm-zone-23-raw-full: 5833069 rows, 12 segments of 8 windows, N 64; frames 3608000 B, packets 3720864 B; s: 0 1 6 
+evm-zone-23-raw-base: 5833069 rows, 12 segments of 8 windows, N 64; frames 3616368 B, packets 3729520 B; s: 0 1 6 
+evm-zone-23-lru-full: 5833069 rows, 12 segments of 8 windows, N 64; frames 2703536 B, packets 2788112 B; s: 0 1 6 
+evm-zone-23-lru-base: 5833069 rows, 12 segments of 8 windows, N 64; frames 2707552 B, packets 2792272 B; s: 0 1 6 
+cyclone-22-raw-full: 2705819 rows, 6 segments of 8 windows, N 64; frames 5132784 B, packets 5293296 B; s: 0 1 3 
+cyclone-22-raw-base: 2705819 rows, 6 segments of 8 windows, N 64; frames 5132912 B, packets 5293456 B; s: 0 1 3 
+cyclone-22-lru-full: 2705819 rows, 6 segments of 8 windows, N 64; frames 3847136 B, packets 3967440 B; s: 0 1 3 
+cyclone-22-lru-base: 2705819 rows, 6 segments of 8 windows, N 64; frames 3847264 B, packets 3967600 B; s: 0 1 3 
+frames: matrix: 8 runs in /tmp/v137-250-v137-int-s3-suites/inputs/v137/matrix; 8 packet files equal to the tests' writer's
+evm-zone-23: 5833069 rows, 2 segments of 64 windows, N 128; frames 2742848 B, packets 2828672 B; s: 0 1 
+cyclone-22: 2705819 rows, 1 segments of 64 windows, N 128; frames 3900560 B, packets 4022560 B; s: 0 
+frames: real: 2 runs in /tmp/v137-250-v137-int-s3-suites/inputs/v137/real; 2 packet files equal to the tests' writer's
+evm-zone-29: 354861942 rows, 85 segments of 64 windows, N 128; frames 4234368 B, packets 4366800 B; s: 0 1 42 83 84 
+cyclone-29: 371526406 rows, 89 segments of 64 windows, N 128; frames 16383648 B, packets 16895744 B; s: 0 1 44 87 88 
+frames: 29: 2 runs in /tmp/v137-250-v137-int-s3-suites/inputs/v137/29; 2 packet files equal to the tests' writer's
+VERDICT frames: PASS
+
+==== 3. ./run_tests.sh all --check (JOBS=16; MESHSIM_INPUTS=/tmp/v137-250-v137-int-s3-suites/inputs; LPDDR_SEED=) (18:20:12, +171 s)
+ReplayerTest: 2356 passed, 0 failed
+== the Tracer's memory system: FileStore's trees and statuses, the shared cache's timing
+MemorySystemTest: 56 passed, 0 failed
+== the Tracer's RVC decompressor against gold's, every 16-bit encoding
+RvcTest: 49157 passed, 0 failed
+== the Tracer: execution, memory, the map, errors, cuts, core-fed expansions, the output path
+TracerTest: 233 passed, 0 failed
+== the Tracer alone on a synthetic RV64IMAC guest, against an interpreter of it: the output, the exact counters, the cycles adding up and by hand
+PASS the synthetic guest, compression 0, fill model
+== the Tracer alone on the real segments (EVM Zone 0 and 1, Cyclone 0): every run against gold's files and the RTL's figures, cycle for cycle
+PASS cyclone-22 segment 0, compression 0, fill model
+== WORKER5: the Tracer alone on the real segments on the cache's controller (EVM Zone 0 and 1, Cyclone 0; compression 0 and 7): every run against gold's files
+PASS cyclone-22 segment 0, compression 7, fill cache
+== WORKER5: the LPDDR model, the AXI arbiter and the cache's controller alone; the cache against the stand-in with no cache on random traffic (tests/test_lpddr_model.cpp, test_axi_arbiter.cpp, test_cache.cpp)
+build/clang-suite/test_cache: 13 passed, 0 failed, 0 skipped (debug-only)
+== WORKER5: the Tracer alone on the cache's controller, eight synthetic guests against their interpreter (tracer_block --synthetic, with the cache)
+PASS the synthetic guest, compression 0, fill cache
+== v1.37: the file store's pages by address: placed where told, whole pages, beside the pages it hands out (tests/test_file_store.cpp)
+build/clang-suite/test_file_store: 7 passed, 0 failed, 0 skipped (debug-only)
+== v1.37: the Updater black box alone: registers, queues and credits, update words raw and LRU, copy-on-write, the Tracer's copy, errors; gold's fixtures, each image against gold's (tests/test_updater.cpp)
+build/clang-suite/test_updater: 25 passed, 0 failed, 0 skipped (debug-only)
+== v1.37: Ingress's host link, the black box: the link's checks, the rule for a service flag, reading out by the DMA, both streams, the errors, the timing (tests/test_ingress_link.cpp)
+build/clang-suite/test_ingress_link: 44 passed, 0 failed, 0 skipped (debug-only)
+== v1.37: Ingress's host link against gold's packetizer: every vector, packet file and damaged file of /tmp/v137-250-v137-int-s3-suites/kit/updater_wip/pipeline/gold/test/packets, by the reader and through the black box (tests/test_packet_vectors.cpp)
+build/clang-suite/test_packet_vectors: 6 passed, 0 failed, 0 skipped (debug-only)
+== v1.37: the fixtures made again by gold (../updater_wip/pipeline/gold), equal to the committed ones (tests/updater/make_fixtures.sh --check)
+make_fixtures: 25 fixture files equal to gold's
+== v1.37: the master tile's program on the whole chip, from a packet file: gold's frames of the guests in the link's packets, the Updater's images against gold's, the hand-over, the segment traced and replayed; the error path; the checks' teeth (tests/test_master.cpp)
+build/clang-suite/test_master: 34 passed, 0 failed, 0 skipped (debug-only)
+== v1.37: the Updater's controller with the test LPDDR and the stand-in cache, and joined to the memory system (the real cache, arbiter and LPDDR model): gold's fixtures alone and against the black box, random streams, varied timing, a second client at once, the errors (tests/test_updater_ctl.cpp)
+build/clang-suite/test_updater_ctl: 34 passed, 0 failed, 0 skipped (debug-only)
+== v1.37: the memory system, the memory tile's peripheral 1, in the chip: its window, its error on the error line, the reset, the RW engine on client 2 (tests/test_memory_system.cpp)
+build/clang-suite/test_memory_system: 6 passed, 0 failed, 0 skipped (debug-only)
+== the sort on the chip at 64 x 65,536 records: kv32 and k128, against the oracle (about a minute)
+build/clang-suite/test_sort: 2 passed, 0 failed, 0 skipped (debug-only)
+== the segment on the real workloads' windows: EVM Zone's 0-63 and 64-127 and Cyclone's 0-63, every row and delivery against the recorded files (about a minute)
+build/clang-suite/test_segment: 3 passed, 0 failed, 0 skipped (debug-only)
+== v1.37: segment-real's three segments from packet files: the master builds the images with the Updater and hands the tracer tile its segment; every row and delivery against the recorded files, every image against gold's
+PASS proof_run cyclone-22.frames, N 128, s 0: 0 checks failed
+== v1.37: the small inputs from packet files, segments of 8 windows: EVM Zone and Cyclone, raw and LRU-coded, with and without a base table, s = 0, 1 and the middle; every image against gold's, the Tracer's last record against record s + 1 (24 runs)
+PASS proof_run cyclone-22-lru-base.frames, N 64, s 3: 0 checks failed
+== v1.37: both workloads at 2^29 from packet files, N 128: five segments of each (the first two, the middle, the last two), every image against gold's, the Tracer's last record against record s + 1 (10 runs)
+PASS proof_run cyclone-29.frames, N 128, s 88: 0 checks failed
+  fw-build: SKIPPED (no riscv-none-elf-gcc: needs xPack riscv-none-elf-gcc 15.2.0-1 (https://github.com/xpack-dev-tools/riscv-none-elf-gcc-xpack/releases/tag/v15.2.0-1; unpack it and put its bin folder on PATH, or name it: RISCV_PREFIX=/path/to/bin/riscv-none-elf-))
+== all passed, 1 steps SKIPPED for what is not on this machine (data, a toolchain); logs in results/
+exit 0; == all passed, 1 steps SKIPPED for what is not on this machine (data, a toolchain); logs in results/
+VERDICT run_tests: PASS
+
+==== 4. the proof runs, counted, and their figures (18:35:38, +1097 s)
+VERDICT proof-real: PASS-3-runs
+VERDICT proof-matrix: PASS-24-runs
+VERDICT proof-29: PASS-10-runs
+| cyclone-29 | 128 | 88 | 1: 2/2 2: 20/1 4: 2/2 5: 8/1 3: 8/7 4: 2/2 5: 1/1 6: 18/1 7: 15/9 8: 14/8 9: 51/0 | 1: 757 2: 66884 4: 888 5: 21538 3: 26118 4: 878 5: 429 6: 58946 7: 1564 8: 6535 9: 169608 |
+
+37 runs, 37 passed
+VERDICT run_tests-skipped: SKIPPED-2-steps: fw-build: no 
+
+==== end (18:35:38, +1097 s)
+machine PASS
+build-convert PASS
+inputs-small PASS
+frames PASS
+run_tests PASS
+proof-real PASS-3-runs
+proof-matrix PASS-24-runs
+proof-29 PASS-10-runs
+run_tests-skipped SKIPPED-2-steps: fw-build: no 
+build-convert 3 s
+inputs-small 68 s
+frames 100 s
+run_tests 926 s
+ALL PASS
