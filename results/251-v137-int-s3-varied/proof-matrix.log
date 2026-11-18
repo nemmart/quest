@@ -1,0 +1,516 @@
+evm-zone-23-raw-full.frames, N 64, s 0: the master: status 1 (detail 0x0), 9 frames, 6 runs, 912 pages taken, 130 LOADs, 65 results, 0 others, boot 5; ERRORS: the tile's 0x0, Ingress's 0x0, the Updater's 0x0
+evm-zone-23-raw-full.frames, N 64, s 0: the cache: memory index 2050 hits, 5 misses (99.76%); memory data 185 hits, 316 misses (36.93%); map index 106 hits, 0 misses (100.00%); map data 0 hits, 53 misses (0.00%); look-up index 3333 hits, 44 misses (98.70%); evictions 0, write-backs 0, allocations 0, replays 1, served under a miss 29
+evm-zone-23-raw-full.frames, N 64, s 0: the cache: walks of 0/1/2/3 index lines 528/1669/501/0; fill reads 577, mean 87.6, max 420 cycles; fill writes 185, mean 7.0, max 7; look-ups 1030, mean 10.0, max 220; updates 906, mean 126.9, max 315
+evm-zone-23-raw-full.frames, N 64, s 0: LPDDR: 1206 read bursts, 8994 write bursts, 28560 beats read, 266064 written; error bursts 0, unwritten reads 0; the cache's error flag 0
+evm-zone-23-raw-full.frames, N 64, s 0: the clients: the Updater's look-ups 1030, updates 906; cycles with its look-up and a fill request both outstanding 1021; the arbiter's bursts read/written by client 0 (the cache) 418/906, 1 (the Updater) 191/1044, 2 (the RW engine) 0/0, 3 0/0; pieces waiting for their turn, cycles: reads 0/198/0/0, writes 0/0/0/0; the joint's checks 0
+evm-zone-23-raw-full.frames, N 64, s 0: the master's exit 0x1; the tracer tile: status 1, 8 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 6393344 cycles from the reset
+evm-zone-23-raw-full.frames, N 64, s 0: passed in 6393344 cycles, 7.2 s of simulation, 887239 cycles a second
+
+run             done at     cycles    on data   on pages  on memory     read  written PAGE_COUNT
+program         2162244    2058871    1499298          0     302774        0      493          0
+table           3245353    1067241     777255          0     156607        0      257          0
+cycle0          3256891      11245       3841          0       5368        1        8          0
+start-0         3358361        860          0          0        856        1        1          0
+tracer          3389919      31317      10232          0      16701        3       26          0
+final           3841285     451247     205905          0     180039      186      259          0
+the link: 7054 packets, 225500 words, 3720864 bytes; the page map: 913 pages marked; the master's core: 187662 cycles awake of 6393344 (2.94%), 134188 instructions
+the master: the tracer tile's load at its cycle 3390202, the windows landed and the replay released at 6173542, its exit at 6392924
+the forward count: the link at 1 bytes a cycle; the master's wakes: 64, 54 to the hand-over; Ingress's DMA: 20 transfers, 20 to the hand-over, 266 words; 6 count stores; 219161 words forwarded, 6073 dropped; the master awake 172487 cycles to the hand-over at 3390202: 5.09%; the link: its last byte at 3813951, 93087 cycles waiting for room; awake 86038 cycles at the first frame, at its cycle 102344
+each frame, its type: cycles awake: 1: 862 2: 40627 3: 14855 4: 674 5: 21556 6: 1054 7: 871 8: 3021 9: 2929 (the last to the hand-over)
+each frame, its type: wakes/transfers: 1: 2/2 2: 11/1 3: 7/5 4: 2/2 5: 8/1 6: 2/1 7: 6/5 8: 3/2 9: 6/0 (the last to the hand-over)
+PASS proof_run evm-zone-23-raw-full.frames, N 64, s 0: 0 checks failed
+evm-zone-23-raw-full.frames, N 64, s 1: the master: status 1 (detail 0x0), 9 frames, 6 runs, 917 pages taken, 130 LOADs, 65 results, 0 others, boot 5; ERRORS: the tile's 0x0, Ingress's 0x0, the Updater's 0x0
+evm-zone-23-raw-full.frames, N 64, s 1: the cache: memory index 1822 hits, 1 misses (99.95%); memory data 179 hits, 245 misses (42.22%); map index 2 hits, 0 misses (100.00%); map data 0 hits, 1 misses (0.00%); look-up index 3339 hits, 46 misses (98.64%); evictions 0, write-backs 0, allocations 0, replays 0, served under a miss 5
+evm-zone-23-raw-full.frames, N 64, s 1: the cache: walks of 0/1/2/3 index lines 530/1654/424/0; fill reads 488, mean 72.1, max 285 cycles; fill writes 179, mean 7.0, max 7; look-ups 1030, mean 10.0, max 220; updates 911, mean 130.5, max 353
+evm-zone-23-raw-full.frames, N 64, s 1: LPDDR: 1113 read bursts, 9019 write bursts, 28584 beats read, 266744 written; error bursts 0, unwritten reads 0; the cache's error flag 0
+evm-zone-23-raw-full.frames, N 64, s 1: the clients: the Updater's look-ups 1030, updates 911; cycles with its look-up and a fill request both outstanding 158; the arbiter's bursts read/written by client 0 (the cache) 293/911, 1 (the Updater) 196/1045, 2 (the RW engine) 0/0, 3 0/0; pieces waiting for their turn, cycles: reads 0/197/0/0, writes 0/0/0/0; the joint's checks 0
+evm-zone-23-raw-full.frames, N 64, s 1: the master's exit 0x1; the tracer tile: status 1, 8 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 6410752 cycles from the reset
+evm-zone-23-raw-full.frames, N 64, s 1: passed in 6410752 cycles, 7.2 s of simulation, 885962 cycles a second
+
+run             done at     cycles    on data   on pages  on memory     read  written PAGE_COUNT
+program         2162575    2059202    1500553          0     301850        0      493          0
+table           3245585    1067224     776004          0     157841        0      257          0
+cycle0          3256678      10782       3741          0       5005        1        8          0
+start-1         3390251      32500      18384          0       9776        4       13          0
+tracer          3423612      33120      12185          0      16785        4       24          0
+final           3842108     418377     180959        216     175967      187      250          0
+the link: 7054 packets, 225500 words, 3720864 bytes; the page map: 918 pages marked; the master's core: 188644 cycles awake of 6410752 (2.94%), 134925 instructions
+the master: the tracer tile's load at its cycle 3423895, the windows landed and the replay released at 6191282, its exit at 6410681
+the forward count: the link at 1 bytes a cycle; the master's wakes: 71, 61 to the hand-over; Ingress's DMA: 23 transfers, 23 to the hand-over, 266 words; 7 count stores; 219161 words forwarded, 6073 dropped; the master awake 173869 cycles to the hand-over at 3423895: 5.08%; the link: its last byte at 3813642, 92778 cycles waiting for room; awake 86038 cycles at the first frame, at its cycle 102344
+each frame, its type: cycles awake: 1: 862 2: 40627 3: 14854 4: 674 5: 21556 6: 1054 7: 1388 8: 3021 9: 3795 (the last to the hand-over)
+each frame, its type: wakes/transfers: 1: 2/2 2: 11/1 3: 7/5 4: 2/2 5: 8/1 6: 2/1 7: 13/8 8: 3/2 9: 6/0 (the last to the hand-over)
+PASS proof_run evm-zone-23-raw-full.frames, N 64, s 1: 0 checks failed
+evm-zone-23-raw-full.frames, N 64, s 6: the master: status 1 (detail 0x0), 9 frames, 6 runs, 939 pages taken, 130 LOADs, 65 results, 0 others, boot 5; ERRORS: the tile's 0x0, Ingress's 0x0, the Updater's 0x0
+evm-zone-23-raw-full.frames, N 64, s 6: the cache: memory index 3246 hits, 8 misses (99.75%); memory data 807 hits, 408 misses (66.42%); map index 2726 hits, 0 misses (100.00%); map data 1918 hits, 404 misses (82.60%); look-up index 3385 hits, 50 misses (98.54%); evictions 0, write-backs 0, allocations 0, replays 0, served under a miss 53
+evm-zone-23-raw-full.frames, N 64, s 6: the cache: walks of 0/1/2/3 index lines 532/3755/1215/0; fill reads 3381, mean 37.1, max 382 cycles; fill writes 156, mean 7.0, max 7; look-ups 1032, mean 10.6, max 212; updates 933, mean 131.9, max 317
+evm-zone-23-raw-full.frames, N 64, s 6: LPDDR: 1718 read bursts, 9089 write bursts, 34096 beats read, 268456 written; error bursts 0, unwritten reads 0; the cache's error flag 0
+evm-zone-23-raw-full.frames, N 64, s 6: the clients: the Updater's look-ups 1032, updates 933; cycles with its look-up and a fill request both outstanding 1586; the arbiter's bursts read/written by client 0 (the cache) 870/933, 1 (the Updater) 194/1048, 2 (the RW engine) 0/0, 3 0/0; pieces waiting for their turn, cycles: reads 0/200/0/0, writes 0/0/0/0; the joint's checks 0
+evm-zone-23-raw-full.frames, N 64, s 6: the master's exit 0x1; the tracer tile: status 1, 8 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 6829568 cycles from the reset
+evm-zone-23-raw-full.frames, N 64, s 6: passed in 6829568 cycles, 7.7 s of simulation, 885469 cycles a second
+
+run             done at     cycles    on data   on pages  on memory     read  written PAGE_COUNT
+program         2162287    2058914    1498875          0     303240        0      493          0
+table           3245450    1067280     776302          0     157599        0      257          0
+cycle0          3256708      10917       3852          0       5029        1        8          0
+start-6         3562244     204658     120977          0      54175       36       82          0
+tracer          3589550      27065         54          0      24618       14       30          0
+final           3843322     253653      87550          0     128165      143      178          0
+the link: 7054 packets, 225500 words, 3720864 bytes; the page map: 940 pages marked; the master's core: 191351 cycles awake of 6829568 (2.80%), 136973 instructions
+the master: the tracer tile's load at its cycle 3589833, the windows landed and the replay released at 6599173, its exit at 6829138
+the forward count: the link at 1 bytes a cycle; the master's wakes: 82, 65 to the hand-over; Ingress's DMA: 25 transfers, 25 to the hand-over, 266 words; 7 count stores; 219161 words forwarded, 6073 dropped; the master awake 178225 cycles to the hand-over at 3589833: 4.96%; the link: its last byte at 3813639, 92775 cycles waiting for room; awake 86038 cycles at the first frame, at its cycle 102344
+each frame, its type: cycles awake: 1: 862 2: 40637 3: 14795 4: 674 5: 21546 6: 1120 7: 1721 8: 3021 9: 7811 (the last to the hand-over)
+each frame, its type: wakes/transfers: 1: 2/2 2: 11/1 3: 6/5 4: 2/2 5: 8/1 6: 3/1 7: 17/10 8: 3/2 9: 6/0 (the last to the hand-over)
+PASS proof_run evm-zone-23-raw-full.frames, N 64, s 6: 0 checks failed
+evm-zone-23-raw-base.frames, N 64, s 0: the master: status 1 (detail 0x0), 11 frames, 7 runs, 915 pages taken, 130 LOADs, 65 results, 0 others, boot 5; ERRORS: the tile's 0x0, Ingress's 0x0, the Updater's 0x0
+evm-zone-23-raw-base.frames, N 64, s 0: the cache: memory index 2050 hits, 5 misses (99.76%); memory data 185 hits, 316 misses (36.93%); map index 100 hits, 6 misses (94.34%); map data 0 hits, 53 misses (0.00%); look-up index 3335 hits, 46 misses (98.64%); evictions 0, write-backs 0, allocations 0, replays 0, served under a miss 31
+evm-zone-23-raw-base.frames, N 64, s 0: the cache: walks of 0/1/2/3 index lines 532/1669/501/0; fill reads 577, mean 92.9, max 361 cycles; fill writes 185, mean 7.0, max 7; look-ups 1032, mean 10.4, max 216; updates 908, mean 129.1, max 309
+evm-zone-23-raw-base.frames, N 64, s 0: LPDDR: 1222 read bursts, 9020 write bursts, 28880 beats read, 266848 written; error bursts 0, unwritten reads 0; the cache's error flag 0
+evm-zone-23-raw-base.frames, N 64, s 0: the clients: the Updater's look-ups 1032, updates 908; cycles with its look-up and a fill request both outstanding 622; the arbiter's bursts read/written by client 0 (the cache) 426/908, 1 (the Updater) 192/1047, 2 (the RW engine) 0/0, 3 0/0; pieces waiting for their turn, cycles: reads 0/201/0/0, writes 0/0/0/0; the joint's checks 0
+evm-zone-23-raw-base.frames, N 64, s 0: the master's exit 0x1; the tracer tile: status 1, 8 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 6405120 cycles from the reset
+evm-zone-23-raw-base.frames, N 64, s 0: passed in 6405120 cycles, 7.2 s of simulation, 885874 cycles a second
+
+run             done at     cycles    on data   on pages  on memory     read  written PAGE_COUNT
+program         2162481    2059108    1500842          0     301467        0      493          0
+base            3243874    1080581     791521          0     155681        0      257          0
+table           3263470       3391          1          0       2344        1        3          0
+cycle0          3271221       7644         28          0       5580        1        8          0
+start-0         3367136        801          0          0        797        1        1          0
+tracer          3398978      31601       8981          0      18236        3       26          0
+final           3850443     451346     205023          0     181020      186      259          0
+the link: 7072 packets, 226023 words, 3729520 bytes; the page map: 916 pages marked; the master's core: 189669 cycles awake of 6405120 (2.96%), 135794 instructions
+the master: the tracer tile's load at its cycle 3399261, the windows landed and the replay released at 6185664, its exit at 6405046
+the forward count: the link at 1 bytes a cycle; the master's wakes: 68, 58 to the hand-over; Ingress's DMA: 23 transfers, 23 to the hand-over, 276 words; 7 count stores; 219674 words forwarded, 6073 dropped; the master awake 174494 cycles to the hand-over at 3399261: 5.13%; the link: its last byte at 3822470, 92950 cycles waiting for room; awake 86038 cycles at the first frame, at its cycle 102344
+each frame, its type: cycles awake: 1: 862 2: 40627 4: 994 5: 21538 3: 14801 4: 983 5: 694 6: 1120 7: 871 8: 3021 9: 2945 (the last to the hand-over)
+each frame, its type: wakes/transfers: 1: 2/2 2: 11/1 4: 2/2 5: 8/1 3: 6/5 4: 2/2 5: 2/1 6: 3/1 7: 6/5 8: 3/2 9: 6/0 (the last to the hand-over)
+PASS proof_run evm-zone-23-raw-base.frames, N 64, s 0: 0 checks failed
+evm-zone-23-raw-base.frames, N 64, s 1: the master: status 1 (detail 0x0), 11 frames, 7 runs, 920 pages taken, 130 LOADs, 65 results, 0 others, boot 5; ERRORS: the tile's 0x0, Ingress's 0x0, the Updater's 0x0
+evm-zone-23-raw-base.frames, N 64, s 1: the cache: memory index 1822 hits, 1 misses (99.95%); memory data 179 hits, 245 misses (42.22%); map index 1 hits, 1 misses (50.00%); map data 0 hits, 1 misses (0.00%); look-up index 3341 hits, 48 misses (98.58%); evictions 0, write-backs 0, allocations 0, replays 0, served under a miss 18
+evm-zone-23-raw-base.frames, N 64, s 1: the cache: walks of 0/1/2/3 index lines 534/1654/424/0; fill reads 488, mean 73.6, max 349 cycles; fill writes 179, mean 7.0, max 7; look-ups 1032, mean 10.2, max 217; updates 913, mean 130.7, max 391
+evm-zone-23-raw-base.frames, N 64, s 1: LPDDR: 1124 read bursts, 9045 write bursts, 28864 beats read, 267528 written; error bursts 0, unwritten reads 0; the cache's error flag 0
+evm-zone-23-raw-base.frames, N 64, s 1: the clients: the Updater's look-ups 1032, updates 913; cycles with its look-up and a fill request both outstanding 505; the arbiter's bursts read/written by client 0 (the cache) 296/913, 1 (the Updater) 197/1048, 2 (the RW engine) 0/0, 3 0/0; pieces waiting for their turn, cycles: reads 0/209/0/0, writes 0/0/0/0; the joint's checks 0
+evm-zone-23-raw-base.frames, N 64, s 1: the master's exit 0x1; the tracer tile: status 1, 8 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 6420480 cycles from the reset
+evm-zone-23-raw-base.frames, N 64, s 1: passed in 6420480 cycles, 7.2 s of simulation, 887025 cycles a second
+
+run             done at     cycles    on data   on pages  on memory     read  written PAGE_COUNT
+program         2162570    2059197    1497780          0     304618        0      493          0
+base            3244055    1080620     791245          0     155996        0      257          0
+table           3263659       3439          1          0       2392        1        3          0
+cycle0          3271699       7933         28          0       5869        1        8          0
+start-1         3399081      32604      18696          0       9568        4       13          0
+tracer          3432579      33257      12933          0      16174        4       24          0
+final           3849858     417160     180536        144     175245      187      250          0
+the link: 7072 packets, 226023 words, 3729520 bytes; the page map: 921 pages marked; the master's core: 190179 cycles awake of 6420480 (2.96%), 136205 instructions
+the master: the tracer tile's load at its cycle 3432862, the windows landed and the replay released at 6200975, its exit at 6420374
+the forward count: the link at 1 bytes a cycle; the master's wakes: 69, 59 to the hand-over; Ingress's DMA: 23 transfers, 23 to the hand-over, 276 words; 8 count stores; 219674 words forwarded, 6073 dropped; the master awake 175404 cycles to the hand-over at 3432862: 5.11%; the link: its last byte at 3822578, 93058 cycles waiting for room; awake 86038 cycles at the first frame, at its cycle 102344
+each frame, its type: cycles awake: 1: 862 2: 40627 4: 994 5: 21538 3: 14800 4: 983 5: 694 6: 1120 7: 940 8: 3021 9: 3787 (the last to the hand-over)
+each frame, its type: wakes/transfers: 1: 2/2 2: 11/1 4: 2/2 5: 8/1 3: 6/5 4: 2/2 5: 2/1 6: 3/1 7: 7/5 8: 3/2 9: 6/0 (the last to the hand-over)
+PASS proof_run evm-zone-23-raw-base.frames, N 64, s 1: 0 checks failed
+evm-zone-23-raw-base.frames, N 64, s 6: the master: status 1 (detail 0x0), 11 frames, 7 runs, 942 pages taken, 130 LOADs, 65 results, 0 others, boot 5; ERRORS: the tile's 0x0, Ingress's 0x0, the Updater's 0x0
+evm-zone-23-raw-base.frames, N 64, s 6: the cache: memory index 3246 hits, 8 misses (99.75%); memory data 807 hits, 408 misses (66.42%); map index 2720 hits, 6 misses (99.78%); map data 1918 hits, 404 misses (82.60%); look-up index 3387 hits, 52 misses (98.49%); evictions 0, write-backs 0, allocations 0, replays 0, served under a miss 43
+evm-zone-23-raw-base.frames, N 64, s 6: the cache: walks of 0/1/2/3 index lines 536/3755/1215/0; fill reads 3381, mean 37.0, max 372 cycles; fill writes 156, mean 7.0, max 7; look-ups 1034, mean 10.3, max 218; updates 935, mean 132.8, max 410
+evm-zone-23-raw-base.frames, N 64, s 6: LPDDR: 1734 read bursts, 9115 write bursts, 34416 beats read, 269240 written; error bursts 0, unwritten reads 0; the cache's error flag 0
+evm-zone-23-raw-base.frames, N 64, s 6: the clients: the Updater's look-ups 1034, updates 935; cycles with its look-up and a fill request both outstanding 1208; the arbiter's bursts read/written by client 0 (the cache) 878/935, 1 (the Updater) 195/1051, 2 (the RW engine) 0/0, 3 0/0; pieces waiting for their turn, cycles: reads 1/202/0/0, writes 0/0/0/0; the joint's checks 0
+evm-zone-23-raw-base.frames, N 64, s 6: the master's exit 0x1; the tracer tile: status 1, 8 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 6836736 cycles from the reset
+evm-zone-23-raw-base.frames, N 64, s 6: passed in 6836736 cycles, 7.7 s of simulation, 886286 cycles a second
+
+run             done at     cycles    on data   on pages  on memory     read  written PAGE_COUNT
+program         2162284    2058911    1497784          0     304328        0      493          0
+base            3243756    1080523     790735          0     156409        0      257          0
+table           3263388       3390          1          0       2343        1        3          0
+cycle0          3271091       7596         28          0       5532        1        8          0
+start-6         3570871     204596     120894          0      54196       36       82          0
+tracer          3597202      26090         54          0      23643       14       30          0
+final           3852938     255617      86974          0     130705      143      178          0
+the link: 7072 packets, 226023 words, 3729520 bytes; the page map: 943 pages marked; the master's core: 192832 cycles awake of 6836736 (2.82%), 138211 instructions
+the master: the tracer tile's load at its cycle 3597485, the windows landed and the replay released at 6606356, its exit at 6836321
+the forward count: the link at 1 bytes a cycle; the master's wakes: 80, 63 to the hand-over; Ingress's DMA: 25 transfers, 25 to the hand-over, 276 words; 8 count stores; 219674 words forwarded, 6073 dropped; the master awake 179706 cycles to the hand-over at 3597485: 5.00%; the link: its last byte at 3822259, 92739 cycles waiting for room; awake 86038 cycles at the first frame, at its cycle 102344
+each frame, its type: cycles awake: 1: 862 2: 40627 4: 994 5: 21539 3: 14795 4: 983 5: 694 6: 1120 7: 1230 8: 3021 9: 7803 (the last to the hand-over)
+each frame, its type: wakes/transfers: 1: 2/2 2: 11/1 4: 2/2 5: 8/1 3: 6/5 4: 2/2 5: 2/1 6: 3/1 7: 11/7 8: 3/2 9: 6/0 (the last to the hand-over)
+PASS proof_run evm-zone-23-raw-base.frames, N 64, s 6: 0 checks failed
+evm-zone-23-lru-full.frames, N 64, s 0: the master: status 1 (detail 0x0), 9 frames, 6 runs, 912 pages taken, 130 LOADs, 65 results, 0 others, boot 5; ERRORS: the tile's 0x0, Ingress's 0x0, the Updater's 0x0
+evm-zone-23-lru-full.frames, N 64, s 0: the cache: memory index 2052 hits, 5 misses (99.76%); memory data 185 hits, 316 misses (36.93%); map index 107 hits, 0 misses (100.00%); map data 0 hits, 53 misses (0.00%); look-up index 3334 hits, 44 misses (98.70%); evictions 0, write-backs 0, allocations 0, replays 3, served under a miss 54
+evm-zone-23-lru-full.frames, N 64, s 0: the cache: walks of 0/1/2/3 index lines 528/1669/501/0; fill reads 577, mean 87.9, max 406 cycles; fill writes 185, mean 7.0, max 7; look-ups 1030, mean 9.7, max 216; updates 906, mean 130.2, max 386
+evm-zone-23-lru-full.frames, N 64, s 0: LPDDR: 1206 read bursts, 8994 write bursts, 28560 beats read, 266064 written; error bursts 0, unwritten reads 0; the cache's error flag 0
+evm-zone-23-lru-full.frames, N 64, s 0: the clients: the Updater's look-ups 1030, updates 906; cycles with its look-up and a fill request both outstanding 1805; the arbiter's bursts read/written by client 0 (the cache) 418/906, 1 (the Updater) 191/1044, 2 (the RW engine) 0/0, 3 0/0; pieces waiting for their turn, cycles: reads 0/183/0/0, writes 0/0/0/0; the joint's checks 0
+evm-zone-23-lru-full.frames, N 64, s 0: the master's exit 0x1; the tracer tile: status 1, 8 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 5774848 cycles from the reset
+evm-zone-23-lru-full.frames, N 64, s 0: passed in 5774848 cycles, 6.4 s of simulation, 909048 cycles a second
+
+run             done at     cycles    on data   on pages  on memory     read  written PAGE_COUNT
+program         2148146    2044773    1485838          0     302136        0      493          0
+table           2636123     472271     182815          0     156077        0      257          0
+cycle0          2647083      10645       3508          0       5432        1        8          0
+start-0         2748862        933          0          0        929        1        1          0
+tracer          2771134      22031          4          0      17643        3       26          0
+final           3015598     244345       1199          0     177843      186      259          0
+the link: 5286 packets, 168971 words, 2788112 bytes; the page map: 913 pages marked; the master's core: 187722 cycles awake of 5774848 (3.25%), 134230 instructions
+the master: the tracer tile's load at its cycle 2771417, the windows landed and the replay released at 5554962, its exit at 5774344
+the forward count: the link at 1 bytes a cycle; the master's wakes: 65, 55 to the hand-over; Ingress's DMA: 20 transfers, 20 to the hand-over, 266 words; 6 count stores; 162632 words forwarded, 6073 dropped; the master awake 172547 cycles to the hand-over at 2771417: 6.23%; the link: its last byte at 2974087, 185975 cycles waiting for room; awake 86038 cycles at the first frame, at its cycle 102344
+each frame, its type: cycles awake: 1: 862 2: 40627 3: 14855 4: 674 5: 21546 6: 1120 7: 871 8: 3021 9: 2933 (the last to the hand-over)
+each frame, its type: wakes/transfers: 1: 2/2 2: 11/1 3: 7/5 4: 2/2 5: 8/1 6: 3/1 7: 6/5 8: 3/2 9: 6/0 (the last to the hand-over)
+PASS proof_run evm-zone-23-lru-full.frames, N 64, s 0: 0 checks failed
+evm-zone-23-lru-full.frames, N 64, s 1: the master: status 1 (detail 0x0), 9 frames, 6 runs, 917 pages taken, 130 LOADs, 65 results, 0 others, boot 5; ERRORS: the tile's 0x0, Ingress's 0x0, the Updater's 0x0
+evm-zone-23-lru-full.frames, N 64, s 1: the cache: memory index 1822 hits, 1 misses (99.95%); memory data 179 hits, 245 misses (42.22%); map index 2 hits, 0 misses (100.00%); map data 0 hits, 1 misses (0.00%); look-up index 3340 hits, 46 misses (98.64%); evictions 0, write-backs 0, allocations 0, replays 1, served under a miss 9
+evm-zone-23-lru-full.frames, N 64, s 1: the cache: walks of 0/1/2/3 index lines 530/1654/424/0; fill reads 488, mean 72.4, max 224 cycles; fill writes 179, mean 7.0, max 7; look-ups 1030, mean 9.7, max 250; updates 911, mean 131.6, max 385
+evm-zone-23-lru-full.frames, N 64, s 1: LPDDR: 1113 read bursts, 9019 write bursts, 28584 beats read, 266744 written; error bursts 0, unwritten reads 0; the cache's error flag 0
+evm-zone-23-lru-full.frames, N 64, s 1: the clients: the Updater's look-ups 1030, updates 911; cycles with its look-up and a fill request both outstanding 302; the arbiter's bursts read/written by client 0 (the cache) 293/911, 1 (the Updater) 196/1045, 2 (the RW engine) 0/0, 3 0/0; pieces waiting for their turn, cycles: reads 0/188/0/0, writes 0/0/0/0; the joint's checks 0
+evm-zone-23-lru-full.frames, N 64, s 1: the master's exit 0x1; the tracer tile: status 1, 8 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 5770240 cycles from the reset
+evm-zone-23-lru-full.frames, N 64, s 1: passed in 5770240 cycles, 6.3 s of simulation, 909319 cycles a second
+
+run             done at     cycles    on data   on pages  on memory     read  written PAGE_COUNT
+program         2148475    2045102    1485095          0     303208        0      493          0
+table           2636249     472275     183527          0     155369        0      257          0
+cycle0          2647384      10802       3470          0       5627        1        8          0
+start-1         2761842      13769          4          0       9425        4       13          0
+tracer          2782613      20530          1          0      16379        4       24          0
+final           3020333     237601       1197        221     174948      187      250          0
+the link: 5286 packets, 168971 words, 2788112 bytes; the page map: 918 pages marked; the master's core: 188442 cycles awake of 5770240 (3.27%), 134794 instructions
+the master: the tracer tile's load at its cycle 2782896, the windows landed and the replay released at 5550403, its exit at 5769802
+the forward count: the link at 1 bytes a cycle; the master's wakes: 68, 58 to the hand-over; Ingress's DMA: 22 transfers, 22 to the hand-over, 266 words; 7 count stores; 162632 words forwarded, 6073 dropped; the master awake 173667 cycles to the hand-over at 2782896: 6.24%; the link: its last byte at 2978365, 190253 cycles waiting for room; awake 86038 cycles at the first frame, at its cycle 102344
+each frame, its type: cycles awake: 1: 862 2: 40627 3: 14810 4: 674 5: 21546 6: 1120 7: 1186 8: 3021 9: 3783 (the last to the hand-over)
+each frame, its type: wakes/transfers: 1: 2/2 2: 11/1 3: 6/5 4: 2/2 5: 8/1 6: 3/1 7: 10/7 8: 3/2 9: 6/0 (the last to the hand-over)
+PASS proof_run evm-zone-23-lru-full.frames, N 64, s 1: 0 checks failed
+evm-zone-23-lru-full.frames, N 64, s 6: the master: status 1 (detail 0x0), 9 frames, 6 runs, 939 pages taken, 130 LOADs, 65 results, 0 others, boot 5; ERRORS: the tile's 0x0, Ingress's 0x0, the Updater's 0x0
+evm-zone-23-lru-full.frames, N 64, s 6: the cache: memory index 3246 hits, 8 misses (99.75%); memory data 807 hits, 408 misses (66.42%); map index 2728 hits, 0 misses (100.00%); map data 1918 hits, 404 misses (82.60%); look-up index 3386 hits, 50 misses (98.54%); evictions 0, write-backs 0, allocations 0, replays 3, served under a miss 78
+evm-zone-23-lru-full.frames, N 64, s 6: the cache: walks of 0/1/2/3 index lines 532/3755/1215/0; fill reads 3381, mean 37.6, max 391 cycles; fill writes 156, mean 7.0, max 7; look-ups 1032, mean 10.1, max 262; updates 933, mean 131.1, max 300
+evm-zone-23-lru-full.frames, N 64, s 6: LPDDR: 1718 read bursts, 9089 write bursts, 34096 beats read, 268456 written; error bursts 0, unwritten reads 0; the cache's error flag 0
+evm-zone-23-lru-full.frames, N 64, s 6: the clients: the Updater's look-ups 1032, updates 933; cycles with its look-up and a fill request both outstanding 2628; the arbiter's bursts read/written by client 0 (the cache) 870/933, 1 (the Updater) 194/1048, 2 (the RW engine) 0/0, 3 0/0; pieces waiting for their turn, cycles: reads 0/208/0/0, writes 0/0/0/0; the joint's checks 0
+evm-zone-23-lru-full.frames, N 64, s 6: the master's exit 0x1; the tracer tile: status 1, 8 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 6102528 cycles from the reset
+evm-zone-23-lru-full.frames, N 64, s 6: passed in 6102528 cycles, 6.8 s of simulation, 898448 cycles a second
+
+run             done at     cycles    on data   on pages  on memory     read  written PAGE_COUNT
+program         2148462    2045089    1485021          0     303269        0      493          0
+table           2636259     472345     182299          0     156667        0      257          0
+cycle0          2647437      10910       3560          0       5645        1        8          0
+start-6         2833356      85338        222          0      55610       36       82          0
+tracer          2860908      27311         54          0      24864       14       30          0
+final           3027297     166270        926          0     127406      143      178          0
+the link: 5286 packets, 168971 words, 2788112 bytes; the page map: 940 pages marked; the master's core: 191351 cycles awake of 6102528 (3.14%), 136973 instructions
+the master: the tracer tile's load at its cycle 2861191, the windows landed and the replay released at 5872147, its exit at 6102112
+the forward count: the link at 1 bytes a cycle; the master's wakes: 82, 65 to the hand-over; Ingress's DMA: 25 transfers, 25 to the hand-over, 266 words; 7 count stores; 162632 words forwarded, 6073 dropped; the master awake 178225 cycles to the hand-over at 2861191: 6.23%; the link: its last byte at 2983689, 195577 cycles waiting for room; awake 86038 cycles at the first frame, at its cycle 102344
+each frame, its type: cycles awake: 1: 862 2: 40627 3: 14805 4: 674 5: 21546 6: 1120 7: 1721 8: 3021 9: 7811 (the last to the hand-over)
+each frame, its type: wakes/transfers: 1: 2/2 2: 11/1 3: 6/5 4: 2/2 5: 8/1 6: 3/1 7: 17/10 8: 3/2 9: 6/0 (the last to the hand-over)
+PASS proof_run evm-zone-23-lru-full.frames, N 64, s 6: 0 checks failed
+evm-zone-23-lru-base.frames, N 64, s 0: the master: status 1 (detail 0x0), 11 frames, 7 runs, 915 pages taken, 130 LOADs, 65 results, 0 others, boot 5; ERRORS: the tile's 0x0, Ingress's 0x0, the Updater's 0x0
+evm-zone-23-lru-base.frames, N 64, s 0: the cache: memory index 2050 hits, 5 misses (99.76%); memory data 185 hits, 316 misses (36.93%); map index 101 hits, 6 misses (94.39%); map data 0 hits, 53 misses (0.00%); look-up index 3335 hits, 46 misses (98.64%); evictions 0, write-backs 0, allocations 0, replays 2, served under a miss 54
+evm-zone-23-lru-base.frames, N 64, s 0: the cache: walks of 0/1/2/3 index lines 532/1669/501/0; fill reads 577, mean 90.5, max 368 cycles; fill writes 185, mean 7.0, max 7; look-ups 1032, mean 10.3, max 216; updates 908, mean 130.0, max 345
+evm-zone-23-lru-base.frames, N 64, s 0: LPDDR: 1222 read bursts, 9020 write bursts, 28880 beats read, 266848 written; error bursts 0, unwritten reads 0; the cache's error flag 0
+evm-zone-23-lru-base.frames, N 64, s 0: the clients: the Updater's look-ups 1032, updates 908; cycles with its look-up and a fill request both outstanding 1473; the arbiter's bursts read/written by client 0 (the cache) 426/908, 1 (the Updater) 192/1047, 2 (the RW engine) 0/0, 3 0/0; pieces waiting for their turn, cycles: reads 1/209/0/0, writes 0/0/0/0; the joint's checks 0
+evm-zone-23-lru-base.frames, N 64, s 0: the master's exit 0x1; the tracer tile: status 1, 8 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 5779456 cycles from the reset
+evm-zone-23-lru-base.frames, N 64, s 0: passed in 5779456 cycles, 6.4 s of simulation, 907561 cycles a second
+
+run             done at     cycles    on data   on pages  on memory     read  written PAGE_COUNT
+program         2148361    2044988    1483979          0     304210        0      493          0
+base            2634680     485608     195419          0     156810        0      257          0
+table           2654341       3570          1          0       2523        1        3          0
+cycle0          2661682       7234          3          0       5526        1        8          0
+start-0         2753089        867          0          0        863        1        1          0
+tracer          2774393      21063          4          0      16675        3       26          0
+final           3022036     247524       1199          0     181022      186      259          0
+the link: 5295 packets, 169222 words, 2792272 bytes; the page map: 916 pages marked; the master's core: 189717 cycles awake of 5779456 (3.28%), 135824 instructions
+the master: the tracer tile's load at its cycle 2774676, the windows landed and the replay released at 5559706, its exit at 5779088
+the forward count: the link at 1 bytes a cycle; the master's wakes: 69, 59 to the hand-over; Ingress's DMA: 23 transfers, 23 to the hand-over, 276 words; 7 count stores; 162873 words forwarded, 6073 dropped; the master awake 174542 cycles to the hand-over at 2774676: 6.29%; the link: its last byte at 2979793, 187521 cycles waiting for room; awake 86038 cycles at the first frame, at its cycle 102344
+each frame, its type: cycles awake: 1: 862 2: 40627 4: 994 5: 21528 3: 14855 4: 983 5: 694 6: 1120 7: 871 8: 3021 9: 2949 (the last to the hand-over)
+each frame, its type: wakes/transfers: 1: 2/2 2: 11/1 4: 2/2 5: 8/1 3: 7/5 4: 2/2 5: 2/1 6: 3/1 7: 6/5 8: 3/2 9: 6/0 (the last to the hand-over)
+PASS proof_run evm-zone-23-lru-base.frames, N 64, s 0: 0 checks failed
+evm-zone-23-lru-base.frames, N 64, s 1: the master: status 1 (detail 0x0), 11 frames, 7 runs, 920 pages taken, 130 LOADs, 65 results, 0 others, boot 5; ERRORS: the tile's 0x0, Ingress's 0x0, the Updater's 0x0
+evm-zone-23-lru-base.frames, N 64, s 1: the cache: memory index 1822 hits, 1 misses (99.95%); memory data 179 hits, 245 misses (42.22%); map index 1 hits, 1 misses (50.00%); map data 0 hits, 1 misses (0.00%); look-up index 3341 hits, 48 misses (98.58%); evictions 0, write-backs 0, allocations 0, replays 0, served under a miss 12
+evm-zone-23-lru-base.frames, N 64, s 1: the cache: walks of 0/1/2/3 index lines 534/1654/424/0; fill reads 488, mean 71.5, max 380 cycles; fill writes 179, mean 7.0, max 7; look-ups 1032, mean 9.8, max 213; updates 913, mean 129.1, max 290
+evm-zone-23-lru-base.frames, N 64, s 1: LPDDR: 1124 read bursts, 9045 write bursts, 28864 beats read, 267528 written; error bursts 0, unwritten reads 0; the cache's error flag 0
+evm-zone-23-lru-base.frames, N 64, s 1: the clients: the Updater's look-ups 1032, updates 913; cycles with its look-up and a fill request both outstanding 246; the arbiter's bursts read/written by client 0 (the cache) 296/913, 1 (the Updater) 197/1048, 2 (the RW engine) 0/0, 3 0/0; pieces waiting for their turn, cycles: reads 0/231/0/0, writes 0/0/0/0; the joint's checks 0
+evm-zone-23-lru-base.frames, N 64, s 1: the master's exit 0x1; the tracer tile: status 1, 8 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 5774336 cycles from the reset
+evm-zone-23-lru-base.frames, N 64, s 1: passed in 5774336 cycles, 6.4 s of simulation, 906393 cycles a second
+
+run             done at     cycles    on data   on pages  on memory     read  written PAGE_COUNT
+program         2148425    2045052    1486393          0     301860        0      493          0
+base            2634632     485515     195448          0     156688        0      257          0
+table           2654330       3536          1          0       2489        1        3          0
+cycle0          2661640       7203          3          0       5495        1        8          0
+start-1         2766115      13848          4          0       9504        4       13          0
+tracer          2787478      21122          1          0      16971        4       24          0
+final           3025263     237666       1197        130     175104      187      250          0
+the link: 5295 packets, 169222 words, 2792272 bytes; the page map: 921 pages marked; the master's core: 190179 cycles awake of 5774336 (3.29%), 136205 instructions
+the master: the tracer tile's load at its cycle 2787761, the windows landed and the replay released at 5554819, its exit at 5774218
+the forward count: the link at 1 bytes a cycle; the master's wakes: 69, 59 to the hand-over; Ingress's DMA: 23 transfers, 23 to the hand-over, 276 words; 8 count stores; 162873 words forwarded, 6073 dropped; the master awake 175404 cycles to the hand-over at 2787761: 6.29%; the link: its last byte at 2983582, 191310 cycles waiting for room; awake 86038 cycles at the first frame, at its cycle 102344
+each frame, its type: cycles awake: 1: 862 2: 40627 4: 994 5: 21538 3: 14800 4: 983 5: 694 6: 1120 7: 940 8: 3021 9: 3787 (the last to the hand-over)
+each frame, its type: wakes/transfers: 1: 2/2 2: 11/1 4: 2/2 5: 8/1 3: 6/5 4: 2/2 5: 2/1 6: 3/1 7: 7/5 8: 3/2 9: 6/0 (the last to the hand-over)
+PASS proof_run evm-zone-23-lru-base.frames, N 64, s 1: 0 checks failed
+evm-zone-23-lru-base.frames, N 64, s 6: the master: status 1 (detail 0x0), 11 frames, 7 runs, 942 pages taken, 130 LOADs, 65 results, 0 others, boot 5; ERRORS: the tile's 0x0, Ingress's 0x0, the Updater's 0x0
+evm-zone-23-lru-base.frames, N 64, s 6: the cache: memory index 3250 hits, 8 misses (99.75%); memory data 807 hits, 408 misses (66.42%); map index 2721 hits, 6 misses (99.78%); map data 1918 hits, 404 misses (82.60%); look-up index 3390 hits, 52 misses (98.49%); evictions 0, write-backs 0, allocations 0, replays 5, served under a miss 83
+evm-zone-23-lru-base.frames, N 64, s 6: the cache: walks of 0/1/2/3 index lines 536/3755/1215/0; fill reads 3381, mean 36.9, max 430 cycles; fill writes 156, mean 7.0, max 7; look-ups 1034, mean 10.7, max 223; updates 935, mean 131.5, max 399
+evm-zone-23-lru-base.frames, N 64, s 6: LPDDR: 1734 read bursts, 9115 write bursts, 34416 beats read, 269240 written; error bursts 0, unwritten reads 0; the cache's error flag 0
+evm-zone-23-lru-base.frames, N 64, s 6: the clients: the Updater's look-ups 1034, updates 935; cycles with its look-up and a fill request both outstanding 3307; the arbiter's bursts read/written by client 0 (the cache) 878/935, 1 (the Updater) 195/1051, 2 (the RW engine) 0/0, 3 0/0; pieces waiting for their turn, cycles: reads 0/215/0/0, writes 0/0/0/0; the joint's checks 0
+evm-zone-23-lru-base.frames, N 64, s 6: the master's exit 0x1; the tracer tile: status 1, 8 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 6102528 cycles from the reset
+evm-zone-23-lru-base.frames, N 64, s 6: passed in 6102528 cycles, 6.8 s of simulation, 897847 cycles a second
+
+run             done at     cycles    on data   on pages  on memory     read  written PAGE_COUNT
+program         2148437    2045064    1483651          0     304614        0      493          0
+base            2634683     485653     194760          0     157514        0      257          0
+table           2654157       3434          1          0       2387        1        3          0
+cycle0          2661280       7016          3          0       5308        1        8          0
+start-6         2836272      84092        222          0      54364       36       82          0
+tracer          2863360      26847         54          0      24400       14       30          0
+final           3033849     170370        926          0     131506      143      178          0
+the link: 5295 packets, 169222 words, 2792272 bytes; the page map: 943 pages marked; the master's core: 192573 cycles awake of 6102528 (3.16%), 138029 instructions
+the master: the tracer tile's load at its cycle 2863643, the windows landed and the replay released at 5872192, its exit at 6102157
+the forward count: the link at 1 bytes a cycle; the master's wakes: 77, 60 to the hand-over; Ingress's DMA: 23 transfers, 23 to the hand-over, 276 words; 8 count stores; 162873 words forwarded, 6073 dropped; the master awake 179447 cycles to the hand-over at 2863643: 6.27%; the link: its last byte at 2989080, 196808 cycles waiting for room; awake 86038 cycles at the first frame, at its cycle 102344
+each frame, its type: cycles awake: 1: 862 2: 40627 4: 994 5: 21528 3: 14849 4: 983 5: 694 6: 1120 7: 940 8: 3021 9: 7791 (the last to the hand-over)
+each frame, its type: wakes/transfers: 1: 2/2 2: 11/1 4: 2/2 5: 8/1 3: 7/5 4: 2/2 5: 2/1 6: 3/1 7: 7/5 8: 3/2 9: 6/0 (the last to the hand-over)
+PASS proof_run evm-zone-23-lru-base.frames, N 64, s 6: 0 checks failed
+cyclone-22-raw-full.frames, N 64, s 0: the master: status 1 (detail 0x0), 9 frames, 6 runs, 1262 pages taken, 130 LOADs, 65 results, 0 others, boot 5; ERRORS: the tile's 0x0, Ingress's 0x0, the Updater's 0x0
+cyclone-22-raw-full.frames, N 64, s 0: the cache: memory index 4396 hits, 9 misses (99.80%); memory data 755 hits, 721 misses (51.15%); map index 552 hits, 0 misses (100.00%); map data 120 hits, 216 misses (35.71%); look-up index 4628 hits, 49 misses (98.95%); evictions 0, write-backs 0, allocations 0, replays 1, served under a miss 78
+cyclone-22-raw-full.frames, N 64, s 0: the cache: walks of 0/1/2/3 index lines 528/2392/1476/0; fill reads 1272, mean 102.2, max 351 cycles; fill writes 540, mean 7.0, max 11; look-ups 1328, mean 9.7, max 221; updates 1256, mean 128.8, max 368
+cyclone-22-raw-full.frames, N 64, s 0: LPDDR: 1475 read bursts, 11824 write bursts, 23320 beats read, 348224 written; error bursts 0, unwritten reads 0; the cache's error flag 0
+cyclone-22-raw-full.frames, N 64, s 0: the clients: the Updater's look-ups 1328, updates 1256; cycles with its look-up and a fill request both outstanding 2906; the arbiter's bursts read/written by client 0 (the cache) 995/1256, 1 (the Updater) 113/1342, 2 (the RW engine) 0/0, 3 0/0; pieces waiting for their turn, cycles: reads 0/143/0/0, writes 0/0/0/0; the joint's checks 0
+cyclone-22-raw-full.frames, N 64, s 0: the master's exit 0x1; the tracer tile: status 1, 8 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 7989760 cycles from the reset
+cyclone-22-raw-full.frames, N 64, s 0: passed in 7989760 cycles, 9.2 s of simulation, 864324 cycles a second
+
+run             done at     cycles    on data   on pages  on memory     read  written PAGE_COUNT
+program         3501403    3398135    2481215          0     494330        0      810          0
+table           4584452    1067597     776822          0     157396        0      257          0
+cycle0          4613999      29283      16195          0       8142        1       12          0
+start-0         4689277        850          0          0        846        1        1          0
+tracer          4739328      49810      16292          0      26428        4       40          0
+final           5403893     664446     436018          0     147669      107      222          0
+the link: 10032 packets, 320799 words, 5293296 bytes; the page map: 1263 pages marked; the master's core: 216885 cycles awake of 7989760 (2.71%), 158148 instructions
+the master: the tracer tile's load at its cycle 4739611, the windows landed and the replay released at 7752410, its exit at 7989312
+the forward count: the link at 1 bytes a cycle; the master's wakes: 81, 69 to the hand-over; Ingress's DMA: 25 transfers, 25 to the hand-over, 263 words; 6 count stores; 316191 words forwarded, 4345 dropped; the master awake 200338 cycles to the hand-over at 4739611: 4.23%; the link: its last byte at 5380856, 87560 cycles waiting for room; awake 86038 cycles at the first frame, at its cycle 102344
+each frame, its type: cycles awake: 1: 757 2: 66884 3: 14540 4: 674 5: 21546 6: 1440 7: 1431 8: 3147 9: 3881 (the last to the hand-over)
+each frame, its type: wakes/transfers: 1: 2/2 2: 20/1 3: 7/5 4: 2/2 5: 8/1 6: 3/1 7: 13/9 8: 4/3 9: 3/0 (the last to the hand-over)
+PASS proof_run cyclone-22-raw-full.frames, N 64, s 0: 0 checks failed
+cyclone-22-raw-full.frames, N 64, s 1: the master: status 1 (detail 0x0), 9 frames, 6 runs, 1282 pages taken, 130 LOADs, 65 results, 0 others, boot 5; ERRORS: the tile's 0x0, Ingress's 0x0, the Updater's 0x0
+cyclone-22-raw-full.frames, N 64, s 1: the cache: memory index 9958 hits, 14 misses (99.86%); memory data 1839 hits, 1570 misses (53.95%); map index 2458 hits, 0 misses (100.00%); map data 1100 hits, 679 misses (61.83%); look-up index 4679 hits, 53 misses (98.88%); evictions 18, write-backs 4, allocations 0, replays 0, served under a miss 12
+cyclone-22-raw-full.frames, N 64, s 1: the cache: walks of 0/1/2/3 index lines 532/3859/3409/0; fill reads 4219, mean 74.2, max 421 cycles; fill writes 969, mean 7.0, max 7; look-ups 1336, mean 9.4, max 216; updates 1276, mean 128.7, max 381
+cyclone-22-raw-full.frames, N 64, s 1: LPDDR: 2840 read bursts, 11940 write bursts, 35296 beats read, 351360 written; error bursts 0, unwritten reads 0; the cache's error flag 0
+cyclone-22-raw-full.frames, N 64, s 1: the clients: the Updater's look-ups 1336, updates 1276; cycles with its look-up and a fill request both outstanding 436; the arbiter's bursts read/written by client 0 (the cache) 2316/1280, 1 (the Updater) 115/1352, 2 (the RW engine) 0/0, 3 0/0; pieces waiting for their turn, cycles: reads 0/121/0/0, writes 0/0/0/0; the joint's checks 0
+cyclone-22-raw-full.frames, N 64, s 1: the master's exit 0x1; the tracer tile: status 1, 8 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 8239616 cycles from the reset
+cyclone-22-raw-full.frames, N 64, s 1: passed in 8239616 cycles, 9.6 s of simulation, 855521 cycles a second
+
+run             done at     cycles    on data   on pages  on memory     read  written PAGE_COUNT
+program         3501331    3398063    2480778          0     494695        0      810          0
+table           4584224    1067430     775685          0     158366        0      257          0
+cycle0          4613917      29321      16587          0       7788        1       12          0
+start-1         4738764      50397      29525          0      13851        6       20          0
+tracer          4818507      79502      29453          0      39554       12       56          0
+final           5404364     585738     384731          0     130577       96      197          0
+the link: 10032 packets, 320799 words, 5293296 bytes; the page map: 1283 pages marked; the master's core: 219784 cycles awake of 8239616 (2.67%), 160285 instructions
+the master: the tracer tile's load at its cycle 4818790, the windows landed and the replay released at 7988607, its exit at 8239140
+the forward count: the link at 1 bytes a cycle; the master's wakes: 96, 72 to the hand-over; Ingress's DMA: 25 transfers, 25 to the hand-over, 268 words; 8 count stores; 316191 words forwarded, 4340 dropped; the master awake 203424 cycles to the hand-over at 4818790: 4.22%; the link: its last byte at 5380796, 87500 cycles waiting for room; awake 86038 cycles at the first frame, at its cycle 102344
+each frame, its type: cycles awake: 1: 757 2: 66884 3: 14539 4: 674 5: 21556 6: 1374 7: 1564 8: 3153 9: 6885 (the last to the hand-over)
+each frame, its type: wakes/transfers: 1: 2/2 2: 20/1 3: 7/5 4: 2/2 5: 8/1 6: 2/1 7: 15/9 8: 4/3 9: 5/0 (the last to the hand-over)
+PASS proof_run cyclone-22-raw-full.frames, N 64, s 1: 0 checks failed
+cyclone-22-raw-full.frames, N 64, s 3: the master: status 1 (detail 0x0), 9 frames, 6 runs, 1396 pages taken, 130 LOADs, 65 results, 0 others, boot 5; ERRORS: the tile's 0x0, Ingress's 0x0, the Updater's 0x0
+cyclone-22-raw-full.frames, N 64, s 3: the cache: memory index 43554 hits, 23 misses (99.95%); memory data 9825 hits, 5976 misses (62.18%); map index 12189 hits, 0 misses (100.00%); map data 8508 hits, 1840 misses (82.22%); look-up index 5124 hits, 57 misses (98.90%); evictions 4225, write-backs 3453, allocations 2, replays 2, served under a miss 54
+cyclone-22-raw-full.frames, N 64, s 3: the cache: walks of 0/1/2/3 index lines 532/12650/15801/0; fill reads 20462, mean 76.4, max 557 cycles; fill writes 5687, mean 7.0, max 13; look-ups 1444, mean 9.5, max 218; updates 1390, mean 129.4, max 374
+cyclone-22-raw-full.frames, N 64, s 3: LPDDR: 8430 read bursts, 16371 write bursts, 80304 beats read, 407640 written; error bursts 0, unwritten reads 0; the cache's error flag 0
+cyclone-22-raw-full.frames, N 64, s 3: the clients: the Updater's look-ups 1444, updates 1390; cycles with its look-up and a fill request both outstanding 785; the arbiter's bursts read/written by client 0 (the cache) 7894/4843, 1 (the Updater) 112/1460, 2 (the RW engine) 0/0, 3 0/0; pieces waiting for their turn, cycles: reads 1/166/0/0, writes 0/0/0/0; the joint's checks 0
+cyclone-22-raw-full.frames, N 64, s 3: the master's exit 0x1; the tracer tile: status 1, 8 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 10255872 cycles from the reset
+cyclone-22-raw-full.frames, N 64, s 3: passed in 10255872 cycles, 11.4 s of simulation, 901184 cycles a second
+
+run             done at     cycles    on data   on pages  on memory     read  written PAGE_COUNT
+program         3501345    3398077    2479229          0     496258        0      810          0
+table           4584399    1067558     778108          0     156071        0      257          0
+cycle0          4613903      29198      16550          0       7702        1       12          0
+start-3         4844858     156377      93549          0      42034       32       61          0
+tracer          5367703     522604     283446          0     173847       18      272          0
+final           5404476      36654        220          0      34137       61       48          0
+the link: 10032 packets, 320799 words, 5293296 bytes; the page map: 1397 pages marked; the master's core: 229368 cycles awake of 10255872 (2.24%), 168042 instructions
+the master: the tracer tile's load at its cycle 5367986, the windows landed and the replay released at 10017603, its exit at 10255573
+the forward count: the link at 1 bytes a cycle; the master's wakes: 100, 77 to the hand-over; Ingress's DMA: 25 transfers, 25 to the hand-over, 380 words; 8 count stores; 316191 words forwarded, 4228 dropped; the master awake 222827 cycles to the hand-over at 5367986: 4.15%; the link: its last byte at 5380845, 87549 cycles waiting for room; awake 86038 cycles at the first frame, at its cycle 102344
+each frame, its type: cycles awake: 1: 757 2: 66884 3: 14537 4: 674 5: 21546 6: 1440 7: 1564 8: 3153 9: 26234 (the last to the hand-over)
+each frame, its type: wakes/transfers: 1: 2/2 2: 20/1 3: 7/5 4: 2/2 5: 8/1 6: 3/1 7: 15/9 8: 4/3 9: 9/0 (the last to the hand-over)
+PASS proof_run cyclone-22-raw-full.frames, N 64, s 3: 0 checks failed
+cyclone-22-raw-base.frames, N 64, s 0: the master: status 1 (detail 0x0), 11 frames, 7 runs, 1263 pages taken, 130 LOADs, 65 results, 0 others, boot 5; ERRORS: the tile's 0x0, Ingress's 0x0, the Updater's 0x0
+cyclone-22-raw-base.frames, N 64, s 0: the cache: memory index 4396 hits, 9 misses (99.80%); memory data 755 hits, 721 misses (51.15%); map index 544 hits, 8 misses (98.55%); map data 120 hits, 216 misses (35.71%); look-up index 4629 hits, 49 misses (98.95%); evictions 0, write-backs 0, allocations 0, replays 2, served under a miss 93
+cyclone-22-raw-base.frames, N 64, s 0: the cache: walks of 0/1/2/3 index lines 528/2392/1476/0; fill reads 1272, mean 100.4, max 420 cycles; fill writes 540, mean 7.0, max 10; look-ups 1328, mean 9.8, max 213; updates 1256, mean 130.0, max 326
+cyclone-22-raw-base.frames, N 64, s 0: LPDDR: 1491 read bursts, 11832 write bursts, 23640 beats read, 348480 written; error bursts 0, unwritten reads 0; the cache's error flag 0
+cyclone-22-raw-base.frames, N 64, s 0: the clients: the Updater's look-ups 1328, updates 1256; cycles with its look-up and a fill request both outstanding 3090; the arbiter's bursts read/written by client 0 (the cache) 1003/1256, 1 (the Updater) 114/1343, 2 (the RW engine) 0/0, 3 0/0; pieces waiting for their turn, cycles: reads 0/103/0/0, writes 0/0/0/0; the joint's checks 0
+cyclone-22-raw-base.frames, N 64, s 0: the master's exit 0x1; the tracer tile: status 1, 8 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 7988224 cycles from the reset
+cyclone-22-raw-base.frames, N 64, s 0: passed in 7988224 cycles, 9.2 s of simulation, 863608 cycles a second
+
+run             done at     cycles    on data   on pages  on memory     read  written PAGE_COUNT
+program         3501397    3398129    2478916          0     496623        0      810          0
+base            4582762    1080670     791317          0     155974        0      257          0
+table           4599469        905          0          0        901        1        1          0
+cycle0          4614574      14998       2260          0       7792        1       12          0
+start-0         4690013        862          0          0        858        1        1          0
+tracer          4740175      49921      16285          0      26546        4       40          0
+final           5404703     664409     437847          0     145803      107      222          0
+the link: 10034 packets, 320807 words, 5293456 bytes; the page map: 1264 pages marked; the master's core: 218353 cycles awake of 7988224 (2.73%), 159337 instructions
+the master: the tracer tile's load at its cycle 4740458, the windows landed and the replay released at 7750944, its exit at 7987846
+the forward count: the link at 1 bytes a cycle; the master's wakes: 83, 71 to the hand-over; Ingress's DMA: 28 transfers, 28 to the hand-over, 271 words; 6 count stores; 316191 words forwarded, 4345 dropped; the master awake 201806 cycles to the hand-over at 4740458: 4.26%; the link: its last byte at 5381580, 88124 cycles waiting for room; awake 86038 cycles at the first frame, at its cycle 102344
+each frame, its type: cycles awake: 1: 757 2: 66884 4: 889 5: 21538 3: 14486 4: 878 5: 429 6: 1440 7: 1431 8: 3147 9: 3889 (the last to the hand-over)
+each frame, its type: wakes/transfers: 1: 2/2 2: 20/1 4: 2/2 5: 8/1 3: 6/5 4: 2/2 5: 1/1 6: 3/1 7: 13/9 8: 4/3 9: 3/0 (the last to the hand-over)
+PASS proof_run cyclone-22-raw-base.frames, N 64, s 0: 0 checks failed
+cyclone-22-raw-base.frames, N 64, s 1: the master: status 1 (detail 0x0), 11 frames, 7 runs, 1283 pages taken, 130 LOADs, 65 results, 0 others, boot 5; ERRORS: the tile's 0x0, Ingress's 0x0, the Updater's 0x0
+cyclone-22-raw-base.frames, N 64, s 1: the cache: memory index 9958 hits, 14 misses (99.86%); memory data 1840 hits, 1569 misses (53.97%); map index 2450 hits, 8 misses (99.67%); map data 1100 hits, 679 misses (61.83%); look-up index 4679 hits, 53 misses (98.88%); evictions 19, write-backs 5, allocations 0, replays 1, served under a miss 24
+cyclone-22-raw-base.frames, N 64, s 1: the cache: walks of 0/1/2/3 index lines 532/3859/3409/0; fill reads 4219, mean 75.0, max 402 cycles; fill writes 969, mean 7.0, max 7; look-ups 1336, mean 9.7, max 218; updates 1276, mean 130.9, max 403
+cyclone-22-raw-base.frames, N 64, s 1: LPDDR: 2855 read bursts, 11949 write bursts, 35608 beats read, 351624 written; error bursts 0, unwritten reads 0; the cache's error flag 0
+cyclone-22-raw-base.frames, N 64, s 1: the clients: the Updater's look-ups 1336, updates 1276; cycles with its look-up and a fill request both outstanding 442; the arbiter's bursts read/written by client 0 (the cache) 2323/1281, 1 (the Updater) 116/1353, 2 (the RW engine) 0/0, 3 0/0; pieces waiting for their turn, cycles: reads 0/134/0/0, writes 0/0/0/0; the joint's checks 0
+cyclone-22-raw-base.frames, N 64, s 1: the master's exit 0x1; the tracer tile: status 1, 8 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 8243200 cycles from the reset
+cyclone-22-raw-base.frames, N 64, s 1: passed in 8243200 cycles, 9.7 s of simulation, 852660 cycles a second
+
+run             done at     cycles    on data   on pages  on memory     read  written PAGE_COUNT
+program         3501396    3398128    2477737          0     497801        0      810          0
+base            4582896    1080815     790626          0     156810        0      257          0
+table           4599427        854          0          0        850        1        1          0
+cycle0          4614607      15073       1857          0       8270        1       12          0
+start-1         4739235      50172      28674          0      14477        6       20          0
+tracer          4819334      79858      28754          0      40609       12       56          0
+final           5405294     585841     385886          0     129525       96      197          0
+the link: 10034 packets, 320807 words, 5293456 bytes; the page map: 1284 pages marked; the master's core: 221360 cycles awake of 8243200 (2.69%), 161546 instructions
+the master: the tracer tile's load at its cycle 4819617, the windows landed and the replay released at 7992625, its exit at 8243158
+the forward count: the link at 1 bytes a cycle; the master's wakes: 100, 76 to the hand-over; Ingress's DMA: 28 transfers, 28 to the hand-over, 276 words; 8 count stores; 316191 words forwarded, 4340 dropped; the master awake 205000 cycles to the hand-over at 4819617: 4.25%; the link: its last byte at 5381492, 88036 cycles waiting for room; awake 86038 cycles at the first frame, at its cycle 102344
+each frame, its type: cycles awake: 1: 757 2: 66884 4: 889 5: 21528 3: 14539 4: 878 5: 429 6: 1440 7: 1564 8: 3153 9: 6901 (the last to the hand-over)
+each frame, its type: wakes/transfers: 1: 2/2 2: 20/1 4: 2/2 5: 8/1 3: 7/5 4: 2/2 5: 1/1 6: 3/1 7: 15/9 8: 4/3 9: 5/0 (the last to the hand-over)
+PASS proof_run cyclone-22-raw-base.frames, N 64, s 1: 0 checks failed
+cyclone-22-raw-base.frames, N 64, s 3: the master: status 1 (detail 0x0), 11 frames, 7 runs, 1397 pages taken, 130 LOADs, 65 results, 0 others, boot 5; ERRORS: the tile's 0x0, Ingress's 0x0, the Updater's 0x0
+cyclone-22-raw-base.frames, N 64, s 3: the cache: memory index 43570 hits, 24 misses (99.94%); memory data 9818 hits, 5983 misses (62.14%); map index 12175 hits, 8 misses (99.93%); map data 8513 hits, 1835 misses (82.27%); look-up index 5124 hits, 57 misses (98.90%); evictions 4164, write-backs 3397, allocations 1, replays 2, served under a miss 64
+cyclone-22-raw-base.frames, N 64, s 3: the cache: walks of 0/1/2/3 index lines 532/12650/15801/0; fill reads 20462, mean 76.4, max 636 cycles; fill writes 5687, mean 7.0, max 13; look-ups 1444, mean 9.8, max 219; updates 1390, mean 129.4, max 380
+cyclone-22-raw-base.frames, N 64, s 3: LPDDR: 8450 read bursts, 16323 write bursts, 80656 beats read, 407448 written; error bursts 0, unwritten reads 0; the cache's error flag 0
+cyclone-22-raw-base.frames, N 64, s 3: the clients: the Updater's look-ups 1444, updates 1390; cycles with its look-up and a fill request both outstanding 940; the arbiter's bursts read/written by client 0 (the cache) 7906/4787, 1 (the Updater) 113/1461, 2 (the RW engine) 0/0, 3 0/0; pieces waiting for their turn, cycles: reads 0/139/0/0, writes 0/0/0/0; the joint's checks 0
+cyclone-22-raw-base.frames, N 64, s 3: the master's exit 0x1; the tracer tile: status 1, 8 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 10255872 cycles from the reset
+cyclone-22-raw-base.frames, N 64, s 3: passed in 10255872 cycles, 11.3 s of simulation, 911441 cycles a second
+
+run             done at     cycles    on data   on pages  on memory     read  written PAGE_COUNT
+program         3501508    3398240    2480138          0     495512        0      810          0
+base            4583053    1080851     790394          0     157078        0      257          0
+table           4599565        873          0          0        869        1        1          0
+cycle0          4614938      15266       2293          0       8027        1       12          0
+start-3         4845711     156418      92568          0      43056       32       61          0
+tracer          5368506     522554     283137          0     174106       18      272          0
+final           5405594      36969        220          0      34452       61       48          0
+the link: 10034 packets, 320807 words, 5293456 bytes; the page map: 1398 pages marked; the master's core: 230884 cycles awake of 10255872 (2.25%), 169261 instructions
+the master: the tracer tile's load at its cycle 5368789, the windows landed and the replay released at 10017708, its exit at 10255678
+the forward count: the link at 1 bytes a cycle; the master's wakes: 103, 80 to the hand-over; Ingress's DMA: 28 transfers, 28 to the hand-over, 388 words; 8 count stores; 316191 words forwarded, 4228 dropped; the master awake 224343 cycles to the hand-over at 5368789: 4.18%; the link: its last byte at 5381657, 88201 cycles waiting for room; awake 86038 cycles at the first frame, at its cycle 102344
+each frame, its type: cycles awake: 1: 757 2: 66884 4: 889 5: 21528 3: 14537 4: 878 5: 429 6: 1440 7: 1564 8: 3153 9: 26246 (the last to the hand-over)
+each frame, its type: wakes/transfers: 1: 2/2 2: 20/1 4: 2/2 5: 8/1 3: 7/5 4: 2/2 5: 1/1 6: 3/1 7: 15/9 8: 4/3 9: 9/0 (the last to the hand-over)
+PASS proof_run cyclone-22-raw-base.frames, N 64, s 3: 0 checks failed
+cyclone-22-lru-full.frames, N 64, s 0: the master: status 1 (detail 0x0), 9 frames, 6 runs, 1262 pages taken, 130 LOADs, 65 results, 0 others, boot 5; ERRORS: the tile's 0x0, Ingress's 0x0, the Updater's 0x0
+cyclone-22-lru-full.frames, N 64, s 0: the cache: memory index 4402 hits, 9 misses (99.80%); memory data 755 hits, 721 misses (51.15%); map index 552 hits, 0 misses (100.00%); map data 120 hits, 216 misses (35.71%); look-up index 4632 hits, 49 misses (98.95%); evictions 0, write-backs 0, allocations 0, replays 6, served under a miss 277
+cyclone-22-lru-full.frames, N 64, s 0: the cache: walks of 0/1/2/3 index lines 528/2392/1476/0; fill reads 1272, mean 100.8, max 346 cycles; fill writes 540, mean 7.0, max 11; look-ups 1328, mean 9.3, max 217; updates 1256, mean 130.7, max 358
+cyclone-22-lru-full.frames, N 64, s 0: LPDDR: 1475 read bursts, 11824 write bursts, 23320 beats read, 348224 written; error bursts 0, unwritten reads 0; the cache's error flag 0
+cyclone-22-lru-full.frames, N 64, s 0: the clients: the Updater's look-ups 1328, updates 1256; cycles with its look-up and a fill request both outstanding 11020; the arbiter's bursts read/written by client 0 (the cache) 995/1256, 1 (the Updater) 113/1342, 2 (the RW engine) 0/0, 3 0/0; pieces waiting for their turn, cycles: reads 1/131/0/0, writes 0/0/0/0; the joint's checks 0
+cyclone-22-lru-full.frames, N 64, s 0: the master's exit 0x1; the tracer tile: status 1, 8 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 7196672 cycles from the reset
+cyclone-22-lru-full.frames, N 64, s 0: passed in 7196672 cycles, 8.1 s of simulation, 892231 cycles a second
+
+run             done at     cycles    on data   on pages  on memory     read  written PAGE_COUNT
+program         3381157    3277889    2355349          0     499950        0      810          0
+table           3811107     415129     125981          0     155769        0      257          0
+cycle0          3838437      27061      14283          0       7968        1       12          0
+start-0         3914158        927          0          0        923        1        1          0
+tracer          3948051      33652         39          0      26523        4       40          0
+final           4186158     237988      11276          0     145953      107      222          0
+the link: 7519 packets, 240446 words, 3967440 bytes; the page map: 1263 pages marked; the master's core: 216640 cycles awake of 7196672 (3.01%), 157973 instructions
+the master: the tracer tile's load at its cycle 3948334, the windows landed and the replay released at 6959322, its exit at 7196224
+the forward count: the link at 1 bytes a cycle; the master's wakes: 79, 67 to the hand-over; Ingress's DMA: 24 transfers, 24 to the hand-over, 263 words; 6 count stores; 235838 words forwarded, 4345 dropped; the master awake 200093 cycles to the hand-over at 3948334: 5.07%; the link: its last byte at 4127923, 160483 cycles waiting for room; awake 86038 cycles at the first frame, at its cycle 102344
+each frame, its type: cycles awake: 1: 757 2: 66884 3: 14303 4: 674 5: 21546 6: 1440 7: 1431 8: 3147 9: 3873 (the last to the hand-over)
+each frame, its type: wakes/transfers: 1: 2/2 2: 20/1 3: 5/4 4: 2/2 5: 8/1 6: 3/1 7: 13/9 8: 4/3 9: 3/0 (the last to the hand-over)
+PASS proof_run cyclone-22-lru-full.frames, N 64, s 0: 0 checks failed
+cyclone-22-lru-full.frames, N 64, s 1: the master: status 1 (detail 0x0), 9 frames, 6 runs, 1282 pages taken, 130 LOADs, 65 results, 0 others, boot 5; ERRORS: the tile's 0x0, Ingress's 0x0, the Updater's 0x0
+cyclone-22-lru-full.frames, N 64, s 1: the cache: memory index 9960 hits, 14 misses (99.86%); memory data 1839 hits, 1570 misses (53.95%); map index 2458 hits, 0 misses (100.00%); map data 1100 hits, 679 misses (61.83%); look-up index 4679 hits, 53 misses (98.88%); evictions 18, write-backs 4, allocations 0, replays 1, served under a miss 18
+cyclone-22-lru-full.frames, N 64, s 1: the cache: walks of 0/1/2/3 index lines 532/3859/3409/0; fill reads 4219, mean 74.9, max 408 cycles; fill writes 969, mean 7.0, max 7; look-ups 1336, mean 9.4, max 219; updates 1276, mean 129.3, max 385
+cyclone-22-lru-full.frames, N 64, s 1: LPDDR: 2840 read bursts, 11940 write bursts, 35296 beats read, 351360 written; error bursts 0, unwritten reads 0; the cache's error flag 0
+cyclone-22-lru-full.frames, N 64, s 1: the clients: the Updater's look-ups 1336, updates 1276; cycles with its look-up and a fill request both outstanding 679; the arbiter's bursts read/written by client 0 (the cache) 2316/1280, 1 (the Updater) 115/1352, 2 (the RW engine) 0/0, 3 0/0; pieces waiting for their turn, cycles: reads 0/118/0/0, writes 0/0/0/0; the joint's checks 0
+cyclone-22-lru-full.frames, N 64, s 1: the master's exit 0x1; the tracer tile: status 1, 8 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 7411200 cycles from the reset
+cyclone-22-lru-full.frames, N 64, s 1: passed in 7411200 cycles, 8.4 s of simulation, 879006 cycles a second
+
+run             done at     cycles    on data   on pages  on memory     read  written PAGE_COUNT
+program         3381371    3278103    2359366          0     496147        0      810          0
+table           3811301     415285     125688          0     156218        0      257          0
+cycle0          3838527      27088      14625          0       7653        1       12          0
+start-1         3937845      24551       3040          0      14490        6       20          0
+tracer          3987564      49478        361          0      38622       12       56          0
+final           4188852     201169        413          0     130326       96      197          0
+the link: 7519 packets, 240446 words, 3967440 bytes; the page map: 1283 pages marked; the master's core: 219599 cycles awake of 7411200 (2.96%), 160152 instructions
+the master: the tracer tile's load at its cycle 3987847, the windows landed and the replay released at 7160481, its exit at 7411014
+the forward count: the link at 1 bytes a cycle; the master's wakes: 95, 71 to the hand-over; Ingress's DMA: 24 transfers, 24 to the hand-over, 268 words; 8 count stores; 235838 words forwarded, 4340 dropped; the master awake 203239 cycles to the hand-over at 3987847: 5.10%; the link: its last byte at 4130002, 162562 cycles waiting for room; awake 86038 cycles at the first frame, at its cycle 102344
+each frame, its type: cycles awake: 1: 757 2: 66884 3: 14302 4: 674 5: 21546 6: 1440 7: 1564 8: 3153 9: 6881 (the last to the hand-over)
+each frame, its type: wakes/transfers: 1: 2/2 2: 20/1 3: 5/4 4: 2/2 5: 8/1 6: 3/1 7: 15/9 8: 4/3 9: 5/0 (the last to the hand-over)
+PASS proof_run cyclone-22-lru-full.frames, N 64, s 1: 0 checks failed
+cyclone-22-lru-full.frames, N 64, s 3: the master: status 1 (detail 0x0), 9 frames, 6 runs, 1396 pages taken, 130 LOADs, 65 results, 0 others, boot 5; ERRORS: the tile's 0x0, Ingress's 0x0, the Updater's 0x0
+cyclone-22-lru-full.frames, N 64, s 3: the cache: memory index 43556 hits, 23 misses (99.95%); memory data 9825 hits, 5976 misses (62.18%); map index 12188 hits, 0 misses (100.00%); map data 8508 hits, 1840 misses (82.22%); look-up index 5124 hits, 57 misses (98.90%); evictions 4225, write-backs 3453, allocations 2, replays 2, served under a miss 55
+cyclone-22-lru-full.frames, N 64, s 3: the cache: walks of 0/1/2/3 index lines 532/12650/15801/0; fill reads 20462, mean 76.2, max 643 cycles; fill writes 5687, mean 7.0, max 13; look-ups 1444, mean 9.6, max 220; updates 1390, mean 128.1, max 380
+cyclone-22-lru-full.frames, N 64, s 3: LPDDR: 8430 read bursts, 16371 write bursts, 80304 beats read, 407640 written; error bursts 0, unwritten reads 0; the cache's error flag 0
+cyclone-22-lru-full.frames, N 64, s 3: the clients: the Updater's look-ups 1444, updates 1390; cycles with its look-up and a fill request both outstanding 866; the arbiter's bursts read/written by client 0 (the cache) 7894/4843, 1 (the Updater) 112/1460, 2 (the RW engine) 0/0, 3 0/0; pieces waiting for their turn, cycles: reads 0/120/0/0, writes 0/0/0/0; the joint's checks 0
+cyclone-22-lru-full.frames, N 64, s 3: the master's exit 0x1; the tracer tile: status 1, 8 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 9121792 cycles from the reset
+cyclone-22-lru-full.frames, N 64, s 3: passed in 9121792 cycles, 9.9 s of simulation, 923379 cycles a second
+
+run             done at     cycles    on data   on pages  on memory     read  written PAGE_COUNT
+program         3381251    3277983    2358836          0     496557        0      810          0
+table           3811248     415208     124709          0     157120        0      257          0
+cycle0          3838682      27262      14852          0       7600        1       12          0
+start-3         3998495      85155      21867          0      42494       32       61          0
+tracer          4237031     238295        132          0     172852       18      272          0
+final           4274465      37315        220          0      34798       61       48          0
+the link: 7519 packets, 240446 words, 3967440 bytes; the page map: 1397 pages marked; the master's core: 229123 cycles awake of 9121792 (2.51%), 167867 instructions
+the master: the tracer tile's load at its cycle 4237314, the windows landed and the replay released at 8883651, its exit at 9121621
+the forward count: the link at 1 bytes a cycle; the master's wakes: 98, 75 to the hand-over; Ingress's DMA: 24 transfers, 24 to the hand-over, 380 words; 8 count stores; 235838 words forwarded, 4228 dropped; the master awake 222582 cycles to the hand-over at 4237314: 5.25%; the link: its last byte at 4203447, 236007 cycles waiting for room; awake 86038 cycles at the first frame, at its cycle 102344
+each frame, its type: cycles awake: 1: 757 2: 66884 3: 14300 4: 674 5: 21546 6: 1440 7: 1564 8: 3153 9: 26226 (the last to the hand-over)
+each frame, its type: wakes/transfers: 1: 2/2 2: 20/1 3: 5/4 4: 2/2 5: 8/1 6: 3/1 7: 15/9 8: 4/3 9: 9/0 (the last to the hand-over)
+PASS proof_run cyclone-22-lru-full.frames, N 64, s 3: 0 checks failed
+cyclone-22-lru-base.frames, N 64, s 0: the master: status 1 (detail 0x0), 11 frames, 7 runs, 1263 pages taken, 130 LOADs, 65 results, 0 others, boot 5; ERRORS: the tile's 0x0, Ingress's 0x0, the Updater's 0x0
+cyclone-22-lru-base.frames, N 64, s 0: the cache: memory index 4398 hits, 9 misses (99.80%); memory data 755 hits, 721 misses (51.15%); map index 545 hits, 8 misses (98.55%); map data 120 hits, 216 misses (35.71%); look-up index 4632 hits, 49 misses (98.95%); evictions 0, write-backs 0, allocations 0, replays 5, served under a miss 281
+cyclone-22-lru-base.frames, N 64, s 0: the cache: walks of 0/1/2/3 index lines 528/2392/1476/0; fill reads 1272, mean 101.2, max 480 cycles; fill writes 540, mean 7.0, max 11; look-ups 1328, mean 9.8, max 248; updates 1256, mean 130.1, max 356
+cyclone-22-lru-base.frames, N 64, s 0: LPDDR: 1491 read bursts, 11832 write bursts, 23640 beats read, 348480 written; error bursts 0, unwritten reads 0; the cache's error flag 0
+cyclone-22-lru-base.frames, N 64, s 0: the clients: the Updater's look-ups 1328, updates 1256; cycles with its look-up and a fill request both outstanding 10809; the arbiter's bursts read/written by client 0 (the cache) 1003/1256, 1 (the Updater) 114/1343, 2 (the RW engine) 0/0, 3 0/0; pieces waiting for their turn, cycles: reads 0/135/0/0, writes 0/0/0/0; the joint's checks 0
+cyclone-22-lru-base.frames, N 64, s 0: the master's exit 0x1; the tracer tile: status 1, 8 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 7198208 cycles from the reset
+cyclone-22-lru-base.frames, N 64, s 0: passed in 7198208 cycles, 8.1 s of simulation, 892031 cycles a second
+
+run             done at     cycles    on data   on pages  on memory     read  written PAGE_COUNT
+program         3381264    3277996    2358137          0     497269        0      810          0
+base            3809652     427786     138705          0     155702        0      257          0
+table           3826195        898          0          0        894        1        1          0
+cycle0          3839468      13166        403          0       7953        1       12          0
+start-0         3915150        910          0          0        906        1        1          0
+tracer          3948955      33564         39          0      26435        4       40          0
+final           4189834     240760      11680          0     148321      107      222          0
+the link: 7521 packets, 240454 words, 3967600 bytes; the page map: 1264 pages marked; the master's core: 218472 cycles awake of 7198208 (3.04%), 159413 instructions
+the master: the tracer tile's load at its cycle 3949238, the windows landed and the replay released at 6960841, its exit at 7197743
+the forward count: the link at 1 bytes a cycle; the master's wakes: 85, 73 to the hand-over; Ingress's DMA: 28 transfers, 28 to the hand-over, 271 words; 6 count stores; 235838 words forwarded, 4345 dropped; the master awake 201925 cycles to the hand-over at 3949238: 5.11%; the link: its last byte at 4130712, 163112 cycles waiting for room; awake 86038 cycles at the first frame, at its cycle 102344
+each frame, its type: cycles awake: 1: 757 2: 66884 4: 888 5: 21528 3: 14540 4: 878 5: 429 6: 1440 7: 1499 8: 3147 9: 3897 (the last to the hand-over)
+each frame, its type: wakes/transfers: 1: 2/2 2: 20/1 4: 2/2 5: 8/1 3: 7/5 4: 2/2 5: 1/1 6: 3/1 7: 14/9 8: 4/3 9: 3/0 (the last to the hand-over)
+PASS proof_run cyclone-22-lru-base.frames, N 64, s 0: 0 checks failed
+cyclone-22-lru-base.frames, N 64, s 1: the master: status 1 (detail 0x0), 11 frames, 7 runs, 1283 pages taken, 130 LOADs, 65 results, 0 others, boot 5; ERRORS: the tile's 0x0, Ingress's 0x0, the Updater's 0x0
+cyclone-22-lru-base.frames, N 64, s 1: the cache: memory index 9956 hits, 14 misses (99.86%); memory data 1840 hits, 1569 misses (53.97%); map index 2450 hits, 8 misses (99.67%); map data 1100 hits, 679 misses (61.83%); look-up index 4680 hits, 53 misses (98.88%); evictions 19, write-backs 5, allocations 0, replays 0, served under a miss 11
+cyclone-22-lru-base.frames, N 64, s 1: the cache: walks of 0/1/2/3 index lines 532/3859/3409/0; fill reads 4219, mean 74.4, max 404 cycles; fill writes 969, mean 7.0, max 7; look-ups 1336, mean 9.4, max 217; updates 1276, mean 131.9, max 346
+cyclone-22-lru-base.frames, N 64, s 1: LPDDR: 2855 read bursts, 11949 write bursts, 35608 beats read, 351624 written; error bursts 0, unwritten reads 0; the cache's error flag 0
+cyclone-22-lru-base.frames, N 64, s 1: the clients: the Updater's look-ups 1336, updates 1276; cycles with its look-up and a fill request both outstanding 480; the arbiter's bursts read/written by client 0 (the cache) 2323/1281, 1 (the Updater) 116/1353, 2 (the RW engine) 0/0, 3 0/0; pieces waiting for their turn, cycles: reads 0/147/0/0, writes 0/0/0/0; the joint's checks 0
+cyclone-22-lru-base.frames, N 64, s 1: the master's exit 0x1; the tracer tile: status 1, 8 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 7410176 cycles from the reset
+cyclone-22-lru-base.frames, N 64, s 1: passed in 7410176 cycles, 8.4 s of simulation, 877527 cycles a second
+
+run             done at     cycles    on data   on pages  on memory     read  written PAGE_COUNT
+program         3381120    3277852    2359433          0     495829        0      810          0
+base            3809648     427917     136838          0     157700        0      257          0
+table           3826031        795          0          0        791        1        1          0
+cycle0          3839409      13271        278          0       8183        1       12          0
+start-1         3938282      24379       3542          0      13816        6       20          0
+tracer          3988478      49955         79          0      39381       12       56          0
+final           4190003     201406        413          0     130563       96      197          0
+the link: 7521 packets, 240454 words, 3967600 bytes; the page map: 1284 pages marked; the master's core: 221359 cycles awake of 7410176 (2.99%), 161547 instructions
+the master: the tracer tile's load at its cycle 3988761, the windows landed and the replay released at 7159277, its exit at 7409810
+the forward count: the link at 1 bytes a cycle; the master's wakes: 100, 76 to the hand-over; Ingress's DMA: 28 transfers, 28 to the hand-over, 276 words; 8 count stores; 235838 words forwarded, 4340 dropped; the master awake 204999 cycles to the hand-over at 3988761: 5.14%; the link: its last byte at 4131319, 163719 cycles waiting for room; awake 86038 cycles at the first frame, at its cycle 102344
+each frame, its type: cycles awake: 1: 757 2: 66884 4: 888 5: 21528 3: 14539 4: 878 5: 429 6: 1440 7: 1564 8: 3153 9: 6901 (the last to the hand-over)
+each frame, its type: wakes/transfers: 1: 2/2 2: 20/1 4: 2/2 5: 8/1 3: 7/5 4: 2/2 5: 1/1 6: 3/1 7: 15/9 8: 4/3 9: 5/0 (the last to the hand-over)
+PASS proof_run cyclone-22-lru-base.frames, N 64, s 1: 0 checks failed
+cyclone-22-lru-base.frames, N 64, s 3: the master: status 1 (detail 0x0), 11 frames, 7 runs, 1397 pages taken, 130 LOADs, 65 results, 0 others, boot 5; ERRORS: the tile's 0x0, Ingress's 0x0, the Updater's 0x0
+cyclone-22-lru-base.frames, N 64, s 3: the cache: memory index 43570 hits, 24 misses (99.94%); memory data 9818 hits, 5983 misses (62.14%); map index 12175 hits, 8 misses (99.93%); map data 8513 hits, 1835 misses (82.27%); look-up index 5124 hits, 57 misses (98.90%); evictions 4164, write-backs 3397, allocations 1, replays 2, served under a miss 60
+cyclone-22-lru-base.frames, N 64, s 3: the cache: walks of 0/1/2/3 index lines 532/12650/15801/0; fill reads 20462, mean 76.1, max 748 cycles; fill writes 5687, mean 7.0, max 13; look-ups 1444, mean 9.7, max 217; updates 1390, mean 129.7, max 365
+cyclone-22-lru-base.frames, N 64, s 3: LPDDR: 8450 read bursts, 16323 write bursts, 80656 beats read, 407448 written; error bursts 0, unwritten reads 0; the cache's error flag 0
+cyclone-22-lru-base.frames, N 64, s 3: the clients: the Updater's look-ups 1444, updates 1390; cycles with its look-up and a fill request both outstanding 764; the arbiter's bursts read/written by client 0 (the cache) 7906/4787, 1 (the Updater) 113/1461, 2 (the RW engine) 0/0, 3 0/0; pieces waiting for their turn, cycles: reads 0/130/0/0, writes 0/0/0/0; the joint's checks 0
+cyclone-22-lru-base.frames, N 64, s 3: the master's exit 0x1; the tracer tile: status 1, 8 windows, ERRORS 0x0, advice left 0, end differs at 0, 0 strays; 9120768 cycles from the reset
+cyclone-22-lru-base.frames, N 64, s 3: passed in 9120768 cycles, 9.9 s of simulation, 921729 cycles a second
+
+run             done at     cycles    on data   on pages  on memory     read  written PAGE_COUNT
+program         3381243    3277975    2356282          0     499103        0      810          0
+base            3809721     427876     136483          0     158014        0      257          0
+table           3826174       1006          0          0       1002        1        1          0
+cycle0          3839349      13068        349          0       7909        1       12          0
+start-3         3999712      85671      22245          0      42632       32       61          0
+tracer          4239098     239145        132          0     173702       18      272          0
+final           4276837      37620        220          0      35103       61       48          0
+the link: 7521 packets, 240454 words, 3967600 bytes; the page map: 1398 pages marked; the master's core: 230835 cycles awake of 9120768 (2.53%), 169232 instructions
+the master: the tracer tile's load at its cycle 4239381, the windows landed and the replay released at 8882619, its exit at 9120589
+the forward count: the link at 1 bytes a cycle; the master's wakes: 102, 79 to the hand-over; Ingress's DMA: 28 transfers, 28 to the hand-over, 388 words; 8 count stores; 235838 words forwarded, 4228 dropped; the master awake 224294 cycles to the hand-over at 4239381: 5.29%; the link: its last byte at 4206085, 238485 cycles waiting for room; awake 86038 cycles at the first frame, at its cycle 102344
+each frame, its type: cycles awake: 1: 757 2: 66884 4: 888 5: 21528 3: 14493 4: 878 5: 429 6: 1440 7: 1564 8: 3153 9: 26242 (the last to the hand-over)
+each frame, its type: wakes/transfers: 1: 2/2 2: 20/1 4: 2/2 5: 8/1 3: 6/5 4: 2/2 5: 1/1 6: 3/1 7: 15/9 8: 4/3 9: 9/0 (the last to the hand-over)
+PASS proof_run cyclone-22-lru-base.frames, N 64, s 3: 0 checks failed
