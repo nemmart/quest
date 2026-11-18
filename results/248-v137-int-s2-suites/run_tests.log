@@ -1,0 +1,97 @@
+== building the suites (MODE=suite CC_NAME=clang)
+== the files copied from v1.3 (tools/check_copies.sh)
+check_copies: 15 files equal to v1.3's
+== the framework's port kinds (the debug build: its throws checks are debug assertions)
+BusTest: 154 passed, 0 failed
+== the committed firmware images against their hash lists, and the runs' keys made here against the committed keys (fw/check_images.sh)
+fw/check_images.sh (images core runs): 73 committed files equal to their hash lists and to what is made here
+== the firmware rebuilt from its sources, against the committed images
+SKIPPED (no riscv-none-elf-gcc: needs xPack riscv-none-elf-gcc 15.2.0-1 (https://github.com/xpack-dev-tools/riscv-none-elf-gcc-xpack/releases/tag/v15.2.0-1; unpack it and put its bin folder on PATH, or name it: RISCV_PREFIX=/path/to/bin/riscv-none-elf-))
+== the RTL's core programs on the core: each pass, cycle, retirement and trap the RTL's (tests/core-programs/)
+build/clang-suite/test_core_programs: 7 passed, 0 failed, 0 skipped (debug-only)
+== the RTL's core on the tile's environment: region 0xFF's accesses in register_bus's cycles
+build/clang-suite/test_core_tile: 10 passed, 0 failed, 0 skipped (debug-only)
+== the RTL's core against its contract: the core specification's §1 on a bus, and machine-spec 5 and 6.4 through register_bus.h's decode (tests/test_rv32_rtl.cpp)
+build/clang-suite/test_rv32_rtl: 57 passed, 0 failed, 0 skipped (debug-only)
+== REGISTERS.md and mesh.h against their generator, the simulator's decode, the specification and the RTL firmware's definitions (tests/test_regs.cpp)
+build/clang-suite/test_regs: 12 passed, 0 failed, 0 skipped (debug-only)
+== the tile control unit and the register bus's decode: events, errors, the barrier (machine-spec 5, 7)
+build/clang-suite/test_tile_control: 8 passed, 0 failed, 0 skipped (debug-only)
+== the router against the RTL's own and from machine-spec 16 (tests/test_router.cpp, test_special_router.cpp)
+build/clang-suite/test_special_router: 19 passed, 0 failed, 0 skipped (debug-only)
+== the request unit and the request tree (machine-spec 11; tests/test_request_tree.cpp, test_reqbus.cpp)
+build/clang-suite/test_reqbus: 7 passed, 0 failed, 0 skipped (debug-only)
+== the scratchpad and the inject unit (machine-spec 14, 15; tests/test_mem.cpp)
+build/clang-suite/test_mem: 16 passed, 0 failed, 0 skipped (debug-only)
+== the same, the units of a level stepped in a shuffled order (seed 3)
+build/clang-suite/test_mem: 16 passed, 0 failed, 0 skipped (debug-only)
+== the same (seed 8)
+build/clang-suite/test_mem: 16 passed, 0 failed, 0 skipped (debug-only)
+== the DMA unit (8.2-8.5: test_ag), the write engine with PTR and HIST (12.4, 12.5: test_receive), the gather unit (13: test_gather)
+build/clang-suite/test_gather: 7 passed, 0 failed, 0 skipped (debug-only)
+== test_ag and test_receive, the units of a level stepped in a shuffled order (seed 4)
+build/clang-suite/test_receive: 9 passed, 0 failed, 0 skipped (debug-only)
+== the tile and the machine harness: the pull boot on all 64 tiles, the chip's build, packets, reads, an all-to-all, the gather unit on the tile (tests/test_mach.cpp)
+build/clang-suite/test_mach: 11 passed, 0 failed, 0 skipped (debug-only)
+== the checker's report: packets that break a rule, each named once at its sender and at its receiver; ERRORS bits by machine-spec 7.4's names (tests/test_checker.cpp)
+build/clang-suite/test_checker: 2 passed, 0 failed, 0 skipped (debug-only)
+== the peripheral slot: the control block and the DMA (machine-spec 17.1-17.4, the RTL's peripheral_control and peripheral_dma; tests/test_periph_slot.cpp)
+build/clang-suite/test_periph_slot: 14 passed, 0 failed, 0 skipped (debug-only)
+== Ingress/Egress: the nets, RELEASE, the watchdog, the error lines, the toast pin, the UART, the host interface (17.6; tests/test_ingress_egress.cpp)
+build/clang-suite/test_ingress_egress: 27 passed, 0 failed, 0 skipped (debug-only)
+== the RTL's tile programs on one compute tile, with the boot ROM's cycles (tests/test_rtl_tile.cpp)
+build/clang-suite/test_rtl_tile: 3 passed, 0 failed, 0 skipped (debug-only)
+== the sort on the chip, 64 x 16 records: kv32, k128, and kv32 split over threads, against the oracle, every tile's error provoked (tests/test_sort.cpp)
+build/clang-suite/test_sort: 3 passed, 0 failed, 0 skipped (debug-only)
+== the master's host interface and UART on the chip: the RTL's chip_stream_test, and the UART through the core (tests/test_rtl_stream.cpp)
+build/clang-suite/test_rtl_stream: 2 passed, 0 failed, 0 skipped (debug-only)
+== the memory tile: the RW engine against the RTL's unit, cycle for cycle, and the memory run on the chip (tests/test_rw_engine.cpp, tests/test_memory.cpp)
+build/clang-suite/test_memory: 3 passed, 0 failed, 0 skipped (debug-only)
+== the segment on the chip: 4 windows, 64 windows and a window of 65,536 rows, traced, delivered and replayed, every row and delivery against the segment's (tests/test_segment.cpp)
+build/clang-suite/test_segment: 4 passed, 0 failed, 0 skipped (debug-only)
+== the replayer: the opcode table, the ALU against vec.tsv at 821e1bd, the unit tests
+ReplayerTest: 2356 passed, 0 failed
+== the Tracer's memory system: FileStore's trees and statuses, the shared cache's timing
+MemorySystemTest: 56 passed, 0 failed
+== the Tracer's RVC decompressor against gold's, every 16-bit encoding
+RvcTest: 49157 passed, 0 failed
+== the Tracer: execution, memory, the map, errors, cuts, core-fed expansions, the output path
+TracerTest: 233 passed, 0 failed
+== the Tracer alone on a synthetic RV64IMAC guest, against an interpreter of it: the output, the exact counters, the cycles adding up and by hand
+PASS the synthetic guest, compression 0, fill model
+== the Tracer alone on the real segments (EVM Zone 0 and 1, Cyclone 0): every run against gold's files and the RTL's figures, cycle for cycle
+PASS cyclone-22 segment 0, compression 0, fill model
+== WORKER5: the Tracer alone on the real segments on the cache's controller (EVM Zone 0 and 1, Cyclone 0; compression 0 and 7): every run against gold's files
+PASS cyclone-22 segment 0, compression 7, fill cache
+== WORKER5: the LPDDR model, the AXI arbiter and the cache's controller alone; the cache against the stand-in with no cache on random traffic (tests/test_lpddr_model.cpp, test_axi_arbiter.cpp, test_cache.cpp)
+build/clang-suite/test_cache: 13 passed, 0 failed, 0 skipped (debug-only)
+== WORKER5: the Tracer alone on the cache's controller, eight synthetic guests against their interpreter (tracer_block --synthetic, with the cache)
+PASS the synthetic guest, compression 0, fill cache
+== v1.37: the file store's pages by address: placed where told, whole pages, beside the pages it hands out (tests/test_file_store.cpp)
+build/clang-suite/test_file_store: 7 passed, 0 failed, 0 skipped (debug-only)
+== v1.37: the Updater black box alone: registers, queues and credits, update words raw and LRU, copy-on-write, the Tracer's copy, errors; gold's fixtures, each image against gold's (tests/test_updater.cpp)
+build/clang-suite/test_updater: 25 passed, 0 failed, 0 skipped (debug-only)
+== v1.37: Ingress's host link, the black box: the link's checks, the rule for a service flag, reading out by the DMA, both streams, the errors, the timing (tests/test_ingress_link.cpp)
+build/clang-suite/test_ingress_link: 43 passed, 0 failed, 0 skipped (debug-only)
+== v1.37: Ingress's host link against gold's packetizer: every vector, packet file and damaged file of /tmp/v137-248-v137-int-s2-suites/kit/updater_wip/pipeline/gold/test/packets, by the reader and through the black box (tests/test_packet_vectors.cpp)
+build/clang-suite/test_packet_vectors: 6 passed, 0 failed, 0 skipped (debug-only)
+== v1.37: the fixtures made again by gold (../updater_wip/pipeline/gold), equal to the committed ones (tests/updater/make_fixtures.sh --check)
+make_fixtures: 25 fixture files equal to gold's
+== v1.37: the master tile's program on the whole chip, from a packet file: gold's frames of the guests in the link's packets, the Updater's images against gold's, the hand-over, the segment traced and replayed; the error path; the checks' teeth (tests/test_master.cpp)
+build/clang-suite/test_master: 34 passed, 0 failed, 0 skipped (debug-only)
+== v1.37: the Updater's controller with the test LPDDR and the stand-in cache, and joined to the memory system (the real cache, arbiter and LPDDR model): gold's fixtures alone and against the black box, random streams, varied timing, a second client at once, the errors (tests/test_updater_ctl.cpp)
+build/clang-suite/test_updater_ctl: 34 passed, 0 failed, 0 skipped (debug-only)
+== v1.37: the memory system, the memory tile's peripheral 1, in the chip: its window, its error on the error line, the reset, the RW engine on client 2 (tests/test_memory_system.cpp)
+build/clang-suite/test_memory_system: 6 passed, 0 failed, 0 skipped (debug-only)
+== the sort on the chip at 64 x 65,536 records: kv32 and k128, against the oracle (about a minute)
+build/clang-suite/test_sort: 2 passed, 0 failed, 0 skipped (debug-only)
+== the segment on the real workloads' windows: EVM Zone's 0-63 and 64-127 and Cyclone's 0-63, every row and delivery against the recorded files (about a minute)
+build/clang-suite/test_segment: 3 passed, 0 failed, 0 skipped (debug-only)
+== v1.37: segment-real's three segments from packet files: the master builds the images with the Updater and hands the tracer tile its segment; every row and delivery against the recorded files, every image against gold's
+PASS proof_run cyclone-22.frames, N 128, s 0: 0 checks failed
+== v1.37: the small inputs from packet files, segments of 8 windows: EVM Zone and Cyclone, raw and LRU-coded, with and without a base table, s = 0, 1 and the middle; every image against gold's, the Tracer's last record against record s + 1 (24 runs)
+PASS proof_run cyclone-22-lru-base.frames, N 64, s 3: 0 checks failed
+== v1.37: both workloads at 2^29 from packet files, N 128: five segments of each (the first two, the middle, the last two), every image against gold's, the Tracer's last record against record s + 1 (10 runs)
+PASS proof_run cyclone-29.frames, N 128, s 88: 0 checks failed
+  fw-build: SKIPPED (no riscv-none-elf-gcc: needs xPack riscv-none-elf-gcc 15.2.0-1 (https://github.com/xpack-dev-tools/riscv-none-elf-gcc-xpack/releases/tag/v15.2.0-1; unpack it and put its bin folder on PATH, or name it: RISCV_PREFIX=/path/to/bin/riscv-none-elf-))
+== all passed, 1 steps SKIPPED for what is not on this machine (data, a toolchain); logs in results/
