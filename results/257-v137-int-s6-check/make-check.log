@@ -1,0 +1,298 @@
+==== gcc tsan
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c tests/test_link_depth.cpp -o build/gcc-tsan/tests/test_link_depth.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c tests/harness.cpp -o build/gcc-tsan/tests/harness.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/base/alloc_guard.cpp -o build/gcc-tsan/src/base/alloc_guard.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/base/arena.cpp -o build/gcc-tsan/src/base/arena.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/base/fatal.cpp -o build/gcc-tsan/src/base/fatal.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/barrier.cpp -o build/gcc-tsan/src/barrier.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/check.cpp -o build/gcc-tsan/src/check.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/config.cpp -o build/gcc-tsan/src/config.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/digest.cpp -o build/gcc-tsan/src/digest.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/engine.cpp -o build/gcc-tsan/src/engine.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/observe.cpp -o build/gcc-tsan/src/observe.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/parallel.cpp -o build/gcc-tsan/src/parallel.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/partition.cpp -o build/gcc-tsan/src/partition.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/regions.cpp -o build/gcc-tsan/src/regions.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/threads.cpp -o build/gcc-tsan/src/threads.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/topology.cpp -o build/gcc-tsan/src/topology.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c tests/test_matrix.cpp -o build/gcc-tsan/tests/test_matrix.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c tests/test_observe.cpp -o build/gcc-tsan/tests/test_observe.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c tests/test_parallel.cpp -o build/gcc-tsan/tests/test_parallel.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c tests/test_partition.cpp -o build/gcc-tsan/tests/test_partition.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c tests/test_reqbus.cpp -o build/gcc-tsan/tests/test_reqbus.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c tests/statefp.cpp -o build/gcc-tsan/tests/statefp.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c tests/test_threads.cpp -o build/gcc-tsan/tests/test_threads.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c tests/test_topology.cpp -o build/gcc-tsan/tests/test_topology.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread build/gcc-tsan/tests/test_link_depth.o build/gcc-tsan/tests/harness.o build/gcc-tsan/src/base/alloc_guard.o build/gcc-tsan/src/base/arena.o build/gcc-tsan/src/base/fatal.o build/gcc-tsan/src/barrier.o build/gcc-tsan/src/check.o build/gcc-tsan/src/config.o build/gcc-tsan/src/digest.o build/gcc-tsan/src/engine.o build/gcc-tsan/src/observe.o build/gcc-tsan/src/parallel.o build/gcc-tsan/src/partition.o build/gcc-tsan/src/regions.o build/gcc-tsan/src/threads.o build/gcc-tsan/src/topology.o -o build/gcc-tsan/test_link_depth -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign -Wl,--allow-multiple-definition
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread build/gcc-tsan/tests/test_matrix.o build/gcc-tsan/tests/harness.o build/gcc-tsan/src/base/alloc_guard.o build/gcc-tsan/src/base/arena.o build/gcc-tsan/src/base/fatal.o build/gcc-tsan/src/barrier.o build/gcc-tsan/src/check.o build/gcc-tsan/src/config.o build/gcc-tsan/src/digest.o build/gcc-tsan/src/engine.o build/gcc-tsan/src/observe.o build/gcc-tsan/src/parallel.o build/gcc-tsan/src/partition.o build/gcc-tsan/src/regions.o build/gcc-tsan/src/threads.o build/gcc-tsan/src/topology.o -o build/gcc-tsan/test_matrix -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign -Wl,--allow-multiple-definition
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread build/gcc-tsan/tests/test_observe.o build/gcc-tsan/tests/harness.o build/gcc-tsan/src/base/alloc_guard.o build/gcc-tsan/src/base/arena.o build/gcc-tsan/src/base/fatal.o build/gcc-tsan/src/barrier.o build/gcc-tsan/src/check.o build/gcc-tsan/src/config.o build/gcc-tsan/src/digest.o build/gcc-tsan/src/engine.o build/gcc-tsan/src/observe.o build/gcc-tsan/src/parallel.o build/gcc-tsan/src/partition.o build/gcc-tsan/src/regions.o build/gcc-tsan/src/threads.o build/gcc-tsan/src/topology.o -o build/gcc-tsan/test_observe -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign -Wl,--allow-multiple-definition
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread build/gcc-tsan/tests/test_parallel.o build/gcc-tsan/tests/harness.o build/gcc-tsan/src/base/alloc_guard.o build/gcc-tsan/src/base/arena.o build/gcc-tsan/src/base/fatal.o build/gcc-tsan/src/barrier.o build/gcc-tsan/src/check.o build/gcc-tsan/src/config.o build/gcc-tsan/src/digest.o build/gcc-tsan/src/engine.o build/gcc-tsan/src/observe.o build/gcc-tsan/src/parallel.o build/gcc-tsan/src/partition.o build/gcc-tsan/src/regions.o build/gcc-tsan/src/threads.o build/gcc-tsan/src/topology.o -o build/gcc-tsan/test_parallel -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign -Wl,--allow-multiple-definition
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread build/gcc-tsan/tests/test_partition.o build/gcc-tsan/tests/harness.o build/gcc-tsan/src/base/alloc_guard.o build/gcc-tsan/src/base/arena.o build/gcc-tsan/src/base/fatal.o build/gcc-tsan/src/barrier.o build/gcc-tsan/src/check.o build/gcc-tsan/src/config.o build/gcc-tsan/src/digest.o build/gcc-tsan/src/engine.o build/gcc-tsan/src/observe.o build/gcc-tsan/src/parallel.o build/gcc-tsan/src/partition.o build/gcc-tsan/src/regions.o build/gcc-tsan/src/threads.o build/gcc-tsan/src/topology.o -o build/gcc-tsan/test_partition -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign -Wl,--allow-multiple-definition
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread build/gcc-tsan/tests/test_reqbus.o build/gcc-tsan/tests/harness.o build/gcc-tsan/src/base/alloc_guard.o build/gcc-tsan/src/base/arena.o build/gcc-tsan/src/base/fatal.o build/gcc-tsan/src/barrier.o build/gcc-tsan/src/check.o build/gcc-tsan/src/config.o build/gcc-tsan/src/digest.o build/gcc-tsan/src/engine.o build/gcc-tsan/src/observe.o build/gcc-tsan/src/parallel.o build/gcc-tsan/src/partition.o build/gcc-tsan/src/regions.o build/gcc-tsan/src/threads.o build/gcc-tsan/src/topology.o build/gcc-tsan/tests/statefp.o -o build/gcc-tsan/test_reqbus -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign -Wl,--allow-multiple-definition
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread build/gcc-tsan/tests/test_threads.o build/gcc-tsan/tests/harness.o build/gcc-tsan/src/base/alloc_guard.o build/gcc-tsan/src/base/arena.o build/gcc-tsan/src/base/fatal.o build/gcc-tsan/src/barrier.o build/gcc-tsan/src/check.o build/gcc-tsan/src/config.o build/gcc-tsan/src/digest.o build/gcc-tsan/src/engine.o build/gcc-tsan/src/observe.o build/gcc-tsan/src/parallel.o build/gcc-tsan/src/partition.o build/gcc-tsan/src/regions.o build/gcc-tsan/src/threads.o build/gcc-tsan/src/topology.o -o build/gcc-tsan/test_threads -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign -Wl,--allow-multiple-definition
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread build/gcc-tsan/tests/test_topology.o build/gcc-tsan/tests/harness.o build/gcc-tsan/src/base/alloc_guard.o build/gcc-tsan/src/base/arena.o build/gcc-tsan/src/base/fatal.o build/gcc-tsan/src/barrier.o build/gcc-tsan/src/check.o build/gcc-tsan/src/config.o build/gcc-tsan/src/digest.o build/gcc-tsan/src/engine.o build/gcc-tsan/src/observe.o build/gcc-tsan/src/parallel.o build/gcc-tsan/src/partition.o build/gcc-tsan/src/regions.o build/gcc-tsan/src/threads.o build/gcc-tsan/src/topology.o -o build/gcc-tsan/test_topology -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign -Wl,--allow-multiple-definition
+ok   a_link_with_depth_holds_its_words_in_order
+ok   the_plain_declaration_is_depth_2
+ok   a_link_with_depth_beyond_its_capacity_is_fatal
+ok   a_link_with_depth_beyond_its_capacity_is_fatal_across_domains
+ok   a_link_with_depth_holds_across_domains_as_in_one
+ok   the_credit_protocol_on_a_link_with_depth_across_partitions
+./build/gcc-tsan/test_link_depth: 6 passed, 0 failed, 0 skipped (debug-only)
+ok   matrix_link
+ok   matrix_fifo
+ok   matrix_credit_fifo
+ok   matrix_hold
+ok   matrix_reg
+ok   matrix_count
+ok   matrix_wide_payloads
+ok   the_report_names_each_kind
+./build/gcc-tsan/test_matrix: 8 passed, 0 failed, 0 skipped (debug-only)
+ok   observe_a_link_one_domain
+ok   observe_a_link_split
+ok   observe_a_fifo_one_domain
+ok   observe_a_fifo_split
+ok   observe_a_hold_one_domain
+ok   observe_a_hold_split
+ok   observe_a_reg_one_domain
+ok   observe_a_reg_split
+ok   observe_the_same_view_in_one_domain_and_split
+ok   observe_a_link_without_arrivals_is_fatal_while_a_word_is_visible
+ok   observe_during_a_run_is_fatal
+ok   stop_ends_a_run_after_its_cycle_in_one_domain
+ok   stop_ends_a_split_run_at_the_barrier_on_every_thread
+ok   wake_steps_the_unit_at_the_next_cycle_in_one_domain
+ok   wake_steps_the_unit_at_the_next_cycle_split
+ok   wake_gives_the_same_digest_in_one_domain_and_split
+ok   wake_of_an_unknown_unit_is_fatal
+ok   time_threads_reports_phase_shares_and_changes_nothing
+ok   observe_links_of_different_latencies_split_as_in_one_domain
+ok   overflow_steps_the_owner_when_judged_in_one_domain
+ok   overflow_steps_the_owner_when_judged_split
+ok   overflow_without_the_declaration_stays_hidden
+ok   regions_cover_the_machine_without_overlap
+./build/gcc-tsan/test_observe: 23 passed, 0 failed, 0 skipped (debug-only)
+ok   a_synthetic_chip_is_deterministic_and_busy
+ok   n_chips_on_n_threads_match_one_at_a_time
+ok   n_chips_built_and_run_on_their_own_threads
+ok   the_same_chip_twice_on_two_threads
+ok   the_same_sim_twice_is_refused
+./build/gcc-tsan/test_parallel: 5 passed, 0 failed, 0 skipped (debug-only)
+ok   by_load_gives_the_one_thread_digest_on_the_synthetic_chip
+ok   by_load_keeps_wires_and_declared_domains_together_and_the_digest
+ok   by_load_balances_declared_weights
+ok   by_load_on_one_thread_is_one_engine_and_never_more_groups_than_granules
+ok   by_load_runs_allocation_free
+ok   calibration_measures_uneven_loads_and_round_trips_as_text
+ok   a_malformed_profile_is_fatal_naming_its_line
+ok   the_flags_barrier_gives_the_one_thread_digest
+./build/gcc-tsan/test_partition: 8 passed, 0 failed, 0 skipped (debug-only)
+  mix-s1.txt.gz mode 0: 6000 cycles, 5999 states equal to ref, 3065 pushes (23184 refused), 727 pops, 5992 beats at the root, 22 dropped
+  mix-s1.txt.gz mode 3: not compared (backpressure), lag_cycles 2098 (cycles that would differ from ref)
+ok   reqbus_mix_seed1
+  calm-s2.txt.gz mode 0: 6000 cycles, 5299 states equal to ref, 335 pushes (0 refused), 334 pops, 2672 beats at the root, 0 dropped
+  calm-s2.txt.gz mode 3: equal to ref, lag_cycles 0 (cycles that would differ from ref)
+ok   reqbus_calm_seed2_mode3_equals_ref
+  full-s3.txt.gz mode 0: 4000 cycles, 2583 states equal to ref, 1216 pushes (24116 refused), 110 pops, 2472 beats at the root, 0 dropped
+  full-s3.txt.gz mode 3: not compared (backpressure), lag_cycles 993 (cycles that would differ from ref)
+ok   reqbus_full_seed3
+  fanin-s4.txt.gz mode 0: 4000 cycles, 3999 states equal to ref, 4771 pushes (33324 refused), 498 pops, 3995 beats at the root, 0 dropped
+  fanin-s4.txt.gz mode 3: not compared (backpressure), lag_cycles 1562 (cycles that would differ from ref)
+ok   reqbus_fanin_seed4
+  drop-s5.txt.gz mode 0: 4000 cycles, 3999 states equal to ref, 3459 pushes (11822 refused), 330 pops, 3992 beats at the root, 169 dropped
+  drop-s5.txt.gz mode 3: not compared (backpressure), lag_cycles 1961 (cycles that would differ from ref)
+ok   reqbus_drop_seed5
+ok   reqbus_mode0_split_is_refused_at_build
+  calm-s2.txt.gz: one domain lag 0; split: 5 domains in 5 engines on 5 threads; crossings: 128 link (128 link delivered direct); barrier every 3 cycles, set by link 'reqbus.row0.cr0' -> 't0.reqleaf.credit' (latency 3); the flags barrier, lag 0
+  full-s3.txt.gz: one domain lag 993; split: 5 domains in 5 engines on 5 threads; crossings: 128 link (128 link delivered direct); barrier every 3 cycles, set by link 'reqbus.row0.cr0' -> 't0.reqleaf.credit' (latency 3); the flags barrier, lag 993
+ok   reqbus_mode3_split_equals_one_domain
+./build/gcc-tsan/test_reqbus: 7 passed, 0 failed, 0 skipped (debug-only)
+ok   a_link_across_domains_arrives_at_t_plus_l
+ok   the_partition_reports_its_interval_and_why
+ok   a_partition_with_no_crossing_needs_no_barrier
+ok   the_synthetic_chip_split_any_way_matches_one_domain
+ok   one_domain_per_cluster_on_three_threads
+ok   the_synthetic_chip_split_one_thread_per_domain_matches_one_domain
+ok   debug_options_per_domain_change_nothing
+ok   nothing_allocated_in_the_loop_with_threads
+ok   every_barrier_mode_gives_the_same
+ok   a_long_sleep_across_domains_costs_nothing
+ok   wide_payloads_cross_by_copy
+ok   the_missed_wake_detector_sees_words_on_their_way_across_domains
+ok   a_real_missed_wake_across_domains_is_still_caught
+ok   a_missed_wake_just_before_the_machine_idles_is_reported_across_domains
+ok   and_in_one_domain
+ok   a_wire_across_domains_is_fatal
+ok   a_regfile_across_domains_is_fatal
+ok   a_count_read_now_across_domains_is_fatal_in_debug
+ok   a_thread_stuck_past_the_watchdog_is_named
+./build/gcc-tsan/test_threads: 19 passed, 0 failed, 0 skipped (debug-only)
+ok   cpu_lists_parse_and_print
+ok   a_hybrid_chip_places_one_per_p_core_then_siblings_then_e_cores
+ok   a_two_socket_server_places_one_per_core_first
+ok   a_plain_chip_is_all_p_cores
+ok   only_the_cpus_this_process_may_use
+ok   the_environment_overrides_detection
+ok   this_machine_has_a_record
+./build/gcc-tsan/test_topology: 7 passed, 0 failed, 0 skipped (debug-only)
+==== clang tsan
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c tests/test_link_depth.cpp -o build/clang-tsan/tests/test_link_depth.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c tests/harness.cpp -o build/clang-tsan/tests/harness.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/base/alloc_guard.cpp -o build/clang-tsan/src/base/alloc_guard.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/base/arena.cpp -o build/clang-tsan/src/base/arena.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/base/fatal.cpp -o build/clang-tsan/src/base/fatal.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/barrier.cpp -o build/clang-tsan/src/barrier.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/check.cpp -o build/clang-tsan/src/check.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/config.cpp -o build/clang-tsan/src/config.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/digest.cpp -o build/clang-tsan/src/digest.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/engine.cpp -o build/clang-tsan/src/engine.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/observe.cpp -o build/clang-tsan/src/observe.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/parallel.cpp -o build/clang-tsan/src/parallel.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/partition.cpp -o build/clang-tsan/src/partition.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/regions.cpp -o build/clang-tsan/src/regions.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/threads.cpp -o build/clang-tsan/src/threads.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/topology.cpp -o build/clang-tsan/src/topology.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c tests/test_matrix.cpp -o build/clang-tsan/tests/test_matrix.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c tests/test_observe.cpp -o build/clang-tsan/tests/test_observe.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c tests/test_parallel.cpp -o build/clang-tsan/tests/test_parallel.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c tests/test_partition.cpp -o build/clang-tsan/tests/test_partition.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c tests/test_reqbus.cpp -o build/clang-tsan/tests/test_reqbus.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c tests/statefp.cpp -o build/clang-tsan/tests/statefp.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c tests/test_threads.cpp -o build/clang-tsan/tests/test_threads.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c tests/test_topology.cpp -o build/clang-tsan/tests/test_topology.o
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread build/clang-tsan/tests/test_link_depth.o build/clang-tsan/tests/harness.o build/clang-tsan/src/base/alloc_guard.o build/clang-tsan/src/base/arena.o build/clang-tsan/src/base/fatal.o build/clang-tsan/src/barrier.o build/clang-tsan/src/check.o build/clang-tsan/src/config.o build/clang-tsan/src/digest.o build/clang-tsan/src/engine.o build/clang-tsan/src/observe.o build/clang-tsan/src/parallel.o build/clang-tsan/src/partition.o build/clang-tsan/src/regions.o build/clang-tsan/src/threads.o build/clang-tsan/src/topology.o -o build/clang-tsan/test_link_depth -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign -Wl,--allow-multiple-definition
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread build/clang-tsan/tests/test_matrix.o build/clang-tsan/tests/harness.o build/clang-tsan/src/base/alloc_guard.o build/clang-tsan/src/base/arena.o build/clang-tsan/src/base/fatal.o build/clang-tsan/src/barrier.o build/clang-tsan/src/check.o build/clang-tsan/src/config.o build/clang-tsan/src/digest.o build/clang-tsan/src/engine.o build/clang-tsan/src/observe.o build/clang-tsan/src/parallel.o build/clang-tsan/src/partition.o build/clang-tsan/src/regions.o build/clang-tsan/src/threads.o build/clang-tsan/src/topology.o -o build/clang-tsan/test_matrix -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign -Wl,--allow-multiple-definition
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread build/clang-tsan/tests/test_observe.o build/clang-tsan/tests/harness.o build/clang-tsan/src/base/alloc_guard.o build/clang-tsan/src/base/arena.o build/clang-tsan/src/base/fatal.o build/clang-tsan/src/barrier.o build/clang-tsan/src/check.o build/clang-tsan/src/config.o build/clang-tsan/src/digest.o build/clang-tsan/src/engine.o build/clang-tsan/src/observe.o build/clang-tsan/src/parallel.o build/clang-tsan/src/partition.o build/clang-tsan/src/regions.o build/clang-tsan/src/threads.o build/clang-tsan/src/topology.o -o build/clang-tsan/test_observe -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign -Wl,--allow-multiple-definition
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread build/clang-tsan/tests/test_parallel.o build/clang-tsan/tests/harness.o build/clang-tsan/src/base/alloc_guard.o build/clang-tsan/src/base/arena.o build/clang-tsan/src/base/fatal.o build/clang-tsan/src/barrier.o build/clang-tsan/src/check.o build/clang-tsan/src/config.o build/clang-tsan/src/digest.o build/clang-tsan/src/engine.o build/clang-tsan/src/observe.o build/clang-tsan/src/parallel.o build/clang-tsan/src/partition.o build/clang-tsan/src/regions.o build/clang-tsan/src/threads.o build/clang-tsan/src/topology.o -o build/clang-tsan/test_parallel -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign -Wl,--allow-multiple-definition
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread build/clang-tsan/tests/test_partition.o build/clang-tsan/tests/harness.o build/clang-tsan/src/base/alloc_guard.o build/clang-tsan/src/base/arena.o build/clang-tsan/src/base/fatal.o build/clang-tsan/src/barrier.o build/clang-tsan/src/check.o build/clang-tsan/src/config.o build/clang-tsan/src/digest.o build/clang-tsan/src/engine.o build/clang-tsan/src/observe.o build/clang-tsan/src/parallel.o build/clang-tsan/src/partition.o build/clang-tsan/src/regions.o build/clang-tsan/src/threads.o build/clang-tsan/src/topology.o -o build/clang-tsan/test_partition -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign -Wl,--allow-multiple-definition
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread build/clang-tsan/tests/test_reqbus.o build/clang-tsan/tests/harness.o build/clang-tsan/src/base/alloc_guard.o build/clang-tsan/src/base/arena.o build/clang-tsan/src/base/fatal.o build/clang-tsan/src/barrier.o build/clang-tsan/src/check.o build/clang-tsan/src/config.o build/clang-tsan/src/digest.o build/clang-tsan/src/engine.o build/clang-tsan/src/observe.o build/clang-tsan/src/parallel.o build/clang-tsan/src/partition.o build/clang-tsan/src/regions.o build/clang-tsan/src/threads.o build/clang-tsan/src/topology.o build/clang-tsan/tests/statefp.o -o build/clang-tsan/test_reqbus -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign -Wl,--allow-multiple-definition
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread build/clang-tsan/tests/test_threads.o build/clang-tsan/tests/harness.o build/clang-tsan/src/base/alloc_guard.o build/clang-tsan/src/base/arena.o build/clang-tsan/src/base/fatal.o build/clang-tsan/src/barrier.o build/clang-tsan/src/check.o build/clang-tsan/src/config.o build/clang-tsan/src/digest.o build/clang-tsan/src/engine.o build/clang-tsan/src/observe.o build/clang-tsan/src/parallel.o build/clang-tsan/src/partition.o build/clang-tsan/src/regions.o build/clang-tsan/src/threads.o build/clang-tsan/src/topology.o -o build/clang-tsan/test_threads -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign -Wl,--allow-multiple-definition
+clang++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread build/clang-tsan/tests/test_topology.o build/clang-tsan/tests/harness.o build/clang-tsan/src/base/alloc_guard.o build/clang-tsan/src/base/arena.o build/clang-tsan/src/base/fatal.o build/clang-tsan/src/barrier.o build/clang-tsan/src/check.o build/clang-tsan/src/config.o build/clang-tsan/src/digest.o build/clang-tsan/src/engine.o build/clang-tsan/src/observe.o build/clang-tsan/src/parallel.o build/clang-tsan/src/partition.o build/clang-tsan/src/regions.o build/clang-tsan/src/threads.o build/clang-tsan/src/topology.o -o build/clang-tsan/test_topology -Wl,--wrap=malloc,--wrap=calloc,--wrap=realloc,--wrap=free,--wrap=aligned_alloc,--wrap=posix_memalign -Wl,--allow-multiple-definition
+ok   a_link_with_depth_holds_its_words_in_order
+ok   the_plain_declaration_is_depth_2
+ok   a_link_with_depth_beyond_its_capacity_is_fatal
+ok   a_link_with_depth_beyond_its_capacity_is_fatal_across_domains
+ok   a_link_with_depth_holds_across_domains_as_in_one
+ok   the_credit_protocol_on_a_link_with_depth_across_partitions
+./build/clang-tsan/test_link_depth: 6 passed, 0 failed, 0 skipped (debug-only)
+ok   matrix_link
+ok   matrix_fifo
+ok   matrix_credit_fifo
+ok   matrix_hold
+ok   matrix_reg
+ok   matrix_count
+ok   matrix_wide_payloads
+ok   the_report_names_each_kind
+./build/clang-tsan/test_matrix: 8 passed, 0 failed, 0 skipped (debug-only)
+ok   observe_a_link_one_domain
+ok   observe_a_link_split
+ok   observe_a_fifo_one_domain
+ok   observe_a_fifo_split
+ok   observe_a_hold_one_domain
+ok   observe_a_hold_split
+ok   observe_a_reg_one_domain
+ok   observe_a_reg_split
+ok   observe_the_same_view_in_one_domain_and_split
+ok   observe_a_link_without_arrivals_is_fatal_while_a_word_is_visible
+ok   observe_during_a_run_is_fatal
+ok   stop_ends_a_run_after_its_cycle_in_one_domain
+ok   stop_ends_a_split_run_at_the_barrier_on_every_thread
+ok   wake_steps_the_unit_at_the_next_cycle_in_one_domain
+ok   wake_steps_the_unit_at_the_next_cycle_split
+ok   wake_gives_the_same_digest_in_one_domain_and_split
+ok   wake_of_an_unknown_unit_is_fatal
+ok   time_threads_reports_phase_shares_and_changes_nothing
+ok   observe_links_of_different_latencies_split_as_in_one_domain
+ok   overflow_steps_the_owner_when_judged_in_one_domain
+ok   overflow_steps_the_owner_when_judged_split
+ok   overflow_without_the_declaration_stays_hidden
+ok   regions_cover_the_machine_without_overlap
+./build/clang-tsan/test_observe: 23 passed, 0 failed, 0 skipped (debug-only)
+ok   a_synthetic_chip_is_deterministic_and_busy
+ok   n_chips_on_n_threads_match_one_at_a_time
+ok   n_chips_built_and_run_on_their_own_threads
+ok   the_same_chip_twice_on_two_threads
+ok   the_same_sim_twice_is_refused
+./build/clang-tsan/test_parallel: 5 passed, 0 failed, 0 skipped (debug-only)
+ok   by_load_gives_the_one_thread_digest_on_the_synthetic_chip
+ok   by_load_keeps_wires_and_declared_domains_together_and_the_digest
+ok   by_load_balances_declared_weights
+ok   by_load_on_one_thread_is_one_engine_and_never_more_groups_than_granules
+ok   by_load_runs_allocation_free
+ok   calibration_measures_uneven_loads_and_round_trips_as_text
+ok   a_malformed_profile_is_fatal_naming_its_line
+ok   the_flags_barrier_gives_the_one_thread_digest
+./build/clang-tsan/test_partition: 8 passed, 0 failed, 0 skipped (debug-only)
+  mix-s1.txt.gz mode 0: 6000 cycles, 5999 states equal to ref, 3065 pushes (23184 refused), 727 pops, 5992 beats at the root, 22 dropped
+  mix-s1.txt.gz mode 3: not compared (backpressure), lag_cycles 2098 (cycles that would differ from ref)
+ok   reqbus_mix_seed1
+  calm-s2.txt.gz mode 0: 6000 cycles, 5299 states equal to ref, 335 pushes (0 refused), 334 pops, 2672 beats at the root, 0 dropped
+  calm-s2.txt.gz mode 3: equal to ref, lag_cycles 0 (cycles that would differ from ref)
+ok   reqbus_calm_seed2_mode3_equals_ref
+  full-s3.txt.gz mode 0: 4000 cycles, 2583 states equal to ref, 1216 pushes (24116 refused), 110 pops, 2472 beats at the root, 0 dropped
+  full-s3.txt.gz mode 3: not compared (backpressure), lag_cycles 993 (cycles that would differ from ref)
+ok   reqbus_full_seed3
+  fanin-s4.txt.gz mode 0: 4000 cycles, 3999 states equal to ref, 4771 pushes (33324 refused), 498 pops, 3995 beats at the root, 0 dropped
+  fanin-s4.txt.gz mode 3: not compared (backpressure), lag_cycles 1562 (cycles that would differ from ref)
+ok   reqbus_fanin_seed4
+  drop-s5.txt.gz mode 0: 4000 cycles, 3999 states equal to ref, 3459 pushes (11822 refused), 330 pops, 3992 beats at the root, 169 dropped
+  drop-s5.txt.gz mode 3: not compared (backpressure), lag_cycles 1961 (cycles that would differ from ref)
+ok   reqbus_drop_seed5
+ok   reqbus_mode0_split_is_refused_at_build
+  calm-s2.txt.gz: one domain lag 0; split: 5 domains in 5 engines on 5 threads; crossings: 128 link (128 link delivered direct); barrier every 3 cycles, set by link 'reqbus.row0.cr0' -> 't0.reqleaf.credit' (latency 3); the flags barrier, lag 0
+  full-s3.txt.gz: one domain lag 993; split: 5 domains in 5 engines on 5 threads; crossings: 128 link (128 link delivered direct); barrier every 3 cycles, set by link 'reqbus.row0.cr0' -> 't0.reqleaf.credit' (latency 3); the flags barrier, lag 993
+ok   reqbus_mode3_split_equals_one_domain
+./build/clang-tsan/test_reqbus: 7 passed, 0 failed, 0 skipped (debug-only)
+ok   a_link_across_domains_arrives_at_t_plus_l
+ok   the_partition_reports_its_interval_and_why
+ok   a_partition_with_no_crossing_needs_no_barrier
+ok   the_synthetic_chip_split_any_way_matches_one_domain
+ok   one_domain_per_cluster_on_three_threads
+ok   the_synthetic_chip_split_one_thread_per_domain_matches_one_domain
+ok   debug_options_per_domain_change_nothing
+ok   nothing_allocated_in_the_loop_with_threads
+ok   every_barrier_mode_gives_the_same
+ok   a_long_sleep_across_domains_costs_nothing
+ok   wide_payloads_cross_by_copy
+ok   the_missed_wake_detector_sees_words_on_their_way_across_domains
+ok   a_real_missed_wake_across_domains_is_still_caught
+ok   a_missed_wake_just_before_the_machine_idles_is_reported_across_domains
+ok   and_in_one_domain
+ok   a_wire_across_domains_is_fatal
+ok   a_regfile_across_domains_is_fatal
+ok   a_count_read_now_across_domains_is_fatal_in_debug
+ok   a_thread_stuck_past_the_watchdog_is_named
+./build/clang-tsan/test_threads: 19 passed, 0 failed, 0 skipped (debug-only)
+ok   cpu_lists_parse_and_print
+ok   a_hybrid_chip_places_one_per_p_core_then_siblings_then_e_cores
+ok   a_two_socket_server_places_one_per_core_first
+ok   a_plain_chip_is_all_p_cores
+ok   only_the_cpus_this_process_may_use
+ok   the_environment_overrides_detection
+ok   this_machine_has_a_record
+./build/clang-tsan/test_topology: 7 passed, 0 failed, 0 skipped (debug-only)
+==== gcc tsan (chip)
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c tests/test_sort.cpp -o build/gcc-tsan/tests/test_sort.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c tests/mach.cpp -o build/gcc-tsan/tests/mach.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c tests/checker.cpp -o build/gcc-tsan/tests/checker.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c tests/suite.cpp -o build/gcc-tsan/tests/suite.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/units/net.cpp -o build/gcc-tsan/src/units/net.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/units/router.cpp -o build/gcc-tsan/src/units/router.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/units/inject.cpp -o build/gcc-tsan/src/units/inject.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/units/chip.cpp -o build/gcc-tsan/src/units/chip.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c tests/bench_master.cpp -o build/gcc-tsan/tests/bench_master.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/units/trace_log.cpp -o build/gcc-tsan/src/units/trace_log.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/units/tile_ctl.cpp -o build/gcc-tsan/src/units/tile_ctl.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/units/periph_slot.cpp -o build/gcc-tsan/src/units/periph_slot.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/units/replayer.cpp -o build/gcc-tsan/src/units/replayer.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/units/file_store.cpp -o build/gcc-tsan/src/units/file_store.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/units/replay_tables.cpp -o build/gcc-tsan/src/units/replay_tables.o
+g++ -std=c++20 -fno-exceptions -fno-rtti -Wall -Wextra -Werror -Isrc -I../updater_wip/link -I../updater_wip/wire -MMD -MP -pthread -O1 -g -DSIM_DEBUG -fsanitize=thread -fno-omit-frame-pointer -pthread -c src/units/tracer.cpp -o build/gcc-tsan/src/units/tracer.o
+In file included from tests/mach.cpp:4:
+tests/wire_ends.h:15:10: fatal error: wire.h: No such file or directory
+   15 | #include "wire.h"
+      |          ^~~~~~~~
+compilation terminated.
+make[2]: *** [src/threads.mk:18: build/gcc-tsan/tests/mach.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+make[1]: *** [tests/mach.mk:25: tsan-chip] Error 2
+make: *** [src/threads.mk:53: tsan-all] Error 2
