@@ -243,3 +243,7 @@ same number (`044b-...`), claimed the same way.
 | 257 | meshsim updater_wip INTEGRATOR | the same, "check" (v137-build c3ad3ad1): make check from a clean tree, debug and release, gcc and clang, TSan (its chip build fixed: Quest 255). Not timing |
 | 258 | meshsim updater_wip INTEGRATOR | v1.37 stage 6, "chain-evm-zone" (v137-build c3ad3ad1): the chain of processes at 2^29 on EVM Zone: the driver and two chips (segments 0 and 1, N 128), each chip's every check against gold's references, both replies against gold's files; run twice, the same. Not timing |
 | 259 | meshsim updater_wip INTEGRATOR | the same, "chain-cyclone" (v137-build c3ad3ad1): on Cyclone at 2^29. Not timing |
+| 260 | meshsim updater_wip INTEGRATOR | 256 again (v137-build d974f3a3): its kit now carries updater_wip/wire, which 256 to 259 lacked. "suites": ./run_tests.sh all --check with the chain's step, the 37 proof runs through the link. Not timing |
+| 261 | meshsim updater_wip INTEGRATOR | 257 again (v137-build d974f3a3), "check": make check, TSan's chip build included. Not timing |
+| 262 | meshsim updater_wip INTEGRATOR | 258 again (v137-build d974f3a3), "chain-evm-zone": the chain of processes at 2^29 on EVM Zone, twice. Not timing |
+| 263 | meshsim updater_wip INTEGRATOR | 259 again (v137-build d974f3a3), "chain-cyclone": on Cyclone, twice. Not timing |
