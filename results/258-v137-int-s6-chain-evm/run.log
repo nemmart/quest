@@ -1,6 +1,6 @@
 kit sha256 348dc7acae8815399789504beaaa2d685d3cd797dc5d91e52ec92c86af49b49c
 
-==== the machine (21:51:05, +0 s)
+==== the machine (21:55:28, +0 s)
 kit: meshsim c3ad3ad1 (v137-build), v1.37_wip's check kit (chain-evm-zone; the link's vectors: HEAD's), built 2026-11-18
 host godspeed; 16 CPUs; Linux 6.8.0-149-generic
 Ubuntu clang version 18.1.3 (1ubuntu1)
@@ -15,28 +15,28 @@ Mem:              62           1          59           0           1          60
  256G
 VERDICT machine: PASS
 
-==== 1. convert_delivery (clang release), which the inputs' build needs (21:51:05, +0 s)
+==== 1. convert_delivery (clang release), which the inputs' build needs (21:55:28, +0 s)
 VERDICT build-convert: PASS
 
-==== 2. the small inputs, from the pinned sources (jolt-asic-planning from Quest task 111's kit) (21:51:08, +3 s)
-[evm-zone-23 21:54:20] jumpmap: gold_check ok at all 128 segments
-[evm-zone-23 21:54:20] jumpmap: /tmp/v137-258-v137-int-s6-chain-evm/inputs/w26-jumpmap/evm-zone-23/manifest.sha256 1ab3f06a7e4ffdd897d5a0254048d47697b27237878da0fd02468a00dc812ca3
-[evm-zone-23 21:54:20] done: tools deliveries convert gold jumpmap
-[cyclone-22 21:54:26] jumpmap: gold_check ok at all 128 segments
-[cyclone-22 21:54:26] jumpmap: /tmp/v137-258-v137-int-s6-chain-evm/inputs/w26-jumpmap/cyclone-22/manifest.sha256 f6bd0527bb68a6887e2996c4215af47455ee8d8c4a13b0c6aa34aa44713fba21
-[cyclone-22 21:54:26] done: tools deliveries convert gold jumpmap
+==== 2. the small inputs, from the pinned sources (jolt-asic-planning from Quest task 111's kit) (21:55:31, +3 s)
+[evm-zone-23 21:56:29] jumpmap: gold_check ok at all 128 segments
+[evm-zone-23 21:56:29] jumpmap: /tmp/v137-258-v137-int-s6-chain-evm/inputs/w26-jumpmap/evm-zone-23/manifest.sha256 1ab3f06a7e4ffdd897d5a0254048d47697b27237878da0fd02468a00dc812ca3
+[evm-zone-23 21:56:29] done: tools deliveries convert gold jumpmap
+[cyclone-22 21:56:36] jumpmap: gold_check ok at all 128 segments
+[cyclone-22 21:56:36] jumpmap: /tmp/v137-258-v137-int-s6-chain-evm/inputs/w26-jumpmap/cyclone-22/manifest.sha256 f6bd0527bb68a6887e2996c4215af47455ee8d8c4a13b0c6aa34aa44713fba21
+[cyclone-22 21:56:36] done: tools deliveries convert gold jumpmap
 evm-zone-23: PASS
 cyclone-22: PASS
 1.1G	/tmp/v137-258-v137-int-s6-chain-evm/inputs
 VERDICT inputs-small: PASS
 
-==== 2b. the host's side of the proof steps: gold's frames, packets and references (pipeline/frames/build.sh) (21:54:28, +203 s)
+==== 2b. the host's side of the proof steps: gold's frames, packets and references (pipeline/frames/build.sh) (21:56:37, +69 s)
 evm-zone-29: 354861942 rows, 85 segments of 64 windows, N 128; frames 4234368 B, packets 4366800 B; s: 0 1 42 83 84 
 cyclone-29: 371526406 rows, 89 segments of 64 windows, N 128; frames 16383648 B, packets 16895744 B; s: 0 1 44 87 88 
 frames: 29: 2 runs in /tmp/v137-258-v137-int-s6-chain-evm/inputs/v137/29; 2 packet files equal to the tests' writer's
 VERDICT frames: PASS
 
-==== 6. the chain of processes at 2^29: evm-zone-29, the driver and two chips (segments 0 and 1) (21:55:21, +256 s)
+==== 6. the chain of processes at 2^29: evm-zone-29, the driver and two chips (segments 0 and 1) (21:57:30, +122 s)
 make: *** Waiting for unfinished jobs....
 1 error generated.
 make: *** [Makefile:56: build/clang-suite/tests/mach.o] Error 1
@@ -47,7 +47,7 @@ run b: exit 127
 VERDICT chain: FAIL
 VERDICT chain-again: PASS-the-same
 
-==== end (21:55:23, +258 s)
+==== end (21:57:33, +125 s)
 machine PASS
 build-convert PASS
 inputs-small PASS
@@ -55,7 +55,7 @@ frames PASS
 chain FAIL
 chain-again PASS-the-same
 build-convert 3 s
-inputs-small 200 s
+inputs-small 66 s
 frames 53 s
-chain 2 s
+chain 3 s
 FAILED
