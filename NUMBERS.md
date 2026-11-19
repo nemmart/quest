@@ -252,3 +252,4 @@ same number (`044b-...`), claimed the same way.
 | 266 | meshsim updater_wip INTEGRATOR | the same, "check" (v137-build 62a0b205): make check from a clean tree of the folder alone, debug and release, gcc and clang, TSan. Not timing |
 | 267 | meshsim updater_wip INTEGRATOR | the same, "chain-evm-zone" (v137-build 62a0b205): the chain of processes at 2^29 on EVM Zone, twice. Not timing |
 | 268 | meshsim updater_wip INTEGRATOR | the same, "chain-cyclone" (v137-build 62a0b205): on Cyclone at 2^29, twice. Not timing |
+| 269 | meshsim design session | v1.37 as it landed, "suites" (main 9396eb7d, v1.37/tools/v137-check/make_task.sh): the small inputs, the host's side of the proof steps, ./run_tests.sh all --check and the 37 proof runs, from the frozen folder after updater_wip/ was removed. Not timing |
