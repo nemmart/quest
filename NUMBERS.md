@@ -247,3 +247,8 @@ same number (`044b-...`), claimed the same way.
 | 261 | meshsim updater_wip INTEGRATOR | 257 again (v137-build d974f3a3), "check": make check, TSan's chip build included. Not timing |
 | 262 | meshsim updater_wip INTEGRATOR | 258 again (v137-build d974f3a3), "chain-evm-zone": the chain of processes at 2^29 on EVM Zone, twice. Not timing |
 | 263 | meshsim updater_wip INTEGRATOR | 259 again (v137-build d974f3a3), "chain-cyclone": on Cyclone, twice. Not timing |
+| 264 | meshsim updater_wip INTEGRATOR | v1.37 made ready to freeze (v137-build 62a0b205; updater_wip/tasks/v137-check/make_task.sh), its kit v1.37_wip/ alone (the link, the wire and the frames' gold copied in, FROM-UPDATER.sha256), the tracer tile's last record pulled (SEND_END) and the reply at 73 words: "suites": ./run_tests.sh all --check, the chain's step, the 37 proof runs through the link, every image against gold's. Not timing |
+| 265 | meshsim updater_wip INTEGRATOR | the same, "suites-varied" (v137-build 62a0b205): as 264 with every chip's LPDDR model in its jitter mode. Not timing |
+| 266 | meshsim updater_wip INTEGRATOR | the same, "check" (v137-build 62a0b205): make check from a clean tree of the folder alone, debug and release, gcc and clang, TSan. Not timing |
+| 267 | meshsim updater_wip INTEGRATOR | the same, "chain-evm-zone" (v137-build 62a0b205): the chain of processes at 2^29 on EVM Zone, twice. Not timing |
+| 268 | meshsim updater_wip INTEGRATOR | the same, "chain-cyclone" (v137-build 62a0b205): on Cyclone at 2^29, twice. Not timing |
